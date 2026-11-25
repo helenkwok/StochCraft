@@ -1458,6 +1458,27 @@ unit	yr	р.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	У блока {block} є час обслуговування для пулу «{pool}», якого немає в моделі. Видаліть цей час або виберіть наявний пул.
 	{block} has two service times for the pool “{pool}”. Keep one.	У блока {block} час обслуговування для пулу «{pool}» задано двічі. Залиште один.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	У блока {block} є час обслуговування для пулу «{pool}», який йому не потрібен. Додайте пул до його потреб або видаліть цей час.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} використовує таблицю рішень «{decision}» з файлу {file}, яку не може використати: {reason} Виправте таблицю або приберіть її з блока.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} використовує таблицю рішень «{decision}», правила {first} і {second} якої обидва підходять для {example}, але за її політикою збігів Unique може підходити лише одне. Змініть правила так, щоб підходило лише одне, або виберіть іншу політику збігів.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} використовує таблицю рішень «{decision}», у якій жодне правило не підходить для {example}, тож така сутність не отримує там результату. Додайте правило або типовий вивід, якщо це не задумано.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} використовує таблицю рішень «{decision}», у якій забагато поєднань входів, щоб перевірити її повністю, тож у ній можуть бути правила, що перетинаються, або входи, для яких не підходить жодне правило. Перевірте її правила або розділіть її на менші таблиці.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} спрямовує за таблицею рішень «{decision}», яка може дати «{value}» — ім’я жодного з його виходів. Зробіть кожне значення виводу, за яким він спрямовує, id виходу або id чи ім’ям блока, до якого він веде.
+	Decision table	Таблиця рішень
+	Open decision table	Відкрити таблицю рішень
+	Hit policy	Політика збігів
+	Unique	Єдине
+	First	Перше
+	Collect	Збір
+	Aggregation	Агрегування
+	Sum	Сума
+	Count	Кількість
+	Add rule	Додати правило
+	Remove rule	Вилучити правило
+	Change Decision Table	Змінити таблицю рішень
+	Use Decision Table	Використати таблицю рішень
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Поки що лише для читання: редагуйте таблицю в її файлі .dmn або командою dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Його таблиці рішень не записано: застосунок поки не записує файли .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Його таблиці рішень ще треба зберегти, тому модель залишилася відкритою: застосунок поки не записує файли .dmn.
 	Reset {field}	Скинути: {field}
 	Changed from the default	Змінено порівняно зі значенням за замовчуванням
 	Changed from the inherited scenario	Змінено порівняно з успадкованим сценарієм

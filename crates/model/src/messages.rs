@@ -475,6 +475,26 @@ pub const TEMPLATES: &[(&str, &str)] = &[
         "{block} is a transport, which StochCraft does not simulate yet. Remove it to run the model.",
     ),
     (
+        "decision_unusable",
+        "{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.",
+    ),
+    (
+        "decision_overlap",
+        "{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.",
+    ),
+    (
+        "decision_gap",
+        "{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.",
+    ),
+    (
+        "decision_route",
+        "{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.",
+    ),
+    (
+        "decision_unchecked",
+        "{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.",
+    ),
+    (
         "transport_pool_missing",
         "The pool {pool} of the transport {block} does not exist. Choose a pool that exists.",
     ),
@@ -1205,6 +1225,54 @@ impl Diagnostic {
                 vec![("flow", flow_of(None)), ("time", num(*time))],
             ),
             Problem::TransportNotSimulated => part("transport_not_simulated", vec![b()]),
+            Problem::DecisionUnusable {
+                file,
+                decision,
+                reason,
+            } => part(
+                "decision_unusable",
+                vec![
+                    b(),
+                    ("decision", decision.clone()),
+                    ("file", file.clone()),
+                    ("reason", reason.clone()),
+                ],
+            ),
+            Problem::DecisionOverlap {
+                decision,
+                first,
+                second,
+                example,
+            } => part(
+                "decision_overlap",
+                vec![
+                    b(),
+                    ("decision", decision.clone()),
+                    ("first", first.to_string()),
+                    ("second", second.to_string()),
+                    ("example", example.clone()),
+                ],
+            ),
+            Problem::DecisionGap { decision, example } => part(
+                "decision_gap",
+                vec![
+                    b(),
+                    ("decision", decision.clone()),
+                    ("example", example.clone()),
+                ],
+            ),
+            Problem::DecisionRoute { decision, value } => part(
+                "decision_route",
+                vec![
+                    b(),
+                    ("decision", decision.clone()),
+                    ("value", value.clone()),
+                ],
+            ),
+            Problem::DecisionUnchecked { decision } => part(
+                "decision_unchecked",
+                vec![b(), ("decision", decision.clone())],
+            ),
             Problem::TransportPool { pool, exists } => part(
                 if *exists {
                     "transport_pool_not_mobile"

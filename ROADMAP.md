@@ -3783,10 +3783,12 @@ you build it.*
   - The same table runs in the simulation, is edited as a grid in the spreadsheet view, and is
     saved back as DMN. Validation reports overlapping rules under UNIQUE and inputs no rule
     covers.
-  - Open DMN engines exist: DSNTK, in Rust, is MIT OR Apache-2.0. Whether to depend on it or
-    write the small subset ourselves is measured in the first PR. The community DMN test kit
-    (TCK) is a source of test files, fetched at a pinned commit as in D7 and D14 if its licence
-    allows.
+  - Open DMN engines exist: DSNTK, in Rust, is MIT OR Apache-2.0. Measured in the first PR
+    (L10): its evaluator and model crates (0.3.0) bring about 220 packages, among them C
+    libraries for decimal numbers and, through an HTTP client, for TLS, which do not build for
+    the browser app as they are. The subset is written in `stochcraft-model` instead (about
+    1,500 lines with its checks and documentation). The community DMN test kit (TCK) is a source of test files,
+    fetched at a pinned commit as in D7 and D14 if its licence allows.
 - **Classifiers with errors.** A classify step (a scanner, a camera, a model) assigns a class
   from a confusion matrix: for each true class, the share assigned to each class, plus a no-read
   share. Its draws come from its own keyed stream.
@@ -3916,6 +3918,26 @@ an edit to all of them one undo step. Left from U2: collapsible groups for the p
 flows and shared properties (the folds below them already collapse), units typed with the
 value, a scenario picker in the window, and the experiment fields and connections table
 leaving the model page (with U5).
+L10 is done: `stochcraft-model::dmn` holds decision tables with the hit policies
+UNIQUE, FIRST, PRIORITY and COLLECT (with SUM, COUNT, MIN or MAX) and S-FEEL's simple unary tests
+in their cells (comparisons, a value alone, ranges, lists, `not(...)` and `-`), evaluated as
+FEEL compares (no value matches a value of another kind; null matches only `not(...)`), and an
+exact check of a UNIQUE table's overlaps and of inputs no rule covers, each with an example;
+`stochcraft-io::dmn` reads DMN 1.1 to 1.6 and writes 1.6, refusing by name what a table run
+cannot honour, and saves an edited table into its file with the rest kept byte for byte. A
+task, a gateway or a divert names a decision with `stochcraft:decision` (file, decision and, on
+a gateway with several outputs, the output to route by); its outputs are written as entity
+properties as an entity enters, and a gateway with no conditions takes the way whose flow id,
+target id or target name is the output. The engine reads the `.dmn` files beside the model and
+writes edited ones back (`dmn.get`, `dmn.set`, `dmn.use`), and the window shows a table as a
+grid from the block's page, read-only for now: the app's own open and save handle the model's
+file only, so editing in the grid waits for the app to read and write the `.dmn` files beside
+the model (the desktop app in the folder, the browser by download), which is next. Its Save
+says a model's tables were not written, and a table changed since its file was written keeps
+the model unsaved. Left from L10: the hit policies ANY, RULE ORDER and OUTPUT ORDER;
+names, dates and durations in cells; the grid in the spreadsheet view (U6); sharing the
+`.dmn` files with the model (M7.4); a task with a decision is written as a plain task in a new
+file, not a `businessRuleTask`.
 
 L5's first part is done: points along a section and junctions. A divert gateway placed at `s`
 along the conveyor that sends into it is a point of that conveyor (`model::site::points`): its

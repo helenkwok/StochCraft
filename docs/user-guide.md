@@ -222,6 +222,45 @@ On a decision, each outgoing flow has a probability **p** or a condition **if**,
 a **Default flow**. A flow can be marked **Rework**, and on a task with a resource also
 **Gave up**, **Turned away** or **Balked**.
 
+### Decision tables
+
+A task, a decision or a divert can use a decision table (OMG DMN 1.6) to route or classify
+entities by their properties: parcels to chutes by postcode and size, jobs to a priority by
+customer and due date. The table lives in a `.dmn` file beside the model's file, so other DMN
+tools can open it too, and the model names the decision it uses (a `stochcraft:decision`
+extension in its BPSim data).
+
+- As an entity enters the block, the table is evaluated on the entity's properties and each
+  output is written back as a property of that name. A table no rule of which matches gives no
+  result (or its default output), and the outputs are cleared. An output must fit the
+  property's type: text cannot go into a property of type boolean, nor a fraction into a long.
+- A decision none of whose flows out has a condition takes the flow whose id, or whose target's
+  id or name, is the output, compared exactly (`true` names only a flow or block called `true`);
+  a value that names more than one flow is an error. With conditions, the conditions read the
+  outputs. A divert does the same, then takes its default flow if the chosen way is full.
+- The hit policies are Unique (at most one rule may match), First (the first match in rule
+  order), Priority (the match whose outputs come first in the outputs' lists of values) and
+  Collect (with Sum, Count, Minimum or Maximum).
+- Cells use the simple tests of DMN's S-FEEL: `< 10`, `>= 2.5`, a value alone (`"express"`,
+  `true`), ranges such as `[1..5]` or `(1..5]`, lists separated by commas, `not(...)` and `-`
+  for any value. Values are numbers, strings in double quotes, `true` and `false`. A value
+  matches only a value of its own kind, so `5` does not match the string `"5"`.
+- **Open decision table** on the block's page shows the table as a grid, rules in rows, with
+  its hit policy. The app shows tables read-only for now, because it does not yet write `.dmn`
+  files: edit a table in its `.dmn` file (in another DMN tool or a text editor), or with the
+  `dmn.set` command, which checks it and refuses a table that cannot run with the cell and the
+  reason; `file.save` then writes the file beside the model. Editing in the window, with the
+  app reading and writing the `.dmn` files beside the model, is next.
+- The app's **Save** writes the model's file only. For a model that uses decision tables the
+  status bar says so ("Its decision tables were not written"), and a table changed since its
+  file was written (by `dmn.set` through the MCP server, say) keeps the model marked unsaved.
+- The model's problems include rules that overlap in a Unique table (an error, with an example,
+  `null` for an entity without the property) and inputs no rule covers (a warning, with an
+  example). Inputs that read the same property are checked with one value.
+- Not yet: the hit policies Any, Rule order and Output order; names, dates and durations in
+  cells; literal expressions and decisions that require other decisions. A file using them is
+  refused with a message naming the construct. Numbers are 64-bit floating point.
+
 ### Shared resources and shifts
 
 **Servers that differ in speed.** A task that needs either of two pools, say a faster and a
@@ -1066,6 +1105,10 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 - A baseline compares two versions of a model, one change at a time; there is no table of named
   scenarios yet. For several values of one parameter, use the Analysis view's sweep.
 - Charts can't be configured beyond their colours.
+- The app (desktop and browser) opens a model from its file alone, so it does not read the
+  `.dmn` files beside it: its blocks that use a decision table report the file as not read.
+  `file.open` (the command line or the MCP server) reads them. The app does not write them
+  either; reading and writing them beside the model is next.
 - The canvas is one drawn surface, so screen readers can't yet read its blocks; the menus,
   dialogs and status messages are readable.
 - What is planned next is in the [roadmap](../ROADMAP.md).

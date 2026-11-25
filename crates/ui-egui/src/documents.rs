@@ -553,14 +553,41 @@ impl App {
         self.pick_for = None;
     }
 
-    /// The shell wrote `bytes` to `path`: the model is saved there.
+    /// What the status bar adds to "Saved" or "Downloaded" for a model that uses decision tables
+    /// or holds any: the app writes only the model's file, never its `.dmn` files (`file.save`
+    /// does), so a table edited or made since they were written, or a model saved into another
+    /// folder, is not on disk beside it. Empty for a model without tables.
+    fn tables_not_written(&self) -> String {
+        let m = self.engine.model();
+        if m.decisions.is_empty() && m.dmn.is_empty() {
+            return String::new();
+        }
+        format!(
+            ". {}",
+            t("Its decision tables were not written: the app does not write .dmn files yet.")
+        )
+    }
+
+    /// The shell wrote `bytes` to `path`: the model is saved there. What was to follow the save
+    /// (quit, new, open) goes ahead only if the model is saved now: a model whose decision tables
+    /// are still unsaved (the app writes only the model's file) is kept open, rather than closed
+    /// or replaced with its tables lost.
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
-                self.info(tf("Saved {file}", &[("file", file_name(path))]));
+                let saved = tf("Saved {file}", &[("file", file_name(path))]);
                 self.remember(path);
-                if let Some(next) = self.after_save.take() {
-                    self.replace_now(next);
+                match self.after_save.take() {
+                    Some(_) if self.unsaved_changes() => self.info(format!(
+                        "{saved}. {}",
+                        t("Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.")
+                    )),
+                    next => {
+                        self.info(saved + &self.tables_not_written());
+                        if let Some(next) = next {
+                            self.replace_now(next);
+                        }
+                    }
                 }
             }
             Err(e) => self.save_failed(e.message),
@@ -572,11 +599,25 @@ impl App {
     /// A browser can't tell whether the user kept the file or cancelled it, so the model is not
     /// marked saved: the unsaved mark, the guard on closing the tab and the recovery copy all
     /// stay until a model replaces this one. What was to follow the save (New, Open…) goes ahead,
-    /// as the user chose Download in the unsaved-changes question.
+    /// as the user chose Download in the unsaved-changes question, unless the model's decision
+    /// tables are not on disk, which the download does not hold.
     pub fn downloaded(&mut self, name: &str) {
-        self.info(tf("Downloaded {file}", &[("file", file_name(name))]));
-        if let Some(next) = self.after_save.take() {
-            self.replace_now(next);
+        let downloaded = tf("Downloaded {file}", &[("file", file_name(name))]);
+        // The download holds the model's file only: with decision tables not on disk as they
+        // are, what was to follow is dropped and the model kept open, as after a Save
+        // ([`App::written`]). The model's own unsaved mark is no reason, as a download never
+        // clears it.
+        match self.after_save.take() {
+            Some(_) if self.engine.tables_unsaved() => self.info(format!(
+                "{downloaded}. {}",
+                t("Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.")
+            )),
+            next => {
+                self.info(downloaded + &self.tables_not_written());
+                if let Some(next) = next {
+                    self.replace_now(next);
+                }
+            }
         }
     }
 

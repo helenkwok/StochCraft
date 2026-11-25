@@ -1458,6 +1458,27 @@ unit	yr	j
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} heeft een servicetijd voor de pool ‘{pool}’, die het model niet heeft. Verwijder die tijd of kies een bestaande pool.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} heeft twee servicetijden voor de pool ‘{pool}’. Houd er één van over.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} heeft een servicetijd voor de pool ‘{pool}’, die het niet nodig heeft. Voeg de pool toe aan de behoeften of verwijder die tijd.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} gebruikt de beslistabel ‘{decision}’ uit het bestand {file}, die het niet kan gebruiken: {reason} Verbeter de tabel, of haal hem van het blok af.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} gebruikt de beslistabel ‘{decision}’, waarvan de regels {first} en {second} allebei passen op {example}, maar onder het hitbeleid Unique mag er maar één passen. Wijzig de regels zodat er maar één past, of kies een ander hitbeleid.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} gebruikt de beslistabel ‘{decision}’, waarin geen regel past op {example}, zodat zo’n entiteit daar geen resultaat krijgt. Voeg een regel of een standaarduitvoer toe, als dat niet de bedoeling is.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} gebruikt de beslistabel ‘{decision}’, die te veel combinaties van invoer heeft om volledig te controleren, zodat er regels kunnen zijn die overlappen of invoer waarop geen regel past. Controleer de regels, of splits de tabel in kleinere tabellen.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} routeert volgens de beslistabel ‘{decision}’, die ‘{value}’ kan geven, de naam van geen van zijn uitgangen. Maak van elke waarde van de uitvoer waarop hij routeert de id van een uitgang, of de id of naam van een blok waar hij naartoe leidt.
+	Decision table	Beslistabel
+	Open decision table	Beslistabel openen
+	Hit policy	Hitbeleid
+	Unique	Uniek
+	First	Eerste
+	Collect	Verzamelen
+	Aggregation	Aggregatie
+	Sum	Som
+	Count	Aantal
+	Add rule	Regel toevoegen
+	Remove rule	Regel verwijderen
+	Change Decision Table	Beslistabel wijzigen
+	Use Decision Table	Beslistabel gebruiken
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Voorlopig alleen-lezen: bewerk de tabel in het .dmn-bestand ervan, of met de opdracht dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	De beslistabellen zijn niet geschreven: de app schrijft nog geen .dmn-bestanden.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	De beslistabellen moeten nog worden opgeslagen, dus het model is open gebleven: de app schrijft nog geen .dmn-bestanden.
 	Reset {field}	{field} resetten
 	Changed from the default	Gewijzigd ten opzichte van de standaard
 	Changed from the inherited scenario	Gewijzigd ten opzichte van het overgeërfde scenario

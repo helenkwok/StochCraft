@@ -33,6 +33,9 @@ pub(crate) fn draws(model: &Model) -> bool {
         // are read from `elements`), and places and scenery draw nothing.
         site: _,
         agents,
+        // A decision table draws nothing: it reads properties already drawn.
+        decisions: _,
+        dmn: _,
     } = model;
     // `experiment.optimise` does not refuse a model with agents (one with a process beside its
     // populations reaches here), and agents' charts have random timeouts and rates, so any agent

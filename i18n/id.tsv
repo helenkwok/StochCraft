@@ -1458,6 +1458,27 @@ unit	yr	thn
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} memiliki waktu layanan untuk kumpulan “{pool}”, yang tidak ada di model. Hapus waktu itu, atau pilih kumpulan yang ada.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} memiliki dua waktu layanan untuk kumpulan “{pool}”. Pertahankan salah satunya.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} memiliki waktu layanan untuk kumpulan “{pool}”, yang tidak dibutuhkannya. Tambahkan kumpulan itu ke kebutuhannya, atau hapus waktu itu.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} memakai tabel keputusan “{decision}” dari file {file}, yang tidak dapat dipakainya: {reason} Perbaiki tabel itu, atau lepaskan dari blok.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} memakai tabel keputusan “{decision}”, yang aturan {first} dan {second}-nya sama-sama cocok dengan {example}, tetapi dengan kebijakan kecocokan Unique hanya satu yang boleh cocok. Ubah aturannya agar hanya satu yang cocok, atau pilih kebijakan kecocokan lain.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} memakai tabel keputusan “{decision}”, yang tidak satu aturan pun cocok dengan {example}, sehingga entitas seperti itu tidak mendapat hasil di sana. Tambahkan aturan atau keluaran bawaan, jika itu tidak disengaja.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} memakai tabel keputusan “{decision}”, yang memiliki terlalu banyak kombinasi masukan untuk diperiksa sepenuhnya, sehingga mungkin memiliki aturan yang tumpang tindih atau masukan yang tidak cocok dengan aturan mana pun. Periksa aturannya, atau bagi menjadi tabel-tabel yang lebih kecil.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} merutekan menurut tabel keputusan “{decision}”, yang dapat memberi “{value}”, bukan nama jalan keluar mana pun. Jadikan setiap nilai keluaran yang dipakai untuk merutekan id sebuah jalan keluar, atau id atau nama blok yang ditujunya.
+	Decision table	Tabel keputusan
+	Open decision table	Buka tabel keputusan
+	Hit policy	Kebijakan kecocokan
+	Unique	Unik
+	First	Pertama
+	Collect	Kumpulkan
+	Aggregation	Agregasi
+	Sum	Jumlah
+	Count	Hitungan
+	Add rule	Tambah aturan
+	Remove rule	Hapus aturan
+	Change Decision Table	Ubah Tabel Keputusan
+	Use Decision Table	Pakai Tabel Keputusan
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Untuk saat ini hanya baca: sunting tabel di berkas .dmn-nya, atau dengan perintah dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Tabel keputusannya tidak ditulis: aplikasi belum menulis berkas .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Tabel keputusannya masih perlu disimpan, jadi model tetap dibuka: aplikasi belum menulis berkas .dmn.
 	Reset {field}	Atur ulang {field}
 	Changed from the default	Diubah dari default
 	Changed from the inherited scenario	Diubah dari skenario yang diwarisi

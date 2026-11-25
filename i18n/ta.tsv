@@ -1458,6 +1458,27 @@ unit	yr	ஆண்டு
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} இல் மாதிரியில் இல்லாத “{pool}” தொகுப்புக்கு ஒரு சேவை நேரம் உள்ளது. அந்த நேரத்தை அகற்றவும், அல்லது இருக்கும் ஒரு தொகுப்பைத் தேர்ந்தெடுக்கவும்.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} இல் “{pool}” தொகுப்புக்கு இரண்டு சேவை நேரங்கள் உள்ளன. ஒன்றை மட்டும் வைத்திருக்கவும்.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} இல் தனக்குத் தேவையில்லாத “{pool}” தொகுப்புக்கு ஒரு சேவை நேரம் உள்ளது. அந்தத் தொகுப்பை அதன் தேவைகளில் சேர்க்கவும், அல்லது அந்த நேரத்தை அகற்றவும்.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} கோப்பு {file}-இன் முடிவு அட்டவணை “{decision}”-ஐப் பயன்படுத்துகிறது, ஆனால் அதைப் பயன்படுத்த முடியாது: {reason} அட்டவணையைத் திருத்துங்கள், அல்லது தொகுதியிலிருந்து நீக்குங்கள்.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} முடிவு அட்டவணை “{decision}”-ஐப் பயன்படுத்துகிறது; அதன் விதிகள் {first}, {second} இரண்டும் {example}-உடன் பொருந்துகின்றன, ஆனால் அதன் பொருத்தக் கொள்கை Unique-இல் ஒன்று மட்டுமே பொருந்தலாம். ஒன்று மட்டும் பொருந்தும்படி விதிகளை மாற்றுங்கள், அல்லது வேறு பொருத்தக் கொள்கையைத் தேர்ந்தெடுங்கள்.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} முடிவு அட்டவணை “{decision}”-ஐப் பயன்படுத்துகிறது; அதில் எந்த விதியும் {example}-உடன் பொருந்தவில்லை, எனவே அத்தகைய உருப்படிக்கு அங்கு முடிவு கிடைக்காது. இது நோக்கமில்லை எனில் ஒரு விதியையோ இயல்புநிலை வெளியீட்டையோ சேருங்கள்.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} முடிவு அட்டவணை “{decision}”-ஐப் பயன்படுத்துகிறது; அதில் உள்ளீடுகளின் சேர்க்கைகள் முழுமையாகச் சரிபார்க்க முடியாத அளவுக்கு அதிகம், எனவே ஒன்றின் மேல் ஒன்று படியும் விதிகளோ எந்த விதியும் பொருந்தாத உள்ளீடுகளோ அதில் இருக்கலாம். அதன் விதிகளைச் சரிபாருங்கள், அல்லது அதைச் சிறிய அட்டவணைகளாகப் பிரியுங்கள்.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} முடிவு அட்டவணை “{decision}”-இன்படி வழிநடத்துகிறது; அது “{value}”-ஐத் தரலாம், இது அதன் எந்த வெளியேற்றத்தின் பெயரும் அல்ல. அது வழிநடத்தும் வெளியீட்டின் ஒவ்வொரு மதிப்பையும் ஒரு வெளியேற்றத்தின் id அல்லது அது செல்லும் தொகுதியின் id அல்லது பெயர் ஆக்குங்கள்.
+	Decision table	முடிவு அட்டவணை
+	Open decision table	முடிவு அட்டவணையைத் திற
+	Hit policy	பொருத்தக் கொள்கை
+	Unique	தனித்தது
+	First	முதலாவது
+	Collect	சேகரி
+	Aggregation	திரட்டல்
+	Sum	கூட்டுத்தொகை
+	Count	எண்ணிக்கை
+	Add rule	விதியைச் சேர்
+	Remove rule	விதியை நீக்கு
+	Change Decision Table	முடிவு அட்டவணையை மாற்று
+	Use Decision Table	முடிவு அட்டவணையைப் பயன்படுத்து
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	இப்போதைக்குப் படிக்க மட்டும்: அட்டவணையை அதன் .dmn கோப்பில் அல்லது dmn.set கட்டளையால் திருத்தவும்.
+	Its decision tables were not written: the app does not write .dmn files yet.	இதன் முடிவு அட்டவணைகள் எழுதப்படவில்லை: பயன்பாடு இன்னும் .dmn கோப்புகளை எழுதுவதில்லை.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	இதன் முடிவு அட்டவணைகளை இன்னும் சேமிக்க வேண்டும், எனவே மாதிரி திறந்தே வைக்கப்பட்டது: பயன்பாடு இன்னும் .dmn கோப்புகளை எழுதுவதில்லை.
 	Reset {field}	{field} மீட்டமை
 	Changed from the default	இயல்புநிலையிலிருந்து மாற்றப்பட்டது
 	Changed from the inherited scenario	மரபுரிமையாகப் பெற்ற சூழ்நிலையிலிருந்து மாற்றப்பட்டது

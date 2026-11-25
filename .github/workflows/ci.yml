@@ -128,6 +128,14 @@ jobs:
           key: scxml-${{ hashFiles('xtask/src/scxml.rs') }}
       - name: cargo xtask fetch-scxml
         run: cargo xtask fetch-scxml
+      # OMG's DMN 1.6 XML Schema, for the test that every .dmn file written is valid DMN; fetched
+      # at a pinned commit and checksums, never committed. The cache key follows xtask/src/dmn.rs.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: target/dmn
+          key: dmn-${{ hashFiles('xtask/src/dmn.rs') }}
+      - name: cargo xtask fetch-dmn
+        run: cargo xtask fetch-dmn
       - name: cargo xtask ci (the affected crates, or everything)
         env:
           BASE: ${{ needs.plan.outputs.base }}

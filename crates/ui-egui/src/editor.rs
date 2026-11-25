@@ -1358,6 +1358,7 @@ impl App {
         });
         ui.label(theme::weak(ui, tf("id {id}", &[("id", &id)])).monospace());
         ui.add_space(8.0);
+        self.decision_link(ui, &id);
 
         // The block's own problems, and those of the flows into and out of it, in a place of
         // fixed height (two lines, scrolling beyond), so the form under it doesn't move when one

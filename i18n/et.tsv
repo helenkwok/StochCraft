@@ -1458,6 +1458,27 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida mudelis pole. Eemalda see aeg või vali olemasolev kogum.
 	{block} has two service times for the pool “{pool}”. Keep one.	Plokil {block} on kaks teenindusaega kogumile „{pool}”. Jäta üks.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Plokil {block} on teenindusaeg kogumile „{pool}”, mida see ei vaja. Lisa kogum selle vajadustesse või eemalda see aeg.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} kasutab faili {file} otsustustabelit „{decision}”, mida see kasutada ei saa: {reason} Parandage tabel või eemaldage see plokilt.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} kasutab otsustustabelit „{decision}”, mille reeglid {first} ja {second} sobivad mõlemad väärtusele {example}, kuid tabamuspoliitika Unique korral tohib sobida vaid üks. Muutke reegleid nii, et sobiks vaid üks, või valige teine tabamuspoliitika.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} kasutab otsustustabelit „{decision}”, milles ükski reegel ei sobi väärtusele {example}, nii et selline olem ei saa seal tulemust. Lisage reegel või vaikeväljund, kui see pole taotluslik.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} kasutab otsustustabelit „{decision}”, millel on liiga palju sisendite kombinatsioone, et seda täielikult kontrollida, nii et sellel võib olla kattuvaid reegleid või sisendeid, millele ükski reegel ei sobi. Kontrollige selle reegleid või jagage see väiksemateks tabeliteks.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} suunab otsustustabeli „{decision}” järgi, mis võib anda „{value}”, mis pole ühegi selle väljapääsu nimi. Tehke iga väärtus väljundis, mille järgi see suunab, väljapääsu ID-ks või selle ploki ID-ks või nimeks, kuhu see viib.
+	Decision table	Otsustustabel
+	Open decision table	Ava otsustustabel
+	Hit policy	Tabamuspoliitika
+	Unique	Unikaalne
+	First	Esimene
+	Collect	Kogu
+	Aggregation	Koondamine
+	Sum	Summa
+	Count	Arv
+	Add rule	Lisa reegel
+	Remove rule	Eemalda reegel
+	Change Decision Table	Muuda otsustustabelit
+	Use Decision Table	Kasuta otsustustabelit
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Praegu ainult vaatamiseks: muutke tabelit selle .dmn-failis või käsuga dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Selle otsustustabeleid ei kirjutatud: rakendus ei kirjuta veel .dmn-faile.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Selle otsustustabelid tuleb veel salvestada, seega jäeti mudel avatuks: rakendus ei kirjuta veel .dmn-faile.
 	Reset {field}	Lähtesta: {field}
 	Changed from the default	Vaikeväärtusest muudetud
 	Changed from the inherited scenario	Päritud stsenaariumist muudetud

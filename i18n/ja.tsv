@@ -1458,6 +1458,27 @@ unit	yr	年
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} にプール「{pool}」のサービス時間がありますが、モデルにそのプールはありません。その時間を削除するか、存在するプールを選んでください。
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} にプール「{pool}」のサービス時間が 2 つあります。どちらか一方を残してください。
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} にプール「{pool}」のサービス時間がありますが、このブロックはそのプールを必要としていません。プールを必要なリソースに追加するか、その時間を削除してください。
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} はファイル {file} の決定表「{decision}」を使っていますが、使えません: {reason} 表を直すか、ブロックから外してください。
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} は決定表「{decision}」を使っており、そのルール {first} と {second} がどちらも {example} に一致しますが、ヒットポリシー Unique では一つしか一致できません。一つだけが一致するようにルールを変えるか、別のヒットポリシーを選んでください。
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} は決定表「{decision}」を使っていますが、どのルールも {example} に一致しないため、そのようなエンティティはそこで結果を得られません。意図したものでなければ、ルールか既定の出力を追加してください。
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} は決定表「{decision}」を使っていますが、入力の組み合わせが多すぎてすべては確認できないため、重なるルールや、どのルールにも一致しない入力があるかもしれません。ルールを確認するか、より小さな表に分けてください。
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} は決定表「{decision}」で振り分けますが、表は「{value}」を返すことがあり、これはどの出口の名前でもありません。振り分けに使う出力の各値を、出口の ID、または行き先となるブロックの ID か名前にしてください。
+	Decision table	決定表
+	Open decision table	決定表を開く
+	Hit policy	ヒットポリシー
+	Unique	一意
+	First	最初
+	Collect	収集
+	Aggregation	集計
+	Sum	合計
+	Count	件数
+	Add rule	ルールを追加
+	Remove rule	ルールを削除
+	Change Decision Table	決定表の変更
+	Use Decision Table	決定表の使用
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	現在は読み取り専用です。表は .dmn ファイルで、または dmn.set コマンドで編集してください。
+	Its decision tables were not written: the app does not write .dmn files yet.	決定表は書き込まれていません。アプリはまだ .dmn ファイルを書き込みません。
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	決定表はまだ保存が必要なため、モデルは開いたままにしました。アプリはまだ .dmn ファイルを書き込みません。
 	Reset {field}	{field} をリセット
 	Changed from the default	既定値から変更
 	Changed from the inherited scenario	継承元のシナリオから変更

@@ -736,6 +736,17 @@
     another: how their sections join (kind: inline, side or turntable) and the time across the
     junction (transfer, in the scenario's base time unit, 0 or more).
 
+    stochcraft:decision, on a task's or an exclusive gateway's ElementParameters: the decision
+    table it uses (DMN 1.6). file is the .dmn file, relative to the model's file; decision is the
+    decision's id in it; route, on a gateway whose table has several outputs, names the output
+    to route by. As an entity enters, the table is evaluated on its properties and the outputs
+    are written back as properties. A gateway none of whose ways out has a condition takes the
+    way whose flow id, target id or target name is the output's value.
+
+    <bpsim:VendorExtension name="stochcraft:decision" xmlns:stochcraft="…">
+      <stochcraft:decision file="sorting.dmn" decision="chute"/>
+    </bpsim:VendorExtension>
+
     stochcraft:scene, a child of the scenario: look-only scenery, one object per element with an
     id, a kind (floor, wall, pallet, column, marking...), its centre frame and its size. The run
     never reads it. version says which vocabulary of kinds the scene uses.
@@ -782,6 +793,13 @@
       <xs:attribute name="heading" type="xs:double" default="0"/>
       <xs:attribute name="path" type="xs:string"/>
       <xs:attribute name="s" type="xs:double"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="decision">
+    <xs:complexType>
+      <xs:attribute name="file" type="xs:string" use="required"/>
+      <xs:attribute name="decision" type="xs:string" use="required"/>
+      <xs:attribute name="route" type="xs:string"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="junction">

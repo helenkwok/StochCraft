@@ -1458,6 +1458,27 @@ unit	yr	년
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}에 모델에 없는 풀 “{pool}”의 서비스 시간이 있습니다. 그 시간을 제거하거나 존재하는 풀을 선택하세요.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block}에 풀 “{pool}”의 서비스 시간이 둘 있습니다. 하나만 남기세요.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}에 필요하지 않은 풀 “{pool}”의 서비스 시간이 있습니다. 그 풀을 필요 자원에 추가하거나 그 시간을 제거하세요.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block}은(는) 파일 {file}의 결정 테이블 “{decision}”을(를) 사용하지만 사용할 수 없습니다: {reason} 테이블을 고치거나 블록에서 떼어 내세요.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block}은(는) 결정 테이블 “{decision}”을(를) 사용하며, 그 규칙 {first}과(와) {second}이(가) 모두 {example}에 일치하지만 적중 정책 Unique에서는 하나만 일치할 수 있습니다. 하나만 일치하도록 규칙을 바꾸거나 다른 적중 정책을 고르세요.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block}은(는) 결정 테이블 “{decision}”을(를) 사용하지만 어떤 규칙도 {example}에 일치하지 않아 그런 개체는 그곳에서 결과를 얻지 못합니다. 의도한 것이 아니면 규칙이나 기본 출력을 추가하세요.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block}은(는) 결정 테이블 “{decision}”을(를) 사용하지만 입력 조합이 너무 많아 모두 확인할 수 없으므로, 겹치는 규칙이나 어떤 규칙에도 일치하지 않는 입력이 있을 수 있습니다. 규칙을 확인하거나 더 작은 테이블로 나누세요.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block}은(는) 결정 테이블 “{decision}”에 따라 경로를 정하는데, 이 테이블은 “{value}”을(를) 줄 수 있고 이는 어떤 출구의 이름도 아닙니다. 경로를 정하는 출력의 각 값을 출구의 id, 또는 향하는 블록의 id나 이름으로 하세요.
+	Decision table	결정 테이블
+	Open decision table	결정 테이블 열기
+	Hit policy	적중 정책
+	Unique	고유
+	First	첫 번째
+	Collect	수집
+	Aggregation	집계
+	Sum	합계
+	Count	개수
+	Add rule	규칙 추가
+	Remove rule	규칙 제거
+	Change Decision Table	결정 테이블 변경
+	Use Decision Table	결정 테이블 사용
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	지금은 읽기 전용입니다. 테이블은 해당 .dmn 파일에서 또는 dmn.set 명령으로 편집하세요.
+	Its decision tables were not written: the app does not write .dmn files yet.	결정 테이블은 기록되지 않았습니다. 앱은 아직 .dmn 파일을 기록하지 않습니다.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	결정 테이블을 아직 저장해야 하므로 모델을 열어 두었습니다. 앱은 아직 .dmn 파일을 기록하지 않습니다.
 	Reset {field}	{field} 초기화
 	Changed from the default	기본값에서 변경됨
 	Changed from the inherited scenario	상속된 시나리오에서 변경됨

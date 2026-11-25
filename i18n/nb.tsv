@@ -1458,6 +1458,27 @@ unit	yr	år
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} har en servicetid for puljen «{pool}», som modellen ikke har. Fjern den tiden, eller velg en pulje som finnes.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} har to servicetider for puljen «{pool}». Behold én av dem.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} har en servicetid for puljen «{pool}», som den ikke trenger. Legg puljen til i behovene, eller fjern den tiden.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} bruker beslutningstabellen «{decision}» fra filen {file}, som den ikke kan bruke: {reason} Rett tabellen, eller fjern den fra blokken.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} bruker beslutningstabellen «{decision}», der reglene {first} og {second} begge passer på {example}, men under treffpolicyen Unique kan bare én passe. Endre reglene slik at bare én passer, eller velg en annen treffpolicy.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} bruker beslutningstabellen «{decision}», der ingen regel passer på {example}, så en slik enhet får ikke noe resultat der. Legg til en regel eller et standardutdata, hvis det ikke er meningen.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} bruker beslutningstabellen «{decision}», som har for mange kombinasjoner av inndata til å kontrolleres helt, så den kan ha regler som overlapper, eller inndata som ingen regel passer på. Kontroller reglene, eller del den opp i mindre tabeller.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} ruter etter beslutningstabellen «{decision}», som kan gi «{value}», navnet på ingen av utgangene. Gjør hver verdi av utdataene den ruter etter til ID-en til en utgang, eller ID-en eller navnet til en blokk den fører til.
+	Decision table	Beslutningstabell
+	Open decision table	Åpne beslutningstabell
+	Hit policy	Treffpolicy
+	Unique	Entydig
+	First	Første
+	Collect	Samle
+	Aggregation	Aggregering
+	Sum	Sum
+	Count	Antall
+	Add rule	Legg til regel
+	Remove rule	Fjern regel
+	Change Decision Table	Endre beslutningstabell
+	Use Decision Table	Bruk beslutningstabell
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Foreløpig bare for visning: rediger tabellen i .dmn-filen dens, eller med kommandoen dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Beslutningstabellene ble ikke skrevet: appen skriver ikke .dmn-filer ennå.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Beslutningstabellene må fortsatt lagres, så modellen ble holdt åpen: appen skriver ikke .dmn-filer ennå.
 	Reset {field}	Nullstill {field}
 	Changed from the default	Endret fra standard
 	Changed from the inherited scenario	Endret fra det arvede scenarioet

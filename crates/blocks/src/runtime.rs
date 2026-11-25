@@ -20,12 +20,16 @@ use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
 
 use crate::series::{Quantity, Recording};
-use crate::{Assign, Compiled, ElementReport, Entity, Held, Report, Route, RunError, Source};
+use crate::{
+    Assign, Compiled, Decide, ElementReport, Entity, Held, Report, Route, RunError, Source,
+};
 
-/// What an element assigns to entities as they enter, and the stream it draws values from.
+/// What an element assigns to entities as they enter, and the stream it draws values from; and
+/// the decision table it evaluates then, after the assignments.
 struct Props {
     assigns: Vec<Assign>,
     rng: RefCell<Rng>,
+    decide: Option<Decide>,
 }
 
 /// The model's property slots and each element's assignments, shared by the ports.
@@ -42,16 +46,53 @@ impl Assigner {
     }
 
     /// Makes element `index`'s assignments to `e`, all from the values it arrived with, and
-    /// records the values in the element's statistics.
+    /// records the values in the element's statistics; then evaluates its decision table, if it
+    /// has one, on the values after them, and writes the outputs (a null result clears them).
     fn enter(&self, index: usize, e: &mut Entity, stats: &[RefCell<BlockStats>]) {
         let Some(props) = self.elements.get(index) else {
             return;
         };
-        if props.assigns.is_empty() {
+        if props.assigns.is_empty() && props.decide.is_none() {
             return;
         }
         if e.properties.len() < self.slots.len() {
             e.properties.resize(self.slots.len(), None);
+        }
+        self.assign(props, index, e, stats);
+        if let Some(d) = &props.decide {
+            let values = {
+                let read = |name: &str| {
+                    let slot = self.slots.binary_search_by(|s| s.as_str().cmp(name)).ok()?;
+                    e.properties.get(slot)?.as_ref().map(Held::value)
+                };
+                d.table.properties(&read)
+            };
+            let mut s = stats.get(index).map(RefCell::borrow_mut);
+            for ((to, tally), v) in d
+                .outputs
+                .iter()
+                .zip(&d.tally)
+                .zip(values.unwrap_or_default())
+            {
+                if let Some((slot, ty)) = to
+                    && let Some(p) = e.properties.get_mut(*slot)
+                {
+                    *p = v.as_ref().and_then(|v| Held::of(v, *ty));
+                    if let (Some(s), Some(k), Some(x)) =
+                        (&mut s, tally, p.as_ref().and_then(Held::statistic))
+                        && let Some(t) = s.properties.get_mut(*k)
+                    {
+                        t.add(x);
+                    }
+                }
+            }
+        }
+    }
+
+    /// Element `index`'s own assignments to `e` (see [`Assigner::enter`]).
+    fn assign(&self, props: &Props, index: usize, e: &mut Entity, stats: &[RefCell<BlockStats>]) {
+        if props.assigns.is_empty() {
+            return;
         }
         let read = |name: &str| {
             let slot = self.slots.binary_search_by(|s| s.as_str().cmp(name)).ok()?;
@@ -148,7 +189,7 @@ impl Compiled {
         let mut sim = Sim::new();
         let ctx = sim.ctx();
         let stats: Rc<Vec<RefCell<BlockStats>>> = Rc::new(
-            self.assigns
+            self.reported
                 .iter()
                 .map(|a| RefCell::new(BlockStats::new(0.0, a.len())))
                 .collect(),
@@ -393,10 +434,12 @@ impl Compiled {
             elements: self
                 .assigns
                 .iter()
+                .zip(&self.decides)
                 .enumerate()
-                .map(|(i, a)| Props {
+                .map(|(i, (a, d))| Props {
                     assigns: a.clone(),
                     rng: RefCell::new(stream("properties", i)),
+                    decide: d.clone(),
                 })
                 .collect(),
         });
@@ -1225,7 +1268,7 @@ impl Live<'_> {
             .elements
             .iter()
             .zip(self.stats.iter())
-            .zip(&self.compiled.assigns)
+            .zip(&self.compiled.reported)
             .zip(self.feeds_buffer.iter().zip(&self.feeds_transfer))
             .zip(&self.compiled.inputs)
             .map(|((((e, s), a), (&blocks, &transfers)), &inputs)| {
@@ -1788,7 +1831,7 @@ impl BlockStats {
     pub(crate) fn report(
         &self,
         element: &Element,
-        assigns: &[Assign],
+        properties: &[String],
         sends: Sends,
         join: bool,
         end: f64,
@@ -2125,10 +2168,10 @@ impl BlockStats {
             }),
             time_restarting: checked
                 .and_then(|(c, _)| self.states.restarting.average(end).map(|x| x / c)),
-            properties: assigns
+            properties: properties
                 .iter()
                 .zip(&self.properties)
-                .map(|(a, t)| (a.name.clone(), t.mean()))
+                .map(|(name, t)| (name.clone(), t.mean()))
                 .collect(),
             inside_at_start: self.inside_at_start,
             inside_at_end: self.inside(),

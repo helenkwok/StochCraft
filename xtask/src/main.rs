@@ -7,6 +7,7 @@
 
 mod affected;
 mod bpsim;
+mod dmn;
 mod layers;
 mod miwg;
 mod scxml;
@@ -26,6 +27,8 @@ cargo xtask <command>
                   under Node's WASI (xtask/wasi-run.mjs): the pinned results must match there too
   fetch-bpsim     download the BPSim reference models and XML Schema from bpsim.org into
                   target/bpsim (checked against pinned SHA-256; never committed)
+  fetch-dmn       download OMG's DMN 1.6 XML Schema into target/dmn (checked against pinned
+                  SHA-256; never committed)
   fetch-miwg      fetch the BPMN MIWG test suite's Reference/ folder at a pinned commit into
                   target/miwg (CC BY 3.0; never committed)
   fetch-scxml     download W3C's SCXML 1.0 XML Schema into target/scxml (checked against
@@ -48,6 +51,7 @@ fn main() -> ExitCode {
         Some("wasm") => cmd_wasm(),
         Some("golden") => cmd_golden(),
         Some("fetch-bpsim") => bpsim::fetch(),
+        Some("fetch-dmn") => dmn::fetch(),
         Some("fetch-miwg") => miwg::fetch(),
         Some("fetch-scxml") => scxml::fetch(),
         Some("web-fonts") => cmd_web_fonts(),
