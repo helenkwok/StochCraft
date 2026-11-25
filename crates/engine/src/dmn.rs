@@ -500,6 +500,15 @@ impl Engine {
         Ok(out)
     }
 
+    /// Whether a table file the model reads holds other tables than the model: as last read or
+    /// written (a file the model no longer reads, or has never been read or written, is not
+    /// counted).
+    pub(crate) fn dmn_unsaved(&self) -> bool {
+        self.dmn
+            .iter()
+            .any(|(href, f)| self.model.dmn.get(href).is_some_and(|d| *d != f.read))
+    }
+
     /// Records that the model's `.dmn` files were written as `written` (by reference), so the
     /// next save starts from them.
     pub(crate) fn dmn_saved(&mut self, written: Vec<(String, Vec<u8>)>) {

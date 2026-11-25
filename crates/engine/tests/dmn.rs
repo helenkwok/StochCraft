@@ -333,8 +333,11 @@ fn a_table_file_written_by_a_failed_save_is_not_taken_for_a_change() {
     assert!(e.execute("file.save", json!({})).is_err());
     block(false);
     ok(&mut e, "undo", json!({}));
+    // The model is as last saved, but its table file is not: still unsaved.
+    assert!(e.is_dirty(), "the table file holds the undone edit");
     ok(&mut e, "file.save", json!({}));
     assert_eq!(read(&dmn), edited);
+    assert!(!e.is_dirty());
 }
 
 /// A table file that could not be read stops a run only while a block uses it.
@@ -394,4 +397,35 @@ fn edits_are_kept_as_the_files_read_them_back() {
     ok(&mut e, "file.save", json!({}));
     let back = stochcraft_io::dmn::read_dmn(&read(&dmn)).unwrap_or_else(|err| panic!("{err}"));
     assert_eq!(back, e.model().dmn["sorting.dmn"]);
+}
+
+/// The app's save writes the model's file only ([`Engine::saved_to`]): a table edited since the
+/// `.dmn` file was written keeps the model unsaved, until a save that writes the file.
+#[test]
+fn a_save_of_the_model_s_file_alone_leaves_an_edited_table_unsaved() {
+    let dir = folder("model-only-save");
+    let (bpmn, _) = write_sorter(&dir);
+    let path = bpmn.to_string_lossy().into_owned();
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({ "path": path }));
+    // Nothing edited: the model's file alone is the whole save.
+    let bytes = e.save_bytes(false).unwrap_or_else(|err| panic!("{err}"));
+    e.saved_to(&path, &bytes)
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert!(!e.is_dirty());
+    // A table edited: the model's file written, the table not.
+    let got = ok(&mut e, "dmn.get", json!({ "file": "sorting.dmn" }));
+    let mut t = got["files"][0]["decisions"][0]["table"].clone();
+    t["rules"][0]["outputs"][0] = json!("\"chute_b\"");
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "sorting.dmn", "decision": "chute", "table": t }),
+    );
+    let bytes = e.save_bytes(false).unwrap_or_else(|err| panic!("{err}"));
+    e.saved_to(&path, &bytes)
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert!(e.is_dirty(), "the edited table is not on disk");
+    ok(&mut e, "file.save", json!({}));
+    assert!(!e.is_dirty());
 }

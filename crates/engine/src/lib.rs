@@ -913,9 +913,14 @@ impl Engine {
     }
 
     /// Whether the model (the process model, or the system dynamics model with its diagram)
-    /// differs from the one last opened or saved.
+    /// differs from the one last opened or saved, or a decision table differs from its `.dmn`
+    /// file as this engine last read or wrote it. A save that wrote the table file and then
+    /// failed leaves the file edited; undoing the edit then gives back the model last saved, but
+    /// not the file, so the model is still unsaved until a save writes the table back.
     pub fn is_dirty(&self) -> bool {
-        self.model != self.saved || self.sd.as_ref().is_some_and(|d| d.model != d.saved)
+        self.model != self.saved
+            || self.sd.as_ref().is_some_and(|d| d.model != d.saved)
+            || self.dmn_unsaved()
     }
 
     /// The file the model was opened from or last saved to.
@@ -1157,8 +1162,16 @@ impl Engine {
 
     /// Records that the model was saved as `bytes` at `path`, as the app does once its shell has
     /// written the file. Journalled as a `file.save` step, as saving with the command is.
+    ///
+    /// The shell writes the model's file only, not the `.dmn` files beside it (`file.save` writes
+    /// those), so the decision tables are recorded as they were last saved: a table edited or
+    /// made since leaves the model unsaved ([`Engine::is_dirty`]).
     pub fn saved_to(&mut self, path: &str, bytes: &[u8]) -> Result<Value, CommandError> {
+        let tables = self.saved.dmn.clone();
         let result = self.record_saved(path, bytes)?;
+        if self.sd.is_none() {
+            self.saved.dmn = tables;
+        }
         self.journal.push(JournalEntry {
             command: "file.save".to_owned(),
             params: json!({ "path": path }),
