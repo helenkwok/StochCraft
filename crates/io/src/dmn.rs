@@ -558,6 +558,9 @@ struct Pairs {
 ///    place, only when as many are left on each side and no equal items were left undecided.
 ///    Otherwise which continues which is not known, and the old ones left are `unknown`.
 ///
+/// Without `decidable` (the `same` comparison cannot tell apart old items that differ), steps 2
+/// and 3 are not taken: the items not paired by id are not known, and nor are the old ones left.
+///
 /// Each of `old`'s is taken once.
 fn pair<T>(
     old: &[T],
@@ -565,6 +568,7 @@ fn pair<T>(
     id: impl Fn(&T) -> Option<&str>,
     same: impl Fn(&T, &T) -> bool,
     rich: impl Fn(usize) -> bool,
+    decidable: bool,
 ) -> Pairs {
     let mut used = vec![false; old.len()];
     let mut from: Vec<Option<usize>> = vec![None; new.len()];
@@ -583,7 +587,7 @@ fn pair<T>(
     let open = |i: usize, used: &[bool]| {
         !used.get(i).copied().unwrap_or(true) && old.get(i).is_some_and(|o| id(o).is_none())
     };
-    for j in 0..new.len() {
+    for j in (0..new.len()).filter(|_| decidable) {
         if from[j].is_none()
             && open(j, &used)
             && old.get(j).zip(new.get(j)).is_some_and(|(o, n)| same(o, n))
@@ -592,9 +596,9 @@ fn pair<T>(
             from[j] = Some(j);
         }
     }
-    let mut undecided = false;
+    let mut undecided = !decidable;
     for (n, from) in new.iter().zip(from.iter_mut()) {
-        if from.is_some() {
+        if from.is_some() || !decidable {
             continue;
         }
         let equal: Vec<usize> = (0..old.len())
@@ -625,6 +629,15 @@ fn pair<T>(
         unknown = old_left;
     }
     Pairs { from, unknown }
+}
+
+/// A rule's `cells` (of one kind) as the new columns show them: for each, the cell of the old
+/// column it continues (none for a new column).
+fn projected<'a>(cells: &'a [String], columns: &[Option<usize>]) -> Vec<Option<&'a String>> {
+    columns
+        .iter()
+        .map(|from| from.and_then(|i| cells.get(i)))
+        .collect()
 }
 
 /// Whether a rule's `new` cells (of one kind) are `old`'s, each column's compared with the cell
@@ -843,6 +856,7 @@ impl Patch<'_> {
                 } == *n
             },
             |i| rich(0, i),
+            true,
         );
         let outputs = pair(
             &old.outputs,
@@ -855,6 +869,7 @@ impl Patch<'_> {
                 } == *n
             },
             |i| rich(1, i),
+            true,
         );
         let annotations = pair(
             &old.annotations,
@@ -862,9 +877,27 @@ impl Patch<'_> {
             |_| None,
             |o, n| o == n,
             |i| rich(2, i),
+            true,
         );
         // A rule's cells are compared column by column, each new column with the old one it
         // continues, so a rule whose cells moved with their columns is the same rule.
+        // Rules are told apart only by what the new columns still show of them. When columns
+        // are removed or replaced, two different rules without ids can show the same, and
+        // which edited rule continues which is then not known.
+        let alike = |x: &Rule, y: &Rule| {
+            x.description == y.description
+                && projected(&x.inputs, &inputs.from) == projected(&y.inputs, &inputs.from)
+                && projected(&x.outputs, &outputs.from) == projected(&y.outputs, &outputs.from)
+                && projected(&x.annotations, &annotations.from)
+                    == projected(&y.annotations, &annotations.from)
+        };
+        let unnamed: Vec<&Rule> = old.rules.iter().filter(|r| r.id.is_none()).collect();
+        let decidable = unnamed.iter().enumerate().all(|(a, x)| {
+            unnamed
+                .iter()
+                .skip(a + 1)
+                .all(|y| !alike(x, y) || **x == **y)
+        });
         let rules = pair(
             &old.rules,
             &new.rules,
@@ -876,6 +909,7 @@ impl Patch<'_> {
                     && same_cells(&o.annotations, &n.annotations, &annotations.from)
             },
             |i| rich(3, i),
+            decidable,
         );
         // An item without an id whose place in the edited table is not known is not kept; that
         // is refused only if it holds what the model does not, which would otherwise be lost or
@@ -1849,5 +1883,42 @@ mod tests {
             .unwrap_or_default();
         assert!(refused.contains("rule 1"), "{refused}");
         assert!(saved(&table_file(output, &rules("")), edit).is_ok());
+    }
+
+    /// Two rules without ids that differ only in their one output column, which is replaced while
+    /// the rules are swapped: nothing left tells which edited rule continues which, so the save
+    /// is refused when the rules hold what the model does not, and saved when they do not.
+    #[test]
+    fn rules_the_new_columns_cannot_tell_apart_are_not_matched() {
+        let rules = |ext: bool| {
+            let x = |v: &str| {
+                if ext {
+                    format!(
+                        r#"<extensionElements><v:x xmlns:v="urn:v">{v}</v:x></extensionElements>"#
+                    )
+                } else {
+                    String::new()
+                }
+            };
+            format!(
+                r#"<rule>{}<inputEntry><text>-</text></inputEntry><outputEntry><text>1</text></outputEntry></rule><rule>{}<inputEntry><text>-</text></inputEntry><outputEntry><text>2</text></outputEntry></rule>"#,
+                x("one"),
+                x("two")
+            )
+        };
+        let output = r#"<output id="o1" name="a"/>"#;
+        let edit = |t: &mut Table| {
+            t.outputs = vec![Output {
+                id: Some("o9".into()),
+                name: Some("b".into()),
+                ..Output::default()
+            }];
+            t.rules.reverse();
+        };
+        let refused = saved(&table_file(output, &rules(true)), edit)
+            .err()
+            .unwrap_or_default();
+        assert!(refused.contains("rule 1"), "{refused}");
+        assert!(saved(&table_file(output, &rules(false)), edit).is_ok());
     }
 }
