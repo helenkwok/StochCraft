@@ -1486,6 +1486,7 @@ connection	Flow	Rrjedhë
 	Add a straight path	Shto një shteg të drejtë
 	Drawn length: {length} {unit}	Gjatësia e vizatuar: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ky shteg ngjitet ose ka një spirale: pikat e tij nuk mund të ndryshohen këtu.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ky shteg kthehet një rreth të plotë ose më shumë në një hark: pikat e tij nuk mund të ndryshohen këtu.
 	Point {n}	Pika {n}
 	x of point {n}	x i pikës {n}
 	y of point {n}	y i pikës {n}

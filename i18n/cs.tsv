@@ -1486,6 +1486,7 @@ connection	Flow	Tok
 	Add a straight path	Přidat rovnou trasu
 	Drawn length: {length} {unit}	Nakreslená délka: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Tato trasa stoupá nebo má šroubovici: její body zde nelze upravit.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Tato trasa se v jednom oblouku otočí o celý kruh nebo víc: její body zde nelze upravit.
 	Point {n}	Bod {n}
 	x of point {n}	x bodu {n}
 	y of point {n}	y bodu {n}

@@ -1486,6 +1486,7 @@ connection	Flow	ప్రవాహం
 	Add a straight path	నేరుగా ఉన్న మార్గం జోడించు
 	Drawn length: {length} {unit}	గీసిన పొడవు: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	ఈ మార్గం పైకి ఎక్కుతుంది లేదా హెలిక్స్ ఉంది: దాని బిందువులను ఇక్కడ సవరించలేరు.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	ఈ మార్గం ఒకే వంపులో పూర్తి వృత్తం లేదా అంతకంటే ఎక్కువ తిరుగుతుంది: దాని బిందువులను ఇక్కడ సవరించలేరు.
 	Point {n}	బిందువు {n}
 	x of point {n}	బిందువు {n} యొక్క x
 	y of point {n}	బిందువు {n} యొక్క y

@@ -1486,6 +1486,7 @@ connection	Flow	Flyt
 	Add a straight path	Legg til en rett bane
 	Drawn length: {length} {unit}	Tegnet lengde: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Denne banen stiger eller har en spiral: punktene kan ikke redigeres her.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Denne banen svinger en hel sirkel eller mer i én bue: punktene kan ikke redigeres her.
 	Point {n}	Punkt {n}
 	x of point {n}	x for punkt {n}
 	y of point {n}	y for punkt {n}

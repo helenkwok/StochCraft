@@ -1486,6 +1486,7 @@ connection	Flow	Verbindung
 	Add a straight path	Geraden Pfad hinzufügen
 	Drawn length: {length} {unit}	Gezeichnete Länge: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Dieser Pfad steigt an oder hat eine Wendel: Seine Punkte lassen sich hier nicht bearbeiten.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Dieser Pfad dreht sich in einem Bogen um einen ganzen Kreis oder mehr: Seine Punkte lassen sich hier nicht bearbeiten.
 	Point {n}	Punkt {n}
 	x of point {n}	x von Punkt {n}
 	y of point {n}	y von Punkt {n}

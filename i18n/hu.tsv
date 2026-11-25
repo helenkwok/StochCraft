@@ -1486,6 +1486,7 @@ connection	Flow	Folyamat
 	Add a straight path	Egyenes útvonal hozzáadása
 	Drawn length: {length} {unit}	Megrajzolt hossz: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ez az útvonal emelkedik vagy csavarvonalat tartalmaz: pontjai itt nem szerkeszthetők.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ez az útvonal egyetlen ívben egy teljes kört vagy többet fordul: pontjai itt nem szerkeszthetők.
 	Point {n}	{n}. pont
 	x of point {n}	{n}. pont x
 	y of point {n}	{n}. pont y

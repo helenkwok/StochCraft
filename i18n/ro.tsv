@@ -1486,6 +1486,7 @@ connection	Flow	Flux
 	Add a straight path	Adaugă un traseu drept
 	Drawn length: {length} {unit}	Lungime desenată: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Acest traseu urcă sau are o elice: punctele lui nu pot fi editate aici.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Acest traseu face un cerc complet sau mai mult într-un singur arc: punctele lui nu pot fi editate aici.
 	Point {n}	Punctul {n}
 	x of point {n}	x al punctului {n}
 	y of point {n}	y al punctului {n}

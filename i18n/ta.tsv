@@ -1486,6 +1486,7 @@ connection	Flow	ஓட்டம்
 	Add a straight path	நேரான பாதையைச் சேர்
 	Drawn length: {length} {unit}	வரைந்த நீளம்: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	இந்தப் பாதை மேலே ஏறுகிறது அல்லது சுருள் உள்ளது: அதன் புள்ளிகளை இங்கே திருத்த முடியாது.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	இந்தப் பாதை ஒரே வளைவில் ஒரு முழு வட்டம் அல்லது அதற்கு மேல் திரும்புகிறது: அதன் புள்ளிகளை இங்கே திருத்த முடியாது.
 	Point {n}	புள்ளி {n}
 	x of point {n}	புள்ளி {n} இன் x
 	y of point {n}	புள்ளி {n} இன் y

@@ -1486,6 +1486,7 @@ connection	Flow	Przepływ
 	Add a straight path	Dodaj prostą trasę
 	Drawn length: {length} {unit}	Narysowana długość: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ta trasa wznosi się lub ma spiralę: jej punktów nie można tu edytować.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ta trasa zatacza w jednym łuku pełne koło lub więcej: jej punktów nie można tu edytować.
 	Point {n}	Punkt {n}
 	x of point {n}	x punktu {n}
 	y of point {n}	y punktu {n}

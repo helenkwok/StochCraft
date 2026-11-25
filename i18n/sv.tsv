@@ -1486,6 +1486,7 @@ connection	Flow	Flöde
 	Add a straight path	Lägg till en rak bana
 	Drawn length: {length} {unit}	Ritad längd: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Den här banan stiger eller har en spiral: dess punkter kan inte redigeras här.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Den här banan svänger en hel cirkel eller mer i en båge: dess punkter kan inte redigeras här.
 	Point {n}	Punkt {n}
 	x of point {n}	x för punkt {n}
 	y of point {n}	y för punkt {n}

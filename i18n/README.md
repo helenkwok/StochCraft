@@ -1036,9 +1036,10 @@ fields (`“Service time”`) are named in the messages by their own rows.
 - The rows for drawing and editing a conveyor's path in the Layout view (M5.5, L4 part 1: Draw
   path, the points and their bends, the properties panel's path fields, the Change Path undo
   label) were machine-drafted from the plain meaning of the English, with each catalog's own word
-  for the Layout view and its "drag to pan, scroll to zoom" wording from its existing rows. Not
-  checked against any other source and not reviewed by native speakers; the least certain are lo,
-  th, ta, te, bn, ka, kk and hi.
+  for the Layout view and its "drag to pan, scroll to zoom" wording from its existing rows. The
+  row for a path that turns a whole circle or more in one arc reuses the second half of each
+  catalog's row for a path that climbs. Not checked against any other source and not reviewed by
+  native speakers; the least certain are lo, th, ta, te, bn, ka, kk and hi.
 - The rows for the start page's search and its new field (Search examples, Clear search,
   Logistics and warehousing) and for the parcel sorter example's line about it, its question and
   what it teaches (which had no rows before) were machine-drafted from the plain meaning of the

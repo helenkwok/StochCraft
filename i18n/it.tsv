@@ -1486,6 +1486,7 @@ connection	Flow	Flusso
 	Add a straight path	Aggiungi un percorso dritto
 	Drawn length: {length} {unit}	Lunghezza disegnata: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Questo percorso sale o ha un'elica: i suoi punti non si possono modificare qui.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Questo percorso compie un giro completo o più in un solo arco: i suoi punti non si possono modificare qui.
 	Point {n}	Punto {n}
 	x of point {n}	x del punto {n}
 	y of point {n}	y del punto {n}

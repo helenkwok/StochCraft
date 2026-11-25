@@ -1486,6 +1486,7 @@ connection	Flow	Ток
 	Add a straight path	Додај праву путању
 	Drawn length: {length} {unit}	Нацртана дужина: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ова путања се пење или има спиралу: њене тачке се овде не могу уређивати.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ова путања се у једном луку окреће за цео круг или више: њене тачке се овде не могу уређивати.
 	Point {n}	Тачка {n}
 	x of point {n}	x тачке {n}
 	y of point {n}	y тачке {n}

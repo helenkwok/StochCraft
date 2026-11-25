@@ -1486,6 +1486,7 @@ connection	Flow	Поток
 	Add a straight path	Добави право трасе
 	Drawn length: {length} {unit}	Начертана дължина: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Това трасе се изкачва или има спирала: точките му не могат да се редактират тук.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Това трасе прави пълен кръг или повече в една дъга: точките му не могат да се редактират тук.
 	Point {n}	Точка {n}
 	x of point {n}	x на точка {n}
 	y of point {n}	y на точка {n}

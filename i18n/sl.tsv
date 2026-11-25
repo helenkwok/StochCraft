@@ -1486,6 +1486,7 @@ connection	Flow	Tok
 	Add a straight path	Dodaj ravno pot
 	Drawn length: {length} {unit}	Narisana dolžina: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ta pot se vzpenja ali ima vijačnico: njenih točk tu ni mogoče urejati.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ta pot se v enem loku zavrti za cel krog ali več: njenih točk tu ni mogoče urejati.
 	Point {n}	Točka {n}
 	x of point {n}	x točke {n}
 	y of point {n}	y točke {n}

@@ -1486,6 +1486,7 @@ connection	Flow	Flux
 	Add a straight path	Ajouter un tracé droit
 	Drawn length: {length} {unit}	Longueur dessinée : {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ce tracé monte ou comporte une hélice : ses points ne peuvent pas être modifiés ici.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ce tracé fait un tour complet ou plus en un seul arc : ses points ne peuvent pas être modifiés ici.
 	Point {n}	Point {n}
 	x of point {n}	x du point {n}
 	y of point {n}	y du point {n}

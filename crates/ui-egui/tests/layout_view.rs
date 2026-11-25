@@ -176,3 +176,110 @@ fn a_point_is_dragged_and_moved_by_the_keys() {
         "{nudged:?}"
     );
 }
+
+/// Drags from `from` by `by` in four held steps, the last `held` of the way, then lets go at
+/// `from + by` (in the same frame as any movement left).
+fn drag_by(h: &mut Harness<'static, App>, from: egui::Pos2, by: egui::Vec2, held: f32) {
+    h.hover_at(from);
+    settle(h);
+    h.drag_at(from);
+    h.run_steps(1);
+    for f in [0.25, 0.5, 0.75, 1.0] {
+        h.hover_at(from + by * (held * f));
+        h.run_steps(1);
+    }
+    h.drop_at(from + by);
+    settle(h);
+}
+
+fn point_of(h: &Harness<'static, App>, label: &str) -> egui::Pos2 {
+    h.get_by_label_contains(label).rect().center()
+}
+
+#[test]
+fn a_point_and_the_belt_go_where_they_are_let_go() {
+    let mut h = sorter();
+    on_layout(&mut h, "lane_red");
+    let before = points(&h, "lane_red").expect("a track");
+    let end = point_of(&h, "Point 2 of Lane red");
+    let by = egui::vec2(60.0, 0.0);
+    // Held all the way, then let go where the pointer already is.
+    drag_by(&mut h, end, by, 1.0);
+    let all_the_way = points(&h, "lane_red").expect("a track");
+    h.state_mut().undo();
+    settle(&mut h);
+    // Held half way, then let go 30 px further on in the same frame: the same place.
+    drag_by(&mut h, end, by, 0.5);
+    let let_go = points(&h, "lane_red").expect("a track");
+    assert!(all_the_way[1][0] > before[1][0] + 0.1, "{all_the_way:?}");
+    assert_eq!(let_go, all_the_way);
+    h.state_mut().undo();
+    settle(&mut h);
+    assert_eq!(points(&h, "lane_red").expect("a track"), before);
+
+    // The whole belt, grabbed a quarter of the way along it, likewise.
+    let start = point_of(&h, "Point 1 of Lane red");
+    let grab = start + (end - start) * 0.25;
+    drag_by(&mut h, grab, by, 1.0);
+    let moved = points(&h, "lane_red").expect("a track");
+    let shift = moved[0][0] - before[0][0];
+    assert!(shift > 0.1, "{moved:?}");
+    assert!(
+        ((moved[1][0] - before[1][0]) - shift).abs() < 1e-6,
+        "{moved:?}"
+    );
+    h.state_mut().undo();
+    settle(&mut h);
+    drag_by(&mut h, grab, by, 0.5);
+    assert_eq!(points(&h, "lane_red").expect("a track"), moved);
+}
+
+#[test]
+fn shift_and_an_arrow_move_a_point_a_metre() {
+    let mut h = sorter();
+    on_layout(&mut h, "lane_red");
+    let before = points(&h, "lane_red").expect("a track");
+    h.get_by_label_contains("Point 2 of Lane red").click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::SHIFT, egui::Key::ArrowRight);
+    settle(&mut h);
+    let nudged = points(&h, "lane_red").expect("a track");
+    assert!(
+        (nudged[1][0] - before[1][0] - 1.0).abs() < 1e-6,
+        "{nudged:?}"
+    );
+}
+
+#[test]
+fn a_track_set_during_a_drag_ends_it_and_is_kept() {
+    let mut h = sorter();
+    on_layout(&mut h, "lane_red");
+    let end = point_of(&h, "Point 2 of Lane red");
+    h.hover_at(end);
+    settle(&mut h);
+    h.drag_at(end);
+    h.run_steps(1);
+    for f in [0.25, 0.5] {
+        h.hover_at(end + egui::vec2(60.0 * f, 0.0));
+        h.run_steps(1);
+    }
+    // An agent draws the lane anew while the point is held.
+    h.state_mut()
+        .control(
+            "track.set",
+            serde_json::json!({ "id": "lane_red", "track": {
+                "start": { "x": 0.0, "y": 0.0 },
+                "segments": [{ "type": "line", "length": 3.0 }]
+            } }),
+        )
+        .expect("track.set");
+    h.run_steps(1);
+    h.hover_at(end + egui::vec2(60.0, 0.0));
+    h.run_steps(1);
+    h.drop_at(end + egui::vec2(60.0, 0.0));
+    settle(&mut h);
+    assert_eq!(
+        points(&h, "lane_red").expect("a track"),
+        vec![[0.0, 0.0], [3.0, 0.0]]
+    );
+}

@@ -1486,6 +1486,7 @@ connection	Flow	Fluxo
 	Add a straight path	Adicionar um percurso reto
 	Drawn length: {length} {unit}	Comprimento desenhado: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Este percurso sobe ou tem uma hélice: seus pontos não podem ser editados aqui.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Este percurso gira um círculo completo ou mais em um só arco: seus pontos não podem ser editados aqui.
 	Point {n}	Ponto {n}
 	x of point {n}	x do ponto {n}
 	y of point {n}	y do ponto {n}

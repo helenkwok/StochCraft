@@ -1486,6 +1486,7 @@ connection	Flow	Flow
 	Add a straight path	Tilføj en lige bane
 	Drawn length: {length} {unit}	Tegnet længde: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Denne bane stiger eller har en spiral: dens punkter kan ikke redigeres her.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Denne bane drejer en hel cirkel eller mere i én bue: dens punkter kan ikke redigeres her.
 	Point {n}	Punkt {n}
 	x of point {n}	x for punkt {n}
 	y of point {n}	y for punkt {n}

@@ -1486,6 +1486,7 @@ connection	Flow	प्रवाह
 	Add a straight path	सीधा पथ जोड़ें
 	Drawn length: {length} {unit}	बनाई गई लंबाई: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	यह पथ ऊपर चढ़ता है या इसमें हेलिक्स है: इसके बिंदु यहाँ संपादित नहीं किए जा सकते।
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	यह पथ एक ही चाप में पूरा एक वृत्त या उससे अधिक घूमता है: इसके बिंदु यहाँ संपादित नहीं किए जा सकते।
 	Point {n}	बिंदु {n}
 	x of point {n}	बिंदु {n} का x
 	y of point {n}	बिंदु {n} का y

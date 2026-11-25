@@ -28,7 +28,7 @@ use egui::{
 };
 use serde_json::{Value, json};
 use stochcraft_model::site::{default_bend, to_step};
-use stochcraft_model::{Element, ElementId, ElementKind, Model, Outline, Path};
+use stochcraft_model::{Element, ElementId, ElementKind, Model, Outline, Path, Segment};
 
 use crate::App;
 use crate::i18n::{t, tf};
@@ -353,11 +353,24 @@ struct Drawing {
 }
 
 /// A drag on the plan: of a point of the selected path or of the whole path (to and by, in the
-/// model's length unit), or of the view.
-#[derive(Debug, Clone, Copy, PartialEq)]
+/// model's length unit), or of the view. A drag of a path is of conveyor `conveyor` as the model
+/// was at `revision`: if the model changes under it (an agent's edit, an undo), the drag ends
+/// without writing over the change.
+#[derive(Debug, Clone, PartialEq)]
 enum Drag {
-    Point { index: usize, to: [f64; 2] },
-    Whole { by: [f64; 2] },
+    Point {
+        conveyor: String,
+        revision: u64,
+        index: usize,
+        to: [f64; 2],
+    },
+    /// `at` is where the pointer was when `by` was last worked out.
+    Whole {
+        conveyor: String,
+        revision: u64,
+        by: [f64; 2],
+        at: Pos2,
+    },
     Pan,
 }
 
@@ -612,11 +625,24 @@ impl App {
                 &ch.id == c && ch.outline.as_ref().is_some_and(|o| *i < o.points.len())
             })
         });
-        let mut drag = self
-            .layout_view
-            .drag
-            .take()
-            .filter(|d| *d == Drag::Pan || chosen.as_ref().is_some_and(|c| c.path.is_some()));
+        let mut drag = self.layout_view.drag.take().filter(|d| match d {
+            Drag::Pan => true,
+            Drag::Point {
+                conveyor,
+                revision: r,
+                ..
+            }
+            | Drag::Whole {
+                conveyor,
+                revision: r,
+                ..
+            } => {
+                *r == revision
+                    && chosen
+                        .as_ref()
+                        .is_some_and(|c| &c.id == conveyor && c.path.is_some())
+            }
+        });
         let drawing_name = drawing.as_ref().map(|d| {
             self.engine
                 .model()
@@ -739,8 +765,8 @@ impl App {
             && let Some(outline) = &ch.outline
         {
             for (i, q) in outline.points.iter().enumerate() {
-                let shown_at = match drag {
-                    Some(Drag::Point { index, to }) if index == i => to,
+                let shown_at = match &drag {
+                    Some(Drag::Point { index, to, .. }) if *index == i => *to,
                     _ => *q,
                 };
                 let pos = to_screen(&vw, shown_at);
@@ -765,17 +791,24 @@ impl App {
                     r.request_focus();
                 }
                 if r.drag_started() {
-                    drag = Some(Drag::Point { index: i, to: *q });
+                    drag = Some(Drag::Point {
+                        conveyor: ch.id.clone(),
+                        revision,
+                        index: i,
+                        to: *q,
+                    });
                 }
-                if r.dragged()
-                    && let Some(Drag::Point { index, to }) = &mut drag
+                // The frame that lets go has the pointer where it was let go, even if it moved
+                // in that frame (egui says `drag_stopped` and not `dragged` then).
+                if (r.dragged() || r.drag_stopped())
+                    && let Some(Drag::Point { index, to, .. }) = &mut drag
                     && *index == i
                     && let Some(at) = r.interact_pointer_pos()
                 {
                     *to = to_model(&vw, at);
                 }
                 if r.drag_stopped() {
-                    if let Some(Drag::Point { index, to }) = drag
+                    if let Some(Drag::Point { index, to, .. }) = drag
                         && index == i
                         && to != *q
                     {
@@ -786,7 +819,8 @@ impl App {
                 if r.has_focus() {
                     let by = ui.input_mut(|k| {
                         let mut by = [0.0, 0.0];
-                        for (mods, metres) in [(Modifiers::NONE, 0.1), (Modifiers::SHIFT, 1.0)] {
+                        // Shift first: a plain arrow's match also takes a shifted press.
+                        for (mods, metres) in [(Modifiers::SHIFT, 1.0), (Modifiers::NONE, 0.1)] {
                             let d = metres / m;
                             if k.consume_key(mods, Key::ArrowLeft) {
                                 by[0] -= d;
@@ -827,24 +861,34 @@ impl App {
                         && belt_at(&plan, in_metres(&vw, origin), slack)
                             .is_some_and(|b| b.id == c.id)
                 });
-            drag = Some(if on_chosen {
-                Drag::Whole { by: [0.0, 0.0] }
-            } else {
-                Drag::Pan
+            drag = Some(match chosen.as_ref().filter(|_| on_chosen) {
+                Some(c) => Drag::Whole {
+                    conveyor: c.id.clone(),
+                    revision,
+                    by: [0.0, 0.0],
+                    at: origin,
+                },
+                None => Drag::Pan,
             });
         }
-        if resp.dragged() {
-            let d = resp.drag_delta();
-            match &mut drag {
-                Some(Drag::Whole { by }) => {
+        // The belt follows the pointer from where it was pressed to where it is let go,
+        // including the movement before egui calls it a drag and in the frame that lets go.
+        match &mut drag {
+            Some(Drag::Whole { by, at, .. }) => {
+                if (resp.dragged() || resp.drag_stopped())
+                    && let Some(now) = resp.interact_pointer_pos()
+                {
+                    let d = now - *at;
                     by[0] += f64::from(d.x / vw.scale) / m;
                     by[1] -= f64::from(d.y / vw.scale) / m;
+                    *at = now;
                 }
-                _ => vw.pan(d),
             }
+            _ if resp.dragged() => vw.pan(resp.drag_delta()),
+            _ => {}
         }
         if resp.drag_stopped() {
-            if let (Some(Drag::Whole { by }), Some(ch)) = (drag, &chosen)
+            if let (Some(Drag::Whole { by, .. }), Some(ch)) = (&drag, &chosen)
                 && let Some(path) = &ch.path
             {
                 let by = [to_step(by[0], unit), to_step(by[1], unit)];
@@ -987,9 +1031,9 @@ impl App {
         if let Some(ch) = &chosen
             && let Some(path) = &ch.path
         {
-            let shown = match (drag, &ch.outline) {
-                (Some(Drag::Point { index, to }), Some(o)) => o.moved(index, to).to_path(),
-                (Some(Drag::Whole { by }), _) => shifted(path, by),
+            let shown = match (&drag, &ch.outline) {
+                (Some(Drag::Point { index, to, .. }), Some(o)) => o.moved(*index, *to).to_path(),
+                (Some(Drag::Whole { by, .. }), _) => shifted(path, *by),
                 _ => path.clone(),
             };
             let pts: Vec<Pos2> = plan_points(&shown, m)
@@ -1203,10 +1247,19 @@ impl App {
             &[("length", &shown), ("unit", &unit_label)],
         ));
         let Some(outline) = path.outline() else {
-            ui.label(theme::weak(
-                ui,
-                t("This path climbs or has a helix: its points cannot be edited here."),
-            ));
+            // Flat and still without an outline, it turns a whole circle or more in one arc.
+            let climbs = path.segments.iter().any(|s| match *s {
+                Segment::Line { rise, .. } | Segment::Arc { rise, .. } => rise != 0.0,
+                Segment::Helix { .. } => true,
+            });
+            let why = if climbs {
+                t("This path climbs or has a helix: its points cannot be edited here.")
+            } else {
+                t(
+                    "This path turns a whole circle or more in one arc: its points cannot be edited here.",
+                )
+            };
+            ui.label(theme::weak(ui, why));
             if ui.button(t("Remove path")).clicked() {
                 self.remove_path(id);
             }

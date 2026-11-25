@@ -1486,6 +1486,7 @@ connection	Flow	Tok
 	Add a straight path	Dodaj pravu putanju
 	Drawn length: {length} {unit}	Nacrtana dužina: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ova putanja se penje ili ima spiralu: njene tačke se ovde ne mogu uređivati.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ova putanja se u jednom luku okreće za ceo krug ili više: njene tačke se ovde ne mogu uređivati.
 	Point {n}	Tačka {n}
 	x of point {n}	x tačke {n}
 	y of point {n}	y tačke {n}

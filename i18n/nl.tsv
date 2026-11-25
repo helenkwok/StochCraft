@@ -1486,6 +1486,7 @@ connection	Flow	Stroom
 	Add a straight path	Recht traject toevoegen
 	Drawn length: {length} {unit}	Getekende lengte: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Dit traject stijgt of heeft een spiraal: de punten kunnen hier niet worden bewerkt.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Dit traject draait in één boog een hele cirkel of meer: de punten kunnen hier niet worden bewerkt.
 	Point {n}	Punt {n}
 	x of point {n}	x van punt {n}
 	y of point {n}	y van punt {n}
