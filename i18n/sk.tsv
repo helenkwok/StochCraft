@@ -1458,6 +1458,27 @@ unit	yr	r.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} má čas obsluhy pre skupinu „{pool}“, ktorú model nemá. Odstráňte tento čas alebo vyberte existujúcu skupinu.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} má dva časy obsluhy pre skupinu „{pool}“. Ponechajte jeden.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} má čas obsluhy pre skupinu „{pool}“, ktorú nepotrebuje. Pridajte skupinu k jeho potrebám alebo tento čas odstráňte.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} používa rozhodovaciu tabuľku „{decision}“ zo súboru {file}, ktorú nemôže použiť: {reason} Opravte tabuľku alebo ju z bloku odstráňte.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} používa rozhodovaciu tabuľku „{decision}“, ktorej pravidlá {first} a {second} obe zodpovedajú {example}, ale pri jej zásade zhody Unique smie zodpovedať len jedno. Zmeňte pravidlá tak, aby zodpovedalo len jedno, alebo zvoľte inú zásadu zhody.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} používa rozhodovaciu tabuľku „{decision}“, v ktorej žiadne pravidlo nezodpovedá {example}, takže taká entita tam nedostane žiadny výsledok. Pridajte pravidlo alebo predvolený výstup, ak to nie je zámer.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} používa rozhodovaciu tabuľku „{decision}“, ktorá má príliš veľa kombinácií vstupov na úplnú kontrolu, takže môže mať prekrývajúce sa pravidlá alebo vstupy, ktorým nezodpovedá žiadne pravidlo. Skontrolujte jej pravidlá alebo ju rozdeľte na menšie tabuľky.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} smeruje podľa rozhodovacej tabuľky „{decision}“, ktorá môže dať „{value}“, názov žiadneho z jeho výstupov. Urobte z každej hodnoty výstupu, podľa ktorého smeruje, id cesty von alebo id či názov bloku, ku ktorému vedie.
+	Decision table	Rozhodovacia tabuľka
+	Open decision table	Otvoriť rozhodovaciu tabuľku
+	Hit policy	Zásada zhody
+	Unique	Jedinečná
+	First	Prvá
+	Collect	Zber
+	Aggregation	Agregácia
+	Sum	Súčet
+	Count	Počet
+	Add rule	Pridať pravidlo
+	Remove rule	Odstrániť pravidlo
+	Change Decision Table	Zmeniť rozhodovaciu tabuľku
+	Use Decision Table	Použiť rozhodovaciu tabuľku
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Zatiaľ len na čítanie: tabuľku upravte v jej súbore .dmn alebo príkazom dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Jeho rozhodovacie tabuľky neboli zapísané: aplikácia zatiaľ nezapisuje súbory .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Jeho rozhodovacie tabuľky treba ešte uložiť, preto model zostal otvorený: aplikácia zatiaľ nezapisuje súbory .dmn.
 	Reset {field}	Obnoviť: {field}
 	Changed from the default	Zmenené oproti predvolenej hodnote
 	Changed from the inherited scenario	Zmenené oproti zdedenému scenáru
@@ -1476,3 +1497,7 @@ connection	Flow	Tok
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Triedenie poštových zásielok: okruh zásobuje štyri dráhy podľa produktu a výhybky pošlú zásielku na ďalšie kolo, keď je jej dráha plná.
 	How many parcels go round the loop because their lane is full?	Koľko zásielok ide ďalšie kolo okruhu, pretože je ich dráha plná?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Dopravníky a výhybky: zásielky idú ďalšie kolo okruhu, keď je ich dráha plná.
+	Repairmen with spares	Opravári a záložné stroje
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Desať strojov musí bežať, štyri záložné čakajú v pohotovosti a traja opravári opravujú tie, ktoré sa pokazia (Crane a Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Koľko záložných strojov a opravárov udrží desať strojov v chode?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Záložné stroje v pohotovosti sa nemôžu pokaziť: v priemere je pokazených 3.47 strojov a beží 9.29. Štvrtý opravár pomôže zhruba toľko ako štyri záložné stroje navyše.

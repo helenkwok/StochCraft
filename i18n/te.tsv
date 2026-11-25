@@ -1458,6 +1458,27 @@ unit	yr	సం.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} లో మోడల్‌లో లేని “{pool}” పూల్‌కు ఒక సేవా సమయం ఉంది. ఆ సమయాన్ని తొలగించండి, లేదా ఉన్న పూల్‌ను ఎంచుకోండి.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} లో “{pool}” పూల్‌కు రెండు సేవా సమయాలు ఉన్నాయి. ఒకదాన్ని ఉంచండి.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} లో దానికి అవసరం లేని “{pool}” పూల్‌కు ఒక సేవా సమయం ఉంది. ఆ పూల్‌ను దాని అవసరాలకు జోడించండి, లేదా ఆ సమయాన్ని తొలగించండి.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} ఫైల్ {file}లోని నిర్ణయ పట్టిక “{decision}”ను ఉపయోగిస్తుంది, కానీ దాన్ని ఉపయోగించలేదు: {reason} పట్టికను సరిచేయండి, లేదా బ్లాక్ నుండి తీసివేయండి.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} నిర్ణయ పట్టిక “{decision}”ను ఉపయోగిస్తుంది; దాని నియమాలు {first}, {second} రెండూ {example}తో సరిపోలుతాయి, కానీ దాని సరిపోలిక విధానం Uniqueలో ఒక్కటే సరిపోలాలి. ఒక్కటే సరిపోలేలా నియమాలను మార్చండి, లేదా వేరే సరిపోలిక విధానాన్ని ఎంచుకోండి.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} నిర్ణయ పట్టిక “{decision}”ను ఉపయోగిస్తుంది; అందులో ఏ నియమమూ {example}తో సరిపోలదు, కాబట్టి అలాంటి అంశానికి అక్కడ ఫలితం రాదు. ఇది ఉద్దేశించినది కాకపోతే ఒక నియమాన్ని లేదా డిఫాల్ట్ అవుట్‌పుట్‌ను జోడించండి.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} నిర్ణయ పట్టిక “{decision}”ను ఉపయోగిస్తుంది; దానిలో ఇన్‌పుట్‌ల కలయికలు పూర్తిగా తనిఖీ చేయలేనన్ని ఎక్కువ, కాబట్టి దానిలో ఒకదానిపై ఒకటి పడే నియమాలు లేదా ఏ నియమమూ సరిపోలని ఇన్‌పుట్‌లు ఉండవచ్చు. దాని నియమాలను తనిఖీ చేయండి, లేదా దాన్ని చిన్న పట్టికలుగా విభజించండి.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} నిర్ణయ పట్టిక “{decision}” ప్రకారం మళ్లిస్తుంది; అది “{value}”ను ఇవ్వవచ్చు, ఇది దాని ఏ నిష్క్రమణ పేరూ కాదు. అది మళ్లించే అవుట్‌పుట్ యొక్క ప్రతి విలువను ఒక నిష్క్రమణ idగా, లేదా అది దారితీసే బ్లాక్ id లేదా పేరుగా చేయండి.
+	Decision table	నిర్ణయ పట్టిక
+	Open decision table	నిర్ణయ పట్టికను తెరువు
+	Hit policy	సరిపోలిక విధానం
+	Unique	ఏకైక
+	First	మొదటిది
+	Collect	సేకరించు
+	Aggregation	సమాహారం
+	Sum	మొత్తం
+	Count	లెక్క
+	Add rule	నియమాన్ని జోడించు
+	Remove rule	నియమాన్ని తీసివేయి
+	Change Decision Table	నిర్ణయ పట్టికను మార్చు
+	Use Decision Table	నిర్ణయ పట్టికను ఉపయోగించు
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	ప్రస్తుతానికి చదవడానికి మాత్రమే: పట్టికను దాని .dmn ఫైల్‌లో లేదా dmn.set ఆదేశంతో సవరించండి.
+	Its decision tables were not written: the app does not write .dmn files yet.	దీని నిర్ణయ పట్టికలు వ్రాయబడలేదు: యాప్ ఇంకా .dmn ఫైల్‌లను వ్రాయదు.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	దీని నిర్ణయ పట్టికలను ఇంకా సేవ్ చేయాలి, కాబట్టి మోడల్ తెరిచే ఉంచబడింది: యాప్ ఇంకా .dmn ఫైల్‌లను వ్రాయదు.
 	Reset {field}	{field} రీసెట్ చేయి
 	Changed from the default	డిఫాల్ట్ నుండి మార్చబడింది
 	Changed from the inherited scenario	వారసత్వంగా వచ్చిన దృశ్యం నుండి మార్చబడింది
@@ -1476,3 +1497,7 @@ connection	Flow	ప్రవాహం
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	తపాలా పార్సెల్ సార్టింగ్: ఒక లూప్ ఉత్పత్తి వారీగా నాలుగు లేన్లకు పార్సెల్‌లను పంపుతుంది, లేన్ నిండితే డైవర్ట్‌లు పార్సెల్‌ను మళ్లీ ఒక రౌండ్ పంపుతాయి.
 	How many parcels go round the loop because their lane is full?	లేన్ నిండినందున ఎన్ని పార్సెల్‌లు లూప్‌లో మళ్లీ తిరుగుతాయి?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	కన్వేయర్లు మరియు డైవర్ట్‌లు: లేన్ నిండితే పార్సెల్‌లు లూప్‌లో మళ్లీ తిరుగుతాయి.
+	Repairmen with spares	విడి యంత్రాలతో మెకానిక్‌లు
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	పది యంత్రాలు నడుస్తూ ఉండాలి, నాలుగు విడి యంత్రాలు సిద్ధంగా వేచి ఉంటాయి, ముగ్గురు మెకానిక్‌లు పాడైనవాటిని బాగుచేస్తారు (Crane మరియు Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	పది యంత్రాలను నడుపుతూ ఉంచడానికి ఎన్ని విడి యంత్రాలు, ఎంతమంది మెకానిక్‌లు కావాలి?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	సిద్ధంగా వేచి ఉన్న విడి యంత్రాలు పాడవవు: సగటున 3.47 యంత్రాలు పాడై ఉంటాయి, 9.29 నడుస్తాయి. నాలుగో మెకానిక్ మరో నాలుగు విడి యంత్రాలంత ఉపయోగపడతాడు.

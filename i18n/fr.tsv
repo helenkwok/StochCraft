@@ -1458,6 +1458,27 @@ unit	yr	an
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} a un temps de service pour le pool « {pool} », que le modèle n'a pas. Supprimez ce temps ou choisissez un pool existant.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} a deux temps de service pour le pool « {pool} ». N'en gardez qu'un.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} a un temps de service pour le pool « {pool} », dont il n'a pas besoin. Ajoutez le pool à ses besoins ou supprimez ce temps.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} utilise la table de décision « {decision} » du fichier {file}, qu’il ne peut pas utiliser : {reason} Corrigez la table, ou retirez-la du bloc.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} utilise la table de décision « {decision} », dont les règles {first} et {second} correspondent toutes deux à {example}, mais avec sa politique de correspondance Unique une seule le peut. Modifiez les règles pour qu’une seule corresponde, ou choisissez une autre politique de correspondance.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} utilise la table de décision « {decision} », où aucune règle ne correspond à {example} ; une telle entité n’y obtient donc aucun résultat. Ajoutez une règle ou une sortie par défaut, si ce n’est pas voulu.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} utilise la table de décision « {decision} », qui a trop de combinaisons d’entrées pour être vérifiée entièrement ; elle peut donc avoir des règles qui se chevauchent ou des entrées auxquelles aucune règle ne correspond. Vérifiez ses règles ou divisez-la en tables plus petites.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} oriente selon la table de décision « {decision} », qui peut donner « {value} », le nom d’aucune de ses sorties. Faites de chaque valeur de la sortie selon laquelle il oriente l’identifiant d’une de ses sorties, ou l’identifiant ou le nom d’un bloc auquel il mène.
+	Decision table	Table de décision
+	Open decision table	Ouvrir la table de décision
+	Hit policy	Politique de correspondance
+	Unique	Unique
+	First	Première
+	Collect	Collecter
+	Aggregation	Agrégation
+	Sum	Somme
+	Count	Nombre
+	Add rule	Ajouter une règle
+	Remove rule	Supprimer la règle
+	Change Decision Table	Modifier la table de décision
+	Use Decision Table	Utiliser la table de décision
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	En lecture seule pour l'instant : modifiez la table dans son fichier .dmn, ou avec la commande dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Ses tables de décision n'ont pas été écrites : l'application n'écrit pas encore de fichiers .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Ses tables de décision doivent encore être enregistrées, le modèle est donc resté ouvert : l'application n'écrit pas encore de fichiers .dmn.
 	Reset {field}	Réinitialiser {field}
 	Changed from the default	Modifié par rapport à la valeur par défaut
 	Changed from the inherited scenario	Modifié par rapport au scénario hérité
@@ -1476,3 +1497,7 @@ connection	Flow	Flux
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Tri de colis postaux : une boucle alimente quatre voies par produit, et des déviateurs renvoient un colis pour un tour de plus quand sa voie est pleine.
 	How many parcels go round the loop because their lane is full?	Combien de colis refont un tour de boucle parce que leur voie est pleine ?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Convoyeurs et déviateurs : des colis renvoyés pour un tour de boucle quand leur voie est pleine.
+	Repairmen with spares	Mécaniciens et machines de réserve
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dix machines doivent tourner, quatre machines de réserve attendent prêtes et trois mécaniciens réparent celles qui tombent en panne (Crane et Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Combien de machines de réserve et de mécaniciens pour faire tourner dix machines ?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Les machines de réserve en attente ne peuvent pas tomber en panne : en moyenne 3.47 machines sont en panne et 9.29 tournent. Un quatrième mécanicien apporte à peu près autant que quatre machines de réserve de plus.

@@ -24,6 +24,7 @@ mod chrome;
 pub mod commands;
 mod dashboard;
 mod decide;
+mod dmn_table;
 mod documents;
 pub use autosave::Autosave;
 pub use documents::OpenTicket;
@@ -383,6 +384,22 @@ pub const EXAMPLES: &[Example] = &[
                 start::Glyph::Resource,
             ],
             featured: true,
+        },
+    },
+    Example {
+        title: "Repairmen with spares",
+        about: "Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).",
+        file: "repairmen-spares.bpmn",
+        bytes: include_bytes!("../../../tests/models/repairmen-spares.bpmn"),
+        card: start::Card {
+            question: "How many spares and repairmen keep ten machines running?",
+            industry: start::Industry::Manufacturing,
+            topics: &[start::Topic::Staffing, start::Topic::Breakdown],
+            teaches: "Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.",
+            minutes: 3,
+            proof: Some(start::Proof::Theory),
+            flow: &[start::Glyph::Resource, start::Glyph::Resource],
+            featured: false,
         },
     },
     Example {
@@ -979,6 +996,8 @@ pub struct App {
     chart_palette: String,
     custom_palettes: Vec<chart_palette::ChartPalette>,
     chart_colours: Option<chart_editor::Editor>,
+    /// The decision table window, while it is open.
+    dmn_table: Option<dmn_table::Grid>,
     /// The interface language as the user chose it (`None`: the system's), and as shown.
     language: Option<String>,
     lang: craft_i18n::Lang,
@@ -1092,6 +1111,7 @@ impl App {
             chart_palette: chart_palette::DEFAULT.to_owned(),
             custom_palettes: Vec::new(),
             chart_colours: None,
+            dmn_table: None,
             language: None,
             lang: i18n::I18N.system_lang(),
             applied_theme: None,
@@ -1263,6 +1283,8 @@ fn change_label(command: &str) -> &str {
         "property.remove" => "Remove Property",
         "estimate.set" => "Change Estimate",
         "estimate.remove" => "Remove Estimate",
+        "dmn.set" => "Change Decision Table",
+        "dmn.use" => "Use Decision Table",
         "observation.add" => "Add Observed Value",
         "observation.set" => "Change Observed Value",
         "observation.remove" => "Remove Observed Value",

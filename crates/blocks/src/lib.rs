@@ -146,6 +146,79 @@ struct Assign {
     source: Source,
 }
 
+/// A decision table an element evaluates as an entity enters (D30), and where its outputs go:
+/// per output, in column order, the property's slot and type (`None`: not held, which cannot
+/// happen once the model is valid), and the element's statistic its values are recorded in
+/// (`None` for a property the element assigns itself, whose statistic is the assignment's).
+#[derive(Debug, Clone)]
+struct Decide {
+    table: stochcraft_model::dmn::Compiled,
+    outputs: Vec<Option<(usize, PropertyType)>>,
+    tally: Vec<Option<usize>>,
+}
+
+/// The condition that output `output` (the property it writes) is `v`, compared as a value of
+/// its own kind. The property holds the kind the output gives (validation sees to it), so the
+/// comparison is exact, where XPath's `=` would turn a string compared with a boolean into one.
+fn equals(output: &str, v: &stochcraft_model::dmn::Literal) -> expr::Expr {
+    use stochcraft_model::dmn::Literal;
+    let property = expr::Expr::Property(output.to_owned());
+    let (left, right) = match v {
+        Literal::Number(x) => (property, expr::Expr::Number(*x)),
+        Literal::Text(s) => (property, expr::Expr::Text(s.clone())),
+        // `string()` of a boolean is "true" or "false"; of a missing property, "".
+        Literal::Boolean(b) => (
+            expr::Expr::Call(expr::Func::String, vec![property]),
+            expr::Expr::Text(b.to_string()),
+        ),
+    };
+    expr::Expr::Binary(expr::BinOp::Eq, Box::new(left), Box::new(right))
+}
+
+/// For each way out of `gateway`, if it is routed directly by its decision table, the
+/// condition that takes it: the routing output is one of the values that name that way, and
+/// that way only ([`Model::ways_named`]), each compared exactly. A way no value names is never
+/// taken (but as the default).
+fn decision_conditions(model: &Model, gateway: &ElementId) -> Option<Vec<(ElementId, expr::Expr)>> {
+    use stochcraft_model::dmn::Literal;
+    let ways = model.decision_ways(gateway)?;
+    let u = model.decisions.get(gateway)?;
+    let (d, table) = model.decision_table(u).ok()?;
+    let j = Model::route_output(u, &table).ok()?;
+    let output = d.output_name(j);
+    // The values the output can give, each with the ways out it names: the table's own, by
+    // their text; for an aggregation (which can give any number), the numbers the ways' names
+    // read as, compared as numbers (as validation compares them).
+    let values: Vec<(Literal, Vec<&Connection>)> = if table.aggregation().is_some() {
+        Model::ways_by_number(&ways)
+            .into_iter()
+            .map(|(x, _, named)| (Literal::Number(x), named))
+            .collect()
+    } else {
+        table
+            .output_values(j)
+            .into_iter()
+            .map(|v| {
+                let named = Model::ways_named(&ways, &v.text());
+                (v, named)
+            })
+            .collect()
+    };
+    Some(
+        ways.iter()
+            .map(|(c, _)| {
+                let condition = values
+                    .iter()
+                    .filter(|(_, named)| matches!(named.as_slice(), [only] if only.id == c.id))
+                    .map(|(v, _)| equals(&output, v))
+                    .reduce(|a, b| expr::Expr::Binary(expr::BinOp::Or, Box::new(a), Box::new(b)))
+                    .unwrap_or_else(|| expr::Expr::Call(expr::Func::False, Vec::new()));
+                (c.id.clone(), condition)
+            })
+            .collect(),
+    )
+}
+
 /// One of the connections an element sends entities down.
 #[derive(Debug, Clone)]
 struct Route {
@@ -192,6 +265,11 @@ pub struct Compiled {
     slots: Vec<String>,
     /// For each element, its property assignments.
     assigns: Vec<Vec<Assign>>,
+    /// For each element, the properties it reports the mean value of
+    /// ([`ElementReport::properties`]): those it assigns, then those its decision table writes.
+    reported: Vec<Vec<String>>,
+    /// For each element, the decision table it evaluates, if any.
+    decides: Vec<Option<Decide>>,
     /// Sources create their first entity at time 0 rather than after the first interval.
     first_arrival_at_zero: bool,
     /// See [`Compiled::max_events_at_one_time`].
@@ -385,6 +463,9 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                 _ => None,
             };
             let by_condition = outs.iter().any(|c| c.condition.is_some());
+            // A gateway routed directly by its decision table: each way's condition is that the
+            // output names it.
+            let direct = decision_conditions(model, &e.id);
             // Probabilities: those not given share evenly what the given ones leave; if
             // nothing is left to share, every connection counts the same.
             let given: f64 = outs.iter().filter_map(|c| c.probability).sum();
@@ -415,10 +496,15 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                         to,
                         input,
                         weight,
-                        condition: if by_condition {
-                            c.condition.as_deref().and_then(|s| expr::parse(s).ok())
-                        } else {
-                            None
+                        condition: match &direct {
+                            Some(ways) => ways
+                                .iter()
+                                .find(|(id, _)| id == &c.id)
+                                .map(|(_, condition)| condition.clone()),
+                            None if by_condition => {
+                                c.condition.as_deref().and_then(|s| expr::parse(s).ok())
+                            }
+                            None => None,
                         },
                         default: default == Some(&c.id),
                         rework: c.rework,
@@ -459,7 +545,7 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
     let types = model.property_types();
     let slots: Vec<String> = types.keys().cloned().collect();
     // Validation guarantees every expression parses and every property has a type.
-    let assigns = model
+    let assigns: Vec<Vec<Assign>> = model
         .elements
         .iter()
         .map(|e| {
@@ -467,6 +553,47 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                 .iter()
                 .filter_map(|p| compile_assign(p, &slots, *types.get(&p.name)?))
                 .collect()
+        })
+        .collect();
+    // What each element reports the mean of: the properties it assigns, then those its decision
+    // table writes that it does not assign itself.
+    let mut reported: Vec<Vec<String>> = assigns
+        .iter()
+        .map(|a| a.iter().map(|x| x.name.clone()).collect())
+        .collect();
+    // Validation guarantees every decision table named compiles and gives one row.
+    let decides = model
+        .elements
+        .iter()
+        .zip(&mut reported)
+        .map(|(e, names)| {
+            let u = model.decisions.get(&e.id)?;
+            let (_, table) = model.decision_table(u).ok()?;
+            let outputs = table
+                .outputs()
+                .iter()
+                .map(|(name, _)| {
+                    let slot = slots.iter().position(|s| s == name)?;
+                    Some((slot, *types.get(*name)?))
+                })
+                .collect();
+            let assigned = names.len();
+            let tally = table
+                .outputs()
+                .iter()
+                .map(|(name, _)| {
+                    if names.iter().take(assigned).any(|n| n == name) {
+                        return None;
+                    }
+                    names.push((*name).to_owned());
+                    Some(names.len() - 1)
+                })
+                .collect();
+            Some(Decide {
+                table,
+                outputs,
+                tally,
+            })
         })
         .collect();
     Ok(Compiled {
@@ -477,6 +604,8 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
         warnings: diagnostics,
         slots,
         assigns,
+        reported,
+        decides,
         first_arrival_at_zero: false,
         max_events_at_one_time: MAX_EVENTS_AT_ONE_TIME,
         record: None,
@@ -991,8 +1120,10 @@ pub struct ElementReport {
     pub taken_out: Option<u64>,
     pub mean_in_service: Option<f64>,
     pub time_restarting: Option<f64>,
-    /// For each property the element assigns, in the element's order: the mean of the values
-    /// it assigned (`None` when it assigned none, or the property holds text).
+    /// For each property the element assigns, in the element's order, then each its decision
+    /// table writes that it does not assign itself: the mean of the values it assigned (`None`
+    /// when it assigned none, or the property holds text). A decision's null result assigns
+    /// nothing.
     pub properties: Vec<(String, Option<f64>)>,
     /// Not metrics, but what the behaviour checks ([`checks`]) need: the entities inside the
     /// element when the statistics started (0, or those inside as the warm-up ended) and at

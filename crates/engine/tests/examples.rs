@@ -21,6 +21,8 @@
 //!   mean numbers inside its network of infinite-server stations;
 //! - Penny Fab (Hopp and Spearman, Factory Physics) against the practical worst case, exact for a
 //!   balanced closed line with exponential times, and the best case for fixed times.
+//! - repairmen with spares (Crane and Iglehart, WSC 1973) against the birth–death chain of the
+//!   number of machines broken, whose stationary distribution gives the paper's values.
 //! - arrivals at the gaps between zeros of the Riemann zeta function against exact G/M/1 theory,
 //!   beside Poisson arrivals at the same rate (M/M/1).
 //! - Able and Baker, two servers that differ in speed behind one queue (a service time by
@@ -29,7 +31,8 @@
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
 //! added by hand, as in `mm1.bpmn`. The starting contents of the prison and of Penny Fab were
-//! added by hand too. The zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`.
+//! added by hand too, and the repairmen-with-spares file was written by hand in the same form. The
+//! zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`.
 //!
 //! Each check allows √2 times the 95% half-width, since several checks read the same runs (as in
 //! `crates/blocks/tests/queueing_cases.rs`).
@@ -1041,6 +1044,125 @@ fn penny_fab_matches_the_practical_worst_case_and_the_best_case() {
     }
     let (out, _) = result(&r, "deburr", "entered");
     assert!((out - rb * duration).abs() <= 2.0, "{out}");
+}
+
+/// Repairmen with spares, the example of M. A. Crane and D. L. Iglehart, *A New Approach to
+/// Simulating Stable Stochastic Systems*, Proceedings of the 1973 Winter Simulation Conference
+/// (the model on p. 269, its parameters and Table 1 on p. 270): N = 10 machines must run, M = 4
+/// spares wait on cold standby (they cannot fail while they wait) and S = 3 repairmen repair the
+/// broken ones; a running machine fails at rate λ = 1 and a repair takes an exponential time at
+/// rate μ = 4. The number broken X is a birth–death chain on 0..=N + M, up at
+/// λ min(N, N + M − X) and down at μ min(X, S). Its stationary distribution gives the paper's
+/// theoretical values (Table 1): E(X) 3.471, E(X²) 17.278, P(X > M) .306, P(X > S) .438,
+/// E[(S − X)⁺] .678, P(X > 0) .939 and P(X = 0) .061.
+///
+/// The run is checked on what the engine reports, each from the same chain: the machines broken
+/// (the repair task's work in progress, waiting or being repaired), the repairmen's utilisation,
+/// the machines waiting for a repairman and, by Little's law, their wait; the machines running,
+/// the spares waiting and the repairs done (machines running × λ, the failures). The paper's
+/// probabilities are shares of time, which no result reports, so they are checked on the chain
+/// only. The scenarios (two or four repairmen, no spares or eight) are checked on the machines
+/// broken and running.
+#[test]
+fn repairmen_with_spares_match_their_birth_death_chain() {
+    let (n, lambda, mu): (usize, f64, f64) = (10, 1.0, 4.0);
+    let duration = 10_000.0;
+    for (scenario, spares, repairmen) in [
+        (None, 4usize, 3usize),
+        (Some("two-repairmen"), 4, 2),
+        (Some("four-repairmen"), 4, 4),
+        (Some("no-spares"), 0, 3),
+        (Some("eight-spares"), 8, 3),
+    ] {
+        let m = model_of("repairmen-spares.bpmn", scenario);
+        let (to_fail, machines) = server(&m, "running");
+        assert!(
+            (to_fail - 1.0 / lambda).abs() < 1e-12,
+            "{scenario:?}: {to_fail}"
+        );
+        assert_eq!(machines as usize, n, "{scenario:?}");
+        let (to_repair, crew) = server(&m, "repair");
+        assert!(
+            (to_repair - 1.0 / mu).abs() < 1e-12,
+            "{scenario:?}: {to_repair}"
+        );
+        assert_eq!(crew as usize, repairmen, "{scenario:?}");
+        let k = n + spares;
+        let start = m.starting.get(&ElementId::unchecked("running")).copied();
+        assert_eq!(start.map(|s| s as usize), Some(k), "{scenario:?}");
+
+        let moves: Vec<Vec<(usize, f64)>> = (0..=k)
+            .map(|x| {
+                let mut out = Vec::new();
+                if x < k {
+                    out.push((x + 1, n.min(k - x) as f64 * lambda));
+                }
+                if x > 0 {
+                    out.push((x - 1, x.min(repairmen) as f64 * mu));
+                }
+                out
+            })
+            .collect();
+        let p = stationary(&moves);
+        let mean =
+            |f: &dyn Fn(usize) -> f64| -> f64 { p.iter().enumerate().map(|(x, q)| f(x) * q).sum() };
+        let share = |f: &dyn Fn(usize) -> bool| mean(&|x: usize| f64::from(u8::from(f(x))));
+        let broken = mean(&|x: usize| x as f64);
+        let busy = mean(&|x: usize| x.min(repairmen) as f64);
+        let waiting = mean(&|x: usize| x.saturating_sub(repairmen) as f64);
+        let running = mean(&|x: usize| n.min(k - x) as f64);
+        let spare = mean(&|x: usize| (k - x).saturating_sub(n) as f64);
+        if scenario.is_none() {
+            // The paper's theoretical values, printed to three decimals.
+            for (what, chain, paper) in [
+                ("E(X)", broken, 3.471),
+                ("E(X²)", mean(&|x: usize| (x * x) as f64), 17.278),
+                ("P(X > M)", share(&|x: usize| x > spares), 0.306),
+                ("P(X > S)", share(&|x: usize| x > repairmen), 0.438),
+                ("E[(S − X)⁺]", repairmen as f64 - busy, 0.678),
+                ("P(X > 0)", share(&|x: usize| x > 0), 0.939),
+                ("P(X = 0)", share(&|x: usize| x == 0), 0.061),
+            ] {
+                assert!(
+                    (chain - paper).abs() < 5e-4,
+                    "{what}: {chain} against {paper}"
+                );
+            }
+            assert!((broken - 3.470_797).abs() < 1e-6, "{broken}");
+            assert!((running - 9.289_369).abs() < 1e-6, "{running}");
+        }
+        // Repairs keep up with failures.
+        assert!(
+            (busy * mu - running * lambda).abs() < 1e-9,
+            "{scenario:?}: {busy} {running}"
+        );
+
+        let mut e = open_scenario(
+            "repairmen-spares.bpmn",
+            scenario,
+            json!({ "replications": 20, "warmup": 500.0, "duration": duration }),
+        );
+        // A closed loop: no exit wanted, so neither the model's checks nor the behaviour checks
+        // warn.
+        let checked = ok(&mut e, "model.validate", json!({}));
+        assert_eq!(checked["diagnostics"], json!([]), "{scenario:?}: {checked}");
+        let r = ok(&mut e, "run", json!({}));
+        let behaviour = behaviour_warnings(&r);
+        assert!(behaviour.is_empty(), "{scenario:?}: {behaviour:?}");
+        covers(&r, "repair", "mean_work_in_progress", broken);
+        covers(&r, "running", "mean_contents", running);
+        // The paper's own case checks every result; the scenarios only the two above, so that
+        // with fewer checks a miss by chance stays rare.
+        if scenario.is_some() {
+            continue;
+        }
+        covers(&r, "repair", "utilisation", busy / repairmen as f64);
+        covers(&r, "repair", "mean_queue_length", waiting);
+        covers(&r, "repair", "mean_wait", waiting / (running * lambda));
+        covers(&r, "running", "utilisation", running / n as f64);
+        covers(&r, "running", "mean_queue_length", spare);
+        covers(&r, "repair", "entered", running * lambda * duration);
+    }
 }
 
 /// The root σ in (0, 1) of σ = A*(μ(1 − σ)) for a G/M/1 queue whose times between arrivals take

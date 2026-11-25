@@ -1458,6 +1458,27 @@ unit	yr	ж.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} блогында моделде жоқ «{pool}» қорына қызмет көрсету уақыты бар. Бұл уақытты жойыңыз немесе бар қорды таңдаңыз.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} блогында «{pool}» қорына екі қызмет көрсету уақыты бар. Біреуін қалдырыңыз.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} блогында өзіне қажет емес «{pool}» қорына қызмет көрсету уақыты бар. Қорды қажеттіліктеріне қосыңыз немесе бұл уақытты жойыңыз.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} {file} файлындағы «{decision}» шешім кестесін пайдаланады, бірақ оны пайдалана алмайды: {reason} Кестені түзетіңіз немесе оны блоктан алып тастаңыз.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} «{decision}» шешім кестесін пайдаланады, оның {first} және {second} ережелері екеуі де {example} мәніне сәйкес келеді, бірақ оның Unique сәйкестік саясатында тек біреуі ғана сәйкес келе алады. Тек біреуі сәйкес келетіндей ережелерді өзгертіңіз немесе басқа сәйкестік саясатын таңдаңыз.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} «{decision}» шешім кестесін пайдаланады, онда ешбір ереже {example} мәніне сәйкес келмейді, сондықтан мұндай нысан онда нәтиже алмайды. Егер бұл көзделмесе, ереже немесе әдепкі шығыс қосыңыз.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} «{decision}» шешім кестесін пайдаланады, оның кірістер тіркестері толық тексеру үшін тым көп, сондықтан онда бір-бірін жабатын ережелер немесе ешбір ереже сәйкес келмейтін кірістер болуы мүмкін. Оның ережелерін тексеріңіз немесе оны кішірек кестелерге бөліңіз.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} «{decision}» шешім кестесі бойынша бағыттайды, ол «{value}» бере алады, бірақ бұл оның ешбір шығысының атауы емес. Бағыттау жүретін шығыстың әр мәнін шығу жолының id-і немесе ол апаратын блоктың id-і не атауы етіңіз.
+	Decision table	Шешім кестесі
+	Open decision table	Шешім кестесін ашу
+	Hit policy	Сәйкестік саясаты
+	Unique	Бірегей
+	First	Бірінші
+	Collect	Жинау
+	Aggregation	Біріктіру
+	Sum	Қосынды
+	Count	Саны
+	Add rule	Ереже қосу
+	Remove rule	Ережені жою
+	Change Decision Table	Шешім кестесін өзгерту
+	Use Decision Table	Шешім кестесін пайдалану
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Әзірге тек оқуға арналған: кестені оның .dmn файлында немесе dmn.set командасымен өңдеңіз.
+	Its decision tables were not written: the app does not write .dmn files yet.	Оның шешім кестелері жазылмады: қолданба әзірге .dmn файлдарын жазбайды.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Оның шешім кестелерін әлі сақтау керек, сондықтан модель ашық қалдырылды: қолданба әзірге .dmn файлдарын жазбайды.
 	Reset {field}	{field}: қалпына келтіру
 	Changed from the default	Әдепкі мәннен өзгертілген
 	Changed from the inherited scenario	Мұраланған сценарийден өзгертілген
@@ -1476,3 +1497,7 @@ connection	Flow	Ағын
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Пошта сәлемдемелерін сұрыптау: айналма конвейер өнім бойынша төрт жолақты толтырады, ал бұрғыштар жолағы толы сәлемдемені тағы бір айналымға жібереді.
 	How many parcels go round the loop because their lane is full?	Жолағы толы болғандықтан қанша сәлемдеме тағы бір айналым жасайды?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Конвейерлер мен бұрғыштар: жолағы толы сәлемдемелер тағы бір айналым жасайды.
+	Repairmen with spares	Слесарьлар және қосалқы машиналар
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Он машина жұмыс істеуі керек, төрт қосалқы машина дайын тұрады, ал үш слесарь бұзылғандарын жөндейді (Crane және Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Он машинаның жұмысын қанша қосалқы машина мен слесарь қамтамасыз етеді?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Дайын тұрған қосалқы машиналар бұзыла алмайды: орташа есеппен 3.47 машина бұзық, 9.29 машина жұмыс істейді. Төртінші слесарь тағы төрт қосалқы машинамен шамамен бірдей пайда береді.

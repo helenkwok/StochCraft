@@ -1458,6 +1458,27 @@ unit	yr	v
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blloku {block} ka një kohë shërbimi për grupin „{pool}”, që modeli nuk e ka. Hiqeni atë kohë ose zgjidhni një grup që ekziston.
 	{block} has two service times for the pool “{pool}”. Keep one.	Blloku {block} ka dy kohë shërbimi për grupin „{pool}”. Mbani njërën.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blloku {block} ka një kohë shërbimi për grupin „{pool}”, që nuk i nevojitet. Shtojeni grupin te nevojat e tij ose hiqeni atë kohë.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} përdor tabelën e vendimeve “{decision}” të skedarit {file}, të cilën nuk mund ta përdorë: {reason} Korrigjoni tabelën, ose hiqeni nga blloku.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} përdor tabelën e vendimeve “{decision}”, rregullat {first} dhe {second} të së cilës përputhen të dyja me {example}, por me politikën e përputhjes Unique vetëm një mund të përputhet. Ndryshoni rregullat që të përputhet vetëm një, ose zgjidhni një politikë tjetër përputhjeje.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} përdor tabelën e vendimeve “{decision}”, në të cilën asnjë rregull nuk përputhet me {example}, kështu që një njësi e tillë nuk merr aty asnjë rezultat. Shtoni një rregull ose një dalje të paracaktuar, nëse kjo nuk është e qëllimshme.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} përdor tabelën e vendimeve “{decision}”, e cila ka shumë kombinime hyrjesh për t’u kontrolluar plotësisht, kështu që mund të ketë rregulla që mbivendosen ose hyrje me të cilat nuk përputhet asnjë rregull. Kontrolloni rregullat e saj ose ndajeni në tabela më të vogla.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} drejton sipas tabelës së vendimeve “{decision}”, e cila mund të japë “{value}”, emrin e asnjërës prej daljeve të tij. Bëjeni çdo vlerë të daljes sipas së cilës drejton id-në e një dalje ose id-në apo emrin e një blloku ku të çon.
+	Decision table	Tabelë vendimesh
+	Open decision table	Hap tabelën e vendimeve
+	Hit policy	Politika e përputhjes
+	Unique	Unike
+	First	E para
+	Collect	Mblidh
+	Aggregation	Përmbledhje
+	Sum	Shuma
+	Count	Numri
+	Add rule	Shto rregull
+	Remove rule	Hiq rregullin
+	Change Decision Table	Ndrysho tabelën e vendimeve
+	Use Decision Table	Përdor tabelën e vendimeve
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Për momentin vetëm për lexim: redaktojeni tabelën në skedarin e saj .dmn ose me komandën dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Tabelat e tij të vendimeve nuk u shkruan: aplikacioni ende nuk shkruan skedarë .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Tabelat e tij të vendimeve duhen ende ruajtur, ndaj modeli u mbajt i hapur: aplikacioni ende nuk shkruan skedarë .dmn.
 	Reset {field}	Rivendos {field}
 	Changed from the default	Ndryshuar nga parazgjedhja
 	Changed from the inherited scenario	Ndryshuar nga skenari i trashëguar
@@ -1476,3 +1497,7 @@ connection	Flow	Rrjedhë
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Renditja e pakove postare: një lak ushqen katër korsi sipas produktit, dhe devijuesit e dërgojnë një pako për një xhiro tjetër kur korsia e saj është plot.
 	How many parcels go round the loop because their lane is full?	Sa pako bëjnë një xhiro tjetër në lak sepse korsia e tyre është plot?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportierë dhe devijues: pako të dërguara për një xhiro tjetër kur korsia e tyre është plot.
+	Repairmen with spares	Mekanikë dhe makina rezervë
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dhjetë makina duhet të punojnë, katër makina rezervë presin gati dhe tre mekanikë riparojnë ato që prishen (Crane dhe Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Sa makina rezervë dhe sa mekanikë i mbajnë në punë dhjetë makina?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Makinat rezervë që presin nuk mund të prishen: mesatarisht 3.47 makina janë të prishura dhe 9.29 punojnë. Një mekanik i katërt jep afërsisht sa katër makina rezervë më shumë.

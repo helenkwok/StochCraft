@@ -1458,6 +1458,27 @@ unit	yr	წელი
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}-ს აქვს მომსახურების დრო პულისთვის „{pool}“, რომელიც მოდელში არ არის. წაშალეთ ეს დრო ან აირჩიეთ არსებული პული.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block}-ს ორი მომსახურების დრო აქვს პულისთვის „{pool}“. დატოვეთ ერთი.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}-ს აქვს მომსახურების დრო პულისთვის „{pool}“, რომელიც მას არ სჭირდება. დაამატეთ პული მის საჭიროებებში ან წაშალეთ ეს დრო.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} იყენებს ფაილ {file}-ის გადაწყვეტილების ცხრილს „{decision}“, რომლის გამოყენებაც არ შეუძლია: {reason} შეასწორეთ ცხრილი ან მოხსენით იგი ბლოკს.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} იყენებს გადაწყვეტილების ცხრილს „{decision}“, რომლის წესები {first} და {second} ორივე ემთხვევა {example}-ს, მაგრამ მისი დამთხვევის პოლიტიკით Unique მხოლოდ ერთს შეუძლია. შეცვალეთ წესები ისე, რომ მხოლოდ ერთი ემთხვეოდეს, ან აირჩიეთ სხვა დამთხვევის პოლიტიკა.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} იყენებს გადაწყვეტილების ცხრილს „{decision}“, რომელშიც არცერთი წესი არ ემთხვევა {example}-ს, ასე რომ ასეთი ერთეული იქ შედეგს ვერ იღებს. დაამატეთ წესი ან ნაგულისხმევი გამოსავალი, თუ ეს განზრახული არ არის.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} იყენებს გადაწყვეტილების ცხრილს „{decision}“, რომელსაც შესავლების იმდენად ბევრი კომბინაცია აქვს, რომ სრულად ვერ შემოწმდება, ასე რომ მასში შეიძლება იყოს ერთმანეთზე გადაფარული წესები ან შესავლები, რომლებსაც არცერთი წესი არ ემთხვევა. შეამოწმეთ მისი წესები ან დაყავით იგი უფრო მცირე ცხრილებად.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} მიმართავს გადაწყვეტილების ცხრილის „{decision}“ მიხედვით, რომელსაც შეუძლია მისცეს „{value}“, რაც არცერთი მისი გასასვლელის სახელი არ არის. იმ გამოსავლის თითოეული მნიშვნელობა, რომლითაც მიმართავს, გახადეთ გასასვლელის id, ან იმ ბლოკის id ან სახელი, რომელთანაც მიდის.
+	Decision table	გადაწყვეტილების ცხრილი
+	Open decision table	გადაწყვეტილების ცხრილის გახსნა
+	Hit policy	დამთხვევის პოლიტიკა
+	Unique	უნიკალური
+	First	პირველი
+	Collect	შეგროვება
+	Aggregation	აგრეგაცია
+	Sum	ჯამი
+	Count	რაოდენობა
+	Add rule	წესის დამატება
+	Remove rule	წესის წაშლა
+	Change Decision Table	გადაწყვეტილების ცხრილის შეცვლა
+	Use Decision Table	გადაწყვეტილების ცხრილის გამოყენება
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	ამჟამად მხოლოდ წასაკითხად: ცხრილი შეცვალეთ მის .dmn ფაილში ან dmn.set ბრძანებით.
+	Its decision tables were not written: the app does not write .dmn files yet.	მისი გადაწყვეტილების ცხრილები არ ჩაიწერა: აპი ჯერ არ წერს .dmn ფაილებს.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	მისი გადაწყვეტილების ცხრილები ჯერ კიდევ შესანახია, ამიტომ მოდელი ღია დარჩა: აპი ჯერ არ წერს .dmn ფაილებს.
 	Reset {field}	{field}: საწყისზე დაბრუნება
 	Changed from the default	შეცვლილია ნაგულისხმევთან შედარებით
 	Changed from the inherited scenario	შეცვლილია მემკვიდრეობით მიღებულ სცენართან შედარებით
@@ -1476,3 +1497,7 @@ connection	Flow	ნაკადი
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	საფოსტო ამანათების დახარისხება: წრიული ხაზი პროდუქტის მიხედვით ოთხ ზოლს კვებავს, ხოლო გადამრთველები ამანათს ახალ წრეზე აგზავნიან, როცა მისი ზოლი სავსეა.
 	How many parcels go round the loop because their lane is full?	რამდენი ამანათი გადის ახალ წრეს, რადგან მათი ზოლი სავსეა?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	კონვეიერები და გადამრთველები: ამანათები ახალ წრეს გადიან, როცა მათი ზოლი სავსეა.
+	Repairmen with spares	ზეინკლები და სათადარიგო მანქანები
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ათი მანქანა უნდა მუშაობდეს, ოთხი სათადარიგო მზადყოფნაში ელოდება, ხოლო სამი ზეინკალი აკეთებს გაფუჭებულებს (Crane და Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	რამდენი სათადარიგო მანქანა და ზეინკალი ინარჩუნებს ათ მანქანას მუშა მდგომარეობაში?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	მზადყოფნაში მყოფი სათადარიგო მანქანები ვერ გაფუჭდება: საშუალოდ 3.47 მანქანაა გაფუჭებული და 9.29 მუშაობს. მეოთხე ზეინკალი დაახლოებით იმდენს აკეთებს, რამდენსაც კიდევ ოთხი სათადარიგო მანქანა.

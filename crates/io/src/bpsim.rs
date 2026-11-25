@@ -81,6 +81,14 @@ pub const PROCESSING_TIME_BY: &str = "stochcraft:processingTimeBy";
 /// every resource.
 pub const PROCESSING_TIME_BY_RESOURCE: &str = "stochcraft:processingTimeByResource";
 
+/// The vendor extension that names the decision table an element uses (ROADMAP M5.5, D30): a
+/// `stochcraft:decision` element with attributes `file` (the `.dmn` file, relative to the model's
+/// file), `decision` (the decision's id there) and, on a gateway whose table has several
+/// outputs, `route` (the output to route by), in the element's `ElementParameters`. As an
+/// entity enters, the table is evaluated on its properties and the outputs are written back as
+/// properties; see [`crate::dmn`].
+pub const DECISION: &str = "stochcraft:decision";
+
 /// An exclusive gateway's routing rule: `stochcraft:routing` with the value `shortestQueue` on
 /// the gateway's `ElementParameters` sends each entity to the way with the shortest queue that
 /// has room.

@@ -1458,6 +1458,27 @@ unit	yr	έτ
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Το μπλοκ {block} έχει χρόνο εξυπηρέτησης για τη δεξαμενή «{pool}», που το μοντέλο δεν έχει. Αφαιρέστε αυτόν τον χρόνο ή επιλέξτε μια δεξαμενή που υπάρχει.
 	{block} has two service times for the pool “{pool}”. Keep one.	Το μπλοκ {block} έχει δύο χρόνους εξυπηρέτησης για τη δεξαμενή «{pool}». Κρατήστε τον έναν.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Το μπλοκ {block} έχει χρόνο εξυπηρέτησης για τη δεξαμενή «{pool}», που δεν χρειάζεται. Προσθέστε τη δεξαμενή στις ανάγκες του ή αφαιρέστε αυτόν τον χρόνο.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	Το {block} χρησιμοποιεί τον πίνακα αποφάσεων «{decision}» του αρχείου {file}, τον οποίο δεν μπορεί να χρησιμοποιήσει: {reason} Διορθώστε τον πίνακα ή αφαιρέστε τον από το μπλοκ.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	Το {block} χρησιμοποιεί τον πίνακα αποφάσεων «{decision}», του οποίου οι κανόνες {first} και {second} ταιριάζουν και οι δύο με {example}, αλλά με την πολιτική αντιστοίχισης Unique μόνο ένας επιτρέπεται. Αλλάξτε τους κανόνες ώστε να ταιριάζει μόνο ένας ή επιλέξτε άλλη πολιτική αντιστοίχισης.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	Το {block} χρησιμοποιεί τον πίνακα αποφάσεων «{decision}», στον οποίο κανένας κανόνας δεν ταιριάζει με {example}, οπότε μια τέτοια οντότητα δεν παίρνει εκεί αποτέλεσμα. Προσθέστε κανόνα ή προεπιλεγμένη έξοδο, αν αυτό δεν είναι σκόπιμο.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	Το {block} χρησιμοποιεί τον πίνακα αποφάσεων «{decision}», που έχει πάρα πολλούς συνδυασμούς εισόδων για να ελεγχθεί πλήρως, οπότε μπορεί να έχει κανόνες που επικαλύπτονται ή εισόδους με τις οποίες δεν ταιριάζει κανένας κανόνας. Ελέγξτε τους κανόνες του ή χωρίστε τον σε μικρότερους πίνακες.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	Το {block} δρομολογεί με τον πίνακα αποφάσεων «{decision}», που μπορεί να δώσει «{value}», όνομα καμίας από τις εξόδους του. Κάντε κάθε τιμή της εξόδου με την οποία δρομολογεί id μιας εξόδου του ή id ή όνομα ενός μπλοκ στο οποίο οδηγεί.
+	Decision table	Πίνακας αποφάσεων
+	Open decision table	Άνοιγμα πίνακα αποφάσεων
+	Hit policy	Πολιτική αντιστοίχισης
+	Unique	Μοναδική
+	First	Πρώτη
+	Collect	Συλλογή
+	Aggregation	Συνάθροιση
+	Sum	Άθροισμα
+	Count	Πλήθος
+	Add rule	Προσθήκη κανόνα
+	Remove rule	Αφαίρεση κανόνα
+	Change Decision Table	Αλλαγή πίνακα αποφάσεων
+	Use Decision Table	Χρήση πίνακα αποφάσεων
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Προς το παρόν μόνο για ανάγνωση: επεξεργαστείτε τον πίνακα στο αρχείο .dmn του ή με την εντολή dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Οι πίνακες αποφάσεών του δεν γράφτηκαν: η εφαρμογή δεν γράφει ακόμη αρχεία .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Οι πίνακες αποφάσεών του χρειάζεται ακόμη να αποθηκευτούν, οπότε το μοντέλο έμεινε ανοιχτό: η εφαρμογή δεν γράφει ακόμη αρχεία .dmn.
 	Reset {field}	Επαναφορά: {field}
 	Changed from the default	Αλλαγμένο σε σχέση με την προεπιλογή
 	Changed from the inherited scenario	Αλλαγμένο σε σχέση με το κληρονομημένο σενάριο
@@ -1476,3 +1497,7 @@ connection	Flow	Ροή
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Διαλογή ταχυδρομικών δεμάτων: ένας βρόχος τροφοδοτεί τέσσερις λωρίδες ανά προϊόν, και οι εκτροπείς στέλνουν ένα δέμα για άλλο γύρο όταν η λωρίδα του είναι γεμάτη.
 	How many parcels go round the loop because their lane is full?	Πόσα δέματα κάνουν άλλο γύρο στον βρόχο επειδή η λωρίδα τους είναι γεμάτη;
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Μεταφορείς και εκτροπείς: δέματα που κάνουν άλλο γύρο στον βρόχο όταν η λωρίδα τους είναι γεμάτη.
+	Repairmen with spares	Τεχνίτες και εφεδρικές μηχανές
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Δέκα μηχανές πρέπει να λειτουργούν, τέσσερις εφεδρικές περιμένουν σε ετοιμότητα και τρεις τεχνίτες επισκευάζουν όσες χαλάνε (Crane και Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Πόσες εφεδρικές μηχανές και πόσοι τεχνίτες κρατούν σε λειτουργία δέκα μηχανές;
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Οι εφεδρικές μηχανές σε αναμονή δεν παθαίνουν βλάβη: κατά μέσο όρο 3.47 μηχανές είναι χαλασμένες και 9.29 λειτουργούν. Ένας τέταρτος τεχνίτης προσφέρει περίπου όσο τέσσερις εφεδρικές μηχανές επιπλέον.

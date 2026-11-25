@@ -1458,6 +1458,27 @@ unit	yr	ປີ
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} ມີເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ທີ່ບໍ່ມີໃນແບບຈຳລອງ ລຶບເວລານັ້ນ ຫຼື ເລືອກກຸ່ມທີ່ມີຢູ່
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} ມີສອງເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ເກັບໄວ້ອັນດຽວ
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} ມີເວລາໃຫ້ບໍລິການສຳລັບກຸ່ມ “{pool}” ທີ່ມັນບໍ່ຕ້ອງໃຊ້ ເພີ່ມກຸ່ມນັ້ນເຂົ້າໃນສິ່ງທີ່ຕ້ອງໃຊ້ ຫຼື ລຶບເວລານັ້ນ
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ “{decision}” ຂອງໄຟລ໌ {file} ທີ່ມັນໃຊ້ບໍ່ໄດ້: {reason} ແກ້ໄຂຕາຕະລາງ ຫຼື ເອົາອອກຈາກບລັອກ.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ “{decision}” ເຊິ່ງກົດ {first} ແລະ {second} ກົງກັບ {example} ທັງສອງ, ແຕ່ພາຍໃຕ້ນະໂຍບາຍການກົງກັນ Unique ກົງໄດ້ພຽງກົດດຽວ. ແກ້ກົດໃຫ້ກົງພຽງກົດດຽວ ຫຼື ເລືອກນະໂຍບາຍການກົງກັນອື່ນ.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ “{decision}” ເຊິ່ງບໍ່ມີກົດໃດກົງກັບ {example}, ສິ່ງດັ່ງກ່າວຈຶ່ງບໍ່ໄດ້ຜົນຢູ່ທີ່ນັ້ນ. ເພີ່ມກົດ ຫຼື ຜົນອອກຄ່າເລີ່ມຕົ້ນ ຖ້າບໍ່ໄດ້ຕັ້ງໃຈ.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ “{decision}” ເຊິ່ງມີການປະສົມຂອງຂໍ້ມູນເຂົ້າຫຼາຍເກີນໄປທີ່ຈະກວດໄດ້ທັງໝົດ ຈຶ່ງອາດມີກົດທີ່ຊ້ອນກັນ ຫຼື ຂໍ້ມູນເຂົ້າທີ່ບໍ່ມີກົດໃດກົງກັນ. ກວດກົດຂອງມັນ ຫຼື ແບ່ງມັນເປັນຕາຕະລາງນ້ອຍລົງ.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} ສົ່ງຕໍ່ຕາມຕາຕະລາງການຕັດສິນໃຈ “{decision}” ເຊິ່ງອາດໃຫ້ “{value}” ທີ່ບໍ່ແມ່ນຊື່ຂອງທາງອອກໃດເລີຍ. ໃຫ້ແຕ່ລະຄ່າຂອງຜົນອອກທີ່ໃຊ້ສົ່ງຕໍ່ເປັນ id ຂອງທາງອອກ ຫຼື id ຫຼື ຊື່ຂອງບລັອກທີ່ມັນໄປເຖິງ.
+	Decision table	ຕາຕະລາງການຕັດສິນໃຈ
+	Open decision table	ເປີດຕາຕະລາງການຕັດສິນໃຈ
+	Hit policy	ນະໂຍບາຍການກົງກັນ
+	Unique	ດຽວເທົ່ານັ້ນ
+	First	ທຳອິດ
+	Collect	ເກັບລວມ
+	Aggregation	ການລວມຄ່າ
+	Sum	ຜົນລວມ
+	Count	ຈຳນວນ
+	Add rule	ເພີ່ມກົດ
+	Remove rule	ລຶບກົດ
+	Change Decision Table	ປ່ຽນຕາຕະລາງການຕັດສິນໃຈ
+	Use Decision Table	ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	ຕອນນີ້ອ່ານໄດ້ຢ່າງດຽວ: ແກ້ໄຂຕາຕະລາງໃນໄຟລ໌ .dmn ຂອງມັນ ຫຼື ດ້ວຍຄຳສັ່ງ dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	ຕາຕະລາງການຕັດສິນໃຈຂອງມັນບໍ່ໄດ້ຖືກຂຽນ: ແອັບຍັງບໍ່ຂຽນໄຟລ໌ .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	ຕາຕະລາງການຕັດສິນໃຈຂອງມັນຍັງຕ້ອງບັນທຶກ ຈຶ່ງເປີດແບບຈຳລອງໄວ້: ແອັບຍັງບໍ່ຂຽນໄຟລ໌ .dmn.
 	Reset {field}	ຣີເຊັດ {field}
 	Changed from the default	ປ່ຽນຈາກຄ່າເລີ່ມຕົ້ນ
 	Changed from the inherited scenario	ປ່ຽນຈາກສະຖານະການທີ່ສືບທອດມາ
@@ -1476,3 +1497,7 @@ connection	Flow	ເສັ້ນທາງ
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	ການຄັດແຍກພັດສະດຸໄປສະນີ: ວົງຮອບປ້ອນພັດສະດຸເຂົ້າສີ່ຊ່ອງຕາມສິນຄ້າ ແລະ ຕົວປ່ຽນທາງສົ່ງພັດສະດຸໄປອີກຮອບເມື່ອຊ່ອງຂອງມັນເຕັມ.
 	How many parcels go round the loop because their lane is full?	ມີພັດສະດຸຈັກອັນທີ່ວຽນອີກຮອບເພາະຊ່ອງຂອງມັນເຕັມ?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	ສາຍພານລຳລຽງ ແລະ ຕົວປ່ຽນທາງ: ພັດສະດຸວຽນອີກຮອບເມື່ອຊ່ອງຂອງມັນເຕັມ.
+	Repairmen with spares	ຊ່າງຈັກ ແລະ ເຄື່ອງຈັກສຳຮອງ
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ເຄື່ອງຈັກສິບເຄື່ອງຕ້ອງເຮັດວຽກ, ເຄື່ອງຈັກສຳຮອງສີ່ເຄື່ອງລໍຖ້າພ້ອມ ແລະ ຊ່າງຈັກສາມຄົນສ້ອມແປງເຄື່ອງທີ່ເສຍ (Crane ແລະ Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	ຕ້ອງມີເຄື່ອງຈັກສຳຮອງ ແລະ ຊ່າງຈັກຈັກເທົ່າໃດ ເພື່ອໃຫ້ເຄື່ອງຈັກສິບເຄື່ອງເຮັດວຽກຕໍ່ໄປໄດ້?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	ເຄື່ອງຈັກສຳຮອງທີ່ລໍຖ້າຢູ່ບໍ່ສາມາດເສຍໄດ້: ໂດຍສະເລ່ຍເຄື່ອງຈັກເສຍ 3.47 ເຄື່ອງ ແລະ ເຮັດວຽກ 9.29 ເຄື່ອງ. ຊ່າງຈັກຄົນທີສີ່ຊ່ວຍໄດ້ປະມານເທົ່າກັບເຄື່ອງຈັກສຳຮອງອີກສີ່ເຄື່ອງ.

@@ -17,6 +17,7 @@
 
 pub mod agents;
 pub mod bpsim;
+pub mod dmn;
 pub mod duration;
 pub mod layout;
 mod mc;
@@ -231,8 +232,13 @@ impl Opened {
     /// The file's bytes for `model`: exactly the original bytes when the model is unchanged;
     /// otherwise the original file with the changes written in, and everything StochCraft does
     /// not understand kept as it was. The result is checked by reading it back.
+    ///
+    /// The decision tables a model reads ([`stochcraft_model::Model::dmn`]) are files of their
+    /// own, saved with [`dmn::save_dmn`]; they are not part of this file.
     pub fn save(&self, model: &stochcraft_model::Model) -> Result<Vec<u8>, SaveError> {
-        if *model == self.model_at_load {
+        let mut model = model.clone();
+        model.dmn.clear();
+        if model == self.model_at_load {
             Ok(self.bytes.clone())
         } else {
             save::save_edited(
@@ -240,7 +246,7 @@ impl Opened {
                 self.format,
                 self.scenario.as_deref(),
                 &self.model_at_load,
-                model,
+                &model,
             )
         }
     }

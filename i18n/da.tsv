@@ -1458,6 +1458,27 @@ unit	yr	år
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} har en servicetid for puljen »{pool}«, som modellen ikke har. Fjern den tid, eller vælg en pulje, der findes.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} har to servicetider for puljen »{pool}«. Behold en af dem.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} har en servicetid for puljen »{pool}«, som den ikke har brug for. Føj puljen til dens behov, eller fjern den tid.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} bruger beslutningstabellen »{decision}« fra filen {file}, som den ikke kan bruge: {reason} Ret tabellen, eller fjern den fra blokken.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} bruger beslutningstabellen »{decision}«, hvis regler {first} og {second} begge passer på {example}, men under dens hitpolitik Unique må kun én passe. Ret reglerne, så kun én passer, eller vælg en anden hitpolitik.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} bruger beslutningstabellen »{decision}«, hvor ingen regel passer på {example}, så sådan en enhed får intet resultat der. Tilføj en regel eller et standardoutput, hvis det ikke er meningen.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} bruger beslutningstabellen »{decision}«, som har for mange kombinationer af input til at blive kontrolleret helt, så den kan have regler, der overlapper, eller input, som ingen regel passer på. Kontrollér dens regler, eller del den op i mindre tabeller.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} dirigerer efter beslutningstabellen »{decision}«, som kan give »{value}«, navnet på ingen af dens udgange. Gør hver værdi af det output, den dirigerer efter, til id’et på en udgang eller id’et eller navnet på en blok, den fører til.
+	Decision table	Beslutningstabel
+	Open decision table	Åbn beslutningstabel
+	Hit policy	Hitpolitik
+	Unique	Entydig
+	First	Første
+	Collect	Saml
+	Aggregation	Aggregering
+	Sum	Sum
+	Count	Antal
+	Add rule	Tilføj regel
+	Remove rule	Fjern regel
+	Change Decision Table	Skift beslutningstabel
+	Use Decision Table	Brug beslutningstabel
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Kun til visning indtil videre: rediger tabellen i dens .dmn-fil eller med kommandoen dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Dens beslutningstabeller blev ikke skrevet: appen skriver endnu ikke .dmn-filer.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Dens beslutningstabeller mangler stadig at blive gemt, så modellen blev holdt åben: appen skriver endnu ikke .dmn-filer.
 	Reset {field}	Nulstil {field}
 	Changed from the default	Ændret fra standarden
 	Changed from the inherited scenario	Ændret fra det nedarvede scenarie
@@ -1476,3 +1497,7 @@ connection	Flow	Flow
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortering af postpakker: en sløjfe fører pakker til fire baner efter produkt, og omstyringer sender en pakke en runde til, når dens bane er fuld.
 	How many parcels go round the loop because their lane is full?	Hvor mange pakker kører en runde til i sløjfen, fordi deres bane er fuld?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportbånd og omstyringer: pakker sendt en runde til i sløjfen, når deres bane er fuld.
+	Repairmen with spares	Mekanikere og reservemaskiner
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Ti maskiner skal køre, fire reservemaskiner står klar, og tre mekanikere reparerer dem, der bryder ned (Crane og Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Hvor mange reservemaskiner og mekanikere holder ti maskiner kørende?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemaskiner, der står klar, kan ikke bryde ned: i gennemsnit er 3.47 maskiner i stykker, og 9.29 kører. En fjerde mekaniker gør omtrent lige så meget som fire reservemaskiner mere.

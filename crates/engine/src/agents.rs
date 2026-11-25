@@ -81,9 +81,10 @@ pub(crate) struct AgentsDoc {
     pub last: Option<(Value, u64)>,
 }
 
-/// Whether `href` is a reference StochCraft reads beside the model: an SCXML chart (`.scxml`)
-/// or a CSV list of links (`.csv`), relative, in the model's folder or below it (no `..`, no
-/// root, drive or scheme, and no part that Windows takes for a device, such as `nul`).
+/// Whether `href` is a reference StochCraft reads beside the model: an SCXML chart (`.scxml`),
+/// a CSV list of links (`.csv`) or a DMN file of decision tables (`.dmn`), relative, in the
+/// model's folder or below it (no `..`, no root, drive or scheme, and no part that Windows takes
+/// for a device, such as `nul`).
 pub fn is_safe_reference(href: &str) -> bool {
     let lower = href.to_ascii_lowercase();
     let device = |part: &str| {
@@ -98,7 +99,7 @@ pub fn is_safe_reference(href: &str) -> bool {
             && stem.chars().nth(3).is_some_and(|c| c.is_ascii_digit());
         numbered || matches!(stem.as_str(), "con" | "prn" | "aux" | "nul")
     };
-    (lower.ends_with(".scxml") || lower.ends_with(".csv"))
+    (lower.ends_with(".scxml") || lower.ends_with(".csv") || lower.ends_with(".dmn"))
         && !href.starts_with(['/', '\\'])
         && !href.contains(':')
         && href
@@ -112,7 +113,7 @@ pub fn is_safe_reference(href: &str) -> bool {
 pub fn beside(dir: &std::path::Path, href: &str) -> Result<std::path::PathBuf, String> {
     if !is_safe_reference(href) {
         return Err(format!(
-            "`{href}` is not a relative reference to an .scxml or .csv file beside the model"
+            "`{href}` is not a relative reference to an .scxml, .csv or .dmn file beside the model"
         ));
     }
     let dir = if dir.as_os_str().is_empty() {
@@ -238,7 +239,7 @@ impl Engine {
         if stochcraft_sd::looks_like_xmile(bytes) {
             return self.open_sd(name, bytes, true);
         }
-        let loaded = stochcraft_io::read_scenario(bytes, scenario)
+        let mut loaded = stochcraft_io::read_scenario(bytes, scenario)
             .map_err(|e| CommandError::new(ErrorCode::BadFile, format!("{name}: {e}")))?;
         let mut files = BTreeMap::new();
         if let Some(a) = loaded
@@ -270,7 +271,15 @@ impl Engine {
             )?;
         }
         let is_agents = loaded.model.is_agents();
+        // A process model's decision tables (D30), from beside it.
+        let dmn = if is_agents {
+            BTreeMap::new()
+        } else {
+            crate::dmn::load(&mut loaded, resolve)
+        };
         let result = self.open_loaded(name, bytes, loaded, is_agents)?;
+        self.dmn = dmn;
+        self.dmn_at = self.path().map(str::to_owned);
         if is_agents {
             self.agents = Some(AgentsDoc { files, last: None });
             self.journal_start.model_digest = self.agents_digest();
@@ -714,6 +723,7 @@ mod tests {
             "person.scxml",
             "charts/person.scxml",
             "a b.scxml",
+            "rules/sorting.dmn",
             "x\\y.csv",
         ] {
             assert!(is_safe_reference(ok), "{ok}");

@@ -1458,6 +1458,27 @@ unit	yr	år
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} har en servicetid för poolen ”{pool}”, som modellen inte har. Ta bort den tiden eller välj en pool som finns.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} har två servicetider för poolen ”{pool}”. Behåll en av dem.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} har en servicetid för poolen ”{pool}”, som den inte behöver. Lägg till poolen bland dess behov eller ta bort den tiden.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} använder beslutstabellen ”{decision}” i filen {file}, som den inte kan använda: {reason} Rätta tabellen, eller ta bort den från blocket.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} använder beslutstabellen ”{decision}”, vars regler {first} och {second} båda matchar {example}, men under träffpolicyn Unique får bara en matcha. Ändra reglerna så att bara en matchar, eller välj en annan träffpolicy.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} använder beslutstabellen ”{decision}”, där ingen regel matchar {example}, så en sådan entitet får inget resultat där. Lägg till en regel eller en standardutdata, om det inte är avsikten.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} använder beslutstabellen ”{decision}”, som har för många kombinationer av indata för att kontrolleras helt, så den kan ha regler som överlappar eller indata som ingen regel matchar. Kontrollera dess regler, eller dela upp den i mindre tabeller.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} dirigerar efter beslutstabellen ”{decision}”, som kan ge ”{value}”, namnet på ingen av dess utgångar. Gör varje värde i utdata som den dirigerar efter till id:t för en utgång, eller id:t eller namnet på ett block som den leder till.
+	Decision table	Beslutstabell
+	Open decision table	Öppna beslutstabell
+	Hit policy	Träffpolicy
+	Unique	Unik
+	First	Första
+	Collect	Samla
+	Aggregation	Aggregering
+	Sum	Summa
+	Count	Antal
+	Add rule	Lägg till regel
+	Remove rule	Ta bort regel
+	Change Decision Table	Ändra beslutstabell
+	Use Decision Table	Använd beslutstabell
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Endast läsbar tills vidare: redigera tabellen i dess .dmn-fil eller med kommandot dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Dess beslutstabeller skrevs inte: appen skriver ännu inte .dmn-filer.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Dess beslutstabeller behöver fortfarande sparas, så modellen hölls öppen: appen skriver ännu inte .dmn-filer.
 	Reset {field}	Återställ {field}
 	Changed from the default	Ändrat från standardvärdet
 	Changed from the inherited scenario	Ändrat från det ärvda scenariot
@@ -1476,3 +1497,7 @@ connection	Flow	Flöde
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortering av postpaket: en slinga matar fyra banor efter produkt, och avledare skickar ett paket ett varv till när dess bana är full.
 	How many parcels go round the loop because their lane is full?	Hur många paket åker ett varv till i slingan för att deras bana är full?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportband och avledare: paket som skickas ett varv till i slingan när deras bana är full.
+	Repairmen with spares	Reparatörer och reservmaskiner
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tio maskiner måste gå, fyra reservmaskiner står redo och tre reparatörer lagar dem som havererar (Crane och Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Hur många reservmaskiner och reparatörer håller tio maskiner i gång?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservmaskiner som står redo kan inte haverera: i genomsnitt är 3.47 maskiner trasiga och 9.29 går. En fjärde reparatör gör ungefär lika mycket som fyra reservmaskiner till.

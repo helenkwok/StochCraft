@@ -414,6 +414,43 @@ fn samples() -> Vec<Diagnostic> {
         found(task, Problem::TransportNotSimulated),
         found(
             task,
+            Problem::DecisionUnusable {
+                file: "rules.dmn".into(),
+                decision: "chute".into(),
+                reason: "the file was not read.".into(),
+            },
+        ),
+        found(
+            task,
+            Problem::DecisionOverlap {
+                decision: "Chute".into(),
+                first: 2,
+                second: 3,
+                example: "size = 50".into(),
+            },
+        ),
+        found(
+            task,
+            Problem::DecisionGap {
+                decision: "Chute".into(),
+                example: "size = 5.5 and class = \"other\"".into(),
+            },
+        ),
+        found(
+            task,
+            Problem::DecisionRoute {
+                decision: "Chute".into(),
+                value: "north".into(),
+            },
+        ),
+        found(
+            task,
+            Problem::DecisionUnchecked {
+                decision: "Chute".into(),
+            },
+        ),
+        found(
+            task,
             Problem::TransportPool {
                 pool: id("p1"),
                 exists: false,

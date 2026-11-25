@@ -1458,6 +1458,27 @@ unit	yr	বছর
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block}-এ “{pool}” পুলের জন্য একটি সেবা সময় আছে, কিন্তু মডেলে এই পুল নেই। সেই সময়টি সরান, অথবা এমন পুল বেছে নিন যা আছে।
 	{block} has two service times for the pool “{pool}”. Keep one.	{block}-এ “{pool}” পুলের জন্য দুটি সেবা সময় আছে। একটি রাখুন।
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block}-এ “{pool}” পুলের জন্য একটি সেবা সময় আছে, কিন্তু এর এই পুলের প্রয়োজন নেই। পুলটি প্রয়োজনের তালিকায় যোগ করুন, অথবা সেই সময়টি সরান।
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} ফাইল {file}-এর সিদ্ধান্ত সারণি “{decision}” ব্যবহার করে, যা সে ব্যবহার করতে পারে না: {reason} সারণিটি ঠিক করুন, অথবা ব্লক থেকে সরিয়ে দিন।
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} সিদ্ধান্ত সারণি “{decision}” ব্যবহার করে, যার নিয়ম {first} ও {second} দুটোই {example}-এর সঙ্গে মেলে, কিন্তু এর মিল নীতি Unique-এ কেবল একটিই মিলতে পারে। নিয়মগুলো এমনভাবে বদলান যাতে কেবল একটি মেলে, অথবা অন্য মিল নীতি বেছে নিন।
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} সিদ্ধান্ত সারণি “{decision}” ব্যবহার করে, যেখানে কোনো নিয়ম {example}-এর সঙ্গে মেলে না, তাই এমন সত্তা সেখানে কোনো ফল পায় না। এটি উদ্দেশ্য না হলে একটি নিয়ম বা ডিফল্ট আউটপুট যোগ করুন।
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} সিদ্ধান্ত সারণি “{decision}” ব্যবহার করে, যার ইনপুটের সমন্বয় পুরোপুরি যাচাই করার পক্ষে খুব বেশি, তাই এতে পরস্পর মিলে যাওয়া নিয়ম বা কোনো নিয়মের সঙ্গে না মেলা ইনপুট থাকতে পারে। এর নিয়মগুলি যাচাই করুন, অথবা এটিকে ছোট সারণিতে ভাগ করুন।
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} সিদ্ধান্ত সারণি “{decision}” অনুযায়ী পাঠায়, যা “{value}” দিতে পারে, যা তার কোনো প্রস্থানের নাম নয়। যে আউটপুট অনুযায়ী এটি পাঠায় তার প্রতিটি মানকে কোনো প্রস্থানের id, অথবা যে ব্লকে এটি নিয়ে যায় তার id বা নাম করুন।
+	Decision table	সিদ্ধান্ত সারণি
+	Open decision table	সিদ্ধান্ত সারণি খুলুন
+	Hit policy	মিল নীতি
+	Unique	অনন্য
+	First	প্রথম
+	Collect	সংগ্রহ
+	Aggregation	একত্রীকরণ
+	Sum	যোগফল
+	Count	গণনা
+	Add rule	নিয়ম যোগ করুন
+	Remove rule	নিয়ম সরান
+	Change Decision Table	সিদ্ধান্ত সারণি বদলান
+	Use Decision Table	সিদ্ধান্ত সারণি ব্যবহার করুন
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	আপাতত শুধু দেখার জন্য: সারণিটি এর .dmn ফাইলে, অথবা dmn.set কমান্ড দিয়ে সম্পাদনা করুন।
+	Its decision tables were not written: the app does not write .dmn files yet.	এর সিদ্ধান্ত সারণিগুলি লেখা হয়নি: অ্যাপটি এখনও .dmn ফাইল লেখে না।
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	এর সিদ্ধান্ত সারণিগুলি এখনও সংরক্ষণ করা দরকার, তাই মডেলটি খোলা রাখা হয়েছে: অ্যাপটি এখনও .dmn ফাইল লেখে না।
 	Reset {field}	{field} রিসেট করুন
 	Changed from the default	ডিফল্ট থেকে পরিবর্তিত
 	Changed from the inherited scenario	উত্তরাধিকারসূত্রে প্রাপ্ত দৃশ্যকল্প থেকে পরিবর্তিত
@@ -1476,3 +1497,7 @@ connection	Flow	প্রবাহ
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	ডাক পার্সেল বাছাই: একটি লুপ পণ্য অনুযায়ী চারটি লেনে পার্সেল দেয়, আর লেন ভরা থাকলে ডাইভার্ট পার্সেলটিকে আবার ঘুরিয়ে পাঠায়।
 	How many parcels go round the loop because their lane is full?	লেন ভরা থাকায় কতগুলো পার্সেল লুপে আবার ঘোরে?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	কনভেয়র ও ডাইভার্ট: লেন ভরা থাকলে পার্সেল লুপে আবার ঘুরে আসে।
+	Repairmen with spares	অতিরিক্ত মেশিনসহ মিস্ত্রি দল
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	দশটি মেশিন চালু থাকতেই হবে, চারটি অতিরিক্ত মেশিন প্রস্তুত থাকে এবং তিনজন মিস্ত্রি বিকল মেশিন সারান (Crane ও Iglehart, Winter Simulation Conference, 1973)।
+	How many spares and repairmen keep ten machines running?	দশটি মেশিন চালু রাখতে কতগুলো অতিরিক্ত মেশিন ও কতজন মিস্ত্রি লাগবে?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	প্রস্তুত থাকা অতিরিক্ত মেশিন বিকল হতে পারে না: গড়ে 3.47টি মেশিন বিকল থাকে এবং 9.29টি চলে। চতুর্থ একজন মিস্ত্রি প্রায় আরও চারটি অতিরিক্ত মেশিনের সমান কাজ করেন।

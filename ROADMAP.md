@@ -3786,10 +3786,12 @@ you build it.*
   - The same table runs in the simulation, is edited as a grid in the spreadsheet view, and is
     saved back as DMN. Validation reports overlapping rules under UNIQUE and inputs no rule
     covers.
-  - Open DMN engines exist: DSNTK, in Rust, is MIT OR Apache-2.0. Whether to depend on it or
-    write the small subset ourselves is measured in the first PR. The community DMN test kit
-    (TCK) is a source of test files, fetched at a pinned commit as in D7 and D14 if its licence
-    allows.
+  - Open DMN engines exist: DSNTK, in Rust, is MIT OR Apache-2.0. Measured in the first PR
+    (L10): its evaluator and model crates (0.3.0) bring about 220 packages, among them C
+    libraries for decimal numbers and, through an HTTP client, for TLS, which do not build for
+    the browser app as they are. The subset is written in `stochcraft-model` instead (about
+    1,500 lines with its checks and documentation). The community DMN test kit (TCK) is a source of test files,
+    fetched at a pinned commit as in D7 and D14 if its licence allows.
 - **Classifiers with errors.** A classify step (a scanner, a camera, a model) assigns a class
   from a confusion matrix: for each true class, the share assigned to each class, plus a no-read
   share. Its draws come from its own keyed stream.
@@ -3919,6 +3921,26 @@ an edit to all of them one undo step. Left from U2: collapsible groups for the p
 flows and shared properties (the folds below them already collapse), units typed with the
 value, a scenario picker in the window, and the experiment fields and connections table
 leaving the model page (with U5).
+L10 is done: `stochcraft-model::dmn` holds decision tables with the hit policies
+UNIQUE, FIRST, PRIORITY and COLLECT (with SUM, COUNT, MIN or MAX) and S-FEEL's simple unary tests
+in their cells (comparisons, a value alone, ranges, lists, `not(...)` and `-`), evaluated as
+FEEL compares (no value matches a value of another kind; null matches only `not(...)`), and an
+exact check of a UNIQUE table's overlaps and of inputs no rule covers, each with an example;
+`stochcraft-io::dmn` reads DMN 1.1 to 1.6 and writes 1.6, refusing by name what a table run
+cannot honour, and saves an edited table into its file with the rest kept byte for byte. A
+task, a gateway or a divert names a decision with `stochcraft:decision` (file, decision and, on
+a gateway with several outputs, the output to route by); its outputs are written as entity
+properties as an entity enters, and a gateway with no conditions takes the way whose flow id,
+target id or target name is the output. The engine reads the `.dmn` files beside the model and
+writes edited ones back (`dmn.get`, `dmn.set`, `dmn.use`), and the window shows a table as a
+grid from the block's page, read-only for now: the app's own open and save handle the model's
+file only, so editing in the grid waits for the app to read and write the `.dmn` files beside
+the model (the desktop app in the folder, the browser by download), which is next. Its Save
+says a model's tables were not written, and a table changed since its file was written keeps
+the model unsaved. Left from L10: the hit policies ANY, RULE ORDER and OUTPUT ORDER;
+names, dates and durations in cells; the grid in the spreadsheet view (U6); sharing the
+`.dmn` files with the model (M7.4); a task with a decision is written as a plain task in a new
+file, not a `businessRuleTask`.
 
 L5's first part is done: points along a section and junctions. A divert gateway placed at `s`
 along the conveyor that sends into it is a point of that conveyor (`model::site::points`): its
@@ -4916,6 +4938,33 @@ are.
     plus customers stay 10,000).
   - Not built in this batch: **the daily peak** (arrivals rising and falling through the day,
     with an exact mean number inside for infinite servers).
+- **Examples from the 1973 Winter Simulation Conference:** checked the same way.
+  - **Repairmen with spares** (`repairmen-spares.bpmn`, "Manufacturing"): M. A. Crane and
+    D. L. Iglehart, *A New Approach to Simulating Stable Stochastic Systems*, Proceedings of the
+    1973 Winter Simulation Conference, pp. 264–272 (the model on p. 269, its parameters and
+    Table 1 on p. 270). Ten machines must be running (N = 10); four spares (M = 4) stand by, and
+    cannot fail while they wait, until one is needed; three repairmen (S = 3). Each running
+    machine fails at rate λ = 1, and a repair takes an exponential time at rate μ = 4 (the
+    paper gives no unit; the model uses hours). The model is a closed loop of 14 machines
+    (starting contents): "Machines running", a task with 10 units and a mean time to failure of
+    1, whose queue holds the spares, then "Repair", a task with 3 units and a mean of 0.25. The
+    number broken X is a birth–death chain, up at λ min(N, N + M − X) and down at μ min(X, S),
+    so its answers are exact: on average 3.4708 broken (mean square 17.2779). With chance
+    0.3056 more than four are broken, so fewer than ten run. With chance 0.4378 at least one
+    broken machine waits for a repairman (more than three broken). On average 0.6777 repairmen
+    are idle, and 0.0609 of the time all three are. These are the paper's theoretical values
+    (Table 1, to three decimals), recomputed from the chain. `crates/engine/tests/examples.rs`
+    solves the chain, checks it against Table 1, and checks the run on what it reports: 3.4708
+    broken (the repair task's work in progress), the repairmen busy 0.7741, 1.1485 machines
+    waiting for a repairman and, by Little's law, 0.1236 hours each, 9.2894 machines running
+    (busy 0.9289), 1.2398 spares waiting, and 9.2894 repairs an hour. The chances above are
+    shares of time, which no result reports, so they are checked on the chain only. Scenarios,
+    each exact from the same chain and checked on the machines broken and running: two
+    repairmen (5.93 broken, 7.64 running), four repairmen (2.72, 9.70), no spares (2.26, 7.74)
+    and eight spares (4.40, 9.71), so a fourth repairman does about as much as four more spares.
+    It differs from the machine repair crew above because spares on cold standby do not fail.
+    Once regenerative intervals (M2.9) are built, this example is their first check: the
+    paper's own intervals come from cycles back to X = 0.
 - **Planned examples:** each joins only once its answer is checked against its source with the
   page, as above.
   - **A particle detector's readout** (a new "Science" industry): collisions at a collider
@@ -4970,17 +5019,6 @@ are.
     every 10, 10 minutes for exponential headways of the same mean. A scenario with headways
     held at a control stop shows bunching reduced. The run measures the headways at each stop
     and checks each stop's mean wait against them.
-  - **Repairmen with spares**: M. A. Crane and D. L. Iglehart, *A New Approach to Simulating
-    Stable Stochastic Systems*, Proceedings of the 1973 Winter Simulation Conference,
-    pp. 264–272. Ten machines must be running; four spares stand by, and cannot fail while they
-    wait, until one is needed; three repairmen. Each running machine fails at rate 1, and a
-    repair takes an exponential time at rate 4. The number of machines broken is a birth-death
-    chain, so its answers are exact: on average 3.4708 broken (mean square 17.2779). With
-    chance 0.3056 more than four are broken, so fewer than ten run. With chance 0.4378 at least
-    one broken machine waits for a repairman (more than three broken). On average 0.6777 repairmen are idle. These are the paper's
-    own values, recomputed from the chain. It differs from the machine repair crew above
-    because spares on cold standby do not fail. It is also the first check of regenerative
-    intervals (M2.9).
   - **A closed-loop conveyor with work stations**: L. E. Bussey and M. P. Terrell, *A Model for
     Analyzing Closed-Loop Conveyor Systems with Multiple Work Stations*, Proceedings of the 1973
     Winter Simulation Conference, pp. 93–111. Items are loaded onto evenly spaced hooks of a loop
@@ -5070,6 +5108,42 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   built on M4's exact level-crossing events (D12) rather than on `sd`'s fixed steps.
 - **Explanations:** agents over MCP describe results in plain language (the bottleneck, what
   limits throughput, which inputs matter most).
+- **A model from a sketch and a prompt:** an agent over MCP reads a layout drawn by hand and a
+  description in words, and builds the model with the engine's commands (blocks, connections,
+  distributions, places on the layout), so every step is in the journal and can be undone. Hsu,
+  Wang, Ni and Yang, *Generative Digital Twins: Vision-Language Simulation Models for Executable
+  Industrial Systems* (CVPR 2026 Findings, arXiv 2512.20387), train models that write a
+  commercial simulator's script from the same two inputs, and score the script three ways:
+  - structure: the objects declared and the connections reproduced (their SVR, 0.6 × connections
+    + 0.4 × objects);
+  - parameters: each distribution's name, type and values (PMR);
+  - execution: the script runs (ESR).
+
+  A built model is scored the same way against a reference model, and one way more, which the
+  paper does not: whether its results agree with the reference's.
+  - **Matching the two models:** the structure score pairs each built element with a reference
+    element (by kind and connections; names in a prompt are not ids). Where several pairings fit
+    the structure equally, as with two parallel tasks, the one whose parameters match the
+    reference's is taken, then the one whose names are closest. Before the results are
+    compared, the built model's elements take their partners' ids, so the random streams, keyed
+    by id, are the reference's, and each measure has its counterpart in `results.compare`. An
+    element with no partner is reported as extra or missing, and its measures are not compared.
+  - **What agreement means:** throughput, utilisation and time in the system are compared by
+    paired differences (M3.7's comparison) at a stated tolerance and number of replications. A
+    difference outside the tolerance fails the model; agreement within it is evidence, not
+    proof, since a behaviour that a run of that length rarely reaches (a buffer that fills once a
+    month, say) can differ unseen.
+  - **A test set:** the paper's GDT-120K (120,285 prompts with code, some with sketches;
+    linear, U-shaped, parallel and conveyor layouts; 13 industries) is not released yet: the
+    code repository (MIT) says the data and weights will follow the review, and no licence is
+    given for the data. If it is released under an open licence, its prompts and sketches (not
+    its code, which is for another tool) can become test cases, each with a reference model
+    built for StochCraft. Until then, the test set is the example gallery: each example's file
+    is the reference and its checked answer the results to agree with; its prompt is its
+    description with every value the reference uses written out (the distributions and their
+    parameters, the capacities, the routing), and its sketch is its layout, drawn from the file
+    where it has none. Parameters are scored only on what the prompt states, so a model is
+    never marked down for a value it was not given.
 - Not planned: parallelising a single run (optimistic Time Warp). Replications in parallel
   already use every core for the models StochCraft targets.
 

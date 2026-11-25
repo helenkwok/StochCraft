@@ -1018,6 +1018,32 @@ fields (`“Service time”`) are named in the messages by their own rows.
   meaning of the English, with each catalog's own words for Layout, Unplaced and block from its
   existing rows. Not checked against any other source and not reviewed by native speakers; the
   least certain are lo, th, ta, te, bn, ka and kk.
+- The rows for decision tables (ROADMAP M5.5, L10: the decision table window, its hit policies
+  and aggregations, the inspector's link, the two undo names and the four validation messages)
+  were machine-drafted from the plain meaning of the English and OMG DMN's terms, with each
+  catalog's own words for block, rule, output and default from its existing rows. The policy
+  name Unique inside the overlap message stays in English, as DMN spells it in a file. Not
+  checked against any other source and not reviewed by native speakers; the least certain are
+  lo, th, ta, te, bn, ka, kk and sq ("hit policy").
+- The two rows for the decision table window shown read-only (M5.5, L10: its note on where a
+  table is edited, and the status bar's addition to Saved and Downloaded that a model's
+  decision tables were not written) were machine-drafted from the plain meaning of the English,
+  with each catalog's own words for decision table, file and command from its existing rows;
+  `.dmn` and `dmn.set` stay as written. The rows for Add rule and Remove rule stay for the
+  window's editing, which comes back with the app writing `.dmn` files. Not checked against any
+  other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn,
+  ka, kk and sq.
+- The row for the validation message of a decision table too large to check in full (M5.5,
+  L10: its rules may overlap, or leave inputs no rule matches) was machine-drafted from the
+  plain meaning of the English, with each catalog's own words for decision table, rule, input
+  and "no rule matches" from its rows for the other decision table messages. Not checked
+  against any other source and not reviewed by native speakers; the least certain are lo, th,
+  ta, te, bn, ka, kk and sq.
+- The row for the status bar after a Save that leaves the decision tables unsaved (M5.5, L10:
+  the model kept open rather than closed or replaced) was machine-drafted from the plain meaning
+  of the English, reusing each catalog's own row for "Its decision tables were not written" and
+  its words for model and saving. Not checked against any other source and not reviewed by
+  native speakers; the least certain are lo, th, ta, te, bn, ka, kk and sq.
 - The rows for the properties of the selection (M5.5, U2: a field's reset, why a value is in
   bold, mixed values across selected blocks, a flow's page with its condition and Remove flow,
   and the properties several blocks share) were machine-drafted from the plain meaning of the
@@ -1041,6 +1067,15 @@ fields (`“Service time”`) are named in the messages by their own rows.
   lane or track, and "divert" a plain word for a deflecting device where the catalog had only the
   verb. Not checked against any other source and not reviewed by native speakers; the least
   certain are lo, th, ta, te, bn, ka, kk and sq.
+- The rows for the repairmen-with-spares example (its title, the line about it, its question and
+  what it teaches) were machine-drafted from the plain meaning of the English, with each
+  catalog's own word for the machine repair crew's fitters as "repairmen" and its own words for
+  machine, break down and running from the earlier example cards; a spare is the language's
+  plain word for a reserve or standby machine. The authors' names and the conference's name stay
+  in English and Latin script, and decimals keep the point. Not checked against any other source
+  and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
+  sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
+  most of them.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -22,7 +22,7 @@ use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     abandoned_element, availability_param, balked_element, balking_element, batching_element,
     bpmn_local, breakdown_element, calendar_element, changeover_element, condition_element,
-    conveyor_element, demand_element, dist_element, edge_ends, estimate_element,
+    conveyor_element, decision_element, demand_element, dist_element, edge_ends, estimate_element,
     health_check_element, interruptible_param, mobility_element, numeric, observed_element,
     observed_off_element, on_shift_end_element, own_marker, patience_element, planned_element,
     power_element, probability_element, processing_by_element, processing_by_resource_element,
@@ -467,6 +467,24 @@ fn difference_within(
     };
     if started(got) != started(want) {
         return Some(format!("its starting contents read as {:?}", got.starting));
+    }
+    // So are the decision tables blocks use (one left by a block that is gone is not written).
+    let used = |m: &'_ Model| -> Vec<(ElementId, String, String, Option<String>)> {
+        m.decisions
+            .iter()
+            .filter(|(id, _)| want.element(id).is_some())
+            .map(|(id, u)| {
+                (
+                    id.clone(),
+                    u.file.clone(),
+                    u.decision.clone(),
+                    u.route.clone(),
+                )
+            })
+            .collect()
+    };
+    if used(got) != used(want) {
+        return Some(format!("its decision tables read as {:?}", got.decisions));
     }
     // The layout too, as much of it as each model can hold (`Site::kept`), and the scenery.
     if got.site.kept(got) != want.site.kept(want) {
@@ -960,8 +978,11 @@ impl Editor {
         // An element written again as another kind: the opened scenario's parameters for it go
         // (they are written afresh below), and the other scenarios keep those that still apply.
         let opened = scenario_id(root, scenario);
-        for id in replaced.iter().filter(|id| new.contains_key(*id)) {
-            keep_params_for_any_kind(root, opened.as_deref(), id);
+        for (id, e) in replaced
+            .iter()
+            .filter_map(|id| new.get(*id).map(|e| (*id, *e)))
+        {
+            keep_params_for_any_kind(root, opened.as_deref(), id, e.kind.reads_decisions());
         }
         for e in &added {
             self.add_node(root, after, e)?;
@@ -2968,6 +2989,39 @@ impl Editor {
             };
             writes.push((id.to_string(), STARTING_CONTENTS, v));
         }
+        // The decision table each block uses (D30), where that changed. One a scenario this one
+        // inherits from names comes back on reading if it is only removed here: such a removal
+        // cannot be saved here (as for the other parameters an inherited scenario sets).
+        let ids: BTreeSet<&ElementId> = before
+            .decisions
+            .keys()
+            .chain(after.decisions.keys())
+            .collect();
+        for id in ids {
+            let (was, now) = (before.decisions.get(id), after.decisions.get(id));
+            if was == now && !replaced.contains(id.as_str()) {
+                continue;
+            }
+            let mut v = now.filter(|_| exists(id)).map(decision_element);
+            if v.is_none()
+                && exists(id)
+                && parents
+                    .iter()
+                    .any(|a| sets_vendor(a, id.as_str(), crate::bpsim::DECISION))
+            {
+                return Err(fail(format!(
+                    "the decision table of `{id}` comes from an inherited scenario, so removing it here would not remove it; save to a new file (Save As) to change it"
+                )));
+            }
+            // A file declared in another encoding than UTF-8 takes its file names and the like
+            // as character references.
+            if self.ascii
+                && let Some(e) = v.as_mut()
+            {
+                ascii_refs(e);
+            }
+            writes.push((id.to_string(), crate::bpsim::DECISION, v));
+        }
         if writes.iter().all(|(_, _, v)| v.is_none()) {
             if let Some(s) = scenario_mut(root, scenario) {
                 for (element, name, _) in writes {
@@ -3919,21 +3973,23 @@ fn remove_params(root: &mut Element, id: &str) {
 /// removes its parameters in the opened scenario (`opened`), which are written afresh, and in
 /// every other scenario keeps only what applies to any kind of element: its properties, its
 /// place on the floor and a stop condition on it (which validation reports if the new kind
-/// cannot hold it). The rest (times, arrivals, resources, costs and StochCraft's settings for
-/// the old kind) went with the old kind, as a BPMN editor's replace keeps only the properties
-/// the new type allows.
-fn keep_params_for_any_kind(root: &mut Element, opened: Option<&str>, id: &str) {
-    use crate::bpsim::{PLACE, STOP_COUNT, STOP_WHEN_EMPTY};
+/// cannot hold it), and the decision table it uses if the new kind can use one (`decision`: a
+/// task made an exclusive gateway, say). The rest (times, arrivals, resources, costs and
+/// StochCraft's settings for the old kind) went with the old kind, as a BPMN editor's replace
+/// keeps only the properties the new type allows.
+fn keep_params_for_any_kind(root: &mut Element, opened: Option<&str>, id: &str, decision: bool) {
+    use crate::bpsim::{DECISION, PLACE, STOP_COUNT, STOP_WHEN_EMPTY};
     let is_ep = |e: &Element| {
         e.is_any(&NSS, "ElementParameters") && e.attr("elementRef").as_deref() == Some(id)
     };
     let applies = |p: &Element| {
         p.is_any(&NSS, "PropertyParameters")
             || (p.is_any(&NSS, "VendorExtension")
-                && matches!(
-                    p.attr("name").as_deref(),
-                    Some(PLACE | STOP_COUNT | STOP_WHEN_EMPTY)
-                ))
+                && match p.attr("name").as_deref() {
+                    Some(PLACE | STOP_COUNT | STOP_WHEN_EMPTY) => true,
+                    Some(DECISION) => decision,
+                    _ => false,
+                })
     };
     let Some(data) = data_mut(root) else {
         return;
