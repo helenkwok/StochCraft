@@ -630,3 +630,35 @@ fn a_value_outside_an_input_s_values_is_an_error_that_gives_null() {
     // Over the values the input allows, no rules overlap.
     assert_eq!(c.check(&[false]), vec![]);
 }
+
+#[test]
+fn an_aggregation_lists_the_numbers_it_can_give() {
+    let mut d = table(
+        HitPolicy::Collect,
+        &["weight"],
+        &["surcharge"],
+        &[(&["> 20"], &["5"]), (&["> 30"], &["2"]), (&["-"], &["5"])],
+    );
+    let cases = [
+        (Aggregation::Count, vec![1.0, 2.0, 3.0]),
+        (Aggregation::Min, vec![2.0, 5.0]),
+        (Aggregation::Max, vec![2.0, 5.0]),
+        (Aggregation::Sum, vec![2.0, 5.0, 7.0, 10.0, 12.0]),
+    ];
+    for (a, want) in cases {
+        d.table.aggregation = Some(a);
+        assert_eq!(compiled(&d).aggregates(), Some(want), "{a:?}");
+    }
+    d.table.aggregation = None;
+    assert_eq!(compiled(&d).aggregates(), None);
+    // A SUM of more rules than it lists the sums of.
+    d.table.aggregation = Some(Aggregation::Sum);
+    d.table.rules = (0..=MAX_SUMMED)
+        .map(|_| Rule {
+            inputs: vec!["-".into()],
+            outputs: vec!["1".into()],
+            ..Rule::default()
+        })
+        .collect();
+    assert_eq!(compiled(&d).aggregates(), None);
+}

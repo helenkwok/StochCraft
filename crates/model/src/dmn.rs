@@ -56,6 +56,9 @@ pub const DMN_NAMESPACES: &[&str] = &[
 /// so ([`Finding::Unchecked`]).
 pub const MAX_PIECES: usize = 200_000;
 
+/// The most rules of a SUM whose possible sums [`Compiled::aggregates`] lists (2¹² - 1 sums).
+pub const MAX_SUMMED: usize = 12;
+
 /// The decisions of one `.dmn` file (a DMN `definitions`).
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct Definitions {
@@ -1192,6 +1195,46 @@ impl Compiled {
     /// aggregation: a COLLECT table with an aggregation gives it as it is.
     pub fn default_value(&self, j: usize) -> Option<&Literal> {
         self.outputs.get(j)?.default.as_ref()
+    }
+
+    /// The numbers the aggregation can give when a rule matches, each once, least first: COUNT
+    /// every count from 1 to the number of rules; MIN and MAX a rule's output; SUM the sum of
+    /// the outputs of some of the rules, added in rule order as evaluation adds them. Not all of
+    /// them need be reachable (rules that never match together still have their sum listed).
+    /// `None` without an aggregation, or for a SUM over more than [`MAX_SUMMED`] rules, whose
+    /// sums are too many to list.
+    pub fn aggregates(&self) -> Option<Vec<f64>> {
+        let a = self.aggregation?;
+        let cells: Vec<f64> = self
+            .rules
+            .iter()
+            .filter_map(|r| match r.outputs.first() {
+                Some(Literal::Number(x)) => Some(*x),
+                _ => None,
+            })
+            .collect();
+        let mut out: Vec<f64> = match a {
+            Aggregation::Count => (1..=self.rules.len()).map(|n| n as f64).collect(),
+            Aggregation::Min | Aggregation::Max => cells,
+            Aggregation::Sum => {
+                if cells.len() > MAX_SUMMED {
+                    return None;
+                }
+                (1..(1_usize << cells.len()))
+                    .map(|set| {
+                        cells
+                            .iter()
+                            .enumerate()
+                            .filter(|(i, _)| (set >> i) & 1 == 1)
+                            .map(|(_, x)| *x)
+                            .sum::<f64>()
+                    })
+                    .collect()
+            }
+        };
+        out.sort_by(f64::total_cmp);
+        out.dedup();
+        Some(out)
     }
 
     /// Whether the table has a default output, so that every input gets a result.

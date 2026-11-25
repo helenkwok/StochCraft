@@ -3872,21 +3872,42 @@ impl Model {
                     _ => true,
                 })
             };
-            // What values of `kind` (all whole numbers, or not) give that the property's type
-            // `ty` cannot hold, if anything.
-            let misfit = |kind: Option<dmn::Kind>, whole: bool, ty: PropertyType| match kind {
-                Some(dmn::Kind::Number) if !ty.is_numeric() => Some("numbers"),
-                Some(dmn::Kind::Number) if ty == PropertyType::Long && !whole => {
-                    Some("fractional numbers")
-                }
-                Some(dmn::Kind::Text)
-                    if !matches!(ty, PropertyType::String | PropertyType::DateTime) =>
-                {
-                    Some("text")
-                }
-                Some(dmn::Kind::Boolean) if ty != PropertyType::Boolean => Some("true or false"),
-                _ => None,
+            // A long holds -2⁶³ up to 2⁶³ - 1; a number beyond that would be held as the nearest
+            // end of it, not as the table gave it.
+            let long = |vs: &[f64]| {
+                vs.iter().all(|x| {
+                    (-9_223_372_036_854_775_808.0..9_223_372_036_854_775_808.0).contains(x)
+                })
             };
+            let numbers = |vs: &[dmn::Literal]| -> Vec<f64> {
+                vs.iter()
+                    .filter_map(|v| match v {
+                        dmn::Literal::Number(x) => Some(*x),
+                        _ => None,
+                    })
+                    .collect()
+            };
+            // What values of `kind` (all whole numbers, or not; all within a long, or not) give
+            // that the property's type `ty` cannot hold, if anything.
+            let misfit =
+                |kind: Option<dmn::Kind>, whole: bool, fits: bool, ty: PropertyType| match kind {
+                    Some(dmn::Kind::Number) if !ty.is_numeric() => Some("numbers"),
+                    Some(dmn::Kind::Number) if ty == PropertyType::Long && !whole => {
+                        Some("fractional numbers")
+                    }
+                    Some(dmn::Kind::Number) if ty == PropertyType::Long && !fits => {
+                        Some("numbers beyond -9223372036854775808 to 9223372036854775807")
+                    }
+                    Some(dmn::Kind::Text)
+                        if !matches!(ty, PropertyType::String | PropertyType::DateTime) =>
+                    {
+                        Some("text")
+                    }
+                    Some(dmn::Kind::Boolean) if ty != PropertyType::Boolean => {
+                        Some("true or false")
+                    }
+                    _ => None,
+                };
             for (j, (name, kind)) in table.outputs().into_iter().enumerate() {
                 let Some(&ty) = types.get(name) else {
                     continue;
@@ -3894,7 +3915,19 @@ impl Model {
                 // An aggregation's result: COUNT is always whole; SUM, MIN and MAX of the cells.
                 let cells = table.aggregation() == Some(dmn::Aggregation::Count)
                     || whole(&table.output_values(j));
-                if let Some(gives) = misfit(kind, cells, ty) {
+                // And within a long: a SUM's least and greatest sums, of every rule giving less
+                // than 0 and of every rule giving more; else the cells themselves.
+                let given = numbers(&table.output_values(j));
+                let fits = match table.aggregation() {
+                    Some(dmn::Aggregation::Count) => true,
+                    Some(dmn::Aggregation::Sum) => {
+                        let low: f64 = given.iter().filter(|x| **x < 0.0).sum();
+                        let high: f64 = given.iter().filter(|x| **x > 0.0).sum();
+                        long(&[low, high])
+                    }
+                    _ => long(&given),
+                };
+                if let Some(gives) = misfit(kind, cells, fits, ty) {
                     out.push(unusable(format!(
                         "its output “{name}” gives {gives}, which the property “{name}”, of type {}, cannot hold.",
                         ty.bpsim_name()
@@ -3905,7 +3938,12 @@ impl Model {
                 // aggregated, so it is checked on its own.
                 if table.aggregation().is_some()
                     && let Some(d) = table.default_value(j)
-                    && let Some(gives) = misfit(Some(d.kind()), whole(std::slice::from_ref(d)), ty)
+                    && let Some(gives) = misfit(
+                        Some(d.kind()),
+                        whole(std::slice::from_ref(d)),
+                        long(&numbers(std::slice::from_ref(d))),
+                        ty,
+                    )
                 {
                     out.push(unusable(format!(
                         "its output “{name}” gives {gives} by default, when no rule matches, which the property “{name}”, of type {}, cannot hold.",
@@ -3917,12 +3955,59 @@ impl Model {
                 match Self::route_output(u, &table) {
                     // An aggregation's value is not among the cells: the numbers the ways are
                     // named by are what it can route to, compared as routing compares them.
-                    Ok(_) if table.aggregation().is_some() => {
-                        for (_, key, named) in Self::ways_by_number(&ways) {
+                    Ok(j) if table.aggregation().is_some() => {
+                        let by_number = Self::ways_by_number(&ways);
+                        for (_, key, named) in &by_number {
                             if named.len() > 1 {
                                 out.push(unusable(format!(
                                     "its aggregation can give {key}, which names more than one of the gateway's ways out (a way's id, or the id or name of the block it leads to, read as a number: 1 and 1.0 are the same); make each number name one."
                                 )));
+                            }
+                        }
+                        // Without a default way, an entity whose number names no way out is
+                        // lost here: each number the aggregation can give, and its default,
+                        // must name one. Where those are too many to list, a default way is
+                        // needed.
+                        let has_default = matches!(
+                            &e.kind,
+                            ElementKind::ExclusiveGateway {
+                                default: Some(_),
+                                ..
+                            }
+                        );
+                        if !has_default {
+                            let route = |value: String| {
+                                Diagnostic::error(
+                                    Some(id),
+                                    Problem::DecisionRoute {
+                                        decision: label.clone(),
+                                        value,
+                                    },
+                                )
+                            };
+                            match table.aggregates() {
+                                Some(results) => {
+                                    for x in results {
+                                        if !by_number.iter().any(|(y, _, _)| *y == x) {
+                                            out.push(route(dmn::Literal::Number(x).text()));
+                                        }
+                                    }
+                                }
+                                None => out.push(unusable(format!(
+                                    "its aggregation SUM can give the sum of any of its rules, more than {} of them, too many to check that each names a way out; give the gateway a default way.",
+                                    dmn::MAX_SUMMED
+                                ))),
+                            }
+                            match table.default_value(j) {
+                                Some(dmn::Literal::Number(x))
+                                    if !by_number.iter().any(|(y, _, _)| y == x) =>
+                                {
+                                    out.push(route(dmn::Literal::Number(*x).text()));
+                                }
+                                Some(d @ (dmn::Literal::Text(_) | dmn::Literal::Boolean(_))) => {
+                                    out.push(route(d.text()));
+                                }
+                                _ => {}
                             }
                         }
                     }

@@ -366,11 +366,11 @@ fn a_count_that_names_two_ways_as_numbers_is_an_error() {
     let r = run(&model);
     assert_eq!(entered(&r, "one"), 30);
     assert_eq!(entered(&r, "two"), 70);
-    // Named "1.0" and "1": both name 1.
+    // Named "1.0" and "1": both name 1, and the count of 2 now names none.
     name(&mut model, "two", "1");
     let ds = model.validate();
-    assert_eq!(ds.len(), 1, "{ds:?}");
-    assert_eq!(ds[0].problem.code(), "decision_unusable");
+    let codes: Vec<&str> = ds.iter().map(|d| d.problem.code()).collect();
+    assert_eq!(codes, vec!["decision_unusable", "decision_route"], "{ds:?}");
     assert!(ds[0].to_string().contains("more than one"), "{}", ds[0]);
     assert!(compile(&model).is_err());
 }
@@ -532,4 +532,97 @@ fn a_deleted_block_s_table_gives_no_property_its_type() {
         model.property_types().get("score"),
         Some(&stochcraft_model::PropertyType::Double)
     );
+}
+
+/// A long holds -2⁶³ up to 2⁶³ - 1: a table giving a whole number beyond that, or a SUM that can
+/// add up to one, cannot write it into a long property, which would hold the nearest end instead.
+#[test]
+fn a_long_property_takes_only_numbers_a_long_holds() {
+    let mut m = Builder::new();
+    let classify = m.delay("classify", Dist::Constant(0.0));
+    parcels(&mut m, classify);
+    let start = m.source("start", Dist::Constant(1.0), Some(1));
+    m.property(
+        start,
+        "score",
+        Some(stochcraft_model::PropertyType::Long),
+        PropertyValue::Number(0.0),
+    );
+    m.connect(start, classify);
+    let sink = m.sink("out");
+    m.connect(classify, sink);
+    let model = with_table(
+        m.build(experiment()),
+        "classify",
+        decision(
+            "score",
+            HitPolicy::First,
+            "score",
+            &[(">= 10", "2"), ("-", "1")],
+        ),
+    );
+    assert_eq!(model.validate(), vec![]);
+    let set = |cells: [&str; 2], sum: bool| {
+        let mut m = model.clone();
+        if let Some(t) = m.dmn.get_mut(FILE).map(|f| &mut f.decisions[0].table) {
+            t.rules[0].outputs[0] = cells[0].into();
+            t.rules[1].outputs[0] = cells[1].into();
+            if sum {
+                t.hit_policy = HitPolicy::Collect;
+                t.aggregation = Some(stochcraft_model::dmn::Aggregation::Sum);
+            }
+        }
+        m.validate()
+            .iter()
+            .map(|d| d.problem.code())
+            .collect::<Vec<&str>>()
+    };
+    assert_eq!(
+        set(["18446744073709551616", "1"], false),
+        vec!["decision_unusable"]
+    );
+    // Each within a long, but the two together are not.
+    let big = "5000000000000000000";
+    assert_eq!(set([big, "1"], true), Vec::<&str>::new());
+    assert_eq!(set([big, big], true), vec!["decision_unusable"]);
+}
+
+/// A gateway with no default way routed by a COUNT: each count it can give must name a way, or
+/// the entity is lost there. One rule gives a count of 1.
+#[test]
+fn every_count_must_name_a_way_unless_the_gateway_has_a_default() {
+    let mut m = Builder::new();
+    let split = m.exclusive("split");
+    parcels(&mut m, split);
+    let (one, two) = (m.sink("one"), m.sink("two"));
+    m.connect(split, one);
+    m.connect(split, two);
+    let mut d = decision("count", HitPolicy::Collect, "matches", &[("-", "1")]);
+    d.table.aggregation = Some(stochcraft_model::dmn::Aggregation::Count);
+    let mut model = with_table(m.build(experiment()), "split", d);
+    // Only a way named 2: a count of 1 names none.
+    name(&mut model, "two", "2");
+    let codes: Vec<&str> = model.validate().iter().map(|d| d.problem.code()).collect();
+    assert_eq!(codes, vec!["decision_route"]);
+    // A way named 1 takes it.
+    name(&mut model, "one", "1");
+    assert_eq!(model.validate(), vec![]);
+    let r = run(&model);
+    assert_eq!(entered(&r, "one"), 100);
+    // Or, with no way named 1, a default way.
+    name(&mut model, "one", "first");
+    let way = model
+        .connections
+        .iter()
+        .find(|c| c.from.as_str() == "split" && c.to.as_str() == "one")
+        .map(|c| c.id.clone());
+    assert!(way.is_some());
+    for e in &mut model.elements {
+        if let stochcraft_model::ElementKind::ExclusiveGateway { default, .. } = &mut e.kind
+            && e.id.as_str() == "split"
+        {
+            *default = way.clone();
+        }
+    }
+    assert_eq!(model.validate(), vec![]);
 }
