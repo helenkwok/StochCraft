@@ -5,7 +5,7 @@
 #![allow(clippy::panic, clippy::expect_used, clippy::unwrap_used)]
 
 use serde_json::{Value, json};
-use stochcraft_engine::{Engine, ErrorCode};
+use stochcraft_engine::{COMMANDS, Engine, ErrorCode};
 use stochcraft_model::{ElementId, ElementKind, Outline};
 
 fn ok(e: &mut Engine, command: &str, params: Value) -> Value {
@@ -136,9 +136,16 @@ fn a_track_a_file_could_not_hold_is_refused() {
         json!({ "start": { "x": 0.0, "y": 0.0 }, "segments": [{ "type": "arc", "radius": -1.0, "angle": 90.0 }] }),
         json!({ "start": { "x": 0.0, "y": 0.0 }, "segments": [{ "type": "line", "length": 0.0 }] }),
         json!({ "start": { "x": 0.0, "y": 0.0 }, "segments": [{ "type": "line", "length": 1.0 }], "width": 0.0 }),
+        // Finite, but its length overflows: 1e155 squared is beyond f64.
+        json!({ "start": { "x": 0.0, "y": 0.0 }, "segments": [{ "type": "line", "length": 1e155 }] }),
     ] {
         assert_eq!(err(&mut e, "track.set", set(bad)), ErrorCode::InvalidParams);
     }
+    // Leaving the track out is not removing it: only `null` does that.
+    assert_eq!(
+        err(&mut e, "track.set", json!({ "id": "lane_red" })),
+        ErrorCode::InvalidParams
+    );
     // Only a conveyor has a track.
     assert_eq!(
         err(
@@ -157,6 +164,52 @@ fn a_track_a_file_could_not_hold_is_refused() {
         ErrorCode::NotFound
     );
     assert_eq!(e.model(), &before);
+}
+
+#[test]
+fn the_schema_requires_the_track_and_takes_null() {
+    let c = COMMANDS
+        .iter()
+        .find(|c| c.name == "track.set")
+        .expect("track.set");
+    let schema = c.params_schema();
+    let required: Vec<&str> = schema["required"]
+        .as_array()
+        .expect("required")
+        .iter()
+        .filter_map(Value::as_str)
+        .collect();
+    assert!(
+        required.contains(&"id") && required.contains(&"track"),
+        "{schema}"
+    );
+    let track = schema["properties"]["track"].to_string();
+    assert!(track.contains("\"null\""), "{track}");
+}
+
+#[test]
+fn removing_a_conveyor_takes_its_track_and_undo_brings_both_back() {
+    let mut e = sorter();
+    let before = e.model().clone();
+    let id = ElementId::unchecked("lane_red");
+    assert!(before.site.paths.contains_key(&id));
+    ok(&mut e, "block.remove", json!({ "id": "lane_red" }));
+    assert!(!e.model().site.paths.contains_key(&id));
+    let after = e.model().clone();
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(e.model(), &before);
+    ok(&mut e, "redo", json!({}));
+    assert_eq!(e.model(), &after);
+    // A new conveyor of the same id starts unplaced, not on the old track.
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "conveyor", "id": "lane_red", "length": 4.0, "speed": 1.0, "accumulating": true, "item_length": 0.4, "gap": 0.2 }),
+    );
+    assert!(!e.model().site.paths.contains_key(&id));
+    // A conveyor with no track is removed as before.
+    ok(&mut e, "block.remove", json!({ "id": "lane_red" }));
+    assert!(e.model().element(&id).is_none());
 }
 
 #[test]

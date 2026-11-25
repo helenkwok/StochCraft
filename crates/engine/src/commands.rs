@@ -1123,8 +1123,22 @@ pub struct TrackSet {
     pub id: String,
     /// Its track, in the experiment's `length_unit` and degrees, as a file holds it: the start
     /// (`x`, `y`, `z`, `heading`), at least one segment, and the belt's width (left out: the
-    /// width it has, or 0.6 m). `null` removes it, and the conveyor is unplaced.
+    /// width it has, or 0.6 m). `null` removes it, and the conveyor is unplaced; it cannot be
+    /// left out.
+    #[serde(deserialize_with = "given")]
+    #[schemars(schema_with = "track_or_null")]
     pub track: Option<crate::site::TrackDoc>,
+}
+
+/// Reads a field that must be given, where `null` is a value of its own: serde reads a missing
+/// `Option` as `None` unless the field has a reader of its own.
+fn given<'de, D: Deserializer<'de>, T: Deserialize<'de>>(d: D) -> Result<Option<T>, D::Error> {
+    Option::<T>::deserialize(d)
+}
+
+/// A track or `null`, as a field the schema lists as required.
+fn track_or_null(g: &mut schemars::SchemaGenerator) -> schemars::Schema {
+    g.subschema_for::<Option<crate::site::TrackDoc>>()
 }
 
 /// A track's numbers as a file would read them back: finite, at least one segment, distances
@@ -1178,8 +1192,10 @@ fn checked_track(
         path: stochcraft_model::Path::new(start.into(), segments),
         width,
     };
-    if track.length(unit) <= 0.0 {
-        return Err(bad("has no length"));
+    // A length too long to hold (a square that overflows) is as wrong as none.
+    let length = track.length(unit);
+    if !(length.is_finite() && length > 0.0) {
+        return Err(bad("has no length, or one too long to work out"));
     }
     Ok(track)
 }
@@ -1378,6 +1394,10 @@ fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         let mut x = x.clone();
         x.stop = None;
         ops.push(Op::SetExperiment(x));
+    }
+    // A conveyor's track goes with it; undone, the conveyor comes back before its track.
+    if e.model().site.paths.contains_key(&id) {
+        ops.push(Op::SetTrack(id.clone(), None));
     }
     ops.push(Op::RemoveElement(id));
     e.edit("block.remove", Op::Batch(ops))?;
