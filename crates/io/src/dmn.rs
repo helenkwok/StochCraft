@@ -613,8 +613,8 @@ fn holds_more(e: &Element, ns: &str, own: &[&str]) -> bool {
 }
 
 /// Whether `pairs` keeps all of `old` items, each where it was.
-fn in_place(pairs: &Pairs, old: usize) -> bool {
-    pairs.from.len() == old && pairs.from.iter().enumerate().all(|(j, p)| *p == Some(j))
+fn in_place(pairs: &[Option<usize>], old: usize) -> bool {
+    pairs.len() == old && pairs.iter().enumerate().all(|(j, p)| *p == Some(j))
 }
 
 /// Sets attribute `name` to `now` where it differs from `was` (so an attribute that is not
@@ -852,10 +852,10 @@ impl Patch<'_> {
                 },
             )
             .collect();
-        let same = in_place(&inputs, old.inputs.len())
-            && in_place(&outputs, old.outputs.len())
-            && in_place(&annotations, old.annotations.len())
-            && in_place(&rules, old.rules.len());
+        let same = in_place(&inputs.from, old.inputs.len())
+            && in_place(&outputs.from, old.outputs.len())
+            && in_place(&annotations.from, old.annotations.len())
+            && in_place(&rules.from, old.rules.len());
         Self::put(
             table,
             slots,
