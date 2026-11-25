@@ -51,8 +51,9 @@ pub const DMN_NAMESPACES: &[&str] = &[
     "http://www.omg.org/spec/DMN/20151101/dmn.xsd",
 ];
 
-/// The most pieces of the input space [`Compiled::check`] looks at before it stops (and reports
-/// nothing more): far more than any hand-written table needs.
+/// The most pieces of the input space [`Compiled::check`] looks at before it stops: far more
+/// than any hand-written table needs. A search stopped there with something still to find says
+/// so ([`Finding::Unchecked`]).
 pub const MAX_PIECES: usize = 200_000;
 
 /// The decisions of one `.dmn` file (a DMN `definitions`).
@@ -925,6 +926,10 @@ pub enum Finding {
     },
     /// No rule matches `example` (and there is no default output).
     Gap { example: String },
+    /// The table has too many pieces of input to look at all of them ([`MAX_PIECES`]): the
+    /// search stopped before it could tell whether rules overlap or an input is not covered, so
+    /// the table is not known to be free of either.
+    Unchecked,
 }
 
 /// A decision table checked and ready to evaluate.
@@ -1216,8 +1221,22 @@ impl Compiled {
     }
 
     /// Evaluates the table on the inputs `read` gives (by property name; `None` is null).
+    ///
+    /// An input's values are the values it allows (DMN 8.3.3): a value outside them is an error,
+    /// which gives null, as a UNIQUE table matching more than one rule does, and not the
+    /// default output. A missing property is no such value.
     pub fn evaluate(&self, read: &dyn Fn(&str) -> Option<Value>) -> Outcome {
-        let hits = self.matches(read);
+        let values: Vec<Option<Value>> = self.inputs.iter().map(|c| read(&c.name)).collect();
+        let outside = self.inputs.iter().zip(&values).any(|(c, v)| {
+            v.is_some()
+                && c.values
+                    .as_ref()
+                    .is_some_and(|allowed| !allowed.satisfies(v.as_ref(), None))
+        });
+        if outside {
+            return Outcome::Null;
+        }
+        let hits = self.matching(&values);
         let values = |i: usize| -> Vec<Value> {
             self.rules
                 .get(i)
@@ -1319,17 +1338,18 @@ impl Compiled {
             .enumerate()
             .map(|(i, c)| c.integer || integer.get(i).copied().unwrap_or(false))
             .collect();
-        self.search(&whole)
+        self.search(&whole, false)
     }
 
     /// As [`Compiled::check`], for a table a block uses: `whole` says, per input, whether the
     /// property it reads holds whole numbers only (a `long`). The types the table itself gives
-    /// its inputs do not count here, since what reaches them is the property's values.
+    /// its inputs do not count here, since what reaches them is the property's values; and a
+    /// `long` holds only the numbers of its 64 bits, so no example lies beyond them.
     pub fn check_bound(&self, whole: &[bool]) -> Vec<Finding> {
         let whole: Vec<bool> = (0..self.inputs.len())
             .map(|i| whole.get(i).copied().unwrap_or(false))
             .collect();
-        self.search(&whole)
+        self.search(&whole, true)
     }
 
     /// Of each input, the first input reading the same property: the inputs reading one
@@ -1347,7 +1367,9 @@ impl Compiled {
             .collect()
     }
 
-    fn search(&self, whole: &[bool]) -> Vec<Finding> {
+    /// The search of [`Compiled::check`]: `whole` says, per input, whether its property holds
+    /// whole numbers only; with `long`, those are the numbers a 64-bit `long` can hold.
+    fn search(&self, whole: &[bool], long: bool) -> Vec<Finding> {
         let leader = self.leaders();
         let want_overlap = self.hit_policy == HitPolicy::Unique;
         // The pieces of each property's values, at its first input (the others follow it), cut
@@ -1366,8 +1388,11 @@ impl Compiled {
                     .map(|(c, _)| c)
                     .collect();
                 let integer = leader.iter().zip(whole).any(|(l, w)| *l == i && *w);
-                let mut out: Vec<Option<Value>> =
-                    pieces_of(&group, integer).into_iter().map(Some).collect();
+                let mut pieces = pieces_of(&group, integer);
+                if integer && long {
+                    pieces.retain(fits_long);
+                }
+                let mut out: Vec<Option<Value>> = pieces.into_iter().map(Some).collect();
                 if want_overlap {
                     out.push(None);
                 }
@@ -1386,6 +1411,8 @@ impl Compiled {
         };
         let all: Vec<usize> = (0..self.rules.len()).collect();
         search.walk(0, &all, &mut Vec::new());
+        // Stopped at the limit with something still to find: what was not looked at may hold it.
+        let cut = search.pieces >= MAX_PIECES && !search.found_all();
         let mut out = Vec::new();
         if let Some((a, b, example)) = search.overlap {
             out.push(Finding::Overlap {
@@ -1396,6 +1423,9 @@ impl Compiled {
         }
         if let Some(example) = search.gap {
             out.push(Finding::Gap { example });
+        }
+        if cut {
+            out.push(Finding::Unchecked);
         }
         out
     }
@@ -1448,6 +1478,18 @@ fn check_output(col: &mut ColumnOut, allowed: Option<&Tests>, v: &Literal) -> Re
     }
     Ok(())
 }
+
+/// Whether `v`, a number, is one a `long` property can give: from -2⁶³ up to the float nearest
+/// 2⁶³ - 1, which is 2⁶³ itself (a `long` is read as the nearest float).
+fn fits_long(v: &Value) -> bool {
+    match v {
+        Value::Number(x) => (LONG_LOW..=-LONG_LOW).contains(x),
+        _ => true,
+    }
+}
+
+/// -2⁶³, the least `long`, exactly.
+const LONG_LOW: f64 = -9_223_372_036_854_775_808.0;
 
 /// The next number above `x` (a whole number if `integer`) that is not `x` itself, if there is
 /// one: `x + 1`, or where that rounds back to `x` (beyond 2⁵³), the next float.
@@ -1558,9 +1600,13 @@ struct Search<'a> {
 }
 
 impl Search<'_> {
+    /// Whether everything wanted has been found.
+    fn found_all(&self) -> bool {
+        (!self.want_overlap || self.overlap.is_some()) && (!self.want_gap || self.gap.is_some())
+    }
+
     fn done(&self) -> bool {
-        ((!self.want_overlap || self.overlap.is_some()) && (!self.want_gap || self.gap.is_some()))
-            || self.pieces >= MAX_PIECES
+        self.found_all() || self.pieces >= MAX_PIECES
     }
 
     fn walk(&mut self, col: usize, rules: &[usize], point: &mut Vec<Option<Value>>) {

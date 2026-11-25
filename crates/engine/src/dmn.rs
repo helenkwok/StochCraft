@@ -608,6 +608,7 @@ fn finding_json(f: &stochcraft_model::dmn::Finding) -> Value {
         stochcraft_model::dmn::Finding::Gap { example } => {
             json!({ "kind": "gap", "example": example })
         }
+        stochcraft_model::dmn::Finding::Unchecked => json!({ "kind": "unchecked" }),
     }
 }
 

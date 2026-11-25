@@ -2777,7 +2777,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "dmn.set",
-        summary: "Set a decision table (DMN 1.6, D30): the decision `decision` of the .dmn file `file` beside the model, added (with the file) if it is not there yet. Every cell is FEEL text: input entries are S-FEEL unary tests (`< 10`, `[1..5]`, `\"A\", \"B\"`, `not(...)`, `-`), output entries a number, a string in double quotes, true or false; the hit policy is UNIQUE, FIRST, PRIORITY or COLLECT (with an optional aggregation). A table that cannot run is refused with the cell and the reason. Returns `findings`: rules that overlap under UNIQUE and inputs no rule covers, each with an example.",
+        summary: "Set a decision table (DMN 1.6, D30): the decision `decision` of the .dmn file `file` beside the model, added (with the file) if it is not there yet. Every cell is FEEL text: input entries are S-FEEL unary tests (`< 10`, `[1..5]`, `\"A\", \"B\"`, `not(...)`, `-`), output entries a number, a string in double quotes, true or false; the hit policy is UNIQUE, FIRST, PRIORITY or COLLECT (with an optional aggregation). A table that cannot run is refused with the cell and the reason. Returns `findings`: rules that overlap under UNIQUE and inputs no rule covers, each with an example, or `unchecked` for a table with too many combinations of inputs to check in full.",
         kind: CommandKind::Edit,
         schema: schema::<crate::dmn::DmnSet>,
         example: || {

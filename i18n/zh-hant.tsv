@@ -1461,6 +1461,7 @@ unit	yr	年
 	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} 使用檔案 {file} 中的決策表「{decision}」，但無法使用它：{reason} 請更正該表，或將它從區塊上移除。
 	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} 使用決策表「{decision}」，其規則 {first} 和 {second} 都符合 {example}，但在其命中策略 Unique 下只能有一條符合。請修改規則使只有一條符合，或選擇其他命中策略。
 	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} 使用決策表「{decision}」，其中沒有規則符合 {example}，因此這樣的實體在那裡得不到結果。如非有意，請新增規則或預設輸出。
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} 使用決策表「{decision}」，其輸入組合太多，無法完整檢查，因此可能有相互重疊的規則，或沒有規則符合的輸入。請檢查其規則，或將其拆分為較小的表。
 	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} 依決策表「{decision}」分流，該表可能給出「{value}」，這不是它任何出口的名稱。請讓用於分流的輸出的每個值都是某個出口的 id，或它通往的某個區塊的 id 或名稱。
 	Decision table	決策表
 	Open decision table	開啟決策表

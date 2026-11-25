@@ -1033,6 +1033,12 @@ fields (`“Service time”`) are named in the messages by their own rows.
   window's editing, which comes back with the app writing `.dmn` files. Not checked against any
   other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn,
   ka, kk and sq.
+- The row for the validation message of a decision table too large to check in full (M5.5,
+  L10: its rules may overlap, or leave inputs no rule matches) was machine-drafted from the
+  plain meaning of the English, with each catalog's own words for decision table, rule, input
+  and "no rule matches" from its rows for the other decision table messages. Not checked
+  against any other source and not reviewed by native speakers; the least certain are lo, th,
+  ta, te, bn, ka, kk and sq.
 - The rows for the properties of the selection (M5.5, U2: a field's reset, why a value is in
   bold, mixed values across selected blocks, a flow's page with its condition and Remove flow,
   and the properties several blocks share) were machine-drafted from the plain meaning of the

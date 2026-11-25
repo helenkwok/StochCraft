@@ -350,8 +350,20 @@ fn collect_lists_or_aggregates_every_match() {
     d.table.hit_policy = HitPolicy::First;
     assert!(d.compile().is_err_and(|e| e.message.contains("COLLECT")));
     d.table.hit_policy = HitPolicy::Collect;
-    d.table.rules[0].outputs[0] = "\"x\"".into();
-    assert!(d.compile().is_err());
+    // Text in every rule, so that the rows agree and only the aggregation can refuse it.
+    for r in &mut d.table.rules {
+        r.outputs[0] = "\"x\"".into();
+    }
+    assert!(
+        d.compile().is_err_and(|e| e
+            .message
+            .contains("the aggregation SUM needs number outputs")),
+        "{:?}",
+        d.compile()
+    );
+    // COUNT counts the rules, whatever they give.
+    d.table.aggregation = Some(Aggregation::Count);
+    assert_eq!(compiled(&d).evaluate(&input), Outcome::Number(3.0));
 }
 
 #[test]
@@ -513,4 +525,108 @@ fn a_table_a_block_uses_is_checked_over_its_property_s_values() {
             example: "size = 0.5".into()
         }]
     );
+}
+
+#[test]
+fn a_bound_long_input_is_checked_over_the_numbers_a_long_holds() {
+    let d = table(
+        HitPolicy::Unique,
+        &["size"],
+        &["band"],
+        &[(&["-"], &["1"]), (&["< -9223372036854775808"], &["2"])],
+    );
+    let c = compiled(&d);
+    // Bound to a long: no long is below -2⁶³, so only `-` matches any of them.
+    assert_eq!(c.check_bound(&[true]), vec![]);
+    // Bound to a double, the next number below it matches both rules.
+    let below = (-9_223_372_036_854_775_808.0_f64).next_down();
+    assert_eq!(
+        c.check_bound(&[false]),
+        vec![Finding::Overlap {
+            first: 1,
+            second: 2,
+            example: format!("size = {}", value_feel(&num(below)))
+        }]
+    );
+}
+
+/// A UNIQUE table with flag, `middle` inputs no rule tests, and end: rules 1 and 2 test only end,
+/// rule 3 also flag, so rules 1 and 3 both match flag = false and end = true.
+fn wide(middle: usize) -> Decision {
+    let names: Vec<String> = std::iter::once("flag".to_owned())
+        .chain((1..=middle).map(|i| format!("p{i}")))
+        .chain(std::iter::once("end".to_owned()))
+        .collect();
+    let inputs: Vec<&str> = names.iter().map(String::as_str).collect();
+    let cells = |flag: &'static str, end: &'static str| -> Vec<&'static str> {
+        std::iter::once(flag)
+            .chain(std::iter::repeat_n("-", middle))
+            .chain(std::iter::once(end))
+            .collect()
+    };
+    let (r1, r2, r3) = (
+        cells("-", "true"),
+        cells("-", "false"),
+        cells("false", "true"),
+    );
+    let mut d = table(
+        HitPolicy::Unique,
+        &inputs,
+        &["route"],
+        &[(&r1, &["1"]), (&r2, &["2"]), (&r3, &["3"])],
+    );
+    for i in &mut d.table.inputs {
+        i.type_ref = Some("boolean".into());
+    }
+    d
+}
+
+#[test]
+fn a_check_stopped_by_its_limit_says_so() {
+    // Small enough to look at in full: the overlap is found.
+    let small = compiled(&wide(2)).check(&[]);
+    assert!(
+        matches!(
+            small.as_slice(),
+            [Finding::Overlap {
+                first: 1,
+                second: 3,
+                ..
+            }]
+        ),
+        "{small:?}"
+    );
+    // With 18 inputs between, the search starts at flag = true, where rules 1 and 2 both stay
+    // open through every input, and reaches its limit before it gets to flag = false: it says
+    // the table was not checked in full, rather than nothing.
+    assert_eq!(compiled(&wide(18)).check(&[]), vec![Finding::Unchecked]);
+}
+
+#[test]
+fn a_value_outside_an_input_s_values_is_an_error_that_gives_null() {
+    let mut d = table(
+        HitPolicy::Unique,
+        &["size"],
+        &["band"],
+        &[(&["[0..20]"], &["1"]), (&["> 10"], &["2"])],
+    );
+    d.table.inputs[0].values = Some("[0..10]".into());
+    d.table.outputs[0].default = Some("0".into());
+    let c = compiled(&d);
+    let at = |x: f64| c.evaluate(&reader(&[("size", num(x))]));
+    // Values the input allows: as before.
+    assert_eq!(at(5.0), row(&[num(1.0)]));
+    assert_eq!(at(10.0), row(&[num(1.0)]));
+    // Others are an error: null, not the rule they match, nor the default.
+    assert_eq!(at(25.0), Outcome::Null);
+    assert_eq!(at(15.0), Outcome::Null);
+    assert_eq!(at(-5.0), Outcome::Null);
+    assert_eq!(
+        c.properties(&reader(&[("size", num(25.0))])),
+        Some(vec![None])
+    );
+    // A missing property is no value outside them: no rule matches, so the default.
+    assert_eq!(c.evaluate(&reader(&[])), row(&[num(0.0)]));
+    // Over the values the input allows, no rules overlap.
+    assert_eq!(c.check(&[false]), vec![]);
 }

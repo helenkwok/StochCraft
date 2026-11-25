@@ -445,6 +445,12 @@ fn samples() -> Vec<Diagnostic> {
         ),
         found(
             task,
+            Problem::DecisionUnchecked {
+                decision: "Chute".into(),
+            },
+        ),
+        found(
+            task,
             Problem::TransportPool {
                 pool: id("p1"),
                 exists: false,

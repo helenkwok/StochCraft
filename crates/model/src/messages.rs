@@ -491,6 +491,10 @@ pub const TEMPLATES: &[(&str, &str)] = &[
         "{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.",
     ),
     (
+        "decision_unchecked",
+        "{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.",
+    ),
+    (
         "transport_pool_missing",
         "The pool {pool} of the transport {block} does not exist. Choose a pool that exists.",
     ),
@@ -1264,6 +1268,10 @@ impl Diagnostic {
                     ("decision", decision.clone()),
                     ("value", value.clone()),
                 ],
+            ),
+            Problem::DecisionUnchecked { decision } => part(
+                "decision_unchecked",
+                vec![b(), ("decision", decision.clone())],
             ),
             Problem::TransportPool { pool, exists } => part(
                 if *exists {

@@ -2094,6 +2094,11 @@ pub enum Problem {
         decision: String,
         value: String,
     },
+    /// A decision table too large for the check of its rules to finish: whether rules overlap,
+    /// or an input is matched by no rule, is not known.
+    DecisionUnchecked {
+        decision: String,
+    },
     /// A transport's pool does not exist, or is not mobile.
     TransportPool {
         pool: ElementId,
@@ -2472,6 +2477,7 @@ impl Problem {
             Problem::DecisionOverlap { .. } => "decision_overlap",
             Problem::DecisionGap { .. } => "decision_gap",
             Problem::DecisionRoute { .. } => "decision_route",
+            Problem::DecisionUnchecked { .. } => "decision_unchecked",
             Problem::TransportPool { .. } => "transport_pool",
             Problem::BadMobilitySpeed { .. } => "bad_mobility_speed",
             Problem::UnknownHome { .. } => "unknown_home",
@@ -3962,6 +3968,12 @@ impl Model {
                         Problem::DecisionGap {
                             decision: label.clone(),
                             example,
+                        },
+                    ),
+                    dmn::Finding::Unchecked => Diagnostic::warning(
+                        Some(id),
+                        Problem::DecisionUnchecked {
+                            decision: label.clone(),
                         },
                     ),
                 });
