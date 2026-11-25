@@ -1216,6 +1216,15 @@ impl Compiled {
         self.inputs.iter().map(|c| c.name.as_str()).collect()
     }
 
+    /// The property names the inputs read, in column order, with the kind of value each
+    /// compares (from its type, else its tests), if known.
+    pub fn inputs(&self) -> Vec<(&str, Option<Kind>)> {
+        self.inputs
+            .iter()
+            .map(|c| (c.name.as_str(), c.kind))
+            .collect()
+    }
+
     /// The output names, in column order, with the kind of value each gives (a number for an
     /// aggregation), if known.
     pub fn outputs(&self) -> Vec<(&str, Option<Kind>)> {

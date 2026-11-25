@@ -626,3 +626,41 @@ fn every_count_must_name_a_way_unless_the_gateway_has_a_default() {
     }
     assert_eq!(model.validate(), vec![]);
 }
+
+/// A table comparing numbers on a property declared boolean or string is an error: no number
+/// test matches such a value, so every entity would take the default (or nothing) unseen.
+#[test]
+fn an_input_must_compare_its_property_s_type() {
+    for (ty, value) in [
+        (
+            stochcraft_model::PropertyType::Boolean,
+            PropertyValue::Boolean(true),
+        ),
+        (
+            stochcraft_model::PropertyType::String,
+            PropertyValue::Text("big".into()),
+        ),
+    ] {
+        let mut m = Builder::new();
+        let classify = m.delay("classify", Dist::Constant(0.0));
+        let start = m.source("start", Dist::Constant(1.0), Some(1));
+        m.property(start, "size", Some(ty), value);
+        m.connect(start, classify);
+        let sink = m.sink("out");
+        m.connect(classify, sink);
+        let model = with_table(
+            m.build(experiment()),
+            "classify",
+            decision(
+                "band",
+                HitPolicy::First,
+                "band",
+                &[(">= 10", "\"heavy\""), ("-", "\"light\"")],
+            ),
+        );
+        let ds = model.validate();
+        assert_eq!(ds.len(), 1, "{ty:?}: {ds:?}");
+        assert_eq!(ds[0].problem.code(), "decision_unusable");
+        assert!(ds[0].to_string().contains("compares numbers"), "{}", ds[0]);
+    }
+}

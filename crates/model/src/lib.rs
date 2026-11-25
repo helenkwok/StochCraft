@@ -3910,6 +3910,19 @@ impl Model {
                     }
                     _ => None,
                 };
+            // Each input must compare values of its property's type: a number test never
+            // matches a boolean, so every entity would fall to the default (or to none) unseen.
+            for (name, kind) in table.inputs() {
+                let Some(&ty) = types.get(name) else {
+                    continue;
+                };
+                if let Some(compares) = misfit(kind, true, true, ty) {
+                    out.push(unusable(format!(
+                        "its input “{name}” compares {compares}, but the property “{name}” is of type {}.",
+                        ty.bpsim_name()
+                    )));
+                }
+            }
             for (j, (name, kind)) in table.outputs().into_iter().enumerate() {
                 let Some(&ty) = types.get(name) else {
                     continue;
