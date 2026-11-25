@@ -513,6 +513,33 @@ impl Engine {
                 .any(|(href, f)| self.model.dmn.get(href).is_some_and(|d| *d != f.read))
     }
 
+    /// `Ok` if every `.dmn` file the model reads from disk still has the decisions it was read (or
+    /// last written) with, in their order: saving writes edited tables into such a file, but
+    /// cannot add, remove or reorder its decisions yet ([`stochcraft_io::dmn::save_dmn`]). A file
+    /// the model no longer reads is not written, and one not read from disk is written whole.
+    pub(crate) fn dmn_decisions_kept(&self) -> Result<(), CommandError> {
+        let ids = |x: &Definitions| x.decisions.iter().map(|d| d.id.clone()).collect::<Vec<_>>();
+        for (href, f) in &self.dmn {
+            let Some(d) = self.model.dmn.get(href) else {
+                continue;
+            };
+            let (now, was) = (ids(d), ids(&f.read));
+            if now != was {
+                return Err(CommandError::new(
+                    ErrorCode::Unsupported,
+                    format!(
+                        "decisions cannot be added to, removed from or reordered in {href}, a .dmn file the model has read, yet: it holds {}; put a new decision in a new .dmn file",
+                        was.iter()
+                            .map(|i| format!("`{i}`"))
+                            .collect::<Vec<_>>()
+                            .join(", ")
+                    ),
+                ));
+            }
+        }
+        Ok(())
+    }
+
     /// Whether a decision table the model holds is not on disk as it is: edited or made since its
     /// `.dmn` file was read or written, or not beside the model's file where that was last saved.
     /// Unlike [`Engine::is_dirty`], it leaves out the model's own file, which a browser's

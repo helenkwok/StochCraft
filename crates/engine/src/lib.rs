@@ -942,7 +942,7 @@ impl Engine {
 
     fn edit(&mut self, label: &'static str, op: Op) -> Result<(), CommandError> {
         self.revision += 1;
-        let inverse = edit::apply(&mut self.model, op)?;
+        let inverse = self.apply_model(op)?;
         self.undo.push(HistoryEntry {
             label,
             op: Undo::Model(inverse),
@@ -951,10 +951,25 @@ impl Engine {
         Ok(())
     }
 
+    /// Applies `op` to the model and gives the op that takes it back; refused, with the model as
+    /// it was, if it would leave a `.dmn` file read from disk with other decisions than it has,
+    /// which saving cannot write ([`Engine::dmn_decisions_kept`]). Every edit, undo and redo
+    /// comes here. (A model already in such a state is not held to it, so it can still be
+    /// mended.)
+    fn apply_model(&mut self, op: Op) -> Result<Op, CommandError> {
+        let kept = self.dmn_decisions_kept().is_ok();
+        let inverse = edit::apply(&mut self.model, op)?;
+        if kept && let Err(err) = self.dmn_decisions_kept() {
+            edit::apply(&mut self.model, inverse)?;
+            return Err(err);
+        }
+        Ok(inverse)
+    }
+
     /// Applies one history entry and gives the entry that takes it back.
     fn apply_history(&mut self, op: Undo) -> Result<Undo, CommandError> {
         match op {
-            Undo::Model(op) => edit::apply(&mut self.model, op).map(Undo::Model),
+            Undo::Model(op) => self.apply_model(op).map(Undo::Model),
             Undo::Sd(model) => self.swap_sd_model(*model).map(|m| Undo::Sd(Box::new(m))),
         }
     }

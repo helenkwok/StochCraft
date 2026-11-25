@@ -881,3 +881,73 @@ fn a_table_file_without_an_id_saves_again_after_an_undo() {
     assert_eq!(read(&dir.join("sorting.dmn")), written);
     assert!(!e.model().dmn["sorting.dmn"].id.is_empty());
 }
+
+/// `model.set` cannot add a decision to, or remove one from, a `.dmn` file read from disk, which
+/// saving could not write: refused before the model changes, as `dmn.set` refuses an added one.
+/// The same model, or one with a table edited, is taken and saves.
+#[test]
+fn model_set_keeps_the_decisions_of_a_file_read_from_disk() {
+    let dir = folder("model-set-decisions");
+    let (bpmn, _) = write_sorter(&dir);
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": bpmn.to_string_lossy() }),
+    );
+    let doc = ok(&mut e, "model.get", json!({}));
+    let before = e.model().clone();
+    // Removed.
+    let mut removed = doc.clone();
+    removed["decisions"]["files"][0]["decisions"] = json!([]);
+    // Added.
+    let mut added = doc.clone();
+    let mut list = added["decisions"]["files"][0]["decisions"].clone();
+    let mut backup = list[0].clone();
+    backup["id"] = json!("backup");
+    if let Some(l) = list.as_array_mut() {
+        l.push(backup);
+    }
+    added["decisions"]["files"][0]["decisions"] = list;
+    for changed in [removed, added] {
+        let refused = e.execute("model.set", json!({ "model": changed }));
+        assert!(
+            refused.is_err_and(|err| err.message.contains("a .dmn file the model has read")),
+            "refused"
+        );
+        assert!(e.model() == &before, "the model is unchanged");
+    }
+    // A table edited through model.set is taken, and saves.
+    let mut edited = doc.clone();
+    edited["decisions"]["files"][0]["decisions"][0]["table"]["rules"][0]["outputs"][0] =
+        json!("\"chute_b\"");
+    ok(&mut e, "model.set", json!({ "model": edited }));
+    ok(&mut e, "file.save", json!({}));
+    assert!(!e.is_dirty());
+}
+
+/// Nor can an undo take a decision out of a file written since it was added.
+#[test]
+fn an_undo_keeps_the_decisions_of_a_file_written_since() {
+    let dir = folder("undo-decisions");
+    let mut e = example();
+    for decision in ["first", "second"] {
+        ok(
+            &mut e,
+            "dmn.set",
+            json!({ "file": "desk.dmn", "decision": decision, "table": one_rule("1", None) }),
+        );
+    }
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": dir.join("desk.bpmn").to_string_lossy() }),
+    );
+    let refused = e.execute("undo", json!({}));
+    assert!(
+        refused.is_err_and(|err| err.message.contains("a .dmn file the model has read")),
+        "refused"
+    );
+    assert_eq!(e.model().dmn["desk.dmn"].decisions.len(), 2);
+    ok(&mut e, "file.save", json!({}));
+}
