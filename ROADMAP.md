@@ -4934,12 +4934,12 @@ are.
     waiting for a repairman and, by Little's law, 0.1236 hours each, 9.2894 machines running
     (busy 0.9289), 1.2398 spares waiting, and 9.2894 repairs an hour. The chances above are
     shares of time, which no result reports, so they are checked on the chain only. Scenarios,
-    each exact from the same chain: two repairmen (5.93 broken, 7.64 running), four repairmen
-    (2.72, 9.70), no spares (2.26, 7.74) and eight spares (4.40, 9.71), so a fourth repairman
-    does about as much as four more spares. It differs from the machine repair crew above
-    because spares on cold standby do not fail. Once regenerative intervals (M2.9) are built,
-    this example is their first check: the paper's own intervals come from cycles back to
-    X = 0.
+    each exact from the same chain and checked on the machines broken and running: two
+    repairmen (5.93 broken, 7.64 running), four repairmen (2.72, 9.70), no spares (2.26, 7.74)
+    and eight spares (4.40, 9.71), so a fourth repairman does about as much as four more spares.
+    It differs from the machine repair crew above because spares on cold standby do not fail.
+    Once regenerative intervals (M2.9) are built, this example is their first check: the
+    paper's own intervals come from cycles back to X = 0.
 - **Planned examples:** each joins only once its answer is checked against its source with the
   page, as above.
   - **A particle detector's readout** (a new "Science" industry): collisions at a collider
