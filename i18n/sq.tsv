@@ -1475,6 +1475,8 @@ unit	yr	v
 	Remove rule	Hiq rregullin
 	Change Decision Table	Ndrysho tabelën e vendimeve
 	Use Decision Table	Përdor tabelën e vendimeve
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Për momentin vetëm për lexim: redaktojeni tabelën në skedarin e saj .dmn ose me komandën dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Tabelat e tij të vendimeve nuk u shkruan: aplikacioni ende nuk shkruan skedarë .dmn.
 	Reset {field}	Rivendos {field}
 	Changed from the default	Ndryshuar nga parazgjedhja
 	Changed from the inherited scenario	Ndryshuar nga skenari i trashëguar

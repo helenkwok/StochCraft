@@ -1475,6 +1475,8 @@ unit	yr	l.
 	Remove rule	Odstrani pravilo
 	Change Decision Table	Spremeni odločitveno tabelo
 	Use Decision Table	Uporabi odločitveno tabelo
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Zaenkrat samo za branje: tabelo uredite v njeni datoteki .dmn ali z ukazom dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Njegove odločitvene tabele niso bile zapisane: aplikacija še ne zapisuje datotek .dmn.
 	Reset {field}	Ponastavi: {field}
 	Changed from the default	Spremenjeno glede na privzeto
 	Changed from the inherited scenario	Spremenjeno glede na podedovani scenarij

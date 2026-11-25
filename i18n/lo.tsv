@@ -1475,6 +1475,8 @@ unit	yr	ປີ
 	Remove rule	ລຶບກົດ
 	Change Decision Table	ປ່ຽນຕາຕະລາງການຕັດສິນໃຈ
 	Use Decision Table	ໃຊ້ຕາຕະລາງການຕັດສິນໃຈ
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	ຕອນນີ້ອ່ານໄດ້ຢ່າງດຽວ: ແກ້ໄຂຕາຕະລາງໃນໄຟລ໌ .dmn ຂອງມັນ ຫຼື ດ້ວຍຄຳສັ່ງ dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	ຕາຕະລາງການຕັດສິນໃຈຂອງມັນບໍ່ໄດ້ຖືກຂຽນ: ແອັບຍັງບໍ່ຂຽນໄຟລ໌ .dmn.
 	Reset {field}	ຣີເຊັດ {field}
 	Changed from the default	ປ່ຽນຈາກຄ່າເລີ່ມຕົ້ນ
 	Changed from the inherited scenario	ປ່ຽນຈາກສະຖານະການທີ່ສືບທອດມາ

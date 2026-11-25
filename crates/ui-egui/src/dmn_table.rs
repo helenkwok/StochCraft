@@ -1,16 +1,15 @@
 //! The decision table window (ROADMAP M5.5, D30): a block's DMN decision table as a grid, rules
 //! in rows, the input columns, then the outputs, then the rule annotations, each cell its FEEL
-//! text. The hit policy (and COLLECT's aggregation) is chosen above it. A cell commits when it
-//! loses the keyboard; every change is one `dmn.set`, so it undoes in one step, and a table that
-//! cannot run is refused with the reason in the status bar while the typed text stays.
+//! text, with the hit policy (and COLLECT's aggregation) above it.
+//!
+//! It shows the table read-only for now: the app does not write `.dmn` files yet, so a table is
+//! edited in its `.dmn` file, or with the `dmn.set` command (which `file.save` writes beside the
+//! model). Editing here comes with the app writing those files.
 //!
 //! It opens from the block's page ("Open decision table"), in a window of its own beside the
 //! inspector; the spreadsheet view (U6) is where it will also open.
 
-use std::collections::BTreeMap;
-
-use serde_json::json;
-use stochcraft_engine::dmn::{AggregationDoc, HitPolicyDoc, RuleDoc, TableDoc};
+use stochcraft_engine::dmn::{AggregationDoc, HitPolicyDoc, TableDoc};
 use stochcraft_model::ElementId;
 
 use crate::i18n::t;
@@ -19,15 +18,12 @@ use crate::{App, theme};
 /// The decision table window's state while it is open.
 #[derive(Debug, Default)]
 pub(crate) struct Grid {
-    /// The document it was opened on (`App::doc_gen`): it closes when that is replaced, so no
-    /// draft of one model reaches another's table of the same file and id.
+    /// The document it was opened on (`App::doc_gen`): it closes when that is replaced, so it
+    /// never shows another model's table of the same file and id.
     doc: u64,
     /// The `.dmn` file and the decision's id.
     file: String,
     decision: String,
-    /// Cells typed and not yet taken: (rule, column) to text, the columns numbered inputs first,
-    /// then outputs, then annotations.
-    typed: BTreeMap<(usize, usize), String>,
 }
 
 fn policy_name(h: HitPolicyDoc) -> &'static str {
@@ -49,17 +45,6 @@ fn aggregation_name(a: Option<AggregationDoc>) -> &'static str {
     }
 }
 
-/// Cell `c` of `rule`, the columns numbered as in [`Grid::typed`].
-fn cell(rule: &mut RuleDoc, inputs: usize, outputs: usize, c: usize) -> Option<&mut String> {
-    if c < inputs {
-        rule.inputs.get_mut(c)
-    } else if c < inputs + outputs {
-        rule.outputs.get_mut(c - inputs)
-    } else {
-        rule.annotations.get_mut(c - inputs - outputs)
-    }
-}
-
 impl App {
     /// Opens the decision table window on decision `decision` of the `.dmn` file `file`.
     pub(crate) fn open_decision_table(&mut self, file: &str, decision: &str) {
@@ -67,7 +52,6 @@ impl App {
             doc: self.doc_gen,
             file: file.to_owned(),
             decision: decision.to_owned(),
-            typed: BTreeMap::new(),
         });
     }
 
@@ -100,7 +84,7 @@ impl App {
     /// (a new model, one opened, recovered or dropped in) or its table is gone (an undo that
     /// removed it).
     pub(crate) fn decision_table_window(&mut self, ctx: &egui::Context) {
-        let Some(mut grid) = self.dmn_table.take() else {
+        let Some(grid) = self.dmn_table.take() else {
             return;
         };
         if grid.doc != self.doc_gen {
@@ -116,7 +100,7 @@ impl App {
         else {
             return;
         };
-        let mut table = TableDoc::from(&decision.table);
+        let table = TableDoc::from(&decision.table);
         let (inputs, outputs) = (table.inputs.len(), table.outputs.len());
         let heads: Vec<String> = table
             .inputs
@@ -126,10 +110,6 @@ impl App {
             .chain(table.annotations.iter().cloned())
             .collect();
         let mut open = true;
-        let mut changed = false;
-        // The cells whose drafts this change takes.
-        let mut taken = Vec::new();
-        let mut remove = None;
         egui::Window::new(t("Decision table"))
             .id(egui::Id::unique("dmn-table"))
             .open(&mut open)
@@ -138,55 +118,12 @@ impl App {
                 ui.label(theme::strong(decision.label().to_owned()));
                 ui.label(theme::weak(ui, grid.file.clone()));
                 ui.add_space(6.0);
-                ui.horizontal(|ui| {
-                    ui.label(t("Hit policy"));
-                    egui::ComboBox::from_id_salt("dmn-hit-policy")
-                        .selected_text(policy_name(table.hit_policy))
-                        .show_ui(ui, |ui| {
-                            for h in [
-                                HitPolicyDoc::Unique,
-                                HitPolicyDoc::First,
-                                HitPolicyDoc::Priority,
-                                HitPolicyDoc::Collect,
-                            ] {
-                                if ui
-                                    .selectable_label(table.hit_policy == h, policy_name(h))
-                                    .clicked()
-                                    && table.hit_policy != h
-                                {
-                                    table.hit_policy = h;
-                                    if h != HitPolicyDoc::Collect {
-                                        table.aggregation = None;
-                                    }
-                                    changed = true;
-                                }
-                            }
-                        });
+                ui.horizontal_wrapped(|ui| {
+                    ui.label(theme::weak(ui, t("Hit policy")));
+                    ui.label(policy_name(table.hit_policy));
                     if table.hit_policy == HitPolicyDoc::Collect {
-                        ui.label(t("Aggregation"));
-                        egui::ComboBox::from_id_salt("dmn-aggregation")
-                            .selected_text(aggregation_name(table.aggregation))
-                            .show_ui(ui, |ui| {
-                                for a in [
-                                    None,
-                                    Some(AggregationDoc::Sum),
-                                    Some(AggregationDoc::Count),
-                                    Some(AggregationDoc::Min),
-                                    Some(AggregationDoc::Max),
-                                ] {
-                                    if ui
-                                        .selectable_label(
-                                            table.aggregation == a,
-                                            aggregation_name(a),
-                                        )
-                                        .clicked()
-                                        && table.aggregation != a
-                                    {
-                                        table.aggregation = a;
-                                        changed = true;
-                                    }
-                                }
-                            });
+                        ui.label(theme::weak(ui, t("Aggregation")));
+                        ui.label(aggregation_name(table.aggregation));
                     }
                 });
                 ui.add_space(6.0);
@@ -198,83 +135,28 @@ impl App {
                             ui.label(if c < inputs { text } else { text.italics() });
                         }
                         ui.end_row();
-                        for (r, rule) in table.rules.iter_mut().enumerate() {
+                        for (r, rule) in table.rules.iter().enumerate() {
                             ui.label((r + 1).to_string());
-                            for c in 0..heads.len() {
-                                let Some(current) = cell(rule, inputs, outputs, c) else {
-                                    ui.label("");
-                                    continue;
-                                };
-                                let mut text = grid
-                                    .typed
-                                    .get(&(r, c))
-                                    .cloned()
-                                    .unwrap_or_else(|| current.clone());
-                                let response = ui.add(
-                                    egui::TextEdit::singleline(&mut text)
-                                        .id_salt(("dmn-cell", r, c))
-                                        .desired_width(110.0),
-                                );
-                                if response.changed() {
-                                    grid.typed.insert((r, c), text.clone());
-                                }
-                                if response.lost_focus() && *current != text {
-                                    *current = text;
-                                    taken.push((r, c));
-                                    changed = true;
-                                }
-                            }
-                            if ui
-                                .small_button("×")
-                                .on_hover_text(t("Remove rule"))
-                                .clicked()
-                            {
-                                remove = Some(r);
+                            let cells = rule
+                                .inputs
+                                .iter()
+                                .chain(&rule.outputs)
+                                .chain(&rule.annotations);
+                            for text in cells.take(heads.len()) {
+                                ui.label(egui::RichText::new(text).monospace());
                             }
                             ui.end_row();
                         }
                     });
                 });
                 ui.add_space(6.0);
-                if ui.add(theme::secondary(ui, t("Add rule"))).clicked() {
-                    let outputs_like = table
-                        .rules
-                        .last()
-                        .map_or_else(|| vec!["\"\"".to_owned(); outputs], |r| r.outputs.clone());
-                    table.rules.push(RuleDoc {
-                        inputs: vec!["-".to_owned(); inputs],
-                        outputs: outputs_like,
-                        annotations: vec![String::new(); table.annotations.len()],
-                        ..RuleDoc::default()
-                    });
-                    changed = true;
-                }
+                ui.label(theme::weak(
+                    ui,
+                    t("Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command."),
+                ));
             });
-        if let Some(r) = remove
-            && r < table.rules.len()
-        {
-            table.rules.remove(r);
-            grid.typed.clear();
-            changed = true;
-        }
-        if changed {
-            self.commit_table(&mut grid, &table, &taken);
-        }
         if open {
             self.dmn_table = Some(grid);
-        }
-    }
-
-    /// Sends `table`, as edited, to `dmn.set`. Taken, the drafts of the cells it took (`taken`)
-    /// go; the others, refused before, stay to be corrected or given up.
-    fn commit_table(&mut self, grid: &mut Grid, table: &TableDoc, taken: &[(usize, usize)]) {
-        let params = json!({
-            "file": grid.file,
-            "decision": grid.decision,
-            "table": table,
-        });
-        if self.execute("dmn.set", params).is_some() {
-            grid.typed.retain(|k, _| !taken.contains(k));
         }
     }
 }
@@ -307,40 +189,7 @@ mod tests {
         app
     }
 
-    fn doc(app: &App) -> stochcraft_engine::dmn::TableDoc {
-        let d = app
-            .engine
-            .model()
-            .dmn
-            .get("desk.dmn")
-            .and_then(|f| f.decision("priority"))
-            .map(|d| stochcraft_engine::dmn::TableDoc::from(&d.table));
-        d.unwrap_or_default()
-    }
-
-    /// A cell's refused text stays when another cell's change is taken.
-    #[test]
-    fn a_refused_draft_outlives_another_cell_s_change() {
-        let mut app = with_table();
-        let mut grid = app.dmn_table.take().unwrap_or_default();
-        // Rule 1's input: refused, its draft kept.
-        grid.typed.insert((0, 0), "[".into());
-        let mut t = doc(&app);
-        t.rules[0].inputs[0] = "[".into();
-        app.commit_table(&mut grid, &t, &[(0, 0)]);
-        assert_eq!(grid.typed.get(&(0, 0)).map(String::as_str), Some("["));
-        // Rule 2's output: taken, and only its own draft goes.
-        grid.typed.insert((1, 1), "3".into());
-        let mut t = doc(&app);
-        t.rules[1].outputs[0] = "3".into();
-        app.commit_table(&mut grid, &t, &[(1, 1)]);
-        assert_eq!(doc(&app).rules[1].outputs[0], "3");
-        assert_eq!(grid.typed.get(&(0, 0)).map(String::as_str), Some("["));
-        assert_eq!(grid.typed.get(&(1, 1)), None);
-    }
-
-    /// Another document closes the window, drafts and all, even with a table of the same file
-    /// and id.
+    /// Another document closes the window, even with a table of the same file and id.
     #[test]
     fn the_window_closes_when_its_document_is_replaced() {
         let mut app = with_table();
@@ -348,5 +197,44 @@ mod tests {
         assert!(app.dmn_table.is_some());
         app.decision_table_window(&egui::Context::default());
         assert!(app.dmn_table.is_none());
+    }
+
+    /// The app writes the model's file only: saving a model with tables says they were not
+    /// written, and leaves the model unsaved while a table is not on disk.
+    #[test]
+    fn a_save_says_the_tables_were_not_written() {
+        let mut app = with_table();
+        let bytes = app.engine.save_bytes(true).unwrap_or_default();
+        app.written("desk.bpmn", &bytes);
+        let status = app.status().to_owned();
+        assert!(status.starts_with("Saved desk.bpmn. "), "{status}");
+        assert!(status.contains(".dmn files"), "{status}");
+        assert!(app.unsaved_changes(), "the table is not on disk");
+        // A model without tables is just saved.
+        let mut plain = App::new(Platform::DESKTOP);
+        let bytes = plain.engine.save_bytes(true).unwrap_or_default();
+        plain.written("plain.bpmn", &bytes);
+        assert_eq!(plain.status(), "Saved plain.bpmn");
+        assert!(!plain.unsaved_changes());
+    }
+
+    /// The window shows the table and leaves it as it is: nothing it draws changes the model.
+    #[test]
+    fn the_window_shows_the_table_without_changing_it() {
+        let app = with_table();
+        let before = app.engine.model().clone();
+        let mut h = egui_kittest::Harness::builder()
+            .with_size(egui::vec2(900.0, 700.0))
+            .build_ui_state(
+                |ui, app: &mut App| {
+                    let ctx = ui.ctx().clone();
+                    app.decision_table_window(&ctx);
+                },
+                app,
+            );
+        h.run_steps(3);
+        let app = h.state();
+        assert!(app.dmn_table.is_some());
+        assert!(app.engine.model() == &before);
     }
 }

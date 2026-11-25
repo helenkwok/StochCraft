@@ -1475,6 +1475,8 @@ unit	yr	ปี
 	Remove rule	ลบกฎ
 	Change Decision Table	เปลี่ยนตารางการตัดสินใจ
 	Use Decision Table	ใช้ตารางการตัดสินใจ
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	ตอนนี้อ่านได้อย่างเดียว: แก้ไขตารางในไฟล์ .dmn ของตาราง หรือด้วยคำสั่ง dmn.set
+	Its decision tables were not written: the app does not write .dmn files yet.	ตารางการตัดสินใจไม่ได้ถูกเขียน: แอปยังไม่เขียนไฟล์ .dmn
 	Reset {field}	รีเซ็ต {field}
 	Changed from the default	เปลี่ยนจากค่าเริ่มต้น
 	Changed from the inherited scenario	เปลี่ยนจากสถานการณ์ที่สืบทอดมา

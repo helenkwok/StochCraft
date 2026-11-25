@@ -1475,6 +1475,8 @@ unit	yr	j
 	Remove rule	Regel verwijderen
 	Change Decision Table	Beslistabel wijzigen
 	Use Decision Table	Beslistabel gebruiken
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Voorlopig alleen-lezen: bewerk de tabel in het .dmn-bestand ervan, of met de opdracht dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	De beslistabellen zijn niet geschreven: de app schrijft nog geen .dmn-bestanden.
 	Reset {field}	{field} resetten
 	Changed from the default	Gewijzigd ten opzichte van de standaard
 	Changed from the inherited scenario	Gewijzigd ten opzichte van het overgeërfde scenario

@@ -1475,6 +1475,8 @@ unit	yr	বছর
 	Remove rule	নিয়ম সরান
 	Change Decision Table	সিদ্ধান্ত সারণি বদলান
 	Use Decision Table	সিদ্ধান্ত সারণি ব্যবহার করুন
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	আপাতত শুধু দেখার জন্য: সারণিটি এর .dmn ফাইলে, অথবা dmn.set কমান্ড দিয়ে সম্পাদনা করুন।
+	Its decision tables were not written: the app does not write .dmn files yet.	এর সিদ্ধান্ত সারণিগুলি লেখা হয়নি: অ্যাপটি এখনও .dmn ফাইল লেখে না।
 	Reset {field}	{field} রিসেট করুন
 	Changed from the default	ডিফল্ট থেকে পরিবর্তিত
 	Changed from the inherited scenario	উত্তরাধিকারসূত্রে প্রাপ্ত দৃশ্যকল্প থেকে পরিবর্তিত

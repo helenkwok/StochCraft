@@ -1475,6 +1475,8 @@ unit	yr	r.
 	Remove rule	Usuń regułę
 	Change Decision Table	Zmień tabelę decyzyjną
 	Use Decision Table	Użyj tabeli decyzyjnej
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Na razie tylko do odczytu: edytuj tabelę w jej pliku .dmn lub poleceniem dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Jego tabele decyzyjne nie zostały zapisane: aplikacja nie zapisuje jeszcze plików .dmn.
 	Reset {field}	Resetuj: {field}
 	Changed from the default	Zmieniono względem wartości domyślnej
 	Changed from the inherited scenario	Zmieniono względem dziedziczonego scenariusza

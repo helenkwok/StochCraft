@@ -1475,6 +1475,8 @@ unit	yr	ஆண்டு
 	Remove rule	விதியை நீக்கு
 	Change Decision Table	முடிவு அட்டவணையை மாற்று
 	Use Decision Table	முடிவு அட்டவணையைப் பயன்படுத்து
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	இப்போதைக்குப் படிக்க மட்டும்: அட்டவணையை அதன் .dmn கோப்பில் அல்லது dmn.set கட்டளையால் திருத்தவும்.
+	Its decision tables were not written: the app does not write .dmn files yet.	இதன் முடிவு அட்டவணைகள் எழுதப்படவில்லை: பயன்பாடு இன்னும் .dmn கோப்புகளை எழுதுவதில்லை.
 	Reset {field}	{field} மீட்டமை
 	Changed from the default	இயல்புநிலையிலிருந்து மாற்றப்பட்டது
 	Changed from the inherited scenario	மரபுரிமையாகப் பெற்ற சூழ்நிலையிலிருந்து மாற்றப்பட்டது

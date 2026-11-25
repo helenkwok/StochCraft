@@ -1475,6 +1475,8 @@ unit	yr	năm
 	Remove rule	Xóa quy tắc
 	Change Decision Table	Đổi bảng quyết định
 	Use Decision Table	Dùng bảng quyết định
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Hiện chỉ để xem: chỉnh sửa bảng trong tệp .dmn của nó, hoặc bằng lệnh dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Các bảng quyết định của nó chưa được ghi: ứng dụng chưa ghi tệp .dmn.
 	Reset {field}	Đặt lại {field}
 	Changed from the default	Đã đổi so với mặc định
 	Changed from the inherited scenario	Đã đổi so với kịch bản kế thừa

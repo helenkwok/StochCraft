@@ -1025,6 +1025,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   name Unique inside the overlap message stays in English, as DMN spells it in a file. Not
   checked against any other source and not reviewed by native speakers; the least certain are
   lo, th, ta, te, bn, ka, kk and sq ("hit policy").
+- The two rows for the decision table window shown read-only (M5.5, L10: its note on where a
+  table is edited, and the status bar's addition to Saved and Downloaded that a model's
+  decision tables were not written) were machine-drafted from the plain meaning of the English,
+  with each catalog's own words for decision table, file and command from its existing rows;
+  `.dmn` and `dmn.set` stay as written. The rows for Add rule and Remove rule stay for the
+  window's editing, which comes back with the app writing `.dmn` files. Not checked against any
+  other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn,
+  ka, kk and sq.
 - The rows for the properties of the selection (M5.5, U2: a field's reset, why a value is in
   bold, mixed values across selected blocks, a flow's page with its condition and Remove flow,
   and the properties several blocks share) were machine-drafted from the plain meaning of the

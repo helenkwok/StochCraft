@@ -1475,6 +1475,8 @@ unit	yr	წელი
 	Remove rule	წესის წაშლა
 	Change Decision Table	გადაწყვეტილების ცხრილის შეცვლა
 	Use Decision Table	გადაწყვეტილების ცხრილის გამოყენება
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	ამჟამად მხოლოდ წასაკითხად: ცხრილი შეცვალეთ მის .dmn ფაილში ან dmn.set ბრძანებით.
+	Its decision tables were not written: the app does not write .dmn files yet.	მისი გადაწყვეტილების ცხრილები არ ჩაიწერა: აპი ჯერ არ წერს .dmn ფაილებს.
 	Reset {field}	{field}: საწყისზე დაბრუნება
 	Changed from the default	შეცვლილია ნაგულისხმევთან შედარებით
 	Changed from the inherited scenario	შეცვლილია მემკვიდრეობით მიღებულ სცენართან შედარებით

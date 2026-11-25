@@ -3930,7 +3930,11 @@ a gateway with several outputs, the output to route by); its outputs are written
 properties as an entity enters, and a gateway with no conditions takes the way whose flow id,
 target id or target name is the output. The engine reads the `.dmn` files beside the model and
 writes edited ones back (`dmn.get`, `dmn.set`, `dmn.use`), and the window shows a table as a
-grid from the block's page. Left from L10: the hit policies ANY, RULE ORDER and OUTPUT ORDER;
+grid from the block's page, read-only for now: the app's own open and save handle the model's
+file only, so editing in the grid waits for the app to read and write the `.dmn` files beside
+the model (the desktop app in the folder, the browser by download), which is next. Its Save
+says a model's tables were not written, and a table changed since its file was written keeps
+the model unsaved. Left from L10: the hit policies ANY, RULE ORDER and OUTPUT ORDER;
 names, dates and durations in cells; the grid in the spreadsheet view (U6); sharing the
 `.dmn` files with the model (M7.4); a task with a decision is written as a plain task in a new
 file, not a `businessRuleTask`.

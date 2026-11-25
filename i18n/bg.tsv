@@ -1475,6 +1475,8 @@ unit	yr	г.
 	Remove rule	Премахни правило
 	Change Decision Table	Промяна на таблица за решения
 	Use Decision Table	Използване на таблица за решения
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Засега само за преглед: редактирайте таблицата в нейния .dmn файл или с командата dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Таблиците за решения не са записани: приложението още не записва .dmn файлове.
 	Reset {field}	Възстановяване на {field}
 	Changed from the default	Променено спрямо стойността по подразбиране
 	Changed from the inherited scenario	Променено спрямо наследения сценарий

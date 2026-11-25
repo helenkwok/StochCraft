@@ -1475,6 +1475,8 @@ unit	yr	v
 	Remove rule	Poista sääntö
 	Change Decision Table	Muuta päätöstaulukkoa
 	Use Decision Table	Käytä päätöstaulukkoa
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Toistaiseksi vain luku: muokkaa taulukkoa sen .dmn-tiedostossa tai komennolla dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Sen päätöstaulukoita ei kirjoitettu: sovellus ei vielä kirjoita .dmn-tiedostoja.
 	Reset {field}	Palauta {field}
 	Changed from the default	Muutettu oletuksesta
 	Changed from the inherited scenario	Muutettu peritystä skenaariosta

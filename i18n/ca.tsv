@@ -1475,6 +1475,8 @@ unit	yr	a
 	Remove rule	Elimina la regla
 	Change Decision Table	Canvia la taula de decisió
 	Use Decision Table	Fes servir la taula de decisió
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	De moment només de lectura: edita la taula al seu fitxer .dmn o amb l'ordre dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Les seves taules de decisió no s'han escrit: l'aplicació encara no escriu fitxers .dmn.
 	Reset {field}	Restableix {field}
 	Changed from the default	Canviat respecte al valor predeterminat
 	Changed from the inherited scenario	Canviat respecte a l'escenari heretat

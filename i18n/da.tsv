@@ -1475,6 +1475,8 @@ unit	yr	år
 	Remove rule	Fjern regel
 	Change Decision Table	Skift beslutningstabel
 	Use Decision Table	Brug beslutningstabel
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Kun til visning indtil videre: rediger tabellen i dens .dmn-fil eller med kommandoen dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Dens beslutningstabeller blev ikke skrevet: appen skriver endnu ikke .dmn-filer.
 	Reset {field}	Nulstil {field}
 	Changed from the default	Ændret fra standarden
 	Changed from the inherited scenario	Ændret fra det nedarvede scenarie

@@ -1475,6 +1475,8 @@ unit	yr	г.
 	Remove rule	Удалить правило
 	Change Decision Table	Изменить таблицу решений
 	Use Decision Table	Использовать таблицу решений
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Пока только для чтения: изменяйте таблицу в её файле .dmn или командой dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Его таблицы решений не записаны: приложение пока не записывает файлы .dmn.
 	Reset {field}	Сбросить: {field}
 	Changed from the default	Изменено относительно значения по умолчанию
 	Changed from the inherited scenario	Изменено относительно унаследованного сценария

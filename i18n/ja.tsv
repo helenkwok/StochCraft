@@ -1475,6 +1475,8 @@ unit	yr	年
 	Remove rule	ルールを削除
 	Change Decision Table	決定表の変更
 	Use Decision Table	決定表の使用
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	現在は読み取り専用です。表は .dmn ファイルで、または dmn.set コマンドで編集してください。
+	Its decision tables were not written: the app does not write .dmn files yet.	決定表は書き込まれていません。アプリはまだ .dmn ファイルを書き込みません。
 	Reset {field}	{field} をリセット
 	Changed from the default	既定値から変更
 	Changed from the inherited scenario	継承元のシナリオから変更

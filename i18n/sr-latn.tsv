@@ -1475,6 +1475,8 @@ unit	yr	god.
 	Remove rule	Ukloni pravilo
 	Change Decision Table	Promeni tabelu odlučivanja
 	Use Decision Table	Koristi tabelu odlučivanja
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Zasad samo za čitanje: uredite tabelu u njenom .dmn fajlu ili komandom dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Njegove tabele odlučivanja nisu zapisane: aplikacija još ne zapisuje .dmn fajlove.
 	Reset {field}	Vrati na početno: {field}
 	Changed from the default	Promenjeno u odnosu na podrazumevano
 	Changed from the inherited scenario	Promenjeno u odnosu na nasleđeni scenario

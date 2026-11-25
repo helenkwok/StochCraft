@@ -245,9 +245,15 @@ extension in its BPSim data).
   `true`), ranges such as `[1..5]` or `(1..5]`, lists separated by commas, `not(...)` and `-`
   for any value. Values are numbers, strings in double quotes, `true` and `false`. A value
   matches only a value of its own kind, so `5` does not match the string `"5"`.
-- **Open decision table** on the block's page shows the table as a grid, rules in rows; each
-  cell is taken when you leave it, and each change undoes in one step. A table that cannot run
-  is refused with the cell and the reason.
+- **Open decision table** on the block's page shows the table as a grid, rules in rows, with
+  its hit policy. The app shows tables read-only for now, because it does not yet write `.dmn`
+  files: edit a table in its `.dmn` file (in another DMN tool or a text editor), or with the
+  `dmn.set` command, which checks it and refuses a table that cannot run with the cell and the
+  reason; `file.save` then writes the file beside the model. Editing in the window, with the
+  app reading and writing the `.dmn` files beside the model, is next.
+- The app's **Save** writes the model's file only. For a model that uses decision tables the
+  status bar says so ("Its decision tables were not written"), and a table changed since its
+  file was written (by `dmn.set` through the MCP server, say) keeps the model marked unsaved.
 - The model's problems include rules that overlap in a Unique table (an error, with an example,
   `null` for an entity without the property) and inputs no rule covers (a warning, with an
   example). Inputs that read the same property are checked with one value.
@@ -1099,8 +1105,10 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 - A baseline compares two versions of a model, one change at a time; there is no table of named
   scenarios yet. For several values of one parameter, use the Analysis view's sweep.
 - Charts can't be configured beyond their colours.
-- A model opened in the browser app from its file alone cannot read the `.dmn` files beside it;
-  its blocks that use a decision table report the file as not read.
+- The app (desktop and browser) opens a model from its file alone, so it does not read the
+  `.dmn` files beside it: its blocks that use a decision table report the file as not read.
+  `file.open` (the command line or the MCP server) reads them. The app does not write them
+  either; reading and writing them beside the model is next.
 - The canvas is one drawn surface, so screen readers can't yet read its blocks; the menus,
   dialogs and status messages are readable.
 - What is planned next is in the [roadmap](../ROADMAP.md).

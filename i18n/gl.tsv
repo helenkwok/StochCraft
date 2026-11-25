@@ -1475,6 +1475,8 @@ unit	yr	a
 	Remove rule	Quitar regra
 	Change Decision Table	Cambiar táboa de decisión
 	Use Decision Table	Usar táboa de decisión
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Polo de agora só lectura: edite a táboa no seu ficheiro .dmn ou coa orde dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	As súas táboas de decisión non se escribiron: a aplicación aínda non escribe ficheiros .dmn.
 	Reset {field}	Restablecer {field}
 	Changed from the default	Cambiado respecto do valor predeterminado
 	Changed from the inherited scenario	Cambiado respecto do escenario herdado

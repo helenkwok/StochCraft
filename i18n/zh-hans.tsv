@@ -1475,6 +1475,8 @@ unit	yr	年
 	Remove rule	删除规则
 	Change Decision Table	更改决策表
 	Use Decision Table	使用决策表
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	目前只读：请在其 .dmn 文件中或用 dmn.set 命令编辑该表。
+	Its decision tables were not written: the app does not write .dmn files yet.	其决策表未写入：应用尚不写入 .dmn 文件。
 	Reset {field}	重置{field}
 	Changed from the default	已不同于默认值
 	Changed from the inherited scenario	已不同于继承的场景

@@ -46,7 +46,7 @@ build it from source; see the [installation guide](docs/installation.md).
 | Sweep a parameter, rank parameters by sensitivity, size capacity to a target | The interface in English and 44 other languages |
 | Lean measures: OEE, takt and cycle time, time in each state | Light, dark and custom themes |
 | Conveyors with a length and a speed, accumulating or not | A capacity table before any run: each station's load and status, the bottleneck, and the mean wait where a queueing formula holds |
-| Decision tables (OMG DMN 1.6) in a `.dmn` file beside the model, for a task, a decision or a divert: route or classify entities by their properties, edited as a grid, with overlapping and missing rules reported ([details](docs/user-guide.md#decision-tables)) | |
+| Decision tables (OMG DMN 1.6) in a `.dmn` file beside the model, for a task, a decision or a divert: route or classify entities by their properties, shown as a grid in the app (read-only for now; edited in the file or with `dmn.set`), with overlapping and missing rules reported ([details](docs/user-guide.md#decision-tables)) | |
 | A 3D view and a to-scale Layout view of the model, and a dashboard beside it | |
 | Export the results table as CSV and the charts as PNG | Check a run against observed data: an observed value differs, or agrees within a tolerance, and a bound passes, fails or is inconclusive, by the 95% interval |
 | Monte Carlo models: uncertain inputs, outputs with targets, the chance of missing each target in words, and which inputs matter (tornado, rank correlations, each input's share of the spread) | |

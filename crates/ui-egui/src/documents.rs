@@ -553,11 +553,27 @@ impl App {
         self.pick_for = None;
     }
 
+    /// What the status bar adds to "Saved" or "Downloaded" for a model that uses decision tables
+    /// or holds any: the app writes only the model's file, never its `.dmn` files (`file.save`
+    /// does), so a table edited or made since they were written, or a model saved into another
+    /// folder, is not on disk beside it. Empty for a model without tables.
+    fn tables_not_written(&self) -> String {
+        let m = self.engine.model();
+        if m.decisions.is_empty() && m.dmn.is_empty() {
+            return String::new();
+        }
+        format!(
+            ". {}",
+            t("Its decision tables were not written: the app does not write .dmn files yet.")
+        )
+    }
+
     /// The shell wrote `bytes` to `path`: the model is saved there.
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
-                self.info(tf("Saved {file}", &[("file", file_name(path))]));
+                let saved = tf("Saved {file}", &[("file", file_name(path))]);
+                self.info(saved + &self.tables_not_written());
                 self.remember(path);
                 if let Some(next) = self.after_save.take() {
                     self.replace_now(next);
@@ -574,7 +590,8 @@ impl App {
     /// stay until a model replaces this one. What was to follow the save (New, Open…) goes ahead,
     /// as the user chose Download in the unsaved-changes question.
     pub fn downloaded(&mut self, name: &str) {
-        self.info(tf("Downloaded {file}", &[("file", file_name(name))]));
+        let downloaded = tf("Downloaded {file}", &[("file", file_name(name))]);
+        self.info(downloaded + &self.tables_not_written());
         if let Some(next) = self.after_save.take() {
             self.replace_now(next);
         }
