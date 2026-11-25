@@ -591,8 +591,8 @@ fn results_are_marked_out_of_date_once_the_model_is_changed() {
 }
 
 #[test]
-fn the_start_page_offers_the_example_among_24() {
-    assert_eq!(EXAMPLES.len(), 24);
+fn the_start_page_offers_the_example_among_25() {
+    assert_eq!(EXAMPLES.len(), 25);
     let mut h = harness();
     h.get_by_label("See all 25 examples, including reference models")
         .click_accesskit();
