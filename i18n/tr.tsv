@@ -1458,6 +1458,27 @@ unit	yr	yıl
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} bloğunda modelde olmayan "{pool}" havuzu için bir hizmet süresi var. Bu süreyi kaldırın veya var olan bir havuz seçin.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} bloğunda "{pool}" havuzu için iki hizmet süresi var. Birini tutun.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} bloğunda ihtiyaç duymadığı "{pool}" havuzu için bir hizmet süresi var. Havuzu ihtiyaçlarına ekleyin veya bu süreyi kaldırın.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block}, {file} dosyasındaki “{decision}” karar tablosunu kullanıyor ama kullanamıyor: {reason} Tabloyu düzeltin ya da bloktan kaldırın.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block}, “{decision}” karar tablosunu kullanıyor; tablonun {first} ve {second} kuralları {example} ile birlikte eşleşiyor, ama Unique eşleşme ilkesinde yalnızca biri eşleşebilir. Kuralları yalnızca biri eşleşecek şekilde değiştirin ya da başka bir eşleşme ilkesi seçin.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block}, “{decision}” karar tablosunu kullanıyor; tabloda hiçbir kural {example} ile eşleşmiyor, bu yüzden böyle bir varlık orada sonuç almıyor. Bu istenmiyorsa bir kural ya da varsayılan çıktı ekleyin.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block}, “{decision}” karar tablosunu kullanıyor; tablonun girdi birleşimleri tamamen denetlenemeyecek kadar çok, bu yüzden çakışan kurallar ya da hiçbir kuralın eşleşmediği girdiler olabilir. Kurallarını denetleyin ya da tabloyu daha küçük tablolara bölün.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block}, “{decision}” karar tablosuna göre yönlendiriyor; tablo “{value}” verebilir, bu ise hiçbir çıkışının adı değil. Yönlendirmede kullanılan çıktının her değerini bir çıkışın kimliği ya da vardığı bir bloğun kimliği veya adı yapın.
+	Decision table	Karar tablosu
+	Open decision table	Karar tablosunu aç
+	Hit policy	Eşleşme ilkesi
+	Unique	Tekil
+	First	İlk
+	Collect	Topla
+	Aggregation	Birleştirme
+	Sum	Toplam
+	Count	Sayı
+	Add rule	Kural ekle
+	Remove rule	Kuralı kaldır
+	Change Decision Table	Karar Tablosunu Değiştir
+	Use Decision Table	Karar Tablosunu Kullan
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Şimdilik salt okunur: tabloyu kendi .dmn dosyasında veya dmn.set komutuyla düzenleyin.
+	Its decision tables were not written: the app does not write .dmn files yet.	Karar tabloları yazılmadı: uygulama henüz .dmn dosyası yazmıyor.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Karar tablolarının hâlâ kaydedilmesi gerekiyor, bu yüzden model açık tutuldu: uygulama henüz .dmn dosyası yazmıyor.
 	Reset {field}	{field} değerini sıfırla
 	Changed from the default	Varsayılandan değiştirildi
 	Changed from the inherited scenario	Devralınan senaryodan değiştirildi
@@ -1504,3 +1525,7 @@ connection	Flow	Akış
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Posta kolisi ayırma: bir döngü ürüne göre dört şeridi besler, şeridi dolu olan koliyi yönlendiriciler bir tur daha gönderir.
 	How many parcels go round the loop because their lane is full?	Şeritleri dolu olduğu için kaç koli döngüde bir tur daha atıyor?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konveyörler ve yönlendiriciler: şeridi dolu olan koliler döngüde bir tur daha atar.
+	Repairmen with spares	Tamirciler ve yedek makineler
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	On makine çalışmak zorunda, dört yedek makine hazırda bekliyor ve üç tamirci arızalananları onarıyor (Crane ve Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	On makineyi kaç yedek makine ve kaç tamirci çalışır durumda tutar?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Hazırda bekleyen yedek makineler arızalanamaz: ortalama 3.47 makine arızalı, 9.29 makine çalışıyor. Dördüncü bir tamirci, dört yedek makine daha eklemek kadar fayda sağlar.

@@ -62,6 +62,7 @@ mod compare;
 mod decide;
 mod design;
 mod distribution;
+pub mod dmn;
 mod drawn;
 mod edit;
 mod evaluate;
@@ -77,6 +78,8 @@ mod sd_window;
 pub mod site;
 pub mod wire;
 mod workers;
+
+use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -598,6 +601,15 @@ pub struct Engine {
     sd: Option<sd::SdDoc>,
     /// The files an agent-based model reads beside its own, and its last run (see [`agents`]).
     agents: Option<agents::AgentsDoc>,
+    /// The `.dmn` files the model reads, as opened or last saved (see [`dmn`]).
+    dmn: BTreeMap<String, dmn::DmnFile>,
+    /// The model's file whose folder `dmn` describes: where it was opened from, or last saved
+    /// to with its tables (`file.save`).
+    dmn_at: Option<String>,
+    /// The model was last saved, without its tables, into another folder than `dmn_at`'s (or
+    /// with no `dmn_at`), so its tables are not known to be beside it there
+    /// ([`Engine::saved_to`]).
+    dmn_away: bool,
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
     job: Option<Job>,
@@ -644,6 +656,9 @@ impl Engine {
             file: None,
             sd: None,
             agents: None,
+            dmn: BTreeMap::new(),
+            dmn_at: None,
+            dmn_away: false,
             job: None,
             job_kept: false,
             last_results: None,
@@ -907,9 +922,14 @@ impl Engine {
     }
 
     /// Whether the model (the process model, or the system dynamics model with its diagram)
-    /// differs from the one last opened or saved.
+    /// differs from the one last opened or saved, or a decision table differs from its `.dmn`
+    /// file as this engine last read or wrote it. A save that wrote the table file and then
+    /// failed leaves the file edited; undoing the edit then gives back the model last saved, but
+    /// not the file, so the model is still unsaved until a save writes the table back.
     pub fn is_dirty(&self) -> bool {
-        self.model != self.saved || self.sd.as_ref().is_some_and(|d| d.model != d.saved)
+        self.model != self.saved
+            || self.sd.as_ref().is_some_and(|d| d.model != d.saved)
+            || self.dmn_unsaved()
     }
 
     /// The file the model was opened from or last saved to.
@@ -922,7 +942,7 @@ impl Engine {
 
     fn edit(&mut self, label: &'static str, op: Op) -> Result<(), CommandError> {
         self.revision += 1;
-        let inverse = edit::apply(&mut self.model, op)?;
+        let inverse = self.apply_model(op)?;
         self.undo.push(HistoryEntry {
             label,
             op: Undo::Model(inverse),
@@ -931,10 +951,25 @@ impl Engine {
         Ok(())
     }
 
+    /// Applies `op` to the model and gives the op that takes it back; refused, with the model as
+    /// it was, if it would leave a `.dmn` file read from disk with other decisions than it has,
+    /// which saving cannot write ([`Engine::dmn_decisions_kept`]). Every edit, undo and redo
+    /// comes here. (A model already in such a state is not held to it, so it can still be
+    /// mended.)
+    fn apply_model(&mut self, op: Op) -> Result<Op, CommandError> {
+        let kept = self.dmn_decisions_kept().is_ok();
+        let inverse = edit::apply(&mut self.model, op)?;
+        if kept && let Err(err) = self.dmn_decisions_kept() {
+            edit::apply(&mut self.model, inverse)?;
+            return Err(err);
+        }
+        Ok(inverse)
+    }
+
     /// Applies one history entry and gives the entry that takes it back.
     fn apply_history(&mut self, op: Undo) -> Result<Undo, CommandError> {
         match op {
-            Undo::Model(op) => edit::apply(&mut self.model, op).map(Undo::Model),
+            Undo::Model(op) => self.apply_model(op).map(Undo::Model),
             Undo::Sd(model) => self.swap_sd_model(*model).map(|m| Undo::Sd(Box::new(m))),
         }
     }
@@ -1007,6 +1042,9 @@ impl Engine {
         self.file = None;
         self.sd = None;
         self.agents = None;
+        self.dmn.clear();
+        self.dmn_at = None;
+        self.dmn_away = false;
         self.cancel_run();
         self.job = None;
         self.job_kept = false;
@@ -1024,7 +1062,7 @@ impl Engine {
         scenario: Option<&str>,
     ) -> Result<Value, CommandError> {
         self.open_bytes_with(name, bytes, scenario, &mut |_| {
-            Err("an agent-based model given alone as bytes cannot read the files beside it: open it from its file (file.open), or with agents.open and their texts".to_owned())
+            Err("a model given alone as bytes cannot read the files beside it: open it from its file (file.open), or an agent-based model with agents.open and their texts".to_owned())
         })
     }
 
@@ -1150,8 +1188,24 @@ impl Engine {
 
     /// Records that the model was saved as `bytes` at `path`, as the app does once its shell has
     /// written the file. Journalled as a `file.save` step, as saving with the command is.
+    ///
+    /// The shell writes the model's file only, not the `.dmn` files beside it (`file.save` writes
+    /// those), so the decision tables are recorded as they were last saved: a table edited or
+    /// made since leaves the model unsaved ([`Engine::is_dirty`]). Saved into another folder than
+    /// its tables were read from or written to, a model with tables is unsaved too, as they are
+    /// not beside it there; saved back into that folder, it is not.
     pub fn saved_to(&mut self, path: &str, bytes: &[u8]) -> Result<Value, CommandError> {
+        let tables = self.saved.dmn.clone();
         let result = self.record_saved(path, bytes)?;
+        if self.sd.is_none() {
+            self.saved.dmn = tables;
+            // With no folder known for the tables (none read or written yet), they are beside
+            // the model nowhere.
+            self.dmn_away = self
+                .dmn_at
+                .as_deref()
+                .is_none_or(|at| !same_folder(at, path));
+        }
         self.journal.push(JournalEntry {
             command: "file.save".to_owned(),
             params: json!({ "path": path }),
@@ -1441,6 +1495,26 @@ pub fn write_atomically(path: &std::path::Path, bytes: &[u8]) -> std::io::Result
 pub fn model_digest(model: &Model) -> String {
     let text = serde_json::to_string(&wire::ModelDoc::from(model)).unwrap_or_default();
     bytes_digest(text.as_bytes())
+}
+
+/// Whether the files `a` and `b` are in one folder: compared with links followed where both
+/// folders are there, else as written.
+fn same_folder(a: &str, b: &str) -> bool {
+    let dir = |p: &str| {
+        let d = std::path::Path::new(p)
+            .parent()
+            .unwrap_or(std::path::Path::new(""));
+        if d.as_os_str().is_empty() {
+            std::path::PathBuf::from(".")
+        } else {
+            d.to_path_buf()
+        }
+    };
+    let (da, db) = (dir(a), dir(b));
+    match (std::fs::canonicalize(&da), std::fs::canonicalize(&db)) {
+        (Ok(x), Ok(y)) => x == y,
+        _ => da == db,
+    }
 }
 
 /// Whether two paths name the same file (the same text, or the same file once resolved).

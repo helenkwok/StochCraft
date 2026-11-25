@@ -1458,6 +1458,27 @@ unit	yr	god.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blok {block} ima vreme posluživanja za fond „{pool}”, koji model nema. Uklonite to vreme ili izaberite fond koji postoji.
 	{block} has two service times for the pool “{pool}”. Keep one.	Blok {block} ima dva vremena posluživanja za fond „{pool}”. Zadržite jedno.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blok {block} ima vreme posluživanja za fond „{pool}”, koji mu nije potreban. Dodajte fond njegovim zahtevima ili uklonite to vreme.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} koristi tabelu odlučivanja „{decision}” iz datoteke {file}, koju ne može da koristi: {reason} Ispravite tabelu ili je uklonite sa bloka.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} koristi tabelu odlučivanja „{decision}”, čija se pravila {first} i {second} oba podudaraju sa {example}, ali uz njeno pravilo pogodaka Unique sme da se podudara samo jedno. Promenite pravila tako da se podudara samo jedno ili izaberite drugo pravilo pogodaka.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} koristi tabelu odlučivanja „{decision}”, u kojoj se nijedno pravilo ne podudara sa {example}, pa takav entitet tu ne dobija rezultat. Dodajte pravilo ili podrazumevani izlaz ako to nije namera.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} koristi tabelu odlučivanja „{decision}”, koja ima previše kombinacija ulaza da bi se u potpunosti proverila, pa može imati pravila koja se preklapaju ili ulaze sa kojima se nijedno pravilo ne podudara. Proverite njena pravila ili je podelite na manje tabele.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} usmerava prema tabeli odlučivanja „{decision}”, koja može da da „{value}”, naziv nijednog od njegovih izlaza. Neka svaka vrednost izlaza po kom usmerava bude id izlaza ili id ili naziv bloka do kog vodi.
+	Decision table	Tabela odlučivanja
+	Open decision table	Otvori tabelu odlučivanja
+	Hit policy	Pravilo pogodaka
+	Unique	Jedinstveno
+	First	Prvo
+	Collect	Prikupi
+	Aggregation	Agregacija
+	Sum	Zbir
+	Count	Broj
+	Add rule	Dodaj pravilo
+	Remove rule	Ukloni pravilo
+	Change Decision Table	Promeni tabelu odlučivanja
+	Use Decision Table	Koristi tabelu odlučivanja
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Zasad samo za čitanje: uredite tabelu u njenom .dmn fajlu ili komandom dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Njegove tabele odlučivanja nisu zapisane: aplikacija još ne zapisuje .dmn fajlove.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Njegove tabele odlučivanja još treba sačuvati, pa je model ostao otvoren: aplikacija još ne zapisuje .dmn fajlove.
 	Reset {field}	Vrati na početno: {field}
 	Changed from the default	Promenjeno u odnosu na podrazumevano
 	Changed from the inherited scenario	Promenjeno u odnosu na nasleđeni scenario
@@ -1504,3 +1525,7 @@ connection	Flow	Tok
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortiranje poštanskih paketa: petlja puni četiri trake prema proizvodu, a skretnice šalju paket na novi krug kada je njegova traka puna.
 	How many parcels go round the loop because their lane is full?	Koliko paketa ide na novi krug petlje jer im je traka puna?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transporteri i skretnice: paketi idu na novi krug petlje kada im je traka puna.
+	Repairmen with spares	Mehaničari i rezervne mašine
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset mašina mora da radi, četiri rezervne čekaju u pripravnosti, a tri mehaničara popravljaju one koje se pokvare (Crane i Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Koliko rezervnih mašina i mehaničara drži deset mašina u radu?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Rezervne mašine u pripravnosti ne mogu da se pokvare: u proseku je 3.47 mašina pokvareno, a 9.29 radi. Četvrti mehaničar postiže otprilike koliko i četiri rezervne mašine više.

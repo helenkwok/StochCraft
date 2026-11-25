@@ -1374,7 +1374,8 @@ fn clear_dangling_defaults(model: &Model, gone: &[ElementId], keep: Option<&Elem
 fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Id = parse(p)?;
     let id = existing_element(e.model(), &p.id)?;
-    // Its estimate and starting contents go with it, and a stop condition watching it.
+    // Its estimate, starting contents and decision table use go with it, and a stop condition
+    // watching it: a block added later with the same id starts without them.
     let gone: Vec<ElementId> = e
         .model()
         .connections
@@ -1388,6 +1389,9 @@ fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     }
     if e.model().starting.contains_key(&id) {
         ops.push(Op::SetStarting(id.clone(), None));
+    }
+    if e.model().decisions.contains_key(&id) {
+        ops.push(Op::SetDecisionUse(id.clone(), None));
     }
     let x = &e.model().experiment;
     if x.stop.as_ref().is_some_and(|s| s.element() == &id) {
@@ -2655,6 +2659,10 @@ fn file_open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     })
 }
 
+/// A file to write beside the model: its reference, where, its bytes, and what was there when the
+/// save looked (`None`: nothing).
+type Sibling = (String, std::path::PathBuf, Vec<u8>, Option<Vec<u8>>);
+
 fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: FileSave = parse(p)?;
     let path = p
@@ -2719,25 +2727,114 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .path()
         .and_then(|p| std::path::Path::new(p).parent())
         .map(std::path::Path::to_path_buf);
+    // The files the model reads beside it: an agent-based model's charts and lists of links,
+    // and a process model's decision tables, each with the bytes it may replace (a `.dmn` file
+    // as it was opened or last saved, when saving into that folder: edited tables are written
+    // back into it). That folder is the one the tables were read from or written to, which a
+    // save of the model's file alone into another folder does not change.
+    let tables_dir = e
+        .dmn_at
+        .as_deref()
+        .and_then(|p| std::path::Path::new(p).parent())
+        .map(std::path::Path::to_path_buf);
+    let same_dir = tables_dir.as_ref().is_some_and(|from| {
+        let canon = |d: &std::path::Path| {
+            std::fs::canonicalize(if d.as_os_str().is_empty() {
+                std::path::Path::new(".")
+            } else {
+                d
+            })
+            .ok()
+        };
+        canon(from).is_some() && canon(from) == canon(&dir)
+    });
+    // A table file the model holds without an id or namespace (new, or come back without them
+    // by an undo) is written with those of the file or generated ones: the model takes them
+    // first, so it records what is written and what the save reads back is what it holds.
+    e.dmn_as_written();
+    let mut files: Vec<crate::dmn::Companion> = e
+        .agent_files()
+        .into_iter()
+        .map(|(href, content)| (href, content, None))
+        .collect();
+    files.extend(
+        e.dmn_files()?
+            .into_iter()
+            .map(|(href, content, was)| (href, content, was.filter(|_| same_dir))),
+    );
     if let Some(from) = &opened_dir {
-        for (href, _) in e.agent_files() {
-            if let Ok(there) = crate::agents::beside(from, &href)
+        for (href, _, _) in &files {
+            if let Ok(there) = crate::agents::beside(from, href)
                 && model_is(there.as_path())
             {
                 return Err(model_over(href.as_str()));
             }
         }
     }
+    // Nor over a decision table where the tables were read from or last written, which a save
+    // of the model's file alone into another folder leaves behind.
+    if let Some(from) = &tables_dir {
+        for (href, _, _) in files
+            .iter()
+            .filter(|(h, _, _)| crate::dmn::is_dmn_reference(h))
+        {
+            if let Ok(there) = crate::agents::beside(from, href)
+                && model_is(there.as_path())
+            {
+                return Err(model_over(href.as_str()));
+            }
+        }
+    }
+    let written: Vec<(String, Vec<u8>)> = e
+        .dmn_files()?
+        .into_iter()
+        .map(|(href, content, _)| (href, content))
+        .collect();
+    // Two references can name one file: names that differ only in case, on a file system that
+    // ignores case, or a link in the model's folder. Holding the same, it is written once, and
+    // the second is recorded only if it reads back as written (a hard link keeps the old bytes
+    // when the first name is replaced); holding different contents, one would overwrite the
+    // other, so the save is refused before anything is written.
+    let mut placed: Vec<(String, std::path::PathBuf, Vec<u8>)> = Vec::new();
+    let mut twins: Vec<(String, std::path::PathBuf, Vec<u8>, String)> = Vec::new();
+    let mut unique = Vec::new();
+    for (href, content, replaceable) in files {
+        let to = crate::agents::beside(&dir, &href)
+            .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))?;
+        if let Some((first, _, held)) = placed.iter().find(|(_, t, _)| same_target(t, &to)) {
+            if *held != content {
+                return Err(CommandError::new(
+                    ErrorCode::Conflict,
+                    format!(
+                        "`{first}` and `{href}` name one file, {}, but the model gives them different contents: make them one reference",
+                        to.display()
+                    ),
+                ));
+            }
+            twins.push((href, to, content, first.clone()));
+            continue;
+        }
+        placed.push((href.clone(), to, content.clone()));
+        unique.push((href, content, replaceable));
+    }
     let mut companions = Vec::new();
-    let mut siblings = Vec::new();
-    for (href, content) in e.agent_files() {
+    // Each file to write, with what was there when the save looked (`None`: nothing).
+    let mut siblings: Vec<Sibling> = Vec::new();
+    // The `.dmn` files already as the model would write them.
+    let mut same = Vec::new();
+    for (href, content, replaceable) in unique {
         let to = crate::agents::beside(&dir, &href)
             .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))?;
         if model_is(to.as_path()) {
             return Err(model_over(href.as_str()));
         }
         match std::fs::read(&to) {
-            Ok(there) if there == content => {}
+            Ok(there) if there == content => same.push(href.clone()),
+            // A decision table file as it was read, unchanged on disk since: edited, it is
+            // written back.
+            Ok(there) if replaceable.as_deref() == Some(there.as_slice()) => {
+                siblings.push((href.clone(), to.clone(), content, Some(there)));
+            }
             Ok(_) => {
                 return Err(CommandError::new(
                     ErrorCode::Conflict,
@@ -2748,7 +2845,7 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 ));
             }
             Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
-                siblings.push((to.clone(), content));
+                siblings.push((href.clone(), to.clone(), content, None));
             }
             Err(err) => {
                 return Err(CommandError::new(
@@ -2759,18 +2856,43 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         }
         companions.push((href, to));
     }
+    // A `.dmn` file written into the folder the model was opened from is recorded as written at
+    // once, so that a save failing after it (writing the model's own file, say) leaves the
+    // record matching the disk: saving again, or after undoing the edit, then finds the file
+    // as this engine left it rather than changed by another. (Written into another folder, it
+    // describes no file the model reads, so the record waits for the whole save.)
+    let record = |e: &mut Engine, href: &str| {
+        if same_dir && let Some(w) = written.iter().find(|(h, _)| h == href) {
+            e.dmn_saved(vec![w.clone()]);
+        }
+    };
+    for href in &same {
+        record(e, href.as_str());
+    }
     // The model's files first, so one that cannot be written leaves the model's old file as it
     // was (and a save again keeps those already written, being the same). Each is written to a
     // temporary file beside it and renamed over it, so a crash or a full disk leaves the old file
     // whole rather than half written.
-    for (to, content) in siblings {
+    for (href, to, content, seen) in siblings {
         if let Some(parent) = to.parent() {
             std::fs::create_dir_all(parent).map_err(|err| {
                 CommandError::new(ErrorCode::Io, format!("{}: {err}", parent.display()))
             })?;
         }
-        craft_atomic::atomic_write(&to, &content)
-            .map_err(|err| CommandError::new(ErrorCode::Io, format!("{}: {err}", to.display())))?;
+        write_beside(&to, &content, seen.as_deref())?;
+        record(e, href.as_str());
+    }
+    for (href, to, content, first) in &twins {
+        if std::fs::read(to).ok().as_ref() != Some(content) {
+            return Err(CommandError::new(
+                ErrorCode::Conflict,
+                format!(
+                    "`{href}` names the same file as `{first}`, {}, but does not read back as it was written (a hard link keeps the old contents): make them one reference",
+                    to.display()
+                ),
+            ));
+        }
+        record(e, href.as_str());
     }
     // Every one is there now, so a name that differs only in case on a file system that ignores
     // it is found too.
@@ -2779,7 +2901,79 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     }
     craft_atomic::atomic_write(model_path, &bytes)
         .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
-    e.record_saved(&path, &bytes)
+    e.dmn_saved(written);
+    let result = e.record_saved(&path, &bytes)?;
+    // The tables are beside the model's file now.
+    e.dmn_at = Some(path);
+    e.dmn_away = false;
+    Ok(result)
+}
+
+/// Whether `a` and `b`, two files beside the model, may be one file. Both there: whether they
+/// are the same file (links followed). Only one there: not, as a name the file system takes for
+/// the other would be there too. Neither there yet: whether they are the same path once their
+/// nearest folders that are there are resolved, compared ignoring case, as a file system may.
+fn same_target(a: &std::path::Path, b: &std::path::Path) -> bool {
+    if a == b {
+        return true;
+    }
+    let resolved = |p: &std::path::Path| {
+        let mut existing = p;
+        let mut rest = Vec::new();
+        while !existing.exists() {
+            match (existing.parent(), existing.file_name()) {
+                (Some(parent), Some(name)) => {
+                    rest.push(name.to_owned());
+                    existing = parent;
+                }
+                _ => break,
+            }
+        }
+        let mut out = std::fs::canonicalize(existing).unwrap_or_else(|_| existing.to_path_buf());
+        for name in rest.iter().rev() {
+            out.push(name);
+        }
+        out.to_string_lossy().to_lowercase()
+    };
+    match (a.exists(), b.exists()) {
+        (true, true) => {
+            same_file::is_same_file(a, b).unwrap_or_else(|_| resolved(a) == resolved(b))
+        }
+        (false, false) => resolved(a) == resolved(b),
+        _ => false,
+    }
+}
+
+/// Writes `content` to `to`, a file beside the model, if it is still as the save found it
+/// (`seen`; `None`: no file there): a file another program changed (or made) since the save
+/// looked is never written over. Another program can still write it between this look and the
+/// rename that puts `content` there; that window is the write's own.
+pub(crate) fn write_beside(
+    to: &std::path::Path,
+    content: &[u8],
+    seen: Option<&[u8]>,
+) -> Result<(), CommandError> {
+    let now = match std::fs::read(to) {
+        Ok(b) => Some(b),
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => None,
+        Err(err) => {
+            return Err(CommandError::new(
+                ErrorCode::Io,
+                format!("{}: {err}", to.display()),
+            ));
+        }
+    };
+    if now.as_deref() != seen {
+        return Err(CommandError::new(
+            ErrorCode::Conflict,
+            format!(
+                "{} changed while the model was being saved: save again, or move that file first",
+                to.display()
+            ),
+        ));
+    }
+    craft_atomic::atomic_write(to, content)
+        .map_err(|err| CommandError::new(ErrorCode::Io, format!("{}: {err}", to.display())))
 }
 
 fn example_model() -> Value {
@@ -2824,6 +3018,40 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<NoParams>,
         example: || json!({}),
         run: model_validate,
+    },
+    Command {
+        name: "dmn.set",
+        summary: "Set a decision table (DMN 1.6, D30): the decision `decision` of the .dmn file `file` beside the model, added (with the file) if it is not there yet; a decision cannot be added yet to a .dmn file the model read from disk, so put a new one in a new .dmn file. Every cell is FEEL text: input entries are S-FEEL unary tests (`< 10`, `[1..5]`, `\"A\", \"B\"`, `not(...)`, `-`), output entries a number, a string in double quotes, true or false; the hit policy is UNIQUE, FIRST, PRIORITY or COLLECT (with an optional aggregation). A table that cannot run is refused with the cell and the reason. Returns `findings`: rules that overlap under UNIQUE and inputs no rule covers, each with an example, or `unchecked` for a table with too many combinations of inputs to check in full.",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::dmn::DmnSet>,
+        example: || {
+            json!({
+                "file": "routing.dmn",
+                "decision": "priority",
+                "table": {
+                    "hit_policy": "UNIQUE",
+                    "outputs": [{ "name": "priority" }],
+                    "rules": [{ "inputs": [], "outputs": ["1"] }]
+                }
+            })
+        },
+        run: crate::dmn::set,
+    },
+    Command {
+        name: "dmn.use",
+        summary: "Make a task or an exclusive gateway use a decision table the model has (`file` and `decision`), or, with neither, stop using one. As an entity enters, the table is evaluated on its properties and the outputs are written back as properties; a gateway none of whose ways out has a condition takes the way whose flow id, target id or target name is the output (`route` names the output when there are several).",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::dmn::DmnUse>,
+        example: || json!({ "element": "desk" }),
+        run: crate::dmn::use_table,
+    },
+    Command {
+        name: "dmn.get",
+        summary: "The decision tables: which block uses which decision of which .dmn file, and every file's decisions with their tables, each cell as its FEEL text.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::dmn::DmnGet>,
+        example: || json!({}),
+        run: crate::dmn::get,
     },
     Command {
         name: "model.capacity",
@@ -3419,3 +3647,34 @@ materials,normal,mean=500;std_dev=50,USD
         run: crate::agents::run,
     },
 ];
+
+#[cfg(test)]
+mod tests {
+    #![allow(clippy::panic)]
+
+    use super::*;
+
+    #[test]
+    fn a_file_beside_the_model_is_written_only_as_the_save_found_it() {
+        let dir = std::env::temp_dir().join(format!("stochcraft-beside-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{e}"));
+        let to = dir.join("sorting.dmn");
+        // Not there when the save looked, and still not: written.
+        assert!(write_beside(&to, b"new", None).is_ok());
+        assert_eq!(std::fs::read(&to).ok().as_deref(), Some(&b"new"[..]));
+        // There as the save found it: written over.
+        assert!(write_beside(&to, b"edited", Some(b"new")).is_ok());
+        // Changed since: refused, and left as it is.
+        std::fs::write(&to, b"theirs").unwrap_or_else(|e| panic!("{e}"));
+        let refused = write_beside(&to, b"mine", Some(b"edited"));
+        assert_eq!(refused.map_err(|e| e.code), Err(ErrorCode::Conflict));
+        assert_eq!(std::fs::read(&to).ok().as_deref(), Some(&b"theirs"[..]));
+        // Made since the save found nothing there: refused too.
+        let made = dir.join("made.dmn");
+        std::fs::write(&made, b"theirs").unwrap_or_else(|e| panic!("{e}"));
+        let refused = write_beside(&made, b"mine", None);
+        assert_eq!(refused.map_err(|e| e.code), Err(ErrorCode::Conflict));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+}

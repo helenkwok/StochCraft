@@ -1458,6 +1458,27 @@ unit	yr	年
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} 为资源池“{pool}”设置了服务时间，但模型中没有该资源池。请移除该时间，或选择存在的资源池。
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} 为资源池“{pool}”设置了两个服务时间。请保留其中一个。
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} 为资源池“{pool}”设置了服务时间，但它并不需要该资源池。请把该资源池加入它所需的资源，或移除该时间。
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} 使用文件 {file} 中的决策表“{decision}”，但无法使用它：{reason} 请更正该表，或将它从块上移除。
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} 使用决策表“{decision}”，其规则 {first} 和 {second} 都匹配 {example}，但在其命中策略 Unique 下只能有一条匹配。请修改规则使只有一条匹配，或选择其他命中策略。
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} 使用决策表“{decision}”，其中没有规则匹配 {example}，因此这样的实体在那里得不到结果。如非有意，请添加规则或默认输出。
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} 使用决策表“{decision}”，其输入组合太多，无法完整检查，因此可能有相互重叠的规则，或没有规则匹配的输入。请检查其规则，或将其拆分为较小的表。
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} 按决策表“{decision}”分流，该表可能给出“{value}”，这不是它任何出口的名称。请让用于分流的输出的每个值都是某个出口的 id，或它通往的某个块的 id 或名称。
+	Decision table	决策表
+	Open decision table	打开决策表
+	Hit policy	命中策略
+	Unique	唯一
+	First	首个
+	Collect	收集
+	Aggregation	聚合
+	Sum	求和
+	Count	计数
+	Add rule	添加规则
+	Remove rule	删除规则
+	Change Decision Table	更改决策表
+	Use Decision Table	使用决策表
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	目前只读：请在其 .dmn 文件中或用 dmn.set 命令编辑该表。
+	Its decision tables were not written: the app does not write .dmn files yet.	其决策表未写入：应用尚不写入 .dmn 文件。
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	其决策表仍需保存，因此模型保持打开：应用尚不写入 .dmn 文件。
 	Reset {field}	重置{field}
 	Changed from the default	已不同于默认值
 	Changed from the inherited scenario	已不同于继承的场景
@@ -1504,3 +1525,7 @@ connection	Flow	顺序流
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	邮政包裹分拣：环形输送线按产品向四条道口供件，道口已满时，分流器让包裹再绕一圈。
 	How many parcels go round the loop because their lane is full?	有多少包裹因道口已满而再绕环线一圈？
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	传送带与分流器：道口已满时，包裹再绕环线一圈。
+	Repairmen with spares	有备用机的维修工
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台机器必须运转，四台备用机待命，三名维修工修理出故障的机器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
+	How many spares and repairmen keep ten machines running?	需要多少台备用机和多少名维修工，才能让十台机器保持运转？
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的备用机不会故障：平均 3.47 台机器在故障中，9.29 台在运转。增加第四名维修工的效果与再增加四台备用机相当。

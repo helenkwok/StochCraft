@@ -1458,6 +1458,27 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} té un temps de servei per al grup «{pool}», que el model no té. Elimineu aquest temps o trieu un grup que existeixi.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} té dos temps de servei per al grup «{pool}». Conserveu-ne només un.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} té un temps de servei per al grup «{pool}», que no necessita. Afegiu el grup a les seves necessitats o elimineu aquest temps.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} fa servir la taula de decisió «{decision}» del fitxer {file}, que no pot fer servir: {reason} Corregiu la taula o traieu-la del bloc.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} fa servir la taula de decisió «{decision}», les regles {first} i {second} de la qual coincideixen totes dues amb {example}, però amb la seva política de coincidència Unique només en pot coincidir una. Canvieu les regles perquè només en coincideixi una, o trieu una altra política de coincidència.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} fa servir la taula de decisió «{decision}», en la qual cap regla no coincideix amb {example}, així que una entitat així no hi obté cap resultat. Afegiu-hi una regla o una sortida per defecte, si no és el que es vol.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} fa servir la taula de decisió «{decision}», que té massa combinacions d'entrades per comprovar-la del tot, així que pot tenir regles que se superposen o entrades amb què no coincideix cap regla. Reviseu-ne les regles o dividiu-la en taules més petites.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} encamina segons la taula de decisió «{decision}», que pot donar «{value}», el nom de cap de les seves sortides. Feu que cada valor de la sortida per la qual encamina sigui l’id d’un camí de sortida, o l’id o el nom d’un bloc al qual porta.
+	Decision table	Taula de decisió
+	Open decision table	Obre la taula de decisió
+	Hit policy	Política de coincidència
+	Unique	Única
+	First	Primera
+	Collect	Recull
+	Aggregation	Agregació
+	Sum	Suma
+	Count	Recompte
+	Add rule	Afegeix una regla
+	Remove rule	Elimina la regla
+	Change Decision Table	Canvia la taula de decisió
+	Use Decision Table	Fes servir la taula de decisió
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	De moment només de lectura: edita la taula al seu fitxer .dmn o amb l'ordre dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Les seves taules de decisió no s'han escrit: l'aplicació encara no escriu fitxers .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Les seves taules de decisió encara s'han de desar, així que el model s'ha mantingut obert: l'aplicació encara no escriu fitxers .dmn.
 	Reset {field}	Restableix {field}
 	Changed from the default	Canviat respecte al valor predeterminat
 	Changed from the inherited scenario	Canviat respecte a l'escenari heretat
@@ -1504,3 +1525,7 @@ connection	Flow	Flux
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Classificació de paquets postals: un circuit alimenta quatre carrils per producte, i els desviadors fan fer una altra volta a un paquet quan el seu carril és ple.
 	How many parcels go round the loop because their lane is full?	Quants paquets fan una altra volta al circuit perquè el seu carril és ple?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Cintes transportadores i desviadors: paquets que fan una altra volta al circuit quan el seu carril és ple.
+	Repairmen with spares	Mecànics i màquines de recanvi
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deu màquines han de funcionar, quatre de recanvi esperen a punt i tres mecànics reparen les que s'avarien (Crane i Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Quantes màquines de recanvi i quants mecànics mantenen en marxa deu màquines?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Les màquines de recanvi en espera no es poden avariar: de mitjana hi ha 3.47 màquines avariades i 9.29 en marxa. Un quart mecànic fa gairebé tant com quatre màquines de recanvi més.

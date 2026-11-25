@@ -1458,6 +1458,27 @@ unit	yr	г.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	У блока {block} есть время обслуживания для пула «{pool}», которого нет в модели. Удалите это время или выберите существующий пул.
 	{block} has two service times for the pool “{pool}”. Keep one.	У блока {block} два времени обслуживания для пула «{pool}». Оставьте одно.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	У блока {block} есть время обслуживания для пула «{pool}», который ему не нужен. Добавьте пул в его потребности или удалите это время.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} использует таблицу решений «{decision}» из файла {file}, которую не может использовать: {reason} Исправьте таблицу или уберите её с блока.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} использует таблицу решений «{decision}», правила {first} и {second} которой оба подходят для {example}, но при её политике совпадений Unique может подходить только одно. Измените правила так, чтобы подходило только одно, или выберите другую политику совпадений.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} использует таблицу решений «{decision}», в которой ни одно правило не подходит для {example}, поэтому такая сущность не получает там результата. Добавьте правило или вывод по умолчанию, если это не задумано.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} использует таблицу решений «{decision}», в которой слишком много сочетаний входов, чтобы проверить её полностью, поэтому в ней могут быть пересекающиеся правила или входы, для которых не подходит ни одно правило. Проверьте её правила или разделите её на таблицы поменьше.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} направляет по таблице решений «{decision}», которая может дать «{value}» — имя ни одного из его выходов. Сделайте каждое значение вывода, по которому он направляет, равным id выхода либо id или имени блока, к которому он ведёт.
+	Decision table	Таблица решений
+	Open decision table	Открыть таблицу решений
+	Hit policy	Политика совпадений
+	Unique	Единственное
+	First	Первое
+	Collect	Сбор
+	Aggregation	Агрегирование
+	Sum	Сумма
+	Count	Количество
+	Add rule	Добавить правило
+	Remove rule	Удалить правило
+	Change Decision Table	Изменить таблицу решений
+	Use Decision Table	Использовать таблицу решений
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Пока только для чтения: изменяйте таблицу в её файле .dmn или командой dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Его таблицы решений не записаны: приложение пока не записывает файлы .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Его таблицы решений ещё нужно сохранить, поэтому модель осталась открытой: приложение пока не записывает файлы .dmn.
 	Reset {field}	Сбросить: {field}
 	Changed from the default	Изменено относительно значения по умолчанию
 	Changed from the inherited scenario	Изменено относительно унаследованного сценария
@@ -1504,3 +1525,7 @@ connection	Flow	Поток
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Сортировка почтовых посылок: кольцевой конвейер подаёт посылки на четыре линии по продукту, а отводчики отправляют посылку на новый круг, когда её линия заполнена.
 	How many parcels go round the loop because their lane is full?	Сколько посылок идёт на новый круг, потому что их линия заполнена?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Конвейеры и отводчики: посылки идут на новый круг, когда их линия заполнена.
+	Repairmen with spares	Слесари и резервные станки
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десять станков должны работать, четыре резервных стоят наготове, а трое слесарей чинят те, что выходят из строя (Crane и Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Сколько резервных станков и слесарей нужно, чтобы десять станков продолжали работать?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервные станки, стоящие наготове, не могут выйти из строя: в среднем 3.47 станка неисправны и 9.29 работают. Четвёртый слесарь даёт примерно столько же, сколько ещё четыре резервных станка.

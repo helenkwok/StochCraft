@@ -1458,6 +1458,27 @@ unit	yr	ปี
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} มีเวลาให้บริการสำหรับกลุ่มทรัพยากร “{pool}” ซึ่งไม่มีในแบบจำลอง ให้นำเวลานั้นออก หรือเลือกกลุ่มทรัพยากรที่มีอยู่
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} มีเวลาให้บริการสองค่าสำหรับกลุ่มทรัพยากร “{pool}” ให้เก็บไว้ค่าเดียว
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} มีเวลาให้บริการสำหรับกลุ่มทรัพยากร “{pool}” ซึ่งไม่ได้ใช้ ให้เพิ่มกลุ่มนั้นในสิ่งที่ต้องใช้ หรือนำเวลานั้นออก
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} ใช้ตารางการตัดสินใจ “{decision}” ของไฟล์ {file} ซึ่งใช้ไม่ได้: {reason} แก้ไขตาราง หรือนำออกจากบล็อก
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} ใช้ตารางการตัดสินใจ “{decision}” ซึ่งกฎ {first} และ {second} ตรงกับ {example} ทั้งคู่ แต่ภายใต้นโยบายการตรงกัน Unique ตรงได้เพียงกฎเดียว แก้กฎให้ตรงเพียงกฎเดียว หรือเลือกนโยบายการตรงกันอื่น
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} ใช้ตารางการตัดสินใจ “{decision}” ซึ่งไม่มีกฎใดตรงกับ {example} สิ่งที่ไหลเข้ามาแบบนั้นจึงไม่ได้ผลลัพธ์ที่นั่น เพิ่มกฎหรือผลลัพธ์ค่าเริ่มต้น หากไม่ได้ตั้งใจเช่นนั้น
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} ใช้ตารางการตัดสินใจ “{decision}” ซึ่งมีชุดค่าผสมของข้อมูลเข้ามากเกินกว่าจะตรวจได้ทั้งหมด จึงอาจมีกฎที่ซ้อนทับกัน หรือข้อมูลเข้าที่ไม่มีกฎใดตรงกัน ตรวจกฎของตาราง หรือแบ่งเป็นตารางที่เล็กลง
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} ส่งต่อตามตารางการตัดสินใจ “{decision}” ซึ่งอาจให้ “{value}” ที่ไม่ใช่ชื่อของทางออกใดเลย ทำให้แต่ละค่าของผลลัพธ์ที่ใช้ส่งต่อเป็น id ของทางออก หรือ id หรือชื่อของบล็อกที่นำไปถึง
+	Decision table	ตารางการตัดสินใจ
+	Open decision table	เปิดตารางการตัดสินใจ
+	Hit policy	นโยบายการตรงกัน
+	Unique	เฉพาะหนึ่ง
+	First	แรกสุด
+	Collect	รวบรวม
+	Aggregation	การรวมค่า
+	Sum	ผลรวม
+	Count	จำนวน
+	Add rule	เพิ่มกฎ
+	Remove rule	ลบกฎ
+	Change Decision Table	เปลี่ยนตารางการตัดสินใจ
+	Use Decision Table	ใช้ตารางการตัดสินใจ
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	ตอนนี้อ่านได้อย่างเดียว: แก้ไขตารางในไฟล์ .dmn ของตาราง หรือด้วยคำสั่ง dmn.set
+	Its decision tables were not written: the app does not write .dmn files yet.	ตารางการตัดสินใจไม่ได้ถูกเขียน: แอปยังไม่เขียนไฟล์ .dmn
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	ตารางการตัดสินใจยังต้องบันทึก จึงเปิดแบบจำลองค้างไว้: แอปยังไม่เขียนไฟล์ .dmn
 	Reset {field}	รีเซ็ต {field}
 	Changed from the default	เปลี่ยนจากค่าเริ่มต้น
 	Changed from the inherited scenario	เปลี่ยนจากสถานการณ์ที่สืบทอดมา
@@ -1504,3 +1525,7 @@ connection	Flow	โฟลว์
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	การคัดแยกพัสดุไปรษณีย์: วงรอบป้อนพัสดุเข้าสี่ช่องตามสินค้า และตัวเบี่ยงทางส่งพัสดุวนอีกรอบเมื่อช่องของมันเต็ม
 	How many parcels go round the loop because their lane is full?	มีพัสดุกี่ชิ้นที่วนอีกรอบเพราะช่องของมันเต็ม?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	สายพานลำเลียงและตัวเบี่ยงทาง: พัสดุวนอีกรอบเมื่อช่องของมันเต็ม
+	Repairmen with spares	ช่างซ่อมกับเครื่องจักรสำรอง
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	เครื่องจักรสิบเครื่องต้องทำงาน เครื่องจักรสำรองสี่เครื่องรอพร้อมใช้ และช่างซ่อมสามคนซ่อมเครื่องที่ขัดข้อง (Crane และ Iglehart, Winter Simulation Conference, 1973)
+	How many spares and repairmen keep ten machines running?	ต้องมีเครื่องจักรสำรองและช่างซ่อมเท่าใด จึงจะให้เครื่องจักรสิบเครื่องทำงานต่อไปได้?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	เครื่องจักรสำรองที่รออยู่ขัดข้องไม่ได้: โดยเฉลี่ยเครื่องจักรเสีย 3.47 เครื่องและทำงาน 9.29 เครื่อง ช่างซ่อมคนที่สี่ช่วยได้พอ ๆ กับเครื่องจักรสำรองอีกสี่เครื่อง

@@ -1458,6 +1458,27 @@ unit	yr	év
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	A(z) {block} blokknak van kiszolgálási ideje a(z) „{pool}” készletre, amely nincs a modellben. Távolítsa el ezt az időt, vagy válasszon létező készletet.
 	{block} has two service times for the pool “{pool}”. Keep one.	A(z) {block} blokknak két kiszolgálási ideje van a(z) „{pool}” készletre. Egyiket tartsa meg.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	A(z) {block} blokknak van kiszolgálási ideje a(z) „{pool}” készletre, amelyre nincs szüksége. Adja hozzá a készletet az igényeihez, vagy távolítsa el ezt az időt.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} a(z) {file} fájl „{decision}” döntési tábláját használja, amelyet nem tud használni: {reason} Javítsa ki a táblát, vagy vegye le a blokkról.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} a(z) „{decision}” döntési táblát használja, amelynek {first}. és {second}. szabálya egyaránt illeszkedik erre: {example}, de az Unique találati szabály mellett csak egy illeszkedhet. Módosítsa a szabályokat, hogy csak egy illeszkedjen, vagy válasszon más találati szabályt.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} a(z) „{decision}” döntési táblát használja, amelyben egyetlen szabály sem illeszkedik erre: {example}, így egy ilyen egyed ott nem kap eredményt. Adjon hozzá szabályt vagy alapértelmezett kimenetet, ha ez nem szándékos.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} a(z) „{decision}” döntési táblát használja, amelyben túl sok a bemenetek kombinációja a teljes ellenőrzéshez, így lehetnek benne átfedő szabályok vagy olyan bemenetek, amelyekre egyetlen szabály sem illeszkedik. Ellenőrizze a szabályait, vagy ossza fel kisebb táblákra.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} a(z) „{decision}” döntési tábla szerint irányít, amely adhatja ezt: „{value}”, ami egyik kimenetének sem a neve. Annak a kimenetnek, amely szerint irányít, minden értéke legyen egy kijárat azonosítója, vagy egy olyan blokk azonosítója vagy neve, ahová vezet.
+	Decision table	Döntési tábla
+	Open decision table	Döntési tábla megnyitása
+	Hit policy	Találati szabály
+	Unique	Egyedi
+	First	Első
+	Collect	Gyűjtés
+	Aggregation	Összesítés
+	Sum	Összeg
+	Count	Darabszám
+	Add rule	Szabály hozzáadása
+	Remove rule	Szabály eltávolítása
+	Change Decision Table	Döntési tábla módosítása
+	Use Decision Table	Döntési tábla használata
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Egyelőre csak olvasható: a táblát a .dmn fájljában vagy a dmn.set paranccsal szerkeszd.
+	Its decision tables were not written: the app does not write .dmn files yet.	A döntési táblái nem lettek kiírva: az alkalmazás még nem ír .dmn fájlokat.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	A döntési tábláit még menteni kell, ezért a modell nyitva maradt: az alkalmazás még nem ír .dmn fájlokat.
 	Reset {field}	{field} visszaállítása
 	Changed from the default	Eltér az alapértelmezettől
 	Changed from the inherited scenario	Eltér az örökölt forgatókönyvtől
@@ -1504,3 +1525,7 @@ connection	Flow	Folyamat
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Postai csomagok válogatása: egy körpálya termék szerint négy sávot táplál, a terelők pedig újabb körre küldik a csomagot, ha a sávja tele van.
 	How many parcels go round the loop because their lane is full?	Hány csomag tesz újabb kört, mert tele van a sávja?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Szállítószalagok és terelők: a csomagok újabb kört tesznek, ha tele van a sávjuk.
+	Repairmen with spares	Szerelők és tartalékgépek
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tíz gépnek kell üzemelnie, négy tartalékgép készenlétben vár, és három szerelő javítja a meghibásodottakat (Crane és Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Hány tartalékgép és szerelő tart üzemben tíz gépet?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	A készenlétben álló tartalékgépek nem hibásodhatnak meg: átlagosan 3.47 gép hibás, és 9.29 üzemel. Egy negyedik szerelő nagyjából annyit ér, mint négy további tartalékgép.

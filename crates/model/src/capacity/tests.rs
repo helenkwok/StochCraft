@@ -99,6 +99,8 @@ fn model(elements: Vec<Element>, connections: Vec<Connection>) -> Model {
         monte_carlo: None,
         site: Default::default(),
         agents: None,
+        decisions: BTreeMap::new(),
+        dmn: BTreeMap::new(),
     }
 }
 

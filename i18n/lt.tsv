@@ -1458,6 +1458,27 @@ unit	yr	m.
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	Blokas {block} turi aptarnavimo laiką grupei „{pool}“, kurios modelyje nėra. Pašalinkite tą laiką arba pasirinkite esamą grupę.
 	{block} has two service times for the pool “{pool}”. Keep one.	Blokas {block} turi du aptarnavimo laikus grupei „{pool}“. Palikite vieną.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	Blokas {block} turi aptarnavimo laiką grupei „{pool}“, kurios jam nereikia. Įtraukite grupę į jo poreikius arba pašalinkite tą laiką.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} naudoja failo {file} sprendimų lentelę „{decision}“, kurios negali naudoti: {reason} Pataisykite lentelę arba pašalinkite ją iš bloko.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} naudoja sprendimų lentelę „{decision}“, kurios taisyklės {first} ir {second} abi atitinka {example}, tačiau pagal jos atitikimo politiką Unique gali atitikti tik viena. Pakeiskite taisykles, kad atitiktų tik viena, arba pasirinkite kitą atitikimo politiką.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} naudoja sprendimų lentelę „{decision}“, kurioje jokia taisyklė neatitinka {example}, todėl toks objektas ten negauna rezultato. Pridėkite taisyklę arba numatytąją išvestį, jei taip neketinta.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} naudoja sprendimų lentelę „{decision}“, kurioje per daug įvesčių derinių, kad ją būtų galima patikrinti visą, todėl joje gali būti persidengiančių taisyklių arba įvesčių, kurių neatitinka jokia taisyklė. Patikrinkite jos taisykles arba padalykite ją į mažesnes lenteles.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} nukreipia pagal sprendimų lentelę „{decision}“, kuri gali duoti „{value}“, ne vieno jo išėjimo pavadinimą. Kiekvieną išvesties, pagal kurią nukreipiama, reikšmę padarykite išėjimo ID arba bloko, į kurį jis veda, ID ar pavadinimu.
+	Decision table	Sprendimų lentelė
+	Open decision table	Atverti sprendimų lentelę
+	Hit policy	Atitikimo politika
+	Unique	Unikali
+	First	Pirmoji
+	Collect	Rinkti
+	Aggregation	Agregavimas
+	Sum	Suma
+	Count	Skaičius
+	Add rule	Pridėti taisyklę
+	Remove rule	Pašalinti taisyklę
+	Change Decision Table	Keisti sprendimų lentelę
+	Use Decision Table	Naudoti sprendimų lentelę
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Kol kas tik skaityti: lentelę redaguokite jos .dmn faile arba komanda dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Jo sprendimų lentelės neįrašytos: programa kol kas neįrašo .dmn failų.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Jo sprendimų lenteles dar reikia įrašyti, todėl modelis paliktas atidarytas: programa kol kas neįrašo .dmn failų.
 	Reset {field}	Atstatyti: {field}
 	Changed from the default	Pakeista, palyginti su numatytąja reikšme
 	Changed from the inherited scenario	Pakeista, palyginti su paveldėtu scenarijumi
@@ -1504,3 +1525,7 @@ connection	Flow	Srautas
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Pašto siuntų rūšiavimas: žiedas tiekia keturias juostas pagal produktą, o nukreipikliai siunčia siuntą dar vienam ratui, kai jos juosta pilna.
 	How many parcels go round the loop because their lane is full?	Kiek siuntų važiuoja dar vieną ratą, nes jų juosta pilna?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konvejeriai ir nukreipikliai: siuntos važiuoja dar vieną ratą, kai jų juosta pilna.
+	Repairmen with spares	Mechanikai ir atsarginės mašinos
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dešimt mašinų turi veikti, keturios atsarginės laukia parengtos, o trys mechanikai taiso sugedusias (Crane ir Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Kiek atsarginių mašinų ir mechanikų reikia, kad veiktų dešimt mašinų?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Parengtos atsarginės mašinos negali sugesti: vidutiniškai 3.47 mašinos sugedusios, o 9.29 veikia. Ketvirtas mechanikas duoda maždaug tiek pat, kiek keturios papildomos atsarginės mašinos.

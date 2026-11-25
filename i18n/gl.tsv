@@ -1458,6 +1458,27 @@ unit	yr	a
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} ten un tempo de servizo para o grupo «{pool}», que o modelo non ten. Elimine ese tempo ou escolla un grupo que exista.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} ten dous tempos de servizo para o grupo «{pool}». Conserve só un.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} ten un tempo de servizo para o grupo «{pool}», que non necesita. Engada o grupo ás súas necesidades ou elimine ese tempo.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} usa a táboa de decisión «{decision}» do ficheiro {file}, que non pode usar: {reason} Corrixa a táboa ou quítea do bloque.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} usa a táboa de decisión «{decision}», cuxas regras {first} e {second} coinciden ambas con {example}, pero coa súa política de coincidencia Unique só pode unha. Cambie as regras para que só coincida unha, ou escolla outra política de coincidencia.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} usa a táboa de decisión «{decision}», na que ningunha regra coincide con {example}, así que esa entidade non obtén alí ningún resultado. Engada unha regra ou unha saída predeterminada, se non é o que se pretende.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} usa a táboa de decisión «{decision}», que ten demasiadas combinacións de entradas para comprobala por completo, así que pode ter regras que se solapan ou entradas coas que non coincide ningunha regra. Revise as súas regras ou divídaa en táboas máis pequenas.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} encamiña segundo a táboa de decisión «{decision}», que pode dar «{value}», o nome de ningunha das súas saídas. Faga que cada valor da saída pola que encamiña sexa o id dunha das súas saídas, ou o id ou o nome dun bloque ao que leva.
+	Decision table	Táboa de decisión
+	Open decision table	Abrir táboa de decisión
+	Hit policy	Política de coincidencia
+	Unique	Única
+	First	Primeira
+	Collect	Recoller
+	Aggregation	Agregación
+	Sum	Suma
+	Count	Reconto
+	Add rule	Engadir regra
+	Remove rule	Quitar regra
+	Change Decision Table	Cambiar táboa de decisión
+	Use Decision Table	Usar táboa de decisión
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Polo de agora só lectura: edite a táboa no seu ficheiro .dmn ou coa orde dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	As súas táboas de decisión non se escribiron: a aplicación aínda non escribe ficheiros .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	As súas táboas de decisión aínda hai que gardalas, así que o modelo mantívose aberto: a aplicación aínda non escribe ficheiros .dmn.
 	Reset {field}	Restablecer {field}
 	Changed from the default	Cambiado respecto do valor predeterminado
 	Changed from the inherited scenario	Cambiado respecto do escenario herdado
@@ -1504,3 +1525,7 @@ connection	Flow	Fluxo
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Clasificación de paquetes postais: un circuíto alimenta catro carrís por produto, e os desviadores fan dar outra volta a un paquete cando o seu carril está cheo.
 	How many parcels go round the loop because their lane is full?	Cantos paquetes dan outra volta ao circuíto porque o seu carril está cheo?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Cintas transportadoras e desviadores: paquetes que dan outra volta ao circuíto cando o seu carril está cheo.
+	Repairmen with spares	Mecánicos e máquinas de reposto
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dez máquinas deben funcionar, catro de reposto agardan listas e tres mecánicos reparan as que se avarían (Crane e Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Cantas máquinas de reposto e cantos mecánicos manteñen en marcha dez máquinas?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	As máquinas de reposto en espera non se poden avariar: de media hai 3.47 máquinas avariadas e 9.29 en marcha. Un cuarto mecánico consegue case o mesmo ca catro máquinas de reposto máis.

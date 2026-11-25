@@ -1458,6 +1458,27 @@ unit	yr	năm
 	{block} has a service time for the pool “{pool}”, which the model does not have. Remove that time, or choose a pool that exists.	{block} có thời gian phục vụ cho nhóm “{pool}”, nhóm mà mô hình không có. Hãy xóa thời gian đó hoặc chọn một nhóm đang có.
 	{block} has two service times for the pool “{pool}”. Keep one.	{block} có hai thời gian phục vụ cho nhóm “{pool}”. Giữ lại một.
 	{block} has a service time for the pool “{pool}”, which it does not need. Add the pool to its needs, or remove that time.	{block} có thời gian phục vụ cho nhóm “{pool}”, nhóm mà nó không cần. Hãy thêm nhóm vào nhu cầu của nó hoặc xóa thời gian đó.
+	{block} uses the decision table “{decision}” of the file {file}, which it cannot use: {reason} Correct the table, or take it off the block.	{block} dùng bảng quyết định “{decision}” của tệp {file}, nhưng không thể dùng nó: {reason} Hãy sửa bảng, hoặc gỡ nó khỏi khối.
+	{block} uses the decision table “{decision}”, whose rules {first} and {second} both match {example}, but under its hit policy Unique only one may. Change the rules so that only one matches, or choose another hit policy.	{block} dùng bảng quyết định “{decision}”, trong đó quy tắc {first} và {second} đều khớp với {example}, nhưng với chính sách khớp Unique chỉ được một quy tắc khớp. Hãy sửa các quy tắc để chỉ một quy tắc khớp, hoặc chọn chính sách khớp khác.
+	{block} uses the decision table “{decision}”, in which no rule matches {example}, so such an entity gets no result there. Add a rule or a default output, if that is not intended.	{block} dùng bảng quyết định “{decision}”, trong đó không quy tắc nào khớp với {example}, nên thực thể như vậy không nhận được kết quả ở đó. Hãy thêm một quy tắc hoặc một đầu ra mặc định, nếu đó không phải chủ ý.
+	{block} uses the decision table “{decision}”, which has too many combinations of inputs to check in full, so it may have rules that overlap or inputs no rule matches. Check its rules, or split it into smaller tables.	{block} dùng bảng quyết định “{decision}”, có quá nhiều tổ hợp đầu vào để kiểm tra hết, nên có thể có các quy tắc chồng lên nhau hoặc đầu vào không khớp với quy tắc nào. Hãy kiểm tra các quy tắc của nó, hoặc chia nó thành các bảng nhỏ hơn.
+	{block} routes by the decision table “{decision}”, which can give “{value}”, the name of none of its ways out. Make each value of the output it routes by the id of a way out, or the id or name of a block it leads to.	{block} định tuyến theo bảng quyết định “{decision}”, bảng này có thể cho “{value}”, không phải tên của lối ra nào của nó. Hãy để mỗi giá trị của đầu ra dùng để định tuyến là id của một lối ra, hoặc id hay tên của một khối mà nó dẫn tới.
+	Decision table	Bảng quyết định
+	Open decision table	Mở bảng quyết định
+	Hit policy	Chính sách khớp
+	Unique	Duy nhất
+	First	Đầu tiên
+	Collect	Thu thập
+	Aggregation	Tổng hợp
+	Sum	Tổng
+	Count	Số lượng
+	Add rule	Thêm quy tắc
+	Remove rule	Xóa quy tắc
+	Change Decision Table	Đổi bảng quyết định
+	Use Decision Table	Dùng bảng quyết định
+	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Hiện chỉ để xem: chỉnh sửa bảng trong tệp .dmn của nó, hoặc bằng lệnh dmn.set.
+	Its decision tables were not written: the app does not write .dmn files yet.	Các bảng quyết định của nó chưa được ghi: ứng dụng chưa ghi tệp .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Các bảng quyết định của nó vẫn cần được lưu, nên mô hình được giữ mở: ứng dụng chưa ghi tệp .dmn.
 	Reset {field}	Đặt lại {field}
 	Changed from the default	Đã đổi so với mặc định
 	Changed from the inherited scenario	Đã đổi so với kịch bản kế thừa
@@ -1504,3 +1525,7 @@ connection	Flow	Luồng
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Phân loại bưu kiện bưu chính: một vòng băng tải cấp cho bốn làn theo sản phẩm, và bộ chuyển hướng cho bưu kiện đi thêm một vòng khi làn của nó đã đầy.
 	How many parcels go round the loop because their lane is full?	Bao nhiêu bưu kiện phải đi thêm một vòng vì làn của chúng đã đầy?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Băng tải và bộ chuyển hướng: bưu kiện đi thêm một vòng khi làn của chúng đã đầy.
+	Repairmen with spares	Thợ máy và máy dự phòng
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Mười máy phải chạy, bốn máy dự phòng chờ sẵn và ba thợ máy sửa những máy bị hỏng (Crane và Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Cần bao nhiêu máy dự phòng và thợ máy để mười máy luôn chạy?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máy dự phòng đang chờ không thể hỏng: trung bình 3.47 máy bị hỏng và 9.29 máy chạy. Thêm một thợ máy thứ tư được việc gần bằng thêm bốn máy dự phòng.
