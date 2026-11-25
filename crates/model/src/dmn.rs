@@ -1477,7 +1477,7 @@ impl Compiled {
                     .map(|(c, _)| c)
                     .collect();
                 let integer = leader.iter().zip(whole).any(|(l, w)| *l == i && *w);
-                let mut pieces = pieces_of(&group, integer);
+                let mut pieces = pieces_of(&group, integer, integer && long);
                 if integer && long {
                     pieces.retain(fits_long);
                 }
@@ -1597,8 +1597,10 @@ fn below(x: f64, integer: bool) -> Option<f64> {
 
 /// The pieces the values of a property fall into, as `group` (the inputs reading it) cut them:
 /// one value from each, such that every test of the table holds for all of a piece or for none
-/// of it. Only pieces within the inputs' own values, if they have some.
-fn pieces_of(group: &[&ColumnIn], integer: bool) -> Vec<Value> {
+/// of it. Only pieces within the inputs' own values, if they have some. With `long`, the pieces
+/// are cut at the ends of what a `long` holds as well, so that pieces within it are among them
+/// even when every number the cells name is beyond it.
+fn pieces_of(group: &[&ColumnIn], integer: bool, long: bool) -> Vec<Value> {
     let in_domain = |v: &Value| {
         group
             .iter()
@@ -1640,6 +1642,9 @@ fn pieces_of(group: &[&ColumnIn], integer: bool) -> Vec<Value> {
                     .iter()
                     .flat_map(|c| c.numbers.iter().copied())
                     .collect();
+                if long {
+                    b.extend([LONG_LOW, -LONG_LOW]);
+                }
                 b.sort_by(f64::total_cmp);
                 b.dedup();
                 let whole = |x: f64| x.fract() == 0.0;

@@ -662,3 +662,22 @@ fn an_aggregation_lists_the_numbers_it_can_give() {
         .collect();
     assert_eq!(compiled(&d).aggregates(), None);
 }
+
+#[test]
+fn a_bound_long_input_is_cut_at_the_ends_of_a_long() {
+    // The only number the cells name is below every long, yet every long matches both rules.
+    let d = table(
+        HitPolicy::Unique,
+        &["size"],
+        &["band"],
+        &[(&["-"], &["1"]), (&["> -100000000000000000000"], &["2"])],
+    );
+    assert_eq!(
+        compiled(&d).check_bound(&[true]),
+        vec![Finding::Overlap {
+            first: 1,
+            second: 2,
+            example: format!("size = {}", value_feel(&num(-9_223_372_036_854_775_808.0)))
+        }]
+    );
+}
