@@ -1476,3 +1476,7 @@ connection	Flow	Verbindung
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortierung von Postpaketen: Ein Kreisförderer speist vier Bahnen nach Produkt, und Ausschleusungen schicken ein Paket eine weitere Runde, wenn seine Bahn voll ist.
 	How many parcels go round the loop because their lane is full?	Wie viele Pakete fahren eine weitere Runde, weil ihre Bahn voll ist?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Förderbänder und Ausschleusungen: Pakete fahren eine weitere Runde, wenn ihre Bahn voll ist.
+	Repairmen with spares	Instandhalter und Reservemaschinen
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Zehn Maschinen müssen laufen, vier Reservemaschinen stehen bereit, und drei Instandhalter reparieren die ausgefallenen (Crane und Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Wie viele Reservemaschinen und Instandhalter halten zehn Maschinen am Laufen?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Bereitstehende Reservemaschinen können nicht ausfallen: Im Mittel sind 3.47 Maschinen ausgefallen und 9.29 laufen. Ein vierter Instandhalter bringt etwa so viel wie vier Reservemaschinen mehr.

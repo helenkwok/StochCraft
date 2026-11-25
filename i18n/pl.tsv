@@ -1476,3 +1476,7 @@ connection	Flow	Przepływ
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortowanie paczek pocztowych: pętla zasila cztery tory według produktu, a zwrotnice wysyłają paczkę na kolejne okrążenie, gdy jej tor jest pełny.
 	How many parcels go round the loop because their lane is full?	Ile paczek robi kolejne okrążenie pętli, bo ich tor jest pełny?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Przenośniki i zwrotnice: paczki robią kolejne okrążenie pętli, gdy ich tor jest pełny.
+	Repairmen with spares	Mechanicy i maszyny zapasowe
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dziesięć maszyn musi pracować, cztery zapasowe czekają w gotowości, a trzech mechaników naprawia te, które ulegną awarii (Crane i Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Ile maszyn zapasowych i mechaników utrzyma w ruchu dziesięć maszyn?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Maszyny zapasowe w gotowości nie mogą ulec awarii: średnio 3.47 maszyny są zepsute, a 9.29 pracuje. Czwarty mechanik daje mniej więcej tyle, co cztery dodatkowe maszyny zapasowe.

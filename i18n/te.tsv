@@ -1476,3 +1476,7 @@ connection	Flow	ప్రవాహం
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	తపాలా పార్సెల్ సార్టింగ్: ఒక లూప్ ఉత్పత్తి వారీగా నాలుగు లేన్లకు పార్సెల్‌లను పంపుతుంది, లేన్ నిండితే డైవర్ట్‌లు పార్సెల్‌ను మళ్లీ ఒక రౌండ్ పంపుతాయి.
 	How many parcels go round the loop because their lane is full?	లేన్ నిండినందున ఎన్ని పార్సెల్‌లు లూప్‌లో మళ్లీ తిరుగుతాయి?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	కన్వేయర్లు మరియు డైవర్ట్‌లు: లేన్ నిండితే పార్సెల్‌లు లూప్‌లో మళ్లీ తిరుగుతాయి.
+	Repairmen with spares	విడి యంత్రాలతో మెకానిక్‌లు
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	పది యంత్రాలు నడుస్తూ ఉండాలి, నాలుగు విడి యంత్రాలు సిద్ధంగా వేచి ఉంటాయి, ముగ్గురు మెకానిక్‌లు పాడైనవాటిని బాగుచేస్తారు (Crane మరియు Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	పది యంత్రాలను నడుపుతూ ఉంచడానికి ఎన్ని విడి యంత్రాలు, ఎంతమంది మెకానిక్‌లు కావాలి?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	సిద్ధంగా వేచి ఉన్న విడి యంత్రాలు పాడవవు: సగటున 3.47 యంత్రాలు పాడై ఉంటాయి, 9.29 నడుస్తాయి. నాలుగో మెకానిక్ మరో నాలుగు విడి యంత్రాలంత ఉపయోగపడతాడు.

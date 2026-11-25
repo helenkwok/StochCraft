@@ -1476,3 +1476,7 @@ connection	Flow	Alur
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Penyortiran paket pos: sebuah putaran mengisi empat jalur menurut produk, dan pengalih mengirim paket berputar lagi saat jalurnya penuh.
 	How many parcels go round the loop because their lane is full?	Berapa banyak paket yang berputar lagi karena jalurnya penuh?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konveyor dan pengalih: paket berputar lagi saat jalurnya penuh.
+	Repairmen with spares	Mekanik dan mesin cadangan
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Sepuluh mesin harus berjalan, empat mesin cadangan siap menunggu, dan tiga mekanik memperbaiki mesin yang rusak (Crane dan Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Berapa mesin cadangan dan mekanik agar sepuluh mesin tetap berjalan?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Mesin cadangan yang menunggu tidak bisa rusak: rata-rata 3.47 mesin rusak dan 9.29 berjalan. Mekanik keempat memberi hasil kira-kira sama dengan empat mesin cadangan tambahan.

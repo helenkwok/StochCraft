@@ -1476,3 +1476,7 @@ connection	Flow	Потік
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Сортування поштових посилок: кільцевий конвеєр подає посилки на чотири лінії за продуктом, а відвідники відправляють посилку на нове коло, коли її лінія заповнена.
 	How many parcels go round the loop because their lane is full?	Скільки посилок іде на нове коло, бо їхня лінія заповнена?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Конвеєри й відвідники: посилки йдуть на нове коло, коли їхня лінія заповнена.
+	Repairmen with spares	Слюсарі та резервні верстати
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десять верстатів мають працювати, чотири резервні стоять напоготові, а троє слюсарів лагодять ті, що виходять з ладу (Crane і Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Скільки резервних верстатів і слюсарів потрібно, щоб десять верстатів працювали?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервні верстати напоготові не можуть вийти з ладу: у середньому 3.47 верстата несправні, а 9.29 працюють. Четвертий слюсар дає приблизно стільки ж, скільки ще чотири резервні верстати.

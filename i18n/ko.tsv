@@ -1476,3 +1476,7 @@ connection	Flow	흐름
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	우편 소포 분류: 순환 컨베이어가 제품별 네 레인에 소포를 보내고, 레인이 가득 차면 분기 장치가 소포를 한 바퀴 더 돌게 합니다.
 	How many parcels go round the loop because their lane is full?	레인이 가득 차서 순환 구간을 한 바퀴 더 도는 소포는 몇 개입니까?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	컨베이어와 분기 장치: 레인이 가득 찬 소포는 순환 구간을 한 바퀴 더 돕니다.
+	Repairmen with spares	예비 기계가 있는 수리반
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	기계 10대가 돌아가야 하고, 예비 기계 4대가 대기하며, 정비공 3명이 고장 난 기계를 수리함 (Crane과 Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	예비 기계와 정비공이 몇이면 기계 10대를 계속 돌릴 수 있을까?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	대기 중인 예비 기계는 고장 나지 않음: 평균 3.47대가 고장 나 있고 9.29대가 돌아감. 정비공 한 명을 더 두면 예비 기계 4대를 더 두는 것과 거의 같은 효과가 있음.

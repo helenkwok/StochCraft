@@ -1476,3 +1476,7 @@ connection	Flow	โฟลว์
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	การคัดแยกพัสดุไปรษณีย์: วงรอบป้อนพัสดุเข้าสี่ช่องตามสินค้า และตัวเบี่ยงทางส่งพัสดุวนอีกรอบเมื่อช่องของมันเต็ม
 	How many parcels go round the loop because their lane is full?	มีพัสดุกี่ชิ้นที่วนอีกรอบเพราะช่องของมันเต็ม?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	สายพานลำเลียงและตัวเบี่ยงทาง: พัสดุวนอีกรอบเมื่อช่องของมันเต็ม
+	Repairmen with spares	ช่างซ่อมกับเครื่องจักรสำรอง
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	เครื่องจักรสิบเครื่องต้องทำงาน เครื่องจักรสำรองสี่เครื่องรอพร้อมใช้ และช่างซ่อมสามคนซ่อมเครื่องที่ขัดข้อง (Crane และ Iglehart, Winter Simulation Conference, 1973)
+	How many spares and repairmen keep ten machines running?	ต้องมีเครื่องจักรสำรองและช่างซ่อมเท่าใด จึงจะให้เครื่องจักรสิบเครื่องทำงานต่อไปได้?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	เครื่องจักรสำรองที่รออยู่ขัดข้องไม่ได้: โดยเฉลี่ยเครื่องจักรเสีย 3.47 เครื่องและทำงาน 9.29 เครื่อง ช่างซ่อมคนที่สี่ช่วยได้พอ ๆ กับเครื่องจักรสำรองอีกสี่เครื่อง

@@ -1476,3 +1476,7 @@ connection	Flow	Voog
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Postipakkide sorteerimine: ringkonveier toidab nelja rada toote järgi ja suunajad saadavad paki uuele ringile, kui selle rada on täis.
 	How many parcels go round the loop because their lane is full?	Mitu pakki teeb uue ringi, sest nende rada on täis?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Konveierid ja suunajad: pakid teevad uue ringi, kui nende rada on täis.
+	Repairmen with spares	Mehaanikud ja varumasinad
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Kümme masinat peavad töötama, neli varumasinat ootavad valmis ja kolm mehaanikut parandavad rikki läinud masinaid (Crane ja Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Mitu varumasinat ja mehaanikut hoiavad kümme masinat töös?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Ootel varumasinad ei saa rikki minna: keskmiselt on rikkis 3.47 masinat ja töötab 9.29. Neljas mehaanik annab umbes sama palju kui neli varumasinat juurde.

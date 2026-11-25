@@ -1476,3 +1476,7 @@ connection	Flow	Rrjedhë
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Renditja e pakove postare: një lak ushqen katër korsi sipas produktit, dhe devijuesit e dërgojnë një pako për një xhiro tjetër kur korsia e saj është plot.
 	How many parcels go round the loop because their lane is full?	Sa pako bëjnë një xhiro tjetër në lak sepse korsia e tyre është plot?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportierë dhe devijues: pako të dërguara për një xhiro tjetër kur korsia e tyre është plot.
+	Repairmen with spares	Mekanikë dhe makina rezervë
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dhjetë makina duhet të punojnë, katër makina rezervë presin gati dhe tre mekanikë riparojnë ato që prishen (Crane dhe Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Sa makina rezervë dhe sa mekanikë i mbajnë në punë dhjetë makina?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Makinat rezervë që presin nuk mund të prishen: mesatarisht 3.47 makina janë të prishura dhe 9.29 punojnë. Një mekanik i katërt jep afërsisht sa katër makina rezervë më shumë.

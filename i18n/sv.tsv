@@ -1476,3 +1476,7 @@ connection	Flow	Flöde
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortering av postpaket: en slinga matar fyra banor efter produkt, och avledare skickar ett paket ett varv till när dess bana är full.
 	How many parcels go round the loop because their lane is full?	Hur många paket åker ett varv till i slingan för att deras bana är full?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportband och avledare: paket som skickas ett varv till i slingan när deras bana är full.
+	Repairmen with spares	Reparatörer och reservmaskiner
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tio maskiner måste gå, fyra reservmaskiner står redo och tre reparatörer lagar dem som havererar (Crane och Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Hur många reservmaskiner och reparatörer håller tio maskiner i gång?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservmaskiner som står redo kan inte haverera: i genomsnitt är 3.47 maskiner trasiga och 9.29 går. En fjärde reparatör gör ungefär lika mycket som fyra reservmaskiner till.

@@ -1476,3 +1476,7 @@ connection	Flow	ნაკადი
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	საფოსტო ამანათების დახარისხება: წრიული ხაზი პროდუქტის მიხედვით ოთხ ზოლს კვებავს, ხოლო გადამრთველები ამანათს ახალ წრეზე აგზავნიან, როცა მისი ზოლი სავსეა.
 	How many parcels go round the loop because their lane is full?	რამდენი ამანათი გადის ახალ წრეს, რადგან მათი ზოლი სავსეა?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	კონვეიერები და გადამრთველები: ამანათები ახალ წრეს გადიან, როცა მათი ზოლი სავსეა.
+	Repairmen with spares	ზეინკლები და სათადარიგო მანქანები
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ათი მანქანა უნდა მუშაობდეს, ოთხი სათადარიგო მზადყოფნაში ელოდება, ხოლო სამი ზეინკალი აკეთებს გაფუჭებულებს (Crane და Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	რამდენი სათადარიგო მანქანა და ზეინკალი ინარჩუნებს ათ მანქანას მუშა მდგომარეობაში?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	მზადყოფნაში მყოფი სათადარიგო მანქანები ვერ გაფუჭდება: საშუალოდ 3.47 მანქანაა გაფუჭებული და 9.29 მუშაობს. მეოთხე ზეინკალი დაახლოებით იმდენს აკეთებს, რამდენსაც კიდევ ოთხი სათადარიგო მანქანა.

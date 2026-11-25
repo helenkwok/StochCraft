@@ -1476,3 +1476,7 @@ connection	Flow	Flux
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Classificació de paquets postals: un circuit alimenta quatre carrils per producte, i els desviadors fan fer una altra volta a un paquet quan el seu carril és ple.
 	How many parcels go round the loop because their lane is full?	Quants paquets fan una altra volta al circuit perquè el seu carril és ple?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Cintes transportadores i desviadors: paquets que fan una altra volta al circuit quan el seu carril és ple.
+	Repairmen with spares	Mecànics i màquines de recanvi
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deu màquines han de funcionar, quatre de recanvi esperen a punt i tres mecànics reparen les que s'avarien (Crane i Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Quantes màquines de recanvi i quants mecànics mantenen en marxa deu màquines?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Les màquines de recanvi en espera no es poden avariar: de mitjana hi ha 3.47 màquines avariades i 9.29 en marxa. Un quart mecànic fa gairebé tant com quatre màquines de recanvi més.

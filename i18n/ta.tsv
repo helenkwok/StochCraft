@@ -1476,3 +1476,7 @@ connection	Flow	ஓட்டம்
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	அஞ்சல் பார்சல் வரிசைப்படுத்தல்: ஒரு சுற்றுப்பாதை தயாரிப்பின்படி நான்கு வரிசைகளுக்கு பார்சல்களை அனுப்புகிறது, வரிசை நிரம்பியிருந்தால் திருப்பிகள் பார்சலை மீண்டும் ஒரு சுற்று அனுப்புகின்றன.
 	How many parcels go round the loop because their lane is full?	வரிசை நிரம்பியிருப்பதால் எத்தனை பார்சல்கள் சுற்றுப்பாதையில் மீண்டும் சுற்றுகின்றன?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	கன்வேயர்களும் திருப்பிகளும்: வரிசை நிரம்பியிருந்தால் பார்சல்கள் மீண்டும் ஒரு சுற்று செல்கின்றன.
+	Repairmen with spares	உதிரி இயந்திரங்களுடன் மெக்கானிக்குகள்
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	பத்து இயந்திரங்கள் இயங்க வேண்டும், நான்கு உதிரி இயந்திரங்கள் தயாராகக் காத்திருக்கின்றன, மூன்று மெக்கானிக்குகள் பழுதானவற்றைச் சரிசெய்கிறார்கள் (Crane மற்றும் Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	பத்து இயந்திரங்களை இயங்க வைக்க எத்தனை உதிரி இயந்திரங்களும் மெக்கானிக்குகளும் தேவை?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	தயாராகக் காத்திருக்கும் உதிரி இயந்திரங்கள் பழுதாக முடியாது: சராசரியாக 3.47 இயந்திரங்கள் பழுதாகவும் 9.29 இயங்கியும் இருக்கும். நான்காவது மெக்கானிக் இன்னும் நான்கு உதிரி இயந்திரங்கள் அளவுக்கு உதவுகிறார்.
