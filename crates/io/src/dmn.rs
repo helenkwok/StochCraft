@@ -463,25 +463,29 @@ pub fn ids(bytes: &[u8]) -> Result<Vec<String>, DmnError> {
         .collect())
 }
 
+/// `defs` as [`write_dmn`] writes it, and so as the file reads back: without an id of its own, it
+/// is given one that none of its decisions' ids is; without a namespace, StochCraft's.
+pub fn as_written(defs: &Definitions) -> Definitions {
+    let mut out = defs.clone();
+    if out.id.is_empty() {
+        out.id = stochcraft_model::dmn::free_id("definitions", &defs.ids());
+    }
+    if out.namespace.is_empty() {
+        out.namespace = "https://helenkwok.github.io/StochCraft/dmn".to_owned();
+    }
+    out
+}
+
 /// A new DMN 1.6 file with `defs`'s decisions. Without an id of its own, the file is given one
 /// that none of its decisions' ids is.
 pub fn write_dmn(defs: &Definitions) -> String {
-    let id = if defs.id.is_empty() {
-        stochcraft_model::dmn::free_id("definitions", &defs.ids())
-    } else {
-        defs.id.clone()
-    };
+    let defs = as_written(defs);
     let mut root = el("", "definitions")
         .with_attr("xmlns", DMN_NS)
-        .with_attr("id", &id)
+        .with_attr("id", &defs.id)
         // The schema requires a name, even an empty one.
-        .with_attr("name", &defs.name);
-    let namespace = if defs.namespace.is_empty() {
-        "https://helenkwok.github.io/StochCraft/dmn"
-    } else {
-        defs.namespace.as_str()
-    };
-    root.set_attr("namespace", namespace);
+        .with_attr("name", &defs.name)
+        .with_attr("namespace", &defs.namespace);
     for d in &defs.decisions {
         root.push(decision_element("", d));
     }

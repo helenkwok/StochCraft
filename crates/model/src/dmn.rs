@@ -94,6 +94,27 @@ impl Definitions {
     }
 }
 
+/// Whether `s` is an XML id, as DMN's `id` attributes must be: a non-colonised name (XML
+/// Namespaces' `NCName`, from XML 1.0's `Name` productions): a letter or `_` first, then
+/// letters, digits, `-`, `.`, `_` and the few marks the productions allow, and no `:`.
+pub fn is_xml_id(s: &str) -> bool {
+    let start = |c: char| {
+        matches!(c,
+            'A'..='Z' | '_' | 'a'..='z'
+            | '\u{C0}'..='\u{D6}' | '\u{D8}'..='\u{F6}' | '\u{F8}'..='\u{2FF}'
+            | '\u{370}'..='\u{37D}' | '\u{37F}'..='\u{1FFF}' | '\u{200C}'..='\u{200D}'
+            | '\u{2070}'..='\u{218F}' | '\u{2C00}'..='\u{2FEF}' | '\u{3001}'..='\u{D7FF}'
+            | '\u{F900}'..='\u{FDCF}' | '\u{FDF0}'..='\u{FFFD}' | '\u{10000}'..='\u{EFFFF}')
+    };
+    let more = |c: char| {
+        start(c)
+            || matches!(c,
+                '-' | '.' | '0'..='9' | '\u{B7}' | '\u{300}'..='\u{36F}' | '\u{203F}'..='\u{2040}')
+    };
+    let mut chars = s.chars();
+    chars.next().is_some_and(start) && chars.all(more)
+}
+
 /// An id that is not in `taken`: `base`, else `base_2`, `base_3` and so on.
 pub fn free_id(base: &str, taken: &[&str]) -> String {
     let mut id = base.to_owned();

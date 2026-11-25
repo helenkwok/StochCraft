@@ -671,3 +671,102 @@ fn a_save_of_the_model_s_file_alone_into_another_folder_leaves_it_unsaved() {
     assert!(other.join("sorting.dmn").exists());
     assert!(!e.is_dirty());
 }
+
+/// Every id `dmn.set` takes is an XML id, as DMN requires: a rule id starting with a digit, or a
+/// table id with a space, is refused before the model changes; letters, digits, `-`, `.` and `_`
+/// after a letter are taken. And the command's summary says where a decision can be added.
+#[test]
+fn ids_dmn_set_takes_are_xml_ids() {
+    let mut e = example();
+    for (rule, table) in [
+        (Some("1rule"), None),
+        (None, Some("t 1")),
+        (Some("a:b"), None),
+    ] {
+        let mut t = one_rule("1", rule);
+        if let Some(id) = table {
+            t["id"] = json!(id);
+        }
+        let refused = e.execute(
+            "dmn.set",
+            json!({ "file": "desk.dmn", "decision": "priority", "table": t }),
+        );
+        assert!(
+            refused.is_err_and(|err| err.message.contains("not an XML id")),
+            "{rule:?} {table:?}"
+        );
+    }
+    assert!(e.model().dmn.is_empty());
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "desk.dmn", "decision": "priority", "table": one_rule("1", Some("r-1.a_é")) }),
+    );
+    let summary = stochcraft_engine::COMMANDS
+        .iter()
+        .find(|c| c.name == "dmn.set")
+        .map(|c| c.summary)
+        .unwrap_or_default();
+    assert!(summary.contains("read from disk"), "{summary}");
+}
+
+/// The sorter with its table file held but not read from disk, with no id or namespace of its
+/// own.
+fn sorter_with_bare_table() -> Model {
+    let mut model = sorter();
+    let mut defs = table();
+    defs.id = String::new();
+    defs.namespace = String::new();
+    model.dmn.insert("sorting.dmn".into(), defs);
+    model
+}
+
+/// A table file the model holds with no id of its own is written with a generated one, and the
+/// model takes it, so what is recorded is what was written: a later edit saves into the file.
+#[test]
+fn a_table_file_without_an_id_is_recorded_as_written() {
+    let dir = folder("bare-root");
+    let path = dir.join("sorter.bpmn");
+    let mut e = Engine::with_model(sorter_with_bare_table());
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    assert!(!e.is_dirty());
+    let written = stochcraft_io::dmn::read_dmn(&read(&dir.join("sorting.dmn")))
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert!(!written.id.is_empty());
+    assert_eq!(e.model().dmn["sorting.dmn"], written);
+    let got = ok(&mut e, "dmn.get", json!({ "file": "sorting.dmn" }));
+    let mut t = got["files"][0]["decisions"][0]["table"].clone();
+    t["rules"][0]["outputs"][0] = json!("\"chute_b\"");
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "sorting.dmn", "decision": "chute", "table": t }),
+    );
+    ok(&mut e, "file.save", json!({}));
+    assert!(!e.is_dirty());
+}
+
+/// A model holding tables that were never written anywhere, saved without them (the app's
+/// save), stays unsaved; one without tables is saved.
+#[test]
+fn a_model_s_file_saved_alone_with_tables_never_written_is_unsaved() {
+    let dir = folder("never-written");
+    let path = dir.join("sorter.bpmn").to_string_lossy().into_owned();
+    let mut e = Engine::with_model(sorter_with_bare_table());
+    let bytes = e.save_bytes(false).unwrap_or_else(|err| panic!("{err}"));
+    e.saved_to(&path, &bytes)
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert!(e.is_dirty(), "its tables are in no folder");
+    let mut plain = Engine::with_model(sorter());
+    let bytes = plain
+        .save_bytes(false)
+        .unwrap_or_else(|err| panic!("{err}"));
+    plain
+        .saved_to(&path, &bytes)
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert!(!plain.is_dirty());
+}

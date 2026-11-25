@@ -2606,6 +2606,9 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         };
         canon(from).is_some() && canon(from) == canon(&dir)
     });
+    // A new table file without an id or namespace is written with generated ones: the model
+    // takes them first, so it records what is written.
+    e.dmn_as_written();
     let mut files: Vec<crate::dmn::Companion> = e
         .agent_files()
         .into_iter()
@@ -2851,7 +2854,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "dmn.set",
-        summary: "Set a decision table (DMN 1.6, D30): the decision `decision` of the .dmn file `file` beside the model, added (with the file) if it is not there yet. Every cell is FEEL text: input entries are S-FEEL unary tests (`< 10`, `[1..5]`, `\"A\", \"B\"`, `not(...)`, `-`), output entries a number, a string in double quotes, true or false; the hit policy is UNIQUE, FIRST, PRIORITY or COLLECT (with an optional aggregation). A table that cannot run is refused with the cell and the reason. Returns `findings`: rules that overlap under UNIQUE and inputs no rule covers, each with an example, or `unchecked` for a table with too many combinations of inputs to check in full.",
+        summary: "Set a decision table (DMN 1.6, D30): the decision `decision` of the .dmn file `file` beside the model, added (with the file) if it is not there yet; a decision cannot be added yet to a .dmn file the model read from disk, so put a new one in a new .dmn file. Every cell is FEEL text: input entries are S-FEEL unary tests (`< 10`, `[1..5]`, `\"A\", \"B\"`, `not(...)`, `-`), output entries a number, a string in double quotes, true or false; the hit policy is UNIQUE, FIRST, PRIORITY or COLLECT (with an optional aggregation). A table that cannot run is refused with the cell and the reason. Returns `findings`: rules that overlap under UNIQUE and inputs no rule covers, each with an example, or `unchecked` for a table with too many combinations of inputs to check in full.",
         kind: CommandKind::Edit,
         schema: schema::<crate::dmn::DmnSet>,
         example: || {

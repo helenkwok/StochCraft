@@ -513,6 +513,29 @@ impl Engine {
                 .any(|(href, f)| self.model.dmn.get(href).is_some_and(|d| *d != f.read))
     }
 
+    /// Gives each table file the model holds that is not read from disk yet, and has no id or
+    /// namespace of its own, the ones [`stochcraft_io::dmn::write_dmn`] writes for it, in the model
+    /// and in what it was last saved as: so the tables recorded as written are those the file
+    /// reads back as, and a later save into the file finds it as recorded.
+    pub(crate) fn dmn_as_written(&mut self) {
+        let mut changed = false;
+        for (href, d) in &mut self.model.dmn {
+            if !self.dmn.contains_key(href) {
+                let w = stochcraft_io::dmn::as_written(d);
+                changed |= w != *d;
+                *d = w;
+            }
+        }
+        for (href, d) in &mut self.saved.dmn {
+            if !self.dmn.contains_key(href) {
+                *d = stochcraft_io::dmn::as_written(d);
+            }
+        }
+        if changed {
+            self.revision += 1;
+        }
+    }
+
     /// Records that the model's `.dmn` files were written as `written` (by reference), so the
     /// next save starts from them.
     pub(crate) fn dmn_saved(&mut self, written: Vec<(String, Vec<u8>)>) {
@@ -548,7 +571,8 @@ pub struct DmnSet {
     /// The `.dmn` file, relative to the model's file: one the model reads, or a new one, which
     /// `file.save` writes beside the model.
     pub file: String,
-    /// The decision's id: one in the file, or a new one.
+    /// The decision's id: one in the file, or a new one (not in a file read from disk, which
+    /// cannot take a decision yet).
     pub decision: String,
     /// The decision's name, if it changes (a new decision takes its id when left out).
     #[serde(default)]
@@ -567,7 +591,9 @@ pub(crate) fn set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             ),
         ));
     }
-    if !stochcraft_model::ElementId::is_valid(&p.decision) {
+    if !stochcraft_model::ElementId::is_valid(&p.decision)
+        || !stochcraft_model::dmn::is_xml_id(&p.decision)
+    {
         return Err(CommandError::new(
             ErrorCode::InvalidParams,
             format!("`{}` is not a valid decision id", p.decision),
@@ -587,6 +613,38 @@ pub(crate) fn set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         variable: old.and_then(|d| d.variable.clone()),
         table: p.table.into(),
     };
+    // Every id the table gives is an XML id, as DMN requires of its `id` attributes.
+    let t = &decision.table;
+    let named = std::iter::once(("the table".to_owned(), t.id.as_deref()))
+        .chain(
+            t.inputs
+                .iter()
+                .enumerate()
+                .map(|(i, c)| (format!("input {}", i + 1), c.id.as_deref())),
+        )
+        .chain(
+            t.outputs
+                .iter()
+                .enumerate()
+                .map(|(i, c)| (format!("output {}", i + 1), c.id.as_deref())),
+        )
+        .chain(
+            t.rules
+                .iter()
+                .enumerate()
+                .map(|(i, r)| (format!("rule {}", i + 1), r.id.as_deref())),
+        );
+    for (what, id) in named {
+        if let Some(id) = id.filter(|i| !stochcraft_model::dmn::is_xml_id(i)) {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                format!(
+                    "{}: the id `{id}` of {what} is not an XML id: start it with a letter or `_`, and use letters, digits, `-`, `.` and `_`",
+                    p.decision
+                ),
+            ));
+        }
+    }
     // A table is set only if it can run.
     decision.compile().map_err(|err| {
         CommandError::new(ErrorCode::InvalidParams, format!("{}: {err}", p.decision))

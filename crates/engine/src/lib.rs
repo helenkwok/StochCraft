@@ -606,8 +606,9 @@ pub struct Engine {
     /// The model's file whose folder `dmn` describes: where it was opened from, or last saved
     /// to with its tables (`file.save`).
     dmn_at: Option<String>,
-    /// The model was last saved, without its tables, into another folder than `dmn_at`'s, so
-    /// its tables are not known to be beside it there ([`Engine::saved_to`]).
+    /// The model was last saved, without its tables, into another folder than `dmn_at`'s (or
+    /// with no `dmn_at`), so its tables are not known to be beside it there
+    /// ([`Engine::saved_to`]).
     dmn_away: bool,
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
@@ -1183,10 +1184,12 @@ impl Engine {
         let result = self.record_saved(path, bytes)?;
         if self.sd.is_none() {
             self.saved.dmn = tables;
+            // With no folder known for the tables (none read or written yet), they are beside
+            // the model nowhere.
             self.dmn_away = self
                 .dmn_at
                 .as_deref()
-                .is_some_and(|at| !same_folder(at, path));
+                .is_none_or(|at| !same_folder(at, path));
         }
         self.journal.push(JournalEntry {
             command: "file.save".to_owned(),
