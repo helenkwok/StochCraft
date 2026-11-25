@@ -3916,13 +3916,15 @@ impl Model {
                 let cells = table.aggregation() == Some(dmn::Aggregation::Count)
                     || whole(&table.output_values(j));
                 // And within a long: a SUM's least and greatest sums, of every rule giving less
-                // than 0 and of every rule giving more; else the cells themselves.
+                // than 0 and of every rule giving more (two rules giving one number add it
+                // twice); else the cells themselves.
                 let given = numbers(&table.output_values(j));
                 let fits = match table.aggregation() {
                     Some(dmn::Aggregation::Count) => true,
                     Some(dmn::Aggregation::Sum) => {
-                        let low: f64 = given.iter().filter(|x| **x < 0.0).sum();
-                        let high: f64 = given.iter().filter(|x| **x > 0.0).sum();
+                        let each = numbers(&table.rule_outputs(j));
+                        let low: f64 = each.iter().filter(|x| **x < 0.0).sum();
+                        let high: f64 = each.iter().filter(|x| **x > 0.0).sum();
                         long(&[low, high])
                     }
                     _ => long(&given),

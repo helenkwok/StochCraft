@@ -1211,6 +1211,15 @@ impl Compiled {
             .collect()
     }
 
+    /// Each rule's entry for output `j`, in rule order, equal ones each time they appear (what a
+    /// SUM of every rule adds up); the default is not one of them.
+    pub fn rule_outputs(&self, j: usize) -> Vec<Literal> {
+        self.rules
+            .iter()
+            .filter_map(|r| r.outputs.get(j).cloned())
+            .collect()
+    }
+
     /// Every value output `j` can give: each rule's entry and the default, in rule order, once
     /// each.
     pub fn output_values(&self, j: usize) -> Vec<Literal> {
