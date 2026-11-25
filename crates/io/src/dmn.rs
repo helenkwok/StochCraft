@@ -593,10 +593,10 @@ fn pair<T>(
         }
     }
     let mut undecided = false;
-    for j in 0..new.len() {
-        let Some(n) = new.get(j).filter(|_| from[j].is_none()) else {
+    for (n, from) in new.iter().zip(from.iter_mut()) {
+        if from.is_some() {
             continue;
-        };
+        }
         let equal: Vec<usize> = (0..old.len())
             .filter(|&i| open(i, &used) && old.get(i).is_some_and(|o| same(o, n)))
             .collect();
@@ -611,7 +611,7 @@ fn pair<T>(
         };
         if let Some(i) = take {
             used[i] = true;
-            from[j] = Some(i);
+            *from = Some(i);
         }
     }
     let old_left: Vec<usize> = (0..old.len()).filter(|&i| open(i, &used)).collect();
