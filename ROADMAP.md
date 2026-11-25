@@ -5079,17 +5079,28 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   - execution: the script runs (ESR).
 
   A built model is scored the same way against a reference model, and one way more, which the
-  paper does not: whether its results agree with the reference's. Both models are run with
-  common random numbers, and throughput, utilisation and time in the system are compared by
-  paired differences (M3.7's comparison), so a model that runs but behaves differently fails.
+  paper does not: whether its results agree with the reference's.
+  - **Matching the two models:** the structure score pairs each built element with a reference
+    element (by kind and connections; names in a prompt are not ids). Before the results are
+    compared, the built model's elements take their partners' ids, so the random streams, keyed
+    by id, are the reference's, and each measure has its counterpart in `results.compare`. An
+    element with no partner is reported as extra or missing, and its measures are not compared.
+  - **What agreement means:** throughput, utilisation and time in the system are compared by
+    paired differences (M3.7's comparison) at a stated tolerance and number of replications. A
+    difference outside the tolerance fails the model; agreement within it is evidence, not
+    proof, since a behaviour that a run of that length rarely reaches (a buffer that fills once a
+    month, say) can differ unseen.
   - **A test set:** the paper's GDT-120K (120,285 prompts with code, some with sketches;
     linear, U-shaped, parallel and conveyor layouts; 13 industries) is not released yet: the
     code repository (MIT) says the data and weights will follow the review, and no licence is
     given for the data. If it is released under an open licence, its prompts and sketches (not
     its code, which is for another tool) can become test cases, each with a reference model
-    built for StochCraft. Until then, the test set is the example gallery: each example's
-    description and layout as the prompt and sketch, its file as the reference, and its checked
-    answer as the results to agree with.
+    built for StochCraft. Until then, the test set is the example gallery: each example's file
+    is the reference and its checked answer the results to agree with; its prompt is its
+    description with every value the reference uses written out (the distributions and their
+    parameters, the capacities, the routing), and its sketch is its layout, drawn from the file
+    where it has none. Parameters are scored only on what the prompt states, so a model is
+    never marked down for a value it was not given.
 - Not planned: parallelising a single run (optimistic Time Warp). Replications in parallel
   already use every core for the models StochCraft targets.
 
