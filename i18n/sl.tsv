@@ -1497,3 +1497,7 @@ connection	Flow	Tok
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Razvrščanje poštnih paketov: zanka napaja štiri proge po izdelku, kretnice pa pošljejo paket v nov krog, ko je njegova proga polna.
 	How many parcels go round the loop because their lane is full?	Koliko paketov gre v nov krog zanke, ker je njihova proga polna?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Tekoči trakovi in kretnice: paketi gredo v nov krog zanke, ko je njihova proga polna.
+	Repairmen with spares	Mehaniki in rezervni stroji
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset strojev mora obratovati, štirje rezervni čakajo v pripravljenosti, trije mehaniki pa popravljajo tiste, ki se pokvarijo (Crane in Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Koliko rezervnih strojev in mehanikov je potrebnih, da deset strojev obratuje?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Rezervni stroji v pripravljenosti se ne morejo pokvariti: v povprečju je pokvarjenih 3.47 strojev, obratuje pa 9.29. Četrti mehanik doseže približno toliko kot štirje rezervni stroji več.

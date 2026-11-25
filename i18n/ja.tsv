@@ -1497,3 +1497,7 @@ connection	Flow	フロー
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	郵便小包の仕分け：ループが製品別の4つのレーンに小包を送り、レーンが満杯のときは分岐装置が小包をもう一周させます。
 	How many parcels go round the loop because their lane is full?	レーンが満杯のためにループをもう一周する小包はいくつですか？
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	コンベヤと分岐装置：レーンが満杯の小包はループをもう一周します。
+	Repairmen with spares	予備機のある修理班
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	10 台の機械が稼働していなければならず、予備機 4 台が待機し、整備士 3 人が故障した機械を修理する（Crane と Iglehart、Winter Simulation Conference、1973）。
+	How many spares and repairmen keep ten machines running?	10 台の機械を動かし続けるには、予備機と整備士がいくつ必要か？
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待機中の予備機は故障しない。平均 3.47 台が故障中で、9.29 台が稼働する。整備士を 1 人増やすと、予備機を 4 台増やすのとほぼ同じ効果がある。

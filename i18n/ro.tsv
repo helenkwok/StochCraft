@@ -1497,3 +1497,7 @@ connection	Flow	Flux
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sortarea coletelor poștale: o buclă alimentează patru benzi după produs, iar deviatoarele trimit un colet într-o nouă tură când banda lui este plină.
 	How many parcels go round the loop because their lane is full?	Câte colete fac încă o tură în buclă pentru că banda lor este plină?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportoare și deviatoare: colete trimise într-o nouă tură când banda lor este plină.
+	Repairmen with spares	Mecanici și mașini de rezervă
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Zece mașini trebuie să funcționeze, patru mașini de rezervă așteaptă pregătite, iar trei mecanici le repară pe cele care se defectează (Crane și Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Câte mașini de rezervă și câți mecanici țin în funcțiune zece mașini?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Mașinile de rezervă care așteaptă nu se pot defecta: în medie 3.47 mașini sunt defecte și 9.29 funcționează. Un al patrulea mecanic aduce cam cât încă patru mașini de rezervă.

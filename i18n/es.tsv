@@ -1497,3 +1497,7 @@ connection	Flow	Flujo
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Clasificación de paquetes postales: un circuito alimenta cuatro carriles por producto, y los desviadores hacen dar otra vuelta a un paquete cuando su carril está lleno.
 	How many parcels go round the loop because their lane is full?	¿Cuántos paquetes dan otra vuelta al circuito porque su carril está lleno?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Cintas transportadoras y desviadores: paquetes que dan otra vuelta al circuito cuando su carril está lleno.
+	Repairmen with spares	Mecánicos y máquinas de repuesto
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Diez máquinas deben funcionar, cuatro de repuesto esperan listas y tres mecánicos reparan las que se averían (Crane e Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	¿Cuántas máquinas de repuesto y cuántos mecánicos mantienen en marcha diez máquinas?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Las máquinas de repuesto en espera no pueden averiarse: de media hay 3.47 máquinas averiadas y 9.29 en marcha. Un cuarto mecánico consigue casi lo mismo que cuatro máquinas de repuesto más.

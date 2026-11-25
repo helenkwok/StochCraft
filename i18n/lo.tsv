@@ -1497,3 +1497,7 @@ connection	Flow	ເສັ້ນທາງ
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	ການຄັດແຍກພັດສະດຸໄປສະນີ: ວົງຮອບປ້ອນພັດສະດຸເຂົ້າສີ່ຊ່ອງຕາມສິນຄ້າ ແລະ ຕົວປ່ຽນທາງສົ່ງພັດສະດຸໄປອີກຮອບເມື່ອຊ່ອງຂອງມັນເຕັມ.
 	How many parcels go round the loop because their lane is full?	ມີພັດສະດຸຈັກອັນທີ່ວຽນອີກຮອບເພາະຊ່ອງຂອງມັນເຕັມ?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	ສາຍພານລຳລຽງ ແລະ ຕົວປ່ຽນທາງ: ພັດສະດຸວຽນອີກຮອບເມື່ອຊ່ອງຂອງມັນເຕັມ.
+	Repairmen with spares	ຊ່າງຈັກ ແລະ ເຄື່ອງຈັກສຳຮອງ
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ເຄື່ອງຈັກສິບເຄື່ອງຕ້ອງເຮັດວຽກ, ເຄື່ອງຈັກສຳຮອງສີ່ເຄື່ອງລໍຖ້າພ້ອມ ແລະ ຊ່າງຈັກສາມຄົນສ້ອມແປງເຄື່ອງທີ່ເສຍ (Crane ແລະ Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	ຕ້ອງມີເຄື່ອງຈັກສຳຮອງ ແລະ ຊ່າງຈັກຈັກເທົ່າໃດ ເພື່ອໃຫ້ເຄື່ອງຈັກສິບເຄື່ອງເຮັດວຽກຕໍ່ໄປໄດ້?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	ເຄື່ອງຈັກສຳຮອງທີ່ລໍຖ້າຢູ່ບໍ່ສາມາດເສຍໄດ້: ໂດຍສະເລ່ຍເຄື່ອງຈັກເສຍ 3.47 ເຄື່ອງ ແລະ ເຮັດວຽກ 9.29 ເຄື່ອງ. ຊ່າງຈັກຄົນທີສີ່ຊ່ວຍໄດ້ປະມານເທົ່າກັບເຄື່ອງຈັກສຳຮອງອີກສີ່ເຄື່ອງ.

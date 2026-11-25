@@ -1497,3 +1497,7 @@ connection	Flow	Stroom
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Sorteren van postpakketten: een lus voedt vier banen per product, en uitstoters sturen een pakket nog een rondje als zijn baan vol is.
 	How many parcels go round the loop because their lane is full?	Hoeveel pakketten gaan nog een rondje omdat hun baan vol is?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Transportbanden en uitstoters: pakketten gaan nog een rondje als hun baan vol is.
+	Repairmen with spares	Monteurs en reservemachines
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tien machines moeten draaien, vier reservemachines staan klaar en drie monteurs repareren de machines die uitvallen (Crane en Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Hoeveel reservemachines en monteurs houden tien machines draaiende?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemachines die klaarstaan, kunnen niet uitvallen: gemiddeld zijn 3.47 machines kapot en draaien er 9.29. Een vierde monteur levert ongeveer evenveel op als vier reservemachines extra.

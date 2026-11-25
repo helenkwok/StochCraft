@@ -4935,6 +4935,33 @@ are.
     plus customers stay 10,000).
   - Not built in this batch: **the daily peak** (arrivals rising and falling through the day,
     with an exact mean number inside for infinite servers).
+- **Examples from the 1973 Winter Simulation Conference:** checked the same way.
+  - **Repairmen with spares** (`repairmen-spares.bpmn`, "Manufacturing"): M. A. Crane and
+    D. L. Iglehart, *A New Approach to Simulating Stable Stochastic Systems*, Proceedings of the
+    1973 Winter Simulation Conference, pp. 264–272 (the model on p. 269, its parameters and
+    Table 1 on p. 270). Ten machines must be running (N = 10); four spares (M = 4) stand by, and
+    cannot fail while they wait, until one is needed; three repairmen (S = 3). Each running
+    machine fails at rate λ = 1, and a repair takes an exponential time at rate μ = 4 (the
+    paper gives no unit; the model uses hours). The model is a closed loop of 14 machines
+    (starting contents): "Machines running", a task with 10 units and a mean time to failure of
+    1, whose queue holds the spares, then "Repair", a task with 3 units and a mean of 0.25. The
+    number broken X is a birth–death chain, up at λ min(N, N + M − X) and down at μ min(X, S),
+    so its answers are exact: on average 3.4708 broken (mean square 17.2779). With chance
+    0.3056 more than four are broken, so fewer than ten run. With chance 0.4378 at least one
+    broken machine waits for a repairman (more than three broken). On average 0.6777 repairmen
+    are idle, and 0.0609 of the time all three are. These are the paper's theoretical values
+    (Table 1, to three decimals), recomputed from the chain. `crates/engine/tests/examples.rs`
+    solves the chain, checks it against Table 1, and checks the run on what it reports: 3.4708
+    broken (the repair task's work in progress), the repairmen busy 0.7741, 1.1485 machines
+    waiting for a repairman and, by Little's law, 0.1236 hours each, 9.2894 machines running
+    (busy 0.9289), 1.2398 spares waiting, and 9.2894 repairs an hour. The chances above are
+    shares of time, which no result reports, so they are checked on the chain only. Scenarios,
+    each exact from the same chain and checked on the machines broken and running: two
+    repairmen (5.93 broken, 7.64 running), four repairmen (2.72, 9.70), no spares (2.26, 7.74)
+    and eight spares (4.40, 9.71), so a fourth repairman does about as much as four more spares.
+    It differs from the machine repair crew above because spares on cold standby do not fail.
+    Once regenerative intervals (M2.9) are built, this example is their first check: the
+    paper's own intervals come from cycles back to X = 0.
 - **Planned examples:** each joins only once its answer is checked against its source with the
   page, as above.
   - **A particle detector's readout** (a new "Science" industry): collisions at a collider
@@ -4989,17 +5016,6 @@ are.
     every 10, 10 minutes for exponential headways of the same mean. A scenario with headways
     held at a control stop shows bunching reduced. The run measures the headways at each stop
     and checks each stop's mean wait against them.
-  - **Repairmen with spares**: M. A. Crane and D. L. Iglehart, *A New Approach to Simulating
-    Stable Stochastic Systems*, Proceedings of the 1973 Winter Simulation Conference,
-    pp. 264–272. Ten machines must be running; four spares stand by, and cannot fail while they
-    wait, until one is needed; three repairmen. Each running machine fails at rate 1, and a
-    repair takes an exponential time at rate 4. The number of machines broken is a birth-death
-    chain, so its answers are exact: on average 3.4708 broken (mean square 17.2779). With
-    chance 0.3056 more than four are broken, so fewer than ten run. With chance 0.4378 at least
-    one broken machine waits for a repairman (more than three broken). On average 0.6777 repairmen are idle. These are the paper's
-    own values, recomputed from the chain. It differs from the machine repair crew above
-    because spares on cold standby do not fail. It is also the first check of regenerative
-    intervals (M2.9).
   - **A closed-loop conveyor with work stations**: L. E. Bussey and M. P. Terrell, *A Model for
     Analyzing Closed-Loop Conveyor Systems with Multiple Work Stations*, Proceedings of the 1973
     Winter Simulation Conference, pp. 93–111. Items are loaded onto evenly spaced hooks of a loop

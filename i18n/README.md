@@ -1067,6 +1067,15 @@ fields (`“Service time”`) are named in the messages by their own rows.
   lane or track, and "divert" a plain word for a deflecting device where the catalog had only the
   verb. Not checked against any other source and not reviewed by native speakers; the least
   certain are lo, th, ta, te, bn, ka, kk and sq.
+- The rows for the repairmen-with-spares example (its title, the line about it, its question and
+  what it teaches) were machine-drafted from the plain meaning of the English, with each
+  catalog's own word for the machine repair crew's fitters as "repairmen" and its own words for
+  machine, break down and running from the earlier example cards; a spare is the language's
+  plain word for a reserve or standby machine. The authors' names and the conference's name stay
+  in English and Latin script, and decimals keep the point. Not checked against any other source
+  and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
+  sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
+  most of them.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

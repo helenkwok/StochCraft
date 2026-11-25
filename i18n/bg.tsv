@@ -1497,3 +1497,7 @@ connection	Flow	Поток
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Сортиране на пощенски пратки: кръгов конвейер захранва четири ленти по продукт, а отклонителите пращат пратката на нова обиколка, когато лентата ѝ е пълна.
 	How many parcels go round the loop because their lane is full?	Колко пратки правят нова обиколка, защото лентата им е пълна?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Конвейери и отклонители: пратките правят нова обиколка, когато лентата им е пълна.
+	Repairmen with spares	Монтьори и резервни машини
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десет машини трябва да работят, четири резервни чакат в готовност, а трима монтьори поправят повредените (Crane и Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Колко резервни машини и монтьори поддържат десет машини в работа?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервните машини в готовност не могат да се повредят: средно 3.47 машини са повредени и 9.29 работят. Четвърти монтьор помага почти колкото четири резервни машини повече.

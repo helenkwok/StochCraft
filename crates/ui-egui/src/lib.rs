@@ -387,6 +387,22 @@ pub const EXAMPLES: &[Example] = &[
         },
     },
     Example {
+        title: "Repairmen with spares",
+        about: "Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).",
+        file: "repairmen-spares.bpmn",
+        bytes: include_bytes!("../../../tests/models/repairmen-spares.bpmn"),
+        card: start::Card {
+            question: "How many spares and repairmen keep ten machines running?",
+            industry: start::Industry::Manufacturing,
+            topics: &[start::Topic::Staffing, start::Topic::Breakdown],
+            teaches: "Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.",
+            minutes: 3,
+            proof: Some(start::Proof::Theory),
+            flow: &[start::Glyph::Resource, start::Glyph::Resource],
+            featured: false,
+        },
+    },
+    Example {
         title: "Inspection with rework",
         about: "Half the parts fail inspection, are reworked and are inspected again.",
         file: "rework.bpmn",

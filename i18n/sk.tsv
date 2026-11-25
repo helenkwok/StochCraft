@@ -1497,3 +1497,7 @@ connection	Flow	Tok
 	Postal parcel sorting: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full.	Triedenie poštových zásielok: okruh zásobuje štyri dráhy podľa produktu a výhybky pošlú zásielku na ďalšie kolo, keď je jej dráha plná.
 	How many parcels go round the loop because their lane is full?	Koľko zásielok ide ďalšie kolo okruhu, pretože je ich dráha plná?
 	Conveyors and diverts: parcels sent round the loop when their lane is full.	Dopravníky a výhybky: zásielky idú ďalšie kolo okruhu, keď je ich dráha plná.
+	Repairmen with spares	Opravári a záložné stroje
+	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Desať strojov musí bežať, štyri záložné čakajú v pohotovosti a traja opravári opravujú tie, ktoré sa pokazia (Crane a Iglehart, Winter Simulation Conference, 1973).
+	How many spares and repairmen keep ten machines running?	Koľko záložných strojov a opravárov udrží desať strojov v chode?
+	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Záložné stroje v pohotovosti sa nemôžu pokaziť: v priemere je pokazených 3.47 strojov a beží 9.29. Štvrtý opravár pomôže zhruba toľko ako štyri záložné stroje navyše.
