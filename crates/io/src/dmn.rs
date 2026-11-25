@@ -526,38 +526,95 @@ fn closing_indent(e: &Element) -> Option<String> {
     }
 }
 
+/// How `new`'s items continue `old`'s ([`pair`]).
+struct Pairs {
+    /// For each of `new`'s items, the one of `old`'s it continues, if any.
+    from: Vec<Option<usize>>,
+    /// `old`'s items without an id whose place in `new` is not known: items without ids were
+    /// both added (or removed) and edited, so none of these is taken to continue as any
+    /// particular one of `new`'s, and none is kept.
+    unknown: Vec<usize>,
+}
+
 /// For each of `new`'s items, the one of `old`'s it continues, if any: the one with the same id;
-/// for an item without an id, one without an id that is equal to it, else the one at its place
-/// if that has no id either. Each of `old`'s is taken once.
-fn pair<T: PartialEq>(old: &[T], new: &[T], id: impl Fn(&T) -> Option<&str>) -> Vec<Option<usize>> {
+/// for an item without an id, one without an id that is equal to it. The items without ids left
+/// over are taken in order, as edited in place, only when as many are left on each side; when
+/// some were added or removed as well, which continues which is not known (DMN gives an element
+/// no identity but its optional id), so none is paired and the old ones left are `unknown`. Each
+/// of `old`'s is taken once.
+fn pair<T: PartialEq>(old: &[T], new: &[T], id: impl Fn(&T) -> Option<&str>) -> Pairs {
     let mut used = vec![false; old.len()];
-    let mut out: Vec<Option<usize>> = vec![None; new.len()];
-    // Three passes: by id, then equal items without ids, then items without ids by place.
-    for pass in 0..3 {
+    let mut from: Vec<Option<usize>> = vec![None; new.len()];
+    // Two passes: by id, then equal items without ids.
+    for pass in 0..2 {
         for (j, n) in new.iter().enumerate() {
-            if out[j].is_some() || (pass == 0) != id(n).is_some() {
+            if from[j].is_some() || (pass == 0) != id(n).is_some() {
                 continue;
             }
             let fits = |i: usize, o: &T| {
                 !used[i]
-                    && match pass {
-                        0 => id(o) == id(n),
-                        1 => id(o).is_none() && o == n,
-                        _ => i == j && id(o).is_none(),
+                    && if pass == 0 {
+                        id(o) == id(n)
+                    } else {
+                        id(o).is_none() && o == n
                     }
             };
             if let Some(i) = old.iter().enumerate().position(|(i, o)| fits(i, o)) {
                 used[i] = true;
-                out[j] = Some(i);
+                from[j] = Some(i);
             }
         }
     }
-    out
+    let old_left: Vec<usize> = (0..old.len())
+        .filter(|&i| !used[i] && old.get(i).is_some_and(|o| id(o).is_none()))
+        .collect();
+    let new_left: Vec<usize> = (0..new.len())
+        .filter(|&j| from[j].is_none() && new.get(j).is_some_and(|n| id(n).is_none()))
+        .collect();
+    let mut unknown = Vec::new();
+    if old_left.len() == new_left.len() {
+        for (i, j) in old_left.into_iter().zip(new_left) {
+            from[j] = Some(i);
+        }
+    } else if !new_left.is_empty() {
+        unknown = old_left;
+    }
+    Pairs { from, unknown }
+}
+
+/// Whether `e`, an element of a decision table (a column, a rule or a rule's cell), holds
+/// something the model does not keep of it: attributes the model does not hold (of `e` itself,
+/// those other than `own`; inside it, any but an input expression's type, so its cells' ids
+/// count), elements of other namespaces, extension elements, comments or processing
+/// instructions. Rebuilt from the model, it would lose them.
+fn holds_more(e: &Element, ns: &str, own: &[&str]) -> bool {
+    let declares = |name: &str| name == "xmlns" || name.starts_with("xmlns:");
+    let extra = |x: &Element, held: &[&str]| {
+        x.attrs
+            .iter()
+            .any(|(name, _)| !declares(name) && !held.contains(&name.as_str()))
+    };
+    let odd = |x: &Element| {
+        x.children
+            .iter()
+            .any(|n| matches!(n, Node::Comment(_) | Node::Pi(_)))
+    };
+    if extra(e, own) || odd(e) {
+        return true;
+    }
+    e.descendants().into_iter().any(|x| {
+        let held: &[&str] = if x.is(ns, "inputExpression") {
+            &["typeRef"]
+        } else {
+            &[]
+        };
+        x.ns.as_deref() != Some(ns) || x.local() == "extensionElements" || extra(x, held) || odd(x)
+    })
 }
 
 /// Whether `pairs` keeps all of `old` items, each where it was.
-fn in_place(pairs: &[Option<usize>], old: usize) -> bool {
-    pairs.len() == old && pairs.iter().enumerate().all(|(j, p)| *p == Some(j))
+fn in_place(pairs: &Pairs, old: usize) -> bool {
+    pairs.from.len() == old && pairs.from.iter().enumerate().all(|(j, p)| *p == Some(j))
 }
 
 /// Sets attribute `name` to `now` where it differs from `was` (so an attribute that is not
@@ -682,13 +739,55 @@ impl Patch<'_> {
         }
     }
 
-    fn table(&self, table: &mut Element, old: &Table, new: &Table, indent: &str) {
+    fn table(
+        &self,
+        table: &mut Element,
+        old: &Table,
+        new: &Table,
+        indent: &str,
+    ) -> Result<(), DmnError> {
         let inner = format!("{indent}  ");
         let inputs = pair(&old.inputs, &new.inputs, |c| c.id.as_deref());
         let outputs = pair(&old.outputs, &new.outputs, |c| c.id.as_deref());
         let annotations = pair(&old.annotations, &new.annotations, |_| None);
         let rules = pair(&old.rules, &new.rules, |r| r.id.as_deref());
         let (mut parts, slots) = self.split(table, &["input", "output", "annotation", "rule"]);
+        // An item without an id whose place in the edited table is not known is not kept; that
+        // is refused only if it holds what the model does not, which would otherwise be lost or
+        // given to another item.
+        let kinds = [
+            ("input", "inputs", &inputs),
+            ("output", "outputs", &outputs),
+            ("annotation", "annotation columns", &annotations),
+            ("rule", "rules", &rules),
+        ];
+        // What the model holds of a column or rule itself: a rule's id, a column's id, label,
+        // name and type.
+        let own = ["id", "label", "name", "typeRef"];
+        let entries = ["inputEntry", "outputEntry", "annotationEntry"];
+        for (k, (kind, plural, p)) in kinds.iter().enumerate() {
+            let held = p.unknown.iter().find(|&&i| {
+                let item = parts.get(k).and_then(|v| v.get(i)).and_then(Option::as_ref);
+                // A column's cells, in every rule, go with it.
+                let cells = entries.get(k).is_some_and(|entry| {
+                    parts.get(3).into_iter().flatten().flatten().any(|r| {
+                        r.elements()
+                            .filter(|c| c.is(self.ns, entry))
+                            .nth(i)
+                            .is_some_and(|c| holds_more(c, self.ns, &[]))
+                    })
+                });
+                cells || item.is_some_and(|e| holds_more(e, self.ns, &own))
+            });
+            if let Some(i) = held {
+                return err(
+                    format!("{kind} {}", i + 1),
+                    format!(
+                        "{plural} without ids were added or removed and others edited in the same change, so which edited one continues this {kind} is not known, and saving would lose what the file keeps of it (cell ids, extensions, comments); give the {plural} ids, or save the edits and the added or removed {plural} separately"
+                    ),
+                );
+            }
+        }
         let mut kept = |k: usize, from: &Option<usize>| -> Option<(usize, Element)> {
             let i = (*from)?;
             Some((i, parts.get_mut(k)?.get_mut(i)?.take()?))
@@ -696,7 +795,7 @@ impl Patch<'_> {
         let built_inputs: Vec<Element> = new
             .inputs
             .iter()
-            .zip(&inputs)
+            .zip(&inputs.from)
             .map(
                 |(c, from)| match (kept(0, from), from.and_then(|i| old.inputs.get(i))) {
                     (Some((_, mut e)), Some(was)) => {
@@ -710,7 +809,7 @@ impl Patch<'_> {
         let built_outputs: Vec<Element> = new
             .outputs
             .iter()
-            .zip(&outputs)
+            .zip(&outputs.from)
             .map(
                 |(c, from)| match (kept(1, from), from.and_then(|i| old.outputs.get(i))) {
                     (Some((_, mut e)), Some(was)) => {
@@ -724,7 +823,7 @@ impl Patch<'_> {
         let built_annotations: Vec<Element> = new
             .annotations
             .iter()
-            .zip(&annotations)
+            .zip(&annotations.from)
             .map(|(a, from)| match kept(2, from) {
                 Some((i, mut e)) => {
                     set_changed(
@@ -738,11 +837,11 @@ impl Patch<'_> {
                 None => el(self.prefix, "annotation").with_attr("name", a),
             })
             .collect();
-        let columns: [&[Option<usize>]; 3] = [&inputs, &outputs, &annotations];
+        let columns: [&[Option<usize>]; 3] = [&inputs.from, &outputs.from, &annotations.from];
         let built_rules: Vec<Element> = new
             .rules
             .iter()
-            .zip(&rules)
+            .zip(&rules.from)
             .map(
                 |(r, from)| match (kept(3, from), from.and_then(|i| old.rules.get(i))) {
                     (Some((_, mut e)), Some(was)) => {
@@ -765,6 +864,7 @@ impl Patch<'_> {
             0,
             indent,
         );
+        Ok(())
     }
 
     fn input(&self, e: &mut Element, old: &Input, new: &Input, fallback: &str) {
@@ -973,7 +1073,11 @@ pub fn save_dmn(
             ns: &ns,
             prefix: &prefix,
         }
-        .table(table, &old.table, &new.table, &indent);
+        .table(table, &old.table, &new.table, &indent)
+        .map_err(|mut e| {
+            e.place = format!("decision “{}”, {}", new.id, e.place);
+            e
+        })?;
     }
     let bytes = xml::write(&doc).into_bytes();
     // What was written must read back as what was meant.
@@ -1290,5 +1394,65 @@ mod tests {
         assert_eq!(read(&text), fewer);
         assert!(text.contains("id=\"ie1\""), "{text}");
         assert!(!text.contains("r_rest"), "{text}");
+    }
+
+    /// Rules without ids have no identity but their place (DMN's `id` is optional): with one
+    /// inserted and one edited in the same change, which edited rule continues which old one is
+    /// not known, so a save that would lose a rule's cell ids or move them to another rule is
+    /// refused. Edited in place, given an id, or holding nothing the model does not, it is saved.
+    #[test]
+    fn rules_without_ids_keep_their_cells_ids_or_the_save_is_refused() {
+        let file = FILE
+            .replace(r#"<dmn:rule id="r_small">"#, "<dmn:rule>")
+            .replace(r#"<dmn:rule id="r_rest">"#, "<dmn:rule>")
+            .replace(
+                r#"<dmn:outputEntry><dmn:text>"small"</dmn:text></dmn:outputEntry>"#,
+                r#"<dmn:outputEntry id="oe1"><dmn:text>"small"</dmn:text></dmn:outputEntry>"#,
+            );
+        let before = read(&file);
+        let x = Rule {
+            inputs: vec!["> 100".into()],
+            outputs: vec!["\"pallet\"".into()],
+            annotations: vec![String::new()],
+            ..Rule::default()
+        };
+        // [A, B] to [X, A', B]: refused, naming the rule.
+        let mut after = before.clone();
+        let t = &mut after.decisions[0].table;
+        t.rules[0].outputs[0] = "\"tiny\"".into();
+        t.rules.insert(0, x.clone());
+        let refused = save_dmn(file.as_bytes(), &before, &after);
+        let message = refused
+            .map(|_| String::new())
+            .unwrap_or_else(|e| e.to_string());
+        assert!(
+            message.contains("rule 1") && message.contains("give the rules ids"),
+            "{message}"
+        );
+        // The same with the new rule given an id: A' continues A, its cell's id with it.
+        let mut named = after.clone();
+        named.decisions[0].table.rules[0].id = Some("r_pallet".into());
+        let bytes = save_dmn(file.as_bytes(), &before, &named).unwrap_or_else(|e| panic!("{e}"));
+        let text = String::from_utf8_lossy(&bytes).into_owned();
+        assert_eq!(read(&text), named);
+        assert!(
+            text.contains(r#"<dmn:outputEntry id="oe1"><dmn:text>&quot;tiny&quot;</dmn:text></dmn:outputEntry>"#),
+            "{text}"
+        );
+        // Edited in place: kept where it was.
+        let mut edited = before.clone();
+        edited.decisions[0].table.rules[0].outputs[0] = "\"tiny\"".into();
+        let bytes = save_dmn(file.as_bytes(), &before, &edited).unwrap_or_else(|e| panic!("{e}"));
+        let text = String::from_utf8_lossy(&bytes).into_owned();
+        assert!(text.contains(r#"id="oe1""#), "{text}");
+        // Holding nothing the model does not (no cell id): inserted and edited, it is rebuilt.
+        let plain = file.replace(r#" id="oe1""#, "");
+        let before = read(&plain);
+        let mut after = before.clone();
+        let t = &mut after.decisions[0].table;
+        t.rules[0].outputs[0] = "\"tiny\"".into();
+        t.rules.insert(0, x);
+        let bytes = save_dmn(plain.as_bytes(), &before, &after).unwrap_or_else(|e| panic!("{e}"));
+        assert_eq!(read(&String::from_utf8_lossy(&bytes)), after);
     }
 }
