@@ -2628,17 +2628,32 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             }
         }
     }
+    // Nor over a decision table where the tables were read from or last written, which a save
+    // of the model's file alone into another folder leaves behind.
+    if let Some(from) = &tables_dir {
+        for (href, _, _) in files
+            .iter()
+            .filter(|(h, _, _)| crate::dmn::is_dmn_reference(h))
+        {
+            if let Ok(there) = crate::agents::beside(from, href)
+                && model_is(there.as_path())
+            {
+                return Err(model_over(href.as_str()));
+            }
+        }
+    }
     let written: Vec<(String, Vec<u8>)> = e
         .dmn_files()?
         .into_iter()
         .map(|(href, content, _)| (href, content))
         .collect();
     // Two references can name one file: names that differ only in case, on a file system that
-    // ignores case, or a link in the model's folder. Holding the same, it is written once (the
-    // second recorded with the first); holding different contents, one would overwrite the
+    // ignores case, or a link in the model's folder. Holding the same, it is written once, and
+    // the second is recorded only if it reads back as written (a hard link keeps the old bytes
+    // when the first name is replaced); holding different contents, one would overwrite the
     // other, so the save is refused before anything is written.
     let mut placed: Vec<(String, std::path::PathBuf, Vec<u8>)> = Vec::new();
-    let mut twins: Vec<String> = Vec::new();
+    let mut twins: Vec<(String, std::path::PathBuf, Vec<u8>, String)> = Vec::new();
     let mut unique = Vec::new();
     for (href, content, replaceable) in files {
         let to = crate::agents::beside(&dir, &href)
@@ -2653,7 +2668,7 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                     ),
                 ));
             }
-            twins.push(href);
+            twins.push((href, to, content, first.clone()));
             continue;
         }
         placed.push((href.clone(), to, content.clone()));
@@ -2724,7 +2739,16 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         write_beside(&to, &content, seen.as_deref())?;
         record(e, href.as_str());
     }
-    for href in &twins {
+    for (href, to, content, first) in &twins {
+        if std::fs::read(to).ok().as_ref() != Some(content) {
+            return Err(CommandError::new(
+                ErrorCode::Conflict,
+                format!(
+                    "`{href}` names the same file as `{first}`, {}, but does not read back as it was written (a hard link keeps the old contents): make them one reference",
+                    to.display()
+                ),
+            ));
+        }
         record(e, href.as_str());
     }
     // Every one is there now, so a name that differs only in case on a file system that ignores

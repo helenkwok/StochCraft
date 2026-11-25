@@ -770,3 +770,80 @@ fn a_model_s_file_saved_alone_with_tables_never_written_is_unsaved() {
         .unwrap_or_else(|err| panic!("{err}"));
     assert!(!plain.is_dirty());
 }
+
+/// After a save of the model's file alone into another folder, the model is not saved over a
+/// decision table where its tables were written, though that is in neither the new folder nor
+/// beside the path given.
+#[test]
+fn the_model_is_not_saved_over_a_table_where_its_tables_are() {
+    let dir = folder("over-a-table");
+    let mut e = example();
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "rules/desk.dmn", "decision": "priority", "table": one_rule("1", None) }),
+    );
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": dir.join("desk.bpmn").to_string_lossy() }),
+    );
+    let table_path = dir.join("rules").join("desk.dmn");
+    let table_bytes = read(&table_path);
+    let other = dir.join("other");
+    std::fs::create_dir_all(&other).unwrap_or_else(|err| panic!("{err}"));
+    let bytes = e.save_bytes(false).unwrap_or_else(|err| panic!("{err}"));
+    e.saved_to(&other.join("desk.bpmn").to_string_lossy(), &bytes)
+        .unwrap_or_else(|err| panic!("{err}"));
+    let refused = e.execute("file.save", json!({ "path": table_path.to_string_lossy() }));
+    assert!(
+        refused.is_err_and(|err| err.message.contains("cannot be saved over a file it reads")),
+        "refused"
+    );
+    assert_eq!(read(&table_path), table_bytes);
+}
+
+/// Two names of one table file by a hard link: writing one name leaves the other with the old
+/// contents, so the save is refused rather than the other recorded as written.
+#[test]
+fn a_hard_link_to_a_table_file_that_keeps_the_old_contents_is_not_taken_as_saved() {
+    let dir = folder("hard-link");
+    let mut model = sorter();
+    model.decisions.insert(
+        ElementId::unchecked("chute_a"),
+        DecisionUse {
+            file: "link.dmn".into(),
+            decision: "chute".into(),
+            route: None,
+        },
+    );
+    let (bpmn, dmn) = (dir.join("sorter.bpmn"), dir.join("sorting.dmn"));
+    std::fs::write(&bpmn, stochcraft_io::write_new(&model)).unwrap_or_else(|e| panic!("{e}"));
+    std::fs::write(&dmn, stochcraft_io::dmn::write_dmn(&table())).unwrap_or_else(|e| panic!("{e}"));
+    std::fs::hard_link(&dmn, dir.join("link.dmn")).unwrap_or_else(|e| panic!("{e}"));
+    let dmn_bytes = read(&dmn);
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": bpmn.to_string_lossy() }),
+    );
+    // The same edit through both names: one file's contents, written under one name.
+    let got = ok(&mut e, "dmn.get", json!({ "file": "sorting.dmn" }));
+    let mut t = got["files"][0]["decisions"][0]["table"].clone();
+    t["rules"][0]["outputs"][0] = json!("\"chute_b\"");
+    for file in ["sorting.dmn", "link.dmn"] {
+        ok(
+            &mut e,
+            "dmn.set",
+            json!({ "file": file, "decision": "chute", "table": t }),
+        );
+    }
+    let refused = e.execute("file.save", json!({}));
+    assert!(
+        refused.is_err_and(|err| err.message.contains("does not read back")),
+        "refused"
+    );
+    assert_eq!(read(&dmn), dmn_bytes);
+    assert!(e.is_dirty());
+}
