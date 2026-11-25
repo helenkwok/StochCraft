@@ -2588,8 +2588,14 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     // The files the model reads beside it: an agent-based model's charts and lists of links,
     // and a process model's decision tables, each with the bytes it may replace (a `.dmn` file
     // as it was opened or last saved, when saving into that folder: edited tables are written
-    // back into it).
-    let same_dir = opened_dir.as_ref().is_some_and(|from| {
+    // back into it). That folder is the one the tables were read from or written to, which a
+    // save of the model's file alone into another folder does not change.
+    let tables_dir = e
+        .dmn_at
+        .as_deref()
+        .and_then(|p| std::path::Path::new(p).parent())
+        .map(std::path::Path::to_path_buf);
+    let same_dir = tables_dir.as_ref().is_some_and(|from| {
         let canon = |d: &std::path::Path| {
             std::fs::canonicalize(if d.as_os_str().is_empty() {
                 std::path::Path::new(".")
@@ -2726,7 +2732,11 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     craft_atomic::atomic_write(model_path, &bytes)
         .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
     e.dmn_saved(written);
-    e.record_saved(&path, &bytes)
+    let result = e.record_saved(&path, &bytes)?;
+    // The tables are beside the model's file now.
+    e.dmn_at = Some(path);
+    e.dmn_away = false;
+    Ok(result)
 }
 
 /// Whether `a` and `b`, two files beside the model, may be one file. Both there: whether they

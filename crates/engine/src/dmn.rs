@@ -504,9 +504,13 @@ impl Engine {
     /// written (a file the model no longer reads, or has never been read or written, is not
     /// counted).
     pub(crate) fn dmn_unsaved(&self) -> bool {
-        self.dmn
-            .iter()
-            .any(|(href, f)| self.model.dmn.get(href).is_some_and(|d| *d != f.read))
+        // Saved without its tables into another folder, a model with tables does not have them
+        // beside it: the records of the folder they are in do not count there.
+        (self.dmn_away && !self.model.dmn.is_empty())
+            || self
+                .dmn
+                .iter()
+                .any(|(href, f)| self.model.dmn.get(href).is_some_and(|d| *d != f.read))
     }
 
     /// Records that the model's `.dmn` files were written as `written` (by reference), so the

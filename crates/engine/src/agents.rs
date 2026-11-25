@@ -279,6 +279,7 @@ impl Engine {
         };
         let result = self.open_loaded(name, bytes, loaded, is_agents)?;
         self.dmn = dmn;
+        self.dmn_at = self.path().map(str::to_owned);
         if is_agents {
             self.agents = Some(AgentsDoc { files, last: None });
             self.journal_start.model_digest = self.agents_digest();

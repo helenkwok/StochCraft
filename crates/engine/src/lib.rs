@@ -603,6 +603,12 @@ pub struct Engine {
     agents: Option<agents::AgentsDoc>,
     /// The `.dmn` files the model reads, as opened or last saved (see [`dmn`]).
     dmn: BTreeMap<String, dmn::DmnFile>,
+    /// The model's file whose folder `dmn` describes: where it was opened from, or last saved
+    /// to with its tables (`file.save`).
+    dmn_at: Option<String>,
+    /// The model was last saved, without its tables, into another folder than `dmn_at`'s, so
+    /// its tables are not known to be beside it there ([`Engine::saved_to`]).
+    dmn_away: bool,
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
     job: Option<Job>,
@@ -650,6 +656,8 @@ impl Engine {
             sd: None,
             agents: None,
             dmn: BTreeMap::new(),
+            dmn_at: None,
+            dmn_away: false,
             job: None,
             job_kept: false,
             last_results: None,
@@ -1019,6 +1027,8 @@ impl Engine {
         self.sd = None;
         self.agents = None;
         self.dmn.clear();
+        self.dmn_at = None;
+        self.dmn_away = false;
         self.cancel_run();
         self.job = None;
         self.job_kept = false;
@@ -1165,12 +1175,18 @@ impl Engine {
     ///
     /// The shell writes the model's file only, not the `.dmn` files beside it (`file.save` writes
     /// those), so the decision tables are recorded as they were last saved: a table edited or
-    /// made since leaves the model unsaved ([`Engine::is_dirty`]).
+    /// made since leaves the model unsaved ([`Engine::is_dirty`]). Saved into another folder than
+    /// its tables were read from or written to, a model with tables is unsaved too, as they are
+    /// not beside it there; saved back into that folder, it is not.
     pub fn saved_to(&mut self, path: &str, bytes: &[u8]) -> Result<Value, CommandError> {
         let tables = self.saved.dmn.clone();
         let result = self.record_saved(path, bytes)?;
         if self.sd.is_none() {
             self.saved.dmn = tables;
+            self.dmn_away = self
+                .dmn_at
+                .as_deref()
+                .is_some_and(|at| !same_folder(at, path));
         }
         self.journal.push(JournalEntry {
             command: "file.save".to_owned(),
@@ -1461,6 +1477,26 @@ pub fn write_atomically(path: &std::path::Path, bytes: &[u8]) -> std::io::Result
 pub fn model_digest(model: &Model) -> String {
     let text = serde_json::to_string(&wire::ModelDoc::from(model)).unwrap_or_default();
     bytes_digest(text.as_bytes())
+}
+
+/// Whether the files `a` and `b` are in one folder: compared with links followed where both
+/// folders are there, else as written.
+fn same_folder(a: &str, b: &str) -> bool {
+    let dir = |p: &str| {
+        let d = std::path::Path::new(p)
+            .parent()
+            .unwrap_or(std::path::Path::new(""));
+        if d.as_os_str().is_empty() {
+            std::path::PathBuf::from(".")
+        } else {
+            d.to_path_buf()
+        }
+    };
+    let (da, db) = (dir(a), dir(b));
+    match (std::fs::canonicalize(&da), std::fs::canonicalize(&db)) {
+        (Ok(x), Ok(y)) => x == y,
+        _ => da == db,
+    }
 }
 
 /// Whether two paths name the same file (the same text, or the same file once resolved).

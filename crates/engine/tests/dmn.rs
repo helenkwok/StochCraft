@@ -635,3 +635,39 @@ fn a_link_to_a_table_file_is_the_same_file() {
         std::fs::symlink_metadata(dir.join("link.dmn")).is_ok_and(|m| m.file_type().is_symlink())
     );
 }
+
+/// The app's Save As of the model's file alone into another folder: the tables are not beside it
+/// there, so the model is unsaved, though no table was edited; saved back into its own folder,
+/// or with `file.save` (which writes the tables there too), it is saved.
+#[test]
+fn a_save_of_the_model_s_file_alone_into_another_folder_leaves_it_unsaved() {
+    let dir = folder("model-only-elsewhere");
+    let (bpmn, _) = write_sorter(&dir);
+    let path = bpmn.to_string_lossy().into_owned();
+    let other = dir.join("other");
+    std::fs::create_dir_all(&other).unwrap_or_else(|err| panic!("{err}"));
+    let elsewhere = other.join("sorter.bpmn").to_string_lossy().into_owned();
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({ "path": path }));
+    let bytes = e.save_bytes(false).unwrap_or_else(|err| panic!("{err}"));
+    // Another name in the same folder: the tables are beside it.
+    let renamed = dir.join("renamed.bpmn").to_string_lossy().into_owned();
+    e.saved_to(&renamed, &bytes)
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert!(!e.is_dirty());
+    // Another folder: they are not.
+    e.saved_to(&elsewhere, &bytes)
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert!(e.is_dirty(), "the tables are not in the other folder");
+    // Back into the first folder: they are again.
+    e.saved_to(&path, &bytes)
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert!(!e.is_dirty());
+    // Into the other folder again, then saved there with its tables: saved.
+    e.saved_to(&elsewhere, &bytes)
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert!(e.is_dirty());
+    ok(&mut e, "file.save", json!({}));
+    assert!(other.join("sorting.dmn").exists());
+    assert!(!e.is_dirty());
+}
