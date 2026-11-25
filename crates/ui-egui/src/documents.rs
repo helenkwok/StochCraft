@@ -599,12 +599,25 @@ impl App {
     /// A browser can't tell whether the user kept the file or cancelled it, so the model is not
     /// marked saved: the unsaved mark, the guard on closing the tab and the recovery copy all
     /// stay until a model replaces this one. What was to follow the save (New, Open…) goes ahead,
-    /// as the user chose Download in the unsaved-changes question.
+    /// as the user chose Download in the unsaved-changes question, unless the model's decision
+    /// tables are not on disk, which the download does not hold.
     pub fn downloaded(&mut self, name: &str) {
         let downloaded = tf("Downloaded {file}", &[("file", file_name(name))]);
-        self.info(downloaded + &self.tables_not_written());
-        if let Some(next) = self.after_save.take() {
-            self.replace_now(next);
+        // The download holds the model's file only: with decision tables not on disk as they
+        // are, what was to follow is dropped and the model kept open, as after a Save
+        // ([`App::written`]). The model's own unsaved mark is no reason, as a download never
+        // clears it.
+        match self.after_save.take() {
+            Some(_) if self.engine.tables_unsaved() => self.info(format!(
+                "{downloaded}. {}",
+                t("Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.")
+            )),
+            next => {
+                self.info(downloaded + &self.tables_not_written());
+                if let Some(next) = next {
+                    self.replace_now(next);
+                }
+            }
         }
     }
 

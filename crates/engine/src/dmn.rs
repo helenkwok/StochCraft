@@ -513,6 +513,14 @@ impl Engine {
                 .any(|(href, f)| self.model.dmn.get(href).is_some_and(|d| *d != f.read))
     }
 
+    /// Whether a decision table the model holds is not on disk as it is: edited or made since its
+    /// `.dmn` file was read or written, or not beside the model's file where that was last saved.
+    /// Unlike [`Engine::is_dirty`], it leaves out the model's own file, which a browser's
+    /// download writes without the model being marked saved.
+    pub fn tables_unsaved(&self) -> bool {
+        self.model.dmn != self.saved.dmn || self.dmn_unsaved()
+    }
+
     /// Gives each table file the model holds that is not read from disk yet, and has no id or
     /// namespace of its own, the ones [`stochcraft_io::dmn::write_dmn`] writes for it, in the model
     /// and in what it was last saved as: so the tables recorded as written are those the file

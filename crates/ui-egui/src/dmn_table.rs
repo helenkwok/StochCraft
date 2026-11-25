@@ -247,6 +247,35 @@ mod tests {
         assert_eq!(plain.status(), "New model");
     }
 
+    /// In a browser, New after a Download with a table not on disk does not go ahead either; with
+    /// no tables it does, though the download leaves the model unsaved.
+    #[test]
+    fn what_follows_a_download_waits_for_the_tables() {
+        let mut app = with_table();
+        app.after_save = Some(crate::Replace::New);
+        app.take_requests();
+        app.downloaded("desk.bpmn");
+        let status = app.status().to_owned();
+        assert!(status.starts_with("Downloaded desk.bpmn. "), "{status}");
+        assert!(status.contains("still need saving"), "{status}");
+        assert!(app.after_save.is_none());
+        assert!(
+            app.engine.model().dmn.contains_key("desk.dmn"),
+            "not replaced"
+        );
+        let mut plain = App::new(Platform::DESKTOP);
+        let example = stochcraft_engine::COMMANDS
+            .iter()
+            .find(|c| c.name == "model.set")
+            .map(|c| c.example())
+            .unwrap_or_default();
+        assert!(plain.execute("model.set", example).is_some());
+        assert!(plain.unsaved_changes());
+        plain.after_save = Some(crate::Replace::New);
+        plain.downloaded("plain.bpmn");
+        assert_eq!(plain.status(), "New model");
+    }
+
     /// The window shows the table and leaves it as it is: nothing it draws changes the model.
     #[test]
     fn the_window_shows_the_table_without_changing_it() {
