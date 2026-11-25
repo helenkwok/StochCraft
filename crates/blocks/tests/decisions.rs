@@ -355,7 +355,7 @@ fn a_count_that_names_two_ways_as_numbers_is_an_error() {
         "count",
         HitPolicy::Collect,
         "matches",
-        &[("> 0", "1"), ("> 10", "1")],
+        &[("-", "1"), ("> 10", "1")],
     );
     d.table.aggregation = Some(stochcraft_model::dmn::Aggregation::Count);
     let mut model = with_table(m.build(experiment()), "split", d);
