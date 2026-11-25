@@ -227,6 +227,8 @@ mod tests {
             .with_size(egui::vec2(900.0, 700.0))
             .build_ui_state(
                 |ui, app: &mut App| {
+                    crate::theme::install_fonts(ui.ctx(), "en");
+                    crate::theme::install(ui.ctx(), &crate::theme::default_theme());
                     let ctx = ui.ctx().clone();
                     app.decision_table_window(&ctx);
                 },
