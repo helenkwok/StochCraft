@@ -218,6 +218,35 @@ mod tests {
         assert!(!plain.unsaved_changes());
     }
 
+    /// Quit or New after a Save that left the tables unsaved does not go ahead: the model is
+    /// kept open, and the status says why. After a save that leaves nothing unsaved, it does.
+    #[test]
+    fn what_follows_a_save_waits_for_the_tables() {
+        for next in [crate::Replace::Quit, crate::Replace::New] {
+            let mut app = with_table();
+            app.after_save = Some(next);
+            app.take_requests();
+            let bytes = app.engine.save_bytes(true).unwrap_or_default();
+            app.written("desk.bpmn", &bytes);
+            let status = app.status().to_owned();
+            assert!(status.starts_with("Saved desk.bpmn. "), "{status}");
+            assert!(status.contains("still need saving"), "{status}");
+            assert!(app.after_save.is_none());
+            assert!(app.take_requests().is_empty(), "nothing follows");
+            assert!(
+                app.engine.model().dmn.contains_key("desk.dmn"),
+                "not replaced"
+            );
+            assert!(app.unsaved_changes());
+        }
+        // A model without tables: New follows the save.
+        let mut plain = App::new(Platform::DESKTOP);
+        plain.after_save = Some(crate::Replace::New);
+        let bytes = plain.engine.save_bytes(true).unwrap_or_default();
+        plain.written("plain.bpmn", &bytes);
+        assert_eq!(plain.status(), "New model");
+    }
+
     /// The window shows the table and leaves it as it is: nothing it draws changes the model.
     #[test]
     fn the_window_shows_the_table_without_changing_it() {

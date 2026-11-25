@@ -1478,6 +1478,7 @@ unit	yr	р.
 	Use Decision Table	Використати таблицю рішень
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Поки що лише для читання: редагуйте таблицю в її файлі .dmn або командою dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Його таблиці рішень не записано: застосунок поки не записує файли .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Його таблиці рішень ще треба зберегти, тому модель залишилася відкритою: застосунок поки не записує файли .dmn.
 	Reset {field}	Скинути: {field}
 	Changed from the default	Змінено порівняно зі значенням за замовчуванням
 	Changed from the inherited scenario	Змінено порівняно з успадкованим сценарієм

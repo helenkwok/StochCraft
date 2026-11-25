@@ -1478,6 +1478,7 @@ unit	yr	a
 	Use Decision Table	Kasuta otsustustabelit
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Praegu ainult vaatamiseks: muutke tabelit selle .dmn-failis või käsuga dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Selle otsustustabeleid ei kirjutatud: rakendus ei kirjuta veel .dmn-faile.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Selle otsustustabelid tuleb veel salvestada, seega jäeti mudel avatuks: rakendus ei kirjuta veel .dmn-faile.
 	Reset {field}	Lähtesta: {field}
 	Changed from the default	Vaikeväärtusest muudetud
 	Changed from the inherited scenario	Päritud stsenaariumist muudetud

@@ -1478,6 +1478,7 @@ unit	yr	thn
 	Use Decision Table	Pakai Tabel Keputusan
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Untuk saat ini hanya baca: sunting tabel di berkas .dmn-nya, atau dengan perintah dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Tabel keputusannya tidak ditulis: aplikasi belum menulis berkas .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Tabel keputusannya masih perlu disimpan, jadi model tetap dibuka: aplikasi belum menulis berkas .dmn.
 	Reset {field}	Atur ulang {field}
 	Changed from the default	Diubah dari default
 	Changed from the inherited scenario	Diubah dari skenario yang diwarisi

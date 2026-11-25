@@ -1478,6 +1478,7 @@ unit	yr	год.
 	Use Decision Table	Користи табелу одлучивања
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Засад само за читање: уредите табелу у њеном .dmn фајлу или командом dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Његове табеле одлучивања нису записане: апликација још не записује .dmn фајлове.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Његове табеле одлучивања још треба сачувати, па је модел остао отворен: апликација још не записује .dmn фајлове.
 	Reset {field}	Врати на почетно: {field}
 	Changed from the default	Промењено у односу на подразумевано
 	Changed from the inherited scenario	Промењено у односу на наслеђени сценарио

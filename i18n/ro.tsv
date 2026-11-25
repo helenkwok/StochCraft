@@ -1478,6 +1478,7 @@ unit	yr	a
 	Use Decision Table	Folosire tabel de decizie
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Deocamdată doar în citire: editați tabelul în fișierul său .dmn sau cu comanda dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Tabelele sale de decizie nu au fost scrise: aplicația nu scrie încă fișiere .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Tabelele sale de decizie trebuie încă salvate, așa că modelul a rămas deschis: aplicația nu scrie încă fișiere .dmn.
 	Reset {field}	Resetează {field}
 	Changed from the default	Modificat față de valoarea implicită
 	Changed from the inherited scenario	Modificat față de scenariul moștenit

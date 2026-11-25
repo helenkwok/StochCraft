@@ -1478,6 +1478,7 @@ unit	yr	년
 	Use Decision Table	결정 테이블 사용
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	지금은 읽기 전용입니다. 테이블은 해당 .dmn 파일에서 또는 dmn.set 명령으로 편집하세요.
 	Its decision tables were not written: the app does not write .dmn files yet.	결정 테이블은 기록되지 않았습니다. 앱은 아직 .dmn 파일을 기록하지 않습니다.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	결정 테이블을 아직 저장해야 하므로 모델을 열어 두었습니다. 앱은 아직 .dmn 파일을 기록하지 않습니다.
 	Reset {field}	{field} 초기화
 	Changed from the default	기본값에서 변경됨
 	Changed from the inherited scenario	상속된 시나리오에서 변경됨

@@ -1478,6 +1478,7 @@ unit	yr	సం.
 	Use Decision Table	నిర్ణయ పట్టికను ఉపయోగించు
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	ప్రస్తుతానికి చదవడానికి మాత్రమే: పట్టికను దాని .dmn ఫైల్‌లో లేదా dmn.set ఆదేశంతో సవరించండి.
 	Its decision tables were not written: the app does not write .dmn files yet.	దీని నిర్ణయ పట్టికలు వ్రాయబడలేదు: యాప్ ఇంకా .dmn ఫైల్‌లను వ్రాయదు.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	దీని నిర్ణయ పట్టికలను ఇంకా సేవ్ చేయాలి, కాబట్టి మోడల్ తెరిచే ఉంచబడింది: యాప్ ఇంకా .dmn ఫైల్‌లను వ్రాయదు.
 	Reset {field}	{field} రీసెట్ చేయి
 	Changed from the default	డిఫాల్ట్ నుండి మార్చబడింది
 	Changed from the inherited scenario	వారసత్వంగా వచ్చిన దృశ్యం నుండి మార్చబడింది

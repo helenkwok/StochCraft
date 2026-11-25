@@ -1039,6 +1039,11 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and "no rule matches" from its rows for the other decision table messages. Not checked
   against any other source and not reviewed by native speakers; the least certain are lo, th,
   ta, te, bn, ka, kk and sq.
+- The row for the status bar after a Save that leaves the decision tables unsaved (M5.5, L10:
+  the model kept open rather than closed or replaced) was machine-drafted from the plain meaning
+  of the English, reusing each catalog's own row for "Its decision tables were not written" and
+  its words for model and saving. Not checked against any other source and not reviewed by
+  native speakers; the least certain are lo, th, ta, te, bn, ka, kk and sq.
 - The rows for the properties of the selection (M5.5, U2: a field's reset, why a value is in
   bold, mixed values across selected blocks, a flow's page with its condition and Remove flow,
   and the properties several blocks share) were machine-drafted from the plain meaning of the

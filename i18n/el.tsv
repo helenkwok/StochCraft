@@ -1478,6 +1478,7 @@ unit	yr	έτ
 	Use Decision Table	Χρήση πίνακα αποφάσεων
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Προς το παρόν μόνο για ανάγνωση: επεξεργαστείτε τον πίνακα στο αρχείο .dmn του ή με την εντολή dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Οι πίνακες αποφάσεών του δεν γράφτηκαν: η εφαρμογή δεν γράφει ακόμη αρχεία .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Οι πίνακες αποφάσεών του χρειάζεται ακόμη να αποθηκευτούν, οπότε το μοντέλο έμεινε ανοιχτό: η εφαρμογή δεν γράφει ακόμη αρχεία .dmn.
 	Reset {field}	Επαναφορά: {field}
 	Changed from the default	Αλλαγμένο σε σχέση με την προεπιλογή
 	Changed from the inherited scenario	Αλλαγμένο σε σχέση με το κληρονομημένο σενάριο

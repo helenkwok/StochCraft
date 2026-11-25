@@ -1478,6 +1478,7 @@ unit	yr	m.
 	Use Decision Table	Naudoti sprendimų lentelę
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Kol kas tik skaityti: lentelę redaguokite jos .dmn faile arba komanda dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Jo sprendimų lentelės neįrašytos: programa kol kas neįrašo .dmn failų.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Jo sprendimų lenteles dar reikia įrašyti, todėl modelis paliktas atidarytas: programa kol kas neįrašo .dmn failų.
 	Reset {field}	Atstatyti: {field}
 	Changed from the default	Pakeista, palyginti su numatytąja reikšme
 	Changed from the inherited scenario	Pakeista, palyginti su paveldėtu scenarijumi

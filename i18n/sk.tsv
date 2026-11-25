@@ -1478,6 +1478,7 @@ unit	yr	r.
 	Use Decision Table	Použiť rozhodovaciu tabuľku
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Zatiaľ len na čítanie: tabuľku upravte v jej súbore .dmn alebo príkazom dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Jeho rozhodovacie tabuľky neboli zapísané: aplikácia zatiaľ nezapisuje súbory .dmn.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Jeho rozhodovacie tabuľky treba ešte uložiť, preto model zostal otvorený: aplikácia zatiaľ nezapisuje súbory .dmn.
 	Reset {field}	Obnoviť: {field}
 	Changed from the default	Zmenené oproti predvolenej hodnote
 	Changed from the inherited scenario	Zmenené oproti zdedenému scenáru

@@ -568,15 +568,26 @@ impl App {
         )
     }
 
-    /// The shell wrote `bytes` to `path`: the model is saved there.
+    /// The shell wrote `bytes` to `path`: the model is saved there. What was to follow the save
+    /// (quit, new, open) goes ahead only if the model is saved now: a model whose decision tables
+    /// are still unsaved (the app writes only the model's file) is kept open, rather than closed
+    /// or replaced with its tables lost.
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
                 let saved = tf("Saved {file}", &[("file", file_name(path))]);
-                self.info(saved + &self.tables_not_written());
                 self.remember(path);
-                if let Some(next) = self.after_save.take() {
-                    self.replace_now(next);
+                match self.after_save.take() {
+                    Some(_) if self.unsaved_changes() => self.info(format!(
+                        "{saved}. {}",
+                        t("Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.")
+                    )),
+                    next => {
+                        self.info(saved + &self.tables_not_written());
+                        if let Some(next) = next {
+                            self.replace_now(next);
+                        }
+                    }
                 }
             }
             Err(e) => self.save_failed(e.message),

@@ -1478,6 +1478,7 @@ unit	yr	yıl
 	Use Decision Table	Karar Tablosunu Kullan
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Şimdilik salt okunur: tabloyu kendi .dmn dosyasında veya dmn.set komutuyla düzenleyin.
 	Its decision tables were not written: the app does not write .dmn files yet.	Karar tabloları yazılmadı: uygulama henüz .dmn dosyası yazmıyor.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Karar tablolarının hâlâ kaydedilmesi gerekiyor, bu yüzden model açık tutuldu: uygulama henüz .dmn dosyası yazmıyor.
 	Reset {field}	{field} değerini sıfırla
 	Changed from the default	Varsayılandan değiştirildi
 	Changed from the inherited scenario	Devralınan senaryodan değiştirildi

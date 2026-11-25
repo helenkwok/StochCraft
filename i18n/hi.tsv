@@ -1478,6 +1478,7 @@ unit	yr	वर्ष
 	Use Decision Table	निर्णय तालिका उपयोग करें
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	अभी केवल पढ़ने के लिए: तालिका को उसकी .dmn फ़ाइल में, या dmn.set कमांड से संपादित करें।
 	Its decision tables were not written: the app does not write .dmn files yet.	इसकी निर्णय तालिकाएँ नहीं लिखी गईं: ऐप अभी .dmn फ़ाइलें नहीं लिखता।
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	इसकी निर्णय तालिकाएँ अभी सहेजनी बाकी हैं, इसलिए मॉडल खुला रखा गया: ऐप अभी .dmn फ़ाइलें नहीं लिखता।
 	Reset {field}	{field} रीसेट करें
 	Changed from the default	डिफ़ॉल्ट से बदला गया
 	Changed from the inherited scenario	विरासत में मिले परिदृश्य से बदला गया

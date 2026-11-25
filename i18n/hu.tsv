@@ -1478,6 +1478,7 @@ unit	yr	év
 	Use Decision Table	Döntési tábla használata
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Egyelőre csak olvasható: a táblát a .dmn fájljában vagy a dmn.set paranccsal szerkeszd.
 	Its decision tables were not written: the app does not write .dmn files yet.	A döntési táblái nem lettek kiírva: az alkalmazás még nem ír .dmn fájlokat.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	A döntési tábláit még menteni kell, ezért a modell nyitva maradt: az alkalmazás még nem ír .dmn fájlokat.
 	Reset {field}	{field} visszaállítása
 	Changed from the default	Eltér az alapértelmezettől
 	Changed from the inherited scenario	Eltér az örökölt forgatókönyvtől

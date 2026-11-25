@@ -1478,6 +1478,7 @@ unit	yr	ж.
 	Use Decision Table	Шешім кестесін пайдалану
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Әзірге тек оқуға арналған: кестені оның .dmn файлында немесе dmn.set командасымен өңдеңіз.
 	Its decision tables were not written: the app does not write .dmn files yet.	Оның шешім кестелері жазылмады: қолданба әзірге .dmn файлдарын жазбайды.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Оның шешім кестелерін әлі сақтау керек, сондықтан модель ашық қалдырылды: қолданба әзірге .dmn файлдарын жазбайды.
 	Reset {field}	{field}: қалпына келтіру
 	Changed from the default	Әдепкі мәннен өзгертілген
 	Changed from the inherited scenario	Мұраланған сценарийден өзгертілген

@@ -1478,6 +1478,7 @@ unit	yr	J.
 	Use Decision Table	Entscheidungstabelle verwenden
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Vorerst schreibgeschützt: Bearbeiten Sie die Tabelle in ihrer .dmn-Datei oder mit dem Befehl dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Seine Entscheidungstabellen wurden nicht geschrieben: Die App schreibt noch keine .dmn-Dateien.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Seine Entscheidungstabellen müssen noch gespeichert werden, daher blieb das Modell geöffnet: Die App schreibt noch keine .dmn-Dateien.
 	Reset {field}	{field} zurücksetzen
 	Changed from the default	Gegenüber dem Standard geändert
 	Changed from the inherited scenario	Gegenüber dem geerbten Szenario geändert

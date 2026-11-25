@@ -1478,6 +1478,7 @@ unit	yr	år
 	Use Decision Table	Bruk beslutningstabell
 	Shown read-only for now: edit the table in its .dmn file, or with the dmn.set command.	Foreløpig bare for visning: rediger tabellen i .dmn-filen dens, eller med kommandoen dmn.set.
 	Its decision tables were not written: the app does not write .dmn files yet.	Beslutningstabellene ble ikke skrevet: appen skriver ikke .dmn-filer ennå.
+	Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.	Beslutningstabellene må fortsatt lagres, så modellen ble holdt åpen: appen skriver ikke .dmn-filer ennå.
 	Reset {field}	Nullstill {field}
 	Changed from the default	Endret fra standard
 	Changed from the inherited scenario	Endret fra det arvede scenarioet
