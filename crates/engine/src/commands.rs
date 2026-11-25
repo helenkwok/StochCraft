@@ -2624,12 +2624,38 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .into_iter()
         .map(|(href, content, _)| (href, content))
         .collect();
+    // Two references can name one file: names that differ only in case, on a file system that
+    // ignores case, or a link in the model's folder. Holding the same, it is written once (the
+    // second recorded with the first); holding different contents, one would overwrite the
+    // other, so the save is refused before anything is written.
+    let mut placed: Vec<(String, std::path::PathBuf, Vec<u8>)> = Vec::new();
+    let mut twins: Vec<String> = Vec::new();
+    let mut unique = Vec::new();
+    for (href, content, replaceable) in files {
+        let to = crate::agents::beside(&dir, &href)
+            .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))?;
+        if let Some((first, _, held)) = placed.iter().find(|(_, t, _)| same_target(t, &to)) {
+            if *held != content {
+                return Err(CommandError::new(
+                    ErrorCode::Conflict,
+                    format!(
+                        "`{first}` and `{href}` name one file, {}, but the model gives them different contents: make them one reference",
+                        to.display()
+                    ),
+                ));
+            }
+            twins.push(href);
+            continue;
+        }
+        placed.push((href.clone(), to, content.clone()));
+        unique.push((href, content, replaceable));
+    }
     let mut companions = Vec::new();
     // Each file to write, with what was there when the save looked (`None`: nothing).
     let mut siblings: Vec<Sibling> = Vec::new();
     // The `.dmn` files already as the model would write them.
     let mut same = Vec::new();
-    for (href, content, replaceable) in files {
+    for (href, content, replaceable) in unique {
         let to = crate::agents::beside(&dir, &href)
             .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))?;
         if model_is(to.as_path()) {
@@ -2689,6 +2715,9 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         write_beside(&to, &content, seen.as_deref())?;
         record(e, href.as_str());
     }
+    for href in &twins {
+        record(e, href.as_str());
+    }
     // Every one is there now, so a name that differs only in case on a file system that ignores
     // it is found too.
     if let Some((href, _)) = companions.iter().find(|(_, to)| model_is(to.as_path())) {
@@ -2698,6 +2727,41 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
     e.dmn_saved(written);
     e.record_saved(&path, &bytes)
+}
+
+/// Whether `a` and `b`, two files beside the model, may be one file. Both there: whether they
+/// are the same file (links followed). Only one there: not, as a name the file system takes for
+/// the other would be there too. Neither there yet: whether they are the same path once their
+/// nearest folders that are there are resolved, compared ignoring case, as a file system may.
+fn same_target(a: &std::path::Path, b: &std::path::Path) -> bool {
+    if a == b {
+        return true;
+    }
+    let resolved = |p: &std::path::Path| {
+        let mut existing = p;
+        let mut rest = Vec::new();
+        while !existing.exists() {
+            match (existing.parent(), existing.file_name()) {
+                (Some(parent), Some(name)) => {
+                    rest.push(name.to_owned());
+                    existing = parent;
+                }
+                _ => break,
+            }
+        }
+        let mut out = std::fs::canonicalize(existing).unwrap_or_else(|_| existing.to_path_buf());
+        for name in rest.iter().rev() {
+            out.push(name);
+        }
+        out.to_string_lossy().to_lowercase()
+    };
+    match (a.exists(), b.exists()) {
+        (true, true) => {
+            same_file::is_same_file(a, b).unwrap_or_else(|_| resolved(a) == resolved(b))
+        }
+        (false, false) => resolved(a) == resolved(b),
+        _ => false,
+    }
 }
 
 /// Writes `content` to `to`, a file beside the model, if it is still as the save found it

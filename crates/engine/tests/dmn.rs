@@ -560,3 +560,78 @@ fn a_decision_is_added_to_a_new_file_not_to_one_read() {
         .unwrap_or_else(|err| panic!("{err}"));
     assert_eq!(backup.decisions[0].id, "backup");
 }
+
+/// Two references that may name one file, here new ones differing only in case (one file where
+/// the file system ignores case), with different tables: the save is refused before anything is
+/// written, rather than one table writing over the other.
+#[test]
+fn two_references_to_one_file_with_different_tables_are_not_saved() {
+    let dir = folder("one-file");
+    let mut e = example();
+    for (file, value) in [("sorting.dmn", "1"), ("Sorting.dmn", "2")] {
+        ok(
+            &mut e,
+            "dmn.set",
+            json!({ "file": file, "decision": "priority", "table": one_rule(value, None) }),
+        );
+    }
+    let path = dir.join("desk.bpmn");
+    let refused = e.execute("file.save", json!({ "path": path.to_string_lossy() }));
+    assert!(
+        refused.is_err_and(|err| err.message.contains("name one file")),
+        "refused"
+    );
+    assert!(!dir.join("sorting.dmn").exists() && !dir.join("Sorting.dmn").exists());
+    assert!(!path.exists());
+}
+
+/// A link in the model's folder to a table file the model also reads by its own name: an edit
+/// through one reference is not saved over the other's table.
+#[cfg(unix)]
+#[test]
+fn a_link_to_a_table_file_is_the_same_file() {
+    let dir = folder("link");
+    let mut model = sorter();
+    model.decisions.insert(
+        ElementId::unchecked("chute_a"),
+        DecisionUse {
+            file: "link.dmn".into(),
+            decision: "chute".into(),
+            route: None,
+        },
+    );
+    let (bpmn, dmn) = (dir.join("sorter.bpmn"), dir.join("sorting.dmn"));
+    std::fs::write(&bpmn, stochcraft_io::write_new(&model)).unwrap_or_else(|e| panic!("{e}"));
+    std::fs::write(&dmn, stochcraft_io::dmn::write_dmn(&table())).unwrap_or_else(|e| panic!("{e}"));
+    std::os::unix::fs::symlink("sorting.dmn", dir.join("link.dmn"))
+        .unwrap_or_else(|e| panic!("{e}"));
+    let dmn_bytes = read(&dmn);
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": bpmn.to_string_lossy() }),
+    );
+    assert_eq!(e.model().dmn.len(), 2);
+    // Unchanged, both read as the one file: saved as it is.
+    ok(&mut e, "file.save", json!({}));
+    assert_eq!(read(&dmn), dmn_bytes);
+    // Edited through the link: refused, and the file is as it was.
+    let got = ok(&mut e, "dmn.get", json!({ "file": "link.dmn" }));
+    let mut t = got["files"][0]["decisions"][0]["table"].clone();
+    t["rules"][0]["outputs"][0] = json!("\"chute_b\"");
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "link.dmn", "decision": "chute", "table": t }),
+    );
+    let refused = e.execute("file.save", json!({}));
+    assert!(
+        refused.is_err_and(|err| err.message.contains("name one file")),
+        "refused"
+    );
+    assert_eq!(read(&dmn), dmn_bytes);
+    assert!(
+        std::fs::symlink_metadata(dir.join("link.dmn")).is_ok_and(|m| m.file_type().is_symlink())
+    );
+}
