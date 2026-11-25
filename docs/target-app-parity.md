@@ -1,6 +1,6 @@
 # StochCraft parity with established tools
 
-> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-20 · **Target:** what users of established commercial simulation tools see and do (from their public documentation),
+> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-25 · **Target:** what users of established commercial simulation tools see and do (from their public documentation),
 > from the start screen to the report
 
 How close StochCraft's window is to what a user of an established tool expects, and to what a
@@ -161,9 +161,11 @@ re-graded. Since then:
 - **Help (area 11; heuristic 10):** Help beside the work with Getting started, a glossary,
   shortcuts and the user guide (#169), and a guided first model on the real canvas (#172). Help
   no longer holds only About.
-- **Start screen (area 1):** a start page that asks what you want to find out (#170), and eleven
-  examples, five of them checked against exact answers (#171) and a parcel sorter (#207); a search
-  over every example, and the full list grouped by field.
+- **Start screen (area 1):** a start page that asks what you want to find out (#170), and 24
+  examples, 15 of them featured, among them five checked against exact answers (#171) and a
+  parcel sorter (#207); a search over every example, and the full list grouped by field.
+- **Properties (area 4):** values changed from the default in bold with a reset, a page for a
+  selected flow, and the shared properties of several selected blocks edited in one step (#309).
 - **Results (area 10; heuristics 1 and 8):** findings in words, how sure the numbers are, four key
   measures per block and two default charts (#163, #164, #165); results stay, marked out of date,
   after an edit, and compare with a kept baseline (#166, #167, #168); a dashboard panel with four
@@ -174,8 +176,12 @@ re-graded. Since then:
 - **Words (heuristic 2):** one vocabulary across the window, the results and the engine's
   messages, which go through the catalogs (#139, #221).
 - **Layout and animation (area 6):** a 3D view (#205, #208, #210, #213) and a read-only Layout
-  view to scale (#216), both placed from the diagram; entities moving on the flowchart are still
+  view to scale (#216), both drawn from the model's layout in the file (conveyor tracks, places,
+  scenery, diverts along a conveyor and junctions; #295, #297, #308), which only the parcel sorter
+  example has so far and the window cannot edit yet; entities moving on the flowchart are still
   missing (#151).
+- **Experiments (area 9):** runs added until the key measures are precise enough (#232); the
+  search for the best design runs from the command line and MCP only (#294, #298).
 - **Run controls (area 7):** a run bar with Play/Pause on Space, Reset, Step, a speed with keys to
   halve or double it, As fast as possible, Pause at a time and a clock (#218).
 - **Release:** v0.2.0 downloads for Windows, macOS and Linux (#214).

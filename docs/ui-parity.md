@@ -1,6 +1,6 @@
 # UI and interaction parity
 
-> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-20 · **Target:** what users of
+> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-25 · **Target:** what users of
 > established commercial simulation tools see and do (from their public documentation) in a
 > session, from the start screen to the report
 
@@ -27,14 +27,16 @@ driven for this checklist.
 ~44%, the 23 first-hour rows ~55%. Weakest: layout and animation (6), results and charts (10), help
 (11), and the library (2), where the first impression is made.
 
-**Since the review (2026-11-20).** The rows below are graded as the review found them, apart from
-the run-control rows of area 7, updated with the run bar (#218), and the summary above was not
-re-graded. Since then:
+**Since the review (2026-11-20; this list last updated 2026-11-25).** The rows below are graded
+as the review found them, apart from the run-control rows of area 7, updated with the run bar
+(#218), and the properties rows of area 4, updated with the properties of the selection (#309),
+which moved "Edit several objects at once" from missing to done: the rows now count 28 done,
+10 done (ours), 26 partial and 27 missing. The summary above was not re-graded. Since then:
 
 - **Start screen (area 1):** a start page that asks "What do you want to find out?", with examples
   by question and industry (#170), a "Start from a blank model" link, and a guided first model
-  on the real canvas (#172). The examples went from three to eleven: five with checked answers
-  (#171) and a parcel sorter (#207). Models have a length unit beside the time unit (#198). A
+  on the real canvas (#172). The examples went from three to 24, 15 of them featured on the start
+  page: among them five with checked answers (#171) and a parcel sorter (#207). Models have a length unit beside the time unit (#198). A
   search box looks through every example, and See all groups them under a heading per field,
   with a Logistics and warehousing field for the parcel sorter.
 - **Library (area 2):** ten kinds in the palette, with the Conveyor (#198). The library is still
@@ -42,11 +44,25 @@ re-graded. Since then:
 - **Distributions (area 5):** fitting measured data by maximum likelihood, ranked by
   Anderson–Darling, in the engine and the command line (`stochcraft-cli fit`, #182); none in the
   window yet.
+- **Properties (area 4):** a value changed from its default, or from the inherited scenario, is
+  in bold with a reset beside it; a selected flow has its own page; several selected blocks show
+  the properties they share and take an edit in one step (#309). The window has no scenario
+  picker yet.
 - **Layout, 2D/3D and animation (area 6):** a 3D view of the model with parametric low-poly
-  shapes and totes on the conveyors of a watched run (#205, #208, #210, #213), and a read-only
-  Layout view to scale (#216), both placed from the diagram for now. The Transport block and
-  mobile pools are in the model and its files (#202), without a runtime yet. Entities moving on
-  the flowchart are still missing (#151).
+  shapes (#205, #208, #210, #213), and a read-only Layout view to scale (#216). Both now draw only
+  from the model's layout, kept in the file: conveyor tracks, places and scenery (#295), diverts
+  at points along a conveyor and junctions between conveyors (#308); a watched run's parcels
+  ride the belts (#297). The layout is not edited in the window yet, and only the parcel sorter
+  example has one. The Transport block and mobile pools are in the model and its files (#202),
+  without a runtime yet. Entities moving on the flowchart are still missing (#151).
+- **Experiments (area 9):** "How many runs" can be "More until precise enough": runs are added
+  until the key measures are within their targets, and the results say why the runs stopped
+  (#232). The search for the best design (`experiment.optimise`: whole-number decisions, rules
+  and a continuous mean, #294, #298) and evaluations for an outside optimiser (#287) run from
+  the command line and MCP only.
+- **Other kinds of model:** Monte Carlo models (#239) and system dynamics models (#253, #258)
+  open, run and are edited in the window; agent-based models run from the command line and MCP
+  only.
 - **Statistics while running (area 8):** "This run" shows the selected block's waiting room over
   time.
 - **Results (area 10):** what the run found in two to four sentences (#165), "How sure are these
