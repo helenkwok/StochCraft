@@ -537,14 +537,17 @@ struct Pairs {
 }
 
 /// For each of `new`'s items, the one of `old`'s it continues, if any: the one with the same id;
-/// for an item without an id, one without an id that is equal to it. The items without ids left
-/// over are taken in order, as edited in place, only when as many are left on each side; when
-/// some were added or removed as well, which continues which is not known (DMN gives an element
-/// no identity but its optional id), so none is paired and the old ones left are `unknown`. Each
-/// of `old`'s is taken once.
+/// for an item without an id, one without an id that is equal to it, the one in the same place
+/// first when as many items without ids are on each side (so of two equal rules, editing one
+/// leaves the other's cells with it). The items without ids left over are taken in order, as
+/// edited in place, only when as many are left on each side; when some were added or removed as
+/// well, which continues which is not known (DMN gives an element no identity but its optional
+/// id), so none is paired and the old ones left are `unknown`. Each of `old`'s is taken once.
 fn pair<T: PartialEq>(old: &[T], new: &[T], id: impl Fn(&T) -> Option<&str>) -> Pairs {
     let mut used = vec![false; old.len()];
     let mut from: Vec<Option<usize>> = vec![None; new.len()];
+    let unnamed = |items: &[T]| items.iter().filter(|x| id(x).is_none()).count();
+    let same_count = unnamed(old) == unnamed(new);
     // Two passes: by id, then equal items without ids.
     for pass in 0..2 {
         for (j, n) in new.iter().enumerate() {
@@ -559,7 +562,9 @@ fn pair<T: PartialEq>(old: &[T], new: &[T], id: impl Fn(&T) -> Option<&str>) -> 
                         id(o).is_none() && o == n
                     }
             };
-            if let Some(i) = old.iter().enumerate().position(|(i, o)| fits(i, o)) {
+            let here =
+                (pass == 1 && same_count && old.get(j).is_some_and(|o| fits(j, o))).then_some(j);
+            if let Some(i) = here.or_else(|| old.iter().enumerate().position(|(i, o)| fits(i, o))) {
                 used[i] = true;
                 from[j] = Some(i);
             }
@@ -1454,5 +1459,43 @@ mod tests {
         t.rules.insert(0, x);
         let bytes = save_dmn(plain.as_bytes(), &before, &after).unwrap_or_else(|e| panic!("{e}"));
         assert_eq!(read(&String::from_utf8_lossy(&bytes)), after);
+    }
+
+    /// Of two equal rules without ids, editing the first leaves the second's cells with the
+    /// second: [A, A] to [A', A] keeps each rule's cell ids where they were.
+    #[test]
+    fn of_two_equal_rules_without_ids_the_edited_one_keeps_its_own_cells_ids() {
+        let file = FILE
+            .replace(r#"<dmn:rule id="r_small">"#, "<dmn:rule>")
+            .replace(r#"<dmn:rule id="r_rest">"#, "<dmn:rule>")
+            .replace("<dmn:text>-</dmn:text>", "<dmn:text>&lt; 10</dmn:text>")
+            .replace(
+                r#"<dmn:annotationEntry><dmn:text></dmn:text></dmn:annotationEntry>"#,
+                r#"<dmn:annotationEntry><dmn:text>fits a tote</dmn:text></dmn:annotationEntry>"#,
+            )
+            .replace(
+                r#"<dmn:outputEntry><dmn:text>"small"</dmn:text></dmn:outputEntry>"#,
+                r#"<dmn:outputEntry id="oe1"><dmn:text>"small"</dmn:text></dmn:outputEntry>"#,
+            )
+            .replace(
+                r#"<dmn:outputEntry><dmn:text>"large"</dmn:text></dmn:outputEntry>"#,
+                r#"<dmn:outputEntry id="oe2"><dmn:text>"small"</dmn:text></dmn:outputEntry>"#,
+            );
+        let before = read(&file);
+        let t = &before.decisions[0].table;
+        assert_eq!(t.rules[0], t.rules[1], "the two rules are equal");
+        let mut after = before.clone();
+        after.decisions[0].table.rules[0].outputs[0] = "\"tiny\"".into();
+        let bytes = save_dmn(file.as_bytes(), &before, &after).unwrap_or_else(|e| panic!("{e}"));
+        let text = String::from_utf8_lossy(&bytes).into_owned();
+        assert_eq!(read(&text), after);
+        assert!(
+            text.contains(r#"<dmn:outputEntry id="oe1"><dmn:text>&quot;tiny&quot;</dmn:text>"#),
+            "{text}"
+        );
+        assert!(
+            text.contains(r#"<dmn:outputEntry id="oe2"><dmn:text>"small"</dmn:text>"#),
+            "{text}"
+        );
     }
 }
