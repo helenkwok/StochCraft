@@ -5081,7 +5081,9 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   A built model is scored the same way against a reference model, and one way more, which the
   paper does not: whether its results agree with the reference's.
   - **Matching the two models:** the structure score pairs each built element with a reference
-    element (by kind and connections; names in a prompt are not ids). Before the results are
+    element (by kind and connections; names in a prompt are not ids). Where several pairings fit
+    the structure equally, as with two parallel tasks, the one whose parameters match the
+    reference's is taken, then the one whose names are closest. Before the results are
     compared, the built model's elements take their partners' ids, so the random streams, keyed
     by id, are the reference's, and each measure has its counterpart in `results.compare`. An
     element with no partner is reported as extra or missing, and its measures are not compared.
