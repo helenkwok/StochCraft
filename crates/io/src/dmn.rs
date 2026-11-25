@@ -539,54 +539,85 @@ fn closing_indent(e: &Element) -> Option<String> {
 struct Pairs {
     /// For each of `new`'s items, the one of `old`'s it continues, if any.
     from: Vec<Option<usize>>,
-    /// `old`'s items without an id whose place in `new` is not known: items without ids were
-    /// both added (or removed) and edited, so none of these is taken to continue as any
-    /// particular one of `new`'s, and none is kept.
+    /// `old`'s items without an id whose place in `new` is not known, so none is taken to
+    /// continue as any particular one of `new`'s, and none is kept.
     unknown: Vec<usize>,
 }
 
-/// For each of `new`'s items, the one of `old`'s it continues, if any: the one with the same id;
-/// for an item without an id, one without an id that is equal to it, the one in the same place
-/// first when as many items without ids are on each side (so of two equal rules, editing one
-/// leaves the other's cells with it). The items without ids left over are taken in order, as
-/// edited in place, only when as many are left on each side; when some were added or removed as
-/// well, which continues which is not known (DMN gives an element no identity but its optional
-/// id), so none is paired and the old ones left are `unknown`. Each of `old`'s is taken once.
-fn pair<T: PartialEq>(old: &[T], new: &[T], id: impl Fn(&T) -> Option<&str>) -> Pairs {
+/// For each of `new`'s items, the one of `old`'s it continues, if any. DMN gives an element no
+/// identity but its optional id, so, in turn:
+///
+/// 1. an item with an id continues the old one with that id;
+/// 2. the others (without an id, or with one no old item has, which may be an old item given an
+///    id) continue old items without an id that are the `same` as them (equal in all the model
+///    holds but the id; a rule's cells compared in the new order of the columns): first the one
+///    in the same place, for every item, then one elsewhere. Of several equal old items
+///    elsewhere, the first is taken only if none of them is `rich` (holds what the model does
+///    not, which would go to the wrong one); otherwise none is;
+/// 3. the items left over continue the old items without an id left over in order, as edited in
+///    place, only when as many are left on each side and no equal items were left undecided.
+///    Otherwise which continues which is not known, and the old ones left are `unknown`.
+///
+/// Each of `old`'s is taken once.
+fn pair<T>(
+    old: &[T],
+    new: &[T],
+    id: impl Fn(&T) -> Option<&str>,
+    same: impl Fn(&T, &T) -> bool,
+    rich: impl Fn(usize) -> bool,
+) -> Pairs {
     let mut used = vec![false; old.len()];
     let mut from: Vec<Option<usize>> = vec![None; new.len()];
-    let unnamed = |items: &[T]| items.iter().filter(|x| id(x).is_none()).count();
-    let same_count = unnamed(old) == unnamed(new);
-    // Two passes: by id, then equal items without ids.
-    for pass in 0..2 {
-        for (j, n) in new.iter().enumerate() {
-            if from[j].is_some() || (pass == 0) != id(n).is_some() {
-                continue;
-            }
-            let fits = |i: usize, o: &T| {
-                !used[i]
-                    && if pass == 0 {
-                        id(o) == id(n)
-                    } else {
-                        id(o).is_none() && o == n
-                    }
-            };
-            let here =
-                (pass == 1 && same_count && old.get(j).is_some_and(|o| fits(j, o))).then_some(j);
-            if let Some(i) = here.or_else(|| old.iter().enumerate().position(|(i, o)| fits(i, o))) {
-                used[i] = true;
-                from[j] = Some(i);
-            }
+    for (j, n) in new.iter().enumerate() {
+        let Some(want) = id(n) else {
+            continue;
+        };
+        if let Some(i) =
+            (0..old.len()).find(|&i| !used[i] && old.get(i).is_some_and(|o| id(o) == Some(want)))
+        {
+            used[i] = true;
+            from[j] = Some(i);
         }
     }
-    let old_left: Vec<usize> = (0..old.len())
-        .filter(|&i| !used[i] && old.get(i).is_some_and(|o| id(o).is_none()))
-        .collect();
-    let new_left: Vec<usize> = (0..new.len())
-        .filter(|&j| from[j].is_none() && new.get(j).is_some_and(|n| id(n).is_none()))
-        .collect();
+    // An old item without an id, not taken yet.
+    let open = |i: usize, used: &[bool]| {
+        !used.get(i).copied().unwrap_or(true) && old.get(i).is_some_and(|o| id(o).is_none())
+    };
+    for j in 0..new.len() {
+        if from[j].is_none()
+            && open(j, &used)
+            && old.get(j).zip(new.get(j)).is_some_and(|(o, n)| same(o, n))
+        {
+            used[j] = true;
+            from[j] = Some(j);
+        }
+    }
+    let mut undecided = false;
+    for j in 0..new.len() {
+        let Some(n) = new.get(j).filter(|_| from[j].is_none()) else {
+            continue;
+        };
+        let equal: Vec<usize> = (0..old.len())
+            .filter(|&i| open(i, &used) && old.get(i).is_some_and(|o| same(o, n)))
+            .collect();
+        let take = match equal.as_slice() {
+            [] => None,
+            [only] => Some(*only),
+            [first, ..] if !equal.iter().any(|&i| rich(i)) => Some(*first),
+            _ => {
+                undecided = true;
+                None
+            }
+        };
+        if let Some(i) = take {
+            used[i] = true;
+            from[j] = Some(i);
+        }
+    }
+    let old_left: Vec<usize> = (0..old.len()).filter(|&i| open(i, &used)).collect();
+    let new_left: Vec<usize> = (0..new.len()).filter(|&j| from[j].is_none()).collect();
     let mut unknown = Vec::new();
-    if old_left.len() == new_left.len() {
+    if !undecided && old_left.len() == new_left.len() {
         for (i, j) in old_left.into_iter().zip(new_left) {
             from[j] = Some(i);
         }
@@ -596,11 +627,20 @@ fn pair<T: PartialEq>(old: &[T], new: &[T], id: impl Fn(&T) -> Option<&str>) -> 
     Pairs { from, unknown }
 }
 
+/// Whether a rule's `new` cells (of one kind) are `old`'s, each column's compared with the cell
+/// of the old column it continues (`columns`); a new column's are not compared.
+fn same_cells(old: &[String], new: &[String], columns: &[Option<usize>]) -> bool {
+    new.iter()
+        .zip(columns)
+        .all(|(cell, from)| from.is_none_or(|i| old.get(i) == Some(cell)))
+}
+
 /// Whether `e`, an element of a decision table (a column, a rule or a rule's cell), holds
 /// something the model does not keep of it: attributes the model does not hold (of `e` itself,
 /// those other than `own`; inside it, any but an input expression's type, so its cells' ids
-/// count), elements of other namespaces, extension elements, comments or processing
-/// instructions. Rebuilt from the model, it would lose them.
+/// count), descriptions (but a rule's own, which the model holds), elements of other
+/// namespaces, extension elements, comments or processing instructions. Rebuilt from the model,
+/// it would lose them.
 fn holds_more(e: &Element, ns: &str, own: &[&str]) -> bool {
     let declares = |name: &str| name == "xmlns" || name.starts_with("xmlns:");
     let extra = |x: &Element, held: &[&str]| {
@@ -613,7 +653,8 @@ fn holds_more(e: &Element, ns: &str, own: &[&str]) -> bool {
             .iter()
             .any(|n| matches!(n, Node::Comment(_) | Node::Pi(_)))
     };
-    if extra(e, own) || odd(e) {
+    let described = |x: &Element| x.elements().any(|c| c.is(ns, "description"));
+    if extra(e, own) || odd(e) || (!e.is(ns, "rule") && described(e)) {
         return true;
     }
     e.descendants().into_iter().any(|x| {
@@ -622,7 +663,11 @@ fn holds_more(e: &Element, ns: &str, own: &[&str]) -> bool {
         } else {
             &[]
         };
-        x.ns.as_deref() != Some(ns) || x.local() == "extensionElements" || extra(x, held) || odd(x)
+        x.ns.as_deref() != Some(ns)
+            || x.local() == "extensionElements"
+            || extra(x, held)
+            || odd(x)
+            || described(x)
     })
 }
 
@@ -761,11 +806,77 @@ impl Patch<'_> {
         indent: &str,
     ) -> Result<(), DmnError> {
         let inner = format!("{indent}  ");
-        let inputs = pair(&old.inputs, &new.inputs, |c| c.id.as_deref());
-        let outputs = pair(&old.outputs, &new.outputs, |c| c.id.as_deref());
-        let annotations = pair(&old.annotations, &new.annotations, |_| None);
-        let rules = pair(&old.rules, &new.rules, |r| r.id.as_deref());
         let (mut parts, slots) = self.split(table, &["input", "output", "annotation", "rule"]);
+        // What the model holds of a column or rule itself, per kind: an input's id and label
+        // (its type is its expression's), an output's id, label, name and type, an annotation
+        // column's name, a rule's id (and its description).
+        let own: [&[&str]; 4] = [
+            &["id", "label"],
+            &["id", "label", "name", "typeRef"],
+            &["name"],
+            &["id"],
+        ];
+        let entries = ["inputEntry", "outputEntry", "annotationEntry"];
+        // Whether old item `i` of kind `k` holds what the model does not: a column's cells, in
+        // every rule, go with it.
+        let rich = |k: usize, i: usize| {
+            let item = parts.get(k).and_then(|v| v.get(i)).and_then(Option::as_ref);
+            let cells = entries.get(k).is_some_and(|entry| {
+                parts.get(3).into_iter().flatten().flatten().any(|r| {
+                    r.elements()
+                        .filter(|c| c.is(self.ns, entry))
+                        .nth(i)
+                        .is_some_and(|c| holds_more(c, self.ns, &[]))
+                })
+            });
+            cells
+                || item.is_some_and(|e| holds_more(e, self.ns, own.get(k).copied().unwrap_or(&[])))
+        };
+        let inputs = pair(
+            &old.inputs,
+            &new.inputs,
+            |c| c.id.as_deref(),
+            |o, n| {
+                Input {
+                    id: n.id.clone(),
+                    ..o.clone()
+                } == *n
+            },
+            |i| rich(0, i),
+        );
+        let outputs = pair(
+            &old.outputs,
+            &new.outputs,
+            |c| c.id.as_deref(),
+            |o, n| {
+                Output {
+                    id: n.id.clone(),
+                    ..o.clone()
+                } == *n
+            },
+            |i| rich(1, i),
+        );
+        let annotations = pair(
+            &old.annotations,
+            &new.annotations,
+            |_| None,
+            |o, n| o == n,
+            |i| rich(2, i),
+        );
+        // A rule's cells are compared column by column, each new column with the old one it
+        // continues, so a rule whose cells moved with their columns is the same rule.
+        let rules = pair(
+            &old.rules,
+            &new.rules,
+            |r| r.id.as_deref(),
+            |o, n| {
+                o.description == n.description
+                    && same_cells(&o.inputs, &n.inputs, &inputs.from)
+                    && same_cells(&o.outputs, &n.outputs, &outputs.from)
+                    && same_cells(&o.annotations, &n.annotations, &annotations.from)
+            },
+            |i| rich(3, i),
+        );
         // An item without an id whose place in the edited table is not known is not kept; that
         // is refused only if it holds what the model does not, which would otherwise be lost or
         // given to another item.
@@ -775,29 +886,13 @@ impl Patch<'_> {
             ("annotation", "annotation columns", &annotations),
             ("rule", "rules", &rules),
         ];
-        // What the model holds of a column or rule itself: a rule's id, a column's id, label,
-        // name and type.
-        let own = ["id", "label", "name", "typeRef"];
-        let entries = ["inputEntry", "outputEntry", "annotationEntry"];
         for (k, (kind, plural, p)) in kinds.iter().enumerate() {
-            let held = p.unknown.iter().find(|&&i| {
-                let item = parts.get(k).and_then(|v| v.get(i)).and_then(Option::as_ref);
-                // A column's cells, in every rule, go with it.
-                let cells = entries.get(k).is_some_and(|entry| {
-                    parts.get(3).into_iter().flatten().flatten().any(|r| {
-                        r.elements()
-                            .filter(|c| c.is(self.ns, entry))
-                            .nth(i)
-                            .is_some_and(|c| holds_more(c, self.ns, &[]))
-                    })
-                });
-                cells || item.is_some_and(|e| holds_more(e, self.ns, &own))
-            });
+            let held = p.unknown.iter().find(|&&i| rich(k, i));
             if let Some(i) = held {
                 return err(
                     format!("{kind} {}", i + 1),
                     format!(
-                        "{plural} without ids were added or removed and others edited in the same change, so which edited one continues this {kind} is not known, and saving would lose what the file keeps of it (cell ids, extensions, comments); give the {plural} ids, or save the edits and the added or removed {plural} separately"
+                        "{plural} without ids were added, removed or given ids, or are alike, and others edited in the same change, so which edited one continues this {kind} is not known, and saving would lose what the file keeps of it (cell ids, descriptions, extensions, comments); save the edits and the added or removed {plural} separately"
                     ),
                 );
             }
@@ -1503,7 +1598,7 @@ mod tests {
     /// Rules without ids have no identity but their place (DMN's `id` is optional): with one
     /// inserted and one edited in the same change, which edited rule continues which old one is
     /// not known, so a save that would lose a rule's cell ids or move them to another rule is
-    /// refused. Edited in place, given an id, or holding nothing the model does not, it is saved.
+    /// refused. Edited in place, or holding nothing the model does not, it is saved.
     #[test]
     fn rules_without_ids_keep_their_cells_ids_or_the_save_is_refused() {
         let file = FILE
@@ -1530,19 +1625,14 @@ mod tests {
             .map(|_| String::new())
             .unwrap_or_else(|e| e.to_string());
         assert!(
-            message.contains("rule 1") && message.contains("give the rules ids"),
+            message.contains("rule 1") && message.contains("separately"),
             "{message}"
         );
-        // The same with the new rule given an id: A' continues A, its cell's id with it.
+        // The same with the new rule given an id: as an old rule may have been given it, which
+        // edited rule continues A is still not known.
         let mut named = after.clone();
         named.decisions[0].table.rules[0].id = Some("r_pallet".into());
-        let bytes = save_dmn(file.as_bytes(), &before, &named).unwrap_or_else(|e| panic!("{e}"));
-        let text = String::from_utf8_lossy(&bytes).into_owned();
-        assert_eq!(read(&text), named);
-        assert!(
-            text.contains(r#"<dmn:outputEntry id="oe1"><dmn:text>&quot;tiny&quot;</dmn:text></dmn:outputEntry>"#),
-            "{text}"
-        );
+        assert!(save_dmn(file.as_bytes(), &before, &named).is_err());
         // Edited in place: kept where it was.
         let mut edited = before.clone();
         edited.decisions[0].table.rules[0].outputs[0] = "\"tiny\"".into();
@@ -1596,5 +1686,168 @@ mod tests {
             text.contains(r#"<dmn:outputEntry id="oe2"><dmn:text>"small"</dmn:text>"#),
             "{text}"
         );
+    }
+
+    /// A decision table file with the output `columns` and the `rules`, after one input column
+    /// `i1` reading `size`, in DMN 1.6's namespace as the default.
+    fn table_file(columns: &str, rules: &str) -> String {
+        format!(
+            r#"<definitions xmlns="https://www.omg.org/spec/DMN/20240513/MODEL/" id="d" name="" namespace="n"><decision id="x" name="X"><decisionTable id="t" hitPolicy="FIRST"><input id="i1"><inputExpression typeRef="number"><text>size</text></inputExpression></input>{columns}{rules}</decisionTable></decision></definitions>"#
+        )
+    }
+
+    /// `file` saved with its one table edited by `edit`: the text, or why it was refused.
+    fn saved(file: &str, edit: impl FnOnce(&mut Table)) -> Result<String, String> {
+        let before = read(file);
+        let mut after = before.clone();
+        if let Some(d) = after.decisions.first_mut() {
+            edit(&mut d.table);
+        }
+        save_dmn(file.as_bytes(), &before, &after)
+            .map(|b| String::from_utf8_lossy(&b).into_owned())
+            .map_err(|e| e.to_string())
+    }
+
+    /// Where `needle` is in `text` (panics if it is not).
+    fn at(text: &str, needle: &str) -> usize {
+        text.find(needle)
+            .unwrap_or_else(|| panic!("no {needle} in {text}"))
+    }
+
+    /// Two outputs with ids swapped, cells and all, in rules without ids whose input cells are
+    /// alike: each rule is matched with the cells moved with their columns, so each keeps its
+    /// own cells (and their ids), not the other's.
+    #[test]
+    fn rules_are_matched_in_the_new_order_of_the_columns() {
+        let file = table_file(
+            r#"<output id="o1" name="a"/><output id="o2" name="b"/>"#,
+            concat!(
+                r#"<rule><inputEntry><text>-</text></inputEntry><outputEntry id="a1"><text>1</text></outputEntry><outputEntry id="b1"><text>2</text></outputEntry></rule>"#,
+                r#"<rule><inputEntry><text>-</text></inputEntry><outputEntry id="a2"><text>2</text></outputEntry><outputEntry id="b2"><text>1</text></outputEntry></rule>"#
+            ),
+        );
+        let text = saved(&file, |t| {
+            t.outputs.swap(0, 1);
+            for r in &mut t.rules {
+                r.outputs.swap(0, 1);
+            }
+        })
+        .unwrap_or_else(|e| panic!("{e}"));
+        assert!(at(&text, "\"b1\"") < at(&text, "\"a1\""), "{text}");
+        assert!(at(&text, "\"a1\"") < at(&text, "\"b2\""), "{text}");
+        assert!(at(&text, "\"b2\"") < at(&text, "\"a2\""), "{text}");
+    }
+
+    /// Rules without ids [B, C, A] edited to [A, C, A]: the unchanged last rule keeps its own
+    /// place first, so the edited first one continues B, each with its own cell's id.
+    #[test]
+    fn a_rule_in_its_own_place_is_matched_before_any_elsewhere() {
+        let rule = |test: &str, value: &str, id: &str| {
+            format!(
+                r#"<rule><inputEntry><text>&lt; {test}</text></inputEntry><outputEntry id="{id}"><text>{value}</text></outputEntry></rule>"#
+            )
+        };
+        let file = table_file(
+            r#"<output id="o1" name="a"/>"#,
+            &[
+                rule("1", "1", "ob"),
+                rule("2", "2", "oc"),
+                rule("3", "3", "oa"),
+            ]
+            .concat(),
+        );
+        let text = saved(&file, |t| {
+            if let Some(last) = t.rules.last().cloned()
+                && let Some(first) = t.rules.first_mut()
+            {
+                *first = last;
+            }
+        })
+        .unwrap_or_else(|e| panic!("{e}"));
+        assert!(at(&text, "\"ob\"") < at(&text, "\"oc\""), "{text}");
+        assert!(at(&text, "\"oc\"") < at(&text, "\"oa\""), "{text}");
+    }
+
+    /// A rule without an id given one keeps its element, and so its cells' ids, whether or not
+    /// it is edited as well.
+    #[test]
+    fn a_rule_given_an_id_keeps_its_cells_ids() {
+        let file = table_file(
+            r#"<output id="o1" name="a"/>"#,
+            r#"<rule><inputEntry><text>-</text></inputEntry><outputEntry id="oe1"><text>1</text></outputEntry></rule>"#,
+        );
+        for edited in [false, true] {
+            let text = saved(&file, |t| {
+                if let Some(r) = t.rules.first_mut() {
+                    r.id = Some("r_new".into());
+                    if edited {
+                        r.outputs = vec!["2".into()];
+                    }
+                }
+            })
+            .unwrap_or_else(|e| panic!("{e}"));
+            assert!(text.contains(r#"<rule id="r_new">"#), "{text}");
+            assert!(text.contains(r#"<outputEntry id="oe1">"#), "{text}");
+        }
+    }
+
+    /// An output column without an id whose place is not known (one inserted, it renamed) is
+    /// refused if it has a description, which the model does not hold; without one it is saved.
+    #[test]
+    fn a_column_s_description_is_not_lost_to_an_ambiguous_edit() {
+        let rules = r#"<rule><inputEntry><text>-</text></inputEntry><outputEntry><text>1</text></outputEntry></rule>"#;
+        let described = table_file(
+            r#"<output name="fee"><description>Charged per parcel</description></output>"#,
+            rules,
+        );
+        let plain = table_file(r#"<output name="fee"/>"#, rules);
+        let edit = |t: &mut Table| {
+            if let Some(o) = t.outputs.first_mut() {
+                o.name = Some("net".into());
+            }
+            t.outputs.insert(
+                0,
+                Output {
+                    name: Some("surcharge".into()),
+                    ..Output::default()
+                },
+            );
+            for r in &mut t.rules {
+                r.outputs.insert(0, "0".into());
+            }
+        };
+        let refused = saved(&described, edit).err().unwrap_or_default();
+        assert!(refused.contains("output 1"), "{refused}");
+        assert!(saved(&plain, edit).is_ok());
+    }
+
+    /// A rule without an id whose place is not known (one inserted, it edited) is refused if it
+    /// has a label, which the model does not hold of a rule; without one it is saved.
+    #[test]
+    fn a_rule_s_label_is_not_lost_to_an_ambiguous_edit() {
+        let rules = |label: &str| {
+            format!(
+                r#"<rule{label}><inputEntry><text>&lt; 1</text></inputEntry><outputEntry><text>1</text></outputEntry></rule><rule><inputEntry><text>-</text></inputEntry><outputEntry><text>2</text></outputEntry></rule>"#
+            )
+        };
+        let output = r#"<output id="o1" name="a"/>"#;
+        let edit = |t: &mut Table| {
+            if let Some(r) = t.rules.first_mut() {
+                r.outputs = vec!["3".into()];
+            }
+            t.rules.insert(
+                0,
+                Rule {
+                    inputs: vec!["< 0".into()],
+                    outputs: vec!["0".into()],
+                    ..Rule::default()
+                },
+            );
+        };
+        let refused = saved(&table_file(output, &rules(r#" label="Small""#)), edit)
+            .err()
+            .unwrap_or_default();
+        assert!(refused.contains("rule 1"), "{refused}");
+        assert!(saved(&table_file(output, &rules("")), edit).is_ok());
     }
 }
