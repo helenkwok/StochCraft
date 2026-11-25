@@ -217,7 +217,8 @@ impl Path {
     /// with the radius of its bend. `None` for a path that climbs, has a helix, or turns through
     /// a whole circle or more in one arc: its points cannot be moved on a plan without losing
     /// that. Each arc becomes one corner, or for one of more than 90 degrees, several of equal
-    /// angle, so the corner points stay near the path.
+    /// angle, so the corner points stay near the path. An arc of no angle is a point on a
+    /// straight, with its bend kept for when the point is moved ([`Outline::to_path`]).
     pub fn outline(&self) -> Option<Outline> {
         let mut points = vec![[self.start.x, self.start.y]];
         let mut bends = Vec::new();
@@ -238,14 +239,19 @@ impl Path {
                     if rise != 0.0
                         || !radius.is_finite()
                         || !angle_deg.is_finite()
-                        || angle_deg.abs() >= 360.0 - ANGLE_EPS
+                        || !within_a_circle(angle_deg)
                     {
                         return None;
                     }
+                    let r = radius.abs();
                     if angle_deg.abs() <= ANGLE_EPS {
+                        let at = [frame.x, frame.y];
+                        if points.last() != Some(&at) {
+                            points.push(at);
+                            bends.push(r);
+                        }
                         continue;
                     }
-                    let r = radius.abs();
                     let pieces: u8 = if angle_deg.abs() <= 90.0 {
                         1
                     } else if angle_deg.abs() <= 180.0 {
@@ -272,7 +278,13 @@ impl Path {
                 Segment::Helix { .. } => return None,
             }
         }
-        points.push([frame.x, frame.y]);
+        // A corner where the path ends (a sharp one, or a point of no turn) is its end.
+        let end = [frame.x, frame.y];
+        if points.len() > 1 && points.last() == Some(&end) {
+            points.pop();
+            bends.pop();
+        }
+        points.push(end);
         Some(Outline {
             z: self.start.z,
             points,
@@ -286,6 +298,13 @@ const ANGLE_EPS: f64 = 1e-9;
 /// Distances shorter than this, relative to the larger of 1 and the distances compared, are
 /// taken as none.
 const LENGTH_EPS: f64 = 1e-9;
+
+/// Whether an arc turning `angle_deg` has an [`Outline`]: less than a whole circle, so its
+/// corner points do not come round on themselves. [`Outline::to_path`] joins bends only while
+/// the arc they make stays so.
+fn within_a_circle(angle_deg: f64) -> bool {
+    angle_deg.abs() < 360.0 - ANGLE_EPS
+}
 
 /// `a` in degrees brought into (−180, 180].
 fn half_turn(a: f64) -> f64 {
@@ -428,8 +447,8 @@ impl Outline {
             let (dx, dy) = (w[1][0] - w[0][0], w[1][1] - w[0][1]);
             let len = norm(dx, dy);
             lengths.push(len);
-            let scale = w[0][0].abs().max(w[0][1].abs()).max(1.0);
-            headings.push((len > LENGTH_EPS * scale).then(|| atan2(dy, dx).to_degrees()));
+            // The same tolerance as a line's in `to_path`, wherever on the floor the straight is.
+            headings.push((len > LENGTH_EPS).then(|| atan2(dy, dx).to_degrees()));
         }
         // A straight of no length takes the heading of the one before it, or for those at the
         // start, of the first that has one.
@@ -471,7 +490,9 @@ impl Outline {
     }
 
     /// The path: a line along each straight, shortened by the bends at its ends, and an arc at
-    /// each corner. Arcs of one radius that follow each other with no line between are one arc.
+    /// each corner. Arcs of one radius that turn the same way with no line between are one arc,
+    /// while it stays less than a whole circle. A corner of no turn (a point on a straight) is an
+    /// arc of no angle, so the point and its bend are kept.
     pub fn to_path(&self) -> Path {
         let start = self.points.first().copied().unwrap_or([0.0, 0.0]);
         let (lengths, headings, turns, reach) = self.layout();
@@ -488,7 +509,8 @@ impl Outline {
             }
             let corner = i + 1;
             let turn = turns.get(corner).copied().unwrap_or(0.0);
-            if corner + 1 < self.points.len() && turn.abs() > ANGLE_EPS {
+            if corner + 1 < self.points.len() {
+                let turn = if turn.abs() > ANGLE_EPS { turn } else { 0.0 };
                 let radius = fitted[corner].unwrap_or(0.0).max(0.0);
                 let same = |r: f64| (r - radius).abs() <= LENGTH_EPS * radius.max(1.0);
                 match segments.last_mut() {
@@ -496,7 +518,12 @@ impl Outline {
                         radius: r,
                         angle_deg,
                         ..
-                    }) if same(*r) && (*angle_deg > 0.0) == (turn > 0.0) => {
+                    }) if turn != 0.0
+                        && *angle_deg != 0.0
+                        && same(*r)
+                        && (*angle_deg > 0.0) == (turn > 0.0)
+                        && within_a_circle(*angle_deg + turn) =>
+                    {
                         *angle_deg += turn;
                     }
                     _ => segments.push(Segment::Arc {
@@ -864,6 +891,105 @@ mod tests {
         assert!(e.removed(0).is_none());
         // Moving the whole outline moves every point.
         assert_eq!(o.shifted([1.0, 1.0]).points[2], [11.0, 7.0]);
+    }
+
+    #[test]
+    fn a_point_put_on_a_straight_stays_with_its_bend() {
+        // A 10 m straight with a point put in at 5 m: the path is as long, and its outline has
+        // the point and the 3 m bend it was given.
+        let o = Outline {
+            z: 0.0,
+            points: vec![[0.0, 0.0], [10.0, 0.0]],
+            bends: Vec::new(),
+        }
+        .inserted(1, [5.0, 0.0], 3.0);
+        let p = o.to_path();
+        near(p.length(), 10.0, 1e-12);
+        let back = p.outline().unwrap();
+        assert_eq!(back.points.len(), 3);
+        for (q, r) in back
+            .points
+            .iter()
+            .zip([[0.0, 0.0], [5.0, 0.0], [10.0, 0.0]])
+        {
+            near(q[0], r[0], 1e-12);
+            near(q[1], r[1], 1e-12);
+        }
+        assert_eq!(back.bends, vec![3.0]);
+        same_path(&p, &back.to_path());
+        // Moved off the line, the point is a corner with that bend, not a sharp one.
+        let bent = back.moved(1, [5.0, 5.0]).to_path();
+        let turned: Vec<f64> = bent
+            .segments
+            .iter()
+            .filter_map(|s| match *s {
+                Segment::Arc {
+                    radius, angle_deg, ..
+                } if angle_deg != 0.0 => Some(radius),
+                _ => None,
+            })
+            .collect();
+        assert_eq!(turned.len(), 1, "{:?}", bent.segments);
+        near(turned[0], 3.0, 1e-12);
+        at(bent.end(), 10.0, 0.0, 0.0, -45.0);
+    }
+
+    #[test]
+    fn a_short_straight_keeps_its_heading_far_from_the_origin() {
+        // 5 mm north, then 10 m east, 10 000 km out along x: the path ends where the points say.
+        let x = 1.0e7;
+        let o = Outline {
+            z: 0.0,
+            points: vec![[x, 0.0], [x, 0.005], [x + 10.0, 0.005]],
+            bends: vec![0.0],
+        };
+        let p = o.to_path();
+        near(p.start.heading_deg, 90.0, 1e-9);
+        let end = p.end();
+        near(end.x, x + 10.0, 1e-6);
+        near(end.y, 0.005, 1e-9);
+        near(p.length(), 10.005, 1e-6);
+    }
+
+    #[test]
+    fn a_loop_of_four_bends_keeps_its_points() {
+        // A 2 m square drawn with 1 m bends and no straight left between them: the bends join
+        // only while less than a whole circle, so the loop keeps its four corners.
+        let points = vec![
+            [1.0, 0.0],
+            [2.0, 0.0],
+            [2.0, 2.0],
+            [0.0, 2.0],
+            [0.0, 0.0],
+            [1.0, 0.0],
+        ];
+        let o = Outline {
+            z: 0.0,
+            points: points.clone(),
+            bends: vec![1.0; 4],
+        };
+        let p = o.to_path();
+        near(p.length(), 2.0 * PI, 1e-9);
+        for s in &p.segments {
+            if let Segment::Arc { angle_deg, .. } = *s {
+                assert!(within_a_circle(angle_deg), "{:?}", p.segments);
+            }
+        }
+        let back = p.outline().unwrap();
+        assert_eq!(back.points.len(), points.len());
+        for (q, r) in back.points.iter().zip(&points) {
+            near(q[0], r[0], 1e-9);
+            near(q[1], r[1], 1e-9);
+        }
+        // A half circle still joins into one arc.
+        let half = Outline {
+            z: 0.0,
+            points: vec![[0.0, 0.0], [1.0, 0.0], [1.0, 2.0], [0.0, 2.0]],
+            bends: vec![1.0, 1.0],
+        }
+        .to_path();
+        assert_eq!(half.segments.len(), 1, "{:?}", half.segments);
+        near(half.length(), PI, 1e-9);
     }
 
     #[test]
