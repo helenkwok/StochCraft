@@ -495,3 +495,41 @@ fn a_table_s_outputs_are_in_its_block_s_statistics() {
     let mean = properties[0].1.unwrap_or(f64::NAN);
     assert!((mean - 5.8).abs() < 1e-12, "{mean}");
 }
+
+/// A use left behind by a deleted block (`a_old`, before `classify` in id order) gives no type to
+/// what it would write: the live table's number decides that `score` is a number.
+#[test]
+fn a_deleted_block_s_table_gives_no_property_its_type() {
+    let mut m = Builder::new();
+    let classify = m.delay("classify", Dist::Constant(0.0));
+    parcels(&mut m, classify);
+    let sink = m.sink("out");
+    m.connect(classify, sink);
+    let mut model = with_table(
+        m.build(experiment()),
+        "classify",
+        decision(
+            "score",
+            HitPolicy::First,
+            "score",
+            &[(">= 10", "7"), ("-", "3")],
+        ),
+    );
+    let old = decision("old", HitPolicy::First, "score", &[("-", "\"high\"")]);
+    if let Some(f) = model.dmn.get_mut(FILE) {
+        f.decisions.push(old);
+    }
+    model.decisions.insert(
+        ElementId::unchecked("a_old"),
+        DecisionUse {
+            file: FILE.into(),
+            decision: "old".into(),
+            route: None,
+        },
+    );
+    assert_eq!(model.validate(), vec![]);
+    assert_eq!(
+        model.property_types().get("score"),
+        Some(&stochcraft_model::PropertyType::Double)
+    );
+}

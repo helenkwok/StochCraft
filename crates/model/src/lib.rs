@@ -3674,8 +3674,12 @@ impl Model {
             };
             types.insert(p.name.clone(), t);
         }
-        // What decision tables write: a number, a string or a boolean, as the outputs give.
-        for u in self.decisions.values() {
+        // What decision tables write: a number, a string or a boolean, as the outputs give. A use
+        // left behind by a block that is gone writes nothing.
+        for (id, u) in &self.decisions {
+            if self.element(id).is_none() {
+                continue;
+            }
             let Ok((_, table)) = self.decision_table(u) else {
                 continue;
             };
