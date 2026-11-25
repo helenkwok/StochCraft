@@ -453,18 +453,27 @@ fn decision_element(prefix: &str, d: &Decision) -> Element {
     e
 }
 
-/// A new DMN 1.6 file with `defs`'s decisions.
+/// The value of every `id` attribute in the `.dmn` file `bytes`, in document order: of what the
+/// model holds of it and of what it does not (input data, cells, diagrams).
+pub fn ids(bytes: &[u8]) -> Result<Vec<String>, DmnError> {
+    let doc = xml::parse(bytes).map_err(|e| DmnError::new(format!("not well-formed XML: {e}")))?;
+    Ok(std::iter::once(&doc.root)
+        .chain(doc.root.descendants())
+        .filter_map(|e| e.attr("id"))
+        .collect())
+}
+
+/// A new DMN 1.6 file with `defs`'s decisions. Without an id of its own, the file is given one
+/// that none of its decisions' ids is.
 pub fn write_dmn(defs: &Definitions) -> String {
+    let id = if defs.id.is_empty() {
+        stochcraft_model::dmn::free_id("definitions", &defs.ids())
+    } else {
+        defs.id.clone()
+    };
     let mut root = el("", "definitions")
         .with_attr("xmlns", DMN_NS)
-        .with_attr(
-            "id",
-            if defs.id.is_empty() {
-                "definitions"
-            } else {
-                defs.id.as_str()
-            },
-        )
+        .with_attr("id", &id)
         // The schema requires a name, even an empty one.
         .with_attr("name", &defs.name);
     let namespace = if defs.namespace.is_empty() {
@@ -1218,6 +1227,21 @@ mod tests {
         assert_eq!(read(&text), d);
         // Written twice, the same bytes.
         assert_eq!(write_dmn(&read(&text)), text);
+    }
+
+    /// A file without an id of its own is given one none of its decisions has.
+    #[test]
+    fn a_new_file_s_own_id_is_not_a_decision_s() {
+        let mut d = read(FILE);
+        d.id = String::new();
+        d.decisions[0].id = "definitions".into();
+        let text = write_dmn(&d);
+        let back = read(&text);
+        assert_eq!(back.id, "definitions_2");
+        assert_eq!(back.decisions[0].id, "definitions");
+        let ids = ids(text.as_bytes()).unwrap_or_default();
+        assert_eq!(ids.first().map(String::as_str), Some("definitions_2"));
+        assert!(ids.iter().any(|i| i == "r_small"), "{ids:?}");
     }
 
     #[test]

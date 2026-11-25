@@ -587,6 +587,29 @@ pub(crate) fn set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     decision.compile().map_err(|err| {
         CommandError::new(ErrorCode::InvalidParams, format!("{}: {err}", p.decision))
     })?;
+    // A file read from disk keeps its decisions: saving writes edited tables into it, but
+    // cannot add a decision to it yet. Refused here, before the model changes, rather than when
+    // saving.
+    if let Some(f) = e.dmn.get(&p.file)
+        && f.read.decision(&p.decision).is_none()
+    {
+        return Err(CommandError::new(
+            ErrorCode::Unsupported,
+            format!(
+                "decisions cannot be added to {}, a .dmn file the model has read, yet: put the decision `{}` in a new .dmn file",
+                p.file, p.decision
+            ),
+        ));
+    }
+    if let Some(id) = clashing_id(e, &p.file, &decision) {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            format!(
+                "the id `{id}` would be used twice in {}: each id names one element of a DMN file; give it another",
+                p.file
+            ),
+        ));
+    }
     let findings = decision.compile().map(|c| c.check(&[])).unwrap_or_default();
     e.edit(
         "dmn.set",
@@ -596,6 +619,38 @@ pub(crate) fn set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         },
     )?;
     Ok(json!({ "findings": findings.iter().map(finding_json).collect::<Vec<_>>() }))
+}
+
+/// An id that `decision`, set in the file `file`, would give twice in that file: one of its own
+/// ids that it gives twice itself, or that another element of the file has (the file itself,
+/// another decision or what is in it, or, in a file read from disk, an element the model does not
+/// hold, such as input data, a cell or a diagram). DMN's ids are XML ids, one per element of a
+/// document.
+fn clashing_id(e: &Engine, file: &str, decision: &Decision) -> Option<String> {
+    let mut others: Vec<String> = Vec::new();
+    if let Some(defs) = e.model.dmn.get(file) {
+        others.extend(Some(defs.id.clone()).filter(|i| !i.is_empty()));
+        for d in defs.decisions.iter().filter(|d| d.id != decision.id) {
+            others.extend(d.ids().into_iter().map(str::to_owned));
+        }
+    }
+    if let Some(f) = e.dmn.get(file) {
+        // The file's ids less those of what the model holds of it, as it was read.
+        let mut held = f.read.ids();
+        for id in stochcraft_io::dmn::ids(&f.bytes).unwrap_or_default() {
+            match held.iter().position(|h| *h == id) {
+                Some(k) => {
+                    held.remove(k);
+                }
+                None => others.push(id),
+            }
+        }
+    }
+    let mine = decision.ids();
+    mine.iter()
+        .enumerate()
+        .find(|(k, id)| mine.iter().take(*k).any(|x| x == *id) || others.iter().any(|o| o == *id))
+        .map(|(_, id)| (*id).to_owned())
 }
 
 fn finding_json(f: &stochcraft_model::dmn::Finding) -> Value {

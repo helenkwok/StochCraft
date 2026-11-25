@@ -429,3 +429,134 @@ fn a_save_of_the_model_s_file_alone_leaves_an_edited_table_unsaved() {
     ok(&mut e, "file.save", json!({}));
     assert!(!e.is_dirty());
 }
+
+/// The model's example with a desk, for tables made with commands.
+fn example() -> Engine {
+    let mut e = Engine::new();
+    let example = stochcraft_engine::COMMANDS
+        .iter()
+        .find(|c| c.name == "model.set")
+        .map(|c| c.example())
+        .unwrap_or_default();
+    ok(&mut e, "model.set", example);
+    e
+}
+
+/// A table of one rule giving `value`, with the rule id `rule` if given.
+fn one_rule(value: &str, rule: Option<&str>) -> Value {
+    let mut r = json!({ "inputs": [], "outputs": [value] });
+    if let Some(id) = rule {
+        r["id"] = json!(id);
+    }
+    json!({ "hit_policy": "FIRST", "outputs": [{ "name": "priority" }], "rules": [r] })
+}
+
+/// DMN's ids are XML ids, one per element of a file: a new file's own id is one its decision does
+/// not use, and an id given twice in a file is refused, naming it.
+#[test]
+fn every_id_in_a_dmn_file_is_used_once() {
+    let dir = folder("ids");
+    let mut e = example();
+    // A decision named as a new file's id would be: the file takes another.
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "desk.dmn", "decision": "definitions", "table": one_rule("1", None) }),
+    );
+    let root = e.model().dmn["desk.dmn"].id.clone();
+    assert_ne!(root, "definitions");
+    // Another decision with the file's id, or a rule with its decision's, is refused.
+    for (decision, rule) in [(root.as_str(), None), ("second", Some("second"))] {
+        let refused = e.execute(
+            "dmn.set",
+            json!({ "file": "desk.dmn", "decision": decision, "table": one_rule("2", rule) }),
+        );
+        assert!(
+            refused.is_err_and(|err| err.message.contains("used twice")),
+            "{decision}"
+        );
+    }
+    assert_eq!(e.model().dmn["desk.dmn"].decisions.len(), 1);
+    let path = dir.join("desk.bpmn");
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    let defs = stochcraft_io::dmn::read_dmn(&read(&dir.join("desk.dmn")))
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert_eq!(defs.id, root);
+    assert_eq!(defs.decisions[0].id, "definitions");
+
+    // In a file read from disk, an id of what the model does not hold counts too.
+    let (bpmn, dmn) = write_sorter(&dir);
+    let text = String::from_utf8_lossy(&read(&dmn)).replacen(
+        "<decision ",
+        "<inputData id=\"size\" name=\"size\"/>\n  <decision ",
+        1,
+    );
+    std::fs::write(&dmn, text).unwrap_or_else(|err| panic!("{err}"));
+    let mut opened = Engine::new();
+    ok(
+        &mut opened,
+        "file.open",
+        json!({ "path": bpmn.to_string_lossy() }),
+    );
+    let got = ok(&mut opened, "dmn.get", json!({ "file": "sorting.dmn" }));
+    let mut t = got["files"][0]["decisions"][0]["table"].clone();
+    t["rules"][0]["id"] = json!("size");
+    let refused = opened.execute(
+        "dmn.set",
+        json!({ "file": "sorting.dmn", "decision": "chute", "table": t }),
+    );
+    assert!(refused.is_err_and(|err| err.message.contains("`size`")));
+    t["rules"][0]["id"] = json!("small");
+    ok(
+        &mut opened,
+        "dmn.set",
+        json!({ "file": "sorting.dmn", "decision": "chute", "table": t }),
+    );
+}
+
+/// A decision cannot be added to a `.dmn` file read from disk yet (saving writes edited tables
+/// into it, not new decisions), so `dmn.set` refuses it before changing the model, pointing to a
+/// new file; a new file, and an edit of a decision the file has, still go ahead and save.
+#[test]
+fn a_decision_is_added_to_a_new_file_not_to_one_read() {
+    let dir = folder("add-decision");
+    let (bpmn, _) = write_sorter(&dir);
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": bpmn.to_string_lossy() }),
+    );
+    let before = e.model().clone();
+    let refused = e.execute(
+        "dmn.set",
+        json!({ "file": "sorting.dmn", "decision": "backup", "table": one_rule("1", None) }),
+    );
+    assert!(
+        refused.is_err_and(|err| err.message.contains("new .dmn file")),
+        "refused"
+    );
+    assert!(e.model() == &before, "the model is unchanged");
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "backup.dmn", "decision": "backup", "table": one_rule("1", None) }),
+    );
+    let got = ok(&mut e, "dmn.get", json!({ "file": "sorting.dmn" }));
+    let mut t = got["files"][0]["decisions"][0]["table"].clone();
+    t["rules"][0]["outputs"][0] = json!("\"chute_b\"");
+    ok(
+        &mut e,
+        "dmn.set",
+        json!({ "file": "sorting.dmn", "decision": "chute", "table": t }),
+    );
+    ok(&mut e, "file.save", json!({}));
+    assert!(!e.is_dirty());
+    let backup = stochcraft_io::dmn::read_dmn(&read(&dir.join("backup.dmn")))
+        .unwrap_or_else(|err| panic!("{err}"));
+    assert_eq!(backup.decisions[0].id, "backup");
+}

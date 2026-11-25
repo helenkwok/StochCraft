@@ -293,11 +293,13 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
         ),
         Op::SetDecision { file, decision } => {
             let new_file = !model.dmn.contains_key(&file);
+            // A new file's own id is one its first decision does not use.
+            let root = stochcraft_model::dmn::free_id("definitions", &decision.ids());
             let defs = model
                 .dmn
                 .entry(file.clone())
                 .or_insert_with(|| Definitions {
-                    id: "definitions".to_owned(),
+                    id: root,
                     name: file
                         .rsplit(['/', '\\'])
                         .next()

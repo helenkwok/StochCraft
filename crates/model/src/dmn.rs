@@ -79,6 +79,30 @@ impl Definitions {
     pub fn decision_mut(&mut self, id: &str) -> Option<&mut Decision> {
         self.decisions.iter_mut().find(|d| d.id == id)
     }
+
+    /// The XML ids the file gives what the model holds of it: its own (if it has one), and each
+    /// decision's ([`Decision::ids`]), in file order.
+    pub fn ids(&self) -> Vec<&str> {
+        let mut out: Vec<&str> = Some(self.id.as_str())
+            .filter(|i| !i.is_empty())
+            .into_iter()
+            .collect();
+        for d in &self.decisions {
+            out.extend(d.ids());
+        }
+        out
+    }
+}
+
+/// An id that is not in `taken`: `base`, else `base_2`, `base_3` and so on.
+pub fn free_id(base: &str, taken: &[&str]) -> String {
+    let mut id = base.to_owned();
+    let mut n = 2;
+    while taken.contains(&id.as_str()) {
+        id = format!("{base}_{n}");
+        n += 1;
+    }
+    id
 }
 
 /// A decision whose logic is a decision table.
@@ -127,6 +151,19 @@ impl Decision {
     /// The table checked and ready to evaluate.
     pub fn compile(&self) -> Result<Compiled, DmnError> {
         Compiled::new(self)
+    }
+
+    /// The XML ids the decision gives its elements in a file: its own, its table's, and its
+    /// inputs', outputs' and rules' that have one.
+    pub fn ids(&self) -> Vec<&str> {
+        let t = &self.table;
+        std::iter::once(Some(self.id.as_str()))
+            .chain(std::iter::once(t.id.as_deref()))
+            .chain(t.inputs.iter().map(|c| c.id.as_deref()))
+            .chain(t.outputs.iter().map(|c| c.id.as_deref()))
+            .chain(t.rules.iter().map(|r| r.id.as_deref()))
+            .flatten()
+            .collect()
     }
 }
 
