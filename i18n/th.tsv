@@ -1501,3 +1501,15 @@ connection	Flow	โฟลว์
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	เครื่องจักรสิบเครื่องต้องทำงาน เครื่องจักรสำรองสี่เครื่องรอพร้อมใช้ และช่างซ่อมสามคนซ่อมเครื่องที่ขัดข้อง (Crane และ Iglehart, Winter Simulation Conference, 1973)
 	How many spares and repairmen keep ten machines running?	ต้องมีเครื่องจักรสำรองและช่างซ่อมเท่าใด จึงจะให้เครื่องจักรสิบเครื่องทำงานต่อไปได้?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	เครื่องจักรสำรองที่รออยู่ขัดข้องไม่ได้: โดยเฉลี่ยเครื่องจักรเสีย 3.47 เครื่องและทำงาน 9.29 เครื่อง ช่างซ่อมคนที่สี่ช่วยได้พอ ๆ กับเครื่องจักรสำรองอีกสี่เครื่อง
+	Median time in system	ค่ามัธยฐานของเวลาในระบบ
+	Time in system, 90th percentile	เวลาในระบบ เปอร์เซ็นไทล์ที่ 90
+	Time in system, 95th percentile	เวลาในระบบ เปอร์เซ็นไทล์ที่ 95
+	Share done within the target time	สัดส่วนที่เสร็จภายในเวลาเป้าหมาย
+	Percentiles of time in system	เปอร์เซ็นไทล์ของเวลาในระบบ
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	แสดงค่ามัธยฐาน เปอร์เซ็นไทล์ที่ 90 และ 95 ของเวลาที่แต่ละสิ่งใช้ตั้งแต่ถูกสร้างจนถึงทางออกเหล่านี้ และเมื่อมีเวลาเป้าหมาย จะแสดงสัดส่วนที่เสร็จภายในเวลานั้นด้วย
+	Target time ({unit})	เวลาเป้าหมาย ({unit})
+	The target time is a time above 0	เวลาเป้าหมายต้องมากกว่า 0
+	Count only working time on	นับเฉพาะเวลาทำงานตาม
+	Entities still inside when the run ends are left out, so stop the run once all are done.	สิ่งที่ยังอยู่ภายในเมื่อการรันสิ้นสุดจะไม่ถูกนับ จึงควรหยุดการรันเมื่อทุกสิ่งเสร็จแล้ว
+	Set the target time in system of {block} to a time above 0.	ตั้งเวลาเป้าหมายในระบบของ {block} ให้มากกว่า 0
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	เวลาในระบบของ {block} นับเวลาทำงานตามปฏิทินที่ไม่มีอยู่ ให้เลือกปฏิทินที่มีอยู่

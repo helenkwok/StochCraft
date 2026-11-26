@@ -1501,3 +1501,15 @@ connection	Flow	প্রবাহ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	দশটি মেশিন চালু থাকতেই হবে, চারটি অতিরিক্ত মেশিন প্রস্তুত থাকে এবং তিনজন মিস্ত্রি বিকল মেশিন সারান (Crane ও Iglehart, Winter Simulation Conference, 1973)।
 	How many spares and repairmen keep ten machines running?	দশটি মেশিন চালু রাখতে কতগুলো অতিরিক্ত মেশিন ও কতজন মিস্ত্রি লাগবে?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	প্রস্তুত থাকা অতিরিক্ত মেশিন বিকল হতে পারে না: গড়ে 3.47টি মেশিন বিকল থাকে এবং 9.29টি চলে। চতুর্থ একজন মিস্ত্রি প্রায় আরও চারটি অতিরিক্ত মেশিনের সমান কাজ করেন।
+	Median time in system	সিস্টেমে সময়ের মধ্যমা
+	Time in system, 90th percentile	সিস্টেমে সময়, ৯০তম শতাংশক
+	Time in system, 95th percentile	সিস্টেমে সময়, ৯৫তম শতাংশক
+	Share done within the target time	লক্ষ্য সময়ের মধ্যে শেষ হওয়ার অংশ
+	Percentiles of time in system	সিস্টেমে সময়ের শতাংশক
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	প্রতিটি সত্তা তৈরি হওয়া থেকে এই প্রস্থানগুলিতে পৌঁছাতে যে সময় নিয়েছে তার মধ্যমা, ৯০তম ও ৯৫তম শতাংশক দেখায়, আর লক্ষ্য সময় দিলে তার মধ্যে শেষ হওয়ার অংশ।
+	Target time ({unit})	লক্ষ্য সময় ({unit})
+	The target time is a time above 0	লক্ষ্য সময় 0-এর বেশি একটি সময় হতে হবে
+	Count only working time on	শুধু কাজের সময় গুনুন এতে
+	Entities still inside when the run ends are left out, so stop the run once all are done.	রান শেষ হলে যেগুলো এখনও ভেতরে, সেগুলো বাদ থাকে, তাই সবগুলো শেষ হলে রান থামান।
+	Set the target time in system of {block} to a time above 0.	{block}-এর সিস্টেমে লক্ষ্য সময় 0-এর বেশি একটি সময়ে সেট করুন।
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block}-এর সিস্টেমে সময় এমন একটি ক্যালেন্ডারে কাজের সময় গোনে যা নেই। এমন ক্যালেন্ডার বেছে নিন যা আছে।

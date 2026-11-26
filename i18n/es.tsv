@@ -1501,3 +1501,15 @@ connection	Flow	Flujo
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Diez máquinas deben funcionar, cuatro de repuesto esperan listas y tres mecánicos reparan las que se averían (Crane e Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	¿Cuántas máquinas de repuesto y cuántos mecánicos mantienen en marcha diez máquinas?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Las máquinas de repuesto en espera no pueden averiarse: de media hay 3.47 máquinas averiadas y 9.29 en marcha. Un cuarto mecánico consigue casi lo mismo que cuatro máquinas de repuesto más.
+	Median time in system	Mediana del tiempo en el sistema
+	Time in system, 90th percentile	Tiempo en el sistema, percentil 90
+	Time in system, 95th percentile	Tiempo en el sistema, percentil 95
+	Share done within the target time	Proporción terminada dentro del tiempo objetivo
+	Percentiles of time in system	Percentiles del tiempo en el sistema
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Muestra la mediana y los percentiles 90 y 95 del tiempo que tardó cada entidad desde su creación hasta estas salidas y, con un tiempo objetivo, la proporción terminada dentro de él.
+	Target time ({unit})	Tiempo objetivo ({unit})
+	The target time is a time above 0	El tiempo objetivo es un tiempo mayor que 0
+	Count only working time on	Contar solo el tiempo de trabajo de
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Las entidades aún dentro cuando termina la ejecución no se incluyen, así que detenga la ejecución cuando todas hayan terminado.
+	Set the target time in system of {block} to a time above 0.	Fije el tiempo objetivo en el sistema de {block} en un tiempo mayor que 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	El tiempo en el sistema de {block} cuenta el tiempo de trabajo de un calendario que no existe. Elija un calendario que exista.

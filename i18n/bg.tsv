@@ -1501,3 +1501,15 @@ connection	Flow	Поток
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десет машини трябва да работят, четири резервни чакат в готовност, а трима монтьори поправят повредените (Crane и Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Колко резервни машини и монтьори поддържат десет машини в работа?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервните машини в готовност не могат да се повредят: средно 3.47 машини са повредени и 9.29 работят. Четвърти монтьор помага почти колкото четири резервни машини повече.
+	Median time in system	Медиана на времето в системата
+	Time in system, 90th percentile	Време в системата, 90-и персентил
+	Time in system, 95th percentile	Време в системата, 95-и персентил
+	Share done within the target time	Дял, завършени в целевото време
+	Percentiles of time in system	Персентили на времето в системата
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Показва медианата, 90-ия и 95-ия персентил на времето, което всеки обект е прекарал от създаването си до тези изходи, а с целево време — дела, завършени в него.
+	Target time ({unit})	Целево време ({unit})
+	The target time is a time above 0	Целевото време е време над 0
+	Count only working time on	Брой само работното време по
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Обектите, които са още вътре при края на изпълнението, не се включват, затова спирайте изпълнението, когато всички са готови.
+	Set the target time in system of {block} to a time above 0.	Задайте целевото време в системата на блок {block} на време над 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Времето в системата на блок {block} брои работно време по календар, който не съществува. Изберете съществуващ календар.

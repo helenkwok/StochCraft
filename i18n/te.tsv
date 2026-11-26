@@ -1501,3 +1501,15 @@ connection	Flow	ప్రవాహం
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	పది యంత్రాలు నడుస్తూ ఉండాలి, నాలుగు విడి యంత్రాలు సిద్ధంగా వేచి ఉంటాయి, ముగ్గురు మెకానిక్‌లు పాడైనవాటిని బాగుచేస్తారు (Crane మరియు Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	పది యంత్రాలను నడుపుతూ ఉంచడానికి ఎన్ని విడి యంత్రాలు, ఎంతమంది మెకానిక్‌లు కావాలి?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	సిద్ధంగా వేచి ఉన్న విడి యంత్రాలు పాడవవు: సగటున 3.47 యంత్రాలు పాడై ఉంటాయి, 9.29 నడుస్తాయి. నాలుగో మెకానిక్ మరో నాలుగు విడి యంత్రాలంత ఉపయోగపడతాడు.
+	Median time in system	వ్యవస్థలో గడిపిన సమయం మధ్యగతం
+	Time in system, 90th percentile	వ్యవస్థలో గడిపిన సమయం, 90వ శతాంశం
+	Time in system, 95th percentile	వ్యవస్థలో గడిపిన సమయం, 95వ శతాంశం
+	Share done within the target time	లక్ష్య సమయంలో పూర్తయిన వాటా
+	Percentiles of time in system	వ్యవస్థలో గడిపిన సమయం శతాంశాలు
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	ప్రతి అంశం సృష్టించబడినప్పటి నుంచి ఈ నిష్క్రమణలకు చేరే వరకు తీసుకున్న సమయం యొక్క మధ్యగతం, 90వ మరియు 95వ శతాంశాలను చూపుతుంది; లక్ష్య సమయం ఇస్తే దానిలో పూర్తయిన వాటాను కూడా చూపుతుంది.
+	Target time ({unit})	లక్ష్య సమయం ({unit})
+	The target time is a time above 0	లక్ష్య సమయం 0 కంటే ఎక్కువ సమయం కావాలి
+	Count only working time on	పని సమయాన్ని మాత్రమే లెక్కించే క్యాలెండర్
+	Entities still inside when the run ends are left out, so stop the run once all are done.	అమలు ముగిసేటప్పుడు ఇంకా లోపల ఉన్నవి లెక్కించబడవు, కాబట్టి అన్నీ పూర్తయిన తర్వాత అమలును ఆపండి.
+	Set the target time in system of {block} to a time above 0.	{block} యొక్క వ్యవస్థలో లక్ష్య సమయాన్ని 0 కంటే ఎక్కువ సమయానికి సెట్ చేయండి.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} యొక్క వ్యవస్థలో గడిపిన సమయం లేని క్యాలెండర్ ప్రకారం పని సమయాన్ని లెక్కిస్తోంది. ఉన్న క్యాలెండర్‌ను ఎంచుకోండి.

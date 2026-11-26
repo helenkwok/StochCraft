@@ -907,6 +907,14 @@ fn showcase() -> Model {
             calendar: None,
         },
     );
+    // Time in system by percentile, within a target, in the day shift's working time.
+    m.time_in_system(
+        other,
+        stochcraft_blocks::TimeInSystem {
+            within: Some(120.0),
+            calendar: Some(ElementId::unchecked("day-shift")),
+        },
+    );
     m.connect(split, left);
     m.connect(split, right);
     m.connect(left, join);

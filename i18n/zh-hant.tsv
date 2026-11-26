@@ -1501,3 +1501,15 @@ connection	Flow	順序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台機器必須運轉，四台備用機待命，三名維修技師修理故障的機器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台備用機和多少名維修技師，才能讓十台機器保持運轉？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的備用機不會故障：平均 3.47 台機器在故障中，9.29 台在運轉。增加第四名維修技師的效果與再增加四台備用機相當。
+	Median time in system	系統內時間中位數
+	Time in system, 90th percentile	系統內時間，第 90 百分位數
+	Time in system, 95th percentile	系統內時間，第 95 百分位數
+	Share done within the target time	在目標時間內完成的比例
+	Percentiles of time in system	系統內時間的百分位數
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	顯示每個實體從建立到抵達這些出口所用時間的中位數、第 90 與第 95 百分位數；設定目標時間後，也顯示在該時間內完成的比例。
+	Target time ({unit})	目標時間（{unit}）
+	The target time is a time above 0	目標時間必須是大於 0 的時間
+	Count only working time on	只計工作時間的行事曆
+	Entities still inside when the run ends are left out, so stop the run once all are done.	執行結束時仍在內部的實體不計入，因此請在全部完成後再停止執行。
+	Set the target time in system of {block} to a time above 0.	請將 {block} 的系統內目標時間設為大於 0 的時間。
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} 的系統內時間依不存在的行事曆計算工作時間。請選擇存在的行事曆。

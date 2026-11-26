@@ -1501,3 +1501,15 @@ connection	Flow	Flux
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dix machines doivent tourner, quatre machines de réserve attendent prêtes et trois mécaniciens réparent celles qui tombent en panne (Crane et Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Combien de machines de réserve et de mécaniciens pour faire tourner dix machines ?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Les machines de réserve en attente ne peuvent pas tomber en panne : en moyenne 3.47 machines sont en panne et 9.29 tournent. Un quatrième mécanicien apporte à peu près autant que quatre machines de réserve de plus.
+	Median time in system	Médiane du temps dans le système
+	Time in system, 90th percentile	Temps dans le système, 90e centile
+	Time in system, 95th percentile	Temps dans le système, 95e centile
+	Share done within the target time	Part terminée dans le temps cible
+	Percentiles of time in system	Centiles du temps dans le système
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Affiche la médiane, le 90e et le 95e centile du temps que chaque entité a mis depuis sa création jusqu'à ces sorties et, avec un temps cible, la part terminée dans ce temps.
+	Target time ({unit})	Temps cible ({unit})
+	The target time is a time above 0	Le temps cible est un temps supérieur à 0
+	Count only working time on	Ne compter que le temps de travail de
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Les entités encore présentes à la fin de l'exécution sont exclues ; arrêtez donc l'exécution quand toutes sont terminées.
+	Set the target time in system of {block} to a time above 0.	Réglez le temps cible dans le système du bloc {block} sur un temps supérieur à 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Le temps dans le système du bloc {block} compte le temps de travail d'un calendrier qui n'existe pas. Choisissez un calendrier existant.

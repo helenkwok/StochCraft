@@ -1501,3 +1501,15 @@ connection	Flow	Akış
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	On makine çalışmak zorunda, dört yedek makine hazırda bekliyor ve üç tamirci arızalananları onarıyor (Crane ve Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	On makineyi kaç yedek makine ve kaç tamirci çalışır durumda tutar?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Hazırda bekleyen yedek makineler arızalanamaz: ortalama 3.47 makine arızalı, 9.29 makine çalışıyor. Dördüncü bir tamirci, dört yedek makine daha eklemek kadar fayda sağlar.
+	Median time in system	Sistemdeki sürenin medyanı
+	Time in system, 90th percentile	Sistemdeki süre, 90. yüzdelik
+	Time in system, 95th percentile	Sistemdeki süre, 95. yüzdelik
+	Share done within the target time	Hedef süre içinde biten pay
+	Percentiles of time in system	Sistemdeki sürenin yüzdelikleri
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Her varlığın oluşturulmasından bu çıkışlara ulaşmasına kadar geçen sürenin medyanını, 90. ve 95. yüzdeliğini, bir hedef süre verilirse bu süre içinde bitenlerin payını gösterir.
+	Target time ({unit})	Hedef süre ({unit})
+	The target time is a time above 0	Hedef süre 0'dan büyük bir süredir
+	Count only working time on	Yalnızca çalışma süresini say, takvim
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Çalıştırma bittiğinde hâlâ içeride olan varlıklar dahil edilmez, bu yüzden çalıştırmayı hepsi bittiğinde durdurun.
+	Set the target time in system of {block} to a time above 0.	{block} bloğunun sistemdeki hedef süresini 0'dan büyük bir süreye ayarlayın.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} bloğunun sistemdeki süresi, var olmayan bir takvime göre çalışma süresini sayıyor. Var olan bir takvim seçin.

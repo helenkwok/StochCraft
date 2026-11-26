@@ -1501,3 +1501,15 @@ connection	Flow	Flux
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deu màquines han de funcionar, quatre de recanvi esperen a punt i tres mecànics reparen les que s'avarien (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Quantes màquines de recanvi i quants mecànics mantenen en marxa deu màquines?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Les màquines de recanvi en espera no es poden avariar: de mitjana hi ha 3.47 màquines avariades i 9.29 en marxa. Un quart mecànic fa gairebé tant com quatre màquines de recanvi més.
+	Median time in system	Mediana del temps al sistema
+	Time in system, 90th percentile	Temps al sistema, percentil 90
+	Time in system, 95th percentile	Temps al sistema, percentil 95
+	Share done within the target time	Proporció acabada dins el temps objectiu
+	Percentiles of time in system	Percentils del temps al sistema
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Mostra la mediana i els percentils 90 i 95 del temps que cada entitat ha trigat des de la seva creació fins a aquestes sortides i, amb un temps objectiu, la proporció acabada dins d'aquest temps.
+	Target time ({unit})	Temps objectiu ({unit})
+	The target time is a time above 0	El temps objectiu és un temps més gran que 0
+	Count only working time on	Compta només el temps de treball de
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Les entitats encara a dins quan acaba l'execució no es tenen en compte; atureu l'execució quan totes hagin acabat.
+	Set the target time in system of {block} to a time above 0.	Definiu el temps objectiu al sistema del bloc {block} com un temps més gran que 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	El temps al sistema del bloc {block} compta el temps de treball d'un calendari que no existeix. Trieu un calendari que existeixi.

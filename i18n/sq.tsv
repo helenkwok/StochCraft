@@ -1501,3 +1501,15 @@ connection	Flow	Rrjedhë
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dhjetë makina duhet të punojnë, katër makina rezervë presin gati dhe tre mekanikë riparojnë ato që prishen (Crane dhe Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Sa makina rezervë dhe sa mekanikë i mbajnë në punë dhjetë makina?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Makinat rezervë që presin nuk mund të prishen: mesatarisht 3.47 makina janë të prishura dhe 9.29 punojnë. Një mekanik i katërt jep afërsisht sa katër makina rezervë më shumë.
+	Median time in system	Mediana e kohës në sistem
+	Time in system, 90th percentile	Koha në sistem, përqindëshi i 90-të
+	Time in system, 95th percentile	Koha në sistem, përqindëshi i 95-të
+	Share done within the target time	Pjesa e përfunduar brenda kohës së synuar
+	Percentiles of time in system	Përqindëshat e kohës në sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Tregon medianën, përqindëshin e 90-të dhe të 95-të të kohës që i duhej çdo entiteti nga krijimi deri te këto dalje dhe, me një kohë të synuar, pjesën e përfunduar brenda saj.
+	Target time ({unit})	Koha e synuar ({unit})
+	The target time is a time above 0	Koha e synuar është një kohë mbi 0
+	Count only working time on	Numëro vetëm kohën e punës sipas
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitetet që janë ende brenda kur mbaron ekzekutimi lihen jashtë, prandaj ndaleni ekzekutimin kur të kenë përfunduar të gjitha.
+	Set the target time in system of {block} to a time above 0.	Vendosni kohën e synuar në sistem të bllokut {block} në një kohë mbi 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Koha në sistem e bllokut {block} numëron kohën e punës sipas një kalendari që nuk ekziston. Zgjidhni një kalendar që ekziston.

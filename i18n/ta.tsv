@@ -1501,3 +1501,15 @@ connection	Flow	ஓட்டம்
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	பத்து இயந்திரங்கள் இயங்க வேண்டும், நான்கு உதிரி இயந்திரங்கள் தயாராகக் காத்திருக்கின்றன, மூன்று மெக்கானிக்குகள் பழுதானவற்றைச் சரிசெய்கிறார்கள் (Crane மற்றும் Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	பத்து இயந்திரங்களை இயங்க வைக்க எத்தனை உதிரி இயந்திரங்களும் மெக்கானிக்குகளும் தேவை?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	தயாராகக் காத்திருக்கும் உதிரி இயந்திரங்கள் பழுதாக முடியாது: சராசரியாக 3.47 இயந்திரங்கள் பழுதாகவும் 9.29 இயங்கியும் இருக்கும். நான்காவது மெக்கானிக் இன்னும் நான்கு உதிரி இயந்திரங்கள் அளவுக்கு உதவுகிறார்.
+	Median time in system	அமைப்பில் கழித்த நேரத்தின் இடைநிலை
+	Time in system, 90th percentile	அமைப்பில் கழித்த நேரம், 90-ஆம் சதமானம்
+	Time in system, 95th percentile	அமைப்பில் கழித்த நேரம், 95-ஆம் சதமானம்
+	Share done within the target time	இலக்கு நேரத்துக்குள் முடிந்த பங்கு
+	Percentiles of time in system	அமைப்பில் கழித்த நேரத்தின் சதமானங்கள்
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	ஒவ்வொரு உருப்படியும் உருவானதிலிருந்து இந்த வெளியேற்றங்களை அடையும் வரை எடுத்த நேரத்தின் இடைநிலை, 90-ஆம் மற்றும் 95-ஆம் சதமானங்களைக் காட்டும்; இலக்கு நேரம் கொடுத்தால் அதற்குள் முடிந்த பங்கையும் காட்டும்.
+	Target time ({unit})	இலக்கு நேரம் ({unit})
+	The target time is a time above 0	இலக்கு நேரம் 0-ஐ விடப் பெரிய நேரமாக இருக்க வேண்டும்
+	Count only working time on	வேலை நேரத்தை மட்டும் எண்ணும் நாட்காட்டி
+	Entities still inside when the run ends are left out, so stop the run once all are done.	இயக்கம் முடியும்போது இன்னும் உள்ளே உள்ளவை சேர்க்கப்படாது, எனவே அனைத்தும் முடிந்ததும் இயக்கத்தை நிறுத்தவும்.
+	Set the target time in system of {block} to a time above 0.	{block} இன் அமைப்பில் இலக்கு நேரத்தை 0-ஐ விடப் பெரிய நேரமாக அமைக்கவும்.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} இன் அமைப்பில் கழித்த நேரம் இல்லாத ஒரு நாட்காட்டியின்படி வேலை நேரத்தை எண்ணுகிறது. இருக்கும் ஒரு நாட்காட்டியைத் தேர்ந்தெடுக்கவும்.

@@ -1501,3 +1501,15 @@ connection	Flow	Srautas
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dešimt mašinų turi veikti, keturios atsarginės laukia parengtos, o trys mechanikai taiso sugedusias (Crane ir Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kiek atsarginių mašinų ir mechanikų reikia, kad veiktų dešimt mašinų?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Parengtos atsarginės mašinos negali sugesti: vidutiniškai 3.47 mašinos sugedusios, o 9.29 veikia. Ketvirtas mechanikas duoda maždaug tiek pat, kiek keturios papildomos atsarginės mašinos.
+	Median time in system	Laiko sistemoje mediana
+	Time in system, 90th percentile	Laikas sistemoje, 90-asis procentilis
+	Time in system, 95th percentile	Laikas sistemoje, 95-asis procentilis
+	Share done within the target time	Per tikslinį laiką baigtų dalis
+	Percentiles of time in system	Laiko sistemoje procentiliai
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Rodo laiko, kurį kiekvienas objektas praleido nuo sukūrimo iki šių išėjimų, medianą, 90-ąjį ir 95-ąjį procentilius, o nurodžius tikslinį laiką – per jį baigtų dalį.
+	Target time ({unit})	Tikslinis laikas ({unit})
+	The target time is a time above 0	Tikslinis laikas turi būti didesnis už 0
+	Count only working time on	Skaičiuoti tik darbo laiką pagal
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Objektai, kurie vykdymo pabaigoje dar viduje, neįskaičiuojami, todėl sustabdykite vykdymą, kai visi baigti.
+	Set the target time in system of {block} to a time above 0.	Nustatykite bloko {block} tikslinį laiką sistemoje didesnį už 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Bloko {block} laikas sistemoje skaičiuoja darbo laiką pagal kalendorių, kurio nėra. Pasirinkite esamą kalendorių.

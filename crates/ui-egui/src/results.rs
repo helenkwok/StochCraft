@@ -68,6 +68,10 @@ fn label<'a>(name: &'a str, kind: &str) -> &'a str {
         "work_in_progress" => t("Still inside at the end"),
         "mean_work_in_progress" => t("Mean work in progress"),
         "mean_time_in_system" => t("Mean time in system"),
+        "time_in_system_p50" => t("Median time in system"),
+        "time_in_system_p90" => t("Time in system, 90th percentile"),
+        "time_in_system_p95" => t("Time in system, 95th percentile"),
+        "within_target_share" => t("Share done within the target time"),
         "mean_blocked_time" => t("Mean time blocked"),
         "mean_time_on" => t("Mean time on the conveyor"),
         // A conveyor has no units: the share of time its front item waits at the end.

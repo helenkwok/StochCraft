@@ -177,7 +177,33 @@ pub(crate) fn outputs(model: &Value, results: Option<&Value>) -> Vec<(String, St
         let listed: Vec<String> = results
             .and_then(|r| r["values"][id].as_object())
             .map(|m| m.keys().cloned().collect())
-            .unwrap_or_else(|| metrics_for(&kind).iter().map(|m| (*m).to_owned()).collect());
+            .unwrap_or_else(|| {
+                let mut by_kind: Vec<String> =
+                    metrics_for(&kind).iter().map(|m| (*m).to_owned()).collect();
+                // A sink that reports time in system by percentile, and the share within its
+                // target when it has one.
+                let times = model["elements"]
+                    .as_array()
+                    .into_iter()
+                    .flatten()
+                    .find(|e| e["id"] == id)
+                    .map(|e| &e["time_in_system"])
+                    .filter(|x| x.is_object());
+                if let Some(x) = times {
+                    by_kind.extend(
+                        [
+                            "time_in_system_p50",
+                            "time_in_system_p90",
+                            "time_in_system_p95",
+                        ]
+                        .map(str::to_owned),
+                    );
+                    if x["within"].is_number() {
+                        by_kind.push("within_target_share".to_owned());
+                    }
+                }
+                by_kind
+            });
         for m in listed {
             let label = format!("{} · {}", name_of(model, id), metric_label(&m, &kind));
             out.push((format!("{id}/{m}"), label));
@@ -848,7 +874,13 @@ impl App {
         let d = d.clone();
         // Times read in the model's time unit; counts and shares as they are.
         let unit = match metric.as_str() {
-            "stop_time" | "mean_wait" | "mean_time_in_system" | "mean_blocked_time" => {
+            "stop_time"
+            | "mean_wait"
+            | "mean_time_in_system"
+            | "time_in_system_p50"
+            | "time_in_system_p90"
+            | "time_in_system_p95"
+            | "mean_blocked_time" => {
                 unit_label(results["record"]["time_unit"].as_str().unwrap_or("")).to_owned()
             }
             _ => String::new(),

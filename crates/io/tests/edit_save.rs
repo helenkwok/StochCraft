@@ -580,6 +580,7 @@ fn removing_a_block_leaves_no_references_to_it() {
     element(&mut m, "serve").kind = ElementKind::Sink {
         scrap: None,
         demand: None,
+        time_in_system: None,
     };
     m.connections.retain(|c| c.id.as_str() != "f2");
     let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
@@ -2197,6 +2198,7 @@ fn a_re_pointed_flow_keeps_every_scenarios_junction() {
                 ElementKind::Sink {
                     scrap: None,
                     demand: None,
+                    time_in_system: None,
                 },
             ),
         ],

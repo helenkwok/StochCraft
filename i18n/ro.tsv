@@ -1501,3 +1501,15 @@ connection	Flow	Flux
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Zece mașini trebuie să funcționeze, patru mașini de rezervă așteaptă pregătite, iar trei mecanici le repară pe cele care se defectează (Crane și Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Câte mașini de rezervă și câți mecanici țin în funcțiune zece mașini?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Mașinile de rezervă care așteaptă nu se pot defecta: în medie 3.47 mașini sunt defecte și 9.29 funcționează. Un al patrulea mecanic aduce cam cât încă patru mașini de rezervă.
+	Median time in system	Mediana timpului în sistem
+	Time in system, 90th percentile	Timp în sistem, percentila 90
+	Time in system, 95th percentile	Timp în sistem, percentila 95
+	Share done within the target time	Proporția terminată în timpul țintă
+	Percentiles of time in system	Percentilele timpului în sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Arată mediana, percentilele 90 și 95 ale timpului pe care fiecare entitate l-a petrecut de la creare până la aceste ieșiri și, cu un timp țintă, proporția terminată în el.
+	Target time ({unit})	Timp țintă ({unit})
+	The target time is a time above 0	Timpul țintă este un timp mai mare decât 0
+	Count only working time on	Numără doar timpul de lucru după
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitățile încă în interior când se încheie rularea sunt lăsate în afară, așa că opriți rularea când toate sunt gata.
+	Set the target time in system of {block} to a time above 0.	Setați timpul țintă în sistem al blocului {block} la un timp mai mare decât 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Timpul în sistem al blocului {block} numără timpul de lucru după un calendar care nu există. Alegeți un calendar existent.

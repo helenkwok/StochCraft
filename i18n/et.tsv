@@ -1501,3 +1501,15 @@ connection	Flow	Voog
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Kümme masinat peavad töötama, neli varumasinat ootavad valmis ja kolm mehaanikut parandavad rikki läinud masinaid (Crane ja Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Mitu varumasinat ja mehaanikut hoiavad kümme masinat töös?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Ootel varumasinad ei saa rikki minna: keskmiselt on rikkis 3.47 masinat ja töötab 9.29. Neljas mehaanik annab umbes sama palju kui neli varumasinat juurde.
+	Median time in system	Süsteemis oleku aja mediaan
+	Time in system, 90th percentile	Aeg süsteemis, 90. protsentiil
+	Time in system, 95th percentile	Aeg süsteemis, 95. protsentiil
+	Share done within the target time	Sihtaja jooksul valmis saanute osa
+	Percentiles of time in system	Süsteemis oleku aja protsentiilid
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Näitab iga olemi loomisest nende väljumisteni kulunud aja mediaani, 90. ja 95. protsentiili ning sihtaja korral selle jooksul valmis saanute osa.
+	Target time ({unit})	Sihtaeg ({unit})
+	The target time is a time above 0	Sihtaeg peab olema suurem kui 0
+	Count only working time on	Loe ainult tööaega kalendri järgi
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Olemid, mis on käivitamise lõppedes veel sees, jäetakse välja, seega peata käivitamine, kui kõik on valmis.
+	Set the target time in system of {block} to a time above 0.	Määra ploki {block} sihtaeg süsteemis suuremaks kui 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Ploki {block} aeg süsteemis loeb tööaega kalendri järgi, mida pole olemas. Vali olemasolev kalender.

@@ -1452,6 +1452,7 @@ impl App {
             self.by_resource_section(ui, model, el);
         }
         if kind == "sink" {
+            self.time_in_system_section(ui, model, el, &id);
             self.demand_section(ui, model, el, &id);
             self.scrap_section(ui, model, el, &id);
         }
@@ -1653,6 +1654,132 @@ impl App {
         if decision {
             self.default_flow(ui, &id, el, &conns, &names);
         }
+    }
+
+    /// Whether a sink reports its entities' time in system by percentile, the target time for
+    /// the share done within it, and whether only a calendar's active time counts.
+    fn time_in_system_section(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value, id: &str) {
+        section(ui, t("Time in system"));
+        let times = el["time_in_system"].clone();
+        let mut on = times.is_object();
+        let (mark, reference) = self.block_mark(el, "time_in_system");
+        let (toggled, reset) = marked_checkbox(
+            ui,
+            &mut on,
+            t("Percentiles of time in system"),
+            t(
+                "Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.",
+            ),
+            mark,
+        );
+        if reset {
+            self.after_reset(&format!("{id}/time_in_system"));
+            self.execute(
+                "block.set",
+                json!({ "id": id, "time_in_system": reference }),
+            );
+            return;
+        }
+        if toggled {
+            let v = if on { json!({}) } else { Value::Null };
+            self.execute("block.set", json!({ "id": id, "time_in_system": v }));
+        }
+        if !on {
+            return;
+        }
+        let set = |x: &Value, key: &str, v: Value| {
+            let mut x = x.clone();
+            if v.is_null() {
+                if let Some(o) = x.as_object_mut() {
+                    o.remove(key);
+                }
+            } else {
+                x[key] = v;
+            }
+            x
+        };
+        let unit = self.time_unit_label();
+        let within_now = times["within"]
+            .as_f64()
+            .map(crate::results::grouped)
+            .unwrap_or_default();
+        let within_label = tf("Target time ({unit})", &[("unit", &unit)]);
+        if let Some(text) = self.text_field(
+            ui,
+            &format!("{id}/time_in_system"),
+            &within_label,
+            &within_now,
+            true,
+        ) {
+            if text.is_empty() {
+                let x = set(&times, "within", Value::Null);
+                self.execute("block.set", json!({ "id": id, "time_in_system": x }));
+            } else {
+                match self.numbers.parse(&text) {
+                    Ok(w) if w.is_finite() && w > 0.0 => {
+                        let x = set(&times, "within", json!(w));
+                        self.execute("block.set", json!({ "id": id, "time_in_system": x }));
+                    }
+                    _ => self.report_error(t("The target time is a time above 0")),
+                }
+            }
+        }
+        let calendars: Vec<(String, String)> = model["calendars"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .map(|c| {
+                let i = c["id"].as_str().unwrap_or("").to_owned();
+                let n = c["name"]
+                    .as_str()
+                    .filter(|n| !n.is_empty())
+                    .unwrap_or(&i)
+                    .to_owned();
+                (i, n)
+            })
+            .collect();
+        let cal_now = times["calendar"].as_str().map(str::to_owned);
+        let clock = t("The whole clock");
+        let shown = cal_now
+            .as_ref()
+            .map(|c| {
+                calendars
+                    .iter()
+                    .find(|(i, _)| i == c)
+                    .map_or_else(|| c.clone(), |(_, n)| n.clone())
+            })
+            .unwrap_or_else(|| clock.to_owned());
+        let mut chosen_cal: Option<Option<String>> = None;
+        let working = t("Count only working time on");
+        ui.horizontal(|ui| {
+            form::label_cell(ui, working, 26.0);
+            craft_ui::ComboBox::from_id_salt((id, "working"))
+                .selected_text(shown)
+                .width(200.0)
+                .show_ui(ui, |ui| {
+                    if ui.selectable_label(cal_now.is_none(), clock).clicked() {
+                        chosen_cal = Some(None);
+                    }
+                    for (i, n) in &calendars {
+                        if ui
+                            .selectable_label(cal_now.as_deref() == Some(i), n)
+                            .clicked()
+                        {
+                            chosen_cal = Some(Some(i.clone()));
+                        }
+                    }
+                })
+                .response
+                .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, working));
+        });
+        if let Some(c) = chosen_cal.filter(|c| *c != cal_now) {
+            let x = set(&times, "calendar", c.map_or(Value::Null, |c| json!(c)));
+            self.execute("block.set", json!({ "id": id, "time_in_system": x }));
+        }
+        ui.label(theme::weak(
+            ui,
+            t("Entities still inside when the run ends are left out, so stop the run once all are done."),
+        ));
     }
 
     /// The customer demand a sink serves, for takt: how many parts, per run, day, week or

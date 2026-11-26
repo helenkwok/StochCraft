@@ -1501,3 +1501,15 @@ connection	Flow	Flow
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Ti maskiner skal køre, fire reservemaskiner står klar, og tre mekanikere reparerer dem, der bryder ned (Crane og Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hvor mange reservemaskiner og mekanikere holder ti maskiner kørende?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemaskiner, der står klar, kan ikke bryde ned: i gennemsnit er 3.47 maskiner i stykker, og 9.29 kører. En fjerde mekaniker gør omtrent lige så meget som fire reservemaskiner mere.
+	Median time in system	Median for tid i systemet
+	Time in system, 90th percentile	Tid i systemet, 90. percentil
+	Time in system, 95th percentile	Tid i systemet, 95. percentil
+	Share done within the target time	Andel færdige inden for måltiden
+	Percentiles of time in system	Percentiler for tid i systemet
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Viser medianen, 90. og 95. percentil af den tid, hver enhed brugte fra den blev skabt, til den nåede disse afgange, og med en måltid andelen, der blev færdige inden for den.
+	Target time ({unit})	Måltid ({unit})
+	The target time is a time above 0	Måltiden er en tid over 0
+	Count only working time on	Tæl kun arbejdstid efter
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Enheder, der stadig er indeni, når kørslen slutter, er udeladt, så stop kørslen, når alle er færdige.
+	Set the target time in system of {block} to a time above 0.	Sæt måltiden i systemet for {block} til en tid over 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Tiden i systemet for {block} tæller arbejdstid efter en kalender, der ikke findes. Vælg en kalender, der findes.

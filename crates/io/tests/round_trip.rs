@@ -1388,6 +1388,106 @@ fn a_demand_is_written_saved_and_removed() {
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
 }
 
+/// Time in system by percentile is StochCraft's vendor extension: a target time and a calendar
+/// of working time, written, read back, changed and removed in place. A target written as a
+/// BPSim duration reads in the scenario's time unit; one that is not above 0 is left out with
+/// a note.
+#[test]
+fn a_time_in_system_is_written_saved_and_removed() {
+    let mut m = Builder::new();
+    m.calendar(
+        "weekdays",
+        vec![stochcraft_blocks::Event {
+            start: stochcraft_model::DateTime::new(2016, 1, 4, 0, 0, 0)
+                .unwrap_or(stochcraft_model::DateTime(0)),
+            end: stochcraft_model::DateTime::new(2016, 1, 9, 0, 0, 0)
+                .unwrap_or(stochcraft_model::DateTime(0)),
+            rule: stochcraft_blocks::Rule::parse("FREQ=WEEKLY").ok(),
+        }],
+    );
+    let src = m.source("parts", Dist::Exponential { mean: 5.0 }, None);
+    let out = m.sink("out");
+    m.time_in_system(
+        out,
+        stochcraft_blocks::TimeInSystem {
+            within: Some(60.0),
+            calendar: Some(stochcraft_model::ElementId::unchecked("weekdays")),
+        },
+    );
+    m.connect(src, out);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    let target = r#"<bpsim:FloatingParameter value="60"/>"#;
+    assert!(
+        text.contains(r#"<stochcraft:timeInSystem calendar="weekdays">"#)
+            && text.contains("<stochcraft:within>")
+            && text.matches(target).count() == 1,
+        "{text}"
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model.clone()));
+
+    // An hour as a BPSim duration is 60 minutes; a target of 0 is refused.
+    let hour = text.replace(target, r#"<bpsim:DurationParameter value="PT1H"/>"#);
+    assert_eq!(
+        read(hour.as_bytes()).map(|l| l.model).ok(),
+        Some(laid_out(model.clone()))
+    );
+    let zero = text.replace(target, r#"<bpsim:FloatingParameter value="0"/>"#);
+    let Ok(bad) = read(zero.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(
+        bad.notes
+            .iter()
+            .any(|n| n.message.contains("target time in system")),
+        "{:#?}",
+        bad.notes
+    );
+    assert!(bad.model.elements.iter().any(|e| matches!(
+        &e.kind,
+        ElementKind::Sink {
+            time_in_system: Some(x),
+            ..
+        } if x.within.is_none()
+    )));
+
+    let mut edited = loaded.model.clone();
+    for e in &mut edited.elements {
+        if let ElementKind::Sink {
+            time_in_system: Some(x),
+            ..
+        } = &mut e.kind
+        {
+            x.within = Some(90.0);
+            x.calendar = None;
+        }
+    }
+    let Ok(saved) = loaded.opened.save(&edited) else {
+        unreachable!()
+    };
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    for e in &mut edited.elements {
+        if let ElementKind::Sink { time_in_system, .. } = &mut e.kind {
+            *time_in_system = None;
+        }
+    }
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let Ok(removed) = again.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("stochcraft:timeInSystem"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
 /// A rework way with no probability, condition or quantity is still written in a new file.
 #[test]
 fn a_plain_rework_way_is_written_in_a_new_file() {
@@ -2160,6 +2260,7 @@ fn belt_model() -> Model {
                 ElementKind::Sink {
                     scrap: None,
                     demand: None,
+                    time_in_system: None,
                 },
             ),
         ],
@@ -2350,6 +2451,7 @@ fn carry_model() -> Model {
                 ElementKind::Sink {
                     scrap: None,
                     demand: None,
+                    time_in_system: None,
                 },
             ),
         ],
