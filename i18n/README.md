@@ -1076,6 +1076,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The rows for the sensor-location example (its title, the line about it, its question and what
+  it teaches) were machine-drafted from the plain meaning of the English. An anchor is the
+  language's word for a reference point of known position (an anchor node where that is the
+  usual term), "least squares" the language's name for the method, and "the shortcut formula" a
+  plain phrase for a quick direct formula. The authors' names and the proceedings' title stay in
+  English and Latin script, the "and" between the names is the catalog's own, and decimals keep
+  the point. Not checked against any other source and not reviewed by native speakers; the least
+  certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

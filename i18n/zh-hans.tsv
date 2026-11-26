@@ -1501,3 +1501,7 @@ connection	Flow	顺序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台机器必须运转，四台备用机待命，三名维修工修理出故障的机器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台备用机和多少名维修工，才能让十台机器保持运转？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的备用机不会故障：平均 3.47 台机器在故障中，9.29 台在运转。增加第四名维修工的效果与再增加四台备用机相当。
+	Locating a sensor	定位传感器
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	三个位置已知的锚点测量到传感器的距离，每次测量都有随机误差；已定位的传感器又依次充当锚点（Simeonov 和 Marinov，Environment. Technology. Resources.，2024）。
+	How precisely can a sensor be located from three noisy distance readings?	从三个带噪声的距离读数中，能把传感器定位到多精确？
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	误差经由几何传递：距离误差为 5 m 时，最小二乘法把传感器定位到 6.2 m（简便公式为 10.7 m），在锚点本身也是定位得来的第五级为 10.9 m。
