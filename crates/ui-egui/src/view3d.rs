@@ -43,6 +43,10 @@ pub(crate) const BELT_HEIGHT: f32 = 0.85;
 pub(crate) const RAIL: f32 = 0.07;
 /// The longest step between two cross-sections of a belt, in metres.
 const STEP: f64 = 0.25;
+/// The most cross-sections [`stations`] makes of a path, past its start and one for each
+/// segment: a longer path has its steps stretched, so one hundreds of kilometres long is drawn
+/// at no more cost.
+const MOST_STATIONS: f64 = 4096.0;
 /// The most parcels drawn at a block; more are counted by a number.
 const MOST_AT_A_BLOCK: usize = 3;
 /// The most parcels drawn on one conveyor.
@@ -389,18 +393,22 @@ fn floor_rect(c: [f32; 2], along: f32, across: f32, heading: f32, z: f32) -> Mes
 }
 
 /// The cross-sections of a belt along `path` (in metres): at most [`STEP`] apart, closer on a
-/// tight curve, and at every segment's ends.
+/// tight curve, and at every segment's ends; on a path long enough to need more than
+/// [`MOST_STATIONS`], the steps are stretched alike to fit.
 pub(crate) fn stations(path: &Path) -> Vec<Station> {
+    let step_of = |seg: &PathSegment| match *seg {
+        PathSegment::Line { .. } => STEP,
+        PathSegment::Arc { radius, .. } | PathSegment::Helix { radius, .. } => {
+            (radius.abs() * 6.0_f64.to_radians()).clamp(0.05, STEP)
+        }
+    };
+    let wanted: f64 = path.segments.iter().map(|s| s.length() / step_of(s)).sum();
+    let stretch = (wanted / MOST_STATIONS).max(1.0);
     let mut out = Vec::new();
     let mut done = 0.0;
     for seg in &path.segments {
         let len = seg.length();
-        let step = match *seg {
-            PathSegment::Line { .. } => STEP,
-            PathSegment::Arc { radius, .. } | PathSegment::Helix { radius, .. } => {
-                (radius.abs() * 6.0_f64.to_radians()).clamp(0.05, STEP)
-            }
-        };
+        let step = step_of(seg) * stretch;
         let n = (len / step).ceil().max(1.0) as u32;
         let first = u32::from(!out.is_empty());
         for k in first..=n {
@@ -418,13 +426,34 @@ pub(crate) fn stations(path: &Path) -> Vec<Station> {
 }
 
 /// The distance along `path` of the point nearest `q`, how far `q` is from it, and on which side
-/// (1 left of the direction of travel, -1 right).
+/// (1 left of the direction of travel, -1 right). It looks every 5 cm along the path, in at most
+/// [`MOST_STATIONS`] steps: on a longer path, at that many steps and then again round the nearest
+/// of them, closer each time, until the steps are 5 cm.
 fn nearest(path: &Path, q: [f64; 2]) -> (f64, f64, f64) {
     let total = path.length();
-    let n = (total / 0.05).ceil().max(1.0) as u32;
+    let (mut from, mut to) = (0.0, total);
     let mut best = (0.0, f64::INFINITY, 1.0);
+    // Each look narrows the span by thousands of times, so a few reach 5 cm on any path.
+    for _ in 0..8 {
+        let n = ((to - from) / 0.05).ceil().clamp(1.0, MOST_STATIONS);
+        let found = nearest_between(path, q, from, to, n as u32);
+        if found.1 <= best.1 {
+            best = found;
+        }
+        if n < MOST_STATIONS {
+            break;
+        }
+        let step = (to - from) / n;
+        (from, to) = ((best.0 - step).max(0.0), (best.0 + step).min(total));
+    }
+    best
+}
+
+/// [`nearest`] among `n + 1` points evenly spaced along `path` from `from` to `to`.
+fn nearest_between(path: &Path, q: [f64; 2], from: f64, to: f64, n: u32) -> (f64, f64, f64) {
+    let mut best = (from, f64::INFINITY, 1.0);
     for k in 0..=n {
-        let s = total * f64::from(k) / f64::from(n);
+        let s = from + (to - from) * f64::from(k) / f64::from(n.max(1));
         let f = path.point_at(s);
         let (dx, dy) = (q[0] - f.x, q[1] - f.y);
         let d = (dx * dx + dy * dy).sqrt();
@@ -1270,6 +1299,51 @@ mod tests {
         )
         .unwrap();
         e.model().clone()
+    }
+
+    #[test]
+    fn a_belt_hundreds_of_kilometres_long_has_a_bounded_number_of_stations() {
+        let straight = |length: f64| {
+            Path::new(
+                Frame::default(),
+                vec![PathSegment::Line { length, rise: 0.0 }],
+            )
+        };
+        // 500 km would be two million quarter-metre steps.
+        let long = stations(&straight(500_000.0));
+        // At most the budget, past the start and one for its segment.
+        assert!(long.len() <= MOST_STATIONS as usize + 2, "{}", long.len());
+        let last = long.last().unwrap();
+        assert!((last.x - 500_000.0).abs() < 1.0, "{}", last.x);
+        // An ordinary length keeps its quarter-metre steps: 10 m is 41 stations.
+        assert_eq!(stations(&straight(10.0)).len(), 41);
+    }
+
+    #[test]
+    fn the_nearest_point_on_a_very_long_belt_is_found_to_5_cm() {
+        // A million kilometres: 5 cm steps all along would be twenty billion points.
+        let path = Path::new(
+            Frame::default(),
+            vec![PathSegment::Line {
+                length: 1.0e9,
+                rise: 0.0,
+            }],
+        );
+        let (s, d, side) = nearest(&path, [654_321_987.6, -3.0]);
+        assert!((s - 654_321_987.6).abs() <= 0.05, "{s}");
+        assert!((d - 3.0).abs() < 1e-3, "{d}");
+        assert_eq!(side, -1.0);
+        // On an ordinary belt, the 5 cm steps as before.
+        let short = Path::new(
+            Frame::default(),
+            vec![PathSegment::Line {
+                length: 10.0,
+                rise: 0.0,
+            }],
+        );
+        let (s, d, side) = nearest(&short, [4.0, 1.0]);
+        assert!((s - 4.0).abs() < 1e-9 && (d - 1.0).abs() < 1e-9, "{s} {d}");
+        assert_eq!(side, 1.0);
     }
 
     #[test]
