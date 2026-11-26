@@ -488,3 +488,95 @@ fn a_picked_point_moved_onto_its_neighbour_is_let_go() {
     settle(&mut h);
     near_points(&points(&h, "lane_red").expect("a track"), &merged);
 }
+
+#[test]
+fn delete_in_the_frame_a_double_click_puts_a_point_in_waits() {
+    let mut h = sorter();
+    on_layout(&mut h, "lane_red");
+    // North 2 m, a sharp right turn, east 3 m: (0, 0), (0, 2), (3, 2).
+    set_track(
+        &mut h,
+        "lane_red",
+        [0.0, 0.0, 90.0],
+        serde_json::json!([
+            { "type": "line", "length": 2.0 },
+            { "type": "arc", "radius": 0.0, "angle": -90.0 },
+            { "type": "line", "length": 3.0 }
+        ]),
+    );
+    h.get_by_role_and_label(Role::Button, "Fit").click();
+    settle(&mut h);
+    let (a, b) = (
+        point_of(&h, "Point 1 of Lane red"),
+        point_of(&h, "Point 2 of Lane red"),
+    );
+    let mid = a + (b - a) * 0.5;
+    // The drawing has the keyboard (as by Tab), so Delete is the view's, not the block list's.
+    h.get_by_role_and_label(Role::Canvas, VIEW).focus();
+    settle(&mut h);
+    h.hover_at(mid);
+    settle(&mut h);
+    // A double-click half way along the first straight, Delete pressed as it is let go.
+    let button = |pressed: bool| egui::Event::PointerButton {
+        pos: mid,
+        button: egui::PointerButton::Primary,
+        pressed,
+        modifiers: egui::Modifiers::NONE,
+    };
+    for pressed in [true, false, true] {
+        h.event(button(pressed));
+    }
+    h.run_steps(1);
+    let key = |pressed: bool| egui::Event::Key {
+        key: egui::Key::Delete,
+        physical_key: None,
+        pressed,
+        repeat: false,
+        modifiers: egui::Modifiers::NONE,
+    };
+    h.input_mut()
+        .events
+        .extend([button(false), key(true), key(false)]);
+    h.run_steps(1);
+    settle(&mut h);
+    // The point is put in, about half way up the first straight, and nothing is taken away.
+    let got = points(&h, "lane_red").expect("a track");
+    assert_eq!(got.len(), 4, "{got:?}");
+    near_points(
+        &[got[0], got[2], got[3]],
+        &[[0.0, 0.0], [0.0, 2.0], [3.0, 2.0]],
+    );
+    assert!(
+        got[1][0].abs() < 1e-6 && (got[1][1] - 1.0).abs() < 0.2,
+        "{got:?}"
+    );
+}
+
+#[test]
+fn adding_a_point_keeps_a_coordinate_typed_and_not_entered() {
+    let mut h = sorter();
+    h.state_mut()
+        .select(std::iter::once("lane_red".to_owned()).collect());
+    settle(&mut h);
+    let before = points(&h, "lane_red").expect("a track");
+    into_view(&mut h, Role::TextInput, "x of point 2");
+    h.get_by_role_and_label(Role::TextInput, "x of point 2")
+        .click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.get_by_role_and_label(Role::TextInput, "x of point 2")
+        .type_text("12");
+    settle(&mut h);
+    // The click on Add a point at the end commits the field in the same frame: both are kept.
+    into_view(&mut h, Role::Button, "Add a point at the end");
+    h.get_by_role_and_label(Role::Button, "Add a point at the end")
+        .click();
+    settle(&mut h);
+    let after = points(&h, "lane_red").expect("a track");
+    assert_eq!(after.len(), 3, "{after:?}");
+    assert!((after[1][0] - 12.0).abs() < 1e-6, "{after:?}");
+    assert!((after[1][1] - before[1][1]).abs() < 1e-6, "{after:?}");
+    // The new point is a metre on from the typed end, the way the last straight now goes.
+    let (dx, dy) = (after[2][0] - after[1][0], after[2][1] - after[1][1]);
+    assert!(((dx * dx + dy * dy).sqrt() - 1.0).abs() < 1e-3, "{after:?}");
+}

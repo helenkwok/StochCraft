@@ -974,7 +974,10 @@ impl App {
                     drag = None;
                 }
             } else if let Some((c, i, _)) = point.clone() {
-                if key(ui, Key::Delete) || key(ui, Key::Backspace) {
+                // Each change is worked out from the path as the frame began, so Delete waits
+                // for a frame that has not already changed it (a point put in by a double-click,
+                // say): the picked point is then of the path as changed.
+                if commits.is_empty() && (key(ui, Key::Delete) || key(ui, Key::Backspace)) {
                     match chosen.as_ref().and_then(|ch| ch.outline.as_ref()) {
                         Some(o) => match o.removed(i) {
                             Some(less) => {
@@ -1371,9 +1374,11 @@ impl App {
         }
         ui.horizontal_wrapped(|ui| {
             if ui.button(t("Add a point at the end")).clicked() {
-                // A metre on from the end, the way the last straight goes.
-                let k = n_points;
-                let (a, b) = (outline.points[k - 2], outline.points[k - 1]);
+                // A metre on from the end, the way the last straight goes, of the outline as
+                // a field committed in this frame leaves it.
+                let base = edit.take().unwrap_or_else(|| outline.clone());
+                let k = base.points.len();
+                let (a, b) = (base.points[k - 2], base.points[k - 1]);
                 let (dx, dy) = (b[0] - a[0], b[1] - a[1]);
                 let len = (dx * dx + dy * dy).sqrt();
                 let step = 1.0 / unit_metres(unit);
@@ -1386,7 +1391,7 @@ impl App {
                     to_step(b[0] + ux * step, unit),
                     to_step(b[1] + uy * step, unit),
                 ];
-                edit = Some(outline.inserted(k, at, default_bend(unit)));
+                edit = Some(base.inserted(k, at, default_bend(unit)));
             }
             if ui.button(t("Draw in the Layout view")).clicked() {
                 self.draw_path_of(id);
