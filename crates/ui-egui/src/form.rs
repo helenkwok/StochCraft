@@ -1889,6 +1889,37 @@ fn keyed(
 mod limit_tests {
     use super::*;
 
+    /// Every description in `v` (a schema), with the kind it describes where it is a variant.
+    fn descriptions<'a>(v: &'a Value, out: &mut Vec<(Option<&'a str>, &'a str)>) {
+        match v {
+            Value::Object(m) => {
+                if let Some(d) = m.get("description").and_then(Value::as_str) {
+                    out.push((v["properties"]["type"]["const"].as_str(), d));
+                }
+                m.values().for_each(|x| descriptions(x, out));
+            }
+            Value::Array(a) => a.iter().for_each(|x| descriptions(x, out)),
+            _ => {}
+        }
+    }
+
+    /// The distributions' descriptions are doc comments with code marks; tooltips show them
+    /// without (the binomial's "count of successes in `trials`", the Erlang's and others).
+    #[test]
+    fn tooltips_show_descriptions_without_code_marks() {
+        let schema = crate::editor::params_schema("block.set");
+        let mut all = Vec::new();
+        descriptions(&schema, &mut all);
+        let binomial = all.iter().find(|(kind, _)| *kind == Some("binomial"));
+        assert_eq!(
+            binomial.map(|(_, d)| plain(d)).as_deref(),
+            Some("Binomial count of successes in trials.")
+        );
+        let marked = all.iter().filter(|(_, d)| d.contains('`')).count();
+        assert!(marked > 1, "the schema has code marks to take out");
+        assert!(all.iter().all(|(_, d)| !plain(d).contains('`')));
+    }
+
     #[test]
     fn a_truncated_normals_mean_may_be_negative() {
         let n = with_limits(
