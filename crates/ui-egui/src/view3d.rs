@@ -398,8 +398,9 @@ fn floor_rect(c: [f32; 2], along: f32, across: f32, heading: f32, z: f32) -> Mes
 /// tight curve, at least one every [`TURN_STEP`] degrees of a curve, and at every segment's ends;
 /// on a path long enough to need more than [`MOST_STATIONS`], the steps are stretched to fit, the
 /// straights' first (a curve's only if curves alone would take more than half), never past one
-/// every [`TURN_STEP`] degrees. A sharp turn (an arc of radius 0) has its cross-sections turn
-/// round at one place, from the heading it comes in on to the one it leaves on.
+/// every [`TURN_STEP`] degrees. No segment has more than [`MOST_STATIONS`], however far it turns.
+/// A sharp turn (an arc of radius 0) has its cross-sections turn round at one place, from the
+/// heading it comes in on to the one it leaves on.
 pub(crate) fn stations(path: &Path) -> Vec<Station> {
     stations_with(path, &[]).0
 }
@@ -450,7 +451,8 @@ pub(crate) fn stations_with(path: &Path, cuts: &[f64]) -> (Vec<Station>, Vec<f32
         };
         let by_length = (len / (step_of(seg) * stretch)).ceil();
         let by_turn = (turn_of(seg) / TURN_STEP).ceil();
-        let n = by_length.max(by_turn).max(1.0) as u32;
+        // A file may hold an arc or helix that turns millions of times round.
+        let n = by_length.max(by_turn).clamp(1.0, MOST_STATIONS) as u32;
         let first = u32::from(!frames.is_empty());
         for k in first..=n {
             let f = f64::from(k) / f64::from(n);
@@ -1462,6 +1464,24 @@ mod tests {
         assert!((last.x - 500_000.0).abs() < 1.0, "{}", last.x);
         // An ordinary length keeps its quarter-metre steps: 10 m is 41 stations.
         assert_eq!(stations(&straight(10.0)).len(), 41);
+    }
+
+    #[test]
+    fn a_turn_of_millions_of_degrees_has_a_bounded_number_of_stations() {
+        let turn = |seg: PathSegment| stations(&Path::new(Frame::default(), vec![seg])).len();
+        // A billion degrees at 6° a station would be over 166 million.
+        let sharp = turn(PathSegment::Arc {
+            radius: 0.0,
+            angle_deg: 1.0e9,
+            rise: 0.0,
+        });
+        assert!(sharp <= MOST_STATIONS as usize + 1, "{sharp}");
+        let helix = turn(PathSegment::Helix {
+            radius: 1.0,
+            rise: 0.0,
+            turns: 1.0e7,
+        });
+        assert!(helix <= MOST_STATIONS as usize + 1, "{helix}");
     }
 
     #[test]
