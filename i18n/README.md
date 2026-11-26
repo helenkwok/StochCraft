@@ -1076,6 +1076,10 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The row for the validation message of a uniform, truncated normal or beta whose minimum is not
+  below its maximum ("set “Minimum” below “Maximum”", a beta on a range) is each catalog's own
+  row for the triangular's message with its clause about the most likely value left out. Not
+  checked against any other source and not reviewed by native speakers.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -1049,6 +1049,7 @@ unit	yr	ж.
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} блогының «{field}» өрісінде «{param}» мәнін 1 немесе одан үлкен санға қойыңыз.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} блогының «{field}» өрісінде «{param}» мәнін 0-ден 1-ге дейінгі санға қойыңыз.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} блогының «{field}» өрісінде «Минимум» мәнін «Максимум» мәнінен кіші, ал «Ең ықтимал» мәнін (болса) олардың арасында қойыңыз.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} блогының «{field}» өрісінде «Минимум» мәнін «Максимум» мәнінен кіші қойыңыз.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} блогының «{field}» өрісіне ықтималдықтарының қосындысы 0-ден үлкен деректер нүктелерін қосыңыз.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} блогында жұмыс істейтін бірлік ешқашан болмас еді. Кемінде 1 бірлік беріңіз.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} блогы нысандарды тоқтаусыз жасар еді, өйткені оның «Келулер арасындағы уақыт» мәні әрқашан 0. 0-ден үлкен уақыт беріңіз немесе «Келу шегі» орнатыңыз.

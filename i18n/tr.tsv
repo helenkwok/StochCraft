@@ -1049,6 +1049,7 @@ unit	yr	yıl
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} bloğunun "{field}" alanında "{param}" değerini 1 veya daha büyük bir sayıya ayarlayın.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} bloğunun "{field}" alanında "{param}" değerini 0 ile 1 arasında bir sayıya ayarlayın.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} bloğunun "{field}" alanında "Minimum" değerini "Maksimum" değerinin altına ayarlayın ve "En olası" değer varsa ikisinin arasında olsun.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} bloğunun "{field}" alanında "Minimum" değerini "Maksimum" değerinin altına ayarlayın.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} bloğunun "{field}" alanında, olasılıkları toplamı 0'dan büyük olan veri noktaları ekleyin.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} bloğunun çalışacağı hiç birimi olmaz. Ona en az 1 birim verin.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} bloğu sonsuza dek varlık üretir, çünkü "Gelişler arası süre" her zaman 0. Ona 0'dan büyük bir süre verin ya da bir "Geliş sınırı" ayarlayın.

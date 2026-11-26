@@ -1049,6 +1049,7 @@ unit	yr	thn
 	In “{field}” of {block}, set “{param}” to 1 or more.	Pada “{field}” di {block}, atur “{param}” ke 1 atau lebih.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Pada “{field}” di {block}, atur “{param}” ke bilangan dari 0 sampai 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Pada “{field}” di {block}, atur “Minimum” di bawah “Maksimum”, dan nilai “Paling mungkin” (jika ada) di antara keduanya.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Pada “{field}” di {block}, atur “Minimum” di bawah “Maksimum”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Pada “{field}” di {block}, tambahkan titik data yang probabilitasnya berjumlah lebih dari 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} tidak akan pernah punya unit untuk bekerja. Beri setidaknya 1 unit.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} akan membuat entitas tanpa henti, karena “Waktu antar kedatangan” selalu 0. Beri waktu di atas 0, atau tetapkan “Batas kedatangan”.

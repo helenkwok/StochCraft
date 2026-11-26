@@ -512,6 +512,8 @@ fn row<R>(
     help: Option<&str>,
     editor: impl FnOnce(&mut egui::Ui) -> Option<R>,
 ) -> Option<R> {
+    let help = help.map(plain);
+    let help = help.as_deref();
     let mark = take_mark();
     let explained = EXPLAIN.with(|e| e.borrow_mut().take());
     let open_id = explained
@@ -1172,7 +1174,7 @@ fn tagged(
                     if let Some(tag) = tag_of(v) {
                         let r = ui.selectable_label(tag == now, choice_label(&tag));
                         let r = match v["description"].as_str() {
-                            Some(d) => r.on_hover_text(d),
+                            Some(d) => r.on_hover_text(plain(d)),
                             None => r,
                         };
                         if r.clicked() && tag != now {
@@ -1191,9 +1193,10 @@ fn tagged(
         out = Some(default_variant(v, &tag, current));
     }
 
-    // The chosen kind's fields, indented under it, in the schema's required order.
+    // The chosen kind's fields, indented under it, in the schema's required order, then the
+    // optional ones (whose order the schema does not keep) with a minimum before a maximum.
     if let Some(v) = variants.iter().find(|v| tag_of(v).as_deref() == Some(&now)) {
-        let fields: Vec<&str> = v["required"]
+        let mut fields: Vec<&str> = v["required"]
             .as_array()
             .into_iter()
             .flatten()
@@ -1211,6 +1214,20 @@ fn tagged(
                 }
                 acc
             });
+        let required = v["required"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter(|f| f.as_str() != Some("type"))
+            .count();
+        if let Some(optional) = fields.get_mut(required.min(fields.len())..) {
+            optional.sort_by_key(|f| match *f {
+                "min" => 0,
+                "mode" => 1,
+                "max" => 2,
+                _ => 3,
+            });
+        }
         ui.indent(key, |ui| {
             for f in fields {
                 let k = format!("{key}/{f}");
@@ -1251,6 +1268,12 @@ fn tagged(
 
 fn label_for(f: &str) -> String {
     label(f)
+}
+
+/// A schema description as a tooltip shows it: the descriptions are the engine's doc comments,
+/// whose code marks (`trials`) are for the documentation, not the window.
+fn plain(doc: &str) -> String {
+    doc.replace('`', "")
 }
 
 /// Field `f` of a value of kind `kind`, or the value it stands for when it is left out: the

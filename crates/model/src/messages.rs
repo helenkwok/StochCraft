@@ -159,6 +159,10 @@ pub const TEMPLATES: &[(&str, &str)] = &[
         "In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.",
     ),
     (
+        "bad_distribution_range",
+        "In “{field}” of {block}, set “Minimum” below “Maximum”.",
+    ),
+    (
         "bad_distribution_no_points",
         "In “{field}” of {block}, add data points whose probabilities add up to more than 0.",
     ),
@@ -908,13 +912,16 @@ impl Diagnostic {
                         Requirement::UnitInterval => "bad_distribution_share",
                     },
                     DistError::BadBounds => "bad_distribution_bounds",
+                    DistError::BadRange => "bad_distribution_range",
                     DistError::EmptyUserDistribution => "bad_distribution_no_points",
                 };
                 let param = match error {
                     DistError::NotFinite(p) | DistError::OutOfRange { parameter: p, .. } => {
                         param_key(p)
                     }
-                    DistError::BadBounds | DistError::EmptyUserDistribution => "",
+                    DistError::BadBounds
+                    | DistError::BadRange
+                    | DistError::EmptyUserDistribution => "",
                 };
                 let mut args = vec![b(), ("field", field_label(field_key(parameter)).to_owned())];
                 if !param.is_empty() {

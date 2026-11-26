@@ -1049,6 +1049,7 @@ unit	yr	év
 	In “{field}” of {block}, set “{param}” to 1 or more.	A(z) {block} blokk „{field}” mezőjében a(z) „{param}” legyen 1 vagy nagyobb szám.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	A(z) {block} blokk „{field}” mezőjében a(z) „{param}” legyen 0 és 1 közötti szám.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	A(z) {block} blokk „{field}” mezőjében a „Minimum” értéke legyen kisebb, mint a „Maximum” értéke, és az esetleges „Legvalószínűbb” érték essen közéjük.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	A(z) {block} blokk „{field}” mezőjében a „Minimum” értéke legyen kisebb, mint a „Maximum” értéke.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	A(z) {block} blokk „{field}” mezőjében adjon meg olyan adatpontokat, amelyek valószínűségeinek összege nagyobb 0-nál.
 	{block} would never have a unit to work with. Give it at least 1 unit.	A(z) {block} blokknak soha nem lenne egysége, amellyel dolgozhatna. Adjon neki legalább 1 egységet.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	A(z) {block} blokk véget nem érően hozna létre entitásokat, mert az „Érkezések közötti idő” mindig 0. Adjon meg 0-nál nagyobb időt, vagy adjon meg „Érkezési korlát” értéket.

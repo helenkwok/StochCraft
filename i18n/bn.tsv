@@ -1049,6 +1049,7 @@ unit	yr	বছর
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block}-এর “{field}”-এ “{param}”-কে 1 বা তার বেশি করুন।
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block}-এর “{field}”-এ “{param}”-কে 0 থেকে 1-এর মধ্যে একটি সংখ্যা করুন।
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block}-এর “{field}”-এ “সর্বনিম্ন” “সর্বাধিক”-এর কম করুন, আর “সবচেয়ে সম্ভাব্য” কোনো মান থাকলে তা এ দুটির মাঝে রাখুন।
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block}-এর “{field}”-এ “সর্বনিম্ন” “সর্বাধিক”-এর কম করুন।
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block}-এর “{field}”-এ এমন ডেটা বিন্দু যোগ করুন যাদের সম্ভাবনার যোগফল 0-এর বেশি।
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block}-এর কাজ করার মতো কোনো একক কখনো থাকবে না। কমপক্ষে 1টি একক দিন।
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} অবিরাম সত্তা তৈরি করবে, কারণ এর “আগমনের মধ্যবর্তী সময়” সব সময় 0। 0-এর বেশি একটি সময় দিন, অথবা একটি “আগমনের সীমা” ঠিক করুন।

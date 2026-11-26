@@ -1049,6 +1049,7 @@ unit	yr	år
 	In “{field}” of {block}, set “{param}” to 1 or more.	Sæt »{param}« i »{field}« for {block} til 1 eller mere.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Sæt »{param}« i »{field}« for {block} til et tal fra 0 til 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Sæt »Minimum« under »Maksimum« i »{field}« for {block}, og en eventuel værdi for »Mest sandsynlig« derimellem.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Sæt »Minimum« under »Maksimum« i »{field}« for {block}.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Tilføj datapunkter i »{field}« for {block}, hvis sandsynligheder tilsammen er over 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} ville aldrig have en ressourceenhed at arbejde med. Giv blokken mindst 1 ressourceenhed.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} ville lave enheder uden ende, fordi »Tid mellem ankomster« altid er 0. Giv den en tid over 0, eller angiv en »Grænse for ankomster«.

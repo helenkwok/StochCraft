@@ -1049,6 +1049,7 @@ unit	yr	J.
 	In “{field}” of {block}, set “{param}” to 1 or more.	Setzen Sie in „{field}“ von Block {block} den Wert „{param}“ auf 1 oder mehr.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Setzen Sie in „{field}“ von Block {block} den Wert „{param}“ auf eine Zahl von 0 bis 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Setzen Sie in „{field}“ von Block {block} „Minimum“ unter „Maximum“ und einen etwaigen „Wahrscheinlichster Wert“ dazwischen.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Setzen Sie in „{field}“ von Block {block} „Minimum“ unter „Maximum“.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Fügen Sie in „{field}“ von Block {block} Datenpunkte hinzu, deren Wahrscheinlichkeiten sich zu mehr als 0 summieren.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Block {block} hätte nie eine Einheit zum Arbeiten. Geben Sie ihm mindestens 1 Einheit.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Block {block} würde endlos Entitäten erzeugen, weil seine „Zeit zwischen Ankünften“ immer 0 ist. Geben Sie ihm eine Zeit über 0 oder setzen Sie eine „Ankunftsgrenze“.

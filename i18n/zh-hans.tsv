@@ -1049,6 +1049,7 @@ unit	yr	年
 	In “{field}” of {block}, set “{param}” to 1 or more.	在 {block} 的“{field}”中，请将“{param}”设为 1 或更大的数。
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	在 {block} 的“{field}”中，请将“{param}”设为 0 到 1 之间的数。
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	在 {block} 的“{field}”中，请将“最小值”设为小于“最大值”，并使“最可能值”（如有）介于两者之间。
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	在 {block} 的“{field}”中，请将“最小值”设为小于“最大值”。
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	在 {block} 的“{field}”中，请添加概率之和大于 0 的数据点。
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} 将没有任何资源单元可用。请至少给它 1 个资源单元。
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} 会无休止地产生实体，因为其“到达间隔时间”始终为 0。请设为大于 0 的时间，或设置“到达上限”。

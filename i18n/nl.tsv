@@ -1049,6 +1049,7 @@ unit	yr	j
 	In “{field}” of {block}, set “{param}” to 1 or more.	Stel in ‘{field}’ van {block} ‘{param}’ in op 1 of meer.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Stel in ‘{field}’ van {block} ‘{param}’ in op een getal van 0 tot 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Stel in ‘{field}’ van {block} ‘Minimum’ lager in dan ‘Maximum’, en een eventuele waarde bij ‘Meest waarschijnlijk’ ertussen.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Stel in ‘{field}’ van {block} ‘Minimum’ lager in dan ‘Maximum’.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Voeg in ‘{field}’ van {block} datapunten toe waarvan de kansen samen meer dan 0 zijn.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} zou nooit een eenheid hebben om mee te werken. Geef het blok minstens 1 eenheid.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} zou eindeloos entiteiten maken, omdat de ‘Tijd tussen aankomsten’ altijd 0 is. Geef een tijd boven 0 of stel een ‘Aankomstlimiet’ in.

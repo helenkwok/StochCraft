@@ -1049,6 +1049,7 @@ unit	yr	v
 	In “{field}” of {block}, set “{param}” to 1 or more.	Aseta lohkon {block} kentässä ”{field}” parametri ”{param}” luvuksi, joka on 1 tai suurempi.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Aseta lohkon {block} kentässä ”{field}” parametri ”{param}” luvuksi väliltä 0–1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Aseta lohkon {block} kentässä ”{field}” ”Minimi” pienemmäksi kuin ”Maksimi” ja mahdollinen ”Todennäköisin” arvo niiden väliin.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Aseta lohkon {block} kentässä ”{field}” ”Minimi” pienemmäksi kuin ”Maksimi”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Lisää lohkon {block} kenttään ”{field} datapisteitä, joiden todennäköisyydet summautuvat yli 0:n.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Lohkolla {block} ei olisi koskaan yksikköä, jonka kanssa työskennellä. Anna sille vähintään 1 yksikkö.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Lohko {block} tekisi entiteettejä loputtomasti, koska sen ”Saapumisten välinen aika” on aina 0. Anna sille aika, joka on yli 0, tai aseta ”Saapumisraja”.

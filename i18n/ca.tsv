@@ -1049,6 +1049,7 @@ unit	yr	a
 	In “{field}” of {block}, set “{param}” to 1 or more.	A «{field}» del bloc {block}, establiu «{param}» en 1 o més.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	A «{field}» del bloc {block}, establiu «{param}» en un nombre de 0 a 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	A «{field}» del bloc {block}, establiu «Mínim» per sota de «Màxim», i qualsevol valor de «Més probable» entre tots dos.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	A «{field}» del bloc {block}, establiu «Mínim» per sota de «Màxim».
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	A «{field}» del bloc {block}, afegiu punts de dades les probabilitats dels quals sumin més de 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} no tindria mai cap unitat amb què treballar. Doneu-li almenys 1 unitat.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} crearia entitats sense fi, perquè el seu «Temps entre arribades» és sempre 0. Doneu-li un temps més gran que 0 o definiu un «Límit d'arribades».

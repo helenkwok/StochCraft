@@ -1049,6 +1049,7 @@ unit	yr	god.
 	In “{field}” of {block}, set “{param}” to 1 or more.	U polju „{field}“ bloka {block} postavite „{param}“ na 1 ili više.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	U polju „{field}“ bloka {block} postavite „{param}“ na broj od 0 do 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	U polju „{field}“ bloka {block} postavite „Minimum“ ispod „Maksimum“, a svaku vrijednost „Najvjerojatnije“ između njih.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	U polju „{field}“ bloka {block} postavite „Minimum“ ispod „Maksimum“.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	U polju „{field}“ bloka {block} dodajte podatkovne tačke čije vjerovatnoće zajedno daju više od 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} nikad ne bi imao jedinicu za rad. Dodijelite mu barem 1 jedinicu.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} bi stvarao entitete bez kraja jer je njegovo „Vrijeme između dolazaka“ uvijek 0. Zadajte vrijeme veće od 0 ili postavite „Ograničenje dolazaka“.

@@ -1049,6 +1049,7 @@ unit	yr	έτ
 	In “{field}” of {block}, set “{param}” to 1 or more.	Στο «{field}» του μπλοκ {block}, ορίστε το «{param}» σε 1 ή περισσότερο.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Στο «{field}» του μπλοκ {block}, ορίστε το «{param}» σε αριθμό από 0 έως 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Στο «{field}» του μπλοκ {block}, ορίστε το «Ελάχιστο» κάτω από το «Μέγιστο» και κάθε τιμή «Πιθανότερη τιμή» ανάμεσά τους.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Στο «{field}» του μπλοκ {block}, ορίστε το «Ελάχιστο» κάτω από το «Μέγιστο».
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Στο «{field}» του μπλοκ {block}, προσθέστε σημεία δεδομένων με πιθανότητες που αθροίζουν σε περισσότερο από 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Το μπλοκ {block} δεν θα είχε ποτέ μονάδα για να δουλέψει. Δώστε του τουλάχιστον 1 μονάδα.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Το μπλοκ {block} θα δημιουργούσε οντότητες χωρίς τέλος, επειδή ο «Χρόνος μεταξύ αφίξεων» είναι πάντα 0. Δώστε του χρόνο μεγαλύτερο από 0 ή ορίστε ένα «Όριο αφίξεων».

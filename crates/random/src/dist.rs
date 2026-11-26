@@ -112,8 +112,10 @@ pub enum DistError {
         parameter: &'static str,
         requirement: Requirement,
     },
-    /// `min` is not below `max` (or the mode lies outside them).
+    /// A triangular's `min` is not below its `max`, or its mode lies outside them.
     BadBounds,
+    /// `min` is not below `max` (a uniform, truncated normal or beta, which have no mode).
+    BadRange,
     /// A user distribution has no points or its probabilities do not sum to a positive number.
     EmptyUserDistribution,
 }
@@ -127,6 +129,7 @@ impl std::fmt::Display for DistError {
                 requirement,
             } => write!(f, "{parameter} must be {requirement}"),
             DistError::BadBounds => write!(f, "min must be below max, with any mode between them"),
+            DistError::BadRange => write!(f, "min must be below max"),
             DistError::EmptyUserDistribution => {
                 write!(
                     f,
@@ -668,7 +671,7 @@ impl Dist {
                 if min < max {
                     Ok(())
                 } else {
-                    Err(DistError::BadBounds)
+                    Err(DistError::BadRange)
                 }
             }
             Dist::Triangular { min, mode, max } => {
@@ -703,7 +706,7 @@ impl Dist {
                 if min < max {
                     Ok(())
                 } else {
-                    Err(DistError::BadBounds)
+                    Err(DistError::BadRange)
                 }
             }
             Dist::Gamma { shape, scale } | Dist::Weibull { shape, scale } => {
@@ -723,7 +726,7 @@ impl Dist {
                 if min < max {
                     Ok(())
                 } else {
-                    Err(DistError::BadBounds)
+                    Err(DistError::BadRange)
                 }
             }
             Dist::Erlang { mean, k } => {
@@ -1425,8 +1428,8 @@ mod tests {
             min,
             max,
         };
-        assert_eq!(range(4.0, 1.0).check(), Err(DistError::BadBounds));
-        assert_eq!(range(2.0, 2.0).check(), Err(DistError::BadBounds));
+        assert_eq!(range(4.0, 1.0).check(), Err(DistError::BadRange));
+        assert_eq!(range(2.0, 2.0).check(), Err(DistError::BadRange));
         assert!(range(f64::NAN, 1.0).check().is_err());
         assert!(range(0.0, f64::INFINITY).check().is_err());
         assert!(!range(-2.0, 0.0).can_be_positive());

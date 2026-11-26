@@ -272,7 +272,12 @@ fn a_beta_service_takes_a_range() {
         element(&h, "serve")["service"],
         json!({"type": "beta", "shape": 3.0, "scale": 5.0})
     );
-    h.get_by_role_and_label(Role::TextInput, "Minimum");
+    // The two shapes, then the minimum before the maximum, as for a uniform.
+    let top = |h: &Harness<'static, App>, label: &str| {
+        h.get_by_role_and_label(Role::TextInput, label).rect().top()
+    };
+    let order = ["Shape", "Scale", "Minimum", "Maximum"].map(|l| top(&h, l));
+    assert!(order.windows(2).all(|w| w[0] < w[1]), "{order:?}");
     // The maximum first (a minimum of 1 below a maximum of 1 would be refused), then the minimum.
     type_into(&mut h, "Maximum", "4");
     assert_eq!(
@@ -284,6 +289,43 @@ fn a_beta_service_takes_a_range() {
         element(&h, "serve")["service"],
         json!({"type": "beta", "shape": 3.0, "scale": 5.0, "min": 1.0, "max": 4.0})
     );
+    // A minimum above the maximum: the message asks for the range only (a beta has no most
+    // likely value).
+    type_into(&mut h, "Minimum", "5");
+    assert!(
+        h.query_all_by_label_contains("set “Minimum” below “Maximum”.")
+            .next()
+            .is_some()
+    );
+    assert_eq!(h.query_all_by_label_contains("Most likely").count(), 0);
+}
+
+#[test]
+fn distribution_descriptions_show_without_code_marks() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    click(&mut h, Role::ComboBox, "Service time");
+    let at = h
+        .get_by_role_and_label(Role::Button, "Binomial")
+        .rect()
+        .center();
+    h.hover_at(at);
+    // The tooltip shows once the pointer has rested on the option.
+    for _ in 0..240 {
+        if h.query_all_by_label_contains("Binomial count of successes")
+            .next()
+            .is_some()
+        {
+            break;
+        }
+        h.step();
+    }
+    assert!(
+        h.query_all_by_label_contains("Binomial count of successes in trials.")
+            .next()
+            .is_some()
+    );
+    assert_eq!(h.query_all_by_label_contains("`").count(), 0);
 }
 
 #[test]
