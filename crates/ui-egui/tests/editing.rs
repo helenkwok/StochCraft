@@ -257,6 +257,36 @@ fn choosing_another_distribution_keeps_its_scale() {
 }
 
 #[test]
+fn a_beta_service_takes_a_range() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    // BPSim's beta, on [0, 1]: its range is not in the model, but the form shows it.
+    h.state_mut()
+        .execute(
+            "block.set",
+            json!({"id": "serve", "service": {"type": "beta", "shape": 3, "scale": 5}}),
+        )
+        .expect("a beta service");
+    settle(&mut h);
+    assert_eq!(
+        element(&h, "serve")["service"],
+        json!({"type": "beta", "shape": 3.0, "scale": 5.0})
+    );
+    h.get_by_role_and_label(Role::TextInput, "Minimum");
+    // The maximum first (a minimum of 1 below a maximum of 1 would be refused), then the minimum.
+    type_into(&mut h, "Maximum", "4");
+    assert_eq!(
+        element(&h, "serve")["service"],
+        json!({"type": "beta", "shape": 3.0, "scale": 5.0, "max": 4.0})
+    );
+    type_into(&mut h, "Minimum", "1");
+    assert_eq!(
+        element(&h, "serve")["service"],
+        json!({"type": "beta", "shape": 3.0, "scale": 5.0, "min": 1.0, "max": 4.0})
+    );
+}
+
+#[test]
 fn a_model_is_built_from_blocks_connected_and_run() {
     let mut h = harness();
     h.state_mut()

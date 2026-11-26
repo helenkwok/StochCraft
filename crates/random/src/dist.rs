@@ -38,10 +38,18 @@ pub enum Dist {
     /// Gamma with shape k and scale θ (mean kθ). Marsaglia and Tsang (2000), with the
     /// shape-below-one boost.
     Gamma { shape: f64, scale: f64 },
-    /// Beta on [0, 1]. BPSim names its parameters `shape` and `scale`; they are taken as the two
-    /// shape parameters α = `shape`, β = `scale` (mean α / (α + β)). Ratio of two gammas, and
-    /// for a shape below 0.1 the same ratio formed from their logs.
-    Beta { shape: f64, scale: f64 },
+    /// Beta on [`min`, `max`] (BPSim's on [0, 1]: `min` 0 and `max` 1, see [`Dist::beta`]).
+    /// BPSim names its parameters `shape` and `scale`; they are taken as the two shape
+    /// parameters α = `shape`, β = `scale`, so the mean is min + (max − min) α / (α + β). A
+    /// draw on [0, 1] is a ratio of two gammas, and for a shape below 0.1 the same ratio formed
+    /// from their logs; it is then stretched to the range (min + (max − min) x, which leaves a
+    /// draw on [0, 1] exactly as it was).
+    Beta {
+        shape: f64,
+        scale: f64,
+        min: f64,
+        max: f64,
+    },
     /// Erlang: the sum of `k` exponentials, with overall mean `mean`.
     Erlang { mean: f64, k: u64 },
     /// Weibull with shape k and scale λ. Inversion.
@@ -568,6 +576,16 @@ impl Dist {
         Dist::Exponential { mean }
     }
 
+    /// The beta on [0, 1] with shape parameters α = `shape`, β = `scale` (BPSim's).
+    pub fn beta(shape: f64, scale: f64) -> Self {
+        Dist::Beta {
+            shape,
+            scale,
+            min: 0.0,
+            max: 1.0,
+        }
+    }
+
     /// The distribution of `factor` times a draw from this one (a time measured on another
     /// scale, such as a service taking 10% longer), or `None` for a count (Poisson, binomial),
     /// which cannot be scaled, or a factor that is not a finite number above 0.
@@ -623,8 +641,19 @@ impl Dist {
                 points: points.iter().map(|(p, v)| (*p, v * f)).collect(),
                 discrete: *discrete,
             },
-            // A beta lives on [0, 1]; BPSim's has no scale to change.
-            Dist::Beta { .. } | Dist::Poisson { .. } | Dist::Binomial { .. } => return None,
+            // A beta keeps its shape; its range stretches.
+            Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            } => Dist::Beta {
+                shape: *shape,
+                scale: *scale,
+                min: min * f,
+                max: max * f,
+            },
+            Dist::Poisson { .. } | Dist::Binomial { .. } => return None,
         })
     }
 
@@ -677,11 +706,25 @@ impl Dist {
                     Err(DistError::BadBounds)
                 }
             }
-            Dist::Gamma { shape, scale }
-            | Dist::Beta { shape, scale }
-            | Dist::Weibull { shape, scale } => {
+            Dist::Gamma { shape, scale } | Dist::Weibull { shape, scale } => {
                 positive("shape", *shape)?;
                 positive("scale", *scale)
+            }
+            Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            } => {
+                positive("shape", *shape)?;
+                positive("scale", *scale)?;
+                finite("min", *min)?;
+                finite("max", *max)?;
+                if min < max {
+                    Ok(())
+                } else {
+                    Err(DistError::BadBounds)
+                }
             }
             Dist::Erlang { mean, k } => {
                 non_negative("mean", *mean)?;
@@ -752,7 +795,13 @@ impl Dist {
                 exp(mu + s2.sqrt() * standard_normal(rng))
             }
             Dist::Gamma { shape, scale } => gamma_sample(rng, *shape, *scale),
-            Dist::Beta { shape, scale } => beta_sample(rng, *shape, *scale),
+            // On [0, 1], 0 + 1 · x is x exactly, so BPSim's beta draws as it always has.
+            Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            } => min + (max - min) * beta_sample(rng, *shape, *scale),
             // The sum of k exponentials costs k draws, so a large k (a fit to tightly clustered
             // data can give millions) is drawn as the gamma it is. Small k keep the sum, so
             // their fixed-seed draws stay as they were.
@@ -778,6 +827,7 @@ impl Dist {
             Dist::Uniform { min, .. }
             | Dist::Triangular { min, .. }
             | Dist::TruncatedNormal { min, .. }
+            | Dist::Beta { min, .. }
                 if min.is_finite() =>
             {
                 *min
@@ -800,12 +850,10 @@ impl Dist {
             }
             Dist::Uniform { max, .. }
             | Dist::Triangular { max, .. }
-            | Dist::TruncatedNormal { max, .. } => *max > 0.0,
+            | Dist::TruncatedNormal { max, .. }
+            | Dist::Beta { max, .. } => *max > 0.0,
             Dist::Normal { mean, std_dev } => *mean > 0.0 || *std_dev > 0.0,
-            Dist::LogNormal { .. }
-            | Dist::Gamma { .. }
-            | Dist::Beta { .. }
-            | Dist::Weibull { .. } => true,
+            Dist::LogNormal { .. } | Dist::Gamma { .. } | Dist::Weibull { .. } => true,
             Dist::Binomial {
                 probability,
                 trials,
@@ -839,7 +887,12 @@ impl Dist {
             } => truncated_moments(*mean, *std_dev, *min, *max).0,
             Dist::Gamma { shape, scale } => shape * scale,
             // Written so that two shapes near the largest number do not overflow their sum.
-            Dist::Beta { shape, scale } => 1.0 / (1.0 + scale / shape),
+            Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            } => min + (max - min) * (1.0 / (1.0 + scale / shape)),
             Dist::Weibull { shape, scale } => scale * exp(ln_gamma(1.0 + 1.0 / shape)),
             Dist::Binomial {
                 probability,
@@ -880,7 +933,15 @@ impl Dist {
                 max,
             } => truncated_moments(*mean, *std_dev, *min, *max).1,
             Dist::Gamma { shape, scale } => shape * scale * scale,
-            Dist::Beta { shape: a, scale: b } => a * b / ((a + b) * (a + b) * (a + b + 1.0)),
+            Dist::Beta {
+                shape: a,
+                scale: b,
+                min,
+                max,
+            } => {
+                let w = max - min;
+                w * w * (a * b / ((a + b) * (a + b) * (a + b + 1.0)))
+            }
             Dist::Erlang { mean, k } => mean * mean / *k as f64,
             Dist::Weibull { shape, scale } => {
                 let g1 = exp(ln_gamma(1.0 + 1.0 / shape));
@@ -1273,7 +1334,7 @@ mod tests {
             (0.002, 0.004, 24),
             (0.000_5, 3.0, 25),
         ] {
-            let d = Dist::Beta { shape: a, scale: b };
+            let d = Dist::beta(a, b);
             let mut rng = Rng::new(seed);
             let xs: Vec<f64> = (0..n).map(|_| d.sample(&mut rng)).collect();
             assert!(xs.iter().all(|x| (0.0..=1.0).contains(x)), "({a}, {b})");
@@ -1289,16 +1350,88 @@ mod tests {
     /// The beta mean does not overflow when both shapes are near the largest number.
     #[test]
     fn the_beta_mean_does_not_overflow() {
-        let big = Dist::Beta {
-            shape: 1e308,
-            scale: 1e308,
-        };
+        let big = Dist::beta(1e308, 1e308);
         assert_eq!(big.mean(), Some(0.5));
-        let d = Dist::Beta {
-            shape: 2.0,
-            scale: 3.0,
-        };
+        let d = Dist::beta(2.0, 3.0);
         assert!((d.mean().unwrap_or(f64::NAN) - 0.4).abs() < 1e-15);
+    }
+
+    /// A beta on [0, 1] draws bit for bit what the [0, 1] sampler draws, and has the [0, 1]
+    /// formulas' mean and variance exactly, so models and files with BPSim's beta keep their
+    /// results.
+    #[test]
+    fn a_beta_on_its_default_range_draws_exactly_as_before() {
+        for (a, b, seed) in [
+            (2.0, 5.0, 31),
+            (0.5, 0.5, 32),
+            (0.01, 3.0, 33),
+            (40.0, 7.0, 34),
+        ] {
+            let d = Dist::beta(a, b);
+            let (mut r1, mut r2) = (Rng::new(seed), Rng::new(seed));
+            for _ in 0..2_000 {
+                assert_eq!(
+                    d.sample(&mut r1).to_bits(),
+                    beta_sample(&mut r2, a, b).to_bits(),
+                    "Beta({a}, {b})"
+                );
+            }
+            assert_eq!(
+                d.mean().map(f64::to_bits),
+                Some((1.0 / (1.0 + b / a)).to_bits())
+            );
+            assert_eq!(
+                d.variance().map(f64::to_bits),
+                Some((a * b / ((a + b) * (a + b) * (a + b + 1.0))).to_bits())
+            );
+        }
+    }
+
+    /// Beta(3, 5) stretched to [1, 4]: mean 1 + 3 · 3/8 = 2.125 and variance
+    /// 3² · 15 / (64 · 9) = 0.234375, every draw inside the range, and checks on the range.
+    #[test]
+    fn a_beta_on_a_range_has_its_mean_variance_and_bounds() {
+        let d = Dist::Beta {
+            shape: 3.0,
+            scale: 5.0,
+            min: 1.0,
+            max: 4.0,
+        };
+        assert!(d.mean().is_some_and(|m| (m - 2.125).abs() < 1e-15));
+        assert!(d.variance().is_some_and(|v| (v - 0.234_375).abs() < 1e-15));
+        let n = 100_000;
+        let mut rng = Rng::new(41);
+        let xs: Vec<f64> = (0..n).map(|_| d.sample(&mut rng)).collect();
+        assert!(xs.iter().all(|x| (1.0..=4.0).contains(x)));
+        let m = xs.iter().sum::<f64>() / n as f64;
+        assert!(
+            (m - 2.125).abs() < 7.0 * (0.234_375 / n as f64).sqrt(),
+            "{m}"
+        );
+        // A change of time unit stretches the range and keeps the shapes.
+        assert_eq!(
+            d.scaled(60.0),
+            Some(Dist::Beta {
+                shape: 3.0,
+                scale: 5.0,
+                min: 60.0,
+                max: 240.0,
+            })
+        );
+        assert!(d.can_be_positive());
+        let range = |min: f64, max: f64| Dist::Beta {
+            shape: 3.0,
+            scale: 5.0,
+            min,
+            max,
+        };
+        assert_eq!(range(4.0, 1.0).check(), Err(DistError::BadBounds));
+        assert_eq!(range(2.0, 2.0).check(), Err(DistError::BadBounds));
+        assert!(range(f64::NAN, 1.0).check().is_err());
+        assert!(range(0.0, f64::INFINITY).check().is_err());
+        assert!(!range(-2.0, 0.0).can_be_positive());
+        // Parameters it refuses draw its lower bound, never a panic.
+        assert_eq!(range(4.0, 1.0).sample(&mut rng), 4.0);
     }
 
     fn all() -> Vec<Dist> {
@@ -1357,14 +1490,8 @@ mod tests {
                 shape: 0.4,
                 scale: 2.0,
             },
-            Dist::Beta {
-                shape: 2.0,
-                scale: 5.0,
-            },
-            Dist::Beta {
-                shape: 0.5,
-                scale: 0.5,
-            },
+            Dist::beta(2.0, 5.0),
+            Dist::beta(0.5, 0.5),
             Dist::Erlang { mean: 6.0, k: 3 },
             Dist::Weibull {
                 shape: 1.5,
@@ -1387,6 +1514,13 @@ mod tests {
             Dist::User {
                 points: vec![(0.0, 0.0), (0.5, 2.0), (0.5, 10.0)],
                 discrete: false,
+            },
+            // Last, so the seeds of those before it stay as they were.
+            Dist::Beta {
+                shape: 3.0,
+                scale: 5.0,
+                min: 1.0,
+                max: 4.0,
             },
         ]
     }
@@ -1435,11 +1569,7 @@ mod tests {
             }
             .sample(&mut r);
             assert!((3.0..=3.4).contains(&t));
-            let b = Dist::Beta {
-                shape: 0.5,
-                scale: 0.5,
-            }
-            .sample(&mut r);
+            let b = Dist::beta(0.5, 0.5).sample(&mut r);
             assert!((0.0..=1.0).contains(&b));
             let p = Dist::Poisson { mean: 3.5 }.sample(&mut r);
             assert_eq!(p, p.trunc());
@@ -1501,10 +1631,7 @@ mod tests {
                 shape: 0.0,
                 scale: 1.0,
             },
-            Dist::Beta {
-                shape: 1.0,
-                scale: f64::NAN,
-            },
+            Dist::beta(1.0, f64::NAN),
             Dist::Erlang { mean: 1.0, k: 0 },
             Dist::Poisson { mean: -2.0 },
             Dist::Binomial {
@@ -2056,9 +2183,15 @@ mod proofs {
     #[kani::proof]
     fn shape_scale_kinds_and_binomial_are_accepted_only_in_range() {
         let (shape, scale) = (any_f64(), any_f64());
+        let (min, max) = (any_f64(), any_f64());
         let kinds = [
             Dist::Gamma { shape, scale },
-            Dist::Beta { shape, scale },
+            Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            },
             Dist::Weibull { shape, scale },
         ];
         for d in &kinds {
@@ -2066,6 +2199,10 @@ mod proofs {
                 assert!(shape.is_finite() && shape > 0.0);
                 assert!(scale.is_finite() && scale > 0.0);
             }
+        }
+        // A beta's range: finite, and min below max.
+        if kinds[1].check().is_ok() {
+            assert!(min.is_finite() && max.is_finite() && min < max);
         }
         let trials: u64 = kani::any();
         let probability = any_f64();

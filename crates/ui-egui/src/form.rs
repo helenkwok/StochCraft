@@ -266,7 +266,9 @@ pub fn choice_label(tag: &str) -> String {
 /// a shape.
 fn is_time(dist: &str, field: &str) -> bool {
     match dist {
-        "poisson" | "binomial" | "beta" => false,
+        "poisson" | "binomial" => false,
+        // A beta's shapes are numbers; its range is in time.
+        "beta" => matches!(field, "min" | "max"),
         "gamma" | "weibull" => field == "scale",
         _ => matches!(field, "value" | "mean" | "min" | "max" | "mode" | "std_dev"),
     }
@@ -1232,7 +1234,7 @@ fn tagged(
                     &k,
                     &label_for(f),
                     fnode["description"].as_str(),
-                    &current[f],
+                    &field_or_default(current, &now, f, &fnode),
                     is_time(&now, f),
                     false,
                 );
@@ -1249,6 +1251,22 @@ fn tagged(
 
 fn label_for(f: &str) -> String {
     label(f)
+}
+
+/// Field `f` of a value of kind `kind`, or the value it stands for when it is left out: the
+/// schema's default, or a beta's range [0, 1] (written only when it is another).
+fn field_or_default(current: &Value, kind: &str, f: &str, node: &Value) -> Value {
+    if !current[f].is_null() {
+        return current[f].clone();
+    }
+    if !node["default"].is_null() {
+        return node["default"].clone();
+    }
+    match (kind, f) {
+        ("beta", "min") => json!(0.0),
+        ("beta", "max") => json!(1.0),
+        _ => Value::Null,
+    }
 }
 
 /// A new value of kind `tag`, keeping what carries over from `current` (a mean stays a mean).
