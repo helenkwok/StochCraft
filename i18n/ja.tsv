@@ -1501,3 +1501,7 @@ connection	Flow	フロー
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	10 台の機械が稼働していなければならず、予備機 4 台が待機し、整備士 3 人が故障した機械を修理する（Crane と Iglehart、Winter Simulation Conference、1973）。
 	How many spares and repairmen keep ten machines running?	10 台の機械を動かし続けるには、予備機と整備士がいくつ必要か？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待機中の予備機は故障しない。平均 3.47 台が故障中で、9.29 台が稼働する。整備士を 1 人増やすと、予備機を 4 台増やすのとほぼ同じ効果がある。
+	One machine's availability	機械 1 台の稼働率
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	平均 90 時間ごとに故障し、修理に 4.5 時間かかる機械 1 台（Hristova、Denev、Tsankov、Environment. Technology. Resources、2024）。
+	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	稼働 90 時間、停止 4.5 時間：機械は時間の 95.2% で稼働し、94.5 時間ごとに故障が起きる。修理時間を半分にすると 97.6% に上がる。

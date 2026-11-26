@@ -1501,3 +1501,7 @@ connection	Flow	ເສັ້ນທາງ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ເຄື່ອງຈັກສິບເຄື່ອງຕ້ອງເຮັດວຽກ, ເຄື່ອງຈັກສຳຮອງສີ່ເຄື່ອງລໍຖ້າພ້ອມ ແລະ ຊ່າງຈັກສາມຄົນສ້ອມແປງເຄື່ອງທີ່ເສຍ (Crane ແລະ Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	ຕ້ອງມີເຄື່ອງຈັກສຳຮອງ ແລະ ຊ່າງຈັກຈັກເທົ່າໃດ ເພື່ອໃຫ້ເຄື່ອງຈັກສິບເຄື່ອງເຮັດວຽກຕໍ່ໄປໄດ້?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	ເຄື່ອງຈັກສຳຮອງທີ່ລໍຖ້າຢູ່ບໍ່ສາມາດເສຍໄດ້: ໂດຍສະເລ່ຍເຄື່ອງຈັກເສຍ 3.47 ເຄື່ອງ ແລະ ເຮັດວຽກ 9.29 ເຄື່ອງ. ຊ່າງຈັກຄົນທີສີ່ຊ່ວຍໄດ້ປະມານເທົ່າກັບເຄື່ອງຈັກສຳຮອງອີກສີ່ເຄື່ອງ.
+	One machine's availability	ຄວາມພ້ອມໃຊ້ງານຂອງເຄື່ອງຈັກໜຶ່ງເຄື່ອງ
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	ເຄື່ອງຈັກໜຶ່ງເຄື່ອງທີ່ເສຍສະເລ່ຍທຸກ 90 ຊົ່ວໂມງ ແລະ ໃຊ້ເວລາ 4.5 ຊົ່ວໂມງໃນການສ້ອມ (Hristova, Denev ແລະ Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	ເຄື່ອງຈັກໜຶ່ງເຄື່ອງຢຸດເລື້ອຍປານໃດ ແລະ ເສຍງານຫຼາຍປານໃດ?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	ເຮັດວຽກ 90 ຊົ່ວໂມງ, ຢຸດ 4.5: ເຄື່ອງຈັກເຮັດວຽກ 95.2% ຂອງເວລາ ແລະ ເກີດເສຍທຸກ 94.5 ຊົ່ວໂມງ. ຖ້າເວລາສ້ອມຫຼຸດເຫຼືອເຄິ່ງໜຶ່ງ ຈະເພີ່ມເປັນ 97.6%.

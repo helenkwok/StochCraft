@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="One machine's availability" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.2.0">
+  <bpmn:resource id="machine_resource" name="Machine"/>
+  <bpmn:process id="process" name="One machine's availability" isExecutable="false">
+    <bpmn:task id="machine" name="Machine">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>machine_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="machine" targetRef="machine"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="machine_di" bpmnElement="machine">
+        <dc:Bounds x="80" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="130" y="140"/>
+        <di:waypoint x="130" y="190"/>
+        <di:waypoint x="230" y="190"/>
+        <di:waypoint x="230" y="100"/>
+        <di:waypoint x="180" y="100"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="Repairs take 4.5 hours" vendor="StochCraft" version="0.2.0">
+          <bpsim:ScenarioParameters replication="20" seed="1" baseTimeUnit="hour">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="101000"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="1000"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="machine">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:FloatingParameter value="30"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('machine_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:PriorityParameters>
+              <bpsim:Interruptible>
+                <bpsim:BooleanParameter value="true"/>
+              </bpsim:Interruptible>
+            </bpsim:PriorityParameters>
+            <bpsim:VendorExtension name="stochcraft:startingContents" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="1"/>
+            <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:breakdown>
+                <stochcraft:timeToFailure>
+                  <bpsim:NegativeExponentialDistribution mean="90"/>
+                </stochcraft:timeToFailure>
+                <stochcraft:repairTime>
+                  <bpsim:NegativeExponentialDistribution mean="4.5"/>
+                </stochcraft:repairTime>
+              </stochcraft:breakdown>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="machine_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="quick-repair" name="Repairs take 2.25 hours" inherits="scenario">
+          <bpsim:ElementParameters elementRef="machine">
+            <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:breakdown>
+                <stochcraft:timeToFailure>
+                  <bpsim:NegativeExponentialDistribution mean="90"/>
+                </stochcraft:timeToFailure>
+                <stochcraft:repairTime>
+                  <bpsim:NegativeExponentialDistribution mean="2.25"/>
+                </stochcraft:repairTime>
+              </stochcraft:breakdown>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

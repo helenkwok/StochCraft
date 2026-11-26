@@ -1501,3 +1501,7 @@ connection	Flow	順序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台機器必須運轉，四台備用機待命，三名維修技師修理故障的機器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台備用機和多少名維修技師，才能讓十台機器保持運轉？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的備用機不會故障：平均 3.47 台機器在故障中，9.29 台在運轉。增加第四名維修技師的效果與再增加四台備用機相當。
+	One machine's availability	單台機器的可用率
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	一台機器平均每 90 小時故障一次，修理需要 4.5 小時（Hristova、Denev 和 Tsankov，Environment. Technology. Resources，2024）。
+	How often is one machine down, and how much work does that cost?	一台機器多久停機一次，這會損失多少工作？
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	運轉 90 小時，停機 4.5 小時：機器 95.2% 的時間在工作，每 94.5 小時發生一次故障。修理時間減半，可用率升至 97.6%。

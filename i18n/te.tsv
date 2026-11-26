@@ -1501,3 +1501,7 @@ connection	Flow	ప్రవాహం
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	పది యంత్రాలు నడుస్తూ ఉండాలి, నాలుగు విడి యంత్రాలు సిద్ధంగా వేచి ఉంటాయి, ముగ్గురు మెకానిక్‌లు పాడైనవాటిని బాగుచేస్తారు (Crane మరియు Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	పది యంత్రాలను నడుపుతూ ఉంచడానికి ఎన్ని విడి యంత్రాలు, ఎంతమంది మెకానిక్‌లు కావాలి?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	సిద్ధంగా వేచి ఉన్న విడి యంత్రాలు పాడవవు: సగటున 3.47 యంత్రాలు పాడై ఉంటాయి, 9.29 నడుస్తాయి. నాలుగో మెకానిక్ మరో నాలుగు విడి యంత్రాలంత ఉపయోగపడతాడు.
+	One machine's availability	ఒక యంత్రం అందుబాటు
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	సగటున ప్రతి 90 గంటలకు చెడిపోయి, మరమ్మతుకు 4.5 గంటలు పట్టే ఒక యంత్రం (Hristova, Denev మరియు Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	ఒక యంత్రం ఎంత తరచుగా ఆగిపోతుంది, దానివల్ల ఎంత పని పోతుంది?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 గంటలు పని, 4.5 గంటలు ఆగుదల: యంత్రం 95.2% సమయం పనిచేస్తుంది, ప్రతి 94.5 గంటలకు ఒక చెడిపోవడం జరుగుతుంది. మరమ్మతు సమయాన్ని సగం చేస్తే అది 97.6% అవుతుంది.
