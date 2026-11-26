@@ -571,10 +571,10 @@ This is one run of many: its numbers differ from the others and from the average
   **Positions from the layout**); a block the layout does not place is listed under **Unplaced**
   and drawn in neither view, so a model with no layout yet shows an empty plan and 3D view. The
   parcel sorter example has a layout.
-  - **Draw a conveyor's path.** Select the conveyor (on the plan, in the flowchart, or by clicking
-    it under **Unplaced**) and click **Draw path**. Click where the belt starts and at each point
-    it turns, then double-click, press Enter or click **Finish**; Backspace takes back the last
-    point and Esc cancels. Each corner bends round with a radius of 1 m (tighter where the
+  - **Draw a conveyor's path.** Select the conveyor (on the plan or in the flowchart) and click
+    **Draw path**, or click the conveyor under **Unplaced**, which starts drawing straight away.
+    Click where the belt starts and at each point it turns, then double-click, press Enter or
+    click **Finish**; Backspace takes back the last point and Esc cancels. Each corner bends round with a radius of 1 m (tighter where the
     straights beside it are too short). The conveyor's **Length** becomes the drawn path's,
     unless a typed length already overrode the path, which it keeps.
   - **Edit it.** Click a belt to select it: its points show as small circles. Drag a point to move
@@ -585,9 +585,10 @@ This is one run of many: its numbers differ from the others and from the average
     and Delete removes it. The conveyor's properties list its path under **Path**: the **Drawn
     length**, each point's x and y and each corner's bend radius as fields, **Remove** for a
     point, **Add a point at the end**, **Add a straight path** (of the typed length, for a
-    conveyor not drawn yet) and **Remove path**. A path that climbs, has a helix or turns a whole
-    circle or more in one arc (drawn in a file, or by an agent) can be moved or removed here but
-    not edited point by point; a loop drawn by its points keeps them.
+    conveyor not drawn yet) and **Remove path**. A path that climbs, has a helix, turns a whole
+    circle or more in one arc, or turns sharply where it starts or ends (drawn in a file, or by an
+    agent) can be moved, drawn again or removed here but not edited point by point; a loop drawn
+    by its points keeps them.
   - Snapping to the grid and to other belts' ends, and a background drawing to trace over, come
     next.
 - **Dashboard** (beside the tabs, or **View ▸ Dashboard**): a panel beside the model with tiles
