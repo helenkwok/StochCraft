@@ -1505,3 +1505,13 @@ connection	Flow	フロー
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	位置が既知の3つのアンカーがセンサーまでの距離を測り、それぞれにランダムな誤差が入ります。位置を推定したセンサーは、次にアンカーとして使われます（Simeonov と Marinov、Environment. Technology. Resources.、2024）。
 	How precisely can a sensor be located from three noisy distance readings?	誤差のある3つの距離の読みから、センサーの位置はどれだけ正確に求められるでしょうか？
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	誤差は幾何を通じて伝わります。距離の誤差が5 mなら、最小二乗法でセンサーの位置は6.2 m（簡便な公式では10.7 m）、アンカー自体も推定された第5レベルでは10.9 mの精度です。
+	Science and engineering	科学と工学
+	Working steps ({n})	途中の計算（{n}）
+	Working steps in detail ({n})	途中の計算の詳細（{n}）
+	The root mean square of {output} is {value} ± {half_width}.	{output} の二乗平均平方根は {value} ± {half_width} です。
+	The root mean square of {output} is {value}.	{output} の二乗平均平方根は {value} です。
+	In the results	結果での表示
+	Working step	途中の計算
+	Root mean square	二乗平均平方根
+	A step towards an answer: the results list it folded away under the answers.	答えに至る途中の計算です。結果では答えの下に折りたたんで表示します。
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	誤差の二乗のような二乗量に使います。結果ではその平均の平方根を、元の量の単位で示します。

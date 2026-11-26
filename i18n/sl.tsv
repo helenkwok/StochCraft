@@ -1505,3 +1505,13 @@ connection	Flow	Tok
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Tri sidra na znanih mestih merijo razdaljo do senzorja, vsako z naključno napako, senzorji z določenim položajem pa nato sami služijo kot sidra (Simeonov in Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Kako natančno je mogoče določiti položaj senzorja iz treh šumnih meritev razdalje?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Napake se prenašajo prek geometrije: razdalje z napako 5 m določijo senzor na 6.2 m z metodo najmanjših kvadratov (10.7 m s skrajšano formulo) in na 10.9 m na peti ravni, kjer so bila tudi sidra sama določena.
+	Science and engineering	Znanost in tehnika
+	Working steps ({n})	Delovni koraki ({n})
+	Working steps in detail ({n})	Delovni koraki podrobno ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Koren povprečnega kvadrata za {output} je {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Koren povprečnega kvadrata za {output} je {value}.
+	In the results	V rezultatih
+	Working step	Delovni korak
+	Root mean square	Koren povprečnega kvadrata
+	A step towards an answer: the results list it folded away under the answers.	Korak proti odgovoru: rezultati ga prikažejo zloženega pod odgovori.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Za kvadrirano količino, na primer kvadrat napake: rezultati podajo kvadratni koren njenega povprečja, v enoti same količine.

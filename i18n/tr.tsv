@@ -1505,3 +1505,13 @@ connection	Flow	Akış
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Yeri bilinen üç çapa noktası bir sensöre olan uzaklığını ölçer, her biri rastgele bir hatayla; yeri bulunan sensörler de sırayla çapa noktası olur (Simeonov ve Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Üç gürültülü uzaklık ölçümünden bir sensörün yeri ne kadar kesin bulunabilir?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Hatalar geometri üzerinden taşınır: 5 m hatalı uzaklıklar en küçük kareler yöntemiyle sensörü 6.2 m kesinlikle bulur (kısa formülle 10.7 m), çapa noktalarının da yeri bulunarak elde edildiği beşinci düzeyde 10.9 m.
+	Science and engineering	Bilim ve mühendislik
+	Working steps ({n})	Ara adımlar ({n})
+	Working steps in detail ({n})	Ara adımların ayrıntısı ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output} için karesel ortalama {value} ± {half_width}.
+	The root mean square of {output} is {value}.	{output} için karesel ortalama {value}.
+	In the results	Sonuçlarda
+	Working step	Ara adım
+	Root mean square	Karesel ortalama
+	A step towards an answer: the results list it folded away under the answers.	Bir yanıta giden adım: sonuçlar onu yanıtların altında katlanmış gösterir.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Hatanın karesi gibi kare bir büyüklük için: sonuçlar ortalamasının karekökünü büyüklüğün kendi biriminde verir.

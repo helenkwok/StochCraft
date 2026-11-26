@@ -1505,3 +1505,13 @@ connection	Flow	Rrjedhë
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Tre ankora në vende të njohura matin largësinë e tyre deri te një sensor, secila me një gabim të rastësishëm, dhe sensorët e lokalizuar shërbejnë nga ana e tyre si ankora (Simeonov dhe Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Sa saktë mund të lokalizohet një sensor nga tri lexime largësie me zhurmë?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Gabimet kalojnë përmes gjeometrisë: largësi me gabim 5 m e lokalizojnë sensorin me saktësi 6.2 m me katrorët më të vegjël (10.7 m me formulën e shkurtër), dhe 10.9 m në nivelin e pestë, ku edhe vetë ankorat ishin lokalizuar.
+	Science and engineering	Shkencë dhe inxhinieri
+	Working steps ({n})	Hapa pune ({n})
+	Working steps in detail ({n})	Hapa pune në hollësi ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Rrënja e mesatares së katrorëve të {output} është {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Rrënja e mesatares së katrorëve të {output} është {value}.
+	In the results	Në rezultate
+	Working step	Hap pune
+	Root mean square	Rrënja e mesatares së katrorëve
+	A step towards an answer: the results list it folded away under the answers.	Një hap drejt një përgjigjeje: rezultatet e tregojnë të palosur nën përgjigjet.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Për një madhësi në katror, si një gabim në katror: rezultatet japin rrënjën katrore të mesatares së saj, në njësinë e vetë madhësisë.

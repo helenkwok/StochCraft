@@ -1505,3 +1505,13 @@ connection	Flow	ເສັ້ນທາງ
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	ຈຸດອ້າງອີງສາມຈຸດທີ່ຮູ້ຕຳແໜ່ງ ວັດແທກໄລຍະຫ່າງໄປຫາເຊັນເຊີ ແຕ່ລະຈຸດມີຄວາມຜິດພາດແບບສຸ່ມ ແລະ ເຊັນເຊີທີ່ຊອກພົບຕຳແໜ່ງແລ້ວ ກໍຈະກາຍເປັນຈຸດອ້າງອີງຕໍ່ໄປ (Simeonov ແລະ Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	ຈະຊອກຫາຕຳແໜ່ງຂອງເຊັນເຊີໄດ້ແມ່ນຍຳພຽງໃດ ຈາກການອ່ານໄລຍະຫ່າງສາມຄັ້ງທີ່ມີຄວາມຜິດພາດ?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	ຄວາມຜິດພາດສົ່ງຜ່ານເລຂາຄະນິດ: ໄລຍະຫ່າງທີ່ຜິດ 5 m ຊອກຫາເຊັນເຊີໄດ້ແມ່ນຍຳ 6.2 m ດ້ວຍວິທີກຳລັງສອງນ້ອຍສຸດ (10.7 m ດ້ວຍສູດລັດ) ແລະ 10.9 m ໃນລະດັບທີຫ້າ ບ່ອນທີ່ຈຸດອ້າງອີງເອງກໍຖືກຊອກຫາຕຳແໜ່ງມາ.
+	Science and engineering	ວິທະຍາສາດ ແລະ ວິສະວະກຳ
+	Working steps ({n})	ຂັ້ນຕອນການຄິດໄລ່ ({n})
+	Working steps in detail ({n})	ຂັ້ນຕອນການຄິດໄລ່ໂດຍລະອຽດ ({n})
+	The root mean square of {output} is {value} ± {half_width}.	ຮາກຂອງຄ່າສະເລ່ຍກຳລັງສອງຂອງ {output} ແມ່ນ {value} ± {half_width}.
+	The root mean square of {output} is {value}.	ຮາກຂອງຄ່າສະເລ່ຍກຳລັງສອງຂອງ {output} ແມ່ນ {value}.
+	In the results	ໃນຜົນໄດ້ຮັບ
+	Working step	ຂັ້ນຕອນການຄິດໄລ່
+	Root mean square	ຮາກຂອງຄ່າສະເລ່ຍກຳລັງສອງ
+	A step towards an answer: the results list it folded away under the answers.	ຂັ້ນຕອນໜຶ່ງໄປສູ່ຄຳຕອບ: ຜົນໄດ້ຮັບສະແດງມັນແບບພັບໄວ້ຢູ່ລຸ່ມຄຳຕອບ.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	ສຳລັບປະລິມານກຳລັງສອງ ເຊັ່ນ ຄວາມຜິດພາດກຳລັງສອງ: ຜົນໄດ້ຮັບໃຫ້ຮາກທີສອງຂອງຄ່າສະເລ່ຍ ໃນຫົວໜ່ວຍຂອງປະລິມານນັ້ນເອງ.

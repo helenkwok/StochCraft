@@ -1505,3 +1505,13 @@ connection	Flow	ஓட்டம்
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	தெரிந்த இடங்களில் உள்ள மூன்று நங்கூரப் புள்ளிகள் ஒரு உணரி வரையிலான தொலைவை அளக்கின்றன, ஒவ்வொன்றிலும் சீரற்ற பிழை உண்டு; இருப்பிடம் கண்டறியப்பட்ட உணரிகள் அடுத்து நங்கூரப் புள்ளிகளாகப் பயன்படுகின்றன (Simeonov மற்றும் Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	பிழையுள்ள மூன்று தொலைவு அளவீடுகளிலிருந்து ஒரு உணரியின் இருப்பிடத்தை எவ்வளவு துல்லியமாகக் கண்டறிய முடியும்?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	பிழைகள் வடிவியல் வழியாகக் கடத்தப்படுகின்றன: 5 m பிழையுள்ள தொலைவுகள் மீச்சிறு வர்க்க முறையில் உணரியை 6.2 m துல்லியத்தில் கண்டறிகின்றன (சுருக்கச் சூத்திரத்தில் 10.7 m), நங்கூரப் புள்ளிகளே கண்டறியப்பட்ட ஐந்தாம் நிலையில் 10.9 m.
+	Science and engineering	அறிவியல் மற்றும் பொறியியல்
+	Working steps ({n})	இடைநிலைப் படிகள் ({n})
+	Working steps in detail ({n})	இடைநிலைப் படிகள் விரிவாக ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output} இன் இருமடிச் சராசரி மூலம் {value} ± {half_width}.
+	The root mean square of {output} is {value}.	{output} இன் இருமடிச் சராசரி மூலம் {value}.
+	In the results	முடிவுகளில்
+	Working step	இடைநிலைப் படி
+	Root mean square	இருமடிச் சராசரி மூலம்
+	A step towards an answer: the results list it folded away under the answers.	ஒரு விடையை நோக்கிய படி: முடிவுகள் அதை விடைகளுக்குக் கீழே மடித்துக் காட்டுகின்றன.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	பிழையின் வர்க்கம் போன்ற வர்க்க அளவுக்கு: முடிவுகள் அதன் சராசரியின் வர்க்கமூலத்தை அந்த அளவின் சொந்த அலகில் தருகின்றன.

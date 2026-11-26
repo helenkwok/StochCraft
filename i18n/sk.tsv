@@ -1505,3 +1505,13 @@ connection	Flow	Tok
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Tri kotvy na známych miestach merajú vzdialenosť k senzoru, každá s náhodnou chybou, a senzory s určenou polohou slúžia ďalej ako kotvy (Simeonov a Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Ako presne možno určiť polohu senzora z troch nepresných meraní vzdialenosti?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Chyby sa prenášajú geometriou: vzdialenosti s chybou 5 m určia senzor na 6.2 m metódou najmenších štvorcov (10.7 m skráteným vzorcom) a na 10.9 m na piatej úrovni, kde boli polohy kotiev samy určené.
+	Science and engineering	Veda a technika
+	Working steps ({n})	Pracovné kroky ({n})
+	Working steps in detail ({n})	Pracovné kroky podrobne ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Kvadratický priemer {output} je {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Kvadratický priemer {output} je {value}.
+	In the results	Vo výsledkoch
+	Working step	Pracovný krok
+	Root mean square	Kvadratický priemer
+	A step towards an answer: the results list it folded away under the answers.	Krok k odpovedi: výsledky ho ukazujú zbalený pod odpoveďami.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Pre umocnenú veličinu, napríklad štvorec chyby: výsledky uvádzajú odmocninu jej priemeru, v jednotke samotnej veličiny.

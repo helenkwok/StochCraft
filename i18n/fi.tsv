@@ -1505,3 +1505,13 @@ connection	Flow	Virta
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Kolme tunnetussa paikassa olevaa ankkuria mittaa etäisyytensä anturiin, kukin satunnaisella virheellä, ja paikannetut anturit toimivat vuorostaan ankkureina (Simeonov ja Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Kuinka tarkasti anturi voidaan paikantaa kolmesta kohinaisesta etäisyyslukemasta?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Virheet kulkevat geometrian läpi: 5 m virheelliset etäisyydet paikantavat anturin 6.2 m tarkkuudella pienimmän neliösumman menetelmällä (oikotiekaavalla 10.7 m) ja 10.9 m tarkkuudella viidennellä tasolla, jossa ankkuritkin oli paikannettu.
+	Science and engineering	Tiede ja tekniikka
+	Working steps ({n})	Työvaiheet ({n})
+	Working steps in detail ({n})	Työvaiheet tarkemmin ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Suureen {output} neliöllinen keskiarvo on {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Suureen {output} neliöllinen keskiarvo on {value}.
+	In the results	Tuloksissa
+	Working step	Työvaihe
+	Root mean square	Neliöllinen keskiarvo
+	A step towards an answer: the results list it folded away under the answers.	Askel kohti vastausta: tulokset näyttävät sen taitettuna vastausten alle.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Neliöidylle suureelle, kuten virheen neliölle: tulokset antavat sen keskiarvon neliöjuuren suureen omassa yksikössä.

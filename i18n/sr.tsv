@@ -1505,3 +1505,13 @@ connection	Flow	Ток
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Три сидра на познатим местима мере удаљеност до сензора, свако са случајном грешком, а сензори чији је положај одређен заузврат служе као сидра (Simeonov и Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Колико се прецизно може одредити положај сензора из три непрецизна мерења удаљености?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Грешке се преносе кроз геометрију: удаљености са грешком од 5 m одређују сензор на 6.2 m методом најмањих квадрата (10.7 m скраћеном формулом), а на 10.9 m на петом нивоу, где су и сама сидра била лоцирана.
+	Science and engineering	Наука и инжењерство
+	Working steps ({n})	Радни кораци ({n})
+	Working steps in detail ({n})	Радни кораци детаљно ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Корен средњег квадрата за {output} је {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Корен средњег квадрата за {output} је {value}.
+	In the results	У резултатима
+	Working step	Радни корак
+	Root mean square	Корен средњег квадрата
+	A step towards an answer: the results list it folded away under the answers.	Корак ка одговору: резултати га приказују склопљеног испод одговора.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	За квадрирану величину, попут квадрата грешке: резултати дају квадратни корен њене средње вредности, у јединици саме величине.

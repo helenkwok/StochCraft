@@ -1505,3 +1505,13 @@ connection	Flow	Folyamat
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Három ismert helyen álló horgonypont megméri a távolságát egy érzékelőtől, mindegyik véletlen hibával, és a már bemért érzékelők maguk is horgonyponttá válnak (Simeonov és Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Milyen pontosan határozható meg egy érzékelő helye három zajos távolságmérésből?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	A hibák a geometrián keresztül terjednek: az 5 m-es hibájú távolságok a legkisebb négyzetek módszerével 6.2 m pontossággal adják meg az érzékelő helyét (a rövid képlettel 10.7 m), az ötödik szinten pedig, ahol a horgonypontokat is bemérték, 10.9 m pontossággal.
+	Science and engineering	Tudomány és mérnöki munka
+	Working steps ({n})	Munkalépések ({n})
+	Working steps in detail ({n})	Munkalépések részletesen ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output} négyzetes közepe {value} ± {half_width}.
+	The root mean square of {output} is {value}.	{output} négyzetes közepe {value}.
+	In the results	Az eredményekben
+	Working step	Munkalépés
+	Root mean square	Négyzetes közép
+	A step towards an answer: the results list it folded away under the answers.	Egy lépés a válasz felé: az eredmények a válaszok alatt összecsukva mutatják.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Négyzetes mennyiséghez, például egy hiba négyzetéhez: az eredmények az átlaga négyzetgyökét adják meg, a mennyiség saját mértékegységében.

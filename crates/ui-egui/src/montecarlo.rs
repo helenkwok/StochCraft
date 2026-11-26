@@ -292,12 +292,64 @@ pub(crate) fn finding_across(o: &Value, basis: &Value) -> Option<(String, Option
             ],
         ),
     };
+    // A squared quantity asked to be summarised by its root mean square: that is the finding,
+    // in the quantity's own unit, and the mean of the squares the line beneath it. It is worked
+    // out from the mean shown (a controlled one where the controls helped).
+    if o["summary"]["kind"] == "rms"
+        && let Some((rms, hw)) =
+            stochcraft_model::OutputSummary::Rms.of(mean, o["half_width"].as_f64())
+    {
+        let rms_unit = stochcraft_model::OutputSummary::Rms.unit(unit);
+        let headline = match hw {
+            Some(hw) => {
+                let (m, h) = rounded(rms, hw);
+                tf(
+                    "The root mean square of {output} is {value} ± {half_width}.",
+                    &[
+                        ("output", name),
+                        ("value", &with_unit(m, &rms_unit)),
+                        ("half_width", &h),
+                    ],
+                )
+            }
+            None => tf(
+                "The root mean square of {output} is {value}.",
+                &[
+                    ("output", name),
+                    ("value", &with_unit(value_text(rms), &rms_unit)),
+                ],
+            ),
+        };
+        return Some((headline, Some(sentence)));
+    }
     // Every value the same: no interval to give, and no claim that the mean is exact.
     let sure = (o["no_variation"] == true).then(|| {
         t("No variation was observed, so there is no interval for the mean; a rare event the trials did not reach could still move it.")
             .to_owned()
     });
     Some((sentence, sure))
+}
+
+/// Whether output `o` (of a run's results or of the model) is a working step, which the
+/// results fold away below the answers.
+pub(crate) fn is_working(o: &Value) -> bool {
+    o["role"] == "working"
+}
+
+/// An output's finding, its second line and what its controls did, as "What the run found"
+/// lists them.
+fn show_finding(ui: &mut egui::Ui, o: &Value, basis: &Value) {
+    // Where the controls narrowed the interval, their result is the headline.
+    if let Some((sentence, sure)) = finding_across(&controlled_headline(o), basis) {
+        ui.add(egui::Label::new(sentence).wrap());
+        if let Some(sure) = sure {
+            ui.add(egui::Label::new(theme::weak(ui, sure)).wrap());
+        }
+        for line in control_lines(o) {
+            ui.add(egui::Label::new(theme::weak(ui, line)).wrap());
+        }
+        ui.add_space(4.0);
+    }
 }
 
 /// Whether a control's stated mean is far from the mean of its trials (the engine's
@@ -1266,6 +1318,30 @@ impl App {
                     };
                     edits.push((key.clone(), params, None));
                 }
+                // How the results show it: an answer or a working step (folded away), and the
+                // root mean square of a squared quantity beside its mean.
+                let mut working = is_working(o);
+                let mut rms = o["summary"] == "rms";
+                let (was_working, was_rms) = (working, rms);
+                ui.horizontal_wrapped(|ui| {
+                    row_label(ui, t("In the results"));
+                    ui.checkbox(&mut working, t("Working step"))
+                        .on_hover_text(t("A step towards an answer: the results list it folded away under the answers."));
+                    ui.checkbox(&mut rms, t("Root mean square"))
+                        .on_hover_text(t("For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit."));
+                });
+                if working != was_working {
+                    let role = if working { "working" } else { "key" };
+                    edits.push((key.clone(), json!({ "name": name, "role": role }), None));
+                }
+                if rms != was_rms {
+                    let summary = if rms { json!("rms") } else { Value::Null };
+                    edits.push((
+                        key.clone(),
+                        json!({ "name": name, "summary": summary }),
+                        None,
+                    ));
+                }
                 // Control variates: inputs with a known mean, or earlier outputs whose mean the
                 // modeller gives; the results use them to narrow this output's interval.
                 let controls: Vec<Value> = o["controls"].as_array().cloned().unwrap_or_default();
@@ -1622,31 +1698,54 @@ impl App {
                     ui.add_space(6.0);
                 }
                 let outputs = r["outputs"].as_array().cloned().unwrap_or_default();
+                // The answers first; the working steps towards them folded away below.
+                let (working, key): (Vec<&Value>, Vec<&Value>) =
+                    outputs.iter().partition(|o| is_working(o));
+                let steps = tf("Working steps ({n})", &[("n", &working.len().to_string())]);
                 ui.label(theme::strong(t("What the run found")));
                 ui.add_space(2.0);
-                for o in &outputs {
-                    // Where the controls narrowed the interval, their result is the headline.
-                    if let Some((sentence, sure)) =
-                        finding_across(&controlled_headline(o), &r["interval_basis"])
-                    {
-                        ui.add(egui::Label::new(sentence).wrap());
-                        if let Some(sure) = sure {
-                            ui.add(egui::Label::new(theme::weak(ui, sure)).wrap());
-                        }
-                        for line in control_lines(o) {
-                            ui.add(egui::Label::new(theme::weak(ui, line)).wrap());
-                        }
-                        ui.add_space(4.0);
-                    }
+                for o in &key {
+                    show_finding(ui, o, &r["interval_basis"]);
+                }
+                if !working.is_empty() {
+                    egui::CollapsingHeader::new(theme::strong(&steps))
+                        .id_salt("mc/working-findings")
+                        .default_open(false)
+                        .show(ui, |ui| {
+                            for o in &working {
+                                show_finding(ui, o, &r["interval_basis"]);
+                            }
+                        });
+                    ui.add_space(4.0);
                 }
                 for w in r["warnings"].as_array().into_iter().flatten() {
                     let text = crate::i18n::engine_message(w);
                     ui.add(egui::Label::new(theme::weak(ui, text)).wrap());
                 }
                 let correlated = r["correlations"].as_array().is_some_and(|c| !c.is_empty());
-                for o in &outputs {
+                for o in &key {
                     shares_wanted |=
                         output_section(ui, o, &r["interval_basis"], correlated, &shares);
+                }
+                if !working.is_empty() {
+                    ui.add_space(8.0);
+                    egui::CollapsingHeader::new(theme::strong(tf(
+                        "Working steps in detail ({n})",
+                        &[("n", &working.len().to_string())],
+                    )))
+                    .id_salt("mc/working-sections")
+                    .default_open(false)
+                    .show(ui, |ui| {
+                        for o in &working {
+                            shares_wanted |= output_section(
+                                ui,
+                                o,
+                                &r["interval_basis"],
+                                correlated,
+                                &shares,
+                            );
+                        }
+                    });
                 }
                 section(ui, t("How sure are these numbers?"));
                 ui.add(egui::Label::new(basis_line(&r)).wrap());
@@ -2390,6 +2489,42 @@ mod tests {
             sure.as_deref(),
             Some("The chance is under 0.04%, with 95% confidence.")
         );
+    }
+
+    /// A squared error summarised by its root mean square reads as that, in the error's own
+    /// unit, with the half-width by the delta method; the mean of the squares is the line
+    /// beneath. 38.0689 m² ± 0.8 is √38.0689 = 6.17 m ± 0.8 / (2 × 6.17) = 0.065 m, shown to its
+    /// first figure as 0.06.
+    #[test]
+    fn a_squared_error_reads_as_its_root_mean_square() {
+        let o = json!({
+            "name": "position_error_1", "unit": "m²", "mean": 38.0689, "half_width": 0.8,
+            "percentiles": { "5": 2.0, "95": 110.0 },
+            "summary": { "kind": "rms", "value": 6.17, "half_width": 0.065, "unit": "m" },
+        });
+        let (sentence, mean) = finding(&o).unwrap_or_default();
+        assert_eq!(
+            sentence,
+            "The root mean square of position_error_1 is 6.17 m ± 0.06."
+        );
+        assert_eq!(
+            mean.as_deref(),
+            Some(
+                "In 9 trials out of 10, position_error_1 is between 2 m² and 110 m²; the mean is 38.1 m² ± 0.8."
+            )
+        );
+        // With no interval, the value alone.
+        let mut o = o;
+        o["half_width"] = Value::Null;
+        let (sentence, _) = finding(&o).unwrap_or_default();
+        assert_eq!(
+            sentence,
+            "The root mean square of position_error_1 is 6.17 m."
+        );
+        // Only a working step is folded away.
+        assert!(is_working(&json!({ "role": "working" })));
+        assert!(!is_working(&json!({ "role": "key" })));
+        assert!(!is_working(&json!({})));
     }
 
     /// Without a target: where 9 trials in 10 fall, and the mean rounded to its interval.

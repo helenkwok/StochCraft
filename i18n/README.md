@@ -1084,6 +1084,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   English and Latin script, the "and" between the names is the catalog's own, and decimals keep
   the point. Not checked against any other source and not reviewed by native speakers; the least
   certain are lo, th, ta, te, bn, ka, kk, hi and sq.
+- The rows for the start page's "Science and engineering" field and for a Monte Carlo output's
+  role and summary (Working steps, In the results, Working step, Root mean square, their two
+  hints and the root-mean-square findings) were machine-drafted from the plain meaning of the
+  English. "Root mean square" is the language's usual statistical term (quadratic mean, or the
+  root of the mean square, where that is what textbooks use); a working step is a plain phrase
+  for an intermediate or working calculation; the placeholders are kept as they are. Not checked
+  against any other source and not reviewed by native speakers; the least certain are lo, th,
+  ta, te, bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

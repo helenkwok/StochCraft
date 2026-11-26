@@ -1505,3 +1505,13 @@ connection	Flow	Flujo
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Tres anclas en lugares conocidos miden su distancia a un sensor, cada una con un error aleatorio, y los sensores ya localizados sirven a su vez de anclas (Simeonov y Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	¿Con qué precisión se puede localizar un sensor a partir de tres lecturas de distancia con ruido?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Los errores se transmiten por la geometría: distancias con un error de 5 m localizan el sensor a 6.2 m por mínimos cuadrados (10.7 m con la fórmula directa), y a 10.9 m en el quinto nivel, donde las propias anclas se habían localizado.
+	Science and engineering	Ciencia e ingeniería
+	Working steps ({n})	Pasos de trabajo ({n})
+	Working steps in detail ({n})	Pasos de trabajo en detalle ({n})
+	The root mean square of {output} is {value} ± {half_width}.	La media cuadrática de {output} es {value} ± {half_width}.
+	The root mean square of {output} is {value}.	La media cuadrática de {output} es {value}.
+	In the results	En los resultados
+	Working step	Paso de trabajo
+	Root mean square	Media cuadrática
+	A step towards an answer: the results list it folded away under the answers.	Un paso hacia una respuesta: los resultados lo muestran plegado bajo las respuestas.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Para una magnitud al cuadrado, como un error al cuadrado: los resultados dan la raíz cuadrada de su media, en la unidad de la propia magnitud.

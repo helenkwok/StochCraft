@@ -223,7 +223,8 @@ pub const AGENTS: &str = "stochcraft:agents";
 /// the default, `latinHypercube`, `antithetic` or `sobol`; a reader that does not know the last
 /// two warns and uses random) and the children `input` (`name`, `unit`: an input's unit;
 /// the inputs themselves are the scenario's `ScenarioParameters/PropertyParameters`), `output`
-/// (`name`, `expression`, optional `unit` and one of `atMost` and `atLeast`), `correlation`
+/// (`name`, `expression`, optional `unit`, one of `atMost` and `atLeast`, `role` (`key` or
+/// `working`) and `summary` (`rms`)), `correlation`
 /// (`a`, `b` and `rank`, a rank correlation strictly between -1 and 1) and `stop` (`relative`
 /// and `max`: more trials until every output's mean is within that share of itself). The file
 /// has no process; the scenario's `replication` is the number of trials. See `crate::mc`.

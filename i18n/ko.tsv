@@ -1505,3 +1505,13 @@ connection	Flow	흐름
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	위치를 아는 세 개의 앵커가 센서까지의 거리를 재며, 각 측정에는 무작위 오차가 있습니다. 위치를 찾은 센서는 다시 앵커가 됩니다 (Simeonov과 Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	오차가 있는 세 개의 거리 측정값으로 센서 위치를 얼마나 정확히 찾을 수 있을까요?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	오차는 기하를 거쳐 전달됩니다. 거리 오차가 5 m이면 최소제곱법으로 센서 위치는 6.2 m(간편 공식으로는 10.7 m), 앵커 자체도 추정된 다섯 번째 단계에서는 10.9 m 정확도로 찾아집니다.
+	Science and engineering	과학 및 공학
+	Working steps ({n})	중간 계산 ({n})
+	Working steps in detail ({n})	중간 계산 자세히 ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output}의 제곱평균제곱근은 {value} ± {half_width}입니다.
+	The root mean square of {output} is {value}.	{output}의 제곱평균제곱근은 {value}입니다.
+	In the results	결과에서
+	Working step	중간 계산
+	Root mean square	제곱평균제곱근
+	A step towards an answer: the results list it folded away under the answers.	답으로 가는 한 단계입니다. 결과에서는 답 아래에 접혀서 표시됩니다.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	오차의 제곱처럼 제곱된 양에 씁니다. 결과는 그 평균의 제곱근을 원래 양의 단위로 보여 줍니다.

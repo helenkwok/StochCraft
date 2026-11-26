@@ -1505,3 +1505,13 @@ connection	Flow	Flux
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Tres àncores en llocs coneguts mesuren la seva distància a un sensor, cadascuna amb un error aleatori, i els sensors localitzats fan alhora d'àncores (Simeonov i Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Amb quina precisió es pot localitzar un sensor a partir de tres lectures de distància amb soroll?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Els errors es transmeten per la geometria: distàncies amb un error de 5 m localitzen el sensor a 6.2 m per mínims quadrats (10.7 m amb la fórmula directa), i a 10.9 m al cinquè nivell, on les mateixes àncores s'havien localitzat.
+	Science and engineering	Ciència i enginyeria
+	Working steps ({n})	Passos de treball ({n})
+	Working steps in detail ({n})	Passos de treball en detall ({n})
+	The root mean square of {output} is {value} ± {half_width}.	La mitjana quadràtica de {output} és {value} ± {half_width}.
+	The root mean square of {output} is {value}.	La mitjana quadràtica de {output} és {value}.
+	In the results	Als resultats
+	Working step	Pas de treball
+	Root mean square	Mitjana quadràtica
+	A step towards an answer: the results list it folded away under the answers.	Un pas cap a una resposta: els resultats el mostren plegat sota les respostes.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Per a una magnitud al quadrat, com un error al quadrat: els resultats donen l'arrel quadrada de la seva mitjana, en la unitat de la magnitud.

@@ -1505,3 +1505,13 @@ connection	Flow	প্রবাহ
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	জানা জায়গায় থাকা তিনটি অ্যাঙ্কর একটি সেন্সর পর্যন্ত দূরত্ব মাপে, প্রতিটিতে একটি এলোমেলো ত্রুটি থাকে, এবং অবস্থান-নির্ণীত সেন্সরগুলি পালাক্রমে অ্যাঙ্কর হিসেবে কাজ করে (Simeonov ও Marinov, Environment. Technology. Resources., 2024)।
 	How precisely can a sensor be located from three noisy distance readings?	তিনটি ত্রুটিপূর্ণ দূরত্ব-পাঠ থেকে একটি সেন্সরের অবস্থান কতটা নির্ভুলভাবে নির্ণয় করা যায়?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	ত্রুটি জ্যামিতির মধ্য দিয়ে বয়ে যায়: 5 m ভুল দূরত্ব থেকে লিস্ট স্কোয়ার্স পদ্ধতিতে সেন্সরের অবস্থান 6.2 m পর্যন্ত নির্ভুল হয় (সংক্ষিপ্ত সূত্রে 10.7 m), এবং পঞ্চম স্তরে, যেখানে অ্যাঙ্করগুলিরও অবস্থান নির্ণয় করা হয়েছিল, 10.9 m।
+	Science and engineering	বিজ্ঞান ও প্রকৌশল
+	Working steps ({n})	কাজের ধাপ ({n})
+	Working steps in detail ({n})	কাজের ধাপের বিস্তারিত ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output}-এর বর্গমূল গড় বর্গ {value} ± {half_width}।
+	The root mean square of {output} is {value}.	{output}-এর বর্গমূল গড় বর্গ {value}।
+	In the results	ফলাফলে
+	Working step	কাজের ধাপ
+	Root mean square	বর্গমূল গড় বর্গ
+	A step towards an answer: the results list it folded away under the answers.	উত্তরের দিকে একটি ধাপ: ফলাফলে এটি উত্তরগুলির নিচে ভাঁজ করে রাখা থাকে।
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	বর্গ রাশির জন্য, যেমন ত্রুটির বর্গ: ফলাফল তার গড়ের বর্গমূল দেয়, রাশিটির নিজস্ব এককে।

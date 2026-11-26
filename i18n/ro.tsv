@@ -1505,3 +1505,13 @@ connection	Flow	Flux
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Trei ancore în locuri cunoscute își măsoară distanța până la un senzor, fiecare cu o eroare aleatoare, iar senzorii localizați devin la rândul lor ancore (Simeonov și Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Cât de precis poate fi localizat un senzor din trei citiri de distanță cu zgomot?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Erorile se transmit prin geometrie: distanțe greșite cu 5 m localizează senzorul la 6.2 m prin metoda celor mai mici pătrate (10.7 m cu formula directă) și la 10.9 m la al cincilea nivel, unde chiar ancorele fuseseră localizate.
+	Science and engineering	Știință și inginerie
+	Working steps ({n})	Pași de calcul ({n})
+	Working steps in detail ({n})	Pași de calcul în detaliu ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Media pătratică a lui {output} este {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Media pătratică a lui {output} este {value}.
+	In the results	În rezultate
+	Working step	Pas de calcul
+	Root mean square	Medie pătratică
+	A step towards an answer: the results list it folded away under the answers.	Un pas spre un răspuns: rezultatele îl arată restrâns sub răspunsuri.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Pentru o mărime la pătrat, cum ar fi o eroare la pătrat: rezultatele dau rădăcina pătrată a mediei ei, în unitatea mărimii însăși.

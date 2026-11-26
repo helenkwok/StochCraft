@@ -20,7 +20,7 @@ use stochcraft_mc::{
 use stochcraft_model::montecarlo::DEFAULT_TRIALS;
 use stochcraft_model::{
     Control as McControl, Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo,
-    Sampling,
+    OutputRole, OutputSummary, Sampling,
 };
 
 use crate::commands::{parse, some};
@@ -80,6 +80,66 @@ impl SamplingSpec {
     }
 }
 
+/// What an output is for: results list the key outputs first and fold the working ones.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum RoleSpec {
+    /// An answer to the model's question.
+    #[default]
+    Key,
+    /// A step towards an answer, kept to be checked.
+    Working,
+}
+
+impl RoleSpec {
+    fn is_key(&self) -> bool {
+        *self == RoleSpec::Key
+    }
+}
+
+impl From<OutputRole> for RoleSpec {
+    fn from(r: OutputRole) -> Self {
+        match r {
+            OutputRole::Key => RoleSpec::Key,
+            OutputRole::Working => RoleSpec::Working,
+        }
+    }
+}
+
+impl From<RoleSpec> for OutputRole {
+    fn from(r: RoleSpec) -> Self {
+        match r {
+            RoleSpec::Key => OutputRole::Key,
+            RoleSpec::Working => OutputRole::Working,
+        }
+    }
+}
+
+/// A summary reported beside an output's mean.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum SummarySpec {
+    /// The output is a squared quantity (a squared error): its root mean square √mean, in the
+    /// quantity's unit, with the half-width half_width / (2 √mean) (the delta method).
+    Rms,
+}
+
+impl From<OutputSummary> for SummarySpec {
+    fn from(s: OutputSummary) -> Self {
+        match s {
+            OutputSummary::Rms => SummarySpec::Rms,
+        }
+    }
+}
+
+impl From<SummarySpec> for OutputSummary {
+    fn from(s: SummarySpec) -> Self {
+        match s {
+            SummarySpec::Rms => OutputSummary::Rms,
+        }
+    }
+}
+
 /// An uncertain input.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -110,6 +170,12 @@ pub struct OutputDoc {
     /// earlier outputs with a mean you know.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub controls: Vec<ControlDoc>,
+    /// `key` (the default) for an answer, `working` for a step towards one.
+    #[serde(default, skip_serializing_if = "RoleSpec::is_key")]
+    pub role: RoleSpec,
+    /// A summary beside the mean: `rms` for the root mean square of a squared quantity.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub summary: Option<SummarySpec>,
 }
 
 /// A control variate: `{ "input": "x" }` (the input's own mean is known), or `{ "output": "y",
@@ -244,6 +310,8 @@ impl From<&MonteCarlo> for MonteCarloDoc {
                         _ => None,
                     },
                     controls: o.controls.iter().map(ControlDoc::from).collect(),
+                    role: o.role.into(),
+                    summary: o.summary.map(Into::into),
                 })
                 .collect(),
             correlations: m
@@ -282,6 +350,8 @@ impl From<MonteCarloDoc> for MonteCarlo {
                     name: o.name,
                     expression: o.expression,
                     unit: o.unit,
+                    role: o.role.into(),
+                    summary: o.summary.map(Into::into),
                 })
                 .collect(),
             correlations: m
@@ -554,6 +624,14 @@ pub struct OutputSet {
     /// exactly it), or earlier outputs with a mean you know, as `{ "output": "y", "expected": 12.5 }`.
     #[serde(default)]
     pub controls: Option<Vec<ControlDoc>>,
+    /// `key` for an answer, `working` for a step towards one (folded away in the results).
+    #[serde(default)]
+    pub role: Option<RoleSpec>,
+    /// `rms` to report the root mean square beside the mean (for a squared quantity); `null`
+    /// removes the summary.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<SummarySpec>")]
+    pub summary: Option<Option<SummarySpec>>,
     /// Where it goes among the outputs (from 0); outputs are evaluated in order, each using
     /// those before it. A new output goes last by default.
     #[serde(default)]
@@ -608,6 +686,8 @@ pub(crate) fn output_set(e: &mut Engine, p: Value) -> Result<Value, CommandError
             unit: String::new(),
             target: None,
             controls: Vec::new(),
+            role: Default::default(),
+            summary: None,
         },
     };
     if let Some(x) = p.expression {
@@ -624,6 +704,12 @@ pub(crate) fn output_set(e: &mut Engine, p: Value) -> Result<Value, CommandError
     }
     if let Some(controls) = p.controls {
         out.controls = controls.into_iter().map(McControl::from).collect();
+    }
+    if let Some(r) = p.role {
+        out.role = r.into();
+    }
+    if let Some(x) = p.summary {
+        out.summary = x.map(Into::into);
     }
     let place = match p.position {
         Some(i) => usize::try_from(i)
@@ -1097,6 +1183,17 @@ fn output_json(o: &OutputResult) -> Value {
             })).collect::<Vec<_>>(),
         },
     });
+    v["role"] = json!(RoleSpec::from(o.role));
+    if let Some(kind) = o.summary
+        && let Some((value, half_width)) = o.mean.and_then(|m| kind.of(m, o.half_width))
+    {
+        v["summary"] = json!({
+            "kind": SummarySpec::from(kind),
+            "value": value,
+            "half_width": half_width,
+            "unit": kind.unit(&o.unit),
+        });
+    }
     if let Some(c) = &o.controlled {
         v["controlled"] = controlled_json(c);
     }
@@ -1380,7 +1477,8 @@ pub fn results_csv(r: &Value) -> String {
         "output,unit,trials,valid,mean,half_width,std_dev,min,p5,p10,p50,p90,p95,max,\
          target,target_value,probability,probability_low,probability_high,\
          controlled_mean,controlled_half_width,interval_narrowing,controlled_probability,\
-         controlled_probability_low,controlled_probability_high\n",
+         controlled_probability_low,controlled_probability_high,role,summary,summary_value,\
+         summary_half_width,summary_unit\n",
     );
     let num = |v: &Value| v.as_f64().map(|x| x.to_string()).unwrap_or_default();
     for o in r["outputs"].as_array().into_iter().flatten() {
@@ -1418,6 +1516,11 @@ pub fn results_csv(r: &Value) -> String {
             num(&o["controlled"]["estimate"]["target"]["probability"]),
             num(&o["controlled"]["estimate"]["target"]["interval"][0]),
             num(&o["controlled"]["estimate"]["target"]["interval"][1]),
+            s(&o["role"]),
+            s(&o["summary"]["kind"]),
+            num(&o["summary"]["value"]),
+            num(&o["summary"]["half_width"]),
+            crate::wire::csv_field(&text_cell(&s(&o["summary"]["unit"]))),
         ];
         out.push_str(&row.join(","));
         out.push('\n');
@@ -1446,6 +1549,8 @@ mod tests {
                 unit: String::new(),
                 target: Some(McTarget::AtLeast(3.0)),
                 controls: vec![McControl::Input { name: "x".into() }],
+                role: Default::default(),
+                summary: None,
             }],
             correlations: vec![],
             sampling: Sampling::LatinHypercube,

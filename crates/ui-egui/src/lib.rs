@@ -591,7 +591,7 @@ pub const EXAMPLES: &[Example] = &[
         bytes: include_bytes!("../../../tests/models/sensor-location.bpmn"),
         card: start::Card {
             question: "How precisely can a sensor be located from three noisy distance readings?",
-            industry: start::Industry::ItOperations,
+            industry: start::Industry::ScienceEngineering,
             topics: &[],
             teaches: "Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.",
             minutes: 3,

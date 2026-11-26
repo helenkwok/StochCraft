@@ -1505,3 +1505,13 @@ connection	Flow	Flux
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Trois ancres en des points connus mesurent leur distance à un capteur, chacune avec une erreur aléatoire, et les capteurs localisés servent à leur tour d'ancres (Simeonov et Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Avec quelle précision peut-on localiser un capteur à partir de trois mesures de distance bruitées ?
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Les erreurs se propagent par la géométrie : des distances fausses de 5 m localisent le capteur à 6.2 m par les moindres carrés (10.7 m par la formule directe), et à 10.9 m au cinquième niveau, où les ancres avaient elles-mêmes été localisées.
+	Science and engineering	Sciences et ingénierie
+	Working steps ({n})	Étapes de calcul ({n})
+	Working steps in detail ({n})	Étapes de calcul en détail ({n})
+	The root mean square of {output} is {value} ± {half_width}.	La moyenne quadratique de {output} est {value} ± {half_width}.
+	The root mean square of {output} is {value}.	La moyenne quadratique de {output} est {value}.
+	In the results	Dans les résultats
+	Working step	Étape de calcul
+	Root mean square	Moyenne quadratique
+	A step towards an answer: the results list it folded away under the answers.	Une étape vers une réponse : les résultats l'affichent repliée sous les réponses.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Pour une grandeur au carré, comme une erreur au carré : les résultats donnent la racine carrée de sa moyenne, dans l'unité de la grandeur elle-même.

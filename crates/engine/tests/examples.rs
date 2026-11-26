@@ -1415,8 +1415,9 @@ impl Sensors {
 }
 
 /// The run of the sensor-location example's `scenario`, checked against the first-order theory:
-/// each level's mean squared position error is σ_k² within its interval, as is the
-/// closed-form solve's, and the model's own GDOP and predictions are the test's.
+/// each level's root mean square position error is σ_k within its interval, as is the
+/// closed-form solve's; the model's own GDOP and predictions are the test's; and only the six
+/// errors are answers, the rest working steps.
 fn sensor_location_checks(scenario: Option<&str>) {
     let s = Sensors::of(scenario);
     let mut e = Engine::new();
@@ -1430,41 +1431,62 @@ fn sensor_location_checks(scenario: Option<&str>) {
     assert_eq!(opened["diagnostics"], json!([]), "{opened}");
     let r = ok(&mut e, "mc.run", json!({}));
     assert_eq!(r["trials"], 10_000);
-    let mean = |name: &str| {
-        let o = r["outputs"]
-            .as_array()
-            .into_iter()
-            .flatten()
+    let outputs = r["outputs"].as_array().cloned().unwrap_or_default();
+    let output = |name: &str| {
+        outputs
+            .iter()
             .find(|o| o["name"] == name)
-            .unwrap_or_else(|| panic!("no output {name}: {r}"));
-        (
-            o["mean"].as_f64().unwrap_or(f64::NAN),
-            o["half_width"].as_f64().unwrap_or(f64::NAN),
-        )
+            .cloned()
+            .unwrap_or_else(|| panic!("no output {name}: {r}"))
     };
+    let answers: Vec<String> = (1..=5)
+        .map(|k| format!("position_error_level_{k}"))
+        .chain(["closed_form_error_level_1".to_owned()])
+        .collect();
+    let key: Vec<&str> = outputs
+        .iter()
+        .filter(|o| o["role"] != "working")
+        .filter_map(|o| o["name"].as_str())
+        .collect();
+    assert_eq!(key, answers, "only the errors are answers");
     let near = |name: &str, want: f64| {
-        let (got, _) = mean(name);
+        let got = output(name)["mean"].as_f64().unwrap_or(f64::NAN);
         assert!(
             (got - want).abs() <= 1e-9 * want,
             "{name}: {got}, not {want}"
         );
     };
-    let covers_mc = |name: &str, theory: f64| {
-        let (m, hw) = mean(name);
-        eprintln!("{scenario:?} {name}: {m} ± {hw}, theory {theory}");
+    // The root mean square, √mean, in m, with the mean's half-width over 2 √mean.
+    let covers_rms = |name: &str, theory: f64| {
+        let o = output(name);
+        let summary = &o["summary"];
+        assert_eq!(summary["kind"], "rms", "{o}");
+        assert_eq!(summary["unit"], "m", "{o}");
+        let (rms, hw) = (
+            summary["value"].as_f64().unwrap_or(f64::NAN),
+            summary["half_width"].as_f64().unwrap_or(f64::NAN),
+        );
+        let (mean, mean_hw) = (
+            o["mean"].as_f64().unwrap_or(f64::NAN),
+            o["half_width"].as_f64().unwrap_or(f64::NAN),
+        );
+        assert_eq!(rms, mean.sqrt());
+        assert_eq!(hw, mean_hw / (2.0 * mean.sqrt()));
+        eprintln!("{scenario:?} {name}: {rms} ± {hw} m, theory {theory}");
         assert!(
-            (m - theory).abs() <= SQRT_2 * hw,
-            "{name}: {m} ± {hw}, theory {theory}"
+            (rms - theory).abs() <= SQRT_2 * hw,
+            "{name}: {rms} ± {hw}, theory {theory}"
         );
     };
     near("gdop", s.gdop());
-    let levels = s.levels();
-    for (k, p) in levels.iter().enumerate() {
+    for (k, p) in s.levels().iter().enumerate() {
         near(&format!("predicted{}", k + 1), *p);
-        covers_mc(&format!("sq_error{}", k + 1), p * p);
+        covers_rms(&format!("position_error_level_{}", k + 1), *p);
     }
-    let closed = s.closed_form_factor() * s.sigma_d;
-    covers_mc("start_sq_error1", closed * closed);
+    covers_rms(
+        "closed_form_error_level_1",
+        s.closed_form_factor() * s.sigma_d,
+    );
 }
 
 /// Locating a sensor from three noisy distances (Simeonov and Marinov, Environment. Technology.

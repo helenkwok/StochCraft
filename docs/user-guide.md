@@ -97,7 +97,7 @@ The examples are also under **File ▸ Open Example**:
 | **Every distribution** | One task per BPSim distribution, to compare their spread (a reference model). |
 | **Parcel sorter** | How many parcels go round the loop because their lane is full? Postal parcel sorting, under Logistics and warehousing: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full. |
 | **Product adoption** | How fast does a new product spread? A system dynamics model (stocks and flows, from an XMILE file): 10,000 potential customers, some buying on their own and the rest after meeting a customer. Checked against the exact solution of its equations (9,087 customers after 12 years). |
-| **Locating a sensor** | How precisely can a sensor be located from three noisy distance readings? A Monte Carlo model after Simeonov and Marinov (Environment. Technology. Resources., 2024): three anchors of a wireless sensor network measure their distance to a node, each off by a normal error of 5 m (1 m and 10 m are scenarios). Each trial solves for the position in closed form and refines it with one step of least squares, at five levels, where a level's anchors were themselves located at the level before. Checked against the geometry: least squares locates the node to 1.2335 times the distance error (the GDOP; 6.2 m), the closed form alone to 2.14 times (10.7 m), and the error grows to 10.9 m at the fifth level. The squared errors are the outputs, so the root mean square error is the square root of a mean. 47 of the 50 values in the paper's table agree with these within the paper's own sampling error. |
+| **Locating a sensor** | How precisely can a sensor be located from three noisy distance readings? A Monte Carlo model after Simeonov and Marinov (Environment. Technology. Resources., 2024): three anchors of a wireless sensor network measure their distance to a node, each off by a normal error of 5 m (1 m and 10 m are scenarios). Each trial solves for the position in closed form and refines it with one step of least squares, at five levels, where a level's anchors were themselves located at the level before. Checked against the geometry: least squares locates the node to 1.2335 times the distance error (the GDOP; 6.2 m), the closed form alone to 2.14 times (10.7 m), and the error grows to 10.9 m at the fifth level. Under Science and engineering. The answers are the squared errors, reported by their root mean square in metres; the 47 steps that work them out are folded away under **Working steps**. 47 of the 50 values in the paper's table agree with these within the paper's own sampling error. |
 
 To try the whole cycle, open **M/M/1 queue** and press **Run**. The results show a mean wait close
 to 3 minutes and about 75% utilisation, which is what queueing theory predicts for this model.
@@ -770,6 +770,16 @@ On the **Model** tab:
   `$name`: `$duration * $day_rate + $materials`. An expression that cannot be read stays in its
   field with the reason under it. Give an output a **Target**, **At most** or **At least** a
   value, to see the chance of missing it.
+- **In the results:** tick **Working step** for an output that is only a step towards an answer
+  (a distance, an intermediate estimate). The results list the other outputs, the answers,
+  first, and fold the working steps away under **Working steps (n)** and, for their charts,
+  **Working steps in detail (n)**. Tick **Root mean square** for an output that is a squared
+  quantity, such as a squared error: the results then lead with the square root of its mean,
+  in the quantity's own unit (m for an output in m²), with its 95% interval from the mean's by
+  the delta method (the half-width over twice the root mean square), and give the mean of the
+  squares beneath it. The table (CSV) has both, in its `role`, `summary`, `summary_value`,
+  `summary_half_width` and `summary_unit` columns. In a file they are the output's
+  `role="working"` and `summary="rms"`.
 - **Controls:** a way to get a narrower interval from the same trials. A control is an input whose
   mean is known (every input says its own, so a labour time with a triangular distribution
   qualifies), or an earlier output whose mean you know and give. Pick one in an output's

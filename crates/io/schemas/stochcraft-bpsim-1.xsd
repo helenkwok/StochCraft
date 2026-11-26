@@ -332,7 +332,10 @@
   order, and the scenario's replication is the number of trials. sampling is random (the
   default), latinHypercube, antithetic or sobol. input gives an input's unit; output an expression (BPSim's XPath
   subset, reading inputs and earlier outputs as $name or getProperty('name')), an optional unit
-  and an optional target, atMost or atLeast, whose probability is reported; control (inside an output) a control
+  and an optional target, atMost or atLeast, whose probability is reported, an optional role
+  (key, the default, for an answer; working for a step towards one, which results fold away
+  below the answers) and an optional summary (rms: the output is a squared quantity, and its
+  root mean square is reported beside the mean); control (inside an output) a control
   variate: input names an input whose own mean is known, or output names an earlier output with
   its known mean in expected; correlation a rank
   correlation, strictly between -1 and 1, between two inputs (induced by Iman and Conover's
@@ -662,6 +665,21 @@
             <xs:attribute name="unit" type="xs:string"/>
             <xs:attribute name="atMost" type="xs:double"/>
             <xs:attribute name="atLeast" type="xs:double"/>
+            <xs:attribute name="role" default="key">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="key"/>
+                  <xs:enumeration value="working"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="summary">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="rms"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
           </xs:complexType>
         </xs:element>
         <xs:element name="correlation" minOccurs="0" maxOccurs="unbounded">

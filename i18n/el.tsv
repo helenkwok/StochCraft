@@ -1505,3 +1505,13 @@ connection	Flow	Ροή
 	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Τρία σημεία αναφοράς σε γνωστές θέσεις μετρούν την απόστασή τους από έναν αισθητήρα, το καθένα με τυχαίο σφάλμα, και οι αισθητήρες που εντοπίστηκαν γίνονται με τη σειρά τους σημεία αναφοράς (Simeonov και Marinov, Environment. Technology. Resources., 2024).
 	How precisely can a sensor be located from three noisy distance readings?	Πόσο ακριβώς μπορεί να εντοπιστεί ένας αισθητήρας από τρεις θορυβώδεις μετρήσεις απόστασης;
 	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Τα σφάλματα περνούν μέσα από τη γεωμετρία: αποστάσεις με σφάλμα 5 m εντοπίζουν τον αισθητήρα με ακρίβεια 6.2 m με ελάχιστα τετράγωνα (10.7 m με τον σύντομο τύπο) και 10.9 m στο πέμπτο επίπεδο, όπου τα ίδια τα σημεία αναφοράς είχαν εντοπιστεί.
+	Science and engineering	Επιστήμη και μηχανική
+	Working steps ({n})	Ενδιάμεσα βήματα ({n})
+	Working steps in detail ({n})	Ενδιάμεσα βήματα αναλυτικά ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Η ρίζα του μέσου τετραγώνου του {output} είναι {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Η ρίζα του μέσου τετραγώνου του {output} είναι {value}.
+	In the results	Στα αποτελέσματα
+	Working step	Ενδιάμεσο βήμα
+	Root mean square	Ρίζα μέσου τετραγώνου
+	A step towards an answer: the results list it folded away under the answers.	Ένα βήμα προς μια απάντηση: τα αποτελέσματα το δείχνουν διπλωμένο κάτω από τις απαντήσεις.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Για ποσότητα στο τετράγωνο, όπως ένα τετραγωνικό σφάλμα: τα αποτελέσματα δίνουν την τετραγωνική ρίζα του μέσου της, στη μονάδα της ίδιας της ποσότητας.

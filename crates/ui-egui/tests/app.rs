@@ -347,8 +347,9 @@ fn the_start_page_asks_what_to_find_out() {
     };
     let manufacturing = heading(&h, "Manufacturing");
     let logistics = heading(&h, "Logistics and warehousing");
+    let science = heading(&h, "Science and engineering");
     let reference = heading(&h, "Reference");
-    assert!(manufacturing < logistics && logistics < reference);
+    assert!(manufacturing < logistics && logistics < science && science < reference);
     h.get_by_label("Show the featured examples only")
         .click_accesskit();
     settle(&mut h);
