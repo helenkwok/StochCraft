@@ -586,9 +586,9 @@ This is one run of many: its numbers differ from the others and from the average
     length**, each point's x and y and each corner's bend radius as fields, **Remove** for a
     point, **Add a point at the end**, **Add a straight path** (of the typed length, for a
     conveyor not drawn yet) and **Remove path**. A path that climbs, has a helix, turns a whole
-    circle or more in one arc, or turns sharply where it starts or ends (drawn in a file, or by an
-    agent) can be moved, drawn again or removed here but not edited point by point; a loop drawn
-    by its points keeps them.
+    circle or more in one arc, or turns sharply where it starts or ends or by a half turn or more
+    (drawn in a file, or by an agent) can be moved, drawn again or removed here but not edited
+    point by point; a loop drawn by its points keeps them.
   - Snapping to the grid and to other belts' ends, and a background drawing to trace over, come
     next.
 - **Dashboard** (beside the tabs, or **View ▸ Dashboard**): a panel beside the model with tiles

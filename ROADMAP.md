@@ -3948,8 +3948,8 @@ the circular arc that meets both straights; `Outline::to_path` makes the `Path` 
 the flat paths that have an outline (an arc of more than 90 degrees is two or more corners, which
 join again into one arc; tangent bends join only where that keeps their corners), and bends too
 big for a short straight are tightened together to fit. A path that climbs, has a helix, turns a
-whole circle or more in one arc, or turns sharply where it starts or ends has no outline: it is
-moved, drawn again or removed, not edited by its points. A drawn corner bends
+whole circle or more in one arc, or turns sharply where it starts or ends or by a half turn or
+more has no outline: it is moved, drawn again or removed, not edited by its points. A drawn corner bends
 at 1 m by default (a bend of 0, typed in the panel, is a sharp corner). The engine's `track.set` sets or removes a conveyor's track in
 one undo step (inside `batch` too), and the conveyor's length follows the path unless a typed
 length already overrode it (D23). In the Layout view: **Draw path** for the selected conveyor, or

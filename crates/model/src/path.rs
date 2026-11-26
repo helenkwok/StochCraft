@@ -216,9 +216,10 @@ impl Path {
     /// The path as a plan editor shows it ([`Outline`]): the points it turns at, each corner
     /// with the radius of its bend. `None` for a path that climbs, has a helix, or turns through
     /// a whole circle or more in one arc: its points cannot be moved on a plan without losing
-    /// that. Also `None` for one that turns sharply (an arc of radius 0) where it starts or ends:
-    /// an outline's ends take their headings from the straights next to them, so that turn would
-    /// be lost. Each arc becomes one corner, or for one of more than 90 degrees, several of equal
+    /// that. Also `None` for one that turns sharply (an arc of radius 0) where it starts or ends,
+    /// or by a half turn or more anywhere: an outline's ends take their headings from the
+    /// straights next to them, and a corner turns by less than a half turn, so that turn would be
+    /// lost. Each arc becomes one corner, or for one of more than 90 degrees, several of equal
     /// angle, so the corner points stay near the path. An arc of no angle is a point on a
     /// straight, with its bend kept for when the point is moved ([`Outline::to_path`]).
     pub fn outline(&self) -> Option<Outline> {
@@ -250,9 +251,16 @@ impl Path {
                     let r = radius.abs();
                     if angle_deg.abs() <= ANGLE_EPS {
                         // A point on a straight is an arc of no length. A wide arc that turns too
-                        // little to tell from none but travels is a straight of its length.
-                        if seg.length() > LENGTH_EPS {
-                            frame = seg.frame_at(frame, 1.0);
+                        // little to tell from none but travels is a straight of its length, worked
+                        // out as one: on so wide a circle, the arc's own formula can round its
+                        // turn away and leave its end at its start.
+                        let len = seg.length();
+                        if len > LENGTH_EPS {
+                            frame = Segment::Line {
+                                length: len,
+                                rise: 0.0,
+                            }
+                            .frame_at(frame, 1.0);
                             continue;
                         }
                         let at = [frame.x, frame.y];
@@ -264,13 +272,14 @@ impl Path {
                         continue;
                     }
                     // A sharp turn of less than a half turn is one corner, so that removing its
-                    // point removes the turn; a rounded one is split to stay near the path.
+                    // point removes the turn; a rounded one is split to stay near the path. A
+                    // sharp half turn or more has no outline: corners at one place cannot say
+                    // which way round it went.
                     let sharp = r == 0.0;
-                    let n = if sharp && angle_deg.abs() < SHARPEST {
-                        1
-                    } else {
-                        pieces(angle_deg)
-                    };
+                    if sharp && angle_deg.abs() >= SHARPEST {
+                        return None;
+                    }
+                    let n = if sharp { 1 } else { pieces(angle_deg) };
                     let step = angle_deg / f64::from(n);
                     let t = r * tan((step.abs() / 2.0).to_radians());
                     if sharp && points.len() == 1 && points[0] == [frame.x, frame.y] {
@@ -1120,6 +1129,11 @@ mod tests {
         same_path(&sharp, &o.to_path());
         let less = o.removed(1).unwrap().to_path();
         assert_eq!(less.outline().unwrap().points.len(), 2);
+        // A sharp half turn or more, either way, has no outline: it would come back as another.
+        for turn in [180.0, -180.0, 270.0, -270.0] {
+            let p = Path::new(Frame::default(), vec![line(3.0), arc(0.0, turn), line(2.0)]);
+            assert!(p.outline().is_none(), "{turn}");
+        }
         // An arc 8.7 m long that turns too little to tell from none is a straight of its
         // length, not a point that would come back with no length.
         let shallow = Path::new(Frame::default(), vec![line(1.0), arc(1.0e12, 5.0e-10)]);
@@ -1128,6 +1142,11 @@ mod tests {
         let o = shallow.outline().unwrap();
         assert_eq!(o.points.len(), 2, "{:?}", o.points);
         near(o.to_path().length(), long, 1e-6);
+        // Wider still, at 45 degrees: the arc's own end rounds back onto its start.
+        let wider = Path::new(Frame::new(0.0, 0.0, 0.0, 45.0), vec![arc(1.0e18, 5.0e-16)]);
+        let long = wider.length();
+        assert!(long > 8.0, "{long}");
+        near(wider.outline().unwrap().to_path().length(), long, 1e-6);
         // A point on a straight, an arc of no angle, still is one.
         let marked = Path::new(Frame::default(), vec![line(1.0), arc(3.0, 0.0), line(1.0)]);
         assert_eq!(marked.outline().unwrap().points.len(), 3);
