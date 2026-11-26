@@ -4616,34 +4616,55 @@ fn take_all(requirements: &[Vec<Alternative>], free: &mut [i64], taken: &mut Tak
     let Some((first, rest)) = requirements.split_first() else {
         return true;
     };
-    for alt in first {
-        let have: i64 = alt
-            .pools
-            .iter()
-            .map(|&p| free.get(p).copied().unwrap_or(0).max(0))
-            .sum();
-        if alt.quantity == 0 || have < i64::from(alt.quantity) {
-            continue;
+    first
+        .iter()
+        .any(|alt| alt.quantity > 0 && fill(&alt.pools, alt.quantity, rest, free, taken))
+}
+
+/// Takes `left` units from `pools` (an alternative's pools, in model order), then meets `rest`
+/// ([`take_all`]). The units are spread over the pools as many from the first as it has free,
+/// then the next, and so on; only when that leaves a later requirement unmet are other spreads
+/// tried, fewer from an earlier pool first. So a take that succeeded before is unchanged, and
+/// one pool of a role is left for a later requirement that names it. `false`, with `free` and
+/// `taken` as they were, when no spread meets them all.
+fn fill(
+    pools: &[usize],
+    left: u32,
+    rest: &[Vec<Alternative>],
+    free: &mut [i64],
+    taken: &mut Taken,
+) -> bool {
+    if left == 0 {
+        return take_all(rest, free, taken);
+    }
+    let Some((&p, others)) = pools.split_first() else {
+        return false;
+    };
+    let elsewhere: i64 = others
+        .iter()
+        .map(|&q| free.get(q).copied().unwrap_or(0).max(0))
+        .sum();
+    let here = free.get(p).copied().unwrap_or(0).clamp(0, i64::from(left)) as u32;
+    for n in (0..=here).rev() {
+        // Fewer from this pool cannot be made up by the others.
+        if i64::from(left - n) > elsewhere {
+            break;
         }
-        let (before, mark) = (free.to_vec(), taken.len());
-        let mut left = alt.quantity;
-        for &p in &alt.pools {
-            if left == 0 {
-                break;
-            }
-            if let Some(f) = free.get_mut(p) {
-                let n = (*f).clamp(0, i64::from(left)) as u32;
-                if n > 0 {
-                    *f -= i64::from(n);
-                    left -= n;
-                    taken.push((p, n));
-                }
-            }
+        let mark = taken.len();
+        if n > 0
+            && let Some(f) = free.get_mut(p)
+        {
+            *f -= i64::from(n);
+            taken.push((p, n));
         }
-        if take_all(rest, free, taken) {
+        if fill(others, left - n, rest, free, taken) {
             return true;
         }
-        free.copy_from_slice(&before);
+        if n > 0
+            && let Some(f) = free.get_mut(p)
+        {
+            *f += i64::from(n);
+        }
         taken.truncate(mark);
     }
     false

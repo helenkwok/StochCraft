@@ -173,3 +173,37 @@ fn each_requirement_is_checked() {
         }]
     );
 }
+
+/// Within an alternative by role, the units are spread over the pools that have the role, as
+/// many from the first as it has: here that would take A, which the later requirement names,
+/// so B serves the role instead. Pools A and B each have one unit with the role `worker`; the
+/// task needs a worker (any) and A. Nobody waits, and each pool is taken once a job.
+#[test]
+fn a_role_leaves_a_pool_that_a_later_requirement_names() {
+    let mut b = Builder::new();
+    b.pool("a", 1, &["worker"]);
+    b.pool("b", 1, &["worker"]);
+    let src = b.source("in", Dist::Constant(5.0), None);
+    let job = b.shared_task_all(
+        "job",
+        Dist::Constant(1.0),
+        vec![
+            Requirement::new(vec![Need::Roles {
+                roles: vec!["worker".into()],
+                quantity: 1,
+            }]),
+            one("a", 1),
+        ],
+        0.0,
+    );
+    let out = b.sink("out");
+    b.connect(src, job);
+    b.connect(job, out);
+    let r = b.run(Rng::new(1), 0.0, 18.0);
+    let Ok(r) = r else { panic!("{r:?}") };
+    // Arrivals at 5, 10 and 15, each served at once for 1.
+    exactly("job wait", element(&r, "job").mean_wait, 0.0);
+    assert_eq!(element(&r, "job").left, 3, "{r:?}");
+    assert_eq!(element(&r, "a").entered, 3, "{r:?}");
+    assert_eq!(element(&r, "b").entered, 3, "{r:?}");
+}
