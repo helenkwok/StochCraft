@@ -1358,7 +1358,14 @@ fn time_in_system_is_set_on_departures_in_the_inspector() {
         element(&h, "leave")["time_in_system"],
         json!({"within": 30.0})
     );
-    type_into(&mut h, "Target time (min)", "");
+    // Cleared, the target goes.
+    h.get_by_role_and_label(Role::TextInput, "Target time (min)")
+        .click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.key_press(egui::Key::Backspace);
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
     assert_eq!(element(&h, "leave")["time_in_system"], json!({}));
     assert!(
         h.get_all_by_role_and_label(Role::ComboBox, "Count only working time on")
