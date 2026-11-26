@@ -1480,3 +1480,57 @@ fn a_task_holding_several_pools_gets_no_formula_but_loads_each_pool() {
     assert_eq!(job.status, Status::Fine);
     assert_eq!(Why::SeveralPools.code(), "several_pools");
 }
+
+/// A pool serves whole jobs only: with 3 units in each of two pools and a job needing 2 of each,
+/// one job at a time, not 1.5. Offered 1.2 jobs an hour with a mean of 1 hour, the task passes on
+/// at most 1, and what follows it gets at most that.
+#[test]
+fn a_pool_serves_whole_jobs_only() {
+    let need = |pool: &str| {
+        Requirement::new(vec![Need::Resource {
+            id: id(pool),
+            quantity: 2,
+        }])
+    };
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(1.2)),
+            el(
+                "job",
+                ElementKind::SharedTask {
+                    service: Dist::exponential_rate(1.0),
+                    processing_by: None,
+                    processing_by_resource: None,
+                    needs: vec![need("a"), need("b")],
+                    priority: 0.0,
+                },
+            ),
+            server("next", 1, Dist::exponential_rate(10.0)),
+            sink("out"),
+        ],
+        vec![link("in", "job"), link("job", "next"), link("next", "out")],
+    );
+    m.resources = vec![
+        ResourcePool::new(id("a"), "A", 3, Vec::new()),
+        ResourcePool::new(id("b"), "B", 3, Vec::new()),
+    ];
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(
+        row(&c, "next").arrival_rate,
+        Value::Known {
+            value: 1.0,
+            bound: Bound::AtMost
+        }
+    );
+    // One job of one unit each: unchanged, 3 at a time.
+    let mut m = m;
+    if let ElementKind::SharedTask { needs, .. } = &mut m.elements[1].kind {
+        for r in needs.iter_mut() {
+            if let Some(Need::Resource { quantity, .. }) = r.alternatives.first_mut() {
+                *quantity = 1;
+            }
+        }
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(row(&c, "next").arrival_rate, Value::exact(1.2));
+}

@@ -988,12 +988,11 @@ impl<'a> Net<'a> {
                 let s = service[i].value().filter(|s| *s > 0.0)?;
                 let units = match (&units[i], self.pool_use(i)) {
                     (Some((c, _)), _) => f64::from(*c),
-                    // A task needing several pools at once is held to the scarcest.
+                    // As many jobs at once as each pool has whole takes for; a task needing
+                    // several pools at once is held to the scarcest.
                     (None, Some(Ok(uses))) if !uses.is_empty() => uses
                         .iter()
-                        .map(|&(j, q)| {
-                            f64::from(model.resources[j].most_units()) / f64::from(q.max(1))
-                        })
+                        .map(|&(j, q)| jobs_at_once(model.resources[j].most_units(), q))
                         .fold(f64::INFINITY, f64::min),
                     _ => return None,
                 };
@@ -1019,7 +1018,7 @@ impl<'a> Net<'a> {
                             if !p.shifts.is_empty() || !p.availability.is_empty() || !p.available {
                                 return Some(0.0);
                             }
-                            least = least.min(f64::from(p.most_units()) / f64::from(q.max(1)));
+                            least = least.min(jobs_at_once(p.most_units(), q));
                         }
                         least
                     }
@@ -1655,6 +1654,12 @@ impl<'a> Net<'a> {
         let variance = dist.variance().ok_or(Why::NoVariance)?;
         pollaczek_khinchine(lambda, s, variance).ok_or(Why::Unstable)
     }
+}
+
+/// How many jobs taking `q` units each `units` units serve at once: whole jobs only (3 units
+/// serve one job of 2 at a time, not 1.5).
+fn jobs_at_once(units: u32, q: u32) -> f64 {
+    f64::from(units / q.max(1))
 }
 
 /// The worse of two statuses: unstable, then congested, then not known, then fine.
