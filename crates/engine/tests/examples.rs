@@ -27,12 +27,15 @@
 //!   beside Poisson arrivals at the same rate (M/M/1).
 //! - Able and Baker, two servers that differ in speed behind one queue (a service time by
 //!   resource), against the exact long-run answer of their discrete-time Markov chain.
+//! - delayed discharge (Boyle et al., OR Society Simulation Workshop 2023) against Erlang B for
+//!   its two discharge-to-assess services, whose overflow waits in hospital.
 //!
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
 //! added by hand, as in `mm1.bpmn`. The starting contents of the prison and of Penny Fab were
 //! added by hand too, and the repairmen-with-spares file was written by hand in the same form. The
-//! zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`.
+//! zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`, and the delayed
+//! discharge file was written by a short script in the same form (its stays have up to 197 points).
 //!
 //! Each check allows √2 times the 95% half-width, since several checks read the same runs (as in
 //! `crates/blocks/tests/queueing_cases.rs`).
@@ -1310,4 +1313,188 @@ fn able_and_baker_match_their_markov_chain() {
         served("able"),
         served("baker")
     );
+}
+
+/// The exact mean numbers waiting in hospital in the delayed-discharge model `m`, for a nursing
+/// home and for care at home, each λ B(c, λT) T, as read from the file: the arrival rate λ is the
+/// patients' rate times the gateway's share, c the discharge-to-assess (D2A) places and T the
+/// mean stay of the distribution as written, which the hospital wait has too. Those finding
+/// every D2A place taken (Erlang B's share, which holds whatever the stay's distribution) wait
+/// in hospital, where there is no limit, for a time T on average (Little's law).
+fn delayed_in_hospital(m: &Model) -> [f64; 2] {
+    let rate = 1.0 / interarrival(m, "patients");
+    let share = |flow: &str| {
+        m.connections
+            .iter()
+            .find(|c| c.id == ElementId::unchecked(flow))
+            .and_then(|c| c.probability)
+            .unwrap_or_else(|| panic!("{flow}: no probability"))
+    };
+    [
+        ("flow-2", "d2a_inpatient", "hospital_nursing_home"),
+        ("flow-3", "d2a_home", "hospital_care_at_home"),
+    ]
+    .map(|(flow, d2a, hospital)| {
+        let lambda = rate * share(flow);
+        let (stay, places) = server(m, d2a);
+        let (wait, _) = server(m, hospital);
+        assert!(
+            (wait - stay).abs() < 1e-12,
+            "{d2a} {stay}, {hospital} {wait}"
+        );
+        lambda * erlang_b(places, lambda * stay) * stay
+    })
+}
+
+/// Delayed discharge, from L. M. Boyle, C. S. M. Currie, C. Lamas Fernandez, L. Nguyen and
+/// C. Halpenny, *A Discrete Event Simulation Model of a Hospital for Prediction of the Impact of
+/// Delayed Discharge*, Proceedings of the Operational Research Society Simulation Workshop 2023
+/// (SW23), pp. 240–249, doi 10.36819/SW23.029 (Table 1 on p. 244, Tables 2–5 on pp. 245–246).
+/// Patients fit to leave hospital arrive at 114 a day (Poisson); 18.52% need a nursing home and
+/// go to a D2A inpatient bed (75), the rest need care at home and go to a D2A home place (500).
+/// Those who find none free wait in hospital, with no limit. A nursing home accepts a patient on
+/// a given day with chance 1/7, care at home with chance 1/3. The model is two independent loss
+/// systems: the stay, in D2A or in hospital, is 1 + 2(N − 1) days with N geometric on 1, 2, …
+/// (each refusal costs 2 days), mean 2/p − 1: 13 days and 5 days. The paper's text gives each
+/// wait 1 day, which would put 74 in hospital rather than its 205; 2 days per refusal is the
+/// reading that gives its tables. The file writes the stays as discrete user distributions on
+/// 1, 3, 5, …, cut where the rest of the tail is below 1e-9 and that rest put on the last point,
+/// and the check uses the mean as written.
+///
+/// Exact, by Erlang B: 202.14 patients wait in hospital on average (199.84 for a nursing home,
+/// 2.31 for care at home); the paper's Table 2 has 205 (203, 207) and the NHS data 208. The run
+/// uses the paper's 8 weeks of warm-up and a year, with 20 replications rather than its 5.
+#[test]
+fn delayed_discharge_matches_erlang_b() {
+    let m = model_of("delayed-discharge.bpmn", None);
+    assert!(
+        (interarrival(&m, "patients") * 114.0 - 1.0).abs() < 1e-12,
+        "{}",
+        interarrival(&m, "patients")
+    );
+    // The stays' means as written are within 1e-7 of 2/p − 1.
+    for (id, p) in [("d2a_inpatient", 1.0 / 7.0), ("d2a_home", 1.0 / 3.0)] {
+        let (stay, _) = server(&m, id);
+        assert!((stay - (2.0 / p - 1.0)).abs() < 1e-7, "{id}: {stay}");
+    }
+    let [nursing_home, care_at_home] = delayed_in_hospital(&m);
+    assert!(
+        (nursing_home + care_at_home - 202.14).abs() < 0.005,
+        "{nursing_home} + {care_at_home}"
+    );
+
+    let mut e = open(
+        "delayed-discharge.bpmn",
+        json!({ "replications": 20, "warmup": 56.0, "duration": 365.0 }),
+    );
+    let r = ok(&mut e, "run", json!({}));
+    let behaviour = behaviour_warnings(&r);
+    assert!(behaviour.is_empty(), "{behaviour:?}");
+    covers(&r, "hospital_nursing_home", "mean_contents", nursing_home);
+    covers(&r, "hospital_care_at_home", "mean_contents", care_at_home);
+    let rate = 114.0;
+    for (id, share, places) in [("d2a_inpatient", 0.1852, 75u32), ("d2a_home", 0.8148, 500)] {
+        let a = rate * share * server(&m, id).0;
+        let b = erlang_b(places, a);
+        covers(&r, id, "loss_probability", b);
+        covers(&r, id, "utilisation", a * (1.0 - b) / f64::from(places));
+    }
+}
+
+/// The paper's published means of the patients waiting in hospital (Tables 2–5), against the
+/// exact values of the file's scenarios. Every exact value sits below the published one, by 0.3
+/// (nursing home 1 in 10) to 3.5 (D2A home 400 places). The published 95% intervals, over 5
+/// runs, hold the exact value in 13 of the 16 cells; the baseline's (203, 207), 450 places'
+/// (227, 233) and a nursing home 1 in 5's (118, 121) do not. Table 2's rows for 550 and 650 D2A
+/// home places are identical, and match Table 4's row for care at home 1 in 2 but for one digit;
+/// the exact values agree, since with that many places, or care at home accepting every other
+/// day, hardly anyone waits in hospital for care at home (199.84 in all three). The paper derives
+/// p from the expected wait by p Σ i(1 − p)^i = 1/p, but that sum is (1 − p)/p.
+#[test]
+fn delayed_discharge_sits_just_below_the_published_tables() {
+    for (scenario, published) in [
+        (None, 205.0),
+        (Some("home-350"), 320.0),
+        (Some("home-400"), 273.0),
+        (Some("home-450"), 230.0),
+        (Some("home-550"), 202.0),
+        (Some("home-650"), 202.0),
+        (Some("nursing-home-1-in-5"), 119.0),
+        (Some("nursing-home-1-in-6"), 162.0),
+        (Some("nursing-home-1-in-8"), 246.0),
+        (Some("nursing-home-1-in-9"), 288.0),
+        (Some("nursing-home-1-in-10"), 329.0),
+        (Some("care-at-home-1-in-2"), 202.0),
+        (Some("care-at-home-1-in-4"), 356.0),
+        (Some("care-at-home-1-in-5"), 539.0),
+        (Some("inpatient-85"), 195.0),
+        (Some("inpatient-95"), 185.0),
+    ] {
+        let [nursing_home, care_at_home] =
+            delayed_in_hospital(&model_of("delayed-discharge.bpmn", scenario));
+        let exact = nursing_home + care_at_home;
+        eprintln!("{scenario:?}: exact {exact:.2}, published {published}");
+        assert!(
+            published - exact > 0.25 && published - exact < 3.6,
+            "{scenario:?}: exact {exact}, published {published}"
+        );
+    }
+    // The sum the paper writes as 1/p.
+    let p: f64 = 1.0 / 7.0;
+    let (mut sum, mut power) = (0.0, 1.0);
+    for i in 1..2_000 {
+        power *= 1.0 - p;
+        sum += p * f64::from(i) * power;
+    }
+    assert!((sum - (1.0 - p) / p).abs() < 1e-9, "{sum}");
+}
+
+/// The delayed-discharge scenarios, each checked on the hospital wait it changes against
+/// [`delayed_in_hospital`]: D2A home places 350, 400, 450, 550 and 650; a nursing home accepting
+/// 1 day in 5, 6, 8, 9 or 10; care at home accepting 1 day in 2, 4 or 5; D2A inpatient beds 85
+/// and 95. Exact totals: 317.1, 269.5, 226.6, 199.8, 199.8; 118.0, 160.0, 244.3, 286.5, 328.7;
+/// 199.8, 353.2, 537.3; 192.2, 182.3. The runs warm up for 200 days: with stays of 19 days on
+/// average, 8 weeks would leave the hospital wait about 0.3% low. Where the exact wait is all
+/// but 0 (care at home with 550 or 650 places, or accepted 1 day in 2), the run is bounded
+/// instead, since its interval is then 0 wide.
+#[test]
+#[ignore = "heavy: 15 scenarios of a year each"]
+fn delayed_discharge_scenarios_match_erlang_b() {
+    for (scenario, changes) in [
+        ("home-350", "hospital_care_at_home"),
+        ("home-400", "hospital_care_at_home"),
+        ("home-450", "hospital_care_at_home"),
+        ("home-550", "hospital_care_at_home"),
+        ("home-650", "hospital_care_at_home"),
+        ("nursing-home-1-in-5", "hospital_nursing_home"),
+        ("nursing-home-1-in-6", "hospital_nursing_home"),
+        ("nursing-home-1-in-8", "hospital_nursing_home"),
+        ("nursing-home-1-in-9", "hospital_nursing_home"),
+        ("nursing-home-1-in-10", "hospital_nursing_home"),
+        ("care-at-home-1-in-2", "hospital_care_at_home"),
+        ("care-at-home-1-in-4", "hospital_care_at_home"),
+        ("care-at-home-1-in-5", "hospital_care_at_home"),
+        ("inpatient-85", "hospital_nursing_home"),
+        ("inpatient-95", "hospital_nursing_home"),
+    ] {
+        let [nursing_home, care_at_home] =
+            delayed_in_hospital(&model_of("delayed-discharge.bpmn", Some(scenario)));
+        let exact = if changes == "hospital_nursing_home" {
+            nursing_home
+        } else {
+            care_at_home
+        };
+        let mut e = open_scenario(
+            "delayed-discharge.bpmn",
+            Some(scenario),
+            json!({ "replications": 20, "warmup": 200.0, "duration": 365.0 }),
+        );
+        let r = ok(&mut e, "run", json!({}));
+        if exact < 0.01 {
+            let (mean, _) = result(&r, changes, "mean_contents");
+            assert!(mean < 0.5, "{scenario}: {mean}, exact {exact}");
+        } else {
+            covers(&r, changes, "mean_contents", exact);
+        }
+    }
 }

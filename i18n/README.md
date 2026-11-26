@@ -1076,6 +1076,15 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The rows for the delayed-discharge example (its title, the line about it, its question and
+  what it teaches) were machine-drafted from the plain meaning of the English, with each
+  catalog's own words for patients, beds, turned away and average stay from the hospital beds
+  card. "Discharge to assess" has no settled term in most languages, so it is rendered as a
+  discharge with an assessment (of the care needed); a nursing home is the language's plain word
+  for a care home, and care at home its word for home care. The authors' names and the workshop's
+  name stay in English and Latin script. Not checked against any other source and not reviewed
+  by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq, and
+  "discharge to assess" in all of them.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
