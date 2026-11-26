@@ -1601,6 +1601,12 @@ fn a_machine_that_never_makes_anything_wait_leads_with_its_availability() {
         &mut h,
         &["File", "Open Example", "One machine's availability"],
     );
+    // Short, so the run finishes within the test's patience.
+    h.state_mut().execute(
+        "experiment.set",
+        json!({ "replications": 4, "duration": 3000.0, "warmup": 0.0 }),
+    );
+    settle(&mut h);
     menu(&mut h, &["Model", "Run"]);
     finish_run(&mut h);
     h.get_by_label("Availability (%)");

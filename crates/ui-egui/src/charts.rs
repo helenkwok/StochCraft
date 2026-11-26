@@ -85,7 +85,7 @@ pub(crate) fn availability_leads(results: &Value) -> bool {
         .map_or(&[][..], Vec::as_slice);
     elements
         .iter()
-        .all(|e| mean(e, "mean_wait").is_none_or(|w| w == 0.0))
+        .all(|e| mean(e, "mean_wait").is_none_or(|w| w.abs() < 1e-9))
         && elements
             .iter()
             .any(|e| mean(e, "availability").is_some_and(|a| a < 1.0))
