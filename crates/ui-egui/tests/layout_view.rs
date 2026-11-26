@@ -452,3 +452,39 @@ fn an_arrow_key_in_the_frame_a_point_is_let_go_moves_it_on_from_there() {
     settle(&mut h);
     assert_eq!(points(&h, "lane_red").expect("a track"), before);
 }
+
+#[test]
+fn a_picked_point_moved_onto_its_neighbour_is_let_go() {
+    let mut h = sorter();
+    on_layout(&mut h, "lane_red");
+    // A straight 3 m with points put on it at 1 m and 2 m.
+    set_track(
+        &mut h,
+        "lane_red",
+        [0.0, 0.0, 0.0],
+        serde_json::json!([
+            { "type": "line", "length": 1.0 },
+            { "type": "arc", "radius": 1.0, "angle": 0.0 },
+            { "type": "line", "length": 1.0 },
+            { "type": "arc", "radius": 1.0, "angle": 0.0 },
+            { "type": "line", "length": 1.0 }
+        ]),
+    );
+    h.get_by_role_and_label(Role::Button, "Fit").click();
+    settle(&mut h);
+    near_points(
+        &points(&h, "lane_red").expect("a track"),
+        &[[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [3.0, 0.0]],
+    );
+    // The point at 1 m, moved 1 m back onto the start, is one with it: the saved path has the
+    // point at 2 m second now, and Delete does not take that away.
+    h.get_by_label_contains("Point 2 of Lane red").click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::SHIFT, egui::Key::ArrowLeft);
+    settle(&mut h);
+    let merged = [[0.0, 0.0], [2.0, 0.0], [3.0, 0.0]];
+    near_points(&points(&h, "lane_red").expect("a track"), &merged);
+    h.key_press(egui::Key::Delete);
+    settle(&mut h);
+    near_points(&points(&h, "lane_red").expect("a track"), &merged);
+}

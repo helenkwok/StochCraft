@@ -756,6 +756,8 @@ impl App {
 
         // What this frame changes in the model, applied once the view is drawn.
         let mut commits: Vec<(String, Path)> = Vec::new();
+        // How many points the selected path's outline is to have after those changes.
+        let mut points_after: Option<usize> = None;
         let mut pick: Option<Option<String>> = None;
         let mut too_few = false;
 
@@ -854,6 +856,7 @@ impl App {
                     && to != *q
                 {
                     commits.push((ch.id.clone(), outline.moved(i, to).to_path()));
+                    points_after = Some(outline.points.len());
                 }
                 let picked = point
                     .as_ref()
@@ -909,6 +912,7 @@ impl App {
                 let by = [to_step(by[0], unit), to_step(by[1], unit)];
                 if by != [0.0, 0.0] {
                     commits.push((ch.id.clone(), shifted(path, by)));
+                    points_after = ch.outline.as_ref().map(|o| o.points.len());
                 }
             }
             drag = None;
@@ -935,6 +939,7 @@ impl App {
                             ch.id.clone(),
                             outline.inserted(i, on, default_bend(unit)).to_path(),
                         ));
+                        points_after = Some(outline.points.len() + 1);
                         point = Some((ch.id.clone(), i, revision));
                     }
                 }
@@ -1206,7 +1211,16 @@ impl App {
             self.set_path(&id, &path);
         }
         // The view's own edits keep the picked point (a nudge, a point put in): it is of the
-        // model they leave.
+        // model they leave. Unless the saved path has other points than the edit meant: a point
+        // moved onto its neighbour is one with it, and the index would be of the next point.
+        let kept = points_after.is_none_or(|n| {
+            self.chosen_conveyor()
+                .and_then(|c| c.outline)
+                .is_some_and(|o| o.points.len() == n)
+        });
+        if !kept {
+            self.layout_view.point = None;
+        }
         if let Some((_, _, r)) = &mut self.layout_view.point {
             *r = self.engine.revision();
         }
