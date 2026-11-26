@@ -1337,7 +1337,13 @@ fn delayed_in_hospital(m: &Model) -> [f64; 2] {
     .map(|(flow, d2a, hospital)| {
         let lambda = rate * share(flow);
         let (stay, places) = server(m, d2a);
-        let (wait, _) = server(m, hospital);
+        let wait = match m.element(&ElementId::unchecked(hospital)).map(|e| &e.kind) {
+            // A task with no resource: an infinite server, which takes everyone at once.
+            Some(ElementKind::Delay { duration, .. }) => duration
+                .mean()
+                .unwrap_or_else(|| panic!("{hospital}: no mean stay")),
+            _ => panic!("{hospital} is not a task without a resource"),
+        };
         assert!(
             (wait - stay).abs() < 1e-12,
             "{d2a} {stay}, {hospital} {wait}"
