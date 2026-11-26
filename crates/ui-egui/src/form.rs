@@ -1220,7 +1220,8 @@ fn tagged(
             .flatten()
             .filter(|f| f.as_str() != Some("type"))
             .count();
-        if let Some(optional) = fields.get_mut(required.min(fields.len())..) {
+        let from = required.min(fields.len());
+        if let Some(optional) = fields.get_mut(from..) {
             optional.sort_by_key(|f| match *f {
                 "min" => 0,
                 "mode" => 1,
