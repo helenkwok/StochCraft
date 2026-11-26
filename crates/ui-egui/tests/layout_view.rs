@@ -516,17 +516,15 @@ fn delete_in_the_frame_a_double_click_puts_a_point_in_waits() {
     settle(&mut h);
     h.hover_at(mid);
     settle(&mut h);
-    // A double-click half way along the first straight, Delete pressed as it is let go.
+    // A double-click half way along the first straight, Delete pressed as it is let go: four
+    // frames 50 ms apart (the harness's own step, a quarter second, is too slow for a
+    // double-click).
     let button = |pressed: bool| egui::Event::PointerButton {
         pos: mid,
         button: egui::PointerButton::Primary,
         pressed,
         modifiers: egui::Modifiers::NONE,
     };
-    for pressed in [true, false, true] {
-        h.event(button(pressed));
-    }
-    h.run_steps(1);
     let key = |pressed: bool| egui::Event::Key {
         key: egui::Key::Delete,
         physical_key: None,
@@ -534,10 +532,20 @@ fn delete_in_the_frame_a_double_click_puts_a_point_in_waits() {
         repeat: false,
         modifiers: egui::Modifiers::NONE,
     };
-    h.input_mut()
-        .events
-        .extend([button(false), key(true), key(false)]);
-    h.run_steps(1);
+    let t0 = h.ctx.input(|i| i.time);
+    let frames = [
+        vec![button(true)],
+        vec![button(false)],
+        vec![button(true)],
+        vec![button(false), key(true), key(false)],
+    ];
+    for (k, events) in frames.into_iter().enumerate() {
+        let input = h.input_mut();
+        input.time = Some(t0 + 0.05 * (k as f64 + 1.0));
+        input.events.extend(events);
+        h.run_steps(1);
+    }
+    h.input_mut().time = None;
     settle(&mut h);
     // The point is put in, about half way up the first straight, and nothing is taken away.
     let got = points(&h, "lane_red").expect("a track");
