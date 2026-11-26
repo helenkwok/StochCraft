@@ -4,7 +4,7 @@
 #![allow(clippy::panic, clippy::expect_used)] // A request or result missing fails the test.
 
 use egui_kittest::Harness;
-use egui_kittest::kittest::Queryable;
+use egui_kittest::kittest::{NodeT, Queryable};
 use serde_json::json;
 use stochcraft_ui_egui::commands::{self, CommandRef};
 use stochcraft_ui_egui::{App, Autosave, Platform, Request};
