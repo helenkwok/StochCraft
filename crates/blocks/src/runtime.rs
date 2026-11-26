@@ -4613,12 +4613,31 @@ fn requirements(model: &Model, needs: &[Requirement]) -> Vec<Vec<Alternative>> {
 /// requirement takes its next alternative only when its first would leave a later one unmet.
 /// `false`, with `free` and `taken` as they were, when there is no way to meet them all now.
 fn take_all(requirements: &[Vec<Alternative>], free: &mut [i64], taken: &mut Taken) -> bool {
+    // Taking only ever leaves fewer free, so a requirement no alternative of which the free
+    // units could meet even alone stays unmet: say so before trying spreads for the earlier
+    // ones, which for many pools of one unit each would be millions.
+    if !requirements.iter().all(|r| meetable_alone(r, free)) {
+        return false;
+    }
     let Some((first, rest)) = requirements.split_first() else {
         return true;
     };
     first
         .iter()
         .any(|alt| alt.quantity > 0 && fill(&alt.pools, alt.quantity, rest, free, taken))
+}
+
+/// Whether one of `requirement`'s alternatives has as many units free in its pools as it needs,
+/// leaving the other requirements aside.
+fn meetable_alone(requirement: &[Alternative], free: &[i64]) -> bool {
+    requirement.iter().any(|alt| {
+        let have: i64 = alt
+            .pools
+            .iter()
+            .map(|&p| free.get(p).copied().unwrap_or(0).max(0))
+            .sum();
+        alt.quantity > 0 && have >= i64::from(alt.quantity)
+    })
 }
 
 /// Takes `left` units from `pools` (an alternative's pools, in model order), then meets `rest`
@@ -5795,4 +5814,46 @@ fn spawn_unbatch(sim: &mut Sim, env: BlockEnv) {
             }
         }
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn alt(pools: std::ops::Range<usize>, quantity: u32) -> Alternative {
+        Alternative {
+            pools: pools.collect(),
+            quantity,
+        }
+    }
+
+    #[test]
+    fn a_busy_machine_ends_the_search_before_any_spread_of_workers_is_tried() {
+        // Thirty worker pools of one free unit each and a machine with none free: fifteen
+        // workers could be spread over the pools in 155,117,520 ways, none of which helps.
+        let mut free = vec![1_i64; 30];
+        free.push(0);
+        let needs = vec![vec![alt(0..30, 15)], vec![alt(30..31, 1)]];
+        let mut taken = Taken::new();
+        assert!(!take_all(&needs, &mut free, &mut taken));
+        assert!(taken.is_empty());
+        assert_eq!(free.iter().sum::<i64>(), 30);
+        // With the machine free, the first fifteen pools give a worker each.
+        free[30] = 1;
+        assert!(take_all(&needs, &mut free, &mut taken));
+        let mut want: Taken = (0..15).map(|p| (p, 1)).collect();
+        want.push((30, 1));
+        assert_eq!(taken, want);
+    }
+
+    #[test]
+    fn a_requirement_met_only_by_another_pool_still_gets_it() {
+        // Two workers from pools 0 or 1, then one from pool 0 alone: the first must leave
+        // pool 0's unit for the second, so it takes both from pool 1.
+        let mut free = vec![1_i64, 2];
+        let needs = vec![vec![alt(0..2, 2)], vec![alt(0..1, 1)]];
+        let mut taken = Taken::new();
+        assert!(take_all(&needs, &mut free, &mut taken));
+        assert_eq!(taken, vec![(1, 2), (0, 1)]);
+    }
 }
