@@ -172,7 +172,8 @@ pub fn show(ui: &mut egui::Ui, results: &Value, line: Option<&[String]>) -> Opti
     let parts = line
         .and_then(|l| parts(results, l))
         .filter(|p| !p.is_empty());
-    let busiest = crate::results::busiest(results);
+    // A line of zeros says nothing: the second chart is then the utilisation of each block.
+    let busiest = crate::results::busiest(results).filter(|b| !queue_never_forms(results, b));
     let measure = |metric: &str| MEASURES.iter().find(|m| m.metric == metric);
     let mut used: Vec<&str> = Vec::new();
     let mut drew = false;
@@ -472,6 +473,16 @@ fn time_chart(ui: &mut egui::Ui, results: &Value, parts: &[Part], unit: &str, wi
     }
 }
 
+/// Whether the mean number waiting before `block` is 0 at every time recorded (a line that says
+/// nothing, so another chart takes its place). Without the series: no.
+fn queue_never_forms(results: &Value, block: &Value) -> bool {
+    let id = block["id"].as_str().unwrap_or("");
+    let mean = results["series"]["elements"][id]["queue_length"]["mean"]
+        .as_array()
+        .map(|a| a.iter().filter_map(Value::as_f64).collect::<Vec<_>>());
+    mean.is_some_and(|m| !m.is_empty() && m.iter().all(|v| *v == 0.0))
+}
+
 /// "Waiting before {block} over the run": the mean number waiting at the busiest task at each
 /// recorded time across the runs, with its 95% band, the warm-up shaded, a crosshair and a
 /// tooltip on hover, and a note where it is still settling at the end.
@@ -574,7 +585,12 @@ fn over_run_chart(
     while v <= x_top + x_step * 0.01 {
         painter.text(
             pos2(x(v), plot.bottom() + 3.0),
-            Align2::CENTER_TOP,
+            // The last label ends at the plot's edge, not centred on it (half of it would be clipped).
+            if v + x_step * 0.5 > x_top {
+                Align2::RIGHT_TOP
+            } else {
+                Align2::CENTER_TOP
+            },
             format!("{} {unit}", grouped(v)),
             FontId::proportional(11.0),
             p.text_weak,

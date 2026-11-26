@@ -1619,6 +1619,16 @@ fn a_machine_that_never_makes_anything_wait_leads_with_its_availability() {
     eprintln!("status: {}", h.state().status());
     h.get_by_label("Availability (%)");
     assert!(h.query_by_label("Mean wait (h)").is_none());
+    // The finding answers it too, not "limits the flow" with nothing waiting.
+    h.get_by_label_contains("Machine is down ");
+    h.get_by_label_contains("nothing waits for it");
+    assert!(h.query_by_label_contains("limits the flow").is_none());
+    // A queue that never forms is no chart: the second one is each block's utilisation.
+    assert!(
+        h.query_by_label("Waiting before Machine over the run")
+            .is_none()
+    );
+    h.get_by_label("Utilisation (%)");
     // The spread across runs starts on the same result.
     let result = h.get_by_role_and_label(egui::accesskit::Role::ComboBox, "Result");
     let shown = result.accesskit_node().value();

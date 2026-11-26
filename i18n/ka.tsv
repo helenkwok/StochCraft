@@ -1505,3 +1505,4 @@ connection	Flow	ნაკადი
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	მანქანა, რომელიც საშუალოდ ყოველ 90 საათში გაუმართავდება და შესაკეთებლად 4.5 საათი სჭირდება (Hristova, Denev და Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	რა ხშირად ჩერდება ერთი მანქანა და რამდენი სამუშაო ღირს ეს?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	მუშაობს 90 საათი, დგას 4.5: მანქანა დროის 95.2%-ში მუშაობს და გაუმართაობა ყოველ 94.5 საათში ერთხელ ხდება. შეკეთების დროის განახევრება მას 97.6%-მდე ზრდის.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} დროის {down}-ში დგას (ხელმისაწვდომობა {up}); მას არაფერი ელოდება.

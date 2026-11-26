@@ -1084,6 +1084,12 @@ fields (`“Service time”`) are named in the messages by their own rows.
   script, and decimals keep the point. Not checked against any other source and not reviewed by
   native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq, and the title in
   most of them.
+- The row for the finding that a machine is down part of the time while nothing waits for it
+  ("{block} is down {down} of the time (available {up}); nothing waits for it.") was
+  machine-drafted from the plain meaning of the English, with each catalog's own word for
+  availability from the example above, and `{block}`, `{down}` and `{up}` kept. Not checked
+  against any other source and not reviewed by native speakers; the least certain are lo, th, ta,
+  te, bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

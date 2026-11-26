@@ -1505,3 +1505,4 @@ connection	Flow	フロー
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	平均 90 時間ごとに故障し、修理に 4.5 時間かかる機械 1 台（Hristova、Denev、Tsankov、Environment. Technology. Resources、2024）。
 	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	稼働 90 時間、停止 4.5 時間：機械は時間の 95.2% で稼働し、94.5 時間ごとに故障が起きる。修理時間を半分にすると 97.6% に上がる。
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} は時間の {down} で停止している（稼働率 {up}）。待っているものはない。
