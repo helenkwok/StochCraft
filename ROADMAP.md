@@ -5106,8 +5106,22 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios.
 - **Bulk flow:** rates, splits by fraction, tanks and batch treatment for process industries,
   built on M4's exact level-crossing events (D12) rather than on `sd`'s fixed steps.
+  - **Example, a liquid-bulk terminal:** tanks grouped by product family (fuels, alcohols,
+    lubricants, chemicals), filled and emptied by road tankers at loading bays, by rail and by
+    ships at berths, with a dashboard of each family's volume over time and the tankers and
+    ships served. It is StochCraft's own design, since the terminals shown publicly give no
+    inputs. Exact checks: each tank's mass balance (what came in less what went out is the
+    change in its level, to the litre); the times a tank reaches full or empty at constant rates,
+    from the level-crossing events; and, with Poisson arrivals and exponential service, the
+    bays' and berths' waits from Erlang C.
 - **Explanations:** agents over MCP describe results in plain language (the bottleneck, what
   limits throughput, which inputs matter most).
+- **An assistant in the window:** a panel where the user describes a change in words ("add a
+  quality check with a rework loop after the press"). An agent proposes a plan of engine
+  commands, shows it, and applies it once the user agrees, step by step on the open model; each
+  step is one undo step and is in the journal, the same as an edit by hand. It uses the same
+  commands as the MCP server, so it is not tied to one model provider and can run against a
+  local model; nothing about the model leaves the machine unless the user chooses a remote one.
 - **A model from a sketch and a prompt:** an agent over MCP reads a layout drawn by hand and a
   description in words, and builds the model with the engine's commands (blocks, connections,
   distributions, places on the layout), so every step is in the journal and can be undone. Hsu,
@@ -5144,6 +5158,19 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
     parameters, the capacities, the routing), and its sketch is its layout, drawn from the file
     where it has none. Parameters are scored only on what the prompt states, so a model is
     never marked down for a value it was not given.
+  - **Editing tasks:** besides building a model from nothing, an agent is asked to change one,
+    scored the same way against a reference model built by hand for each task:
+    1. add a quality check and a rework loop to a line;
+    2. build a line with buffers and operators from a description;
+    3. write the logic of a decision (a DMN table, or an M6.3 logic plugin);
+    4. make a dashboard for a plant manager from a model's results;
+    5. turn a spreadsheet of stations, times and capacities into a running model;
+    6. set up order picking with forklifts.
+
+    Tasks 1 and 2 can be done with today's commands; 3 needs the DMN commands (`dmn.set`,
+    `dmn.use`) or M6.3; 4 and 5 need commands that do not exist yet (laying out a dashboard,
+    importing a table as blocks); 6 needs the transports' runtime (M5.2). Each task that cannot
+    be done is reported as such, which makes the set a list of what the MCP server lacks.
 - Not planned: parallelising a single run (optimistic Time Warp). Replications in parallel
   already use every core for the models StochCraft targets.
 
