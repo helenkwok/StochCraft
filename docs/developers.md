@@ -82,12 +82,16 @@ draw only with fonts the visitor's own system has.
 - `stochcraft-des` runs SimPy-style async processes with resources on a deterministic event
   queue.
 - `stochcraft-experiment` runs replications in parallel with reproducible random streams
-  (`stochcraft-random`), reports 95% confidence intervals (`stochcraft-stats`), and selects the
-  best of a few systems with a stated probability (`select`, below).
+  (`stochcraft-random`), reports 95% confidence intervals (`stochcraft-stats`), selects the
+  best of a few systems with a stated probability (`select`), races candidates (`race`) and
+  searches whole-number decisions (`compass`) and a continuous mean (`simplex`, Nelder–Mead), as
+  described below.
 - `stochcraft-model` is the model in memory (blocks with stable ids, connections, experiment,
-  validation), with the capacity table, line balancing and `Path`, geometry with exact lengths.
+  validation), with the capacity table, line balancing, `Path`, geometry with exact lengths, and
+  `Site`, the physical layout (see [The layout in the file](#the-layout-in-the-file)).
 - `stochcraft-blocks` compiles models of sources, servers, tasks sharing resource pools, delays,
-  conveyors, sinks, decisions, splits and joins, batches and assemblies. It handles processing
+  conveyors (with diverts at points along them and junctions between them), sinks, decisions,
+  splits and joins, batches and assemblies. It handles processing
   times by product type, finite buffers (fixed, by timetable or per working server, with a way
   out for those turned away), shifts, breakdowns and stop conditions, and reports per-element
   statistics.
@@ -98,13 +102,17 @@ draw only with fonts the visitor's own system has.
   smooths, graphical functions and random functions, by Euler or fourth-order Runge-Kutta, and
   every variable over time with bands across replications.
 - `stochcraft-agents` runs state charts with the semantics of W3C SCXML 1.0, their data in BPSim's
-  expressions and their timeouts and rates on the `des` clock (see [Agents](#agents) below).
-- `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL, and agents' state charts as
-  SCXML 1.0.
+  expressions and their timeouts and rates on the `des` clock, and populations of agents that
+  exchange messages, on networks and grids (see [Agents](#agents) below).
+- `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL (with the layout's vendor
+  extensions), and agents' state charts as SCXML 1.0.
 - `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo,
-  and a replayable journal, and adds sweeps, sensitivity analysis, designed experiments and
-  capacity sizing.
-- `stochcraft-render` generates the parametric low-poly meshes the 3D view draws.
+  and a replayable journal, and adds sweeps, sensitivity analysis, designed experiments,
+  capacity sizing, evaluations for an outside optimiser (`experiment.evaluate`) and the search
+  for the best design (`experiment.optimise`).
+- `stochcraft-render` generates the parametric low-poly meshes the 3D view draws, including the
+  pieces built for the layout (`mesh::kit`: belts swept along a path, a scanner arch, a packing
+  station, pallets, roll cages, a control cabinet, parcels).
 - `stochcraft-mcp` serves the engine's commands to AI agents over the Model Context Protocol.
 - `stochcraft-cli` runs models from the command line; the app (`apps/stochcraft`,
   `apps/stochcraft-web`, UI in `crates/ui-egui`) runs them in a window.
@@ -122,6 +130,29 @@ session by its lock file (`File::try_lock`); the browser shell (`apps/stochcraft
 `storage.rs`) by a time stamp the tab refreshes, with a few minutes' grace. A shell that reads a
 file in the background calls `App::begin_open` when it starts and hands the ticket back to
 `App::finish_open` with the bytes, which drops a stale completion.
+
+### The layout in the file
+
+The physical layout (`stochcraft_model::Site`, ROADMAP M5.5) is kept in BPSim vendor extensions,
+declared in `crates/io/schemas/stochcraft-bpsim-1.xsd` and read and written by
+`crates/io/src/layout.rs`. Distances are in the scenario's length unit, headings and angles in
+degrees.
+
+- `stochcraft:path` on a conveyor's `ElementParameters`: its track, a start (`x`, `y`, `z`,
+  `heading`) and `width`, with `line`, `arc` and `helix` segments. A conveyor with a track runs
+  for the path's length; a typed length that differs overrides it and is warned about.
+- `stochcraft:place` on a block's `ElementParameters`: a frame on the floor (`x`, `y`, `z`,
+  `heading`), or `path` and `s`, a distance along a conveyor's track. A divert placed along the
+  conveyor that sends into it is a point of that conveyor.
+- `stochcraft:junction` on the sequence flow from one conveyor to the next: `kind` (`inline`,
+  `side` or `turntable`) and a `transfer` time, both left out at their defaults (`inline`, 0).
+- `stochcraft:scene` on the scenario: look-only scenery (`object`s with an id, a kind, a frame
+  and a size).
+
+In JSON (`model.get`, `model.set`, journals and recovery copies) the same layout is the model's
+`site` (`crates/engine/src/site.rs`). Only the tracks, the places of diverts along a conveyor
+and of blocks a transport serves, and the junctions mark results out of date (`site::FIELDS`);
+other places, the scenery and a belt's width do not.
 
 [architecture.md](architecture.md) has the layers and how they depend on each other, and
 [ROADMAP.md](../ROADMAP.md) what is done and what comes next.

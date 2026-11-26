@@ -9,15 +9,16 @@ crates above it, so a change near the top touches little and a change near the b
 |---|---|---|
 | L0 | `random`, `stats` (standalone: no workspace dependencies) | Random-number generators and BPSim's distributions, statistics collectors |
 | L1 | `des`, `model` | The discrete-event core (event queue, processes, resources, timeouts); the model in memory (elements with stable ids, connections, experiment, validation) |
-| L2 | `blocks`, `mc`, `agents`, `sd` | Modelling libraries: flow blocks (source, server, delay, gateways, batches, conveyors…), Monte Carlo models (a calculation, not a process), moving agents, stock-and-flow |
+| L2 | `blocks`, `mc`, `agents`, `sd` | Modelling libraries: flow blocks (source, server, delay, gateways, batches, conveyors…), Monte Carlo models (a calculation, not a process), agents (state charts, populations, networks and grids), stock-and-flow |
 | L3 | `experiment`, `io` | Replications, parameter sweeps and optimisation; model and result files |
 | L4 | `engine` | Commands, undo and redo, the journal and runs: the one way the CLI, the app and agents change or run a model |
 | L5 | `render`, then `ui-egui` and `mcp` | Drawing, the window, and agents over MCP. The only layer allowed UI, windowing or GPU crates |
 | — | `testkit` | Test tooling; other crates may use it only as a dev-dependency |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | Exempt from the rules |
 
-Every crate in the table exists (with the three apps); `agents` so far holds state charts and
-populations of agents exchanging messages, with networks, grids and files to come (M4.3).
+Every crate in the table exists (with the three apps). `agents` holds state charts, populations
+of agents exchanging messages, and networks and grids; `io` reads and writes their SCXML charts,
+and the engine and the command line open and run them. The window does not show them yet (M4.3).
 
 ## The app on craft-libs
 
@@ -31,11 +32,16 @@ StochCraft's: its commands, its document and its look.
 ### The model view
 
 The Model tab is the flowchart canvas (`ui-egui/src/canvas.rs`) with the inspector beside it
-(`editor.rs`, `form.rs`, `pools.rs`). Both edit only through engine commands, so every change is
-one undo step and an agent can do the same. A gesture that makes several changes (paste, delete a
-selection, align) sends them as one `batch`. Shape positions are part of the model
-(`Model.layout`), read from and saved to the file's BPMN DI or XPDL graphics. The canvas keeps
-only its view (pan, zoom), the selection and the clipboard.
+(`editor.rs`, `form.rs`, `pools.rs`, and `props.rs` for the changed-from-default marks, the
+resets and the properties several selected blocks share). Both edit only through engine commands,
+so every change is one undo step and an agent can do the same. A gesture that makes several
+changes (paste, delete a selection, align, an edit to several blocks) sends them as one `batch`.
+Shape positions are part of the model (`Model.layout`), read from and saved to the file's BPMN DI
+or XPDL graphics. The canvas keeps only its view (pan, zoom), the selection and the clipboard.
+
+The physical layout is a separate part of the model (`Model.site`, `model/src/site.rs`): each
+conveyor's track, each block's place on the floor and look-only scenery. The Layout and 3D views
+(`layout_view.rs`, `view3d.rs`) draw only from it, never from the flowchart's positions.
 
 ### Watching a run
 

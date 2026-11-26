@@ -60,4 +60,6 @@ workflow links it from the pull request), so reviewers can try it.
 `target/bpsim/` (they are never committed). Without them, and without `xmllint`, the
 `stochcraft-io` reference tests skip locally with a message; CI always runs them. `cargo xtask
 fetch-scxml` likewise downloads W3C's SCXML 1.0 XML Schema into `target/scxml/`, for the test that
-every state chart written is valid SCXML.
+every state chart written is valid SCXML, and `cargo xtask fetch-miwg` fetches the reference models
+of the BPMN Model Interchange Working Group's test suite into `target/miwg/`, for the tests that
+every one of them reads and saves stably (`crates/io/tests/miwg.rs`).
