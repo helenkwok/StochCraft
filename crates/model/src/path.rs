@@ -249,6 +249,12 @@ impl Path {
                     }
                     let r = radius.abs();
                     if angle_deg.abs() <= ANGLE_EPS {
+                        // A point on a straight is an arc of no length. A wide arc that turns too
+                        // little to tell from none but travels is a straight of its length.
+                        if seg.length() > LENGTH_EPS {
+                            frame = seg.frame_at(frame, 1.0);
+                            continue;
+                        }
                         let at = [frame.x, frame.y];
                         if points.last() != Some(&at) {
                             points.push(at);
@@ -257,10 +263,16 @@ impl Path {
                         }
                         continue;
                     }
-                    let n = pieces(angle_deg);
+                    // A sharp turn of less than a half turn is one corner, so that removing its
+                    // point removes the turn; a rounded one is split to stay near the path.
+                    let sharp = r == 0.0;
+                    let n = if sharp && angle_deg.abs() < SHARPEST {
+                        1
+                    } else {
+                        pieces(angle_deg)
+                    };
                     let step = angle_deg / f64::from(n);
                     let t = r * tan((step.abs() / 2.0).to_radians());
-                    let sharp = t == 0.0;
                     if sharp && points.len() == 1 && points[0] == [frame.x, frame.y] {
                         return None;
                     }
@@ -300,6 +312,9 @@ impl Path {
 
 /// Angles closer than this, in degrees, are taken as equal (no turn).
 const ANGLE_EPS: f64 = 1e-9;
+/// The sharpest turn, in degrees, one corner of an [`Outline`] makes: short of a half turn,
+/// which would leave the way back undecided.
+const SHARPEST: f64 = 180.0 - 1e-6;
 /// Distances shorter than this, relative to the larger of 1 and the distances compared, are
 /// taken as none.
 const LENGTH_EPS: f64 = 1e-9;
@@ -498,7 +513,7 @@ impl Outline {
             let turn = half_turn(headings[i] - headings[i - 1]);
             turns[i] = turn;
             let r = self.bends.get(i - 1).copied().unwrap_or(0.0).max(0.0);
-            if turn.abs() > ANGLE_EPS && turn.abs() < 180.0 - 1e-6 && r.is_finite() {
+            if turn.abs() > ANGLE_EPS && turn.abs() < SHARPEST && r.is_finite() {
                 reach[i] = r * tan((turn.abs() / 2.0).to_radians());
             }
         }
@@ -1091,6 +1106,31 @@ mod tests {
         let back = round.outline().unwrap().to_path();
         at(back.end(), 4.0, 1.0, 0.0, 90.0);
         same_path(&round, &back);
+    }
+
+    #[test]
+    fn a_sharp_turn_inside_is_one_point_and_a_shallow_wide_arc_has_no_outline() {
+        // A sharp 135 degree corner is one point: removing it takes the turn away.
+        let sharp = Path::new(
+            Frame::default(),
+            vec![line(3.0), arc(0.0, 135.0), line(2.0)],
+        );
+        let o = sharp.outline().unwrap();
+        assert_eq!(o.points.len(), 3, "{:?}", o.points);
+        same_path(&sharp, &o.to_path());
+        let less = o.removed(1).unwrap().to_path();
+        assert_eq!(less.outline().unwrap().points.len(), 2);
+        // An arc 8.7 m long that turns too little to tell from none is a straight of its
+        // length, not a point that would come back with no length.
+        let shallow = Path::new(Frame::default(), vec![line(1.0), arc(1.0e12, 5.0e-10)]);
+        let long = 1.0 + 1.0e12 * (5.0e-10_f64).to_radians();
+        near(shallow.length(), long, 1e-6);
+        let o = shallow.outline().unwrap();
+        assert_eq!(o.points.len(), 2, "{:?}", o.points);
+        near(o.to_path().length(), long, 1e-6);
+        // A point on a straight, an arc of no angle, still is one.
+        let marked = Path::new(Frame::default(), vec![line(1.0), arc(3.0, 0.0), line(1.0)]);
+        assert_eq!(marked.outline().unwrap().points.len(), 3);
     }
 
     #[test]
