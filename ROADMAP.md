@@ -4825,6 +4825,21 @@ are.
     Currie, Onggo, Robinson, Kunc and Taylor, *Strengthening the reporting of empirical
     simulation studies: Introducing the STRESS guidelines*, Journal of Simulation 13(1):55–67,
     2019, doi 10.1080/17477778.2018.1442155.
+- **Designed as teaching material:** the examples, the guided first model and the Help panel
+  follow the ADDIE steps (analysis, design, development, implementation, evaluation) as
+  Ritzhaupt and Covello's open textbook *ADDIE Explained* (CC BY 4.0) sets them out:
+  - **Analysis:** who learns from them (newcomers to simulation, people moving from another
+    simulation tool, programmers who know a simulation library) and what each must be able to
+    do afterwards.
+  - **Design:** each example's "Teaches:" line becomes a learning goal stating what the learner
+    can do, under which conditions and how well, with its verb chosen by level in Bloom's
+    taxonomy (to explain why a clerk busy three quarters of the time already means a queue is
+    understanding; to size the servers for a target wait is applying).
+  - **Development:** a short check at the end of each example, a question whose answer the
+    run shows, aligned with its goal.
+  - **Evaluation:** formative, by trying each example and the first model with a few learners
+    from each group before release; summative, by whether learners answer the checks, which
+    the app could count locally if a learner chooses to share it.
 - **Candidates from the common textbooks** (Banks et al., Law, Robinson) join only once their
   parameters are taken from the books themselves.
 - **Examples:** six more on the start page, each a file in `tests/models/` whose answer
