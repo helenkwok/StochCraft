@@ -1508,6 +1508,7 @@ connection	Flow	Alur
 	Drawn length: {length} {unit}	Panjang tergambar: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Lintasan ini menanjak atau memiliki heliks: titik-titiknya tidak dapat diedit di sini.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Lintasan ini berbelok satu lingkaran penuh atau lebih dalam satu busur: titik-titiknya tidak dapat diedit di sini.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Lintasan ini berbelok tajam di awal atau di akhirnya: titik-titiknya tidak dapat diedit di sini.
 	Point {n}	Titik {n}
 	x of point {n}	x titik {n}
 	y of point {n}	y titik {n}

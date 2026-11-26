@@ -1508,6 +1508,7 @@ connection	Flow	Rrjedhë
 	Drawn length: {length} {unit}	Gjatësia e vizatuar: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ky shteg ngjitet ose ka një spirale: pikat e tij nuk mund të ndryshohen këtu.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ky shteg kthehet një rreth të plotë ose më shumë në një hark: pikat e tij nuk mund të ndryshohen këtu.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ky shteg kthehet befas aty ku nis ose ku mbaron: pikat e tij nuk mund të ndryshohen këtu.
 	Point {n}	Pika {n}
 	x of point {n}	x i pikës {n}
 	y of point {n}	y i pikës {n}

@@ -1508,6 +1508,7 @@ connection	Flow	Потік
 	Drawn length: {length} {unit}	Намальована довжина: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ця траса піднімається або має спіраль: її точки тут не редагуються.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ця траса робить повне коло або більше в одній дузі: її точки тут не редагуються.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ця траса різко повертає на початку або в кінці: її точки тут не редагуються.
 	Point {n}	Точка {n}
 	x of point {n}	x точки {n}
 	y of point {n}	y точки {n}

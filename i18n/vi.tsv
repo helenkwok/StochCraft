@@ -1508,6 +1508,7 @@ connection	Flow	Luồng
 	Drawn length: {length} {unit}	Chiều dài đã vẽ: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Đường đi này đi lên hoặc có đường xoắn: không thể sửa các điểm của nó ở đây.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Đường đi này quay trọn một vòng hoặc hơn trong một cung: không thể sửa các điểm của nó ở đây.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Đường đi này rẽ gấp ở điểm đầu hoặc điểm cuối: không thể sửa các điểm của nó ở đây.
 	Point {n}	Điểm {n}
 	x of point {n}	x của điểm {n}
 	y of point {n}	y của điểm {n}

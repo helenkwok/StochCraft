@@ -1508,6 +1508,7 @@ connection	Flow	Srautas
 	Drawn length: {length} {unit}	Nubraižytas ilgis: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ši trasa kyla arba turi spiralę: jos taškų čia redaguoti negalima.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ši trasa viename lanke apsisuka visą ratą ar daugiau: jos taškų čia redaguoti negalima.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ši trasa staigiai pasuka savo pradžioje arba pabaigoje: jos taškų čia redaguoti negalima.
 	Point {n}	Taškas {n}
 	x of point {n}	taško {n} x
 	y of point {n}	taško {n} y

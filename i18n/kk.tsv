@@ -1508,6 +1508,7 @@ connection	Flow	Ағын
 	Drawn length: {length} {unit}	Сызылған ұзындық: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Бұл жол көтеріледі немесе спиралі бар: оның нүктелерін мұнда өңдеу мүмкін емес.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Бұл жол бір доғада толық шеңбер немесе одан көп бұрылады: оның нүктелерін мұнда өңдеу мүмкін емес.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Бұл жол басында немесе соңында күрт бұрылады: оның нүктелерін мұнда өңдеу мүмкін емес.
 	Point {n}	Нүкте {n}
 	x of point {n}	{n} нүктенің x
 	y of point {n}	{n} нүктенің y

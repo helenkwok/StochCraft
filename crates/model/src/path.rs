@@ -216,13 +216,17 @@ impl Path {
     /// The path as a plan editor shows it ([`Outline`]): the points it turns at, each corner
     /// with the radius of its bend. `None` for a path that climbs, has a helix, or turns through
     /// a whole circle or more in one arc: its points cannot be moved on a plan without losing
-    /// that. Each arc becomes one corner, or for one of more than 90 degrees, several of equal
+    /// that. Also `None` for one that turns sharply (an arc of radius 0) where it starts or ends:
+    /// an outline's ends take their headings from the straights next to them, so that turn would
+    /// be lost. Each arc becomes one corner, or for one of more than 90 degrees, several of equal
     /// angle, so the corner points stay near the path. An arc of no angle is a point on a
     /// straight, with its bend kept for when the point is moved ([`Outline::to_path`]).
     pub fn outline(&self) -> Option<Outline> {
         let mut points = vec![[self.start.x, self.start.y]];
         let mut bends = Vec::new();
         let mut frame = self.start;
+        // Whether the last point put in is a sharp turn's corner, which is where the turn is.
+        let mut last_sharp = false;
         for seg in &self.segments {
             match *seg {
                 Segment::Line { length, rise } => {
@@ -249,38 +253,39 @@ impl Path {
                         if points.last() != Some(&at) {
                             points.push(at);
                             bends.push(r);
+                            last_sharp = false;
                         }
                         continue;
                     }
-                    let pieces: u8 = if angle_deg.abs() <= 90.0 {
-                        1
-                    } else if angle_deg.abs() <= 180.0 {
-                        2
-                    } else if angle_deg.abs() <= 270.0 {
-                        3
-                    } else {
-                        4
-                    };
-                    let step = angle_deg / f64::from(pieces);
+                    let n = pieces(angle_deg);
+                    let step = angle_deg / f64::from(n);
                     let t = r * tan((step.abs() / 2.0).to_radians());
+                    let sharp = t == 0.0;
+                    if sharp && points.len() == 1 && points[0] == [frame.x, frame.y] {
+                        return None;
+                    }
                     let piece = Segment::Arc {
                         radius: r,
                         angle_deg: step,
                         rise: 0.0,
                     };
-                    for _ in 0..pieces {
+                    for _ in 0..n {
                         let h = frame.heading_deg.to_radians();
                         points.push([frame.x + t * cos(h), frame.y + t * sin(h)]);
                         bends.push(r);
+                        last_sharp = sharp;
                         frame = piece.frame_at(frame, 1.0);
                     }
                 }
                 Segment::Helix { .. } => return None,
             }
         }
-        // A corner where the path ends (a sharp one, or a point of no turn) is its end.
+        // A point of no turn where the path ends is its end; a sharp turn there has no outline.
         let end = [frame.x, frame.y];
         if points.len() > 1 && points.last() == Some(&end) {
+            if last_sharp {
+                return None;
+            }
             points.pop();
             bends.pop();
         }
@@ -302,8 +307,32 @@ const LENGTH_EPS: f64 = 1e-9;
 /// Whether an arc turning `angle_deg` has an [`Outline`]: less than a whole circle, so its
 /// corner points do not come round on themselves. [`Outline::to_path`] joins bends only while
 /// the arc they make stays so.
-fn within_a_circle(angle_deg: f64) -> bool {
+pub fn within_a_circle(angle_deg: f64) -> bool {
     angle_deg.abs() < 360.0 - ANGLE_EPS
+}
+
+/// The number of corners of equal turn an arc turning `angle_deg` is on a plan
+/// ([`Path::outline`]): one up to a quarter turn, and one more for each quarter turn beyond.
+fn pieces(angle_deg: f64) -> u8 {
+    let a = angle_deg.abs() - ANGLE_EPS;
+    if a <= 90.0 {
+        1
+    } else if a <= 180.0 {
+        2
+    } else if a <= 270.0 {
+        3
+    } else {
+        4
+    }
+}
+
+/// Whether corners that turn `angle_deg` in all, then one more that turns `turn`, `n` in all,
+/// come back as the same corners once they are one arc: [`Path::outline`] makes an arc
+/// [`pieces`] corners of equal turn, so they must be that many and each turn the same.
+fn joins_evenly(angle_deg: f64, turn: f64, n: usize) -> bool {
+    let total = angle_deg + turn;
+    let p = pieces(total);
+    usize::from(p) == n && (turn - total / f64::from(p)).abs() <= ANGLE_EPS
 }
 
 /// `a` in degrees brought into (−180, 180].
@@ -490,14 +519,17 @@ impl Outline {
     }
 
     /// The path: a line along each straight, shortened by the bends at its ends, and an arc at
-    /// each corner. Arcs of one radius that turn the same way with no line between are one arc,
-    /// while it stays less than a whole circle. A corner of no turn (a point on a straight) is an
-    /// arc of no angle, so the point and its bend are kept.
+    /// each corner. Arcs of one radius that turn the same way with no line between are one arc
+    /// when its outline has the same corners (as two quarter bends make a half circle) and it
+    /// stays less than a whole circle. A corner of no turn (a point on a straight) is an arc of no
+    /// angle, so the point and its bend are kept.
     pub fn to_path(&self) -> Path {
         let start = self.points.first().copied().unwrap_or([0.0, 0.0]);
         let (lengths, headings, turns, reach) = self.layout();
         let heading = headings.first().copied().unwrap_or(0.0);
         let mut segments: Vec<Segment> = Vec::new();
+        // The corners joined into the last segment, when it is an arc.
+        let mut joined = 0_usize;
         let fitted = self.fitted_bends();
         for (i, len) in lengths.iter().enumerate() {
             let line = len - reach[i] - reach[i + 1];
@@ -522,15 +554,20 @@ impl Outline {
                         && *angle_deg != 0.0
                         && same(*r)
                         && (*angle_deg > 0.0) == (turn > 0.0)
-                        && within_a_circle(*angle_deg + turn) =>
+                        && within_a_circle(*angle_deg + turn)
+                        && joins_evenly(*angle_deg, turn, joined + 1) =>
                     {
                         *angle_deg += turn;
+                        joined += 1;
                     }
-                    _ => segments.push(Segment::Arc {
-                        radius,
-                        angle_deg: turn,
-                        rise: 0.0,
-                    }),
+                    _ => {
+                        segments.push(Segment::Arc {
+                            radius,
+                            angle_deg: turn,
+                            rise: 0.0,
+                        });
+                        joined = 1;
+                    }
                 }
             }
         }
@@ -1026,5 +1063,71 @@ mod tests {
         }
         assert_eq!(o.bends, vec![0.0]);
         same_path(&sharp, &o.to_path());
+    }
+
+    #[test]
+    fn a_sharp_turn_at_either_end_has_no_outline() {
+        // 3 m east, then a sharp quarter turn left where it ends: it ends facing north, which an
+        // outline (its last straight east) cannot say.
+        let end = Path::new(Frame::default(), vec![line(3.0), arc(0.0, 90.0)]);
+        at(end.point_at(end.length()), 3.0, 0.0, 0.0, 90.0);
+        assert!(end.outline().is_none());
+        assert!(
+            Path::new(Frame::default(), vec![line(3.0), arc(0.0, 180.0)])
+                .outline()
+                .is_none()
+        );
+        // Likewise a sharp turn where it starts, before its first straight.
+        assert!(
+            Path::new(Frame::default(), vec![arc(0.0, 90.0), line(3.0)])
+                .outline()
+                .is_none()
+        );
+        // A sharp corner between two straights, and a round bend where the path ends, still
+        // have outlines that come back the same.
+        let inside = Path::new(Frame::default(), vec![line(3.0), arc(0.0, 90.0), line(2.0)]);
+        same_path(&inside, &inside.outline().unwrap().to_path());
+        let round = Path::new(Frame::default(), vec![line(3.0), arc(1.0, 90.0)]);
+        let back = round.outline().unwrap().to_path();
+        at(back.end(), 4.0, 1.0, 0.0, 90.0);
+        same_path(&round, &back);
+    }
+
+    #[test]
+    fn tangent_bends_join_only_when_their_outline_keeps_the_corners() {
+        // A 45 degree bend and a 90 degree one of 1 m with no straight between: as one arc of
+        // 135 degrees, the outline would be two corners of 67.5, both moved.
+        let r = 1.0;
+        let first = r * tan((22.5_f64).to_radians());
+        let p1 = [3.0, 0.0];
+        let between = first + r;
+        let d = 45.0_f64.to_radians();
+        let p2 = [p1[0] + between * cos(d), p1[1] + between * sin(d)];
+        let d = 135.0_f64.to_radians();
+        let p3 = [p2[0] + 2.0 * cos(d), p2[1] + 2.0 * sin(d)];
+        let o = Outline {
+            z: 0.0,
+            points: vec![[0.0, 0.0], p1, p2, p3],
+            bends: vec![r, r],
+        };
+        let p = o.to_path();
+        let turns: Vec<f64> = p
+            .segments
+            .iter()
+            .filter_map(|s| match *s {
+                Segment::Arc { angle_deg, .. } => Some(angle_deg),
+                _ => None,
+            })
+            .collect();
+        assert_eq!(turns.len(), 2, "{:?}", p.segments);
+        near(turns[0], 45.0, 1e-9);
+        near(turns[1], 90.0, 1e-9);
+        let back = p.outline().unwrap();
+        assert_eq!(back.points.len(), o.points.len());
+        for (q, w) in back.points.iter().zip(&o.points) {
+            near(q[0], w[0], 1e-9);
+            near(q[1], w[1], 1e-9);
+        }
+        same_path(&p, &back.to_path());
     }
 }

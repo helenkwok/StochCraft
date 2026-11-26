@@ -1508,6 +1508,7 @@ connection	Flow	প্রবাহ
 	Drawn length: {length} {unit}	আঁকা দৈর্ঘ্য: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	এই পথ ওপরে ওঠে বা এতে হেলিক্স আছে: এর বিন্দু এখানে সম্পাদনা করা যায় না।
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	এই পথ একটি বাঁকে পুরো এক বৃত্ত বা তার বেশি ঘোরে: এর বিন্দু এখানে সম্পাদনা করা যায় না।
+	This path turns sharply where it starts or ends: its points cannot be edited here.	এই পথ শুরুতে বা শেষে তীক্ষ্ণভাবে বাঁক নেয়: এর বিন্দু এখানে সম্পাদনা করা যায় না।
 	Point {n}	বিন্দু {n}
 	x of point {n}	বিন্দু {n}-এর x
 	y of point {n}	বিন্দু {n}-এর y

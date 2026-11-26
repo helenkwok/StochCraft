@@ -1508,6 +1508,7 @@ connection	Flow	Tok
 	Drawn length: {length} {unit}	Nacrtana duljina: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Ova se putanja penje ili ima spiralu: njezine se točke ovdje ne mogu uređivati.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ova se putanja u jednom luku okreće za cijeli krug ili više: njezine se točke ovdje ne mogu uređivati.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ova putanja oštro skreće na početku ili na kraju: njezine se točke ovdje ne mogu uređivati.
 	Point {n}	Točka {n}
 	x of point {n}	x točke {n}
 	y of point {n}	y točke {n}

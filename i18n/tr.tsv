@@ -1508,6 +1508,7 @@ connection	Flow	Akış
 	Drawn length: {length} {unit}	Çizilen uzunluk: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Bu yol yükseliyor veya sarmal içeriyor: noktaları burada düzenlenemez.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Bu yol tek bir yayda tam bir daire veya daha fazla dönüyor: noktaları burada düzenlenemez.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Bu yol başladığı ya da bittiği yerde keskin dönüyor: noktaları burada düzenlenemez.
 	Point {n}	Nokta {n}
 	x of point {n}	{n}. noktanın x'i
 	y of point {n}	{n}. noktanın y'si

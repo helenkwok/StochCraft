@@ -1508,6 +1508,7 @@ connection	Flow	Ροή
 	Drawn length: {length} {unit}	Σχεδιασμένο μήκος: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Αυτή η διαδρομή ανεβαίνει ή έχει έλικα: τα σημεία της δεν επεξεργάζονται εδώ.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Αυτή η διαδρομή κάνει έναν πλήρη κύκλο ή περισσότερο σε ένα τόξο: τα σημεία της δεν επεξεργάζονται εδώ.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Αυτή η διαδρομή στρίβει απότομα στην αρχή ή στο τέλος της: τα σημεία της δεν επεξεργάζονται εδώ.
 	Point {n}	Σημείο {n}
 	x of point {n}	x του σημείου {n}
 	y of point {n}	y του σημείου {n}

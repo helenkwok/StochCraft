@@ -1508,6 +1508,7 @@ connection	Flow	顺序流
 	Drawn length: {length} {unit}	绘制长度：{length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	此路径会爬升或含有螺旋：无法在此编辑其点。
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	此路径在一段圆弧中转了一整圈或更多：无法在此编辑其点。
+	This path turns sharply where it starts or ends: its points cannot be edited here.	此路径在起点或终点急转：无法在此编辑其点。
 	Point {n}	点 {n}
 	x of point {n}	点 {n} 的 x
 	y of point {n}	点 {n} 的 y

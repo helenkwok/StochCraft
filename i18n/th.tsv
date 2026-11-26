@@ -1508,6 +1508,7 @@ connection	Flow	โฟลว์
 	Drawn length: {length} {unit}	ความยาวที่วาด: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	เส้นทางนี้ไต่ขึ้นหรือมีเกลียว: แก้ไขจุดของเส้นทางนี้ที่นี่ไม่ได้
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	เส้นทางนี้เลี้ยวครบวงหรือมากกว่าในส่วนโค้งเดียว: แก้ไขจุดของเส้นทางนี้ที่นี่ไม่ได้
+	This path turns sharply where it starts or ends: its points cannot be edited here.	เส้นทางนี้เลี้ยวหักมุมที่จุดเริ่มต้นหรือจุดสิ้นสุด: แก้ไขจุดของเส้นทางนี้ที่นี่ไม่ได้
 	Point {n}	จุด {n}
 	x of point {n}	x ของจุด {n}
 	y of point {n}	y ของจุด {n}

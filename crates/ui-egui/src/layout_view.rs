@@ -1247,16 +1247,25 @@ impl App {
             &[("length", &shown), ("unit", &unit_label)],
         ));
         let Some(outline) = path.outline() else {
-            // Flat and still without an outline, it turns a whole circle or more in one arc.
+            // Flat and still without an outline, it turns a whole circle or more in one arc, or
+            // turns sharply where it starts or ends.
             let climbs = path.segments.iter().any(|s| match *s {
                 Segment::Line { rise, .. } | Segment::Arc { rise, .. } => rise != 0.0,
                 Segment::Helix { .. } => true,
             });
+            let circles = path.segments.iter().any(|s| {
+                matches!(*s, Segment::Arc { angle_deg, .. }
+                    if !stochcraft_model::path::within_a_circle(angle_deg))
+            });
             let why = if climbs {
                 t("This path climbs or has a helix: its points cannot be edited here.")
-            } else {
+            } else if circles {
                 t(
                     "This path turns a whole circle or more in one arc: its points cannot be edited here.",
+                )
+            } else {
+                t(
+                    "This path turns sharply where it starts or ends: its points cannot be edited here.",
                 )
             };
             ui.label(theme::weak(ui, why));

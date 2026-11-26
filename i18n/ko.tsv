@@ -1508,6 +1508,7 @@ connection	Flow	흐름
 	Drawn length: {length} {unit}	그린 길이: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	이 경로는 오르막이거나 나선이 있어 여기서 점을 편집할 수 없습니다.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	이 경로는 한 호에서 한 바퀴 이상 돌기 때문에 여기서 점을 편집할 수 없습니다.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	이 경로는 시작점이나 끝점에서 급하게 꺾이기 때문에 여기서 점을 편집할 수 없습니다.
 	Point {n}	점 {n}
 	x of point {n}	점 {n}의 x
 	y of point {n}	점 {n}의 y

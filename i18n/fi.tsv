@@ -1508,6 +1508,7 @@ connection	Flow	Virta
 	Drawn length: {length} {unit}	Piirretty pituus: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Tämä reitti nousee tai siinä on kierre: sen pisteitä ei voi muokata tässä.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Tämä reitti kääntyy yhdessä kaaressa kokonaisen ympyrän tai enemmän: sen pisteitä ei voi muokata tässä.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Tämä reitti kääntyy jyrkästi alussa tai lopussa: sen pisteitä ei voi muokata tässä.
 	Point {n}	Piste {n}
 	x of point {n}	pisteen {n} x
 	y of point {n}	pisteen {n} y

@@ -1508,6 +1508,7 @@ connection	Flow	ნაკადი
 	Drawn length: {length} {unit}	დახატული სიგრძე: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	ეს ბილიკი ადის ან აქვს სპირალი: მისი წერტილების რედაქტირება აქ შეუძლებელია.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	ეს ბილიკი ერთ რკალში სრულ წრეს ან მეტს უხვევს: მისი წერტილების რედაქტირება აქ შეუძლებელია.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	ეს ბილიკი მკვეთრად უხვევს დასაწყისში ან ბოლოში: მისი წერტილების რედაქტირება აქ შეუძლებელია.
 	Point {n}	წერტილი {n}
 	x of point {n}	წერტილი {n}-ის x
 	y of point {n}	წერტილი {n}-ის y

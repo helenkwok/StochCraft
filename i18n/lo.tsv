@@ -1508,6 +1508,7 @@ connection	Flow	ເສັ້ນທາງ
 	Drawn length: {length} {unit}	ຄວາມຍາວທີ່ແຕ້ມ: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	ເສັ້ນທາງນີ້ຂຶ້ນສູງ ຫຼື ມີກ້ຽວ: ບໍ່ສາມາດແກ້ໄຂຈຸດຂອງມັນຢູ່ນີ້.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	ເສັ້ນທາງນີ້ລ້ຽວຄົບວົງ ຫຼື ຫຼາຍກວ່າໃນໂຄ້ງດຽວ: ບໍ່ສາມາດແກ້ໄຂຈຸດຂອງມັນຢູ່ນີ້.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	ເສັ້ນທາງນີ້ລ້ຽວກະທັນຫັນຢູ່ຈຸດເລີ່ມ ຫຼື ຈຸດສິ້ນສຸດ: ບໍ່ສາມາດແກ້ໄຂຈຸດຂອງມັນຢູ່ນີ້.
 	Point {n}	ຈຸດ {n}
 	x of point {n}	x ຂອງຈຸດ {n}
 	y of point {n}	y ຂອງຈຸດ {n}

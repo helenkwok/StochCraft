@@ -1508,6 +1508,7 @@ connection	Flow	Voog
 	Drawn length: {length} {unit}	Joonistatud pikkus: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	See teekond tõuseb või sellel on spiraal: selle punkte ei saa siin muuta.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	See teekond pöörab ühes kaares terve ringi või rohkem: selle punkte ei saa siin muuta.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	See teekond pöörab järsult oma alguses või lõpus: selle punkte ei saa siin muuta.
 	Point {n}	Punkt {n}
 	x of point {n}	punkti {n} x
 	y of point {n}	punkti {n} y

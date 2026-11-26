@@ -1508,6 +1508,7 @@ connection	Flow	Flow
 	Drawn length: {length} {unit}	Tegnet længde: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Denne bane stiger eller har en spiral: dens punkter kan ikke redigeres her.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Denne bane drejer en hel cirkel eller mere i én bue: dens punkter kan ikke redigeres her.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Denne bane drejer skarpt, hvor den begynder eller slutter: dens punkter kan ikke redigeres her.
 	Point {n}	Punkt {n}
 	x of point {n}	x for punkt {n}
 	y of point {n}	y for punkt {n}

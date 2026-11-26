@@ -1508,6 +1508,7 @@ connection	Flow	フロー
 	Drawn length: {length} {unit}	描いた長さ: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	この経路は上昇するかヘリックスを含むため、ここでは点を編集できません。
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	この経路は1つの円弧で1周以上回るため、ここでは点を編集できません。
+	This path turns sharply where it starts or ends: its points cannot be edited here.	この経路は始点か終点で鋭く曲がるため、ここでは点を編集できません。
 	Point {n}	点 {n}
 	x of point {n}	点 {n} の x
 	y of point {n}	点 {n} の y

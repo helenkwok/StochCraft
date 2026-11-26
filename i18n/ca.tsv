@@ -1508,6 +1508,7 @@ connection	Flow	Flux
 	Drawn length: {length} {unit}	Longitud dibuixada: {length} {unit}
 	This path climbs or has a helix: its points cannot be edited here.	Aquest recorregut puja o té una hèlix: els seus punts no es poden editar aquí.
 	This path turns a whole circle or more in one arc: its points cannot be edited here.	Aquest recorregut fa un cercle sencer o més en un sol arc: els seus punts no es poden editar aquí.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Aquest recorregut gira bruscament on comença o on acaba: els seus punts no es poden editar aquí.
 	Point {n}	Punt {n}
 	x of point {n}	x del punt {n}
 	y of point {n}	y del punt {n}
