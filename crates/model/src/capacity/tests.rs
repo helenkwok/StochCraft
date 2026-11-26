@@ -1523,7 +1523,6 @@ fn a_pool_serves_whole_jobs_only() {
         }
     );
     // One job of one unit each: unchanged, 3 at a time.
-    let mut m = m;
     if let ElementKind::SharedTask { needs, .. } = &mut m.elements[1].kind {
         for r in needs.iter_mut() {
             if let Some(Need::Resource { quantity, .. }) = r.alternatives.first_mut() {
