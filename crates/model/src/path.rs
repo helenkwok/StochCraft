@@ -1109,7 +1109,7 @@ mod tests {
     }
 
     #[test]
-    fn a_sharp_turn_inside_is_one_point_and_a_shallow_wide_arc_has_no_outline() {
+    fn a_sharp_turn_inside_is_one_point_and_a_shallow_wide_arc_a_straight() {
         // A sharp 135 degree corner is one point: removing it takes the turn away.
         let sharp = Path::new(
             Frame::default(),
