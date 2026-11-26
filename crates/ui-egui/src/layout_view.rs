@@ -329,8 +329,10 @@ pub(crate) struct LayoutView {
     view: Option<Vw>,
     /// A path being drawn.
     drawing: Option<Drawing>,
-    /// The point picked on the selected conveyor's path: the conveyor and the point's index.
-    point: Option<(String, usize)>,
+    /// The point picked on the selected conveyor's path: the conveyor, the point's index, and
+    /// the model's revision it is of. The view's own edits keep it; any other change of the model
+    /// (an agent's `track.set`, an undo) lets it go, as the index may be of another point by then.
+    point: Option<(String, usize, u64)>,
     /// A drag under way on the plan.
     drag: Option<Drag>,
 }
@@ -620,10 +622,11 @@ impl App {
                 .element(&ElementId::unchecked(&d.conveyor))
                 .is_some_and(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
         });
-        let mut point = self.layout_view.point.take().filter(|(c, i)| {
-            chosen.as_ref().is_some_and(|ch| {
-                &ch.id == c && ch.outline.as_ref().is_some_and(|o| *i < o.points.len())
-            })
+        let mut point = self.layout_view.point.take().filter(|(c, i, r)| {
+            *r == revision
+                && chosen.as_ref().is_some_and(|ch| {
+                    &ch.id == c && ch.outline.as_ref().is_some_and(|o| *i < o.points.len())
+                })
         });
         let mut drag = self.layout_view.drag.take().filter(|d| match d {
             Drag::Pan => true,
@@ -785,7 +788,7 @@ impl App {
                 );
                 r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, &label));
                 if r.clicked() || r.drag_started() || r.gained_focus() {
-                    point = Some((ch.id.clone(), i));
+                    point = Some((ch.id.clone(), i, revision));
                 }
                 if r.clicked() {
                     r.request_focus();
@@ -807,12 +810,14 @@ impl App {
                 {
                     *to = to_model(&vw, at);
                 }
+                // Where this frame leaves the point, committed once: let go of, it is where it
+                // was let go, and an arrow key pressed in the same frame moves it on from there.
+                let mut moved: Option<[f64; 2]> = None;
                 if r.drag_stopped() {
                     if let Some(Drag::Point { index, to, .. }) = drag
                         && index == i
-                        && to != *q
                     {
-                        commits.push((ch.id.clone(), outline.moved(i, to).to_path()));
+                        moved = Some(to);
                     }
                     drag = None;
                 }
@@ -838,11 +843,21 @@ impl App {
                         by
                     });
                     if by != [0.0, 0.0] {
-                        let to = [to_step(q[0] + by[0], unit), to_step(q[1] + by[1], unit)];
-                        commits.push((ch.id.clone(), outline.moved(i, to).to_path()));
+                        let from = moved.unwrap_or(*q);
+                        moved = Some([
+                            to_step(from[0] + by[0], unit),
+                            to_step(from[1] + by[1], unit),
+                        ]);
                     }
                 }
-                let picked = point.as_ref().is_some_and(|(c, j)| c == &ch.id && *j == i);
+                if let Some(to) = moved
+                    && to != *q
+                {
+                    commits.push((ch.id.clone(), outline.moved(i, to).to_path()));
+                }
+                let picked = point
+                    .as_ref()
+                    .is_some_and(|(c, j, _)| c == &ch.id && *j == i);
                 handles.push((pos, picked, r.has_focus()));
             }
         }
@@ -920,7 +935,7 @@ impl App {
                             ch.id.clone(),
                             outline.inserted(i, on, default_bend(unit)).to_path(),
                         ));
-                        point = Some((ch.id.clone(), i));
+                        point = Some((ch.id.clone(), i, revision));
                     }
                 }
             } else {
@@ -953,7 +968,7 @@ impl App {
                 if key(ui, Key::Escape) {
                     drag = None;
                 }
-            } else if let Some((c, i)) = point.clone() {
+            } else if let Some((c, i, _)) = point.clone() {
                 if key(ui, Key::Delete) || key(ui, Key::Backspace) {
                     match chosen.as_ref().and_then(|ch| ch.outline.as_ref()) {
                         Some(o) => match o.removed(i) {
@@ -1189,6 +1204,11 @@ impl App {
         }
         for (id, path) in commits {
             self.set_path(&id, &path);
+        }
+        // The view's own edits keep the picked point (a nudge, a point put in): it is of the
+        // model they leave.
+        if let Some((_, _, r)) = &mut self.layout_view.point {
+            *r = self.engine.revision();
         }
         if too_few {
             self.info(t("A path needs at least two points."));

@@ -315,3 +315,140 @@ fn removing_a_path_drops_a_coordinate_typed_and_not_entered() {
     settle(&mut h);
     assert_eq!(points(&h, "lane_red"), None);
 }
+
+/// Sets conveyor `id`'s track from `start` (x, y, heading) through `segments`, as an agent would.
+fn set_track(
+    h: &mut Harness<'static, App>,
+    id: &str,
+    start: [f64; 3],
+    segments: serde_json::Value,
+) {
+    h.state_mut()
+        .control(
+            "track.set",
+            serde_json::json!({ "id": id, "track": {
+                "start": { "x": start[0], "y": start[1], "heading": start[2] },
+                "segments": segments
+            } }),
+        )
+        .expect("track.set");
+    settle(h);
+}
+
+fn near_points(got: &[[f64; 2]], want: &[[f64; 2]]) {
+    assert_eq!(got.len(), want.len(), "{got:?}");
+    for (g, w) in got.iter().zip(want) {
+        assert!(
+            (g[0] - w[0]).abs() < 1e-6 && (g[1] - w[1]).abs() < 1e-6,
+            "{got:?}"
+        );
+    }
+}
+
+#[test]
+fn a_picked_point_is_let_go_when_the_track_changes_under_it() {
+    let mut h = sorter();
+    on_layout(&mut h, "lane_red");
+    // North 2 m, a sharp right turn, east 3 m: (0, 0), (0, 2), (3, 2).
+    set_track(
+        &mut h,
+        "lane_red",
+        [0.0, 0.0, 90.0],
+        serde_json::json!([
+            { "type": "line", "length": 2.0 },
+            { "type": "arc", "radius": 0.0, "angle": -90.0 },
+            { "type": "line", "length": 3.0 }
+        ]),
+    );
+    h.get_by_role_and_label(Role::Button, "Fit").click();
+    settle(&mut h);
+    // Picked, moved by the keys, and taken away: the view's own edit keeps the point picked.
+    h.get_by_label_contains("Point 2 of Lane red").click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::SHIFT, egui::Key::ArrowRight);
+    settle(&mut h);
+    near_points(
+        &points(&h, "lane_red").expect("a track"),
+        &[[0.0, 0.0], [1.0, 2.0], [3.0, 2.0]],
+    );
+    h.key_press(egui::Key::Delete);
+    settle(&mut h);
+    near_points(
+        &points(&h, "lane_red").expect("a track"),
+        &[[0.0, 0.0], [3.0, 2.0]],
+    );
+    h.state_mut().undo();
+    settle(&mut h);
+    // Picked again, then an agent draws the lane anew: the second point is another one now, so
+    // Delete takes nothing away.
+    h.get_by_label_contains("Point 2 of Lane red").click();
+    settle(&mut h);
+    let anew = [[0.0, 0.0], [3.0, 0.0], [3.0, 2.0]];
+    set_track(
+        &mut h,
+        "lane_red",
+        [0.0, 0.0, 0.0],
+        serde_json::json!([
+            { "type": "line", "length": 3.0 },
+            { "type": "arc", "radius": 0.0, "angle": 90.0 },
+            { "type": "line", "length": 2.0 }
+        ]),
+    );
+    near_points(&points(&h, "lane_red").expect("a track"), &anew);
+    h.key_press(egui::Key::Delete);
+    settle(&mut h);
+    near_points(&points(&h, "lane_red").expect("a track"), &anew);
+}
+
+#[test]
+fn an_arrow_key_in_the_frame_a_point_is_let_go_moves_it_on_from_there() {
+    let mut h = sorter();
+    on_layout(&mut h, "lane_red");
+    let before = points(&h, "lane_red").expect("a track");
+    let end = point_of(&h, "Point 2 of Lane red");
+    let by = egui::vec2(60.0, 0.0);
+    // Where a drag alone leaves the end.
+    drag_by(&mut h, end, by, 1.0);
+    let let_go = points(&h, "lane_red").expect("a track");
+    assert!(let_go[1][0] > before[1][0] + 0.1, "{let_go:?}");
+    h.state_mut().undo();
+    settle(&mut h);
+    // The end picked, so it has the keyboard, then dragged the same way and let go in the frame
+    // that Shift and the right arrow are pressed.
+    h.get_by_label_contains("Point 2 of Lane red").click();
+    settle(&mut h);
+    h.hover_at(end);
+    settle(&mut h);
+    h.drag_at(end);
+    h.run_steps(1);
+    for f in [0.25, 0.5, 0.75, 1.0] {
+        h.hover_at(end + by * f);
+        h.run_steps(1);
+    }
+    let key = |pressed: bool| egui::Event::Key {
+        key: egui::Key::ArrowRight,
+        physical_key: None,
+        pressed,
+        repeat: false,
+        modifiers: egui::Modifiers::SHIFT,
+    };
+    h.input_mut().events.extend([
+        egui::Event::PointerButton {
+            pos: end + by,
+            button: egui::PointerButton::Primary,
+            pressed: false,
+            modifiers: egui::Modifiers::NONE,
+        },
+        key(true),
+        key(false),
+    ]);
+    h.run_steps(1);
+    settle(&mut h);
+    let moved = points(&h, "lane_red").expect("a track");
+    assert!((moved[1][0] - let_go[1][0] - 1.0).abs() < 1e-6, "{moved:?}");
+    assert!((moved[1][1] - let_go[1][1]).abs() < 1e-6, "{moved:?}");
+    // One edit: one undo puts the end back.
+    h.state_mut().undo();
+    settle(&mut h);
+    assert_eq!(points(&h, "lane_red").expect("a track"), before);
+}
