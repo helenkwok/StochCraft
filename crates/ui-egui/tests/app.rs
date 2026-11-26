@@ -1596,7 +1596,14 @@ fn a_csv_exported_after_an_edit_says_it_is_of_a_prior_run() {
 /// the spread across runs starts on it, not on a mean wait of 0.
 #[test]
 fn a_machine_that_never_makes_anything_wait_leads_with_its_availability() {
-    let mut h = harness(Platform::DESKTOP);
+    // A tall window, so the charts below the findings are all on screen.
+    let mut h = Harness::builder()
+        .with_size(egui::vec2(1000.0, 3000.0))
+        .build_ui_state(
+            |ui, app: &mut App| app.ui(ui),
+            english(App::new(Platform::DESKTOP)),
+        );
+    h.run();
     menu(
         &mut h,
         &["File", "Open Example", "One machine's availability"],
@@ -1609,6 +1616,7 @@ fn a_machine_that_never_makes_anything_wait_leads_with_its_availability() {
     settle(&mut h);
     menu(&mut h, &["Model", "Run"]);
     finish_run(&mut h);
+    eprintln!("status: {}", h.state().status());
     h.get_by_label("Availability (%)");
     assert!(h.query_by_label("Mean wait (h)").is_none());
     h.get_by_label_contains("Machine · Availability");
