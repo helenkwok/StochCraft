@@ -1621,7 +1621,7 @@ fn a_machine_that_never_makes_anything_wait_leads_with_its_availability() {
     assert!(h.query_by_label("Mean wait (h)").is_none());
     // The spread across runs starts on the same result.
     let result = h.get_by_role_and_label(egui::accesskit::Role::ComboBox, "Result");
-    let shown = result.accesskit_node().value().map(str::to_owned);
+    let shown = result.accesskit_node().value();
     assert_eq!(
         shown.as_deref(),
         Some("Machine · Availability"),
