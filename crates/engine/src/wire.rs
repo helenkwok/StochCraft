@@ -197,20 +197,6 @@ fn one() -> u32 {
     1
 }
 
-fn one_f64() -> f64 {
-    1.0
-}
-
-/// Whether a beta's `min` is its default, 0 (so a beta on [0, 1] is written as before).
-fn is_zero(x: &f64) -> bool {
-    *x == 0.0
-}
-
-/// Whether a beta's `max` is its default, 1.
-fn is_one(x: &f64) -> bool {
-    *x == 1.0
-}
-
 /// What an element is and its parameters. Missing parameters take their defaults: exponential
 /// times with mean 1, one server unit, a delay of 1, no arrival limit.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
