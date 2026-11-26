@@ -2522,8 +2522,37 @@ impl Editor {
                         ));
                     }
                     if on != needs {
-                        let v = crate::write::condition_element(&crate::selection::format(needs));
-                        writes.push((id.clone(), "ResourceParameters", "Selection", Some(v)));
+                        let selection = |alternatives: &[stochcraft_model::Need]| {
+                            crate::write::condition_element(&crate::selection::format(alternatives))
+                        };
+                        if needs.len() <= 1 {
+                            // One requirement: the task's own selection, as BPSim has it, and
+                            // no selection of a resource role, which would be read instead.
+                            let alternatives =
+                                needs.first().map_or(&[][..], |r| &r.alternatives[..]);
+                            let v = selection(alternatives);
+                            writes.push((id.clone(), "ResourceParameters", "Selection", Some(v)));
+                            for r in resources.selected_roles.get(&id).into_iter().flatten() {
+                                writes.push((r.clone(), "ResourceParameters", "Selection", None));
+                            }
+                        } else {
+                            // Several: each the selection of one of the task's resource roles,
+                            // which need ids to refer to, one role for each requirement.
+                            let roles: Option<Vec<String>> = resources
+                                .role_ids
+                                .get(&id)
+                                .and_then(|r| r.iter().cloned().collect());
+                            let Some(roles) = roles.filter(|r| r.len() == needs.len()) else {
+                                return Err(fail(format!(
+                                    "`{id}` needs units of several pools at once, one requirement for each of its performers, which this file does not have with ids; save to a new file (Save As) to keep it"
+                                )));
+                            };
+                            for (r, need) in roles.into_iter().zip(needs) {
+                                let v = selection(&need.alternatives);
+                                writes.push((r, "ResourceParameters", "Selection", Some(v)));
+                            }
+                            writes.push((id.clone(), "ResourceParameters", "Selection", None));
+                        }
                     }
                     if op != priority {
                         let v = (*priority != 0.0)

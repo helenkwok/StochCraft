@@ -26,8 +26,8 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
 use crate::{
-    BalkJoin, Connection, Dist, Element, ElementId, ElementKind, Model, Need, PatienceUntil,
-    Routing, never_negative,
+    BalkJoin, Connection, Dist, Element, ElementId, ElementKind, Model, PatienceUntil, Routing,
+    never_negative,
 };
 use stochcraft_random::math::{exp, ln};
 
@@ -149,6 +149,9 @@ pub enum Why {
     /// The task's needs have alternatives, or roles that several pools have: which pool serves
     /// depends on the run.
     Alternatives,
+    /// The task holds units of several pools at once (a machine and a worker): no single-queue
+    /// formula holds, and each pool's row carries its share of the load.
+    SeveralPools,
     /// A bound that rises and one that falls make the result unknown.
     Bounds,
     /// At 100% or more there is no steady state: the queue grows without limit.
@@ -216,6 +219,7 @@ impl Why {
             Why::Changeover => "changeover",
             Why::NoMean => "no_mean",
             Why::Alternatives => "alternatives",
+            Why::SeveralPools => "several_pools",
             Why::Bounds => "bounds",
             Why::Unstable => "unstable",
             Why::SeveralUnitsGeneral => "several_units_general",
@@ -280,6 +284,9 @@ impl Why {
             Why::Changeover => "the setups depend on the order of the types".into(),
             Why::NoMean => "the time has no mean, or can be negative".into(),
             Why::Alternatives => "which pool serves depends on the run".into(),
+            Why::SeveralPools => {
+                "it holds units of several pools at once; each pool's row shows its load".into()
+            }
             Why::Bounds => {
                 "arrivals are at most a rate and the units vary by shift: no bound follows".into()
             }
@@ -468,8 +475,10 @@ struct Net<'a> {
     looped: Vec<bool>,
 }
 
-/// The one pool a shared task uses and how many units, or why it has no one pool.
-type PoolUse = Result<(usize, u32), Why>;
+/// The pools a shared task uses and how many units of each, one pool for each requirement (a
+/// pool two requirements both use once, with their units added), or why that is not known
+/// before a run.
+type PoolUse = Result<Vec<(usize, u32)>, Why>;
 
 /// A connection's rate, before bounds.
 #[derive(Debug, Clone)]
@@ -979,9 +988,13 @@ impl<'a> Net<'a> {
                 let s = service[i].value().filter(|s| *s > 0.0)?;
                 let units = match (&units[i], self.pool_use(i)) {
                     (Some((c, _)), _) => f64::from(*c),
-                    (None, Some(Ok((j, q)))) => {
-                        f64::from(model.resources[j].most_units()) / f64::from(q.max(1))
-                    }
+                    // A task needing several pools at once is held to the scarcest.
+                    (None, Some(Ok(uses))) if !uses.is_empty() => uses
+                        .iter()
+                        .map(|&(j, q)| {
+                            f64::from(model.resources[j].most_units()) / f64::from(q.max(1))
+                        })
+                        .fold(f64::INFINITY, f64::min),
                     _ => return None,
                 };
                 let a = avail[i]
@@ -999,12 +1012,16 @@ impl<'a> Net<'a> {
             .map(|i| {
                 let units = match (&units[i], self.pool_use(i)) {
                     (Some((c, false)), _) => f64::from(*c),
-                    (None, Some(Ok((j, q)))) => {
-                        let p = &model.resources[j];
-                        if !p.shifts.is_empty() || !p.availability.is_empty() || !p.available {
-                            return Some(0.0);
+                    (None, Some(Ok(uses))) if !uses.is_empty() => {
+                        let mut least = f64::INFINITY;
+                        for &(j, q) in &uses {
+                            let p = &model.resources[j];
+                            if !p.shifts.is_empty() || !p.availability.is_empty() || !p.available {
+                                return Some(0.0);
+                            }
+                            least = least.min(f64::from(p.most_units()) / f64::from(q.max(1)));
                         }
-                        f64::from(p.most_units()) / f64::from(q.max(1))
+                        least
                     }
                     (None, None) => return None,
                     _ => return Some(0.0),
@@ -1349,8 +1366,8 @@ impl<'a> Net<'a> {
             })
     }
 
-    /// The one pool shared task `i` uses and how many units, or why it has no one pool (`None`:
-    /// not a shared task).
+    /// The pools shared task `i` uses and how many units of each, or why they are not known
+    /// before a run (`None`: not a shared task).
     fn pool_use(&self, i: usize) -> Option<PoolUse> {
         // A transport takes one unit of its pool (a pool that is missing is the model's error).
         if let ElementKind::Transport { pool, .. } = &self.element(i).kind {
@@ -1359,29 +1376,38 @@ impl<'a> Net<'a> {
                 .resources
                 .iter()
                 .position(|p| &p.id == pool)
-                .map(|j| Ok((j, 1)));
+                .map(|j| Ok(vec![(j, 1)]));
         }
         let ElementKind::SharedTask { needs, .. } = &self.element(i).kind else {
             return None;
         };
-        let [need] = &needs[..] else {
+        if needs.is_empty() {
             return Some(Err(Why::Alternatives));
-        };
-        let matching: Vec<usize> = self
-            .model
-            .resources
-            .iter()
-            .enumerate()
-            .filter(|(_, p)| match need {
-                Need::Resource { id, .. } => &p.id == id,
-                Need::Roles { roles, .. } => roles.iter().all(|r| p.roles.contains(r)),
-            })
-            .map(|(j, _)| j)
-            .collect();
-        Some(match matching[..] {
-            [j] => Ok((j, need.quantity())),
-            _ => Err(Why::Alternatives),
-        })
+        }
+        // Each requirement must name one pool for sure: no alternatives, no roles several
+        // pools have.
+        let mut uses: Vec<(usize, u32)> = Vec::new();
+        for r in needs {
+            let [need] = &r.alternatives[..] else {
+                return Some(Err(Why::Alternatives));
+            };
+            let matching: Vec<usize> = self
+                .model
+                .resources
+                .iter()
+                .enumerate()
+                .filter(|(_, p)| need.met_by(p))
+                .map(|(j, _)| j)
+                .collect();
+            let [j] = matching[..] else {
+                return Some(Err(Why::Alternatives));
+            };
+            match uses.iter_mut().find(|(p, _)| *p == j) {
+                Some((_, q)) => *q = q.saturating_add(need.quantity()),
+                None => uses.push((j, need.quantity())),
+            }
+        }
+        Some(Ok(uses))
     }
 
     /// The shared tasks on a pool that may be loaded to 100% or more: its load is that or more,
@@ -1395,16 +1421,18 @@ impl<'a> Net<'a> {
         let mut unbounded = vec![false; pools];
         for (i, u) in uses.iter().enumerate() {
             match u {
-                Some(Ok((j, q))) => {
-                    let w = rates[i]
-                        .combine(&service[i], false)
-                        .combine(&Value::exact(f64::from(*q)), false);
-                    match w {
-                        Value::Known {
-                            value,
-                            bound: Bound::Exact | Bound::AtMost,
-                        } => work[*j] += value,
-                        _ => unbounded[*j] = true,
+                Some(Ok(uses)) => {
+                    for (j, q) in uses {
+                        let w = rates[i]
+                            .combine(&service[i], false)
+                            .combine(&Value::exact(f64::from(*q)), false);
+                        match w {
+                            Value::Known {
+                                value,
+                                bound: Bound::Exact | Bound::AtMost,
+                            } => work[*j] += value,
+                            _ => unbounded[*j] = true,
+                        }
                     }
                 }
                 Some(Err(_)) => {
@@ -1417,8 +1445,8 @@ impl<'a> Net<'a> {
         }
         uses.iter()
             .map(|u| {
-                matches!(u, Some(Ok((j, _))) if unbounded[*j]
-                    || work[*j] >= f64::from(self.model.resources[*j].most_units().max(1)))
+                matches!(u, Some(Ok(uses)) if uses.iter().any(|(j, _)| unbounded[*j]
+                    || work[*j] >= f64::from(self.model.resources[*j].most_units().max(1))))
             })
             .collect()
     }
@@ -1432,10 +1460,7 @@ impl<'a> Net<'a> {
             return false;
         };
         let p = &self.model.resources[j];
-        needs.iter().any(|n| match n {
-            Need::Resource { id, .. } => &p.id == id,
-            Need::Roles { roles, .. } => roles.iter().all(|r| p.roles.contains(r)),
-        })
+        needs.iter().any(|r| r.may_use(p))
     }
 
     /// The pools' rows, and the shared tasks' utilisation and formulas.
@@ -1456,7 +1481,7 @@ impl<'a> Net<'a> {
             let users: Vec<usize> = tasks
                 .iter()
                 .filter(|(i, r)| match r {
-                    Ok((p, _)) => *p == j,
+                    Ok(uses) => uses.iter().any(|(p, _)| *p == j),
                     Err(_) => self.might_use(*i, j),
                 })
                 .map(|(i, _)| *i)
@@ -1470,10 +1495,11 @@ impl<'a> Net<'a> {
             let mut partial = false;
             for &i in &users {
                 match tasks.iter().find(|(t, _)| *t == i).map(|(_, r)| r) {
-                    Some(Ok((_, q))) => {
+                    Some(Ok(uses)) => {
+                        let q = uses.iter().find(|(p, _)| *p == j).map_or(0, |(_, q)| *q);
                         let w = rates[i]
                             .combine(&service[i], false)
-                            .combine(&Value::exact(f64::from(*q)), false);
+                            .combine(&Value::exact(f64::from(q)), false);
                         work = add(&work, &w);
                     }
                     _ => partial = true,
@@ -1533,18 +1559,41 @@ impl<'a> Net<'a> {
                 if !users.contains(&i) {
                     continue;
                 }
+                let task_use = tasks.iter().find(|(t, _)| *t == i).map(|(_, u)| u);
+                // A task that holds units of several pools at once: each pool's row carries its
+                // load, the task's row the worst status among them and no formula (nor one
+                // share of one pool as its utilisation).
+                if let Some(Ok(uses)) = task_use
+                    && uses.len() > 1
+                {
+                    let status = pool_rows.last().map_or(Status::Unknown, |p| p.status);
+                    let first = uses.first().is_some_and(|(p, _)| *p == j);
+                    st.units = None;
+                    st.utilisation = Value::Unknown(Why::SeveralPools);
+                    st.load = st.utilisation.clone();
+                    st.status = if first {
+                        status
+                    } else {
+                        worse(st.status, status)
+                    };
+                    st.formula = Err(Why::SeveralPools);
+                    continue;
+                }
                 let alone = users.len() == 1
                     && !partial
                     && !vary
-                    && matches!(tasks.iter().find(|(t, _)| *t == i), Some((_, Ok((_, 1)))));
+                    && matches!(task_use, Some(Ok(u)) if matches!(u.as_slice(), [(_, 1)]));
                 st.units = alone.then_some(units);
                 // The task's own share of the pool: its work over the pool's units.
-                st.utilisation = match tasks.iter().find(|(t, _)| *t == i) {
-                    Some((_, Ok((_, q)))) => rates[i]
-                        .combine(&service[i], false)
-                        .combine(&Value::exact(f64::from(*q)), false)
-                        .combine(&units_value, true),
-                    Some((_, Err(w))) => Value::Unknown(w.clone()),
+                st.utilisation = match task_use {
+                    Some(Ok(uses)) => {
+                        let q = uses.first().map_or(0, |(_, q)| *q);
+                        rates[i]
+                            .combine(&service[i], false)
+                            .combine(&Value::exact(f64::from(q)), false)
+                            .combine(&units_value, true)
+                    }
+                    Some(Err(w)) => Value::Unknown(w.clone()),
                     None => Value::Unknown(Why::SharedPool),
                 };
                 st.load = st.utilisation.clone();
@@ -1604,6 +1653,17 @@ impl<'a> Net<'a> {
         let variance = dist.variance().ok_or(Why::NoVariance)?;
         pollaczek_khinchine(lambda, s, variance).ok_or(Why::Unstable)
     }
+}
+
+/// The worse of two statuses: unstable, then congested, then not known, then fine.
+fn worse(a: Status, b: Status) -> Status {
+    let rank = |s: Status| match s {
+        Status::Fine => 0,
+        Status::Unknown => 1,
+        Status::Congested => 2,
+        Status::Unstable => 3,
+    };
+    if rank(b) > rank(a) { b } else { a }
 }
 
 /// The station whose load is surely the highest: at least as high as every other server's and

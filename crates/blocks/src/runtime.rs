@@ -13,8 +13,8 @@ use stochcraft_des::{
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
     Balking, Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, HealthCheck, Model,
-    Need, OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, QueueLimit, ResourcePool,
-    Routing, Setup, Timed,
+    OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, QueueLimit, Requirement,
+    ResourcePool, Routing, Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -709,9 +709,8 @@ impl Compiled {
                         .collect();
                     let service =
                         Times::with_pools(service, processing_by, &by_pool, &self.slots, &env.rng);
-                    let alternatives = alternatives(&self.model, &needs);
                     let request = Rc::new(Request {
-                        alternatives,
+                        requirements: requirements(&self.model, &needs),
                         priority,
                     });
                     spawn_shared(&mut sim, env, service, request, Rc::clone(&pools));
@@ -4581,32 +4580,73 @@ struct Alternative {
 
 /// What a shared task asks of the pools for each entity.
 struct Request {
-    /// Tried in order; the first that can be met now is taken.
-    alternatives: Vec<Alternative>,
+    /// Every one is met together, all at once; each by one of its alternatives, tried in order.
+    requirements: Vec<Vec<Alternative>>,
     priority: f64,
 }
 
-/// The pools each of `needs` can draw on.
-fn alternatives(model: &Model, needs: &[Need]) -> Vec<Alternative> {
+/// The pools each alternative of each of `needs` can draw on.
+fn requirements(model: &Model, needs: &[Requirement]) -> Vec<Vec<Alternative>> {
     needs
         .iter()
-        .map(|need| {
-            let pools = model
-                .resources
+        .map(|r| {
+            r.alternatives
                 .iter()
-                .enumerate()
-                .filter(|(_, r)| match need {
-                    Need::Resource { id, .. } => &r.id == id,
-                    Need::Roles { roles, .. } => r.has_roles(roles),
+                .map(|need| Alternative {
+                    pools: model
+                        .resources
+                        .iter()
+                        .enumerate()
+                        .filter(|(_, r)| need.met_by(r))
+                        .map(|(i, _)| i)
+                        .collect(),
+                    quantity: need.quantity(),
                 })
-                .map(|(i, _)| i)
-                .collect();
-            Alternative {
-                pools,
-                quantity: need.quantity(),
-            }
+                .collect()
         })
         .collect()
+}
+
+/// Takes units from `free` for each of `requirements`, in order, into `taken`: for the first,
+/// its first alternative the free units can meet that leaves a way to meet all the later ones
+/// (with what it leaves), and so on. So the first way in that order is taken, and an earlier
+/// requirement takes its next alternative only when its first would leave a later one unmet.
+/// `false`, with `free` and `taken` as they were, when there is no way to meet them all now.
+fn take_all(requirements: &[Vec<Alternative>], free: &mut [i64], taken: &mut Taken) -> bool {
+    let Some((first, rest)) = requirements.split_first() else {
+        return true;
+    };
+    for alt in first {
+        let have: i64 = alt
+            .pools
+            .iter()
+            .map(|&p| free.get(p).copied().unwrap_or(0).max(0))
+            .sum();
+        if alt.quantity == 0 || have < i64::from(alt.quantity) {
+            continue;
+        }
+        let (before, mark) = (free.to_vec(), taken.len());
+        let mut left = alt.quantity;
+        for &p in &alt.pools {
+            if left == 0 {
+                break;
+            }
+            if let Some(f) = free.get_mut(p) {
+                let n = (*f).clamp(0, i64::from(left)) as u32;
+                if n > 0 {
+                    *f -= i64::from(n);
+                    left -= n;
+                    taken.push((p, n));
+                }
+            }
+        }
+        if take_all(rest, free, taken) {
+            return true;
+        }
+        free.copy_from_slice(&before);
+        taken.truncate(mark);
+    }
+    false
 }
 
 /// Units taken from the pools: (pool, how many).
@@ -4687,31 +4727,15 @@ impl Pools {
         }
     }
 
-    /// Takes the first of `request`'s alternatives that the free units can meet, if any.
+    /// Takes the units for every one of `request`'s requirements together, the first way the
+    /// free units can meet them all ([`take_all`]), or none.
     fn try_take(&self, request: &Request) -> Option<Taken> {
         let mut free = self.free.borrow_mut();
-        let alt = request.alternatives.iter().find(|a| {
-            let have: i64 = a
-                .pools
-                .iter()
-                .map(|&p| free.get(p).copied().unwrap_or(0).max(0))
-                .sum();
-            a.quantity > 0 && have >= i64::from(a.quantity)
-        })?;
-        let mut left = alt.quantity;
         let mut taken = Vec::new();
-        for &p in &alt.pools {
-            if left == 0 {
-                break;
-            }
-            if let Some(f) = free.get_mut(p) {
-                let n = (*f).clamp(0, i64::from(left)) as u32;
-                if n > 0 {
-                    *f -= i64::from(n);
-                    left -= n;
-                    taken.push((p, n));
-                }
-            }
+        if request.requirements.is_empty()
+            || !take_all(&request.requirements, &mut free[..], &mut taken)
+        {
+            return None;
         }
         drop(free);
         self.record(&taken, true);
@@ -4725,7 +4749,9 @@ impl Pools {
         let units = self.units.borrow();
         let mut busy = self.busy.borrow_mut();
         let mut count = self.taken.borrow_mut();
-        for &(p, _) in taken {
+        for (k, &(p, _)) in taken.iter().enumerate() {
+            // A pool two requirements both drew on was taken once.
+            let again = taken[..k].iter().any(|&(q, _)| q == p);
             if let (Some(b), Some(&q), Some(&f)) = (busy.get_mut(p), units.get(p), free.get(p)) {
                 b.set(now, (i64::from(q) - f) as f64);
                 // Units still finishing a job after their shift are there until it ends.
@@ -4736,7 +4762,10 @@ impl Pools {
                     c.set(now, (i64::from(q) - f.min(0)) as f64);
                 }
             }
-            if take && let Some(c) = count.get_mut(p) {
+            if take
+                && !again
+                && let Some(c) = count.get_mut(p)
+            {
                 *c += 1;
             }
         }
@@ -4791,7 +4820,8 @@ impl Pools {
     /// come on shift at one instant all count before anyone is served, so what happens does not
     /// depend on the order those events were scheduled in: the waiting entities, in priority
     /// order and then of arrival, take the free units, each trying its alternatives in the order
-    /// of its task's needs (the first the free units can meet). So with two units of different
+    /// of its task's needs (the first the free units can meet, for every requirement together:
+    /// [`take_all`]). So with two units of different
     /// pools freed together and one entity waiting, it takes the unit of the pool its task lists
     /// first, not the one whose job happened to end first.
     fn dispatch_later(self: &Rc<Self>) {
@@ -4982,7 +5012,8 @@ fn spawn_shared(
                     e.adjust(|s| &mut s.waiting, -1.0);
                     e.adjust(|s| &mut s.busy, 1.0);
                     // The pool that supplied the first unit of the take, in the order it was
-                    // filled, sets the time ([`stochcraft_model::ProcessingByResource`]).
+                    // filled (so the first requirement's), sets the time
+                    // ([`stochcraft_model::ProcessingByResource`]).
                     service.sample(&entity, taken.first().map(|t| t.0), &mut e.rng)
                 };
                 c.hold(duration).await;

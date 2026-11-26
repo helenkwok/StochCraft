@@ -756,7 +756,9 @@ fn shared_pools_read_and_save_into_the_reference_models() {
             .find(|k| matches!(k, ElementKind::SharedTask { .. }))
         {
             *priority = 2.0;
-            if let Some(stochcraft_model::Need::Resource { quantity, .. }) = needs.first_mut() {
+            if let Some(stochcraft_model::Need::Resource { quantity, .. }) =
+                needs.first_mut().and_then(|r| r.alternatives.first_mut())
+            {
                 *quantity = 2;
             }
         }

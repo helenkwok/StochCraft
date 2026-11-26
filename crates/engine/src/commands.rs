@@ -131,6 +131,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "processing_by",
             "processing_by_resource",
             "needs",
+            "also_needs",
             "priority",
         ],
         Some("delay") => &["duration", "processing_by"],
@@ -483,9 +484,15 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<DemandSpec>")]
     pub demand: Option<Option<DemandSpec>>,
-    /// Tasks with shared resources: what each entity needs, the alternatives in order.
+    /// Tasks with shared resources: what each entity needs, the alternatives in order (the
+    /// first requirement; any others are kept).
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
+    /// Tasks with shared resources: the further requirements, each a list of alternatives in
+    /// order, met together with `needs` (a machine and a worker at once); `[]` leaves only
+    /// `needs`.
+    #[serde(default)]
+    pub also_needs: Option<Vec<Vec<NeedSpec>>>,
     /// Tasks with shared resources: who gets freed units first, higher first.
     #[serde(default)]
     pub priority: Option<f64>,
@@ -1581,6 +1588,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("scrap", p.scrap.is_some()),
         ("demand", p.demand.is_some()),
         ("needs", p.needs.is_some()),
+        ("also_needs", p.also_needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
         ("default", p.default.is_some()),
@@ -1626,6 +1634,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "processing_by",
             "processing_by_resource",
             "needs",
+            "also_needs",
             "priority",
             "starting",
         ],
@@ -1796,8 +1805,13 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             if let Some(d) = p.service {
                 *service = d.into();
             }
-            if let Some(n) = p.needs {
-                *needs = n.into_iter().map(Into::into).collect();
+            // `needs` is the first requirement and `also_needs` the others, each set on its own.
+            let (first, rest) = crate::wire::needs_spec(needs);
+            if p.needs.is_some() || p.also_needs.is_some() {
+                *needs = crate::wire::requirements(
+                    p.needs.unwrap_or(first),
+                    p.also_needs.unwrap_or(rest),
+                );
             }
             if let Some(x) = p.priority {
                 *priority = x;
@@ -2060,9 +2074,11 @@ fn resource_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .elements
         .iter()
         .filter(|el| match &el.kind {
-            ElementKind::SharedTask { needs, .. } => needs
-                .iter()
-                .any(|n| matches!(n, Need::Resource { id, .. } if id.as_str() == p.id)),
+            ElementKind::SharedTask { needs, .. } => needs.iter().any(|r| {
+                r.alternatives
+                    .iter()
+                    .any(|n| matches!(n, Need::Resource { id, .. } if id.as_str() == p.id))
+            }),
             ElementKind::Transport { pool, .. } => pool.as_str() == p.id,
             _ => false,
         })
