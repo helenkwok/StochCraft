@@ -486,6 +486,23 @@ pub(crate) fn stations_with(path: &Path, cuts: &[f64]) -> (Vec<Station>, Vec<f32
         .unzip()
 }
 
+/// The shadow under a belt of `width` along `stations`: a strip on the floor between each two.
+/// Two at one place (a sharp turn's) cast none, as their strip would have no direction.
+fn belt_shadows(stations: &[Station], width: f32) -> Vec<Mesh> {
+    stations
+        .windows(2)
+        .filter_map(|w| {
+            let (a, b) = (w[0], w[1]);
+            let along = libm::hypotf(b.x - a.x, b.y - a.y);
+            (along > 1e-4).then(|| {
+                let c = [(a.x + b.x) / 2.0, (a.y + b.y) / 2.0];
+                let h = libm::atan2f(b.y - a.y, b.x - a.x);
+                floor_rect(c, along + 0.02, width + 0.35, h, 0.002)
+            })
+        })
+        .collect()
+}
+
 /// The distance along `path` of the point nearest `q`, how far `q` is from it, and on which side
 /// (1 left of the direction of travel, -1 right), to within 5 cm along the path. A path of up to
 /// [`MOST_STATIONS`] steps of 5 cm is looked at every 5 cm. A longer one is looked at in that many
@@ -705,13 +722,7 @@ pub(crate) fn scene(model: &Model) -> Scene {
             for p in &plates {
                 push_mesh(&mut tris, p, Paint::Steel);
             }
-            for w in st.windows(2) {
-                let (a, b) = (w[0], w[1]);
-                let along = libm::hypotf(b.x - a.x, b.y - a.y);
-                let c = [(a.x + b.x) / 2.0, (a.y + b.y) / 2.0];
-                let h = libm::atan2f(b.y - a.y, b.x - a.x);
-                shadows.push(floor_rect(c, along + 0.02, width + 0.35, h, 0.002));
-            }
+            shadows.extend(belt_shadows(&st, *width));
             anchors.push(Anchor {
                 id,
                 order,
@@ -1607,6 +1618,14 @@ mod tests {
         for s in st.iter().filter(|s| s.y > 0.01) {
             assert!((s.heading - north).abs() < 1e-4, "{s:?}");
         }
+        // The turn's stations, all at the corner, cast no shadow of their own: no strip of the
+        // shadow lies across the corner where the belt has no direction.
+        let pairs = st
+            .windows(2)
+            .filter(|w| libm::hypotf(w[1].x - w[0].x, w[1].y - w[0].y) > 1e-4)
+            .count();
+        assert_eq!(belt_shadows(&st, 0.6).len(), pairs);
+        assert!(pairs < st.len() - 1);
     }
 
     #[test]
