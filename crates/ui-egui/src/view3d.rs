@@ -394,7 +394,8 @@ fn floor_rect(c: [f32; 2], along: f32, across: f32, heading: f32, z: f32) -> Mes
 
 /// The cross-sections of a belt along `path` (in metres): at most [`STEP`] apart, closer on a
 /// tight curve, and at every segment's ends; on a path long enough to need more than
-/// [`MOST_STATIONS`], the steps are stretched alike to fit.
+/// [`MOST_STATIONS`], the steps are stretched to fit, the straights' first: a curve keeps its
+/// steps unless curves alone would take more than half.
 pub(crate) fn stations(path: &Path) -> Vec<Station> {
     stations_with(path, &[])
 }
@@ -409,13 +410,34 @@ pub(crate) fn stations_with(path: &Path, cuts: &[f64]) -> Vec<Station> {
             (radius.abs() * 6.0_f64.to_radians()).clamp(0.05, STEP)
         }
     };
-    let wanted: f64 = path.segments.iter().map(|s| s.length() / step_of(s)).sum();
-    let stretch = (wanted / MOST_STATIONS).max(1.0);
+    let straight = |seg: &PathSegment| matches!(seg, PathSegment::Line { .. });
+    let wanted = |line: bool| -> f64 {
+        path.segments
+            .iter()
+            .filter(|s| straight(s) == line)
+            .map(|s| s.length() / step_of(s))
+            .sum()
+    };
+    let (lines, curves) = (wanted(true), wanted(false));
+    let (line_stretch, curve_stretch) = if lines + curves <= MOST_STATIONS {
+        (1.0, 1.0)
+    } else if curves <= MOST_STATIONS / 2.0 {
+        ((lines / (MOST_STATIONS - curves)).max(1.0), 1.0)
+    } else {
+        let all = (lines + curves) / MOST_STATIONS;
+        (all, all)
+    };
+    let stretch = line_stretch.max(curve_stretch);
     let mut at: Vec<f64> = Vec::new();
     let mut done = 0.0;
     for seg in &path.segments {
         let len = seg.length();
-        let step = step_of(seg) * stretch;
+        let step = step_of(seg)
+            * if straight(seg) {
+                line_stretch
+            } else {
+                curve_stretch
+            };
         let n = (len / step).ceil().max(1.0) as u32;
         let first = u32::from(!at.is_empty());
         for k in first..=n {
@@ -1432,6 +1454,30 @@ mod tests {
         let (s, d, side) = nearest(&short, [4.0, 1.0]);
         assert!((s - 4.0).abs() < 1e-9 && (d - 1.0).abs() < 1e-9, "{s} {d}");
         assert_eq!(side, 1.0);
+    }
+
+    #[test]
+    fn a_bend_on_a_very_long_belt_keeps_its_steps() {
+        // 500 km on, then a half circle of 10 m: the straight's steps stretch, the bend's do not.
+        let path = Path::new(
+            Frame::default(),
+            vec![
+                PathSegment::Line {
+                    length: 500_000.0,
+                    rise: 0.0,
+                },
+                PathSegment::Arc {
+                    radius: 10.0,
+                    angle_deg: 180.0,
+                    rise: 0.0,
+                },
+            ],
+        );
+        let st = stations(&path);
+        assert!(st.len() <= MOST_STATIONS as usize + 3, "{}", st.len());
+        // The bend's 31.4 m keeps its quarter-metre steps: over a hundred stations round it.
+        let round = st.iter().filter(|s| s.x > 500_000.5).count();
+        assert!(round >= 100, "{round}");
     }
 
     #[test]
