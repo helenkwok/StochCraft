@@ -272,8 +272,8 @@ mod tests {
         assert_eq!(rms.unit("m^2"), "m");
         assert_eq!(rms.unit("USD"), "√(USD)");
         assert_eq!(rms.unit(""), "");
-        // √38.0625 = 6.17; the delta method: 0.8 / (2 × 6.17).
-        let (v, hw) = rms.of(38.0625, Some(0.8)).unwrap_or_default();
+        // √38.0689 = 6.17; the delta method: 0.8 / (2 × 6.17).
+        let (v, hw) = rms.of(38.0689, Some(0.8)).unwrap_or_default();
         assert!((v - 6.17).abs() < 1e-12);
         assert!((hw.unwrap_or_default() - 0.8 / 12.34).abs() < 1e-12);
         assert_eq!(rms.of(0.0, Some(1.0)), Some((0.0, None)));
