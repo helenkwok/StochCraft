@@ -1447,7 +1447,7 @@ fn the_workstation_with_triangular_processing_matches_pollaczek_khinchine() {
     assert!((lambda * wait - 2.1806).abs() < 1e-4, "{}", lambda * wait);
     assert!((m.experiment.duration - 168.0 * 60.0).abs() < 1e-9);
 
-    // Each run is 168 hours after a warm-up (about three times the queue's relaxation time).
+    // Each run is 168 hours measured after a warm-up (about three times the queue's relaxation time).
     let mut e = open_scenario(
         "spread.bpmn",
         Some("workstation-mg1"),

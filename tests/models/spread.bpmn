@@ -264,7 +264,7 @@
               <bpsim:FloatingParameter value="2000"/>
             </bpsim:Warmup>
             <bpsim:Duration>
-              <bpsim:FloatingParameter value="10080"/>
+              <bpsim:FloatingParameter value="12080"/>
             </bpsim:Duration>
           </bpsim:ScenarioParameters>
           <bpsim:ElementParameters elementRef="workstation_in">
