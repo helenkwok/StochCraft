@@ -4965,6 +4965,30 @@ are.
     It differs from the machine repair crew above because spares on cold standby do not fail.
     Once regenerative intervals (M2.9) are built, this example is their first check: the
     paper's own intervals come from cycles back to X = 0.
+- **Scenarios added to two examples** (from the Operational Research Society Simulation
+  Workshop 2023 proceedings; no new cards):
+  - **M/M/1 near full load** (`mm1.bpmn`, scenario "Near full load"): R. R. Barton, a tutorial on
+    metamodelling, pp. 48–62, Table 1 on p. 51. M/M/1 with service rate 1 and arrival rates
+    0.75, 0.80, 0.85, 0.90 and 0.95, four runs of 10,000 time units from empty with no warm-up,
+    each run's time-average number in the system published (20 values). Exact: L = ρ/(1 − ρ);
+    from empty the shortfall ∫ (L − E[N(t)]) dt is ρ/(1 − ρ)³, so a run of length T averages
+    L − ρ/((1 − ρ)³ T) (2.9952 at 0.75, 18.24 at 0.95); the time-average's variance is about
+    2ρ(1 + ρ)/((1 − ρ)⁴ T), a standard deviation of 0.26 at 0.75 and 7.70 at 0.95. The test
+    (heavy, in the ignored set) runs 200 replications at each rate and checks the mean against
+    the from-empty expectation and the standard deviation of one run against the exact one,
+    loosely (0.7 to 1.25 of it: a run of finite length varies a little less than the asymptotic
+    constant, 0.87 of it at 0.95 in a Python check). The published 20 values are checked only as
+    within four exact standard deviations of the expected mean (the largest, 8.35 at 0.85, is
+    3.4 away); they are one draw of each, so they cannot be reproduced exactly.
+  - **Workstation M/G/1** (`spread.bpmn`, scenario "Workstation"): G. Wagner, a tutorial on
+    business process simulation, pp. 22–36, Fig. 6 on p. 31. The figure's labels swap the two
+    distributions (as printed, ρ = 1.2, unstable); the author's MIT-licensed code
+    (github.com/gwagner57/oes, `JavaScript/Core1/Workstation-1`) has exponential arrivals at rate
+    1/6 a minute and triangular (3, 4, 8) minute processing over 168 hours, which the scenario
+    follows. The base scenario has the same desk with its arrival count set to 0, so the card's
+    three desks are unchanged. Pollaczek–Khinchine: ρ = 5/6, E[S²] = 25 + 21/18, Wq = λE[S²] /
+    (2(1 − ρ)) = 13.083 minutes and Lq = 2.1806; the test checks utilisation, wait and queue
+    length within the intervals of 200 runs of 168 hours after a 2,000-minute warm-up.
 - **Planned examples:** each joins only once its answer is checked against its source with the
   page, as above.
   - **A particle detector's readout** (a new "Science" industry): collisions at a collider

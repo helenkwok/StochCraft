@@ -3,6 +3,7 @@
   <bpmn:resource id="fixed_resource" name="A: always 1 minute"/>
   <bpmn:resource id="random_resource" name="B: random, mean 1 minute"/>
   <bpmn:resource id="uneven_resource" name="C: very uneven, mean 1 minute"/>
+  <bpmn:resource id="workstation_resource" name="Workstation"/>
   <bpmn:process id="process" name="Same mean, different spread" isExecutable="false">
     <bpmn:startEvent id="fixed_in" name="Jobs arrive at A">
       <bpmn:outgoing>flow-1</bpmn:outgoing>
@@ -43,12 +44,27 @@
     <bpmn:endEvent id="uneven_out" name="Jobs leave C">
       <bpmn:incoming>flow-6</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:startEvent id="workstation_in" name="Jobs arrive at the workstation">
+      <bpmn:outgoing>flow-7</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="workstation" name="Workstation: 3 to 8 minutes">
+      <bpmn:incoming>flow-7</bpmn:incoming>
+      <bpmn:outgoing>flow-8</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>workstation_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="workstation_out" name="Jobs leave the workstation">
+      <bpmn:incoming>flow-8</bpmn:incoming>
+    </bpmn:endEvent>
     <bpmn:sequenceFlow id="flow-1" sourceRef="fixed_in" targetRef="fixed"/>
     <bpmn:sequenceFlow id="flow-2" sourceRef="fixed" targetRef="fixed_out"/>
     <bpmn:sequenceFlow id="flow-3" sourceRef="random_in" targetRef="random"/>
     <bpmn:sequenceFlow id="flow-4" sourceRef="random" targetRef="random_out"/>
     <bpmn:sequenceFlow id="flow-5" sourceRef="uneven_in" targetRef="uneven"/>
     <bpmn:sequenceFlow id="flow-6" sourceRef="uneven" targetRef="uneven_out"/>
+    <bpmn:sequenceFlow id="flow-7" sourceRef="workstation_in" targetRef="workstation"/>
+    <bpmn:sequenceFlow id="flow-8" sourceRef="workstation" targetRef="workstation_out"/>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="diagram">
     <bpmndi:BPMNPlane id="plane" bpmnElement="process">
@@ -79,6 +95,15 @@
       <bpmndi:BPMNShape id="uneven_out_di" bpmnElement="uneven_out">
         <dc:Bounds x="442" y="362" width="36" height="36"/>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="workstation_in_di" bpmnElement="workstation_in">
+        <dc:Bounds x="82" y="502" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="workstation_di" bpmnElement="workstation">
+        <dc:Bounds x="230" y="480" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="workstation_out_di" bpmnElement="workstation_out">
+        <dc:Bounds x="442" y="502" width="36" height="36"/>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
         <di:waypoint x="118" y="100"/>
         <di:waypoint x="230" y="100"/>
@@ -102,6 +127,14 @@
       <bpmndi:BPMNEdge id="flow-6_di" bpmnElement="flow-6">
         <di:waypoint x="330" y="380"/>
         <di:waypoint x="442" y="380"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-7_di" bpmnElement="flow-7">
+        <di:waypoint x="118" y="520"/>
+        <di:waypoint x="230" y="520"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-8_di" bpmnElement="flow-8">
+        <di:waypoint x="330" y="520"/>
+        <di:waypoint x="442" y="520"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
@@ -174,6 +207,35 @@
               </bpsim:Selection>
             </bpsim:ResourceParameters>
           </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="workstation_in">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="6"/>
+              </bpsim:InterTriggerTimer>
+              <bpsim:TriggerCount>
+                <bpsim:NumericParameter value="0"/>
+              </bpsim:TriggerCount>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="workstation">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:TriangularDistribution mode="4" min="3" max="8"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('workstation_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="workstation_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="fixed_resource">
             <bpsim:ResourceParameters>
               <bpsim:Quantity>
@@ -194,6 +256,23 @@
                 <bpsim:NumericParameter value="1"/>
               </bpsim:Quantity>
             </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="workstation-mg1" name="Workstation: one job every 6 minutes, 3 to 8 minutes each" inherits="scenario">
+          <bpsim:ScenarioParameters replication="30">
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="2000"/>
+            </bpsim:Warmup>
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="10080"/>
+            </bpsim:Duration>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="workstation_in">
+            <bpsim:ControlParameters>
+              <bpsim:TriggerCount>
+                <bpsim:NumericParameter value="1000000"/>
+              </bpsim:TriggerCount>
+            </bpsim:ControlParameters>
           </bpsim:ElementParameters>
         </bpsim:Scenario>
       </bpsim:BPSimData>
