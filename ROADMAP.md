@@ -4976,7 +4976,8 @@ are.
     (utilisation) 0.95238 of the time and finishing 0.95238 / 30 = 0.031746 jobs an hour.
     `crates/engine/tests/examples.rs` checks the run on its availability, the time down, its
     utilisation, the jobs finished and the failures an hour. A second scenario halves the repair
-    time (availability 0.97561, 0.032520 jobs an hour). The model is a one-task loop that starts
+    time (availability 0.97561, 0.032520 jobs an hour). The model is a loop of the machine and a
+    "Next job" task that takes no time, started
     with one job, so the machine is never idle.
     - Not checked: the paper's share of time with planned maintenance, 92.5 hours per 450 hours
       of work (450 / 565 = 0.79646), because the breakdown keeps failing through time off shift,

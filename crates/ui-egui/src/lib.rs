@@ -596,7 +596,7 @@ pub const EXAMPLES: &[Example] = &[
             teaches: "Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.",
             minutes: 2,
             proof: Some(start::Proof::Probability),
-            flow: &[start::Glyph::Resource],
+            flow: &[start::Glyph::Resource, start::Glyph::Task],
             featured: false,
         },
     },
