@@ -43,6 +43,8 @@ pub(crate) const BELT_HEIGHT: f32 = 0.85;
 pub(crate) const RAIL: f32 = 0.07;
 /// The longest step between two cross-sections of a belt, in metres.
 const STEP: f64 = 0.25;
+/// The most a curve turns, in degrees, between two cross-sections of a belt.
+const TURN_STEP: f64 = 6.0;
 /// The most cross-sections [`stations`] makes of a path, past its start and one for each
 /// segment: a longer path has its steps stretched, so one hundreds of kilometres long is drawn
 /// at no more cost.
@@ -393,22 +395,29 @@ fn floor_rect(c: [f32; 2], along: f32, across: f32, heading: f32, z: f32) -> Mes
 }
 
 /// The cross-sections of a belt along `path` (in metres): at most [`STEP`] apart, closer on a
-/// tight curve, and at every segment's ends; on a path long enough to need more than
-/// [`MOST_STATIONS`], the steps are stretched to fit, the straights' first: a curve keeps its
-/// steps unless curves alone would take more than half.
+/// tight curve, at least one every [`TURN_STEP`] degrees of a curve, and at every segment's ends;
+/// on a path long enough to need more than [`MOST_STATIONS`], the steps are stretched to fit, the
+/// straights' first (a curve's only if curves alone would take more than half), never past one
+/// every [`TURN_STEP`] degrees. A sharp turn (an arc of radius 0) has its cross-sections turn
+/// round at one place, from the heading it comes in on to the one it leaves on.
 pub(crate) fn stations(path: &Path) -> Vec<Station> {
-    stations_with(path, &[])
+    stations_with(path, &[]).0
 }
 
-/// [`stations`], and where its steps are stretched, one more at each distance along the path in
-/// `cuts` (the ends of the rails' gaps), so a gap shorter than a step still has stations at its
-/// ends and its rail left out.
-pub(crate) fn stations_with(path: &Path, cuts: &[f64]) -> Vec<Station> {
+/// [`stations`] and each one's distance along the path. Where the steps are stretched, there is
+/// one more at each distance in `cuts` (the ends of the rails' gaps), so a gap shorter than a
+/// step still has stations at its ends and its rail left out.
+pub(crate) fn stations_with(path: &Path, cuts: &[f64]) -> (Vec<Station>, Vec<f32>) {
     let step_of = |seg: &PathSegment| match *seg {
         PathSegment::Line { .. } => STEP,
         PathSegment::Arc { radius, .. } | PathSegment::Helix { radius, .. } => {
-            (radius.abs() * 6.0_f64.to_radians()).clamp(0.05, STEP)
+            (radius.abs() * TURN_STEP.to_radians()).clamp(0.05, STEP)
         }
+    };
+    let turn_of = |seg: &PathSegment| match *seg {
+        PathSegment::Line { .. } => 0.0,
+        PathSegment::Arc { angle_deg, .. } => angle_deg.abs(),
+        PathSegment::Helix { turns, .. } => 360.0 * turns.abs(),
     };
     let straight = |seg: &PathSegment| matches!(seg, PathSegment::Line { .. });
     let wanted = |line: bool| -> f64 {
@@ -427,40 +436,54 @@ pub(crate) fn stations_with(path: &Path, cuts: &[f64]) -> Vec<Station> {
         let all = (lines + curves) / MOST_STATIONS;
         (all, all)
     };
-    let stretch = line_stretch.max(curve_stretch);
-    let mut at: Vec<f64> = Vec::new();
+    // Each segment's frames from its own start, so a sharp turn's come in and go out at one
+    // place and distance.
+    let mut frames: Vec<(f64, Frame)> = Vec::new();
+    let mut from = path.start;
     let mut done = 0.0;
     for seg in &path.segments {
         let len = seg.length();
-        let step = step_of(seg)
-            * if straight(seg) {
-                line_stretch
-            } else {
-                curve_stretch
-            };
-        let n = (len / step).ceil().max(1.0) as u32;
-        let first = u32::from(!at.is_empty());
+        let stretch = if straight(seg) {
+            line_stretch
+        } else {
+            curve_stretch
+        };
+        let by_length = (len / (step_of(seg) * stretch)).ceil();
+        let by_turn = (turn_of(seg) / TURN_STEP).ceil();
+        let n = by_length.max(by_turn).max(1.0) as u32;
+        let first = u32::from(!frames.is_empty());
         for k in first..=n {
-            at.push(done + len * f64::from(k) / f64::from(n));
+            let f = f64::from(k) / f64::from(n);
+            frames.push((done + len * f, seg.frame_at(from, f)));
         }
+        from = seg.frame_at(from, 1.0);
         done += len;
     }
-    if stretch > 1.0 {
-        at.extend(cuts.iter().copied().filter(|c| *c > 0.0 && *c < done));
-        at.sort_by(f64::total_cmp);
-        at.dedup();
+    if line_stretch.max(curve_stretch) > 1.0 {
+        frames.extend(
+            cuts.iter()
+                .filter(|c| **c > 0.0 && **c < done)
+                .map(|c| (*c, path.point_at(*c))),
+        );
+        // Stable, so the frames of a sharp turn keep their order.
+        frames.sort_by(|a, b| a.0.total_cmp(&b.0));
     }
-    at.into_iter()
-        .map(|s| {
-            let f = path.point_at(s);
-            Station {
-                x: f.x as f32,
-                y: f.y as f32,
-                z: f.z as f32,
-                heading: f.heading_deg.to_radians() as f32,
-            }
+    // A point on a straight (an arc of no length or turn) gives one frame twice.
+    frames.dedup_by(|b, a| a.0 == b.0 && a.1.heading_deg == b.1.heading_deg);
+    frames
+        .into_iter()
+        .map(|(s, f)| {
+            (
+                Station {
+                    x: f.x as f32,
+                    y: f.y as f32,
+                    z: f.z as f32,
+                    heading: f.heading_deg.to_radians() as f32,
+                },
+                s as f32,
+            )
         })
-        .collect()
+        .unzip()
 }
 
 /// The distance along `path` of the point nearest `q`, how far `q` is from it, and on which side
@@ -666,13 +689,14 @@ pub(crate) fn scene(model: &Model) -> Scene {
                 .chain(&right)
                 .flat_map(|(a, b)| [f64::from(*a), f64::from(*b)])
                 .collect();
-            let st = stations_with(path, &cuts);
+            // The gaps are distances along the path, so the stations' are too.
+            let (st, at) = stations_with(path, &cuts);
             let belt = kit::Belt {
                 width: *width,
                 height: BELT_HEIGHT,
                 ..kit::Belt::default()
             };
-            let parts = kit::belt_along(&st, belt, &left, &right);
+            let parts = kit::belt_along_at(&st, &at, belt, &left, &right);
             let rails = named_colour(&e.name).map_or(Paint::Frame, Paint::Lane);
             push_mesh(&mut tris, &parts.belt, Paint::Belt);
             push_mesh(&mut tris, &parts.frame, rails);
@@ -1491,11 +1515,98 @@ mod tests {
             }],
         );
         let gap = (9.64_f32, 10.36_f32);
-        let st = stations_with(&path, &[f64::from(gap.0), f64::from(gap.1)]);
+        let (st, at) = stations_with(&path, &[f64::from(gap.0), f64::from(gap.1)]);
         let belt = kit::Belt::default();
-        let gapped = kit::belt_along(&st, belt, &[gap], &[]);
-        let whole = kit::belt_along(&st, belt, &[], &[]);
+        let gapped = kit::belt_along_at(&st, &at, belt, &[gap], &[]);
+        let whole = kit::belt_along_at(&st, &at, belt, &[], &[]);
         assert!(gapped.frame.triangle_count() < whole.frame.triangle_count());
+    }
+
+    /// 500 km on, then 17 half circles of 10 m turning left and right in turn, then 10 m on:
+    /// the half circles alone want more than half the stations.
+    fn snake() -> Path {
+        let mut segments = vec![PathSegment::Line {
+            length: 500_000.0,
+            rise: 0.0,
+        }];
+        for k in 0..17 {
+            segments.push(PathSegment::Arc {
+                radius: 10.0,
+                angle_deg: if k % 2 == 0 { 180.0 } else { -180.0 },
+                rise: 0.0,
+            });
+        }
+        segments.push(PathSegment::Line {
+            length: 10.0,
+            rise: 0.0,
+        });
+        Path::new(Frame::default(), segments)
+    }
+
+    #[test]
+    fn many_bends_on_a_very_long_belt_are_not_drawn_as_chords() {
+        let (st, at) = stations_with(&snake(), &[]);
+        // Round the bends, no two stations are further apart than 6 degrees of a 10 m circle
+        // (1.05 m), so the drawing and a click on it follow the curve.
+        let bends = 500_000.0_f32;
+        let longest = st
+            .windows(2)
+            .zip(at.windows(2))
+            .filter(|(_, s)| s[0] >= bends && s[1] <= bends + 17.0 * 31.4)
+            .map(|(w, _)| libm::hypotf(w[1].x - w[0].x, w[1].y - w[0].y))
+            .fold(0.0_f32, f32::max);
+        assert!(longest > 0.0 && longest < 1.2, "{longest}");
+    }
+
+    #[test]
+    fn a_rail_gap_after_the_bends_is_where_the_path_puts_it() {
+        let path = snake();
+        let end = path.length();
+        // A metre-long gap 5 m before the end, on the straight after the bends.
+        let gap = ((end - 5.0) as f32, (end - 4.0) as f32);
+        let (st, at) = stations_with(&path, &[f64::from(gap.0), f64::from(gap.1)]);
+        assert!((at[at.len() - 1] - end as f32).abs() < 0.1);
+        let belt = kit::Belt::default();
+        let gapped = kit::belt_along_at(&st, &at, belt, &[gap], &[]);
+        let whole = kit::belt_along_at(&st, &at, belt, &[], &[]);
+        assert!(gapped.frame.triangle_count() < whole.frame.triangle_count());
+    }
+
+    #[test]
+    fn a_sharp_corner_on_a_stretched_belt_turns_where_it_is() {
+        // 10 km east, a sharp left turn, 10 km north: stations about 4.9 m apart on each.
+        let path = Path::new(
+            Frame::default(),
+            vec![
+                PathSegment::Line {
+                    length: 10_000.0,
+                    rise: 0.0,
+                },
+                PathSegment::Arc {
+                    radius: 0.0,
+                    angle_deg: 90.0,
+                    rise: 0.0,
+                },
+                PathSegment::Line {
+                    length: 10_000.0,
+                    rise: 0.0,
+                },
+            ],
+        );
+        let st = stations(&path);
+        let north = std::f32::consts::FRAC_PI_2;
+        let at_corner = |s: &&Station| (s.x - 10_000.0).abs() < 0.01 && s.y.abs() < 0.01;
+        // At the corner, the cross-sections come in facing east and leave facing north.
+        assert!(st.iter().filter(at_corner).any(|s| s.heading.abs() < 1e-4));
+        assert!(
+            st.iter()
+                .filter(at_corner)
+                .any(|s| (s.heading - north).abs() < 1e-4)
+        );
+        // Past it, every one faces north: no twist along the next step.
+        for s in st.iter().filter(|s| s.y > 0.01) {
+            assert!((s.heading - north).abs() < 1e-4, "{s:?}");
+        }
     }
 
     #[test]

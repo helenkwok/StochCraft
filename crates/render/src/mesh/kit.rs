@@ -161,15 +161,30 @@ fn runs(
 /// in `gaps_left` (from, to, in metres along the stations) and the right one those in
 /// `gaps_right`, where another belt joins or leaves. Empty for fewer than two stations or
 /// parameters that are not positive. The stripe's dashes follow the stations, so they show only
-/// where stations are closer than half a `stripe_pitch`.
+/// where stations are closer than half a `stripe_pitch`. Distances are measured along the
+/// straight lines between the stations; [`belt_along_at`] takes them from the path instead.
 pub fn belt_along(
     stations: &[Station],
     p: Belt,
     gaps_left: &[(f32, f32)],
     gaps_right: &[(f32, f32)],
 ) -> BeltParts {
+    belt_along_at(stations, &distances(stations), p, gaps_left, gaps_right)
+}
+
+/// [`belt_along`] with each station's distance along the path given (`at`, one per station, in
+/// order), so the gaps and the legs fall where the path's own metres put them, round curves too.
+/// Empty if `at` is not one per station.
+pub fn belt_along_at(
+    stations: &[Station],
+    at: &[f32],
+    p: Belt,
+    gaps_left: &[(f32, f32)],
+    gaps_right: &[(f32, f32)],
+) -> BeltParts {
     let mut parts = BeltParts::default();
     if stations.len() < 2
+        || at.len() != stations.len()
         || !valid_positive(&[
             p.width,
             p.height,
@@ -183,7 +198,6 @@ pub fn belt_along(
     {
         return parts;
     }
-    let at = distances(stations);
     let total = at.last().copied().unwrap_or(0.0);
     let flat = stations.iter().all(|s| (s.z - stations[0].z).abs() < 1e-6);
     let hw = p.width / 2.0;
@@ -207,7 +221,7 @@ pub fn belt_along(
             .collect();
         emit_swept_strip(&mut parts.frame, &frame, flat);
         if p.rail_height > 0.0 {
-            for run in runs(stations, &at, gaps, &|s| {
+            for run in runs(stations, at, gaps, &|s| {
                 section(s, a, b, top, top + p.rail_height)
             }) {
                 emit_swept_strip(&mut parts.frame, &run, flat);
@@ -247,7 +261,7 @@ pub fn belt_along(
         ]);
         for k in 0..=count {
             let d = first + (last - first) * (k as f32 / count as f32);
-            let s = station_at(stations, &at, d);
+            let s = station_at(stations, at, d);
             let mut pair = Mesh::new();
             for side in [1.0_f32, -1.0] {
                 let y = side * (hw + p.rail_width / 2.0);
