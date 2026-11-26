@@ -396,6 +396,13 @@ fn floor_rect(c: [f32; 2], along: f32, across: f32, heading: f32, z: f32) -> Mes
 /// tight curve, and at every segment's ends; on a path long enough to need more than
 /// [`MOST_STATIONS`], the steps are stretched alike to fit.
 pub(crate) fn stations(path: &Path) -> Vec<Station> {
+    stations_with(path, &[])
+}
+
+/// [`stations`], and where its steps are stretched, one more at each distance along the path in
+/// `cuts` (the ends of the rails' gaps), so a gap shorter than a step still has stations at its
+/// ends and its rail left out.
+pub(crate) fn stations_with(path: &Path, cuts: &[f64]) -> Vec<Station> {
     let step_of = |seg: &PathSegment| match *seg {
         PathSegment::Line { .. } => STEP,
         PathSegment::Arc { radius, .. } | PathSegment::Helix { radius, .. } => {
@@ -404,66 +411,142 @@ pub(crate) fn stations(path: &Path) -> Vec<Station> {
     };
     let wanted: f64 = path.segments.iter().map(|s| s.length() / step_of(s)).sum();
     let stretch = (wanted / MOST_STATIONS).max(1.0);
-    let mut out = Vec::new();
+    let mut at: Vec<f64> = Vec::new();
     let mut done = 0.0;
     for seg in &path.segments {
         let len = seg.length();
         let step = step_of(seg) * stretch;
         let n = (len / step).ceil().max(1.0) as u32;
-        let first = u32::from(!out.is_empty());
+        let first = u32::from(!at.is_empty());
         for k in first..=n {
-            let f = path.point_at(done + len * f64::from(k) / f64::from(n));
-            out.push(Station {
+            at.push(done + len * f64::from(k) / f64::from(n));
+        }
+        done += len;
+    }
+    if stretch > 1.0 {
+        at.extend(cuts.iter().copied().filter(|c| *c > 0.0 && *c < done));
+        at.sort_by(f64::total_cmp);
+        at.dedup();
+    }
+    at.into_iter()
+        .map(|s| {
+            let f = path.point_at(s);
+            Station {
                 x: f.x as f32,
                 y: f.y as f32,
                 z: f.z as f32,
                 heading: f.heading_deg.to_radians() as f32,
-            });
-        }
-        done += len;
-    }
-    out
+            }
+        })
+        .collect()
 }
 
 /// The distance along `path` of the point nearest `q`, how far `q` is from it, and on which side
-/// (1 left of the direction of travel, -1 right). It looks every 5 cm along the path, in at most
-/// [`MOST_STATIONS`] steps: on a longer path, at that many steps and then again round the nearest
-/// of them, closer each time, until the steps are 5 cm.
+/// (1 left of the direction of travel, -1 right), to within 5 cm along the path. A path of up to
+/// [`MOST_STATIONS`] steps of 5 cm is looked at every 5 cm. A longer one is looked at in that many
+/// steps, then each step that could hold a nearer point is looked at more closely, until the
+/// steps are 5 cm: no point of a step is nearer than its ends' distances allow, since a point
+/// moves no further than it goes along the path. At most [`NEAREST_LOOKS`] points in all.
 fn nearest(path: &Path, q: [f64; 2]) -> (f64, f64, f64) {
     let total = path.length();
-    let (mut from, mut to) = (0.0, total);
+    let look = |s: f64| {
+        let f = path.point_at(s);
+        let (dx, dy) = (q[0] - f.x, q[1] - f.y);
+        let h = f.heading_deg.to_radians();
+        let side = cos(h) * dy - sin(h) * dx;
+        (
+            s,
+            (dx * dx + dy * dy).sqrt(),
+            if side >= 0.0 { 1.0 } else { -1.0 },
+        )
+    };
+    let n = ((total / 0.05).ceil().clamp(1.0, MOST_STATIONS) as u32).max(1);
+    let first: Vec<(f64, f64, f64)> = (0..=n)
+        .map(|k| look(total * f64::from(k) / f64::from(n)))
+        .collect();
     let mut best = (0.0, f64::INFINITY, 1.0);
-    // Each look narrows the span by thousands of times, so a few reach 5 cm on any path.
-    for _ in 0..8 {
-        let n = ((to - from) / 0.05).ceil().clamp(1.0, MOST_STATIONS);
-        let found = nearest_between(path, q, from, to, n as u32);
-        if found.1 <= best.1 {
-            best = found;
+    for p in &first {
+        if p.1 < best.1 {
+            best = *p;
         }
-        if n < MOST_STATIONS {
+    }
+    if !total.is_finite() || total / f64::from(n) <= 0.05 {
+        return best;
+    }
+    // The steps that may hold a nearer point, the most promising first.
+    let mut open = std::collections::BinaryHeap::new();
+    for w in first.windows(2) {
+        open.push(Step::new(w[0], w[1]));
+    }
+    let mut looks = NEAREST_LOOKS;
+    while let Some(step) = open.pop() {
+        if step.bound >= best.1 || looks == 0 {
             break;
         }
-        let step = (to - from) / n;
-        (from, to) = ((best.0 - step).max(0.0), (best.0 + step).min(total));
+        let (a, b) = (step.a, step.b);
+        let len = b.0 - a.0;
+        if len <= 0.05 {
+            continue;
+        }
+        let m = (len / 0.05).ceil().min(16.0) as u32;
+        let mut prev = a;
+        for k in 1..=m {
+            let here = if k == m {
+                b
+            } else {
+                looks = looks.saturating_sub(1);
+                look(a.0 + len * f64::from(k) / f64::from(m))
+            };
+            if here.1 < best.1 {
+                best = here;
+            }
+            let part = Step::new(prev, here);
+            if part.bound < best.1 {
+                open.push(part);
+            }
+            prev = here;
+        }
     }
     best
 }
 
-/// [`nearest`] among `n + 1` points evenly spaced along `path` from `from` to `to`.
-fn nearest_between(path: &Path, q: [f64; 2], from: f64, to: f64, n: u32) -> (f64, f64, f64) {
-    let mut best = (from, f64::INFINITY, 1.0);
-    for k in 0..=n {
-        let s = from + (to - from) * f64::from(k) / f64::from(n.max(1));
-        let f = path.point_at(s);
-        let (dx, dy) = (q[0] - f.x, q[1] - f.y);
-        let d = (dx * dx + dy * dy).sqrt();
-        if d < best.1 {
-            let h = f.heading_deg.to_radians();
-            let side = cos(h) * dy - sin(h) * dx;
-            best = (s, d, if side >= 0.0 { 1.0 } else { -1.0 });
+/// The most points [`nearest`] looks at past its first [`MOST_STATIONS`].
+const NEAREST_LOOKS: u32 = 65_536;
+
+/// A step along a path between two points [`nearest`] looked at (distance along, distance from
+/// the point sought, side), with the least distance any point between them can have.
+struct Step {
+    a: (f64, f64, f64),
+    b: (f64, f64, f64),
+    bound: f64,
+}
+
+impl Step {
+    fn new(a: (f64, f64, f64), b: (f64, f64, f64)) -> Self {
+        Self {
+            a,
+            b,
+            bound: (a.1 + b.1 - (b.0 - a.0)) / 2.0,
         }
     }
-    best
+}
+
+// Ordered so that a `BinaryHeap` gives the step of the least bound first.
+impl PartialEq for Step {
+    fn eq(&self, other: &Self) -> bool {
+        self.bound.total_cmp(&other.bound).is_eq()
+    }
+}
+impl Eq for Step {}
+impl PartialOrd for Step {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+impl Ord for Step {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        other.bound.total_cmp(&self.bound)
+    }
 }
 
 /// A belt's rail gaps on its left and right (from, to, in metres along it), and the transfer
@@ -556,7 +639,12 @@ pub(crate) fn scene(model: &Model) -> Scene {
                 .map(|(_, p, w)| (p, *w))
                 .collect();
             let (left, right, plates) = gaps_of(path, *width, &others);
-            let st = stations(path);
+            let cuts: Vec<f64> = left
+                .iter()
+                .chain(&right)
+                .flat_map(|(a, b)| [f64::from(*a), f64::from(*b)])
+                .collect();
+            let st = stations_with(path, &cuts);
             let belt = kit::Belt {
                 width: *width,
                 height: BELT_HEIGHT,
@@ -1343,6 +1431,61 @@ mod tests {
         );
         let (s, d, side) = nearest(&short, [4.0, 1.0]);
         assert!((s - 4.0).abs() < 1e-9 && (d - 1.0).abs() < 1e-9, "{s} {d}");
+        assert_eq!(side, 1.0);
+    }
+
+    #[test]
+    fn a_rail_gap_on_a_very_long_belt_is_left_out() {
+        // 10 km: the stations are about 2.4 m apart, wider than a gap of 0.72 m.
+        let path = Path::new(
+            Frame::default(),
+            vec![PathSegment::Line {
+                length: 10_000.0,
+                rise: 0.0,
+            }],
+        );
+        let gap = (9.64_f32, 10.36_f32);
+        let st = stations_with(&path, &[f64::from(gap.0), f64::from(gap.1)]);
+        let belt = kit::Belt::default();
+        let gapped = kit::belt_along(&st, belt, &[gap], &[]);
+        let whole = kit::belt_along(&st, belt, &[], &[]);
+        assert!(gapped.frame.triangle_count() < whole.frame.triangle_count());
+    }
+
+    #[test]
+    fn the_nearest_point_is_found_on_the_nearer_of_two_close_runs() {
+        // A long U: 2047.25 m east, a sharp left turn, 1 m north, another, 2047.75 m west. The
+        // point is 0.45 m from the first run and 0.55 m from the way back.
+        let path = Path::new(
+            Frame::default(),
+            vec![
+                PathSegment::Line {
+                    length: 2047.25,
+                    rise: 0.0,
+                },
+                PathSegment::Arc {
+                    radius: 0.0,
+                    angle_deg: 90.0,
+                    rise: 0.0,
+                },
+                PathSegment::Line {
+                    length: 1.0,
+                    rise: 0.0,
+                },
+                PathSegment::Arc {
+                    radius: 0.0,
+                    angle_deg: 90.0,
+                    rise: 0.0,
+                },
+                PathSegment::Line {
+                    length: 2047.75,
+                    rise: 0.0,
+                },
+            ],
+        );
+        let (s, d, side) = nearest(&path, [100.5, 0.45]);
+        assert!((s - 100.5).abs() <= 0.05, "{s}");
+        assert!((d - 0.45).abs() < 1e-3, "{d}");
         assert_eq!(side, 1.0);
     }
 
