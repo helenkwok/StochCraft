@@ -1522,6 +1522,18 @@ fn a_pool_serves_whole_jobs_only() {
             bound: Bound::AtMost
         }
     );
+    // Each pool's load is over the 2 units whole jobs can use: 1.2 × 1 × 2 / 2 = 1.2, so it is
+    // unstable, though its units are busy 2.4 / 3 = 0.8 of the time in the results' sense.
+    for pool in ["a", "b"] {
+        let p = row(&c, pool);
+        assert!(p.load.exact_value().is_some_and(|l| near(l, 1.2)), "{p:?}");
+        assert!(
+            p.utilisation.exact_value().is_some_and(|u| near(u, 0.8)),
+            "{p:?}"
+        );
+        assert_eq!(p.status, Status::Unstable, "{p:?}");
+    }
+    assert_eq!(row(&c, "job").status, Status::Unstable);
     // One job of one unit each: unchanged, 3 at a time.
     if let ElementKind::SharedTask { needs, .. } = &mut m.elements[1].kind {
         for r in needs.iter_mut() {
@@ -1532,4 +1544,8 @@ fn a_pool_serves_whole_jobs_only() {
     }
     let c = m.capacity(DEFAULT_TARGET);
     assert_eq!(row(&c, "next").arrival_rate, Value::exact(1.2));
+    let p = row(&c, "a");
+    assert!(p.load.exact_value().is_some_and(|l| near(l, 0.4)), "{p:?}");
+    assert_eq!(p.load, p.utilisation);
+    assert_eq!(p.status, Status::Fine);
 }

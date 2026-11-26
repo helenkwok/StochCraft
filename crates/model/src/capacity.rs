@@ -1445,9 +1445,40 @@ impl<'a> Net<'a> {
         uses.iter()
             .map(|u| {
                 matches!(u, Some(Ok(uses)) if uses.iter().any(|(j, _)| unbounded[*j]
-                    || work[*j] >= f64::from(self.model.resources[*j].most_units().max(1))))
+                    || work[*j] >= f64::from(self.usable_units(*j).max(1))))
             })
             .collect()
+    }
+
+    /// The units of pool `j` that whole jobs can keep busy at once. Every take from the pool is a
+    /// multiple of g, the greatest common divisor of the units its tasks take from it, so at most
+    /// ⌊units / g⌋ · g of them are ever busy together: 3 units for jobs of 2 can serve only 2.
+    /// With several tasks or requirements taking different numbers this is an upper bound on the
+    /// units in use (never fewer than can really be used), so the load over it never overstates
+    /// how busy the pool is: it may miss an overload, never report one that is not there. A task
+    /// whose take from the pool is not known before a run (alternatives, roles over several
+    /// pools) may take any number, so g is 1 then, as it is with jobs of one unit: all the
+    /// pool's units, as before.
+    fn usable_units(&self, j: usize) -> u32 {
+        fn gcd(a: u32, b: u32) -> u32 {
+            if b == 0 { a } else { gcd(b, a % b) }
+        }
+        let mut g = 0;
+        for i in 0..self.model.elements.len() {
+            match self.pool_use(i) {
+                Some(Ok(uses)) => {
+                    for &(p, q) in &uses {
+                        if p == j {
+                            g = gcd(g, q);
+                        }
+                    }
+                }
+                Some(Err(_)) if self.might_use(i, j) => g = 1,
+                _ => {}
+            }
+        }
+        let g = g.max(1);
+        self.model.resources[j].most_units() / g * g
     }
 
     /// Whether shared task `i` names pool `j` among its needs.
@@ -1522,8 +1553,15 @@ impl<'a> Net<'a> {
                 value: f64::from(units.max(1)),
                 bound: if vary { Bound::AtMost } else { Bound::Exact },
             };
+            // Utilisation is over all the pool's units, as in the results; the load, which sets
+            // the status, over those whole jobs can use ([`Net::usable_units`]).
             let utilisation = work.combine(&units_value, true);
-            let (status, units_for_target) = judge(&utilisation, &work, None, target, 1.0);
+            let usable = Value::Known {
+                value: f64::from(self.usable_units(j).max(1)),
+                bound: if vary { Bound::AtMost } else { Bound::Exact },
+            };
+            let load = work.combine(&usable, true);
+            let (status, units_for_target) = judge(&load, &work, None, target, 1.0);
             // A transport's work is only a lower bound (the empty trips are not counted): its
             // pool is unstable when even that reaches 100%, else not known before a run.
             let moves = users
@@ -1542,8 +1580,8 @@ impl<'a> Net<'a> {
                 units: Some(units),
                 units_vary: vary,
                 availability: None,
-                utilisation: utilisation.clone(),
-                load: utilisation,
+                utilisation,
+                load,
                 status,
                 units_for_target,
                 formula: Err(Why::SharedPool),
