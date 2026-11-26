@@ -82,6 +82,7 @@ The examples are also under **File ▸ Open Example**:
 | **Hospital beds** | How many beds so that fewer than 1 in 50 patients are turned away? Checked against Erlang B, with log-normal stays and, in a second scenario, exponential ones of the same mean; a third has 28 beds. |
 | **Machine repair crew** | How many fitters keep six machines running? Checked against the finite-source queue M/M/R//6, with one, two or three fitters as scenarios. |
 | **Repairmen with spares** | How many spares and repairmen keep ten machines running? Crane and Iglehart's example (Winter Simulation Conference, 1973): ten machines must run, four spares wait and cannot fail while they wait, three repairmen; a machine fails once an hour on average and a repair takes 15 minutes. Checked against the birth–death chain of the number broken, which gives the paper's values: 3.47 broken and 9.29 running on average. Scenarios with two or four repairmen, and with no spares or eight, are checked on the machines broken and running; a fourth repairman keeps 9.70 machines running, about as many as four more spares (9.71). |
+| **A job shop short of workers** | Is the worker or the machines the constraint? From Maggard, Lesso, Hogg and Phillips (Winter Simulation Conference, 1973): two machines and one worker, and each job needs its machine and the worker at the same time (a task that holds units of two pools at once). Jobs arrive once an hour on average, half for each machine, and take 45 minutes. Served first come first served, the worker is the only constraint, so jobs wait as at one server (M/M/1): 3 service times at 75% busy. Checked against M/M/1 on the worker's utilisation, each machine's (half the worker's; the two add up to the worker's exactly) and the jobs' waits. A second scenario with 54-minute jobs (90% busy) is checked on the worker's utilisation and the waits, 9 service times. |
 | **Inspection with rework** | How much longer do parts take when half of them need rework? Checked against the product form of a Jackson network; a second scenario reworks a quarter. |
 | **Project finish date** | When will the project finish? Three ten-day activities in parallel, run until the project ends; checked against the maximum of exponential durations (18.3 days on average). |
 | **Same mean, different spread** | Does it matter how much service times vary when the average is the same? Three desks with fixed, exponential and very uneven times, checked against Pollaczek–Khinchine (waits of 2, 4 and 10 minutes). |
@@ -290,6 +291,19 @@ entities in order of priority, then of arrival, and each entity takes the first 
 alternatives that is free, in the order under **Needs**: with Able listed before Baker, a waiting
 customer gets Able even if Baker's job ended first. The capacity table gives no queueing formula
 for such a task, since its units do not share one service time.
+
+**Several pools at once.** A task can need units of several pools together, such as a job that
+needs a machine and a worker: each requirement has its own alternatives, and an entity takes the
+units for every requirement at once, only when all of them can be met, and gives them all back
+when it is done. It never holds a machine while it waits for the worker, so tasks cannot
+deadlock, and an entity that needs only a machine is served while one needing a machine and the
+busy worker waits. The pool that meets the first requirement sets the **Service time by
+resource**. Each pool counts its units busy while they are held. The capacity table shows each
+pool's load, and no formula for such a task, since it holds several pools. In the file, each
+requirement is a resource role of the task (a `performer`) with its own BPSim `selection`; from
+the command line, `needs` of `block.set` and `block.add` is the first requirement and
+`also_needs` (a list of lists of alternatives) the others. Editing them in the inspector comes
+next; until then the inspector edits the first requirement and keeps the others.
 
 With nothing selected, the inspector shows the whole model:
 

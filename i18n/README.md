@@ -1076,6 +1076,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The rows for the job shop example (its title, the line about it, its question and what it
+  teaches) were machine-drafted from the plain meaning of the English, with each catalog's own
+  words for machine, worker, job, constraint and a single-server queue where it had them. The
+  authors' names and the conference's name stay in English and Latin script, and the numbers and
+  percentages keep the language's usual form. Not checked against any other source and not
+  reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq, and
+  "constraint" (the bottleneck) in most of them.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

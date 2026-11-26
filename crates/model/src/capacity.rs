@@ -1567,7 +1567,9 @@ impl<'a> Net<'a> {
                     && uses.len() > 1
                 {
                     let status = pool_rows.last().map_or(Status::Unknown, |p| p.status);
-                    let first = uses.first().is_some_and(|(p, _)| *p == j);
+                    // The first of its pools reached in this loop sets the status, the others
+                    // can only make it worse.
+                    let first = st.formula != Err(Why::SeveralPools);
                     st.units = None;
                     st.utilisation = Value::Unknown(Why::SeveralPools);
                     st.load = st.utilisation.clone();

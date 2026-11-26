@@ -726,6 +726,16 @@ them.
   - `block.add` with `"kind": "shared_task"`;
   - `block.set` with `needs` and `priority`;
   - model JSON has `resources` only when there are some.
+- **Several pools at once** (done later, with the job shop example): a shared task's needs are
+  requirements, each with its alternatives, all met together (`Requirement`): an entity takes
+  every unit at once, only when all can be met, and gives them back together, so tasks cannot
+  deadlock, and an entity that cannot be served does not hold back one that can. In BPMN each
+  requirement is a resource role of the task (a `performer` with an id) with its own BPSim
+  `selection`, as BPSim applies `selection` to resource roles; a task's own selection is one
+  requirement as before, and a task with several performers and no selection needs each of them
+  (only the first was read before). The pool of the first requirement sets the time by
+  resource. The capacity table shows each pool's load and no formula for such a task. Commands:
+  `also_needs` beside `needs`. Editing them in the inspector is next.
 - **Not here:** resources held across several tasks (BPMN sub-processes); calendars
   (`availability`, quantity by shift) came in M2.6. Erlang loss (M/M/c/c) needs a waiting-room
   limit on a shared task, which this design does not have; a server with `queue_capacity` 0
@@ -4965,6 +4975,25 @@ are.
     It differs from the machine repair crew above because spares on cold standby do not fail.
     Once regenerative intervals (M2.9) are built, this example is their first check: the
     paper's own intervals come from cycles back to X = 0.
+  - **A job shop short of workers** (`job-shop.bpmn`, "Manufacturing"): M. Maggard, W. Lesso,
+    G. Hogg and D. Phillips, *Using an Extended Version of GERT to Simulate Priority and
+    Assignment Rules in a Labor Limited Jobshop*, Proceedings of the 1973 Winter Simulation
+    Conference, pp. 274–288. Each job needs a machine and a worker at the same time, which
+    needed a shared task that holds units of several pools at once (the pools of M2.5 alone
+    could not say it: a task had alternatives, not requirements met together). Two machines
+    and one worker; jobs arrive at rate λ = 1 (an hour) and go to either machine with chance
+    1/2, and a job takes an exponential time of mean 0.75 with its machine and the worker. Each
+    machine's task needs its machine and the worker, all at once. Served first come first
+    served, the worker is the only constraint, so the shop is a single-server queue (M/M/1) in
+    the worker. The authors validated their own model this way, at ρ 0.75 and 0.90, where the
+    exact normalised waits Wq/s are 3 and 9 (pp. 280–283). `crates/engine/tests/examples.rs`
+    checks the worker busy ρ = 0.75, each machine 0.375, every job's wait 2.25 hours and the
+    queue at each machine 1.125, and that the machines' utilisations add up to the worker's
+    exactly (a machine is busy only while the worker serves on it). A scenario at ρ = 0.9
+    (mean 0.9) is checked on the worker's utilisation and the waits, 8.1 hours. The authors
+    also solved the shortest-operation-first case of two machines and one worker analytically,
+    following a result in Saaty's *Elements of Queueing Theory*; that is to read before it
+    becomes a second check.
 - **Planned examples:** each joins only once its answer is checked against its source with the
   page, as above.
   - **A particle detector's readout** (a new "Science" industry): collisions at a collider
@@ -5032,15 +5061,6 @@ are.
 
     Those limits are the exact checks. Between them the curves are published simulation
     results, to be read off the page images and said so on the card.
-  - **A job shop short of workers**: Maggard, Lesso, Hogg and Phillips, *Using an Extended
-    Version of GERT to Simulate Priority and Assignment Rules in a Labor Limited Jobshop*,
-    Proceedings of the 1973 Winter Simulation Conference, pp. 274–288. Each job needs a machine
-    and a worker at the same time (M2.5's shared pools). Exact check: with two machines and one
-    worker, served first come first served, the worker is the only constraint, so the shop is a
-    single-server queue (M/M/1). The authors validated their own model this way. They also
-    solved the shortest-operation-first case of two machines and one worker analytically,
-    following a result in Saaty's *Elements of Queueing Theory*; that is to read before it
-    becomes a second check.
   - **Low-poly scenes** for the 3D view, each with an exact answer: a supermarket checkout,
     staffed desks against self-service (Erlang C); an ambulance fleet (Erlang B); a delivery
     depot; a signalised junction or a roundabout; container berths at a port; and a

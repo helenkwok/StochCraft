@@ -3245,3 +3245,222 @@ fn scenery_in_a_file_that_is_not_utf8_is_written_as_character_references() {
     let back = read(&saved).map(|l| l.model.site.scene);
     assert_eq!(back, Ok(model.site.scene.clone()));
 }
+
+/// A job shop's job needs a machine and a worker at once: a shared task with two requirements.
+fn job_shop() -> Model {
+    let mut m = Builder::new();
+    m.pool("machines", 2, &[]);
+    m.pool("worker", 2, &[]);
+    let src = m.source("jobs", Dist::Exponential { mean: 1.0 }, None);
+    let one = |id: &str| {
+        stochcraft_model::Requirement::new(vec![Need::Resource {
+            id: stochcraft_model::ElementId::unchecked(id),
+            quantity: 1,
+        }])
+    };
+    let job = m.shared_task_all(
+        "job",
+        Dist::Exponential { mean: 0.75 },
+        vec![one("machines"), one("worker")],
+        0.0,
+    );
+    let out = m.sink("out");
+    m.connect(src, job);
+    m.connect(job, out);
+    m.build(Experiment::default())
+}
+
+fn needs_of(m: &Model, id: &str) -> Vec<stochcraft_model::Requirement> {
+    m.elements
+        .iter()
+        .find(|e| e.id.as_str() == id)
+        .and_then(|e| match &e.kind {
+            ElementKind::SharedTask { needs, .. } => Some(needs.clone()),
+            _ => None,
+        })
+        .unwrap_or_default()
+}
+
+/// Each requirement is a resource role of the task (a performer with an id) with its own BPSim
+/// selection, and the task has none of its own: written, read back, saved unchanged, edited in
+/// place, and back to one requirement in place.
+#[test]
+fn a_task_needing_several_pools_has_a_performer_for_each() {
+    let model = job_shop();
+    assert_eq!(model.validate(), vec![]);
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes).into_owned();
+    for (role, pool) in [("job_need1", "machines"), ("job_need2", "worker")] {
+        assert!(
+            text.contains(&format!(
+                "<bpmn:performer id=\"{role}\">\n        <bpmn:resourceRef>{pool}</bpmn:resourceRef>"
+            )),
+            "{text}"
+        );
+        assert!(
+            text.contains(&format!("<bpsim:ElementParameters elementRef=\"{role}\">")),
+            "{text}"
+        );
+        assert!(
+            text.contains(&format!("getResource('{pool}', 1)")),
+            "{text}"
+        );
+    }
+    // Only the roles have a selection.
+    assert_eq!(text.matches("<bpsim:Selection>").count(), 2, "{text}");
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+    assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
+
+    // In place: the job now needs both workers.
+    let mut edited = loaded.model.clone();
+    if let ElementKind::SharedTask { needs, .. } = &mut edited.elements[1].kind
+        && let Some(Need::Resource { quantity, .. }) = needs[1].alternatives.first_mut()
+    {
+        *quantity = 2;
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    let saved_text = String::from_utf8_lossy(&saved).into_owned();
+    assert!(
+        saved_text.contains("getResource('worker', 2)"),
+        "{saved_text}"
+    );
+    let back = read(&saved);
+    assert!(
+        back.as_ref().is_ok_and(|l| l.notes.is_empty()),
+        "{:?}",
+        back.as_ref().map(|l| &l.notes)
+    );
+    assert_eq!(back.map(|l| l.model).ok(), Some(edited.clone()));
+
+    // Back to one requirement in place: the task's own selection, and no role's.
+    let mut single = edited.clone();
+    if let ElementKind::SharedTask { needs, .. } = &mut single.elements[1].kind {
+        needs.truncate(1);
+    }
+    let saved = loaded.opened.save(&single);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    let back = read(&saved);
+    assert!(back.is_ok(), "{back:?}");
+    let Ok(back) = back else { return };
+    assert_eq!(needs_of(&back.model, "job"), needs_of(&single, "job"));
+}
+
+/// A task with two performers and no selection needs both resources at once: each performer is
+/// a requirement of one unit. (Only the first was read before, so the second was dropped.)
+#[test]
+fn a_task_with_two_performers_and_no_selection_needs_both() {
+    let file = r#"<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" id="d" targetNamespace="x">
+  <bpmn:resource id="machine" name="Machine"/>
+  <bpmn:resource id="worker" name="Worker"/>
+  <bpmn:process id="p" isExecutable="false">
+    <bpmn:startEvent id="in"><bpmn:outgoing>f1</bpmn:outgoing></bpmn:startEvent>
+    <bpmn:task id="job" name="Job">
+      <bpmn:incoming>f1</bpmn:incoming>
+      <bpmn:outgoing>f2</bpmn:outgoing>
+      <bpmn:performer><bpmn:resourceRef>machine</bpmn:resourceRef></bpmn:performer>
+      <bpmn:humanPerformer><bpmn:resourceRef>worker</bpmn:resourceRef></bpmn:humanPerformer>
+    </bpmn:task>
+    <bpmn:endEvent id="out"><bpmn:incoming>f2</bpmn:incoming></bpmn:endEvent>
+    <bpmn:sequenceFlow id="f1" sourceRef="in" targetRef="job"/>
+    <bpmn:sequenceFlow id="f2" sourceRef="job" targetRef="out"/>
+  </bpmn:process>
+</bpmn:definitions>"#;
+    let Ok(l) = read(file.as_bytes()) else {
+        unreachable!()
+    };
+    let one = |id: &str| {
+        stochcraft_model::Requirement::new(vec![Need::Resource {
+            id: stochcraft_model::ElementId::unchecked(id),
+            quantity: 1,
+        }])
+    };
+    assert_eq!(
+        needs_of(&l.model, "job"),
+        vec![one("machine"), one("worker")]
+    );
+    let pools: Vec<&str> = l.model.resources.iter().map(|r| r.id.as_str()).collect();
+    assert_eq!(pools, ["machine", "worker"]);
+    // Written anew, both are kept.
+    let Ok(again) = read(&write_new(&l.model)) else {
+        unreachable!()
+    };
+    assert_eq!(needs_of(&again.model, "job"), needs_of(&l.model, "job"));
+}
+
+/// A task with its own selection keeps reading it as one requirement, whatever its performers
+/// (StochCraft writes a performer for each pool an alternative names), and a selection of a
+/// resource role is read for that role.
+#[test]
+fn a_task_selection_is_one_requirement_and_a_role_selection_is_its_role_s() {
+    let model = able_and_baker();
+    let Ok(l) = read(&write_new(&model)) else {
+        unreachable!()
+    };
+    let needs = needs_of(&l.model, "serve");
+    assert_eq!(needs.len(), 1);
+    assert_eq!(needs[0].alternatives.len(), 2);
+
+    let file = r#"<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="d" targetNamespace="x">
+  <bpmn:resource id="lathe" name="Lathe"/>
+  <bpmn:resource id="mill" name="Mill"/>
+  <bpmn:resource id="worker" name="Worker"/>
+  <bpmn:process id="p" isExecutable="false">
+    <bpmn:startEvent id="in"><bpmn:outgoing>f1</bpmn:outgoing></bpmn:startEvent>
+    <bpmn:task id="job" name="Job">
+      <bpmn:incoming>f1</bpmn:incoming>
+      <bpmn:outgoing>f2</bpmn:outgoing>
+      <bpmn:performer id="machine_role"/>
+      <bpmn:performer id="worker_role"><bpmn:resourceRef>worker</bpmn:resourceRef></bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="out"><bpmn:incoming>f2</bpmn:incoming></bpmn:endEvent>
+    <bpmn:sequenceFlow id="f1" sourceRef="in" targetRef="job"/>
+    <bpmn:sequenceFlow id="f2" sourceRef="job" targetRef="out"/>
+  </bpmn:process>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="s">
+          <bpsim:ElementParameters elementRef="machine_role">
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="orResource(getResource('lathe', 1), getResource('mill', 1))"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>d</bpmn:source>
+    <bpmn:target>d</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>"#;
+    let Ok(l) = read(file.as_bytes()) else {
+        unreachable!()
+    };
+    let needs = needs_of(&l.model, "job");
+    let ids = |r: &stochcraft_model::Requirement| -> Vec<String> {
+        r.alternatives
+            .iter()
+            .map(|n| match n {
+                Need::Resource { id, .. } => id.to_string(),
+                Need::Roles { .. } => String::new(),
+            })
+            .collect()
+    };
+    assert_eq!(
+        needs.iter().map(ids).collect::<Vec<_>>(),
+        [
+            vec!["lathe".to_owned(), "mill".to_owned()],
+            vec!["worker".to_owned()]
+        ]
+    );
+}

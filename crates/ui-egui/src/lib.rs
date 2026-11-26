@@ -403,6 +403,27 @@ pub const EXAMPLES: &[Example] = &[
         },
     },
     Example {
+        title: "A job shop short of workers",
+        about: "Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).",
+        file: "job-shop.bpmn",
+        bytes: include_bytes!("../../../tests/models/job-shop.bpmn"),
+        card: start::Card {
+            question: "Is the worker or the machines the constraint?",
+            industry: start::Industry::Manufacturing,
+            topics: &[start::Topic::Bottleneck, start::Topic::Staffing],
+            teaches: "A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.",
+            minutes: 3,
+            proof: Some(start::Proof::Theory),
+            flow: &[
+                start::Glyph::Arrivals,
+                start::Glyph::Decision,
+                start::Glyph::Shared,
+                start::Glyph::Departures,
+            ],
+            featured: false,
+        },
+    },
+    Example {
         title: "Inspection with rework",
         about: "Half the parts fail inspection, are reworked and are inspected again.",
         file: "rework.bpmn",
