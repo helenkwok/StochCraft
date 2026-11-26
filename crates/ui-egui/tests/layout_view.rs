@@ -283,3 +283,35 @@ fn a_track_set_during_a_drag_ends_it_and_is_kept() {
         vec![[0.0, 0.0], [3.0, 0.0]]
     );
 }
+
+/// Scrolls the widget with `role` and `label` into view, if the inspector has it off screen.
+fn into_view(h: &mut Harness<'static, App>, role: Role, label: &str) {
+    let r = h.get_by_role_and_label(role, label).rect();
+    if r.top() < 110.0 || r.bottom() > 820.0 {
+        h.get_by_role_and_label(role, label).scroll_to_me();
+        settle(h);
+    }
+}
+
+#[test]
+fn removing_a_path_drops_a_coordinate_typed_and_not_entered() {
+    let mut h = sorter();
+    h.state_mut()
+        .select(std::iter::once("lane_red".to_owned()).collect());
+    settle(&mut h);
+    assert!(points(&h, "lane_red").is_some());
+    into_view(&mut h, Role::TextInput, "x of point 2");
+    h.get_by_role_and_label(Role::TextInput, "x of point 2")
+        .click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.get_by_role_and_label(Role::TextInput, "x of point 2")
+        .type_text("12");
+    settle(&mut h);
+    // The click on Remove path takes the keyboard from the field, which commits its text in the
+    // frame the button is clicked: the path stays removed all the same.
+    into_view(&mut h, Role::Button, "Remove path");
+    h.get_by_role_and_label(Role::Button, "Remove path").click();
+    settle(&mut h);
+    assert_eq!(points(&h, "lane_red"), None);
+}

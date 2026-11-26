@@ -1350,6 +1350,9 @@ impl App {
             }
             if ui.button(t("Remove path")).clicked() {
                 self.remove_path(id);
+                // A field the click took the keyboard from commits its text in this frame; the
+                // path is gone, so that edit is dropped rather than drawing the path again.
+                edit = None;
             }
         });
         if refused {
