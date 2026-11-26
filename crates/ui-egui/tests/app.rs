@@ -1591,3 +1591,19 @@ fn a_csv_exported_after_an_edit_says_it_is_of_a_prior_run() {
         assert!(row.contains(&digest), "{row}");
     }
 }
+
+/// Where nothing waits but the machine goes down, the results lead with its availability, and
+/// the spread across runs starts on it, not on a mean wait of 0.
+#[test]
+fn a_machine_that_never_makes_anything_wait_leads_with_its_availability() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(
+        &mut h,
+        &["File", "Open Example", "One machine's availability"],
+    );
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    h.get_by_label("Availability (%)");
+    assert!(h.query_by_label("Mean wait (h)").is_none());
+    h.get_by_label_contains("Machine · Availability");
+}

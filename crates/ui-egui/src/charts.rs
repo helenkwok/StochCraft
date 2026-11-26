@@ -68,6 +68,29 @@ const MEASURES: &[Measure] = &[
     },
 ];
 
+/// The chart that leads where nothing waits but a machine goes down: availability per block.
+const AVAILABILITY: Measure = Measure {
+    title: "Availability",
+    metric: "availability",
+    share: true,
+    time: false,
+};
+
+/// Whether availability is the answer to lead with: every block's mean wait is 0 (or none is
+/// reported) and some block is up less than all the time. Otherwise the mean wait leads.
+pub(crate) fn availability_leads(results: &Value) -> bool {
+    let mean = |e: &Value, metric: &str| e["metrics"][metric]["mean"].as_f64();
+    let elements = results["elements"]
+        .as_array()
+        .map_or(&[][..], Vec::as_slice);
+    elements
+        .iter()
+        .all(|e| mean(e, "mean_wait").is_none_or(|w| w == 0.0))
+        && elements
+            .iter()
+            .any(|e| mean(e, "availability").is_some_and(|a| a < 1.0))
+}
+
 /// One bar: the block's name, mean, half-width and replications.
 struct Bar {
     name: String,
@@ -159,7 +182,11 @@ pub fn show(ui: &mut egui::Ui, results: &Value, line: Option<&[String]>) -> Opti
             time_chart(ui, results, parts, unit, chart_w);
             return true;
         }
-        let Some(m) = measure("mean_wait") else {
+        let m = if availability_leads(results) {
+            &AVAILABILITY
+        } else if let Some(m) = measure("mean_wait") {
+            m
+        } else {
             return false;
         };
         let b = bars(results, m);
