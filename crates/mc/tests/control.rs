@@ -1,4 +1,4 @@
-//! Control variates (ROADMAP M4.1; Law, *Simulation Modeling and Analysis*, 5th ed., §11.3).
+//! Control variates (ROADMAP M4.1; Law, *Simulation Modeling and Analysis*, 5th ed., §11.4).
 //!
 //! The answers are known exactly: for Y = X + Z with X and Z independent, controlling X leaves
 //! the variance of Z, so the controlled estimate's variance is Var(Z) / Var(X + Z) of the plain
@@ -125,10 +125,7 @@ fn allowed() -> Vec<Dist> {
             shape: 0.4,
             scale: 2.0,
         },
-        Dist::Beta {
-            shape: 2.0,
-            scale: 5.0,
-        },
+        Dist::beta(2.0, 5.0),
         Dist::Erlang { mean: 4.0, k: 3 },
         Dist::Weibull {
             shape: 1.7,

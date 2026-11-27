@@ -789,10 +789,21 @@ fn input_values(param: &Element) -> Vec<&Element> {
     param
         .elements()
         .filter(|v| {
-            v.ns.as_deref().is_some_and(|n| NSS.contains(&n)) && v.local() != "ResultRequest"
+            (v.ns.as_deref().is_some_and(|n| NSS.contains(&n)) && v.local() != "ResultRequest")
+                || is_scaled_beta(v)
         })
         .filter(|v| v.attr("result").is_none())
         .collect()
+}
+
+/// A beta on a range of StochCraft's: `<stochcraft:BetaDistribution shape="3" scale="5" min="1"
+/// max="4"/>`, a value in BPSim's `ParameterValue` substitution group (its own `BetaDistribution`
+/// lies on [0, 1] and takes no other attributes). `min` and `max` are times in its `timeUnit`.
+pub const SCALED_BETA: &str = "stochcraft:BetaDistribution";
+
+/// Whether `v` is StochCraft's beta on a range ([`SCALED_BETA`]).
+pub fn is_scaled_beta(v: &Element) -> bool {
+    v.ns.as_deref() == Some(STOCHCRAFT_NS) && v.local() == "BetaDistribution"
 }
 
 /// The default value of a parameter element (the first value without `validFor`), in `unit`.
@@ -925,9 +936,31 @@ fn parse_value(
         "GammaDistribution" => n("shape")
             .zip(n("scale"))
             .map(|(shape, scale)| Dist::Gamma { shape, scale }),
-        "BetaDistribution" => n("shape")
-            .zip(n("scale"))
-            .map(|(shape, scale)| Dist::Beta { shape, scale }),
+        "BetaDistribution" => {
+            // BPSim's beta lies on [0, 1], which no time unit changes; StochCraft's has a range,
+            // in its own time unit.
+            let ours = is_scaled_beta(v);
+            if !ours && c != 1.0 {
+                return bad(
+                    notes,
+                    "this distribution cannot be converted to another time unit",
+                );
+            }
+            // A bound left out takes its default; one given must be a number.
+            let bound = |name: &str, default: f64| match v.attr(name) {
+                Some(_) if ours => n(name),
+                _ => Some(default),
+            };
+            match (n("shape"), n("scale"), bound("min", 0.0), bound("max", 1.0)) {
+                (Some(shape), Some(scale), Some(min), Some(max)) => Some(Dist::Beta {
+                    shape,
+                    scale,
+                    min,
+                    max,
+                }),
+                _ => None,
+            }
+        }
         "WeibullDistribution" => n("shape")
             .zip(n("scale"))
             .map(|(shape, scale)| Dist::Weibull { shape, scale }),
@@ -1008,7 +1041,7 @@ fn parse_value(
 }
 
 /// `d` with every value multiplied by `c` (`c` > 0), for a change of time unit. `None` for
-/// count distributions and the beta, whose shape does not survive scaling.
+/// count distributions. A beta keeps its shape, and its range is scaled.
 pub fn scale(d: &Dist, c: f64) -> Option<Dist> {
     if c == 1.0 {
         return Some(d.clone());
@@ -1057,7 +1090,18 @@ pub fn scale(d: &Dist, c: f64) -> Option<Dist> {
             points: points.into_iter().map(|(p, v)| (p, v * c)).collect(),
             discrete,
         },
-        Dist::Beta { .. } | Dist::Poisson { .. } | Dist::Binomial { .. } => return None,
+        Dist::Beta {
+            shape,
+            scale,
+            min,
+            max,
+        } => Dist::Beta {
+            shape,
+            scale,
+            min: min * c,
+            max: max * c,
+        },
+        Dist::Poisson { .. } | Dist::Binomial { .. } => return None,
     })
 }
 
@@ -1225,10 +1269,35 @@ mod tests {
             ),
             (
                 r#"<b:BetaDistribution shape="2" scale="3"/>"#,
+                Some(Dist::beta(2.0, 3.0)),
+            ),
+            // BPSim's beta lies on [0, 1] whatever its time unit says, so it cannot be converted.
+            (
+                r#"<b:BetaDistribution shape="2" scale="3" timeUnit="hour"/>"#,
+                None,
+            ),
+            // StochCraft's has a range in its time unit, converted as any other time.
+            (
+                r#"<s:BetaDistribution xmlns:s="https://helenkwok.github.io/StochCraft/bpsim/1" shape="3" scale="5" min="1" max="4" timeUnit="hour"/>"#,
                 Some(Dist::Beta {
-                    shape: 2.0,
-                    scale: 3.0,
+                    shape: 3.0,
+                    scale: 5.0,
+                    min: 60.0,
+                    max: 240.0,
                 }),
+            ),
+            (
+                r#"<s:BetaDistribution xmlns:s="https://helenkwok.github.io/StochCraft/bpsim/1" shape="3" scale="5" max="4"/>"#,
+                Some(Dist::Beta {
+                    shape: 3.0,
+                    scale: 5.0,
+                    min: 0.0,
+                    max: 4.0,
+                }),
+            ),
+            (
+                r#"<s:BetaDistribution xmlns:s="https://helenkwok.github.io/StochCraft/bpsim/1" shape="3" scale="5" min="one" max="4"/>"#,
+                None,
             ),
             (
                 r#"<b:WeibullDistribution shape="1.5" scale="4"/>"#,

@@ -1318,6 +1318,7 @@ fn change_label(command: &str) -> &str {
         "mc.correlation.set" => "Change Correlation",
         "mc.set" => "Monte Carlo Settings",
         "layout.set" => "Move",
+        "track.set" => "Change Path",
         "sd.variable.add" => "Add Variable",
         "sd.variable.set" => "Edit Variable",
         "sd.variable.remove" => "Remove Variable",

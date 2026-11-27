@@ -1820,6 +1820,68 @@ fn values_with_their_own_unit_in_vendor_extensions_are_rescaled() {
     );
 }
 
+/// StochCraft's beta on a range, here a repair time of Beta(3, 5) on [60, 240] s, has its range
+/// in its own time unit: a change of the model's time unit rescales it like any other time,
+/// while BPSim's beta on [0, 1] beside it is relabelled as it is.
+#[test]
+fn a_beta_on_a_range_with_its_own_unit_is_rescaled() {
+    let original = text(&file("mm1.bpmn")).replace(
+        r#"              <bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+        r#"              <bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"><stochcraft:breakdown><stochcraft:timeToFailure><bpsim:BetaDistribution shape="2" scale="2"/></stochcraft:timeToFailure><stochcraft:repairTime><stochcraft:BetaDistribution shape="3" scale="5" min="60" max="240" timeUnit="s"/></stochcraft:repairTime></stochcraft:breakdown></bpsim:VendorExtension>"#,
+    );
+    assert!(original.contains("stochcraft:BetaDistribution"));
+    let breakdown = |m: &Model| match m
+        .elements
+        .iter()
+        .find(|e| e.id.as_str() == "serve")
+        .map(|e| &e.kind)
+    {
+        Some(ElementKind::Server {
+            breakdown: Some(b), ..
+        }) => Some((b.time_to_failure.clone(), b.repair.clone())),
+        _ => None,
+    };
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    // Under minutes: 1 to 4 minutes, mean 1 + 3 · 3/8 = 2.125.
+    assert_eq!(
+        breakdown(&loaded.model),
+        Some((
+            Dist::beta(2.0, 2.0),
+            Dist::Beta {
+                shape: 3.0,
+                scale: 5.0,
+                min: 1.0,
+                max: 4.0,
+            }
+        ))
+    );
+    let hours = relabel(original.as_bytes(), TimeUnit::Hours);
+    let t = text(&hours);
+    for want in [
+        // 1 to 4 minutes became 1 to 4 hours, written in seconds.
+        r#"<stochcraft:BetaDistribution shape="3" scale="5" min="3600" max="14400" timeUnit="s"/>"#,
+        r#"<bpsim:BetaDistribution shape="2" scale="2"/>"#,
+    ] {
+        assert!(t.contains(want), "{want} missing:\n{t}");
+    }
+    // And back: the original numbers again.
+    let t = text(&relabel(&hours, TimeUnit::Minutes));
+    assert!(
+        t.contains(
+            r#"<stochcraft:BetaDistribution shape="3" scale="5" min="60" max="240" timeUnit="s"/>"#
+        ),
+        "{t}"
+    );
+    // Unchanged, the file saves byte for byte.
+    assert_eq!(
+        loaded.opened.save(&loaded.model).ok().as_deref(),
+        Some(original.as_bytes())
+    );
+}
+
 /// A file nested as deep as the reader allows opens and saves (its unknown content kept); one
 /// nested deeper is refused as not well-formed.
 #[test]

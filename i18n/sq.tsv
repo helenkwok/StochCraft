@@ -1049,6 +1049,7 @@ unit	yr	v
 	In “{field}” of {block}, set “{param}” to 1 or more.	Te „{field}” i bllokut {block}, caktoni „{param}” si 1 ose më shumë.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Te „{field}” i bllokut {block}, caktoni „{param}” si numër nga 0 deri në 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Te „{field}” i bllokut {block}, caktoni „Minimumi” nën „Maksimumi” dhe çdo vlerë „Më e mundshmja” mes tyre.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Te „{field}” i bllokut {block}, caktoni „Minimumi” nën „Maksimumi”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Te „{field}” i bllokut {block}, shtoni pika të dhënash me probabilitete që mblidhen në më shumë se 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Blloku {block} nuk do të kishte kurrë një njësi për të punuar. Jepini të paktën 1 njësi.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Blloku {block} do të krijonte entitete pa fund, sepse „Koha ndërmjet mbërritjeve” është gjithmonë 0. Jepini një kohë më të madhe se 0 ose caktoni një „Kufiri i mbërritjeve”.
@@ -1491,6 +1492,35 @@ connection	Flow	Rrjedhë
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blloku {block} është vendosur {s} përgjatë transportierit {conveyor}, rruga e të cilit ka gjatësi {length}. Vendoseni midis 0 dhe {length} përgjatë rrugës.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitetet në transportierin {conveyor} arrijnë te {before} para {block}, por {block} është vendosur më afër fillimit ({s} përgjatë tij, {before} te {before_s}). Vendoseni {block} më tej përgjatë rrugës se {before} ose këmbejini mes tyre në rrjedha.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Bashkimi në rrjedhën {flow} kërkon {time} për t'u kaluar. Bëjeni kohën e tij të transferimit 0 ose më shumë.
+	A path needs at least two points.	Një shteg ka nevojë për të paktën dy pika.
+	Finish	Përfundo
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Po vizatohet shtegu i {name}: klikoni për të shtuar pika, klikim i dyfishtë ose Enter për të përfunduar, Backspace heq pikën e fundit, Esc anulon.
+	Draw path	Vizato shtegun
+	Select a conveyor to draw its path	Zgjidhni një transportues për të vizatuar shtegun e tij
+	Remove path	Hiq shtegun
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klikoni për të shtuar një pikë · Klikim i dyfishtë ose Enter për të përfunduar · Esc për të anuluar
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Klikoni një shirit për ta zgjedhur · Tërhiqni pikat e tij ose shiritin · Klikim i dyfishtë shton një pikë · Tërhiqni dyshemenë për zhvendosje · Rrotulloni për zmadhim
+	Point {n} of {name}, x {x} m, y {y} m	Pika {n} e {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klikoni këtu një transportues për të vizatuar shtegun e tij.
+	Path	Shtegu
+	Not drawn in the layout yet.	Ende i pavizatuar në planimetri.
+	Draw in the Layout view	Vizato në pamjen Planimetria
+	Add a straight path	Shto një shteg të drejtë
+	Drawn length: {length} {unit}	Gjatësia e vizatuar: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ky shteg ngjitet ose ka një spirale: pikat e tij nuk mund të ndryshohen këtu.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ky shteg kthehet një rreth të plotë ose më shumë në një hark: pikat e tij nuk mund të ndryshohen këtu.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ky shteg kthehet befas aty ku nis ose ku mbaron: pikat e tij nuk mund të ndryshohen këtu.
+	Point {n}	Pika {n}
+	x of point {n}	x i pikës {n}
+	y of point {n}	y i pikës {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Rrezja e kthesës te pika {n}
+	bend	kthesë
+	tightened to {radius} to fit	ngushtuar në {radius} që të nxërë
+	Remove point {n}	Hiq pikën {n}
+	Add a point at the end	Shto një pikë në fund
+	Change Path	Ndrysho shtegun
 	Search examples	Kërko në shembuj
 	Clear search	Pastro kërkimin
 	Logistics and warehousing	Logjistikë dhe magazinim

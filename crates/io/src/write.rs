@@ -86,9 +86,26 @@ pub fn dist_element(d: &Dist) -> Element {
         Dist::Gamma { shape, scale } => s("GammaDistribution")
             .with_attr("shape", &num(*shape))
             .with_attr("scale", &num(*scale)),
-        Dist::Beta { shape, scale } => s("BetaDistribution")
+        // BPSim's beta lies on [0, 1]; one on another range is StochCraft's own value.
+        Dist::Beta {
+            shape,
+            scale,
+            min,
+            max,
+        } if *min == 0.0 && *max == 1.0 => s("BetaDistribution")
             .with_attr("shape", &num(*shape))
             .with_attr("scale", &num(*scale)),
+        Dist::Beta {
+            shape,
+            scale,
+            min,
+            max,
+        } => Element::new(crate::bpsim::SCALED_BETA, Some(crate::bpsim::STOCHCRAFT_NS))
+            .with_attr("xmlns:stochcraft", crate::bpsim::STOCHCRAFT_NS)
+            .with_attr("shape", &num(*shape))
+            .with_attr("scale", &num(*scale))
+            .with_attr("min", &num(*min))
+            .with_attr("max", &num(*max)),
         Dist::Weibull { shape, scale } => s("WeibullDistribution")
             .with_attr("shape", &num(*shape))
             .with_attr("scale", &num(*scale)),

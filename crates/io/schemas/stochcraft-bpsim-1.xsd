@@ -390,11 +390,27 @@
             condition="In('infected')"/>
       </stochcraft:agents>
     </bpsim:VendorExtension>
+
+  stochcraft:BetaDistribution, a BPSim 2.0 value (in BPSim's ParameterValue substitution group,
+  like BPSim's own distributions), wherever a BPSim value can be: the beta distribution with
+  shape parameters shape and scale (as BPSim's BetaDistribution reads them) stretched from
+  [0, 1] to [min, max], its mean min + (max - min) shape / (shape + scale). min and max are in
+  its timeUnit (by default the scenario's base time unit), and min is below max. BPSim's own
+  BetaDistribution takes no other attributes and lies on [0, 1], so a beta on [0, 1] is written
+  as BPSim's, and one on another range as this.
+
+    <bpsim:ProcessingTime>
+      <stochcraft:BetaDistribution xmlns:stochcraft="…" shape="3" scale="5" min="1" max="4"
+          timeUnit="day"/>
+    </bpsim:ProcessingTime>
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"
+    xmlns:bpsim="http://www.bpsim.org/schemas/2.0"
     targetNamespace="https://helenkwok.github.io/StochCraft/bpsim/1"
     elementFormDefault="qualified">
+  <!-- The BPSim 2.0 schema, which a validator imports next to this one. -->
+  <xs:import namespace="http://www.bpsim.org/schemas/2.0"/>
   <xs:attribute name="value" type="xs:string"/>
   <xs:attribute name="perWorkingServer" type="xs:boolean"/>
   <xs:element name="byShift">
@@ -407,10 +423,22 @@
   </xs:element>
   <xs:complexType name="Value">
     <xs:sequence>
-      <xs:any namespace="http://www.bpsim.org/schemas/2.0 http://www.bpsim.org/schemas/1.0"
+      <xs:any namespace="http://www.bpsim.org/schemas/2.0 http://www.bpsim.org/schemas/1.0 ##targetNamespace"
           processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:element name="BetaDistribution" substitutionGroup="bpsim:ParameterValue">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="bpsim:DistributionParameter">
+          <xs:attribute name="shape" type="xs:double" use="required"/>
+          <xs:attribute name="scale" type="xs:double" use="required"/>
+          <xs:attribute name="min" type="xs:double" default="0"/>
+          <xs:attribute name="max" type="xs:double" default="1"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="breakdown">
     <xs:complexType>
       <xs:sequence>
