@@ -1049,6 +1049,7 @@ unit	yr	a
 	In “{field}” of {block}, set “{param}” to 1 or more.	Em “{field}” de {block}, defina “{param}” como 1 ou mais.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Em “{field}” de {block}, defina “{param}” como um número de 0 a 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Em “{field}” de {block}, defina “Mínimo” abaixo de “Máximo”, e qualquer valor de “Mais provável” entre os dois.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Em “{field}” de {block}, defina “Mínimo” abaixo de “Máximo”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Em “{field}” de {block}, adicione pontos de dados cujas probabilidades somem mais de 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} nunca teria uma unidade com a qual trabalhar. Dê a ele pelo menos 1 unidade.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} criaria entidades sem parar, porque o seu “Tempo entre chegadas” é sempre 0. Dê a ele um tempo maior que 0 ou defina um “Limite de chegadas”.
@@ -1491,6 +1492,35 @@ connection	Flow	Fluxo
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} está posicionado a {s} ao longo da esteira transportadora {conveyor}, cujo trajeto tem {length}. Posicione-o entre 0 e {length} ao longo do trajeto.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	As entidades na esteira transportadora {conveyor} alcançam {before} antes de {block}, mas {block} está posicionado mais perto do início ({s} ao longo dela, {before} a {before_s}). Posicione {block} mais adiante no trajeto do que {before}, ou troque-os nos fluxos.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A junção no fluxo {flow} leva {time} para ser atravessada. Faça o tempo de transferência dela ser 0 ou mais.
+	A path needs at least two points.	Um percurso precisa de pelo menos dois pontos.
+	Finish	Concluir
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Desenhando o percurso de {name}: clique para adicionar pontos, clique duplo ou Enter para concluir, Backspace para tirar o último ponto, Esc para cancelar.
+	Draw path	Desenhar percurso
+	Select a conveyor to draw its path	Selecione um transportador para desenhar seu percurso
+	Remove path	Remover percurso
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Clique para adicionar um ponto · Clique duplo ou Enter para concluir · Esc para cancelar
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Clique em uma esteira para selecioná-la · Arraste seus pontos ou a esteira · Clique duplo para adicionar um ponto · Arraste o piso para deslocar · Role para ampliar
+	Point {n} of {name}, x {x} m, y {y} m	Ponto {n} de {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Clique aqui em um transportador para desenhar seu percurso.
+	Path	Percurso
+	Not drawn in the layout yet.	Ainda não desenhado no layout.
+	Draw in the Layout view	Desenhar na visão Layout
+	Add a straight path	Adicionar um percurso reto
+	Drawn length: {length} {unit}	Comprimento desenhado: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Este percurso sobe ou tem uma hélice: seus pontos não podem ser editados aqui.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Este percurso gira um círculo completo ou mais em um só arco: seus pontos não podem ser editados aqui.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Este percurso faz uma curva fechada onde começa ou termina: seus pontos não podem ser editados aqui.
+	Point {n}	Ponto {n}
+	x of point {n}	x do ponto {n}
+	y of point {n}	y do ponto {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Raio da curva no ponto {n}
+	bend	curva
+	tightened to {radius} to fit	reduzido para {radius} para caber
+	Remove point {n}	Remover o ponto {n}
+	Add a point at the end	Adicionar um ponto no fim
+	Change Path	Alterar percurso
 	Search examples	Pesquisar nos exemplos
 	Clear search	Limpar a pesquisa
 	Logistics and warehousing	Logística e armazenagem
@@ -1501,6 +1531,18 @@ connection	Flow	Fluxo
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dez máquinas precisam funcionar, quatro reservas aguardam prontas e três mecânicos consertam as que quebram (Crane e Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Quantas máquinas reservas e quantos mecânicos mantêm dez máquinas funcionando?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máquinas reservas em espera não podem quebrar: em média 3.47 máquinas estão quebradas e 9.29 funcionam. Um quarto mecânico rende quase o mesmo que mais quatro máquinas reservas.
+	Median time in system	Mediana do tempo no sistema
+	Time in system, 90th percentile	Tempo no sistema, percentil 90
+	Time in system, 95th percentile	Tempo no sistema, percentil 95
+	Share done within the target time	Fração concluída dentro do tempo-alvo
+	Percentiles of time in system	Percentis do tempo no sistema
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Mostra a mediana e os percentis 90 e 95 do tempo que cada entidade levou desde a criação até estas saídas e, com um tempo-alvo, a fração concluída dentro dele.
+	Target time ({unit})	Tempo-alvo ({unit})
+	The target time is a time above 0	O tempo-alvo é um tempo maior que 0
+	Count only working time on	Contar só o tempo de trabalho de
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entidades ainda no sistema quando a execução termina ficam de fora, então pare a execução quando todas tiverem terminado.
+	Set the target time in system of {block} to a time above 0.	Defina o tempo-alvo no sistema de {block} como um tempo maior que 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	O tempo no sistema de {block} conta o tempo de trabalho de um calendário que não existe. Escolha um calendário que exista.
 	One machine's availability	Disponibilidade de uma máquina
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Uma máquina que quebra em média a cada 90 horas e leva 4.5 horas para ser consertada (Hristova, Denev e Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Com que frequência uma máquina fica parada e quanto trabalho isso custa?

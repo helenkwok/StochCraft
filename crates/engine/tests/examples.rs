@@ -1457,6 +1457,39 @@ fn the_workstation_with_triangular_processing_matches_pollaczek_khinchine() {
     covers(&r, "serve", "mean_wait", wait);
     covers(&r, "serve", "mean_queue_length", lambda * wait);
 }
+/// One barista at ρ = 0.8: each customer's time in the shop (FIFO M/M/1) is exponential with
+/// rate μ − λ, so its p-quantile is −ln(1 − p) / (μ − λ) and the share done within X is
+/// 1 − e^{−(μ − λ)X}. The percentiles and the share at the departures match them; the mean time
+/// in system stays 1 / (μ − λ).
+#[test]
+fn the_coffee_counter_time_in_system_percentiles_match_m_m_1() {
+    use stochcraft_random::math::{exp, ln};
+    let (lambda, mu) = (0.8, 1.0);
+    let rate = mu - lambda;
+    let within = 10.0;
+    let mut e = open(
+        "coffee.bpmn",
+        json!({ "replications": 20, "warmup": 2_000.0, "duration": 50_000.0 }),
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "served", "time_in_system": { "within": within } }),
+    );
+    let r = ok(&mut e, "run", json!({}));
+    let quantile = |p: f64| -ln(1.0 - p) / rate;
+    covers(&r, "served", "mean_time_in_system", 1.0 / rate);
+    covers(&r, "served", "time_in_system_p50", quantile(0.5));
+    covers(&r, "served", "time_in_system_p90", quantile(0.9));
+    covers(&r, "served", "time_in_system_p95", quantile(0.95));
+    covers(
+        &r,
+        "served",
+        "within_target_share",
+        1.0 - exp(-rate * within),
+    );
+}
+
 /// One machine's availability, the reliability example of Hristova, Denev and Tsankov
 /// (*Environment. Technology. Resources*, 2024, vol. II, pp. 120–126): a machine up for 90 hours
 /// on average between failures (exponential) and repaired in 4.5 hours on average

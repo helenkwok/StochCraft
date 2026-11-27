@@ -18,7 +18,7 @@ use stochcraft_model::{
     Observation, Observed, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
     ProcessingBy, ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit,
     ResourcePool, Routing, Scrap, Sequential, SequentialMeasure, Setup, Severity, Stop, ThreePoint,
-    TimeUnit, Timed, Transfer, Upper,
+    TimeInSystem, TimeUnit, Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -47,8 +47,16 @@ pub enum DistSpec {
     LogNormal { mean: f64, std_dev: f64 },
     /// Gamma with shape k and scale θ (mean kθ).
     Gamma { shape: f64, scale: f64 },
-    /// Beta on [0, 1] with shape parameters α = `shape`, β = `scale` (BPSim's names).
-    Beta { shape: f64, scale: f64 },
+    /// Beta on [`min`, `max`] (by default [0, 1], BPSim's) with shape parameters α = `shape`,
+    /// β = `scale` (BPSim's names): mean min + (max − min) α / (α + β).
+    Beta {
+        shape: f64,
+        scale: f64,
+        #[serde(default, skip_serializing_if = "is_zero")]
+        min: f64,
+        #[serde(default = "one_f64", skip_serializing_if = "is_one")]
+        max: f64,
+    },
     /// The sum of `k` exponentials with overall mean `mean`.
     Erlang { mean: f64, k: u64 },
     /// Weibull with shape k and scale λ.
@@ -95,7 +103,17 @@ impl From<&Dist> for DistSpec {
             },
             Dist::LogNormal { mean, std_dev } => DistSpec::LogNormal { mean, std_dev },
             Dist::Gamma { shape, scale } => DistSpec::Gamma { shape, scale },
-            Dist::Beta { shape, scale } => DistSpec::Beta { shape, scale },
+            Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            } => DistSpec::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            },
             Dist::Erlang { mean, k } => DistSpec::Erlang { mean, k },
             Dist::Weibull { shape, scale } => DistSpec::Weibull { shape, scale },
             Dist::Poisson { mean } => DistSpec::Poisson { mean },
@@ -138,7 +156,17 @@ impl From<DistSpec> for Dist {
             },
             DistSpec::LogNormal { mean, std_dev } => Dist::LogNormal { mean, std_dev },
             DistSpec::Gamma { shape, scale } => Dist::Gamma { shape, scale },
-            DistSpec::Beta { shape, scale } => Dist::Beta { shape, scale },
+            DistSpec::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            } => Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            },
             DistSpec::Erlang { mean, k } => Dist::Erlang { mean, k },
             DistSpec::Weibull { shape, scale } => Dist::Weibull { shape, scale },
             DistSpec::Poisson { mean } => Dist::Poisson { mean },
@@ -324,6 +352,10 @@ pub enum KindSpec {
         /// The customer demand it serves, for takt; left out when none.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         demand: Option<DemandSpec>,
+        /// The percentiles of each entity's time in system to report here, and the share within
+        /// a target; left out when none.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        time_in_system: Option<TimeInSystemSpec>,
     },
     /// Sends each entity down one outgoing connection at once (a BPMN exclusive gateway): the
     /// first whose condition holds if any has one, else drawn by the connections'
@@ -1222,11 +1254,16 @@ impl From<&ElementKind> for KindSpec {
                 duration: duration.into(),
                 processing_by: processing_by.as_ref().map(Into::into),
             },
-            ElementKind::Sink { scrap, demand } => KindSpec::Sink {
+            ElementKind::Sink {
+                scrap,
+                demand,
+                time_in_system,
+            } => KindSpec::Sink {
                 scrap: scrap.as_ref().map(|s| ScrapSpec {
                     charged_to: s.charged_to.as_ref().map(ToString::to_string),
                 }),
                 demand: demand.as_ref().map(Into::into),
+                time_in_system: time_in_system.as_ref().map(Into::into),
             },
             ElementKind::ExclusiveGateway { default, routing } => KindSpec::ExclusiveGateway {
                 default: default.as_ref().map(ToString::to_string),
@@ -1340,11 +1377,16 @@ impl From<KindSpec> for ElementKind {
                 duration: duration.into(),
                 processing_by: processing_by(by),
             },
-            KindSpec::Sink { scrap, demand } => ElementKind::Sink {
+            KindSpec::Sink {
+                scrap,
+                demand,
+                time_in_system,
+            } => ElementKind::Sink {
                 scrap: scrap.map(|s| Scrap {
                     charged_to: s.charged_to.as_deref().map(ElementId::unchecked),
                 }),
                 demand: demand.map(Into::into),
+                time_in_system: time_in_system.map(Into::into),
             },
             KindSpec::ExclusiveGateway { default, routing } => ElementKind::ExclusiveGateway {
                 default: default.as_deref().map(ElementId::unchecked),
@@ -2177,6 +2219,37 @@ impl From<DemandSpec> for Demand {
                 DemandPerSpec::Shift => DemandPer::Shift,
             },
             calendar: d.calendar.as_deref().map(ElementId::unchecked),
+        }
+    }
+}
+
+/// The time in system a sink reports: the median, 90th and 95th percentiles of each entity's
+/// time from creation to reaching it, and with `within` (a time, in the model's time unit, above
+/// 0) the share of them that took at most that long. With `calendar`, only the time that
+/// calendar is active counts (working time). Entities still inside at the end are left out.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct TimeInSystemSpec {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub within: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub calendar: Option<String>,
+}
+
+impl From<&TimeInSystem> for TimeInSystemSpec {
+    fn from(x: &TimeInSystem) -> Self {
+        TimeInSystemSpec {
+            within: x.within,
+            calendar: x.calendar.as_ref().map(ToString::to_string),
+        }
+    }
+}
+
+impl From<TimeInSystemSpec> for TimeInSystem {
+    fn from(x: TimeInSystemSpec) -> Self {
+        TimeInSystem {
+            within: x.within,
+            calendar: x.calendar.as_deref().map(ElementId::unchecked),
         }
     }
 }
@@ -3386,9 +3459,12 @@ mod tests {
                 shape: 2.0,
                 scale: 0.5,
             },
+            Dist::beta(2.0, 3.0),
             Dist::Beta {
-                shape: 2.0,
-                scale: 3.0,
+                shape: 3.0,
+                scale: 5.0,
+                min: 1.0,
+                max: 4.0,
             },
             Dist::Erlang { mean: 4.0, k: 3 },
             Dist::Weibull {
@@ -3413,6 +3489,44 @@ mod tests {
         let e: Result<DistSpec, _> =
             serde_json::from_value(json!({"type": "exponential", "mean": 1, "rate": 2}));
         assert!(e.is_err(), "unknown fields are refused");
+    }
+
+    /// A beta on [0, 1] is written without a range, as before, and one given without a range is
+    /// on [0, 1]; a beta on another range writes it and reads back.
+    #[test]
+    fn a_beta_writes_its_range_only_when_it_is_not_0_to_1() {
+        let plain = json!({"type": "beta", "shape": 2.0, "scale": 3.0});
+        assert_eq!(
+            serde_json::to_value(DistSpec::from(&Dist::beta(2.0, 3.0))).ok(),
+            Some(plain.clone())
+        );
+        let read: Option<DistSpec> = serde_json::from_value(plain).ok();
+        assert_eq!(read.map(Dist::from), Some(Dist::beta(2.0, 3.0)));
+        let ranged = Dist::Beta {
+            shape: 3.0,
+            scale: 5.0,
+            min: 1.0,
+            max: 4.0,
+        };
+        let v = serde_json::to_value(DistSpec::from(&ranged)).unwrap_or(Value::Null);
+        assert_eq!(
+            v,
+            json!({"type": "beta", "shape": 3.0, "scale": 5.0, "min": 1.0, "max": 4.0})
+        );
+        let back: Option<DistSpec> = serde_json::from_value(v).ok();
+        assert_eq!(back.map(Dist::from), Some(ranged));
+        // Only the maximum given: from 0.
+        let up_to: Option<DistSpec> =
+            serde_json::from_value(json!({"type": "beta", "shape": 3, "scale": 5, "max": 4})).ok();
+        assert_eq!(
+            up_to.map(Dist::from),
+            Some(Dist::Beta {
+                shape: 3.0,
+                scale: 5.0,
+                min: 0.0,
+                max: 4.0,
+            })
+        );
     }
 
     #[test]

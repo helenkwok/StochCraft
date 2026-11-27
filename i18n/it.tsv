@@ -1049,6 +1049,7 @@ unit	yr	a
 	In “{field}” of {block}, set “{param}” to 1 or more.	In «{field}» di {block}, imposta «{param}» su 1 o più.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	In «{field}» di {block}, imposta «{param}» su un numero da 0 a 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	In «{field}» di {block}, imposta «Minimo» sotto «Massimo», e qualsiasi valore di «Più probabile» tra i due.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	In «{field}» di {block}, imposta «Minimo» sotto «Massimo».
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	In «{field}» di {block}, aggiungi punti dati le cui probabilità sommino più di 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} non avrebbe mai un'unità con cui lavorare. Assegnagli almeno 1 unità.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} creerebbe entità senza fine, perché il suo «Tempo tra gli arrivi» è sempre 0. Assegnagli un tempo maggiore di 0 o imposta un «Limite degli arrivi».
@@ -1491,6 +1492,35 @@ connection	Flow	Flusso
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} è posizionato a {s} lungo il nastro trasportatore {conveyor}, il cui percorso è lungo {length}. Posizionalo tra 0 e {length} lungo il percorso.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Le entità sul nastro trasportatore {conveyor} raggiungono {before} prima di {block}, ma {block} è posizionato più vicino all'inizio ({s} lungo il nastro, {before} a {before_s}). Posiziona {block} più avanti lungo il percorso rispetto a {before}, oppure scambiali nei flussi.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	La giunzione sul flusso {flow} richiede {time} per essere attraversata. Imposta il suo tempo di trasferimento a 0 o più.
+	A path needs at least two points.	Un percorso richiede almeno due punti.
+	Finish	Fine
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Disegno del percorso di {name}: fai clic per aggiungere punti, doppio clic o Invio per finire, Backspace per togliere l'ultimo punto, Esc per annullare.
+	Draw path	Disegna percorso
+	Select a conveyor to draw its path	Seleziona un trasportatore per disegnarne il percorso
+	Remove path	Rimuovi percorso
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Fai clic per aggiungere un punto · Doppio clic o Invio per finire · Esc per annullare
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Fai clic su un nastro per selezionarlo · Trascina i suoi punti o il nastro · Doppio clic per aggiungere un punto · Trascina il pavimento per spostare · Scorri per zoomare
+	Point {n} of {name}, x {x} m, y {y} m	Punto {n} di {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Fai clic qui su un trasportatore per disegnarne il percorso.
+	Path	Percorso
+	Not drawn in the layout yet.	Non ancora disegnato nel layout.
+	Draw in the Layout view	Disegna nella vista Layout
+	Add a straight path	Aggiungi un percorso dritto
+	Drawn length: {length} {unit}	Lunghezza disegnata: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Questo percorso sale o ha un'elica: i suoi punti non si possono modificare qui.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Questo percorso compie un giro completo o più in un solo arco: i suoi punti non si possono modificare qui.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Questo percorso gira bruscamente dove inizia o dove finisce: i suoi punti non si possono modificare qui.
+	Point {n}	Punto {n}
+	x of point {n}	x del punto {n}
+	y of point {n}	y del punto {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Raggio di curvatura al punto {n}
+	bend	curva
+	tightened to {radius} to fit	ristretto a {radius} per starci
+	Remove point {n}	Rimuovi il punto {n}
+	Add a point at the end	Aggiungi un punto alla fine
+	Change Path	Modifica percorso
 	Search examples	Cerca negli esempi
 	Clear search	Cancella la ricerca
 	Logistics and warehousing	Logistica e magazzino
@@ -1501,6 +1531,18 @@ connection	Flow	Flusso
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dieci macchine devono funzionare, quattro di scorta attendono pronte e tre manutentori riparano quelle che si guastano (Crane e Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Quante macchine di scorta e quanti manutentori tengono in funzione dieci macchine?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Le macchine di scorta in attesa non possono guastarsi: in media 3.47 macchine sono guaste e 9.29 funzionano. Un quarto manutentore rende circa quanto quattro macchine di scorta in più.
+	Median time in system	Mediana del tempo nel sistema
+	Time in system, 90th percentile	Tempo nel sistema, 90° percentile
+	Time in system, 95th percentile	Tempo nel sistema, 95° percentile
+	Share done within the target time	Quota completata entro il tempo obiettivo
+	Percentiles of time in system	Percentili del tempo nel sistema
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Mostra la mediana, il 90° e il 95° percentile del tempo impiegato da ogni entità dalla sua creazione fino a queste uscite e, con un tempo obiettivo, la quota completata entro di esso.
+	Target time ({unit})	Tempo obiettivo ({unit})
+	The target time is a time above 0	Il tempo obiettivo è un tempo maggiore di 0
+	Count only working time on	Conta solo il tempo di lavoro secondo
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Le entità ancora all'interno quando l'esecuzione termina sono escluse, quindi ferma l'esecuzione quando tutte sono finite.
+	Set the target time in system of {block} to a time above 0.	Imposta il tempo obiettivo nel sistema di {block} a un tempo maggiore di 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Il tempo nel sistema di {block} conta il tempo di lavoro secondo un calendario che non esiste. Scegli un calendario esistente.
 	One machine's availability	Disponibilità di una macchina
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Una macchina che si guasta in media ogni 90 ore e richiede 4.5 ore per essere riparata (Hristova, Denev e Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Quanto spesso una macchina è ferma e quanto lavoro costa?

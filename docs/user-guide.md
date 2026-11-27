@@ -200,7 +200,9 @@ Select a block to see its settings. The most used ones come first, under **Param
     the next conveyor, crosses in the transfer time, then rides on.
 
 **Times.** Each time is a distribution: pick its type (Constant, Exponential, Uniform, Triangular,
-Normal, Log-normal, Gamma, Erlang, Weibull and others) and fill in its values. If you only know a
+Normal, Log-normal, Gamma, Erlang, Weibull and others) and fill in its values. A Beta has two
+shapes and a range, **Minimum** and **Maximum** (0 and 1 unless you change them): Beta(3, 5) with
+Minimum 1 and Maximum 4 is a time between 1 and 4, 2.125 on average. If you only know a
 minimum, a most likely value and a maximum, use **Three-point estimate ▸ Estimate from three
 values…** and StochCraft fits the time for you.
 
@@ -220,6 +222,15 @@ More settings are folded under headings; open them when you need them:
   restart.
 - **Properties:** values set on each entity as it enters, for example a product type that
   changes the service time (**Service time by property**).
+- **Time in system** (on Departures): tick **Percentiles of time in system** to see the median,
+  90th and 95th percentile of the time each entity took from its creation to these departures,
+  not only the mean. Give a **Target time** to see the **Share done within the target time**
+  (a service level such as "95% done within 3 days"). With **Count only working time on** set to
+  a calendar, only the time that calendar is active counts, so a part started on Friday and
+  finished on Monday has not waited the weekend. Entities still inside when the run ends are
+  left out, which biases these low when work piles up: stop each run once all are done
+  (**Ends early**, when as many entities as arrive have left these departures). The mean time
+  in system stays on the clock.
 - **Takt** (on Departures): the customer demand, to see takt time, cycle time and whether demand
   is met.
 - **Quality** (on Departures): mark the parts that leave here as scrap.
@@ -454,7 +465,8 @@ The **Results** tab shows, from the top:
 6. **All measures:** every other result in a table per block, folded. Tasks with a resource also
    report the time spent processing, starved, blocked, failed, off shift and setting up, and OEE
    when a planned run time is set. Departures with a demand report takt time, demand met and
-   cycle time.
+   cycle time, and those with **Time in system** its percentiles and the share within the
+   target, for each run over the entities that reached them.
 7. **Spread across runs:** pick a result to see its percentiles and how often it met a
    target, for example "the wait is at most 5 minutes in 14 of 16 runs".
 
@@ -567,11 +579,31 @@ This is one run of many: its numbers differ from the others and from the average
   run is watched, each item on a conveyor is drawn as a parcel where the run has carried it, in
   its product's colour.
 - **Layout:** a plan of the model from above, to scale in metres, with a grid and a scale bar.
-  Conveyors are drawn as their belts and blocks as their footprints. It is for looking only: drag
-  to pan, scroll to zoom, **Fit**. Positions come from the model's layout (the view says
+  Conveyors are drawn as their belts and blocks as their footprints. Drag the floor to pan, scroll
+  to zoom, **Fit** to see it all. Positions come from the model's layout (the view says
   **Positions from the layout**); a block the layout does not place is listed under **Unplaced**
   and drawn in neither view, so a model with no layout yet shows an empty plan and 3D view. The
   parcel sorter example has a layout.
+  - **Draw a conveyor's path.** Select the conveyor (on the plan or in the flowchart) and click
+    **Draw path**, or click the conveyor under **Unplaced**, which starts drawing straight away.
+    Click where the belt starts and at each point it turns, then double-click, press Enter or
+    click **Finish**; Backspace takes back the last point and Esc cancels. Each corner bends round with a radius of 1 m (tighter where the
+    straights beside it are too short). The conveyor's **Length** becomes the drawn path's,
+    unless a typed length already overrode the path, which it keeps.
+  - **Edit it.** Click a belt to select it: its points show as small circles. Drag a point to move
+    it, drag the belt itself to move the whole path, double-click the belt to add a point there,
+    and press Delete to remove the point you picked (a path keeps at least two). The length
+    beside the pointer follows the drag. Every change is one step of **Undo**.
+  - **Without a mouse.** Tab reaches each point; the arrow keys move it 0.1 m (1 m with Shift)
+    and Delete removes it. The conveyor's properties list its path under **Path**: the **Drawn
+    length**, each point's x and y and each corner's bend radius as fields, **Remove** for a
+    point, **Add a point at the end**, **Add a straight path** (of the typed length, for a
+    conveyor not drawn yet) and **Remove path**. A path that climbs, has a helix, turns a whole
+    circle or more in one arc, or turns sharply where it starts or ends or by a half turn or more
+    (drawn in a file, or by an agent) can be moved, drawn again or removed here but not edited
+    point by point; a loop drawn by its points keeps them.
+  - Snapping to the grid and to other belts' ends, and a background drawing to trace over, come
+    next.
 - **Dashboard** (beside the tabs, or **View ▸ Dashboard**): a panel beside the model with tiles
   for throughput, utilisation by resource, time on conveyors, and entities on the conveyors (or
   in the model) over time. Run the model, or watch a run, to fill it. While a run is watched, the
@@ -1090,6 +1122,11 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 | Delete, Backspace | Delete the selection |
 | Ctrl+A | Select all |
 | Up, Down | Select the previous or next block |
+
+In the Layout view, while a path is being drawn: Enter or a double-click finishes it, Backspace
+takes back the last point and Esc cancels. With a point of a path picked: Delete or Backspace
+removes the point (not the conveyor), Esc lets it go, and the arrow keys move it 0.1 m (1 m with
+Shift) while it has the keyboard.
 
 ## Troubleshooting
 

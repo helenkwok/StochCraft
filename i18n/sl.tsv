@@ -1049,6 +1049,7 @@ unit	yr	l.
 	In “{field}” of {block}, set “{param}” to 1 or more.	V polju »{field}« bloka {block} nastavite »{param}« na 1 ali več.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	V polju »{field}« bloka {block} nastavite »{param}« na število od 0 do 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	V polju »{field}« bloka {block} nastavite »Najmanjša vrednost« pod »Največja vrednost«, morebitno vrednost »Najverjetnejša vrednost« pa med njiju.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	V polju »{field}« bloka {block} nastavite »Najmanjša vrednost« pod »Največja vrednost«.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	V polju »{field}« bloka {block} dodajte podatkovne točke, katerih verjetnosti skupaj presegajo 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} nikoli ne bi imel enote za delo. Dajte mu vsaj 1 enoto.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} bi ustvarjal entitete brez konca, ker je njegov »Čas med prihodi« vedno 0. Nastavite čas, večji od 0, ali določite »Omejitev prihodov«.
@@ -1491,6 +1492,35 @@ connection	Flow	Tok
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} je postavljen {s} vzdolž tekočega traku {conveyor}, katerega pot je dolga {length}. Postavite ga med 0 in {length} vzdolž poti.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitete na tekočem traku {conveyor} dosežejo {before} pred {block}, vendar je {block} postavljen bližje začetku ({s} vzdolž njega, {before} pri {before_s}). Postavite {block} dlje po poti kot {before} ali ju zamenjajte v tokovih.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Prečkanje spoja na toku {flow} traja {time}. Nastavite njegov čas prenosa na 0 ali več.
+	A path needs at least two points.	Pot potrebuje vsaj dve točki.
+	Finish	Končaj
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Risanje poti za {name}: kliknite za dodajanje točk, dvoklik ali Enter za konec, Vračalka umakne zadnjo točko, Esc prekliče.
+	Draw path	Nariši pot
+	Select a conveyor to draw its path	Izberite transporter, da narišete njegovo pot
+	Remove path	Odstrani pot
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Kliknite za dodajanje točke · Dvoklik ali Enter za konec · Esc za preklic
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Kliknite trak, da ga izberete · Povlecite njegove točke ali trak · Dvoklik doda točko · Povlecite tla za premik · Drsite za povečavo
+	Point {n} of {name}, x {x} m, y {y} m	Točka {n} od {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Tukaj kliknite transporter, da narišete njegovo pot.
+	Path	Pot
+	Not drawn in the layout yet.	V razporedu še ni narisano.
+	Draw in the Layout view	Nariši v pogledu Razpored
+	Add a straight path	Dodaj ravno pot
+	Drawn length: {length} {unit}	Narisana dolžina: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ta pot se vzpenja ali ima vijačnico: njenih točk tu ni mogoče urejati.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ta pot se v enem loku zavrti za cel krog ali več: njenih točk tu ni mogoče urejati.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ta pot na začetku ali na koncu ostro zavije: njenih točk tu ni mogoče urejati.
+	Point {n}	Točka {n}
+	x of point {n}	x točke {n}
+	y of point {n}	y točke {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Polmer zavoja v točki {n}
+	bend	zavoj
+	tightened to {radius} to fit	zoženo na {radius}, da se prilega
+	Remove point {n}	Odstrani točko {n}
+	Add a point at the end	Dodaj točko na konec
+	Change Path	Sprememba poti
 	Search examples	Išči po primerih
 	Clear search	Počisti iskanje
 	Logistics and warehousing	Logistika in skladiščenje
@@ -1501,6 +1531,18 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset strojev mora obratovati, štirje rezervni čakajo v pripravljenosti, trije mehaniki pa popravljajo tiste, ki se pokvarijo (Crane in Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koliko rezervnih strojev in mehanikov je potrebnih, da deset strojev obratuje?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Rezervni stroji v pripravljenosti se ne morejo pokvariti: v povprečju je pokvarjenih 3.47 strojev, obratuje pa 9.29. Četrti mehanik doseže približno toliko kot štirje rezervni stroji več.
+	Median time in system	Mediana časa v sistemu
+	Time in system, 90th percentile	Čas v sistemu, 90. percentil
+	Time in system, 95th percentile	Čas v sistemu, 95. percentil
+	Share done within the target time	Delež končanih v ciljnem času
+	Percentiles of time in system	Percentili časa v sistemu
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Prikaže mediano ter 90. in 95. percentil časa, ki ga je vsaka entiteta porabila od nastanka do teh izhodov, s ciljnim časom pa delež končanih v njem.
+	Target time ({unit})	Ciljni čas ({unit})
+	The target time is a time above 0	Ciljni čas je čas, večji od 0
+	Count only working time on	Štej samo delovni čas po
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitete, ki so ob koncu zagona še znotraj, niso upoštevane, zato zagon ustavite, ko so vse končane.
+	Set the target time in system of {block} to a time above 0.	Nastavite ciljni čas v sistemu bloka {block} na čas, večji od 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Čas v sistemu bloka {block} šteje delovni čas po koledarju, ki ne obstaja. Izberite koledar, ki obstaja.
 	One machine's availability	Razpoložljivost enega stroja
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	En stroj, ki se v povprečju pokvari vsakih 90 ur, popravilo pa traja 4.5 ure (Hristova, Denev in Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Kako pogosto stoji en stroj in koliko dela to stane?

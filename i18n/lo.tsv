@@ -1049,6 +1049,7 @@ unit	yr	ປີ
 	In “{field}” of {block}, set “{param}” to 1 or more.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “{param}” ເປັນ 1 ຫຼືຫຼາຍກວ່ານັ້ນ
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “{param}” ເປັນຕົວເລກຕັ້ງແຕ່ 0 ເຖິງ 1
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “ຄ່າຕ່ຳສຸດ” ໃຫ້ຕ່ຳກວ່າ “ຄ່າສູງສຸດ” ແລະ ຖ້າມີ “ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ” ໃຫ້ຢູ່ລະຫວ່າງສອງຄ່ານັ້ນ
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	ໃນ “{field}” ຂອງ {block} ຕັ້ງ “ຄ່າຕ່ຳສຸດ” ໃຫ້ຕ່ຳກວ່າ “ຄ່າສູງສຸດ”
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	ໃນ “{field}” ຂອງ {block} ເພີ່ມຈຸດຂໍ້ມູນທີ່ຜົນບວກຄວາມເປັນໄປໄດ້ຫຼາຍກວ່າ 0
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} ຈະບໍ່ມີໜ່ວຍໃຫ້ເຮັດວຽກເລີຍ ໃຫ້ຢ່າງໜ້ອຍ 1 ໜ່ວຍ
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} ຈະສ້າງເອນທິຕີບໍ່ຢຸດ ເພາະ “ເວລາລະຫວ່າງການມາຮອດ” ເປັນ 0 ສະເໝີ ໃຫ້ເວລາທີ່ຫຼາຍກວ່າ 0 ຫຼື ຕັ້ງ “ຂີດຈຳກັດການມາຮອດ”
@@ -1491,6 +1492,35 @@ connection	Flow	ເສັ້ນທາງ
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} ຖືກວາງຢູ່ທີ່ {s} ຕາມສາຍພານລຳລຽງ {conveyor} ເຊິ່ງເສັ້ນທາງຍາວ {length} ໃຫ້ວາງມັນລະຫວ່າງ 0 ຫາ {length} ຕາມເສັ້ນທາງ
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	ເອນທິຕີເທິງສາຍພານລຳລຽງ {conveyor} ໄປຮອດ {before} ກ່ອນ {block} ແຕ່ {block} ຖືກວາງໃກ້ຈຸດເລີ່ມຕົ້ນກວ່າ ({s} ຕາມສາຍພານ, {before} ຢູ່ທີ່ {before_s}) ໃຫ້ວາງ {block} ໄປຕາມເສັ້ນທາງໄກກວ່າ {before} ຫຼື ສະຫຼັບກັນໃນເສັ້ນທາງ
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ຈຸດເຊື່ອມຕໍ່ຢູ່ເສັ້ນທາງ {flow} ໃຊ້ເວລາ {time} ເພື່ອຂ້າມ ໃຫ້ຕັ້ງເວລາຂົນຍ້າຍຂອງມັນເປັນ 0 ຫຼືຫຼາຍກວ່າ
+	A path needs at least two points.	ເສັ້ນທາງຕ້ອງມີຢ່າງໜ້ອຍສອງຈຸດ.
+	Finish	ສຳເລັດ
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	ກຳລັງແຕ້ມເສັ້ນທາງຂອງ {name}: ຄລິກເພື່ອເພີ່ມຈຸດ, ຄລິກສອງເທື່ອ ຫຼື Enter ເພື່ອສຳເລັດ, Backspace ເພື່ອເອົາຈຸດສຸດທ້າຍອອກ, Esc ເພື່ອຍົກເລີກ.
+	Draw path	ແຕ້ມເສັ້ນທາງ
+	Select a conveyor to draw its path	ເລືອກສາຍພານເພື່ອແຕ້ມເສັ້ນທາງຂອງມັນ
+	Remove path	ລຶບເສັ້ນທາງ
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	ຄລິກເພື່ອເພີ່ມຈຸດ · ຄລິກສອງເທື່ອ ຫຼື Enter ເພື່ອສຳເລັດ · Esc ເພື່ອຍົກເລີກ
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	ຄລິກສາຍພານເພື່ອເລືອກ · ລາກຈຸດຂອງມັນ ຫຼື ສາຍພານ · ຄລິກສອງເທື່ອເພື່ອເພີ່ມຈຸດ · ລາກພື້ນເພື່ອຍ້າຍ · ເລື່ອນເພື່ອຊູມ
+	Point {n} of {name}, x {x} m, y {y} m	ຈຸດ {n} ຂອງ {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	ຄລິກສາຍພານຢູ່ນີ້ເພື່ອແຕ້ມເສັ້ນທາງຂອງມັນ.
+	Path	ເສັ້ນທາງ
+	Not drawn in the layout yet.	ຍັງບໍ່ໄດ້ແຕ້ມໃນແຜນຜັງ.
+	Draw in the Layout view	ແຕ້ມໃນມຸມມອງແຜນຜັງ
+	Add a straight path	ເພີ່ມເສັ້ນທາງຊື່
+	Drawn length: {length} {unit}	ຄວາມຍາວທີ່ແຕ້ມ: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	ເສັ້ນທາງນີ້ຂຶ້ນສູງ ຫຼື ມີກ້ຽວ: ບໍ່ສາມາດແກ້ໄຂຈຸດຂອງມັນຢູ່ນີ້.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	ເສັ້ນທາງນີ້ລ້ຽວຄົບວົງ ຫຼື ຫຼາຍກວ່າໃນໂຄ້ງດຽວ: ບໍ່ສາມາດແກ້ໄຂຈຸດຂອງມັນຢູ່ນີ້.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	ເສັ້ນທາງນີ້ລ້ຽວກະທັນຫັນຢູ່ຈຸດເລີ່ມ ຫຼື ຈຸດສິ້ນສຸດ: ບໍ່ສາມາດແກ້ໄຂຈຸດຂອງມັນຢູ່ນີ້.
+	Point {n}	ຈຸດ {n}
+	x of point {n}	x ຂອງຈຸດ {n}
+	y of point {n}	y ຂອງຈຸດ {n}
+	x	x
+	y	y
+	Bend radius at point {n}	ລັດສະໝີໂຄ້ງທີ່ຈຸດ {n}
+	bend	ໂຄ້ງ
+	tightened to {radius} to fit	ຫຍໍ້ເປັນ {radius} ໃຫ້ພໍດີ
+	Remove point {n}	ລຶບຈຸດ {n}
+	Add a point at the end	ເພີ່ມຈຸດທີ່ທ້າຍ
+	Change Path	ປ່ຽນເສັ້ນທາງ
 	Search examples	ຊອກຫາຕົວຢ່າງ
 	Clear search	ລ້າງການຊອກຫາ
 	Logistics and warehousing	ໂລຈິສຕິກ ແລະ ສາງສິນຄ້າ
@@ -1501,6 +1531,18 @@ connection	Flow	ເສັ້ນທາງ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ເຄື່ອງຈັກສິບເຄື່ອງຕ້ອງເຮັດວຽກ, ເຄື່ອງຈັກສຳຮອງສີ່ເຄື່ອງລໍຖ້າພ້ອມ ແລະ ຊ່າງຈັກສາມຄົນສ້ອມແປງເຄື່ອງທີ່ເສຍ (Crane ແລະ Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	ຕ້ອງມີເຄື່ອງຈັກສຳຮອງ ແລະ ຊ່າງຈັກຈັກເທົ່າໃດ ເພື່ອໃຫ້ເຄື່ອງຈັກສິບເຄື່ອງເຮັດວຽກຕໍ່ໄປໄດ້?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	ເຄື່ອງຈັກສຳຮອງທີ່ລໍຖ້າຢູ່ບໍ່ສາມາດເສຍໄດ້: ໂດຍສະເລ່ຍເຄື່ອງຈັກເສຍ 3.47 ເຄື່ອງ ແລະ ເຮັດວຽກ 9.29 ເຄື່ອງ. ຊ່າງຈັກຄົນທີສີ່ຊ່ວຍໄດ້ປະມານເທົ່າກັບເຄື່ອງຈັກສຳຮອງອີກສີ່ເຄື່ອງ.
+	Median time in system	ຄ່າກາງຂອງເວລາໃນລະບົບ
+	Time in system, 90th percentile	ເວລາໃນລະບົບ, ເປີເຊັນໄທລ໌ທີ 90
+	Time in system, 95th percentile	ເວລາໃນລະບົບ, ເປີເຊັນໄທລ໌ທີ 95
+	Share done within the target time	ສ່ວນທີ່ສຳເລັດພາຍໃນເວລາເປົ້າໝາຍ
+	Percentiles of time in system	ເປີເຊັນໄທລ໌ຂອງເວລາໃນລະບົບ
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	ສະແດງຄ່າກາງ, ເປີເຊັນໄທລ໌ທີ 90 ແລະ 95 ຂອງເວລາທີ່ແຕ່ລະສິ່ງໃຊ້ນັບແຕ່ຖືກສ້າງຈົນຮອດທາງອອກເຫຼົ່ານີ້ ແລະ ເມື່ອມີເວລາເປົ້າໝາຍ ກໍສະແດງສ່ວນທີ່ສຳເລັດພາຍໃນເວລານັ້ນ.
+	Target time ({unit})	ເວລາເປົ້າໝາຍ ({unit})
+	The target time is a time above 0	ເວລາເປົ້າໝາຍຕ້ອງຫຼາຍກວ່າ 0
+	Count only working time on	ນັບສະເພາະເວລາເຮັດວຽກຕາມ
+	Entities still inside when the run ends are left out, so stop the run once all are done.	ສິ່ງທີ່ຍັງຢູ່ພາຍໃນເມື່ອການແລ່ນສິ້ນສຸດ ບໍ່ຖືກນັບ ສະນັ້ນຢຸດການແລ່ນເມື່ອທັງໝົດສຳເລັດແລ້ວ.
+	Set the target time in system of {block} to a time above 0.	ຕັ້ງເວລາເປົ້າໝາຍໃນລະບົບຂອງ {block} ເປັນເວລາທີ່ຫຼາຍກວ່າ 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	ເວລາໃນລະບົບຂອງ {block} ນັບເວລາເຮັດວຽກຕາມປະຕິທິນທີ່ບໍ່ມີຢູ່ ເລືອກປະຕິທິນທີ່ມີຢູ່
 	One machine's availability	ຄວາມພ້ອມໃຊ້ງານຂອງເຄື່ອງຈັກໜຶ່ງເຄື່ອງ
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	ເຄື່ອງຈັກໜຶ່ງເຄື່ອງທີ່ເສຍສະເລ່ຍທຸກ 90 ຊົ່ວໂມງ ແລະ ໃຊ້ເວລາ 4.5 ຊົ່ວໂມງໃນການສ້ອມ (Hristova, Denev ແລະ Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	ເຄື່ອງຈັກໜຶ່ງເຄື່ອງຢຸດເລື້ອຍປານໃດ ແລະ ເສຍງານຫຼາຍປານໃດ?

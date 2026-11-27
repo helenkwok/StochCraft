@@ -1049,6 +1049,7 @@ unit	yr	m.
 	In “{field}” of {block}, set “{param}” to 1 or more.	Bloko {block} lauke „{field}“ nustatykite „{param}“ kaip 1 arba daugiau.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Bloko {block} lauke „{field}“ nustatykite „{param}“ kaip skaičių nuo 0 iki 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Bloko {block} lauke „{field}“ nustatykite „Minimumas“ mažesnį už „Maksimumas“, o galimą reikšmę „Labiausiai tikėtina“ – tarp jų.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Bloko {block} lauke „{field}“ nustatykite „Minimumas“ mažesnį už „Maksimumas“.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Bloko {block} lauke „{field}“ pridėkite duomenų taškų, kurių tikimybių suma didesnė už 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Blokas {block} niekada neturėtų vieneto darbui. Suteikite jam bent 1 vienetą.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Blokas {block} kurtų objektus be galo, nes jo „Laikas tarp atvykimų“ visada lygus 0. Nustatykite laiką, didesnį už 0, arba nustatykite „Atvykimų limitas“.
@@ -1491,6 +1492,35 @@ connection	Flow	Srautas
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blokas {block} yra pastatytas {s} atstumu išilgai konvejerio {conveyor}, kurio kelias yra {length} ilgio. Pastatykite jį tarp 0 ir {length} išilgai kelio.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Objektai ant konvejerio {conveyor} pasiekia {before} anksčiau nei {block}, bet {block} yra pastatytas arčiau pradžios ({s} išilgai jo, {before} ties {before_s}). Pastatykite {block} toliau keliu nei {before} arba sukeiskite juos srautuose.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Sandūra sraute {flow} kertama per {time}. Padarykite jos perdavimo laiką 0 arba didesnį.
+	A path needs at least two points.	Trasai reikia bent dviejų taškų.
+	Finish	Baigti
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Braižoma {name} trasa: spustelėkite, kad pridėtumėte taškų, dukart spustelėkite arba Enter – baigti, Backspace – atšaukti paskutinį tašką, Esc – atšaukti.
+	Draw path	Braižyti trasą
+	Select a conveyor to draw its path	Pasirinkite konvejerį, kad nubraižytumėte jo trasą
+	Remove path	Pašalinti trasą
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Spustelėkite, kad pridėtumėte tašką · Dukart spustelėkite arba Enter – baigti · Esc – atšaukti
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Spustelėkite juostą, kad ją pasirinktumėte · Vilkite jos taškus arba juostą · Dukart spustelėkite, kad pridėtumėte tašką · Vilkite grindis perkelti · Slinkite didinti
+	Point {n} of {name}, x {x} m, y {y} m	{name} taškas {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Spustelėkite čia konvejerį, kad nubraižytumėte jo trasą.
+	Path	Trasa
+	Not drawn in the layout yet.	Išdėstyme dar nenubraižyta.
+	Draw in the Layout view	Braižyti Išdėstymo rodinyje
+	Add a straight path	Pridėti tiesią trasą
+	Drawn length: {length} {unit}	Nubraižytas ilgis: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ši trasa kyla arba turi spiralę: jos taškų čia redaguoti negalima.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ši trasa viename lanke apsisuka visą ratą ar daugiau: jos taškų čia redaguoti negalima.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ši trasa staigiai pasuka savo pradžioje arba pabaigoje: jos taškų čia redaguoti negalima.
+	Point {n}	Taškas {n}
+	x of point {n}	taško {n} x
+	y of point {n}	taško {n} y
+	x	x
+	y	y
+	Bend radius at point {n}	Posūkio spindulys taške {n}
+	bend	posūkis
+	tightened to {radius} to fit	susiaurinta iki {radius}, kad tilptų
+	Remove point {n}	Pašalinti tašką {n}
+	Add a point at the end	Pridėti tašką gale
+	Change Path	Keisti trasą
 	Search examples	Ieškoti pavyzdžiuose
 	Clear search	Išvalyti paiešką
 	Logistics and warehousing	Logistika ir sandėliavimas
@@ -1501,6 +1531,18 @@ connection	Flow	Srautas
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dešimt mašinų turi veikti, keturios atsarginės laukia parengtos, o trys mechanikai taiso sugedusias (Crane ir Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kiek atsarginių mašinų ir mechanikų reikia, kad veiktų dešimt mašinų?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Parengtos atsarginės mašinos negali sugesti: vidutiniškai 3.47 mašinos sugedusios, o 9.29 veikia. Ketvirtas mechanikas duoda maždaug tiek pat, kiek keturios papildomos atsarginės mašinos.
+	Median time in system	Laiko sistemoje mediana
+	Time in system, 90th percentile	Laikas sistemoje, 90-asis procentilis
+	Time in system, 95th percentile	Laikas sistemoje, 95-asis procentilis
+	Share done within the target time	Per tikslinį laiką baigtų dalis
+	Percentiles of time in system	Laiko sistemoje procentiliai
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Rodo laiko, kurį kiekvienas objektas praleido nuo sukūrimo iki šių išėjimų, medianą, 90-ąjį ir 95-ąjį procentilius, o nurodžius tikslinį laiką – per jį baigtų dalį.
+	Target time ({unit})	Tikslinis laikas ({unit})
+	The target time is a time above 0	Tikslinis laikas turi būti didesnis už 0
+	Count only working time on	Skaičiuoti tik darbo laiką pagal
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Objektai, kurie vykdymo pabaigoje dar viduje, neįskaičiuojami, todėl sustabdykite vykdymą, kai visi baigti.
+	Set the target time in system of {block} to a time above 0.	Nustatykite bloko {block} tikslinį laiką sistemoje didesnį už 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Bloko {block} laikas sistemoje skaičiuoja darbo laiką pagal kalendorių, kurio nėra. Pasirinkite esamą kalendorių.
 	One machine's availability	Vieno įrenginio parengtis
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Vienas įrenginys, kuris vidutiniškai kas 90 valandų genda, o jį suremontuoti reikia 4.5 valandos (Hristova, Denev ir Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Kaip dažnai stovi vienas įrenginys ir kiek darbo tai kainuoja?

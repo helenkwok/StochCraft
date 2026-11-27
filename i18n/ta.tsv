@@ -1049,6 +1049,7 @@ unit	yr	ஆண்டு
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} இன் “{field}” இல் “{param}” ஐ 1 அல்லது அதற்கு மேல் அமைக்கவும்.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} இன் “{field}” இல் “{param}” ஐ 0 முதல் 1 வரையிலான எண்ணாக அமைக்கவும்.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} இன் “{field}” இல் “குறைந்தபட்சம்” ஐ “அதிகபட்சம்” ஐ விடக் குறைவாகவும், “அதிக வாய்ப்புள்ள மதிப்பு” இருந்தால் அவ்விரண்டுக்கும் இடையிலும் அமைக்கவும்.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} இன் “{field}” இல் “குறைந்தபட்சம்” ஐ “அதிகபட்சம்” ஐ விடக் குறைவாக அமைக்கவும்.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} இன் “{field}” இல் நிகழ்தகவுகளின் கூட்டுத்தொகை 0 ஐ விட அதிகமாக உள்ள தரவுப் புள்ளிகளைச் சேர்க்கவும்.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} இல் வேலை செய்ய ஒரு அலகு கூட இருக்காது. குறைந்தது 1 அலகு கொடுக்கவும்.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} இன் “வருகைகளுக்கு இடையிலான நேரம்” எப்போதும் 0 என்பதால் அது முடிவில்லாமல் உருப்படிகளை உருவாக்கும். 0 ஐ விட அதிகமான நேரத்தைக் கொடுக்கவும், அல்லது “வருகை வரம்பு” அமைக்கவும்.
@@ -1491,6 +1492,35 @@ connection	Flow	ஓட்டம்
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} கன்வேயர் {conveyor} வழியே {s} தொலைவில் வைக்கப்பட்டுள்ளது, ஆனால் அதன் பாதை {length} நீளமே. அதைப் பாதை வழியே 0 முதல் {length} வரைக்குள் வைக்கவும்.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	கன்வேயர் {conveyor} இல் உருப்படிகள் {block} ஐ விட முன்பு {before} ஐ அடைகின்றன, ஆனால் {block} தொடக்கத்துக்கு நெருக்கமாக வைக்கப்பட்டுள்ளது (அதன் வழியே {s}, {before} {before_s} இல்). {block} ஐப் பாதையில் {before} ஐ விடப் பின்னால் வைக்கவும், அல்லது ஓட்டங்களில் அவற்றை மாற்றி அமைக்கவும்.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ஓட்டம் {flow} இல் உள்ள இணைப்பைக் கடக்க {time} ஆகிறது. அதன் இடமாற்ற நேரத்தை 0 அல்லது அதிகமாக்கவும்.
+	A path needs at least two points.	ஒரு பாதைக்கு குறைந்தது இரண்டு புள்ளிகள் தேவை.
+	Finish	முடி
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name} இன் பாதை வரையப்படுகிறது: புள்ளிகளைச் சேர்க்க கிளிக் செய்யவும், முடிக்க இருமுறை கிளிக் அல்லது Enter, கடைசி புள்ளியை நீக்க Backspace, ரத்துசெய்ய Esc.
+	Draw path	பாதையை வரை
+	Select a conveyor to draw its path	பாதையை வரைய ஒரு கன்வேயரைத் தேர்ந்தெடுக்கவும்
+	Remove path	பாதையை அகற்று
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	புள்ளியைச் சேர்க்க கிளிக் செய்யவும் · முடிக்க இருமுறை கிளிக் அல்லது Enter · ரத்துசெய்ய Esc
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	தேர்ந்தெடுக்க பெல்ட்டைக் கிளிக் செய்யவும் · அதன் புள்ளிகளை அல்லது பெல்ட்டை இழுக்கவும் · புள்ளியைச் சேர்க்க இருமுறை கிளிக் செய்யவும் · நகர்த்த தரையை இழுக்கவும் · பெரிதாக்க உருட்டவும்
+	Point {n} of {name}, x {x} m, y {y} m	{name} இன் புள்ளி {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	பாதையை வரைய இங்கே ஒரு கன்வேயரைக் கிளிக் செய்யவும்.
+	Path	பாதை
+	Not drawn in the layout yet.	லேஅவுட்டில் இன்னும் வரையப்படவில்லை.
+	Draw in the Layout view	லேஅவுட் காட்சியில் வரை
+	Add a straight path	நேரான பாதையைச் சேர்
+	Drawn length: {length} {unit}	வரைந்த நீளம்: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	இந்தப் பாதை மேலே ஏறுகிறது அல்லது சுருள் உள்ளது: அதன் புள்ளிகளை இங்கே திருத்த முடியாது.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	இந்தப் பாதை ஒரே வளைவில் ஒரு முழு வட்டம் அல்லது அதற்கு மேல் திரும்புகிறது: அதன் புள்ளிகளை இங்கே திருத்த முடியாது.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	இந்தப் பாதை தொடக்கத்தில் அல்லது முடிவில் கூர்மையாகத் திரும்புகிறது: அதன் புள்ளிகளை இங்கே திருத்த முடியாது.
+	Point {n}	புள்ளி {n}
+	x of point {n}	புள்ளி {n} இன் x
+	y of point {n}	புள்ளி {n} இன் y
+	x	x
+	y	y
+	Bend radius at point {n}	புள்ளி {n} இல் வளைவு ஆரம்
+	bend	வளைவு
+	tightened to {radius} to fit	பொருந்த {radius} ஆகக் குறைக்கப்பட்டது
+	Remove point {n}	புள்ளி {n} ஐ அகற்று
+	Add a point at the end	முடிவில் ஒரு புள்ளியைச் சேர்
+	Change Path	பாதையை மாற்று
 	Search examples	எடுத்துக்காட்டுகளில் தேடு
 	Clear search	தேடலை அழி
 	Logistics and warehousing	சரக்கு போக்குவரத்தும் கிடங்கும்
@@ -1501,6 +1531,18 @@ connection	Flow	ஓட்டம்
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	பத்து இயந்திரங்கள் இயங்க வேண்டும், நான்கு உதிரி இயந்திரங்கள் தயாராகக் காத்திருக்கின்றன, மூன்று மெக்கானிக்குகள் பழுதானவற்றைச் சரிசெய்கிறார்கள் (Crane மற்றும் Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	பத்து இயந்திரங்களை இயங்க வைக்க எத்தனை உதிரி இயந்திரங்களும் மெக்கானிக்குகளும் தேவை?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	தயாராகக் காத்திருக்கும் உதிரி இயந்திரங்கள் பழுதாக முடியாது: சராசரியாக 3.47 இயந்திரங்கள் பழுதாகவும் 9.29 இயங்கியும் இருக்கும். நான்காவது மெக்கானிக் இன்னும் நான்கு உதிரி இயந்திரங்கள் அளவுக்கு உதவுகிறார்.
+	Median time in system	அமைப்பில் கழித்த நேரத்தின் இடைநிலை
+	Time in system, 90th percentile	அமைப்பில் கழித்த நேரம், 90-ஆம் சதமானம்
+	Time in system, 95th percentile	அமைப்பில் கழித்த நேரம், 95-ஆம் சதமானம்
+	Share done within the target time	இலக்கு நேரத்துக்குள் முடிந்த பங்கு
+	Percentiles of time in system	அமைப்பில் கழித்த நேரத்தின் சதமானங்கள்
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	ஒவ்வொரு உருப்படியும் உருவானதிலிருந்து இந்த வெளியேற்றங்களை அடையும் வரை எடுத்த நேரத்தின் இடைநிலை, 90-ஆம் மற்றும் 95-ஆம் சதமானங்களைக் காட்டும்; இலக்கு நேரம் கொடுத்தால் அதற்குள் முடிந்த பங்கையும் காட்டும்.
+	Target time ({unit})	இலக்கு நேரம் ({unit})
+	The target time is a time above 0	இலக்கு நேரம் 0-ஐ விடப் பெரிய நேரமாக இருக்க வேண்டும்
+	Count only working time on	வேலை நேரத்தை மட்டும் எண்ணும் நாட்காட்டி
+	Entities still inside when the run ends are left out, so stop the run once all are done.	இயக்கம் முடியும்போது இன்னும் உள்ளே உள்ளவை சேர்க்கப்படாது, எனவே அனைத்தும் முடிந்ததும் இயக்கத்தை நிறுத்தவும்.
+	Set the target time in system of {block} to a time above 0.	{block} இன் அமைப்பில் இலக்கு நேரத்தை 0-ஐ விடப் பெரிய நேரமாக அமைக்கவும்.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} இன் அமைப்பில் கழித்த நேரம் இல்லாத ஒரு நாட்காட்டியின்படி வேலை நேரத்தை எண்ணுகிறது. இருக்கும் ஒரு நாட்காட்டியைத் தேர்ந்தெடுக்கவும்.
 	One machine's availability	ஒரு இயந்திரத்தின் இயக்கத் தயார்நிலை
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	சராசரியாக ஒவ்வொரு 90 மணிநேரத்திற்கும் பழுதாகி, பழுதுபார்க்க 4.5 மணிநேரம் ஆகும் ஒரு இயந்திரம் (Hristova, Denev மற்றும் Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	ஒரு இயந்திரம் எவ்வளவு அடிக்கடி நின்றுவிடுகிறது, அதனால் எவ்வளவு வேலை இழப்பு?

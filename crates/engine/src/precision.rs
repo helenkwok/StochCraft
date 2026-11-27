@@ -32,6 +32,9 @@ pub fn unit(name: &str) -> Unit {
         | "mean_in_service" => Unit::Items,
         "mean_wait"
         | "mean_time_in_system"
+        | "time_in_system_p50"
+        | "time_in_system_p90"
+        | "time_in_system_p95"
         | "mean_blocked_time"
         | "mean_time_on"
         | "abandoned_wait"
@@ -59,7 +62,8 @@ pub fn unit(name: &str) -> Unit {
         | "scrap_ratio"
         | "rework_ratio"
         | "oee"
-        | "demand_met" => Unit::Share,
+        | "demand_met"
+        | "within_target_share" => Unit::Share,
         "energy" | "specific_energy" => Unit::Energy,
         _ => Unit::Count,
     }
@@ -115,6 +119,8 @@ fn key_candidates(kind: &str) -> &'static [(&'static str, bool)] {
         "sink" => &[
             ("entered", true),
             ("mean_time_in_system", true),
+            ("within_target_share", true),
+            ("time_in_system_p90", true),
             ("cycle_time", true),
             ("demand_met", true),
         ],

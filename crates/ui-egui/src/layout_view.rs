@@ -1,21 +1,34 @@
-//! The Layout view (M5.5, L1; drawn from the layout since L3): the model's plan in metres, to
-//! scale, read-only. A grid, a scale bar, the floor and markings, every conveyor as its belt along
-//! its track's path with its width and rails, every placed block as its footprint with its name,
-//! and the list of blocks that are not placed.
+//! The Layout view (M5.5, L1; drawn from the layout since L3, edited since L4): the model's plan
+//! in metres, to scale. A grid, a scale bar, the floor and markings, every conveyor as its belt
+//! along its track's path with its width and rails, every placed block as its footprint with its
+//! name, and the list of blocks that are not placed.
 //!
 //! Positions come only from the model's layout ([`stochcraft_model::Site`]); a block with no
 //! place is listed as unplaced and drawn nowhere, as in the 3D view. The plan and the 3D view
 //! use the same paths and frames ([`crate::view3d::track_metres`],
 //! [`crate::view3d::frame_metres`]), so every item is at the same `point_at(s)` in both.
 //!
+//! **Editing paths (L4, part 1).** As established layout editors do: **Draw path** for the
+//! selected conveyor, then click to add points, double-click or Enter to finish, Backspace to take
+//! back the last point, Esc to cancel; each corner bends with a radius ([`Outline`]). A click on a
+//! belt or a block selects it, shared with the flowchart and the properties panel. The selected
+//! belt shows its points: drag one to move it, drag the belt to move the whole path, double-click
+//! the belt to add a point there, Delete to remove the selected point. Each point is a control
+//! the keyboard reaches with Tab: the arrow keys move it by 0.1 m (1 m with Shift). Every gesture
+//! is one `track.set`, one undo step. The properties panel lists the points as fields, the way
+//! without a pointer.
+//!
 //! Conventions: metres, `x` right and `y` up, like the 3D view's floor. Drag to pan, scroll to
 //! zoom about the pointer, Fit to see everything; the arrow keys and plus and minus work while
 //! the drawing has focus.
 
 use egui::{
-    Align2, FontId, Key, Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, Vec2, pos2, vec2,
+    Align2, FontId, Key, Modifiers, Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, Vec2,
+    pos2, vec2,
 };
-use stochcraft_model::{Element, ElementKind, Model};
+use serde_json::{Value, json};
+use stochcraft_model::site::{default_bend, to_step};
+use stochcraft_model::{Element, ElementId, ElementKind, Model, Outline, Path, Segment};
 
 use crate::App;
 use crate::i18n::{t, tf};
@@ -78,6 +91,7 @@ impl Footprint {
 /// A block (not a conveyor) as it is drawn: its name and its footprint.
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct Place {
+    id: String,
     name: String,
     footprint: Footprint,
 }
@@ -86,6 +100,7 @@ pub(crate) struct Place {
 /// the point half way along, where its name goes.
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct Belt {
+    id: String,
     name: String,
     points: Vec<[f32; 2]>,
     width: f32,
@@ -100,8 +115,9 @@ pub(crate) struct Plan {
     markings: Vec<Footprint>,
     places: Vec<Place>,
     belts: Vec<Belt>,
-    /// The names of the blocks that have no place: listed, not drawn.
-    unplaced: Vec<String>,
+    /// The blocks that have no place, listed, not drawn: each one's id, name, and whether it is
+    /// a conveyor (whose path can be drawn).
+    unplaced: Vec<(String, String, bool)>,
     /// The corners of the box round everything drawn.
     low: [f32; 2],
     high: [f32; 2],
@@ -123,15 +139,17 @@ fn build_plan(model: &Model) -> Plan {
     let mut unplaced = Vec::new();
     for e in &model.elements {
         let name = label_of(e);
+        let id = e.id.as_str().to_owned();
         if let ElementKind::Conveyor { length, .. } = &e.kind {
             let Some((path, width)) = track_metres(model, &e.id) else {
-                unplaced.push(name);
+                unplaced.push((id, name, true));
                 continue;
             };
             let points: Vec<[f32; 2]> = stations(&path).iter().map(|s| [s.x, s.y]).collect();
             let mid = path.point_at(path.length() / 2.0);
             let own = number(*length * unit_metres(model.experiment.length_unit));
             belts.push(Belt {
+                id,
                 name: format!("{name} · {}", tf("{length} m", &[("length", &own)])),
                 points,
                 width,
@@ -140,11 +158,12 @@ fn build_plan(model: &Model) -> Plan {
             continue;
         }
         let Some(f) = frame_metres(model, e) else {
-            unplaced.push(name);
+            unplaced.push((id, name, false));
             continue;
         };
         let look = look_of(e);
         places.push(Place {
+            id,
             name,
             footprint: Footprint {
                 centre: [f.x as f32, f.y as f32],
@@ -308,6 +327,160 @@ pub(crate) struct LayoutView {
     pub(crate) on: bool,
     plan: Option<(u64, Plan)>,
     view: Option<Vw>,
+    /// A path being drawn.
+    drawing: Option<Drawing>,
+    /// The point picked on the selected conveyor's path: the conveyor, the point's index, and
+    /// the model's revision it is of. The view's own edits keep it; any other change of the model
+    /// (an agent's `track.set`, an undo) lets it go, as the index may be of another point by then.
+    point: Option<(String, usize, u64)>,
+    /// A drag under way on the plan.
+    drag: Option<Drag>,
+}
+
+impl LayoutView {
+    /// Whether the view takes Delete, Backspace, Esc and the arrows this frame (while it is
+    /// shown): it is drawing, dragging, or has a point picked, so they act on that and not on
+    /// the selected block.
+    pub(crate) fn wants_keys(&self) -> bool {
+        self.drawing.is_some() || self.point.is_some() || self.drag.is_some()
+    }
+}
+
+/// A path being drawn: the conveyor's id and the points clicked so far, in the model's length
+/// unit.
+#[derive(Debug, Clone, PartialEq)]
+struct Drawing {
+    conveyor: String,
+    points: Vec<[f64; 2]>,
+}
+
+/// A drag on the plan: of a point of the selected path or of the whole path (to and by, in the
+/// model's length unit), or of the view. A drag of a path is of conveyor `conveyor` as the model
+/// was at `revision`: if the model changes under it (an agent's edit, an undo), the drag ends
+/// without writing over the change.
+#[derive(Debug, Clone, PartialEq)]
+enum Drag {
+    Point {
+        conveyor: String,
+        revision: u64,
+        index: usize,
+        to: [f64; 2],
+    },
+    /// `at` is where the pointer was when `by` was last worked out.
+    Whole {
+        conveyor: String,
+        revision: u64,
+        by: [f64; 2],
+        at: Pos2,
+    },
+    Pan,
+}
+
+/// The outline of points `points` (in the model's unit) with the default bend at each corner;
+/// consecutive points that coincide (to 0.1 mm) count once.
+fn drawn_outline(points: &[[f64; 2]], bend: f64) -> Outline {
+    let mut kept: Vec<[f64; 2]> = Vec::with_capacity(points.len());
+    for p in points {
+        if kept.last() != Some(p) {
+            kept.push(*p);
+        }
+    }
+    let bends = vec![bend; kept.len().saturating_sub(2)];
+    Outline {
+        z: 0.0,
+        points: kept,
+        bends,
+    }
+}
+
+/// The distance from `q` to the segment from `a` to `b`, and the point of it nearest `q`.
+fn to_segment(a: [f64; 2], b: [f64; 2], q: [f64; 2]) -> (f64, [f64; 2]) {
+    let (dx, dy) = (b[0] - a[0], b[1] - a[1]);
+    let len2 = dx * dx + dy * dy;
+    let k = if len2 > 0.0 {
+        (((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / len2).clamp(0.0, 1.0)
+    } else {
+        0.0
+    };
+    let at = [a[0] + k * dx, a[1] + k * dy];
+    let (ex, ey) = (q[0] - at[0], q[1] - at[1]);
+    ((ex * ex + ey * ey).sqrt(), at)
+}
+
+/// Where a point added near `q` goes in `outline`: the index it takes and the point on the
+/// nearest straight between two of its points.
+fn insertion(outline: &Outline, q: [f64; 2]) -> Option<(usize, [f64; 2])> {
+    outline
+        .points
+        .windows(2)
+        .enumerate()
+        .map(|(i, w)| {
+            let (d, at) = to_segment(w[0], w[1], q);
+            (d, i + 1, at)
+        })
+        .min_by(|a, b| a.0.total_cmp(&b.0))
+        .map(|(_, i, at)| (i, at))
+}
+
+/// The distance from `q` to the polyline through `points`.
+fn to_polyline(points: &[[f32; 2]], q: [f32; 2]) -> f32 {
+    let q = [f64::from(q[0]), f64::from(q[1])];
+    points
+        .windows(2)
+        .map(|w| {
+            let a = [f64::from(w[0][0]), f64::from(w[0][1])];
+            let b = [f64::from(w[1][0]), f64::from(w[1][1])];
+            to_segment(a, b, q).0
+        })
+        .fold(f64::INFINITY, f64::min) as f32
+}
+
+/// The belt under `q` (metres), the nearest whose band and rails reach within `slack` metres of
+/// it.
+fn belt_at(plan: &Plan, q: [f32; 2], slack: f32) -> Option<&Belt> {
+    plan.belts
+        .iter()
+        .map(|b| (to_polyline(&b.points, q) - b.width / 2.0 - RAIL, b))
+        .filter(|(d, _)| *d <= slack)
+        .min_by(|a, b| a.0.total_cmp(&b.0))
+        .map(|(_, b)| b)
+}
+
+/// The block whose footprint holds `q` (metres), the last drawn first.
+fn place_at(plan: &Plan, q: [f32; 2]) -> Option<&Place> {
+    plan.places.iter().rev().find(|pl| {
+        let fp = &pl.footprint;
+        let (s, c) = (libm::sinf(fp.heading), libm::cosf(fp.heading));
+        let (dx, dy) = (q[0] - fp.centre[0], q[1] - fp.centre[1]);
+        let (along, across) = (c * dx + s * dy, -s * dx + c * dy);
+        along.abs() <= fp.along / 2.0 && across.abs() <= fp.across / 2.0
+    })
+}
+
+/// A path as `track.set` takes it, in the model's unit; the width is left to the conveyor's.
+fn track_json(path: &Path) -> Value {
+    let doc = stochcraft_engine::site::TrackDoc {
+        start: path.start.into(),
+        segments: path.segments.iter().map(|s| (*s).into()).collect(),
+        width: None,
+    };
+    serde_json::to_value(doc).unwrap_or(Value::Null)
+}
+
+/// `path` moved by `by` as a whole.
+fn shifted(path: &Path, by: [f64; 2]) -> Path {
+    let mut out = path.clone();
+    out.start.x += by[0];
+    out.start.y += by[1];
+    out
+}
+
+/// Points along `path` (in the model's unit) as metres on the plan, for drawing it.
+fn plan_points(path: &Path, m: f64) -> Vec<[f32; 2]> {
+    stations(&path.scaled(m))
+        .iter()
+        .map(|s| [s.x, s.y])
+        .collect()
 }
 
 /// Writes `text` centred at `at` over the drawing as a label (so a screen reader reads it), on a
@@ -345,7 +518,89 @@ fn name_label(
     );
 }
 
+/// The selected conveyor as the Layout view edits it: its id and name, its path in the model's
+/// unit (none while it has no track), and the path's outline where its points can be edited.
+struct Chosen {
+    id: String,
+    name: String,
+    path: Option<Path>,
+    outline: Option<Outline>,
+}
+
+/// How near a belt a click must be, in pixels, to pick it.
+const PICK_PX: f32 = 6.0;
+/// The side of a point's handle, in pixels: the least target WCAG 2.2 asks for.
+const HANDLE_PX: f32 = 24.0;
+
 impl App {
+    /// Starts drawing conveyor `id`'s path in the Layout view, and shows the view.
+    pub(crate) fn draw_path_of(&mut self, id: &str) {
+        self.select(std::iter::once(id.to_owned()).collect());
+        self.show_results = false;
+        self.show_analysis = false;
+        self.show_capacity = false;
+        self.show_3d = true;
+        self.layout_view.on = true;
+        self.layout_view.point = None;
+        self.layout_view.drag = None;
+        self.layout_view.drawing = Some(Drawing {
+            conveyor: id.to_owned(),
+            points: Vec::new(),
+        });
+    }
+
+    /// Sets conveyor `id`'s path to `path` (in the model's unit), in one undo step.
+    pub(crate) fn set_path(&mut self, id: &str, path: &Path) -> bool {
+        self.execute("track.set", json!({ "id": id, "track": track_json(path) }))
+            .is_some()
+    }
+
+    /// Removes conveyor `id`'s path, which leaves it unplaced.
+    pub(crate) fn remove_path(&mut self, id: &str) {
+        if self
+            .execute("track.set", json!({ "id": id, "track": null }))
+            .is_some()
+        {
+            self.layout_view.point = None;
+        }
+    }
+
+    /// Ends the drawing: its points become the conveyor's path, if there are two.
+    fn finish_drawing(&mut self) {
+        let Some(d) = self.layout_view.drawing.take() else {
+            return;
+        };
+        let unit = self.engine.model().experiment.length_unit;
+        let outline = drawn_outline(&d.points, default_bend(unit));
+        if outline.points.len() < 2 {
+            self.layout_view.drawing = Some(d);
+            self.info(t("A path needs at least two points."));
+            return;
+        }
+        if self.set_path(&d.conveyor, &outline.to_path()) {
+            self.select(std::iter::once(d.conveyor).collect());
+        }
+    }
+
+    /// The selected block, if it is a conveyor.
+    fn chosen_conveyor(&self) -> Option<Chosen> {
+        let model = self.engine.model();
+        let id = self.selected.as_ref()?;
+        let eid = ElementId::unchecked(id);
+        let e = model.element(&eid)?;
+        if !matches!(e.kind, ElementKind::Conveyor { .. }) {
+            return None;
+        }
+        let path = model.site.paths.get(&eid).map(|t| t.path.clone());
+        let outline = path.as_ref().and_then(Path::outline);
+        Some(Chosen {
+            id: id.clone(),
+            name: label_of(e),
+            path,
+            outline,
+        })
+    }
+
     /// The Layout view, filling the work area.
     pub(crate) fn layout_view(&mut self, ui: &mut egui::Ui) {
         let p = theme::palette(ui.ctx());
@@ -353,14 +608,78 @@ impl App {
         if !matches!(&self.layout_view.plan, Some((r, _)) if *r == revision) {
             self.layout_view.plan = Some((revision, build_plan(self.engine.model())));
         }
-        let LayoutView { plan, view, .. } = &mut self.layout_view;
-        let Some((_, plan)) = plan else { return };
-        let plan: &Plan = plan;
+        let Some((revision, plan)) = self.layout_view.plan.take() else {
+            return;
+        };
+        let unit = self.engine.model().experiment.length_unit;
+        let m = unit_metres(unit);
+        let chosen = self.chosen_conveyor();
+        // What the view was doing, checked against the model as it is now (an undo, or another
+        // file, may have taken the conveyor or the point away).
+        let mut drawing = self.layout_view.drawing.take().filter(|d| {
+            self.engine
+                .model()
+                .element(&ElementId::unchecked(&d.conveyor))
+                .is_some_and(|e| matches!(e.kind, ElementKind::Conveyor { .. }))
+        });
+        let mut point = self.layout_view.point.take().filter(|(c, i, r)| {
+            *r == revision
+                && chosen.as_ref().is_some_and(|ch| {
+                    &ch.id == c && ch.outline.as_ref().is_some_and(|o| *i < o.points.len())
+                })
+        });
+        let mut drag = self.layout_view.drag.take().filter(|d| match d {
+            Drag::Pan => true,
+            Drag::Point {
+                conveyor,
+                revision: r,
+                ..
+            }
+            | Drag::Whole {
+                conveyor,
+                revision: r,
+                ..
+            } => {
+                *r == revision
+                    && chosen
+                        .as_ref()
+                        .is_some_and(|c| &c.id == conveyor && c.path.is_some())
+            }
+        });
+        let drawing_name = drawing.as_ref().map(|d| {
+            self.engine
+                .model()
+                .element(&ElementId::unchecked(&d.conveyor))
+                .map_or_else(|| d.conveyor.clone(), label_of)
+        });
 
-        let mut fit = false;
-        ui.horizontal(|ui| {
+        // The toolbar: Fit, then Draw path and Remove path, or while drawing, Finish and Cancel
+        // with what to do.
+        let (mut fit, mut start, mut remove, mut finish, mut cancel) =
+            (false, false, false, false, false);
+        ui.horizontal_wrapped(|ui| {
             fit = ui.button(t("Fit")).clicked();
-            ui.label(RichText::new(t("Positions from the layout")).color(p.text_weak));
+            if let Some(name) = &drawing_name {
+                finish = ui.button(t("Finish")).clicked();
+                cancel = ui.button(t("Cancel")).clicked();
+                ui.label(
+                    RichText::new(tf(
+                        "Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.",
+                        &[("name", name)],
+                    ))
+                    .color(p.text_weak),
+                );
+            } else {
+                start = ui
+                    .add_enabled(chosen.is_some(), egui::Button::new(t("Draw path")))
+                    .on_disabled_hover_text(t("Select a conveyor to draw its path"))
+                    .clicked();
+                let has_path = chosen.as_ref().is_some_and(|c| c.path.is_some());
+                remove = ui
+                    .add_enabled(has_path, egui::Button::new(t("Remove path")))
+                    .clicked();
+                ui.label(RichText::new(t("Positions from the layout")).color(p.text_weak));
+            }
         });
         ui.add_space(4.0);
 
@@ -369,23 +688,41 @@ impl App {
         let row = ui
             .text_style_height(&egui::TextStyle::Body)
             .max(ui.spacing().interact_size.y);
-        let reserve = 4.0 * row + 5.0 * ui.spacing().item_spacing.y + 4.0;
+        let reserve = 5.0 * row + 6.0 * ui.spacing().item_spacing.y + 4.0;
         let size = (ui.available_size() - vec2(0.0, reserve)).max(vec2(120.0, 120.0));
         let (rect, resp) = ui.allocate_exact_size(size, Sense::click_and_drag());
         resp.widget_info(|| {
             egui::WidgetInfo::labeled(egui::Role::Canvas, true, t("Layout of the model, to scale"))
         });
-        let hint = t("Drag to pan · Scroll to zoom");
+        let hint = if drawing.is_some() {
+            t("Click to add a point · Double-click or Enter to finish · Esc to cancel")
+        } else {
+            t(
+                "Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom",
+            )
+        };
         ui.ctx()
             .accesskit_node_builder(resp.id, |n| n.set_description(hint));
 
-        let vw = view.get_or_insert_with(|| Vw::fitted(plan.low, plan.high, rect.size()));
+        let mut vw = self
+            .layout_view
+            .view
+            .unwrap_or_else(|| Vw::fitted(plan.low, plan.high, rect.size()));
         if fit {
-            *vw = Vw::fitted(plan.low, plan.high, rect.size());
+            vw = Vw::fitted(plan.low, plan.high, rect.size());
         }
-        if resp.dragged() {
-            vw.pan(resp.drag_delta());
-        }
+        // A point on the screen in the model's unit, to 0.1 mm, and back.
+        let to_model = |vw: &Vw, at: Pos2| -> [f64; 2] {
+            let w = vw.in_metres(rect, at);
+            [
+                to_step(f64::from(w[0]) / m, unit),
+                to_step(f64::from(w[1]) / m, unit),
+            ]
+        };
+        let to_screen =
+            |vw: &Vw, q: [f64; 2]| vw.on_screen(rect, [(q[0] * m) as f32, (q[1] * m) as f32]);
+        let in_metres = |vw: &Vw, at: Pos2| vw.in_metres(rect, at);
+
         if resp.hovered() {
             let (scroll, pinch) = ui.input(|i| (i.smooth_scroll_delta.y, i.zoom_delta()));
             let at = resp.hover_pos().unwrap_or_else(|| rect.center());
@@ -416,8 +753,252 @@ impl App {
                 vw.zoom_at(rect, rect.center(), 1.0 / 1.1);
             }
         }
-        let vw = *vw;
 
+        // What this frame changes in the model, applied once the view is drawn.
+        let mut commits: Vec<(String, Path)> = Vec::new();
+        // How many points the selected path's outline is to have after those changes.
+        let mut points_after: Option<usize> = None;
+        let mut pick: Option<Option<String>> = None;
+        let mut too_few = false;
+
+        // The selected path's points, each a control of its own: picked by a click or Tab,
+        // dragged to move, moved by the arrow keys.
+        let mut handle_ids: Vec<egui::Id> = Vec::new();
+        let mut handles: Vec<(Pos2, bool, bool)> = Vec::new();
+        if drawing.is_none()
+            && let Some(ch) = &chosen
+            && let Some(outline) = &ch.outline
+        {
+            for (i, q) in outline.points.iter().enumerate() {
+                let shown_at = match &drag {
+                    Some(Drag::Point { index, to, .. }) if *index == i => *to,
+                    _ => *q,
+                };
+                let pos = to_screen(&vw, shown_at);
+                let hid = egui::Id::unique(("layout point", ch.id.as_str(), i));
+                handle_ids.push(hid);
+                let r = ui.interact(
+                    Rect::from_center_size(pos, Vec2::splat(HANDLE_PX)),
+                    hid,
+                    Sense::click_and_drag(),
+                );
+                let n = (i + 1).to_string();
+                let (x, y) = (format!("{:.2}", q[0] * m), format!("{:.2}", q[1] * m));
+                let label = tf(
+                    "Point {n} of {name}, x {x} m, y {y} m",
+                    &[("n", &n), ("name", &ch.name), ("x", &x), ("y", &y)],
+                );
+                r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, &label));
+                if r.clicked() || r.drag_started() || r.gained_focus() {
+                    point = Some((ch.id.clone(), i, revision));
+                }
+                if r.clicked() {
+                    r.request_focus();
+                }
+                if r.drag_started() {
+                    drag = Some(Drag::Point {
+                        conveyor: ch.id.clone(),
+                        revision,
+                        index: i,
+                        to: *q,
+                    });
+                }
+                // The frame that lets go has the pointer where it was let go, even if it moved
+                // in that frame (egui says `drag_stopped` and not `dragged` then).
+                if (r.dragged() || r.drag_stopped())
+                    && let Some(Drag::Point { index, to, .. }) = &mut drag
+                    && *index == i
+                    && let Some(at) = r.interact_pointer_pos()
+                {
+                    *to = to_model(&vw, at);
+                }
+                // Where this frame leaves the point, committed once: let go of, it is where it
+                // was let go, and an arrow key pressed in the same frame moves it on from there.
+                let mut moved: Option<[f64; 2]> = None;
+                if r.drag_stopped() {
+                    if let Some(Drag::Point { index, to, .. }) = drag
+                        && index == i
+                    {
+                        moved = Some(to);
+                    }
+                    drag = None;
+                }
+                if r.has_focus() {
+                    let by = ui.input_mut(|k| {
+                        let mut by = [0.0, 0.0];
+                        // Shift first: a plain arrow's match also takes a shifted press.
+                        for (mods, metres) in [(Modifiers::SHIFT, 1.0), (Modifiers::NONE, 0.1)] {
+                            let d = metres / m;
+                            if k.consume_key(mods, Key::ArrowLeft) {
+                                by[0] -= d;
+                            }
+                            if k.consume_key(mods, Key::ArrowRight) {
+                                by[0] += d;
+                            }
+                            if k.consume_key(mods, Key::ArrowUp) {
+                                by[1] += d;
+                            }
+                            if k.consume_key(mods, Key::ArrowDown) {
+                                by[1] -= d;
+                            }
+                        }
+                        by
+                    });
+                    if by != [0.0, 0.0] {
+                        let from = moved.unwrap_or(*q);
+                        moved = Some([
+                            to_step(from[0] + by[0], unit),
+                            to_step(from[1] + by[1], unit),
+                        ]);
+                    }
+                }
+                if let Some(to) = moved
+                    && to != *q
+                {
+                    commits.push((ch.id.clone(), outline.moved(i, to).to_path()));
+                    points_after = Some(outline.points.len());
+                }
+                let picked = point
+                    .as_ref()
+                    .is_some_and(|(c, j, _)| c == &ch.id && *j == i);
+                handles.push((pos, picked, r.has_focus()));
+            }
+        }
+
+        // The drawing itself: a drag on the selected belt moves the whole path, anywhere else
+        // pans; a click adds a point while drawing, else picks what is under it.
+        if resp.drag_started() && drag.is_none() {
+            let origin = ui
+                .input(|i| i.pointer.press_origin())
+                .or(resp.interact_pointer_pos())
+                .unwrap_or_else(|| rect.center());
+            let slack = PICK_PX / vw.scale;
+            let on_chosen = drawing.is_none()
+                && chosen.as_ref().is_some_and(|c| {
+                    c.path.is_some()
+                        && belt_at(&plan, in_metres(&vw, origin), slack)
+                            .is_some_and(|b| b.id == c.id)
+                });
+            drag = Some(match chosen.as_ref().filter(|_| on_chosen) {
+                Some(c) => Drag::Whole {
+                    conveyor: c.id.clone(),
+                    revision,
+                    by: [0.0, 0.0],
+                    at: origin,
+                },
+                None => Drag::Pan,
+            });
+        }
+        // The belt follows the pointer from where it was pressed to where it is let go,
+        // including the movement before egui calls it a drag and in the frame that lets go.
+        match &mut drag {
+            Some(Drag::Whole { by, at, .. }) => {
+                if (resp.dragged() || resp.drag_stopped())
+                    && let Some(now) = resp.interact_pointer_pos()
+                {
+                    let d = now - *at;
+                    by[0] += f64::from(d.x / vw.scale) / m;
+                    by[1] -= f64::from(d.y / vw.scale) / m;
+                    *at = now;
+                }
+            }
+            _ if resp.dragged() => vw.pan(resp.drag_delta()),
+            _ => {}
+        }
+        if resp.drag_stopped() {
+            if let (Some(Drag::Whole { by, .. }), Some(ch)) = (&drag, &chosen)
+                && let Some(path) = &ch.path
+            {
+                let by = [to_step(by[0], unit), to_step(by[1], unit)];
+                if by != [0.0, 0.0] {
+                    commits.push((ch.id.clone(), shifted(path, by)));
+                    points_after = ch.outline.as_ref().map(|o| o.points.len());
+                }
+            }
+            drag = None;
+        }
+        if resp.clicked()
+            && let Some(at) = resp.interact_pointer_pos()
+        {
+            let q = in_metres(&vw, at);
+            if let Some(d) = &mut drawing {
+                if resp.double_clicked() {
+                    finish = true;
+                } else {
+                    d.points.push(to_model(&vw, at));
+                }
+            } else if resp.double_clicked() {
+                if let Some(ch) = &chosen
+                    && let Some(outline) = &ch.outline
+                    && belt_at(&plan, q, PICK_PX / vw.scale).is_some_and(|b| b.id == ch.id)
+                {
+                    let here = to_model(&vw, at);
+                    if let Some((i, on)) = insertion(outline, here) {
+                        let on = [to_step(on[0], unit), to_step(on[1], unit)];
+                        commits.push((
+                            ch.id.clone(),
+                            outline.inserted(i, on, default_bend(unit)).to_path(),
+                        ));
+                        points_after = Some(outline.points.len() + 1);
+                        point = Some((ch.id.clone(), i, revision));
+                    }
+                }
+            } else {
+                let hit = belt_at(&plan, q, PICK_PX / vw.scale)
+                    .map(|b| b.id.clone())
+                    .or_else(|| place_at(&plan, q).map(|pl| pl.id.clone()));
+                point = None;
+                pick = Some(hit);
+            }
+        }
+
+        // The keys, while no other control has the keyboard: Enter, Esc and Backspace while
+        // drawing; Esc to drop a drag; Delete for the picked point, Esc to let it go.
+        let focused = ui.ctx().memory(|mem| mem.focused());
+        let free = focused.is_none_or(|f| f == resp.id || handle_ids.contains(&f));
+        if free {
+            let key =
+                |ui: &mut egui::Ui, k: Key| ui.input_mut(|i| i.consume_key(Modifiers::NONE, k));
+            if let Some(d) = &mut drawing {
+                if key(ui, Key::Enter) {
+                    finish = true;
+                }
+                if key(ui, Key::Escape) {
+                    cancel = true;
+                }
+                if key(ui, Key::Backspace) || key(ui, Key::Delete) {
+                    d.points.pop();
+                }
+            } else if matches!(drag, Some(Drag::Point { .. } | Drag::Whole { .. })) {
+                if key(ui, Key::Escape) {
+                    drag = None;
+                }
+            } else if let Some((c, i, _)) = point.clone() {
+                // Each change is worked out from the path as the frame began, so Delete waits
+                // for a frame that has not already changed it (a point put in by a double-click,
+                // say): the picked point is then of the path as changed.
+                if commits.is_empty() && (key(ui, Key::Delete) || key(ui, Key::Backspace)) {
+                    match chosen.as_ref().and_then(|ch| ch.outline.as_ref()) {
+                        Some(o) => match o.removed(i) {
+                            Some(less) => {
+                                commits.push((c, less.to_path()));
+                                point = None;
+                            }
+                            None => too_few = true,
+                        },
+                        None => point = None,
+                    }
+                } else if key(ui, Key::Escape) {
+                    point = None;
+                }
+            }
+        }
+        if cancel {
+            drawing = None;
+        }
+
+        // Painting: the floor, the grid, the markings, the belts and the blocks, then the
+        // selected path, its points and what is being drawn or dragged.
         let painter = ui.painter_at(rect);
         painter.rect_filled(rect, 4.0, p.canvas);
         let poly = |fp: &Footprint| -> Vec<Pos2> {
@@ -454,13 +1035,80 @@ impl App {
             painter.add(Shape::line(points.clone(), rails));
             painter.add(Shape::line(points, belt));
         }
-        let outline = Stroke::new(1.5, p.control_border);
+        let outline_stroke = Stroke::new(1.5, p.control_border);
         for pl in &plan.places {
+            let picked = self.selected.as_deref() == Some(pl.id.as_str());
+            let stroke = if picked {
+                Stroke::new(2.5, p.accent)
+            } else {
+                outline_stroke
+            };
             painter.add(Shape::convex_polygon(
                 poly(&pl.footprint),
                 p.accent_soft,
-                outline,
+                stroke,
             ));
+        }
+        // The selected path, as it is or as the drag would leave it, and its length then.
+        let mut note: Option<(Pos2, String)> = None;
+        if let Some(ch) = &chosen
+            && let Some(path) = &ch.path
+        {
+            let shown = match (&drag, &ch.outline) {
+                (Some(Drag::Point { index, to, .. }), Some(o)) => o.moved(*index, *to).to_path(),
+                (Some(Drag::Whole { by, .. }), _) => shifted(path, *by),
+                _ => path.clone(),
+            };
+            let pts: Vec<Pos2> = plan_points(&shown, m)
+                .iter()
+                .map(|q| vw.on_screen(rect, *q))
+                .collect();
+            painter.add(Shape::line(pts, Stroke::new(2.0, p.accent)));
+            if matches!(drag, Some(Drag::Point { .. } | Drag::Whole { .. }))
+                && let Some(at) = ui.input(|i| i.pointer.hover_pos())
+            {
+                let len = number(shown.length() * m);
+                note = Some((at, tf("{length} m", &[("length", &len)])));
+            }
+        }
+        for (pos, picked, focus) in &handles {
+            let fill = if *picked { p.accent } else { p.canvas };
+            painter.circle(*pos, 5.0, fill, Stroke::new(2.0, p.accent));
+            if *focus {
+                painter.circle_stroke(*pos, 9.0, Stroke::new(2.0, p.accent));
+            }
+        }
+        // The path being drawn: its points so far and on to the pointer.
+        if let Some(d) = &drawing {
+            let mut pts = d.points.clone();
+            if let Some(at) = resp.hover_pos() {
+                pts.push(to_model(&vw, at));
+            }
+            let outline = drawn_outline(&pts, default_bend(unit));
+            if outline.points.len() >= 2 {
+                let path = outline.to_path();
+                let line: Vec<Pos2> = plan_points(&path, m)
+                    .iter()
+                    .map(|q| vw.on_screen(rect, *q))
+                    .collect();
+                painter.add(Shape::line(line, Stroke::new(2.0, p.accent)));
+                if let Some(at) = resp.hover_pos() {
+                    let len = number(path.length() * m);
+                    note = Some((at, tf("{length} m", &[("length", &len)])));
+                }
+            }
+            for q in &d.points {
+                painter.circle(to_screen(&vw, *q), 4.0, p.accent, Stroke::NONE);
+            }
+        }
+        if let Some((at, text)) = &note {
+            painter.text(
+                *at + vec2(12.0, -12.0),
+                Align2::LEFT_BOTTOM,
+                text,
+                FontId::proportional(12.0),
+                p.text,
+            );
         }
         // The scale bar, bottom left: its length in metres written over it.
         let bar = nice_step(vw.scale, BAR_PX, 0.01);
@@ -527,12 +1175,240 @@ impl App {
             }
         });
         ui.label(RichText::new(t("Unplaced")).strong());
-        let note = if plan.unplaced.is_empty() {
-            t("Every block is placed.").to_owned()
+        let mut draw_unplaced: Option<String> = None;
+        if plan.unplaced.is_empty() {
+            ui.label(RichText::new(t("Every block is placed.")).color(p.text_weak));
         } else {
-            plan.unplaced.join(", ")
+            if plan.unplaced.iter().any(|(_, _, conveyor)| *conveyor) {
+                ui.label(
+                    RichText::new(t("Click a conveyor here to draw its path.")).color(p.text_weak),
+                );
+            }
+            egui::ScrollArea::horizontal()
+                .id_salt("unplaced")
+                .show(ui, |ui| {
+                    ui.horizontal(|ui| {
+                        for (id, name, conveyor) in &plan.unplaced {
+                            if *conveyor {
+                                if ui.link(name).clicked() {
+                                    draw_unplaced = Some(id.clone());
+                                }
+                            } else {
+                                ui.label(RichText::new(name).color(p.text_weak));
+                            }
+                        }
+                    });
+                });
+        }
+
+        // The view's state back, then the changes.
+        self.layout_view.plan = Some((revision, plan));
+        self.layout_view.view = Some(vw);
+        self.layout_view.drawing = drawing;
+        self.layout_view.point = point;
+        self.layout_view.drag = drag;
+        if let Some(hit) = pick {
+            self.select(hit.into_iter().collect());
+        }
+        for (id, path) in commits {
+            self.set_path(&id, &path);
+        }
+        // The view's own edits keep the picked point (a nudge, a point put in): it is of the
+        // model they leave. Unless the saved path has other points than the edit meant: a point
+        // moved onto its neighbour is one with it, and the index would be of the next point.
+        let kept = points_after.is_none_or(|n| {
+            self.chosen_conveyor()
+                .and_then(|c| c.outline)
+                .is_some_and(|o| o.points.len() == n)
+        });
+        if !kept {
+            self.layout_view.point = None;
+        }
+        if let Some((_, _, r)) = &mut self.layout_view.point {
+            *r = self.engine.revision();
+        }
+        if too_few {
+            self.info(t("A path needs at least two points."));
+        }
+        if finish {
+            self.finish_drawing();
+        }
+        if remove && let Some(ch) = &chosen {
+            self.remove_path(&ch.id);
+        }
+        if start && let Some(ch) = &chosen {
+            self.draw_path_of(&ch.id);
+        }
+        if let Some(id) = draw_unplaced {
+            self.draw_path_of(&id);
+        }
+    }
+
+    /// The selected conveyor's path in the properties panel: its drawn length, and each point's
+    /// x and y and each corner's bend as fields, with a point added at the end or taken away,
+    /// so a path can be drawn and edited without a pointer.
+    pub(crate) fn path_section(&mut self, ui: &mut egui::Ui, id: &str) {
+        crate::editor::section(ui, t("Path"));
+        let model = self.engine.model();
+        let unit = model.experiment.length_unit;
+        let unit_label = self.length_unit_label();
+        let eid = ElementId::unchecked(id);
+        let Some(track) = model.site.paths.get(&eid) else {
+            let typed = match model.element(&eid).map(|e| &e.kind) {
+                Some(ElementKind::Conveyor { length, .. }) => *length,
+                _ => 0.0,
+            };
+            ui.label(theme::weak(ui, t("Not drawn in the layout yet.")));
+            ui.horizontal_wrapped(|ui| {
+                if ui.button(t("Draw in the Layout view")).clicked() {
+                    self.draw_path_of(id);
+                }
+                if ui.button(t("Add a straight path")).clicked() {
+                    let straight = Path::new(
+                        stochcraft_model::Frame::default(),
+                        vec![stochcraft_model::Segment::Line {
+                            length: typed,
+                            rise: 0.0,
+                        }],
+                    );
+                    self.set_path(id, &straight);
+                }
+            });
+            return;
         };
-        ui.add(egui::Label::new(RichText::new(note).color(p.text_weak)).truncate());
+        let path = track.path.clone();
+        let drawn = track.length(unit);
+        let shown = self.numbers.format(drawn, 0..=4);
+        ui.label(tf(
+            "Drawn length: {length} {unit}",
+            &[("length", &shown), ("unit", &unit_label)],
+        ));
+        let Some(outline) = path.outline() else {
+            // Flat and still without an outline, it turns a whole circle or more in one arc, or
+            // turns sharply where it starts or ends.
+            let climbs = path.segments.iter().any(|s| match *s {
+                Segment::Line { rise, .. } | Segment::Arc { rise, .. } => rise != 0.0,
+                Segment::Helix { .. } => true,
+            });
+            let circles = path.segments.iter().any(|s| {
+                matches!(*s, Segment::Arc { angle_deg, .. }
+                    if !stochcraft_model::path::within_a_circle(angle_deg))
+            });
+            let why = if climbs {
+                t("This path climbs or has a helix: its points cannot be edited here.")
+            } else if circles {
+                t(
+                    "This path turns a whole circle or more in one arc: its points cannot be edited here.",
+                )
+            } else {
+                t(
+                    "This path turns sharply where it starts or ends: its points cannot be edited here.",
+                )
+            };
+            ui.label(theme::weak(ui, why));
+            if ui.button(t("Remove path")).clicked() {
+                self.remove_path(id);
+            }
+            return;
+        };
+        let fitted = outline.fitted_bends();
+        let mut edit: Option<Outline> = None;
+        let mut refused = false;
+        let n_points = outline.points.len();
+        for (i, q) in outline.points.iter().enumerate() {
+            let n = (i + 1).to_string();
+            ui.horizontal_wrapped(|ui| {
+                ui.label(tf("Point {n}", &[("n", &n)]));
+                for (axis, value) in [("x", q[0]), ("y", q[1])] {
+                    let prefix = if axis == "x" { t("x") } else { t("y") };
+                    let current = self.numbers.format(value, 0..=4);
+                    let name = if axis == "x" {
+                        tf("x of point {n}", &[("n", &n)])
+                    } else {
+                        tf("y of point {n}", &[("n", &n)])
+                    };
+                    let key = format!("{id}/path/{i}/{axis}");
+                    if let Some(typed) = self.small_field(ui, &key, &name, prefix, &current, 64.0) {
+                        match self.numbers.parse(&typed) {
+                            Ok(v) if v.is_finite() => {
+                                let v = to_step(v, unit);
+                                let to = if axis == "x" { [v, q[1]] } else { [q[0], v] };
+                                edit = Some(outline.moved(i, to));
+                            }
+                            _ => refused = true,
+                        }
+                    }
+                }
+                if let Some(bend) = outline.bend(i) {
+                    let current = self.numbers.format(bend, 0..=4);
+                    let name = tf("Bend radius at point {n}", &[("n", &n)]);
+                    let key = format!("{id}/path/{i}/bend");
+                    if let Some(typed) =
+                        self.small_field(ui, &key, &name, t("bend"), &current, 56.0)
+                    {
+                        match self.numbers.parse(&typed) {
+                            Ok(v) if v.is_finite() && v >= 0.0 => {
+                                edit = Some(outline.with_bend(i, to_step(v, unit)));
+                            }
+                            _ => refused = true,
+                        }
+                    }
+                    ui.label(theme::weak(ui, &unit_label));
+                    if let Some(Some(got)) = fitted.get(i)
+                        && (got - bend).abs() > 1e-9 * bend.max(1.0)
+                    {
+                        let got = self.numbers.format(*got, 0..=3);
+                        ui.label(theme::weak(
+                            ui,
+                            tf("tightened to {radius} to fit", &[("radius", &got)]),
+                        ));
+                    }
+                }
+                let remove = ui
+                    .add_enabled(n_points > 2, egui::Button::new(t("Remove")))
+                    .on_hover_text(tf("Remove point {n}", &[("n", &n)]));
+                if remove.clicked() {
+                    edit = outline.removed(i);
+                }
+            });
+        }
+        ui.horizontal_wrapped(|ui| {
+            if ui.button(t("Add a point at the end")).clicked() {
+                // A metre on from the end, the way the last straight goes, of the outline as
+                // a field committed in this frame leaves it.
+                let base = edit.take().unwrap_or_else(|| outline.clone());
+                let k = base.points.len();
+                let (a, b) = (base.points[k - 2], base.points[k - 1]);
+                let (dx, dy) = (b[0] - a[0], b[1] - a[1]);
+                let len = (dx * dx + dy * dy).sqrt();
+                let step = 1.0 / unit_metres(unit);
+                let (ux, uy) = if len > 0.0 {
+                    (dx / len, dy / len)
+                } else {
+                    (1.0, 0.0)
+                };
+                let at = [
+                    to_step(b[0] + ux * step, unit),
+                    to_step(b[1] + uy * step, unit),
+                ];
+                edit = Some(base.inserted(k, at, default_bend(unit)));
+            }
+            if ui.button(t("Draw in the Layout view")).clicked() {
+                self.draw_path_of(id);
+            }
+            if ui.button(t("Remove path")).clicked() {
+                self.remove_path(id);
+                // A field the click took the keyboard from commits its text in this frame; the
+                // path is gone, so that edit is dropped rather than drawing the path again.
+                edit = None;
+            }
+        });
+        if refused {
+            self.report_error(t("Not a number"));
+        }
+        if let Some(o) = edit {
+            self.set_path(id, &o.to_path());
+        }
     }
 }
 
@@ -682,5 +1558,51 @@ mod tests {
         assert_eq!(nice_step(1.0, BAR_PX, 0.01), 100.0);
         // 400 px a metre: 0.2 m is 80 px.
         assert_eq!(nice_step(400.0, BAR_PX, 0.01), 0.2);
+    }
+
+    #[test]
+    fn a_click_picks_the_belt_under_it_or_the_block() {
+        let p = build_plan(&sorter());
+        // The red lane runs from (2.25, -0.45) 4 m down; a point beside it, within its band.
+        let lane = belt_at(&p, [2.4, -2.0], 0.05).unwrap();
+        assert_eq!(lane.id, "lane_red");
+        // Far from every belt, nothing.
+        assert!(belt_at(&p, [2.4, -30.0], 0.05).is_none());
+        // The red packing station's footprint, centred at y = -4.95 below the lane.
+        let pack = p.places.iter().find(|x| x.name == "Pack red").unwrap();
+        let hit = place_at(&p, pack.footprint.centre).unwrap();
+        assert_eq!(hit.id, pack.id);
+    }
+
+    #[test]
+    fn drawn_points_make_an_outline_and_a_point_added_goes_on_the_nearest_straight() {
+        // A repeated click counts once; corners get the bend.
+        let o = drawn_outline(&[[0.0, 0.0], [10.0, 0.0], [10.0, 0.0], [10.0, 6.0]], 1.0);
+        assert_eq!(o.points, vec![[0.0, 0.0], [10.0, 0.0], [10.0, 6.0]]);
+        assert_eq!(o.bends, vec![1.0]);
+        // Near the second straight, half way up: it goes in at index 2, on the straight.
+        let (i, at) = insertion(&o, [10.4, 3.0]).unwrap();
+        assert_eq!(i, 2);
+        assert_eq!(at, [10.0, 3.0]);
+        // Near the first: index 1.
+        assert_eq!(insertion(&o, [4.0, -1.0]).unwrap(), (1, [4.0, 0.0]));
+    }
+
+    #[test]
+    fn a_path_goes_to_track_set_as_a_file_holds_it() {
+        let o = Outline {
+            z: 0.0,
+            points: vec![[1.0, 1.0], [4.0, 1.0], [4.0, 3.0]],
+            bends: vec![1.0],
+        };
+        let v = track_json(&o.to_path());
+        assert_eq!(v["start"]["x"], 1.0);
+        assert_eq!(v["segments"][0]["type"], "line");
+        assert_eq!(v["segments"][1]["type"], "arc");
+        assert!((v["segments"][1]["angle"].as_f64().unwrap() - 90.0).abs() < 1e-9);
+        assert!(v.get("width").is_none(), "{v}");
+        // Moving the whole path moves only its start.
+        let moved = shifted(&o.to_path(), [2.0, -1.0]);
+        assert_eq!((moved.start.x, moved.start.y), (3.0, 0.0));
     }
 }

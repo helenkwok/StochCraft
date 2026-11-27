@@ -49,7 +49,7 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 | `engine` | L4 | Commands with JSON schemas, undo and redo, a journal with its format, version and starting state; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `experiment.evaluate` and `experiment.optimise`; `results.distribution` and `results.compare`; `model.capacity`, `estimate.fit` and `line.balance`; Monte Carlo (`mc.*`), system dynamics (`sd.*`) and agent-based (`agents.*`) models; live runs |
 | `stochcraft-cli` | app | `new`, `validate`, `explain`, `balance`, `run` with a run record, `design`, `evaluate`, `optimize`, `inputs`, `fit`, `exec` (with `--journal`, `--all`, `--force`), `schema`, `mcp` |
 | `render` | L5 | Parametric low-poly meshes (machines, straight, curved and spiral conveyors, racks, totes, operators, forklifts, AGVs, and the sorter's pieces: belts swept along a path, a scanner arch, packing stations, pallets, roll cages, a control cabinet, parcels) as plain vertex and index buffers |
-| `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis and Capacity views; the 3D view and a read-only Layout view, both drawn from the model's layout; the properties of the selection with bold and reset; Monte Carlo and system dynamics models; the dashboard; watching a run from the run bar; autosave; 44 languages besides English |
+| `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis and Capacity views; the 3D view and a Layout view, both drawn from the model's layout, where a conveyor's path is drawn and dragged; the properties of the selection with bold and reset; Monte Carlo and system dynamics models; the dashboard; watching a run from the run bar; autosave; 44 languages besides English |
 | `mcp` | L5 | The MCP server: the engine's commands as tools for agents, headless (with optional read and write roots) or driving the app through its control channel |
 | `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs, `--control` for agents) and the browser shell, published on GitHub Pages |
 | `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy); tandem lines, the hold model and DEVStone LI, HI and HO |
@@ -1140,6 +1140,16 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   delay) and keeps the triad and its source as the parameter's pedigree,
   `stochcraft:estimate` in files (declared in the vendor schema). A distribution changed
   afterwards no longer matches its estimate, which is a warning. `estimate.remove` forgets it.
+- **A beta on a range (built):** `Dist::Beta` has a `min` and a `max` besides its two shapes, 0
+  and 1 by default, so a stage time such as Beta(3, 5) on [1, 4] days is one distribution with
+  mean min + (max − min) α / (α + β). On [0, 1] it draws, and is written, exactly as BPSim's
+  beta always was. BPSim 2.0's `BetaDistribution` takes no other attributes, so a beta on
+  another range is written as `stochcraft:BetaDistribution` (`shape`, `scale`, `min`, `max`,
+  `timeUnit`), declared in the vendor schema in BPSim's `ParameterValue` substitution group: it
+  is valid wherever a BPSim value is, vendor extensions' values included, and a tool that does
+  not know it finds no value rather than a wrong one. Its range is a time and follows changes of
+  time unit; BPSim's beta on [0, 1] still refuses a `timeUnit` other than the base unit, as
+  before. The distribution editor shows the range as two more fields.
 - The CLI's results table states the stop and when it was met.
 - **Results that are easy to misread (#69):**
   - A metric only some replications have a value for shows "n = k of N" in the window (its
@@ -2190,7 +2200,14 @@ A line that makes several products, and results in the terms lean practice uses.
     at (it travels as properties do), or one the scrap sink names; each pass counts as produced,
     and good = produced − scrap − rework (deduced from ISO 22400-2's definitions in 5.5). And
     `oee`, availability × effectiveness × quality ratio, with quality counted as 1 (and said so)
-    when the model marks no scrap or rework. Not yet: ISO's NEE index and per-product plans.
+    when the model marks no scrap or rework. Not yet: ISO's NEE index and per-product plans;
+  - lead time by percentile and service level: done. A departures block can report
+    `time_in_system_p50`, `_p90` and `_p95` (from each entity's exact time, Hyndman and Fan's
+    type 7 quantile) and, with a target time, `within_target_share`, the share done within it
+    (the vendor extension `stochcraft:timeInSystem`). With a calendar, these count only its
+    active time (working time, from prefix sums over its periods). Entities still inside at the
+    end are left out, so a run should stop once all are done; `mean_time_in_system` is
+    unchanged. Checked against M/M/1's exponential sojourn time and a part held over a weekend.
 - **Current and future state:** a current-state and a future-state value stream map as two
   scenarios of one model, compared with `results.compare` (paired when they share their seed
   and replications, #73).
@@ -2680,7 +2697,7 @@ The estimate stays unbiased and the interval method is unchanged.
 Both are checked against exact answers (the intervals hold the mean about 95% of the time over
 200 seeds, are much narrower on a monotone and on a smooth integrand, and the first Sobol points
 are the published ones).
-Control variates are built (Law, *Simulation Modeling and Analysis*, 5th ed., §11.3; Glasserman
+Control variates are built (Law, *Simulation Modeling and Analysis*, 5th ed., §11.4; Glasserman
 2003, §4.1; Nelson 1990): an output can name controls, each an input (whose known mean is its
 distribution's exact mean, `Dist::mean`) or an earlier output with a mean the modeller types
 (`expected`). Each trial's value Y becomes Y − bᵀ(C − μ), with b the least-squares coefficients
@@ -3942,6 +3959,32 @@ names, dates and durations in cells; the grid in the spreadsheet view (U6); shar
 `.dmn` files with the model (M7.4); a task with a decision is written as a plain task in a new
 file, not a `businessRuleTask`.
 
+L4's first part is done: drawing and dragging paths. A flat path reads as an outline
+(`model::Outline`): its points, straight between them, and a bend of a radius at each corner,
+the circular arc that meets both straights; `Outline::to_path` makes the `Path` back, exactly for
+the flat paths that have an outline (an arc of more than 90 degrees is two or more corners, which
+join again into one arc; tangent bends join only where that keeps their corners), and bends too
+big for a short straight are tightened together to fit. A path that climbs, has a helix, turns a
+whole circle or more in one arc, or turns sharply where it starts or ends or by a half turn or
+more has no outline: it is moved, drawn again or removed, not edited by its points. A drawn corner bends
+at 1 m by default (a bend of 0, typed in the panel, is a sharp corner). The engine's `track.set` sets or removes a conveyor's track in
+one undo step (inside `batch` too), and the conveyor's length follows the path unless a typed
+length already overrode it (D23). In the Layout view: **Draw path** for the selected conveyor, or
+a click on one under Unplaced; click the points, double-click or Enter to finish, Backspace for
+the last point, Esc to cancel. A click selects a belt or a block, shared with the flowchart and
+the properties panel; the selected belt shows its points, which drag, take the arrow keys (0.1 m,
+1 m with Shift) and go with Delete; dragging the belt moves the whole path and a double-click on
+it adds a point; the length shows beside the pointer while dragging. The properties panel lists a
+conveyor's path as fields (each point's x and y, each corner's bend, add and remove), the way
+without a pointer (WCAG 2.5.7). Checks: the sorter's racetrack loop goes to an outline of four
+quarter bends and back to the same path; an L of clicked points with a 1 m bend is 14 + π/2 m;
+two bends on a 1 m straight are tightened to 0.5 m; a path edited by its points is saved and read
+back the same. Known limits: a path that climbs or has a helix has no outline (it can be moved,
+redrawn or removed, not edited point by point); places along a conveyor (a divert at `s`) keep
+their `s` when its path changes, so one past a shortened path is flagged as off it; blocks other
+than conveyors are selected on the plan but not yet placed or moved there; points are kept to
+0.1 mm, not snapped. Parts 2 and 3 follow: snapping and ports, then the background by two points.
+
 L5's first part is done: points along a section and junctions. A divert gateway placed at `s`
 along the conveyor that sends into it is a point of that conveyor (`model::site::points`): its
 items meet it as their front reaches `s`, and a non-default way with room takes the item off
@@ -4825,6 +4868,21 @@ are.
     Currie, Onggo, Robinson, Kunc and Taylor, *Strengthening the reporting of empirical
     simulation studies: Introducing the STRESS guidelines*, Journal of Simulation 13(1):55–67,
     2019, doi 10.1080/17477778.2018.1442155.
+- **Designed as teaching material:** the examples, the guided first model and the Help panel
+  follow the ADDIE steps (analysis, design, development, implementation, evaluation) as
+  Ritzhaupt and Covello's open textbook *ADDIE Explained* (CC BY 4.0) sets them out:
+  - **Analysis:** who learns from them (newcomers to simulation, people moving from another
+    simulation tool, programmers who know a simulation library) and what each must be able to
+    do afterwards.
+  - **Design:** each example's "Teaches:" line becomes a learning goal stating what the learner
+    can do, under which conditions and how well, with its verb chosen by level in Bloom's
+    taxonomy (to explain why a clerk busy three quarters of the time already means a queue is
+    understanding; to size the servers for a target wait is applying).
+  - **Development:** a short check at the end of each example, a question whose answer the
+    run shows, aligned with its goal.
+  - **Evaluation:** formative, by trying each example and the first model with a few learners
+    from each group before release; summative, by whether learners answer the checks, which
+    the app could count locally if a learner chooses to share it.
 - **Candidates from the common textbooks** (Banks et al., Law, Robinson) join only once their
   parameters are taken from the books themselves.
 - **Examples:** six more on the start page, each a file in `tests/models/` whose answer
@@ -5153,8 +5211,22 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios.
 - **Bulk flow:** rates, splits by fraction, tanks and batch treatment for process industries,
   built on M4's exact level-crossing events (D12) rather than on `sd`'s fixed steps.
+  - **Example, a liquid-bulk terminal:** tanks grouped by product family (fuels, alcohols,
+    lubricants, chemicals), filled and emptied by road tankers at loading bays, by rail and by
+    ships at berths, with a dashboard of each family's volume over time and the tankers and
+    ships served. It is StochCraft's own design, since the terminals shown publicly give no
+    inputs. Exact checks: each tank's mass balance (what came in less what went out is the
+    change in its level, to the litre); the times a tank reaches full or empty at constant rates,
+    from the level-crossing events; and, with Poisson arrivals and exponential service, the
+    bays' and berths' waits from Erlang C.
 - **Explanations:** agents over MCP describe results in plain language (the bottleneck, what
   limits throughput, which inputs matter most).
+- **An assistant in the window:** a panel where the user describes a change in words ("add a
+  quality check with a rework loop after the press"). An agent proposes a plan of engine
+  commands, shows it, and applies it once the user agrees, step by step on the open model; each
+  step is one undo step and is in the journal, the same as an edit by hand. It uses the same
+  commands as the MCP server, so it is not tied to one model provider and can run against a
+  local model; nothing about the model leaves the machine unless the user chooses a remote one.
 - **A model from a sketch and a prompt:** an agent over MCP reads a layout drawn by hand and a
   description in words, and builds the model with the engine's commands (blocks, connections,
   distributions, places on the layout), so every step is in the journal and can be undone. Hsu,
@@ -5191,6 +5263,19 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
     parameters, the capacities, the routing), and its sketch is its layout, drawn from the file
     where it has none. Parameters are scored only on what the prompt states, so a model is
     never marked down for a value it was not given.
+  - **Editing tasks:** besides building a model from nothing, an agent is asked to change one,
+    scored the same way against a reference model built by hand for each task:
+    1. add a quality check and a rework loop to a line;
+    2. build a line with buffers and operators from a description;
+    3. write the logic of a decision (a DMN table, or an M6.3 logic plugin);
+    4. make a dashboard for a plant manager from a model's results;
+    5. turn a spreadsheet of stations, times and capacities into a running model;
+    6. set up order picking with forklifts.
+
+    Tasks 1 and 2 can be done with today's commands; 3 needs the DMN commands (`dmn.set`,
+    `dmn.use`) or M6.3; 4 and 5 need commands that do not exist yet (laying out a dashboard,
+    importing a table as blocks); 6 needs the transports' runtime (M5.2). Each task that cannot
+    be done is reported as such, which makes the set a list of what the MCP server lacks.
 - Not planned: parallelising a single run (optimistic Time Warp). Replications in parallel
   already use every core for the models StochCraft targets.
 

@@ -257,6 +257,50 @@ fn choosing_another_distribution_keeps_its_scale() {
 }
 
 #[test]
+fn a_beta_service_takes_a_range() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    // BPSim's beta, on [0, 1]: its range is not in the model, but the form shows it.
+    h.state_mut()
+        .execute(
+            "block.set",
+            json!({"id": "serve", "service": {"type": "beta", "shape": 3, "scale": 5}}),
+        )
+        .expect("a beta service");
+    settle(&mut h);
+    assert_eq!(
+        element(&h, "serve")["service"],
+        json!({"type": "beta", "shape": 3.0, "scale": 5.0})
+    );
+    // The two shapes, then the minimum before the maximum, as for a uniform.
+    let top = |h: &Harness<'static, App>, label: &str| {
+        h.get_by_role_and_label(Role::TextInput, label).rect().top()
+    };
+    let order = ["Shape", "Scale", "Minimum", "Maximum"].map(|l| top(&h, l));
+    assert!(order.windows(2).all(|w| w[0] < w[1]), "{order:?}");
+    // The maximum first (a minimum of 1 below a maximum of 1 would be refused), then the minimum.
+    type_into(&mut h, "Maximum", "4");
+    assert_eq!(
+        element(&h, "serve")["service"],
+        json!({"type": "beta", "shape": 3.0, "scale": 5.0, "max": 4.0})
+    );
+    type_into(&mut h, "Minimum", "1");
+    assert_eq!(
+        element(&h, "serve")["service"],
+        json!({"type": "beta", "shape": 3.0, "scale": 5.0, "min": 1.0, "max": 4.0})
+    );
+    // A minimum above the maximum: the message asks for the range only (a beta has no most
+    // likely value).
+    type_into(&mut h, "Minimum", "5");
+    assert!(
+        h.query_all_by_label_contains("set “Minimum” below “Maximum”.")
+            .next()
+            .is_some()
+    );
+    assert_eq!(h.query_all_by_label_contains("Most likely").count(), 0);
+}
+
+#[test]
 fn a_model_is_built_from_blocks_connected_and_run() {
     let mut h = harness();
     h.state_mut()
@@ -1343,6 +1387,37 @@ fn a_demand_is_set_on_departures_in_the_inspector() {
     );
     click(&mut h, Role::CheckBox, "Customer demand");
     assert!(element(&h, "leave").get("demand").is_none());
+}
+
+/// Time in system by percentile is set on departures in the inspector: on, a target time in the
+/// model's unit, the target cleared, and off.
+#[test]
+fn time_in_system_is_set_on_departures_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Customer leaves");
+    click(&mut h, Role::CheckBox, "Percentiles of time in system");
+    assert_eq!(element(&h, "leave")["time_in_system"], json!({}));
+    type_into(&mut h, "Target time (min)", "30");
+    assert_eq!(
+        element(&h, "leave")["time_in_system"],
+        json!({"within": 30.0})
+    );
+    // Cleared, the target goes.
+    h.get_by_role_and_label(Role::TextInput, "Target time (min)")
+        .click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.key_press(egui::Key::Backspace);
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
+    assert_eq!(element(&h, "leave")["time_in_system"], json!({}));
+    // The calendar picker's label sits above it, in full, not cut short beside it.
+    let working = "Count only working time on";
+    let label = h.get_by_role_and_label(Role::Label, working).rect();
+    let picker = h.get_by_role_and_label(Role::ComboBox, working).rect();
+    assert!(label.bottom() <= picker.top() + 1.0, "{label:?} {picker:?}");
+    click(&mut h, Role::CheckBox, "Percentiles of time in system");
+    assert!(element(&h, "leave").get("time_in_system").is_none());
 }
 
 /// Any block's way out, not only a decision's, can be marked rework.

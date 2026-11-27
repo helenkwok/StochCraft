@@ -7,7 +7,10 @@ use serde::{Deserialize, Deserializer};
 use serde_json::{Value, json};
 use stochcraft_model::{
     Bounds, Connection, Element, ElementId, ElementKind, Model, Need, Property, QueueLimit,
-    ResourcePool, Transfer, balance, calendar::Calendar, capacity,
+    ResourcePool, Transfer, balance,
+    calendar::Calendar,
+    capacity,
+    site::{default_width, length_step},
 };
 
 use crate::edit::Op;
@@ -17,7 +20,7 @@ use crate::wire::{
     EstimateDoc, EventDoc, FamilySpec, HealthCheckSpec, KindSpec, LengthUnitSpec, MobilityDoc,
     ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec, PowerSpec, ProcessingByResourceSpec,
     ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc, RoutingSpec,
-    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeInSystemSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry, JournalStart, StartKind, Undo};
 
@@ -125,7 +128,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "shifts",
             "on_shift_end",
         ],
-        Some("sink") => &["scrap", "demand"],
+        Some("sink") => &["scrap", "demand", "time_in_system"],
         Some("shared_task") => &[
             "service",
             "processing_by",
@@ -483,6 +486,12 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<DemandSpec>")]
     pub demand: Option<Option<DemandSpec>>,
+    /// Sinks: report the percentiles of each entity's time in system here, and with `within`
+    /// the share done within that time, counting only `calendar`'s active time if given;
+    /// `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<TimeInSystemSpec>")]
+    pub time_in_system: Option<Option<TimeInSystemSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -1112,6 +1121,137 @@ fn layout_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     Ok(json!({}))
 }
 
+/// Sets or removes a conveyor's track: where it runs on the floor (ROADMAP.md, M5.5).
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct TrackSet {
+    /// The conveyor's id.
+    pub id: String,
+    /// Its track, in the experiment's `length_unit` and degrees, as a file holds it: the start
+    /// (`x`, `y`, `z`, `heading`), at least one segment, and the belt's width (left out: the
+    /// width it has, or 0.6 m). `null` removes it, and the conveyor is unplaced; it cannot be
+    /// left out.
+    #[serde(deserialize_with = "given")]
+    #[schemars(schema_with = "track_or_null")]
+    pub track: Option<crate::site::TrackDoc>,
+}
+
+/// Reads a field that must be given, where `null` is a value of its own: serde reads a missing
+/// `Option` as `None` unless the field has a reader of its own.
+fn given<'de, D: Deserializer<'de>, T: Deserialize<'de>>(d: D) -> Result<Option<T>, D::Error> {
+    Option::<T>::deserialize(d)
+}
+
+/// A track or `null`, as a field the schema lists as required.
+fn track_or_null(g: &mut schemars::SchemaGenerator) -> schemars::Schema {
+    g.subschema_for::<Option<crate::site::TrackDoc>>()
+}
+
+/// A track's numbers as a file would read them back: finite, at least one segment, distances
+/// and radii 0 or more, a width above 0, and some length.
+fn checked_track(
+    doc: crate::site::TrackDoc,
+    width: f64,
+    unit: stochcraft_model::LengthUnit,
+) -> Result<stochcraft_model::Track, CommandError> {
+    let bad = |why: &str| CommandError::new(ErrorCode::InvalidParams, format!("the track {why}"));
+    let start = doc.start;
+    if ![start.x, start.y, start.z, start.heading]
+        .iter()
+        .all(|v| v.is_finite())
+    {
+        return Err(bad("starts at a number that is not finite"));
+    }
+    if doc.segments.is_empty() {
+        return Err(bad("has no segments"));
+    }
+    let width = doc.width.unwrap_or(width);
+    if !(width.is_finite() && width > 0.0) {
+        return Err(bad("has a width that is not above 0"));
+    }
+    let mut segments = Vec::with_capacity(doc.segments.len());
+    for seg in doc.segments {
+        let seg: stochcraft_model::Segment = seg.into();
+        let ok = match seg {
+            stochcraft_model::Segment::Line { length, rise } => {
+                length.is_finite() && length >= 0.0 && rise.is_finite()
+            }
+            stochcraft_model::Segment::Arc {
+                radius,
+                angle_deg,
+                rise,
+            } => radius.is_finite() && radius >= 0.0 && angle_deg.is_finite() && rise.is_finite(),
+            stochcraft_model::Segment::Helix {
+                radius,
+                rise,
+                turns,
+            } => radius.is_finite() && radius >= 0.0 && rise.is_finite() && turns.is_finite(),
+        };
+        if !ok {
+            return Err(bad(
+                "has a segment with a number that is not finite, or a length or radius below 0",
+            ));
+        }
+        segments.push(seg);
+    }
+    let track = stochcraft_model::Track {
+        path: stochcraft_model::Path::new(start.into(), segments),
+        width,
+    };
+    // A length too long to hold (a square that overflows) is as wrong as none.
+    let length = track.length(unit);
+    if !(length.is_finite() && length > 0.0) {
+        return Err(bad("has no length, or one too long to work out"));
+    }
+    Ok(track)
+}
+
+fn track_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: TrackSet = parse(p)?;
+    let id = existing_element(e.model(), &p.id)?;
+    let model = e.model();
+    let unit = model.experiment.length_unit;
+    let Some(element) = model.element(&id) else {
+        return Err(CommandError::new(
+            ErrorCode::NotFound,
+            format!("no element with id `{id}`"),
+        ));
+    };
+    let ElementKind::Conveyor { length: typed, .. } = element.kind else {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            format!("`{id}` is not a conveyor: only a conveyor has a track"),
+        ));
+    };
+    let old = model.site.paths.get(&id);
+    // The typed length follows the path (D23), unless it already overrode the old one.
+    let follows = old.is_none_or(|t| (t.length(unit) - typed).abs() <= length_step(unit));
+    let width = old.map_or_else(|| default_width(unit), |t| t.width);
+    let track = p
+        .track
+        .map(|doc| checked_track(doc, width, unit))
+        .transpose()?;
+    let path_length = track.as_ref().map(|t| t.length(unit));
+    let mut ops = vec![Op::SetTrack(id.clone(), track)];
+    let mut length = typed;
+    if let Some(drawn) = path_length.filter(|_| follows) {
+        length = drawn;
+        if drawn != typed {
+            let mut kind = element.kind.clone();
+            if let ElementKind::Conveyor { length, .. } = &mut kind {
+                *length = drawn;
+            }
+            ops.push(Op::SetKind(id.clone(), kind));
+        }
+    }
+    e.edit("track.set", Op::Batch(ops))?;
+    Ok(json!({
+        "length": length,
+        "path_length": path_length,
+        "override": path_length.is_some_and(|d| (d - length).abs() > length_step(unit)),
+    }))
+}
+
 /// Several editing commands as one step: undone and redone together, and if one fails none of
 /// them is applied.
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -1265,6 +1405,10 @@ fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         x.stop = None;
         ops.push(Op::SetExperiment(x));
     }
+    // A conveyor's track goes with it; undone, the conveyor comes back before its track.
+    if e.model().site.paths.contains_key(&id) {
+        ops.push(Op::SetTrack(id.clone(), None));
+    }
     ops.push(Op::RemoveElement(id));
     e.edit("block.remove", Op::Batch(ops))?;
     Ok(json!({}))
@@ -1291,6 +1435,7 @@ fn estimate_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Sink {
             scrap: None,
             demand: None,
+            time_in_system: None,
         },
         |el| el.kind.clone(),
     );
@@ -1547,6 +1692,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Sink {
             scrap: None,
             demand: None,
+            time_in_system: None,
         },
         |el| el.kind.clone(),
     );
@@ -1580,6 +1726,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("on_shift_end", p.on_shift_end.is_some()),
         ("scrap", p.scrap.is_some()),
         ("demand", p.demand.is_some()),
+        ("time_in_system", p.time_in_system.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -1632,7 +1779,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Delay { .. } => &["duration", "processing_by", "starting"],
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size", "starting"],
-        ElementKind::Sink { .. } => &["scrap", "demand"],
+        ElementKind::Sink { .. } => &["scrap", "demand", "time_in_system"],
         ElementKind::Conveyor { .. } => &[
             "length",
             "speed",
@@ -1821,9 +1968,16 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *size = n;
             }
         }
-        ElementKind::Sink { scrap, demand } => {
+        ElementKind::Sink {
+            scrap,
+            demand,
+            time_in_system,
+        } => {
             if let Some(d) = p.demand {
                 *demand = d.map(Into::into);
+            }
+            if let Some(x) = p.time_in_system {
+                *time_in_system = x.map(Into::into);
             }
             if let Some(s) = p.scrap {
                 *scrap = s.map(|s| stochcraft_model::Scrap {
@@ -2024,8 +2178,19 @@ fn calendar_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                     || queue_limit.calendars().any(|c| c.as_str() == p.id)
             }
             ElementKind::Sink {
-                demand: Some(d), ..
-            } => d.calendar.as_ref().is_some_and(|c| c.as_str() == p.id),
+                demand,
+                time_in_system,
+                ..
+            } => {
+                demand
+                    .as_ref()
+                    .and_then(|d| d.calendar.as_ref())
+                    .is_some_and(|c| c.as_str() == p.id)
+                    || time_in_system
+                        .as_ref()
+                        .and_then(|x| x.calendar.as_ref())
+                        .is_some_and(|c| c.as_str() == p.id)
+            }
             _ => false,
         })
         .map(|el| el.id.as_str())
@@ -2953,8 +3118,16 @@ pub static COMMANDS: &[Command] = &[
         summary: "Add a source, server, shared task, delay, sink, exclusive gateway or parallel gateway. Returns its id.",
         kind: CommandKind::Edit,
         schema: schema::<BlockAdd>,
-        example: || json!({ "kind": "delay", "id": "walk", "duration": {"type": "triangular", "min": 1.0, "mode": 2.0, "max": 4.0} }),
+        example: || json!({ "kind": "conveyor", "id": "belt", "length": 6.0, "speed": 0.5, "accumulating": true, "item_length": 0.4, "gap": 0.2 }),
         run: block_add,
+    },
+    Command {
+        name: "track.set",
+        summary: "Draw a conveyor's track in the layout (its path on the floor and the belt's width), or remove it with null; its length follows the path unless a typed length overrides it.",
+        kind: CommandKind::Edit,
+        schema: schema::<TrackSet>,
+        example: || json!({ "id": "belt", "track": { "start": { "x": 0.0, "y": 0.0 }, "segments": [{ "type": "line", "length": 4.0 }, { "type": "arc", "radius": 1.0, "angle": 90.0 }, { "type": "line", "length": 0.4292 }] } }),
+        run: track_set,
     },
     Command {
         name: "block.set",
@@ -3001,7 +3174,7 @@ pub static COMMANDS: &[Command] = &[
         summary: "Connect one element to another. Returns the connection's id.",
         kind: CommandKind::Edit,
         schema: schema::<Connect>,
-        example: || json!({ "from": "walk", "to": "exit" }),
+        example: || json!({ "from": "belt", "to": "exit" }),
         run: connect,
     },
     Command {
@@ -3017,7 +3190,7 @@ pub static COMMANDS: &[Command] = &[
         summary: "Remove a connection, by id or by the elements it joins.",
         kind: CommandKind::Edit,
         schema: schema::<Disconnect>,
-        example: || json!({ "from": "walk", "to": "exit" }),
+        example: || json!({ "from": "belt", "to": "exit" }),
         run: disconnect,
     },
     Command {
@@ -3025,7 +3198,7 @@ pub static COMMANDS: &[Command] = &[
         summary: "Remove an element and its connections.",
         kind: CommandKind::Edit,
         schema: schema::<Id>,
-        example: || json!({ "id": "walk" }),
+        example: || json!({ "id": "belt" }),
         run: block_remove,
     },
     Command {

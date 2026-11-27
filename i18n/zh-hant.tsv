@@ -1049,6 +1049,7 @@ unit	yr	年
 	In “{field}” of {block}, set “{param}” to 1 or more.	請在 {block} 的「{field}」中，將「{param}」設為 1 或以上。
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	請在 {block} 的「{field}」中，將「{param}」設為 0 到 1 之間的數值。
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	請在 {block} 的「{field}」中，將「最小值」設得小於「最大值」，並讓任何「最可能值」介於兩者之間。
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	請在 {block} 的「{field}」中，將「最小值」設得小於「最大值」。
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	請在 {block} 的「{field}」中，新增機率總和大於 0 的資料點。
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} 將永遠沒有可用的資源單元。請至少給它 1 個資源單元。
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} 會無止盡地產生實體，因為它的「到達間隔時間」永遠是 0。請將時間設為大於 0，或設定「到達上限」。
@@ -1491,6 +1492,35 @@ connection	Flow	順序流
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} 放在輸送帶 {conveyor} 上距起點 {s} 處，但該輸送帶的路徑只有 {length} 長。請把它放在路徑上 0 到 {length} 之間。
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	輸送帶 {conveyor} 上的實體先到達 {before}，後到達 {block}，但 {block} 的位置更靠近起點（沿輸送帶 {s}，而 {before} 在 {before_s}）。請把 {block} 放在路徑上比 {before} 更後面的位置，或在順序流中交換它們。
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	順序流 {flow} 上的銜接處需要 {time} 才能通過。請把它的傳送時間設為 0 或更大。
+	A path needs at least two points.	路徑至少需要兩個點。
+	Finish	完成
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	正在繪製 {name} 的路徑：按一下新增點，按兩下或按 Enter 完成，按 Backspace 收回最後一個點，按 Esc 取消。
+	Draw path	繪製路徑
+	Select a conveyor to draw its path	選擇一條輸送機以繪製其路徑
+	Remove path	移除路徑
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	按一下新增點 · 按兩下或 Enter 完成 · Esc 取消
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	按一下輸送帶以選取 · 拖曳其點或整條輸送帶 · 按兩下新增點 · 拖曳地面平移 · 捲動縮放
+	Point {n} of {name}, x {x} m, y {y} m	{name} 的第 {n} 個點，x {x} m，y {y} m
+	Click a conveyor here to draw its path.	在此按一下輸送機以繪製其路徑。
+	Path	路徑
+	Not drawn in the layout yet.	尚未在佈局中繪製。
+	Draw in the Layout view	在佈局檢視中繪製
+	Add a straight path	新增直線路徑
+	Drawn length: {length} {unit}	繪製長度：{length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	此路徑會爬升或含有螺旋：無法在此編輯其點。
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	此路徑在一段圓弧中轉了一整圈或更多：無法在此編輯其點。
+	This path turns sharply where it starts or ends: its points cannot be edited here.	此路徑在起點或終點急轉：無法在此編輯其點。
+	Point {n}	點 {n}
+	x of point {n}	點 {n} 的 x
+	y of point {n}	點 {n} 的 y
+	x	x
+	y	y
+	Bend radius at point {n}	點 {n} 處的轉彎半徑
+	bend	轉彎
+	tightened to {radius} to fit	已收緊至 {radius} 以容納
+	Remove point {n}	移除點 {n}
+	Add a point at the end	在末端新增點
+	Change Path	變更路徑
 	Search examples	搜尋範例
 	Clear search	清除搜尋
 	Logistics and warehousing	物流與倉儲
@@ -1501,6 +1531,18 @@ connection	Flow	順序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台機器必須運轉，四台備用機待命，三名維修技師修理故障的機器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台備用機和多少名維修技師，才能讓十台機器保持運轉？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的備用機不會故障：平均 3.47 台機器在故障中，9.29 台在運轉。增加第四名維修技師的效果與再增加四台備用機相當。
+	Median time in system	系統內時間中位數
+	Time in system, 90th percentile	系統內時間，第 90 百分位數
+	Time in system, 95th percentile	系統內時間，第 95 百分位數
+	Share done within the target time	在目標時間內完成的比例
+	Percentiles of time in system	系統內時間的百分位數
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	顯示每個實體從建立到抵達這些出口所用時間的中位數、第 90 與第 95 百分位數；設定目標時間後，也顯示在該時間內完成的比例。
+	Target time ({unit})	目標時間（{unit}）
+	The target time is a time above 0	目標時間必須是大於 0 的時間
+	Count only working time on	只計工作時間的行事曆
+	Entities still inside when the run ends are left out, so stop the run once all are done.	執行結束時仍在內部的實體不計入，因此請在全部完成後再停止執行。
+	Set the target time in system of {block} to a time above 0.	請將 {block} 的系統內目標時間設為大於 0 的時間。
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} 的系統內時間依不存在的行事曆計算工作時間。請選擇存在的行事曆。
 	One machine's availability	單台機器的可用率
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	一台機器平均每 90 小時故障一次，修理需要 4.5 小時（Hristova、Denev 和 Tsankov，Environment. Technology. Resources，2024）。
 	How often is one machine down, and how much work does that cost?	一台機器多久停機一次，這會損失多少工作？

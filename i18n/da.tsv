@@ -1049,6 +1049,7 @@ unit	yr	år
 	In “{field}” of {block}, set “{param}” to 1 or more.	Sæt »{param}« i »{field}« for {block} til 1 eller mere.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Sæt »{param}« i »{field}« for {block} til et tal fra 0 til 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Sæt »Minimum« under »Maksimum« i »{field}« for {block}, og en eventuel værdi for »Mest sandsynlig« derimellem.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Sæt »Minimum« under »Maksimum« i »{field}« for {block}.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Tilføj datapunkter i »{field}« for {block}, hvis sandsynligheder tilsammen er over 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} ville aldrig have en ressourceenhed at arbejde med. Giv blokken mindst 1 ressourceenhed.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} ville lave enheder uden ende, fordi »Tid mellem ankomster« altid er 0. Giv den en tid over 0, eller angiv en »Grænse for ankomster«.
@@ -1491,6 +1492,35 @@ connection	Flow	Flow
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} er placeret {s} langs transportbåndet {conveyor}, hvis bane er {length} lang. Placer den mellem 0 og {length} langs banen.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Enheder på transportbåndet {conveyor} når {before} før {block}, men {block} er placeret tættere på starten ({s} langs det, {before} ved {before_s}). Placer {block} længere ude ad banen end {before}, eller byt dem om i flowene.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Overgangen på flowet {flow} tager {time} at passere. Sæt dens overførselstid til 0 eller mere.
+	A path needs at least two points.	En bane skal have mindst to punkter.
+	Finish	Afslut
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Tegner banen for {name}: klik for at tilføje punkter, dobbeltklik eller Enter for at afslutte, Backspace fjerner det sidste punkt, Esc annullerer.
+	Draw path	Tegn bane
+	Select a conveyor to draw its path	Vælg en transportør for at tegne dens bane
+	Remove path	Fjern bane
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klik for at tilføje et punkt · Dobbeltklik eller Enter for at afslutte · Esc for at annullere
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Klik på et bånd for at vælge det · Træk dets punkter eller båndet · Dobbeltklik for at tilføje et punkt · Træk i gulvet for at panorere · Rul for at zoome
+	Point {n} of {name}, x {x} m, y {y} m	Punkt {n} af {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klik på en transportør her for at tegne dens bane.
+	Path	Bane
+	Not drawn in the layout yet.	Endnu ikke tegnet i layoutet.
+	Draw in the Layout view	Tegn i Layout-visningen
+	Add a straight path	Tilføj en lige bane
+	Drawn length: {length} {unit}	Tegnet længde: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Denne bane stiger eller har en spiral: dens punkter kan ikke redigeres her.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Denne bane drejer en hel cirkel eller mere i én bue: dens punkter kan ikke redigeres her.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Denne bane drejer skarpt, hvor den begynder eller slutter: dens punkter kan ikke redigeres her.
+	Point {n}	Punkt {n}
+	x of point {n}	x for punkt {n}
+	y of point {n}	y for punkt {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Kurveradius ved punkt {n}
+	bend	kurve
+	tightened to {radius} to fit	strammet til {radius} for at passe
+	Remove point {n}	Fjern punkt {n}
+	Add a point at the end	Tilføj et punkt i enden
+	Change Path	Ændr bane
 	Search examples	Søg i eksempler
 	Clear search	Ryd søgning
 	Logistics and warehousing	Logistik og lager
@@ -1501,6 +1531,18 @@ connection	Flow	Flow
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Ti maskiner skal køre, fire reservemaskiner står klar, og tre mekanikere reparerer dem, der bryder ned (Crane og Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hvor mange reservemaskiner og mekanikere holder ti maskiner kørende?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemaskiner, der står klar, kan ikke bryde ned: i gennemsnit er 3.47 maskiner i stykker, og 9.29 kører. En fjerde mekaniker gør omtrent lige så meget som fire reservemaskiner mere.
+	Median time in system	Median for tid i systemet
+	Time in system, 90th percentile	Tid i systemet, 90. percentil
+	Time in system, 95th percentile	Tid i systemet, 95. percentil
+	Share done within the target time	Andel færdige inden for måltiden
+	Percentiles of time in system	Percentiler for tid i systemet
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Viser medianen, 90. og 95. percentil af den tid, hver enhed brugte fra den blev skabt, til den nåede disse afgange, og med en måltid andelen, der blev færdige inden for den.
+	Target time ({unit})	Måltid ({unit})
+	The target time is a time above 0	Måltiden er en tid over 0
+	Count only working time on	Tæl kun arbejdstid efter
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Enheder, der stadig er indeni, når kørslen slutter, er udeladt, så stop kørslen, når alle er færdige.
+	Set the target time in system of {block} to a time above 0.	Sæt måltiden i systemet for {block} til en tid over 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Tiden i systemet for {block} tæller arbejdstid efter en kalender, der ikke findes. Vælg en kalender, der findes.
 	One machine's availability	En maskines oppetid
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	En maskine, der i gennemsnit går i stykker hver 90. time og tager 4.5 timer at reparere (Hristova, Denev og Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Hvor ofte står en maskine stille, og hvor meget arbejde koster det?

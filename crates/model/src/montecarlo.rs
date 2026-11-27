@@ -52,7 +52,7 @@ pub struct McOutput {
     /// A target whose probability of being met is reported, with its interval.
     pub target: Option<McTarget>,
     /// Control variates: quantities with a known mean whose deviation from it is used to
-    /// narrow this output's interval (Law, *Simulation Modeling and Analysis*, 5th ed., §11.3).
+    /// narrow this output's interval (Law, *Simulation Modeling and Analysis*, 5th ed., §11.4).
     pub controls: Vec<Control>,
 }
 

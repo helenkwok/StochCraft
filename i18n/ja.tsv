@@ -1049,6 +1049,7 @@ unit	yr	年
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} の「{field}」で、「{param}」に 1 以上の数を設定してください。
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} の「{field}」で、「{param}」に 0 から 1 までの数を設定してください。
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} の「{field}」で、「最小値」を「最大値」より小さくし、「最頻値」がある場合はその間の値にしてください。
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} の「{field}」で、「最小値」を「最大値」より小さくしてください。
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} の「{field}」に、確率の合計が 0 より大きくなるデータ点を追加してください。
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} には作業に使えるユニットが 1 つもなくなります。ユニットを 1 つ以上にしてください。
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} は「到着間隔」が常に 0 のため、エンティティを際限なく作り続けます。0 より大きい時間を設定するか、「到着数の上限」を設定してください。
@@ -1491,6 +1492,35 @@ connection	Flow	フロー
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} はコンベヤ {conveyor} に沿って {s} の位置に置かれていますが、その経路の長さは {length} です。経路に沿って 0 から {length} の間に配置してください。
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	コンベヤ {conveyor} 上のエンティティは {block} より先に {before} に到達しますが、{block} はより始点に近い位置（コンベヤに沿って {s}、{before} は {before_s}）に置かれています。{block} を経路上で {before} より先に配置するか、フローで入れ替えてください。
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	フロー {flow} 上の接合部の通過に {time} かかります。搬送時間を 0 以上にしてください。
+	A path needs at least two points.	経路には少なくとも 2 点が必要です。
+	Finish	完了
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name} の経路を描画中: クリックで点を追加、ダブルクリックまたは Enter で完了、Backspace で最後の点を取り消し、Esc で中止。
+	Draw path	経路を描く
+	Select a conveyor to draw its path	経路を描くコンベヤを選択してください
+	Remove path	経路を削除
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	クリックで点を追加 · ダブルクリックまたは Enter で完了 · Esc で中止
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	ベルトをクリックで選択 · 点またはベルトをドラッグ · ダブルクリックで点を追加 · 床をドラッグで移動 · スクロールでズーム
+	Point {n} of {name}, x {x} m, y {y} m	{name} の点 {n}、x {x} m、y {y} m
+	Click a conveyor here to draw its path.	ここでコンベヤをクリックすると経路を描けます。
+	Path	経路
+	Not drawn in the layout yet.	レイアウトにまだ描かれていません。
+	Draw in the Layout view	レイアウト表示で描く
+	Add a straight path	直線の経路を追加
+	Drawn length: {length} {unit}	描いた長さ: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	この経路は上昇するかヘリックスを含むため、ここでは点を編集できません。
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	この経路は1つの円弧で1周以上回るため、ここでは点を編集できません。
+	This path turns sharply where it starts or ends: its points cannot be edited here.	この経路は始点か終点で鋭く曲がるため、ここでは点を編集できません。
+	Point {n}	点 {n}
+	x of point {n}	点 {n} の x
+	y of point {n}	点 {n} の y
+	x	x
+	y	y
+	Bend radius at point {n}	点 {n} の曲げ半径
+	bend	曲げ
+	tightened to {radius} to fit	収まるよう {radius} に縮小
+	Remove point {n}	点 {n} を削除
+	Add a point at the end	末尾に点を追加
+	Change Path	経路の変更
 	Search examples	例を検索
 	Clear search	検索をクリア
 	Logistics and warehousing	物流・倉庫
@@ -1501,6 +1531,18 @@ connection	Flow	フロー
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	10 台の機械が稼働していなければならず、予備機 4 台が待機し、整備士 3 人が故障した機械を修理する（Crane と Iglehart、Winter Simulation Conference、1973）。
 	How many spares and repairmen keep ten machines running?	10 台の機械を動かし続けるには、予備機と整備士がいくつ必要か？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待機中の予備機は故障しない。平均 3.47 台が故障中で、9.29 台が稼働する。整備士を 1 人増やすと、予備機を 4 台増やすのとほぼ同じ効果がある。
+	Median time in system	システム内の滞在時間の中央値
+	Time in system, 90th percentile	システム内の滞在時間（90 パーセンタイル）
+	Time in system, 95th percentile	システム内の滞在時間（95 パーセンタイル）
+	Share done within the target time	目標時間内に完了した割合
+	Percentiles of time in system	システム内の滞在時間のパーセンタイル
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	各エンティティが生成されてからこの退出に至るまでの時間の中央値、90 パーセンタイル、95 パーセンタイルを表示し、目標時間を指定するとその時間内に完了した割合も表示します。
+	Target time ({unit})	目標時間（{unit}）
+	The target time is a time above 0	目標時間は 0 より大きい時間です
+	Count only working time on	稼働時間のみを数えるカレンダー
+	Entities still inside when the run ends are left out, so stop the run once all are done.	実行の終了時に内部に残っているエンティティは含まれないため、すべてが完了してから実行を止めてください。
+	Set the target time in system of {block} to a time above 0.	{block} のシステム内の目標時間を 0 より大きい時間に設定してください。
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} のシステム内の滞在時間が、存在しないカレンダーで稼働時間を数えています。存在するカレンダーを選んでください。
 	One machine's availability	機械 1 台の稼働率
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	平均 90 時間ごとに故障し、修理に 4.5 時間かかる機械 1 台（Hristova、Denev、Tsankov、Environment. Technology. Resources、2024）。
 	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？

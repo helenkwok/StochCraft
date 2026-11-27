@@ -1049,6 +1049,7 @@ unit	yr	J.
 	In “{field}” of {block}, set “{param}” to 1 or more.	Setzen Sie in „{field}“ von Block {block} den Wert „{param}“ auf 1 oder mehr.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Setzen Sie in „{field}“ von Block {block} den Wert „{param}“ auf eine Zahl von 0 bis 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Setzen Sie in „{field}“ von Block {block} „Minimum“ unter „Maximum“ und einen etwaigen „Wahrscheinlichster Wert“ dazwischen.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Setzen Sie in „{field}“ von Block {block} „Minimum“ unter „Maximum“.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Fügen Sie in „{field}“ von Block {block} Datenpunkte hinzu, deren Wahrscheinlichkeiten sich zu mehr als 0 summieren.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Block {block} hätte nie eine Einheit zum Arbeiten. Geben Sie ihm mindestens 1 Einheit.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Block {block} würde endlos Entitäten erzeugen, weil seine „Zeit zwischen Ankünften“ immer 0 ist. Geben Sie ihm eine Zeit über 0 oder setzen Sie eine „Ankunftsgrenze“.
@@ -1491,6 +1492,35 @@ connection	Flow	Verbindung
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Block {block} ist {s} entlang des Förderbands {conveyor} platziert, dessen Pfad {length} lang ist. Platzieren Sie ihn zwischen 0 und {length} entlang des Pfads.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entitäten auf dem Förderband {conveyor} erreichen {before} vor {block}, aber {block} liegt näher am Anfang ({s} entlang des Förderbands, {before} bei {before_s}). Platzieren Sie {block} weiter hinten auf dem Pfad als {before} oder vertauschen Sie sie in den Verbindungen.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Der Übergang an der Verbindung {flow} braucht zum Überqueren {time}. Setzen Sie seine Transferzeit auf 0 oder mehr.
+	A path needs at least two points.	Ein Pfad braucht mindestens zwei Punkte.
+	Finish	Fertig
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Pfad von {name} wird gezeichnet: Klicken fügt Punkte hinzu, Doppelklick oder Eingabe beendet, Rücktaste nimmt den letzten Punkt zurück, Esc bricht ab.
+	Draw path	Pfad zeichnen
+	Select a conveyor to draw its path	Wählen Sie einen Förderer, um seinen Pfad zu zeichnen
+	Remove path	Pfad entfernen
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klicken fügt einen Punkt hinzu · Doppelklick oder Eingabe beendet · Esc bricht ab
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Band anklicken zum Auswählen · Seine Punkte oder das Band ziehen · Doppelklick fügt einen Punkt hinzu · Boden ziehen zum Verschieben · Scrollen zum Zoomen
+	Point {n} of {name}, x {x} m, y {y} m	Punkt {n} von {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klicken Sie hier auf einen Förderer, um seinen Pfad zu zeichnen.
+	Path	Pfad
+	Not drawn in the layout yet.	Noch nicht im Layout gezeichnet.
+	Draw in the Layout view	In der Layout-Ansicht zeichnen
+	Add a straight path	Geraden Pfad hinzufügen
+	Drawn length: {length} {unit}	Gezeichnete Länge: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Dieser Pfad steigt an oder hat eine Wendel: Seine Punkte lassen sich hier nicht bearbeiten.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Dieser Pfad dreht sich in einem Bogen um einen ganzen Kreis oder mehr: Seine Punkte lassen sich hier nicht bearbeiten.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Dieser Pfad biegt am Anfang oder Ende scharf ab: Seine Punkte lassen sich hier nicht bearbeiten.
+	Point {n}	Punkt {n}
+	x of point {n}	x von Punkt {n}
+	y of point {n}	y von Punkt {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Kurvenradius an Punkt {n}
+	bend	Kurve
+	tightened to {radius} to fit	auf {radius} verengt, damit es passt
+	Remove point {n}	Punkt {n} entfernen
+	Add a point at the end	Punkt am Ende hinzufügen
+	Change Path	Pfad ändern
 	Search examples	Beispiele durchsuchen
 	Clear search	Suche löschen
 	Logistics and warehousing	Logistik und Lager
@@ -1501,6 +1531,18 @@ connection	Flow	Verbindung
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Zehn Maschinen müssen laufen, vier Reservemaschinen stehen bereit, und drei Instandhalter reparieren die ausgefallenen (Crane und Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Wie viele Reservemaschinen und Instandhalter halten zehn Maschinen am Laufen?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Bereitstehende Reservemaschinen können nicht ausfallen: Im Mittel sind 3.47 Maschinen ausgefallen und 9.29 laufen. Ein vierter Instandhalter bringt etwa so viel wie vier Reservemaschinen mehr.
+	Median time in system	Median der Verweilzeit im System
+	Time in system, 90th percentile	Verweilzeit im System, 90. Perzentil
+	Time in system, 95th percentile	Verweilzeit im System, 95. Perzentil
+	Share done within the target time	Anteil fertig innerhalb der Zielzeit
+	Percentiles of time in system	Perzentile der Verweilzeit im System
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Zeigt den Median, das 90. und das 95. Perzentil der Zeit, die jede Einheit von ihrer Entstehung bis zu diesen Abgängen brauchte, und mit einer Zielzeit den Anteil, der innerhalb davon fertig wurde.
+	Target time ({unit})	Zielzeit ({unit})
+	The target time is a time above 0	Die Zielzeit ist eine Zeit über 0
+	Count only working time on	Nur Arbeitszeit zählen nach
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Einheiten, die am Ende des Laufs noch im System sind, gehen nicht ein; beenden Sie den Lauf daher erst, wenn alle fertig sind.
+	Set the target time in system of {block} to a time above 0.	Setzen Sie die Zielzeit im System von Block {block} auf eine Zeit über 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Die Verweilzeit im System von Block {block} zählt Arbeitszeit nach einem Kalender, der nicht existiert. Wählen Sie einen vorhandenen Kalender.
 	One machine's availability	Verfügbarkeit einer Maschine
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Eine Maschine, die im Mittel alle 90 Stunden ausfällt und 4.5 Stunden bis zur Reparatur braucht (Hristova, Denev und Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Wie oft steht eine Maschine still, und wie viel Arbeit kostet das?

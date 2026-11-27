@@ -1049,6 +1049,7 @@ unit	yr	år
 	In “{field}” of {block}, set “{param}” to 1 or more.	Ställ in ”{param}” i ”{field}” för {block} på 1 eller mer.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Ställ in ”{param}” i ”{field}” för {block} på ett tal från 0 till 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Ställ in ”Minimum” under ”Maximum” i ”{field}” för {block}, och ett eventuellt värde för ”Mest sannolikt” mellan dem.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Ställ in ”Minimum” under ”Maximum” i ”{field}” för {block}.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Lägg till datapunkter i ”{field}” för {block} vars sannolikheter tillsammans är över 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} skulle aldrig ha någon enhet att arbeta med. Ge blocket minst 1 enhet.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} skulle skapa entiteter i oändlighet, eftersom ”Tid mellan ankomster” alltid är 0. Ge den en tid över 0 eller ange en ”Gräns för ankomster”.
@@ -1491,6 +1492,35 @@ connection	Flow	Flöde
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} är placerat {s} längs transportbandet {conveyor}, vars bana är {length} lång. Placera det mellan 0 och {length} längs banan.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteter på transportbandet {conveyor} når {before} före {block}, men {block} är placerat närmare början ({s} längs det, {before} vid {before_s}). Placera {block} längre fram längs banan än {before}, eller byt plats på dem i flödena.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Övergången på flödet {flow} tar {time} att korsa. Sätt dess överföringstid till 0 eller mer.
+	A path needs at least two points.	En bana behöver minst två punkter.
+	Finish	Slutför
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Ritar banan för {name}: klicka för att lägga till punkter, dubbelklicka eller Retur för att slutföra, Backsteg tar bort den sista punkten, Esc avbryter.
+	Draw path	Rita bana
+	Select a conveyor to draw its path	Välj en transportör för att rita dess bana
+	Remove path	Ta bort bana
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klicka för att lägga till en punkt · Dubbelklicka eller Retur för att slutföra · Esc för att avbryta
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Klicka på ett band för att välja det · Dra dess punkter eller bandet · Dubbelklicka för att lägga till en punkt · Dra golvet för att panorera · Rulla för att zooma
+	Point {n} of {name}, x {x} m, y {y} m	Punkt {n} av {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klicka på en transportör här för att rita dess bana.
+	Path	Bana
+	Not drawn in the layout yet.	Inte ritad i layouten än.
+	Draw in the Layout view	Rita i Layout-vyn
+	Add a straight path	Lägg till en rak bana
+	Drawn length: {length} {unit}	Ritad längd: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Den här banan stiger eller har en spiral: dess punkter kan inte redigeras här.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Den här banan svänger en hel cirkel eller mer i en båge: dess punkter kan inte redigeras här.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Den här banan svänger skarpt där den börjar eller slutar: dess punkter kan inte redigeras här.
+	Point {n}	Punkt {n}
+	x of point {n}	x för punkt {n}
+	y of point {n}	y för punkt {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Kurvradie vid punkt {n}
+	bend	kurva
+	tightened to {radius} to fit	åtstramad till {radius} för att få plats
+	Remove point {n}	Ta bort punkt {n}
+	Add a point at the end	Lägg till en punkt i slutet
+	Change Path	Ändra bana
 	Search examples	Sök i exempel
 	Clear search	Rensa sökningen
 	Logistics and warehousing	Logistik och lager
@@ -1501,6 +1531,18 @@ connection	Flow	Flöde
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tio maskiner måste gå, fyra reservmaskiner står redo och tre reparatörer lagar dem som havererar (Crane och Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hur många reservmaskiner och reparatörer håller tio maskiner i gång?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservmaskiner som står redo kan inte haverera: i genomsnitt är 3.47 maskiner trasiga och 9.29 går. En fjärde reparatör gör ungefär lika mycket som fyra reservmaskiner till.
+	Median time in system	Median för tid i systemet
+	Time in system, 90th percentile	Tid i systemet, 90:e percentilen
+	Time in system, 95th percentile	Tid i systemet, 95:e percentilen
+	Share done within the target time	Andel klara inom måltiden
+	Percentiles of time in system	Percentiler för tid i systemet
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Visar medianen, 90:e och 95:e percentilen av tiden varje enhet tog från att den skapades tills den nådde dessa avgångar, och med en måltid andelen som blev klara inom den.
+	Target time ({unit})	Måltid ({unit})
+	The target time is a time above 0	Måltiden är en tid över 0
+	Count only working time on	Räkna bara arbetstid enligt
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Enheter som fortfarande är inuti när körningen slutar räknas inte med, så stoppa körningen när alla är klara.
+	Set the target time in system of {block} to a time above 0.	Ställ in måltiden i systemet för {block} på en tid över 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Tiden i systemet för {block} räknar arbetstid enligt en kalender som inte finns. Välj en kalender som finns.
 	One machine's availability	En maskins tillgänglighet
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	En maskin som i genomsnitt går sönder var 90:e timme och tar 4.5 timmar att reparera (Hristova, Denev och Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Hur ofta står en maskin still, och hur mycket arbete kostar det?

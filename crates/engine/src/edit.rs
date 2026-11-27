@@ -6,7 +6,7 @@
 
 use stochcraft_model::{
     Bounds, Connection, Element, ElementId, ElementKind, Estimate, Experiment, Model, MonteCarlo,
-    Property, ResourcePool,
+    Property, ResourcePool, Track,
     calendar::Calendar,
     dmn::{Decision, DecisionUse, Definitions},
 };
@@ -62,6 +62,8 @@ pub enum Op {
     SetStarting(ElementId, Option<u32>),
     /// Replace (or, with `None`, remove) the Monte Carlo inputs and outputs.
     SetMonteCarlo(Option<Box<MonteCarlo>>),
+    /// Set (or, with `None`, remove) a conveyor's track in the layout.
+    SetTrack(ElementId, Option<Track>),
     /// Replace the decision with `decision`'s id in the `.dmn` file `file`, or add it (and the
     /// file, if the model reads no such file yet).
     SetDecision {
@@ -291,6 +293,18 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
         Op::SetMonteCarlo(m) => Op::SetMonteCarlo(
             std::mem::replace(&mut model.monte_carlo, m.map(|b| *b)).map(Box::new),
         ),
+        Op::SetTrack(id, track) => {
+            let was = match track {
+                Some(t) => {
+                    if model.element(&id).is_none() {
+                        return Err(not_found("element", &id));
+                    }
+                    model.site.paths.insert(id.clone(), t)
+                }
+                None => model.site.paths.remove(&id),
+            };
+            Op::SetTrack(id, was)
+        }
         Op::SetDecision { file, decision } => {
             let new_file = !model.dmn.contains_key(&file);
             // A new file's own id is one its first decision does not use.

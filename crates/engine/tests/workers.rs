@@ -128,6 +128,47 @@ fn terminating_runs_on_workers_keep_their_stop_times() {
     assert_eq!(status["result"], threads);
 }
 
+/// Time in system by percentile at a sink, and the share within its target, come back from
+/// workers bit for bit.
+#[test]
+fn time_in_system_percentiles_on_workers_are_those_of_threads() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": root.to_string_lossy() }),
+    );
+    let exit = e
+        .model()
+        .elements
+        .iter()
+        .find(|x| x.kind.name() == "sink")
+        .map(|x| x.id.to_string())
+        .expect("a sink");
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": exit, "time_in_system": { "within": 5.0 } }),
+    );
+    let threads = ok(&mut e, "run", json!({"replications": 5, "threads": 2}));
+    let metrics = threads["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == exit.as_str()))
+        .map(|x| x["metrics"].clone())
+        .expect("the sink's results");
+    for m in [
+        "time_in_system_p50",
+        "time_in_system_p90",
+        "time_in_system_p95",
+        "within_target_share",
+    ] {
+        assert!(metrics[m]["mean"].is_number(), "{m}: {metrics}");
+    }
+    let status = on_workers(&mut e, 5, 2);
+    assert_eq!(status["result"], threads);
+}
+
 #[test]
 fn a_cancelled_or_failing_run_on_workers_says_so() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
