@@ -1519,7 +1519,7 @@ connection	Flow	Stroom
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, gestart vanaf de startwaarde van het experiment: herhaalbaar, en wat simulatie normaal gebruikt.
 	Draw a seed	Startwaarde trekken
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	De gratis variant van ANU (100 verzoeken per maand) dekt startwaarden, geen live uitvoeringen: een live uitvoering heeft de betaalde variant nodig. Elke uitvoering wacht op zijn bytes en elke byte wordt in het bestand vastgelegd, zodat de uitvoering daaruit opnieuw kan worden gedaan.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Getallen uit een fysieke bron zijn onvoorspelbaar en vermelden waar ze vandaan komen; ze maken de antwoorden niet nauwkeuriger.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Getallen uit een fysieke bron zijn onvoorspelbaar en vermelden waar ze vandaan komen. Vergeleken met een goede generator vinden studies tot nu toe geen verschil in nauwkeurigheid; de gebruikershandleiding vat het bewijs samen.
 	Hide the sources	Bronnen verbergen
 	Sources and keys…	Bronnen en sleutels…
 	No key	Geen sleutel

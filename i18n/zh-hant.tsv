@@ -1519,7 +1519,7 @@ connection	Flow	順序流
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**，以實驗的種子初始化：可重複，也是模擬通常使用的方式。
 	Draw a seed	抽取種子
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU 的免費額度（每月 100 次請求）可用於種子，不能用於即時執行：即時執行需要其付費額度。每次執行都要等待它的位元組，每個位元組都會記錄在檔案中，因此執行可以據此重複。
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	來自物理來源的數字不可預測，並說明了它們的出處；它們不會讓答案更準確。
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	來自物理來源的數字不可預測，並說明了它們的出處。與好的產生器相比，迄今的研究未發現準確性上有差異；使用者指南概述了這些證據。
 	Hide the sources	隱藏來源
 	Sources and keys…	來源和金鑰…
 	No key	無金鑰

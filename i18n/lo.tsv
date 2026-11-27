@@ -1519,7 +1519,7 @@ connection	Flow	ເສັ້ນທາງ
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, ເລີ່ມຈາກເມັດສຸ່ມຂອງການທົດລອງ: ເຮັດຊ້ຳໄດ້, ແລະເປັນສິ່ງທີ່ການຈຳລອງໃຊ້ໂດຍທົ່ວໄປ.
 	Draw a seed	ສຸ່ມເມັດສຸ່ມ
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ລະດັບຟຣີຂອງ ANU (100 ຄຳຂໍຕໍ່ເດືອນ) ໃຊ້ໄດ້ສຳລັບເມັດສຸ່ມ, ບໍ່ແມ່ນການປະມວນຜົນສົດ: ການປະມວນຜົນສົດຕ້ອງໃຊ້ລະດັບທີ່ເສຍເງິນ. ແຕ່ລະຮອບລໍຖ້າໄບຕ໌ຂອງມັນ, ແລະທຸກໄບຕ໌ຖືກບັນທຶກໄວ້ໃນໄຟລ໌, ດັ່ງນັ້ນຮອບນັ້ນຈຶ່ງເຮັດຊ້ຳຈາກໄຟລ໌ນັ້ນໄດ້.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	ຕົວເລກຈາກແຫຼ່ງທາງກາຍະພາບຄາດເດົາບໍ່ໄດ້ ແລະບອກວ່າມາຈາກໃສ; ມັນບໍ່ໄດ້ເຮັດໃຫ້ຄຳຕອບຖືກຕ້ອງຂຶ້ນ.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	ຕົວເລກຈາກແຫຼ່ງທາງກາຍະພາບຄາດເດົາບໍ່ໄດ້ ແລະບອກວ່າມາຈາກໃສ. ເມື່ອທຽບກັບຕົວສ້າງທີ່ດີ ການສຶກສາຈົນເຖິງຕອນນີ້ບໍ່ພົບຄວາມແຕກຕ່າງດ້ານຄວາມຖືກຕ້ອງ; ຄູ່ມືສະຫຼຸບຫຼັກຖານໄວ້.
 	Hide the sources	ເຊື່ອງແຫຼ່ງທີ່ມາ
 	Sources and keys…	ແຫຼ່ງທີ່ມາ ແລະກະແຈ…
 	No key	ບໍ່ມີກະແຈ

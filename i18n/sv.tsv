@@ -1519,7 +1519,7 @@ connection	Flow	Flöde
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, startad från experimentets slumpfrö: repeterbar, och det simulering vanligtvis använder.
 	Draw a seed	Dra ett slumpfrö
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU:s gratisnivå (100 förfrågningar i månaden) täcker slumpfrön, inte direktkörningar: en direktkörning kräver den betalda nivån. Varje körning väntar på sina byte, och varje byte sparas i filen, så att körningen kan upprepas från den.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Tal från en fysisk källa är oförutsägbara och anger var de kom ifrån; de gör inte svaren mer exakta.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Tal från en fysisk källa är oförutsägbara och anger var de kom ifrån. Jämfört med en bra generator finner studier hittills ingen skillnad i exakthet; användarhandboken sammanfattar bevisen.
 	Hide the sources	Dölj källorna
 	Sources and keys…	Källor och nycklar…
 	No key	Ingen nyckel

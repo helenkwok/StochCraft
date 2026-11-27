@@ -1519,7 +1519,7 @@ connection	Flow	Ағын
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, эксперимент тұқымынан іске қосылған: қайталанатын және модельдеу әдетте қолданатын нұсқа.
 	Draw a seed	Тұқым алу
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-дың тегін деңгейі (айына 100 сұрау) тұқымдарды қамтиды, тікелей іске қосуларды қамтымайды: тікелей іске қосуға ақылы деңгей керек. Әр іске қосу өз байттарын күтеді, ал әр байт файлға жазылады, сондықтан іске қосуды содан қайталауға болады.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Физикалық дереккөзден алынған сандар болжанбайды және олардың қайдан келгенін айтады; олар жауаптарды дәлірек етпейді.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Физикалық дереккөзден алынған сандар болжанбайды және олардың қайдан келгенін айтады. Жақсы генератормен салыстырғанда, осы уақытқа дейінгі зерттеулер дәлдікте айырмашылық таппайды; нұсқаулық дәлелдерді қорытындылайды.
 	Hide the sources	Дереккөздерді жасыру
 	Sources and keys…	Дереккөздер мен кілттер…
 	No key	Кілт жоқ

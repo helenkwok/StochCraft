@@ -1519,7 +1519,7 @@ connection	Flow	フロー
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**、実験のシードから初期化: 再現でき、シミュレーションで通常使われます。
 	Draw a seed	シードを取得
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU の無料枠 (月 100 リクエスト) はシード用で、ライブ実行には使えません。ライブ実行には有料枠が必要です。各実行はそのバイトを待ち、すべてのバイトがファイルに記録されるため、実行はそこから再現できます。
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	物理的な乱数源の数値は予測不能で、その出所を示しますが、答えがより正確になるわけではありません。
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	物理的な乱数源の数値は予測不能で、その出所を示します。優れたジェネレーターと比べて、これまでの研究では精度に差は見つかっていません。ガイドがその証拠をまとめています。
 	Hide the sources	乱数源を隠す
 	Sources and keys…	乱数源とキー…
 	No key	キーなし

@@ -1519,7 +1519,7 @@ connection	Flow	Flux
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, inicialitzat amb la llavor de l'experiment: repetible, i el que la simulació fa servir normalment.
 	Draw a seed	Obtén una llavor
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	El nivell gratuït d'ANU (100 sol·licituds al mes) cobreix llavors, no execucions en directe: una execució en directe necessita el seu nivell de pagament. Cada execució espera els seus bytes, i cada byte es desa al fitxer, de manera que l'execució es repeteix a partir d'ell.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Els nombres d'una font física són impredictibles i diuen d'on vénen; no fan que les respostes siguin més precises.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Els nombres d'una font física són impredictibles i diuen d'on vénen. Davant d'un bon generador, els estudis fins ara no troben cap diferència en la precisió; la guia resumeix l'evidència.
 	Hide the sources	Amaga les fonts
 	Sources and keys…	Fonts i claus…
 	No key	Sense clau

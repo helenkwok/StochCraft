@@ -1519,7 +1519,7 @@ connection	Flow	Flyt
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, startet fra eksperimentets frø: kan gjentas, og det simulering vanligvis bruker.
 	Draw a seed	Trekk et frø
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANUs gratisnivå (100 forespørsler i måneden) dekker frø, ikke direkte kjøringer: en direkte kjøring trenger betalingsnivået. Hver kjøring venter på sine byte, og hver byte lagres i filen, slik at kjøringen kan gjentas fra den.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Tall fra en fysisk kilde er uforutsigbare og forteller hvor de kom fra; de gjør ikke svarene mer nøyaktige.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Tall fra en fysisk kilde er uforutsigbare og forteller hvor de kom fra. Sammenlignet med en god generator finner studier så langt ingen forskjell i nøyaktighet; veiledningen oppsummerer bevisene.
 	Hide the sources	Skjul kildene
 	Sources and keys…	Kilder og nøkler…
 	No key	Ingen nøkkel

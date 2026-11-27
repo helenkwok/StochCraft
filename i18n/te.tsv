@@ -1519,7 +1519,7 @@ connection	Flow	ప్రవాహం
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, ప్రయోగం యొక్క బీజం నుండి ప్రారంభం: పునరావృతం చేయదగినది, మరియు అనుకరణ సాధారణంగా ఉపయోగించేది.
 	Draw a seed	బీజాన్ని తీయి
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU ఉచిత స్థాయి (నెలకు 100 అభ్యర్థనలు) బీజాలకు వర్తిస్తుంది, ప్రత్యక్ష అమలులకు కాదు: ప్రత్యక్ష అమలుకు చెల్లింపు స్థాయి కావాలి. ప్రతి అమలు తన బైట్ల కోసం వేచి ఉంటుంది, ప్రతి బైట్ ఫైల్‌లో నమోదవుతుంది, కాబట్టి అమలును దాని నుండి మళ్లీ చేయవచ్చు.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	భౌతిక మూలం నుండి వచ్చిన సంఖ్యలు ఊహించలేనివి, అవి ఎక్కడి నుండి వచ్చాయో చెబుతాయి; అవి సమాధానాలను మరింత ఖచ్చితంగా చేయవు.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	భౌతిక మూలం నుండి వచ్చిన సంఖ్యలు ఊహించలేనివి, అవి ఎక్కడి నుండి వచ్చాయో చెబుతాయి. మంచి జనరేటర్‌తో పోలిస్తే, ఇప్పటివరకు జరిగిన అధ్యయనాలు ఖచ్చితత్వంలో తేడాను కనుగొనలేదు; గైడ్ ఆధారాలను సంక్షిప్తంగా తెలియజేస్తుంది.
 	Hide the sources	మూలాలను దాచు
 	Sources and keys…	మూలాలు మరియు కీలు…
 	No key	కీ లేదు

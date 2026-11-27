@@ -1519,7 +1519,7 @@ connection	Flow	Flux
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, inițializat cu sămânța experimentului: repetabil și ceea ce folosește de obicei simularea.
 	Draw a seed	Extrage o sămânță
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Nivelul gratuit ANU (100 de cereri pe lună) acoperă semințele, nu rulările în direct: o rulare în direct are nevoie de nivelul plătit. Fiecare rulare așteaptă octeții săi, iar fiecare octet este înregistrat în fișier, astfel încât rularea se repetă pornind de la el.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Numerele dintr-o sursă fizică sunt imprevizibile și spun de unde provin; nu fac răspunsurile mai exacte.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Numerele dintr-o sursă fizică sunt imprevizibile și spun de unde provin. Față de un generator bun, studiile de până acum nu găsesc nicio diferență de exactitate; ghidul rezumă dovezile.
 	Hide the sources	Ascunde sursele
 	Sources and keys…	Surse și chei…
 	No key	Fără cheie

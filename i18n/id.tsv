@@ -1519,7 +1519,7 @@ connection	Flow	Alur
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, dimulai dari benih eksperimen: dapat diulang, dan yang biasanya dipakai simulasi.
 	Draw a seed	Tarik benih
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Tingkat gratis ANU (100 permintaan per bulan) mencakup benih, bukan eksekusi langsung: eksekusi langsung membutuhkan tingkat berbayar. Setiap eksekusi menunggu byte-nya, dan setiap byte dicatat di berkas, sehingga eksekusi dapat diulang darinya.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Angka dari sumber fisik tidak dapat diprediksi dan menyebutkan asalnya; angka itu tidak membuat jawaban lebih akurat.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Angka dari sumber fisik tidak dapat diprediksi dan menyebutkan asalnya. Dibandingkan dengan generator yang baik, studi sejauh ini tidak menemukan perbedaan akurasi; panduan merangkum buktinya.
 	Hide the sources	Sembunyikan sumber
 	Sources and keys…	Sumber dan kunci…
 	No key	Tanpa kunci

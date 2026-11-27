@@ -1519,7 +1519,7 @@ connection	Flow	Fluxo
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, inicializado com a semente do experimento: repetível, e o que a simulação normalmente usa.
 	Draw a seed	Obter uma semente
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	O nível gratuito da ANU (100 solicitações por mês) cobre sementes, não execuções ao vivo: uma execução ao vivo precisa do nível pago. Cada execução espera pelos seus bytes, e cada byte é registrado no arquivo, de modo que a execução se repete a partir dele.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Números de uma fonte física são imprevisíveis e dizem de onde vieram; eles não tornam as respostas mais precisas.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Números de uma fonte física são imprevisíveis e dizem de onde vieram. Em comparação com um bom gerador, os estudos até agora não encontram diferença na precisão; o guia resume as evidências.
 	Hide the sources	Ocultar as fontes
 	Sources and keys…	Fontes e chaves…
 	No key	Sem chave

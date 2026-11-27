@@ -1519,7 +1519,7 @@ connection	Flow	Rrjedhë
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, nisur nga fara e eksperimentit: i përsëritshëm dhe ai që simulimi zakonisht përdor.
 	Draw a seed	Nxirr një farë
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Niveli falas i ANU (100 kërkesa në muaj) mbulon farat, jo ekzekutimet drejtpërdrejt: një ekzekutim drejtpërdrejt kërkon nivelin me pagesë. Çdo ekzekutim pret bajtet e tij dhe çdo bajt regjistrohet në skedar, kështu ekzekutimi përsëritet nga ai.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Numrat nga një burim fizik janë të paparashikueshëm dhe tregojnë nga vijnë; ata nuk i bëjnë përgjigjet më të sakta.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Numrat nga një burim fizik janë të paparashikueshëm dhe tregojnë nga vijnë. Në krahasim me një gjenerator të mirë, studimet deri tani nuk gjejnë ndryshim në saktësi; udhëzuesi përmbledh provat.
 	Hide the sources	Fshih burimet
 	Sources and keys…	Burimet dhe çelësat…
 	No key	Pa çelës

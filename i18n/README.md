@@ -1094,6 +1094,9 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and sq, the word for beacon and for a free or paid tier everywhere, the keychain in the last
   note, ja 乱数源 and ko 소스 (they differ from the catalogs' "Source" rows, 出典 and 출처, which
   read as a citation), and the long sentence about the free tier everywhere.
+- The note on what numbers from a physical source give was reworded to say that studies so far
+  find no difference in accuracy against a good generator, and its rows were machine-drafted
+  again the same way.
 - The rows for the one-machine-availability example (its title, the line about it, its question
   and what it teaches) were machine-drafted from the plain meaning of the English, with each
   catalog's own words for machine, breakdown and repair from the earlier example cards;

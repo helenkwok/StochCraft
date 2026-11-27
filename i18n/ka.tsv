@@ -1519,7 +1519,7 @@ connection	Flow	ნაკადი
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, ექსპერიმენტის საწყისი მნიშვნელობიდან გაშვებული: განმეორებადი და ის, რასაც სიმულაცია ჩვეულებრივ იყენებს.
 	Draw a seed	საწყისი მნიშვნელობის აღება
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-ს უფასო დონე (თვეში 100 მოთხოვნა) მოიცავს საწყის მნიშვნელობებს, არა პირდაპირ გაშვებებს: პირდაპირ გაშვებას ფასიანი დონე სჭირდება. თითოეული გაშვება თავის ბაიტებს ელოდება და ყოველი ბაიტი ფაილში იწერება, ასე რომ გაშვება მისგან განმეორდება.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	ფიზიკური წყაროდან მიღებული რიცხვები არაპროგნოზირებადია და გვეუბნება, საიდან მოვიდა; ისინი პასუხებს უფრო ზუსტს არ ხდის.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	ფიზიკური წყაროდან მიღებული რიცხვები არაპროგნოზირებადია და გვეუბნება, საიდან მოვიდა. კარგ გენერატორთან შედარებით, აქამდე ჩატარებული კვლევები სიზუსტეში განსხვავებას ვერ პოულობს; სახელმძღვანელო მტკიცებულებებს აჯამებს.
 	Hide the sources	წყაროების დამალვა
 	Sources and keys…	წყაროები და გასაღებები…
 	No key	გასაღები არ არის

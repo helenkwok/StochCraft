@@ -625,6 +625,30 @@ takes or shows one (`random.sources` says only whether a source has one). It is 
 HTTPS, to the origin it was given for: changing a source's address to another origin forgets the
 key, a redirect is never followed, and an address with a key in it is refused.
 
+**What the evidence says.** Most controlled comparisons of a physical (quantum) source with a
+modern, well-tested pseudo-random generator find no significant difference in the results: in
+computational chemistry (Ghersi, Parakh and Mezei, Journal of Computational Chemistry, 2017,
+doi:10.1002/jcc.25065) and the initialisation of neural networks (Heese et al., Machine
+Learning, 2024, doi:10.1007/s10994-023-06490-y). Clear errors come from poor generators, such as
+short-period linear congruential ones. Some studies report gains: smaller errors in Monte Carlo
+estimates of π and Buffon's needle (Lebedev et al., Computer Physics Communications, 2026,
+doi:10.1016/j.cpc.2026.110082), though from a single run per source, with no confidence
+intervals, and with the source's maker among the authors; and a smaller root-mean-square error with
+the authors' own quantum source (Tudor et al., Physica A, 2019, vol. 534, 121901), with no repeated
+runs. None of these
+gains has been reproduced independently. A 2026 survey of such comparisons (Raubitzek, Mühlhauser
+and Mallinger, Entropy, 2026, doi:10.3390/e28111237) concludes that neither an advantage nor an
+equivalence has been shown. What a physical source clearly gives is unpredictable seeds and a
+record of where they came from; no comparison of this kind has been found for discrete-event
+simulation.
+
+**Other services.** ANU's free tier needs a key (requests without one are refused) and allows
+100 requests a month, one a second; its paid tier is sold per request. A service can be added in
+the source manager if it answers an HTTPS request with random bytes in one of the formats above.
+Cisco's Outshift QRNG, for example, needs a key, and its free tier is for testing and
+demonstration, not production; it serves numbers generated in advance, not drawn at the time of
+the request.
+
 **A health check** runs on every fetch: the frequency (monobit) and runs tests of NIST SP 800-22
 Rev. 1a (sections 2.1 and 2.3) and a check for repeated 32-byte blocks. It warns and never
 blocks, and passing it says little: it catches gross faults, such as a service answering with

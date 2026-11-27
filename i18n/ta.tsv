@@ -1519,7 +1519,7 @@ connection	Flow	ஓட்டம்
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, சோதனையின் விதையிலிருந்து தொடங்கப்பட்டது: திரும்பச் செய்யக்கூடியது, உருவகப்படுத்துதல் வழக்கமாகப் பயன்படுத்துவது.
 	Draw a seed	விதையை எடு
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-வின் இலவச நிலை (மாதத்திற்கு 100 கோரிக்கைகள்) விதைகளுக்கானது, நேரடி இயக்கங்களுக்கு அல்ல: நேரடி இயக்கத்திற்கு அதன் கட்டண நிலை தேவை. ஒவ்வொரு இயக்கமும் அதன் பைட்டுகளுக்காகக் காத்திருக்கும், ஒவ்வொரு பைட்டும் கோப்பில் பதிவாகும், எனவே இயக்கத்தை அதிலிருந்து மீண்டும் செய்யலாம்.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	இயற்பியல் மூலத்தின் எண்கள் முன்கணிக்க முடியாதவை, அவை எங்கிருந்து வந்தன என்பதைச் சொல்கின்றன; அவை பதில்களை மேலும் துல்லியமாக்குவதில்லை.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	இயற்பியல் மூலத்தின் எண்கள் முன்கணிக்க முடியாதவை, அவை எங்கிருந்து வந்தன என்பதைச் சொல்கின்றன. ஒரு நல்ல உருவாக்கியுடன் ஒப்பிடும்போது, இதுவரையிலான ஆய்வுகள் துல்லியத்தில் வேறுபாட்டைக் காணவில்லை; வழிகாட்டி சான்றுகளைத் தொகுத்துத் தருகிறது.
 	Hide the sources	மூலங்களை மறை
 	Sources and keys…	மூலங்களும் திறவுகோல்களும்…
 	No key	திறவுகோல் இல்லை

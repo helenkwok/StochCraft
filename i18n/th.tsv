@@ -1519,7 +1519,7 @@ connection	Flow	โฟลว์
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256** เริ่มจากเมล็ดสุ่มของการทดลอง: ทำซ้ำได้ และเป็นสิ่งที่การจำลองใช้ตามปกติ
 	Draw a seed	สุ่มเมล็ดสุ่ม
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ระดับฟรีของ ANU (100 คำขอต่อเดือน) ครอบคลุมเมล็ดสุ่ม ไม่ครอบคลุมการรันสด: การรันสดต้องใช้ระดับที่เสียเงิน การรันแต่ละครั้งรอไบต์ของตน และทุกไบต์จะถูกบันทึกในไฟล์ จึงรันซ้ำจากไฟล์นั้นได้
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	ตัวเลขจากแหล่งทางกายภาพคาดเดาไม่ได้และบอกว่ามาจากที่ใด แต่ไม่ได้ทำให้คำตอบแม่นยำขึ้น
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	ตัวเลขจากแหล่งทางกายภาพคาดเดาไม่ได้และบอกว่ามาจากที่ใด เมื่อเทียบกับตัวสร้างที่ดี การศึกษาที่ผ่านมายังไม่พบความแตกต่างด้านความแม่นยำ คู่มือสรุปหลักฐานไว้ให้
 	Hide the sources	ซ่อนแหล่งที่มา
 	Sources and keys…	แหล่งที่มาและคีย์…
 	No key	ไม่มีคีย์

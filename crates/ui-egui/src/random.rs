@@ -203,7 +203,7 @@ impl App {
         }
         ui.label(theme::weak(
             ui,
-            t("Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate."),
+            t("Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence."),
         ));
         if let Some(n) = &self.random.note {
             ui.label(theme::weak(ui, n.clone()));

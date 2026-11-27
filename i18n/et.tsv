@@ -1519,7 +1519,7 @@ connection	Flow	Voog
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, algväärtustatud katse juhuarvuseemnest: korratav ja see, mida simulatsioon tavaliselt kasutab.
 	Draw a seed	Tõmba juhuarvuseeme
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU tasuta tase (100 päringut kuus) katab seemned, mitte otsekäivitusi: otsekäivitus vajab tasulist taset. Iga käivitamine ootab oma baite ja iga bait salvestatakse faili, nii et käivitamist saab sellest korrata.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Füüsilise allika arvud on ettearvamatud ja ütlevad, kust nad pärinevad; need ei muuda vastuseid täpsemaks.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Füüsilise allika arvud on ettearvamatud ja ütlevad, kust nad pärinevad. Hea generaatoriga võrreldes ei leia seni tehtud uuringud täpsuses vahet; juhend võtab tõendid kokku.
 	Hide the sources	Peida allikad
 	Sources and keys…	Allikad ja võtmed…
 	No key	Võtit pole

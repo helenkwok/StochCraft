@@ -1519,7 +1519,7 @@ connection	Flow	Akış
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, deneyin rastgelelik tohumundan başlatılır: tekrarlanabilir ve simülasyonun normalde kullandığı budur.
 	Draw a seed	Rastgelelik tohumu çek
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU'nun ücretsiz katmanı (ayda 100 istek) tohumları kapsar, canlı çalıştırmaları değil: canlı çalıştırma ücretli katmanı gerektirir. Her çalıştırma baytlarını bekler ve her bayt dosyaya kaydedilir, böylece çalıştırma ondan yinelenebilir.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Fiziksel bir kaynaktan gelen sayılar öngörülemezdir ve nereden geldiklerini söyler; yanıtları daha doğru yapmazlar.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Fiziksel bir kaynaktan gelen sayılar öngörülemezdir ve nereden geldiklerini söyler. İyi bir üreteçle karşılaştırıldığında şimdiye kadarki çalışmalar doğrulukta bir fark bulmamıştır; kılavuz kanıtları özetler.
 	Hide the sources	Kaynakları gizle
 	Sources and keys…	Kaynaklar ve anahtarlar…
 	No key	Anahtar yok

@@ -1519,7 +1519,7 @@ connection	Flow	Luồng
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, khởi tạo từ hạt giống của thí nghiệm: lặp lại được, và là thứ mô phỏng thường dùng.
 	Draw a seed	Rút hạt giống
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Gói miễn phí của ANU (100 yêu cầu mỗi tháng) chỉ đủ cho hạt giống, không đủ cho các lần chạy trực tiếp: một lần chạy trực tiếp cần gói trả phí. Mỗi lần chạy chờ byte của nó, và mọi byte đều được ghi vào tệp, nên lần chạy có thể lặp lại từ đó.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Các số từ nguồn vật lý không thể đoán trước và cho biết chúng đến từ đâu; chúng không làm câu trả lời chính xác hơn.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Các số từ nguồn vật lý không thể đoán trước và cho biết chúng đến từ đâu. So với một bộ tạo tốt, các nghiên cứu cho đến nay không thấy khác biệt về độ chính xác; hướng dẫn sử dụng tóm tắt các bằng chứng.
 	Hide the sources	Ẩn các nguồn
 	Sources and keys…	Nguồn và khóa…
 	No key	Không có khóa

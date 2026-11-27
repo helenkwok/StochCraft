@@ -1519,7 +1519,7 @@ connection	Flow	흐름
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, 실험의 시드로 시작: 반복 가능하며 시뮬레이션이 보통 사용하는 방식입니다.
 	Draw a seed	시드 뽑기
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU의 무료 등급(월 100회 요청)은 시드용이며 실시간 실행에는 쓸 수 없습니다. 실시간 실행에는 유료 등급이 필요합니다. 각 실행은 자신의 바이트를 기다리고, 모든 바이트는 파일에 기록되므로 실행을 그 파일로 되풀이할 수 있습니다.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	물리적 소스에서 얻은 숫자는 예측할 수 없고 출처를 알려 주지만, 답을 더 정확하게 만들지는 않습니다.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	물리적 소스에서 얻은 숫자는 예측할 수 없고 출처를 알려 줍니다. 좋은 생성기와 비교했을 때 지금까지의 연구에서는 정확도에 차이가 발견되지 않았으며, 가이드에 그 근거를 정리해 두었습니다.
 	Hide the sources	소스 숨기기
 	Sources and keys…	소스와 키…
 	No key	키 없음

@@ -1519,7 +1519,7 @@ connection	Flow	Folyamat
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, a kísérlet véletlenszám-magjából indítva: megismételhető, és ezt használja a szimuláció általában.
 	Draw a seed	Véletlenszám-mag húzása
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Az ANU ingyenes szintje (havi 100 kérés) magokat fedez, élő futásokat nem: az élő futáshoz a fizetős szint kell. Minden futás megvárja a saját bájtjait, és minden bájt rögzítésre kerül a fájlban, így a futás abból megismételhető.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	A fizikai forrásból származó számok kiszámíthatatlanok, és megmondják, honnan jöttek; a válaszokat nem teszik pontosabbá.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	A fizikai forrásból származó számok kiszámíthatatlanok, és megmondják, honnan jöttek. Egy jó generátorral összevetve az eddigi vizsgálatok nem találnak különbséget a pontosságban; az útmutató összefoglalja a bizonyítékokat.
 	Hide the sources	Források elrejtése
 	Sources and keys…	Források és kulcsok…
 	No key	Nincs kulcs

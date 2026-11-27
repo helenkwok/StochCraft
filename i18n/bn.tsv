@@ -1519,7 +1519,7 @@ connection	Flow	প্রবাহ
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, পরীক্ষার বীজ থেকে শুরু: পুনরাবৃত্তিযোগ্য, এবং সিমুলেশন সাধারণত যা ব্যবহার করে।
 	Draw a seed	বীজ নিন
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-এর বিনামূল্যের স্তর (মাসে 100টি অনুরোধ) বীজের জন্য, সরাসরি পুনরাবৃত্তির জন্য নয়: সরাসরি পুনরাবৃত্তির জন্য এর পেইড স্তর লাগে। প্রতিটি পুনরাবৃত্তি তার বাইটের জন্য অপেক্ষা করে, এবং প্রতিটি বাইট ফাইলে রেকর্ড হয়, তাই পুনরাবৃত্তি সেখান থেকেই আবার চালানো যায়।
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	ভৌত উৎসের সংখ্যা অনুমান-অযোগ্য এবং জানায় তারা কোথা থেকে এসেছে; তারা উত্তরকে আরও নির্ভুল করে না।
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	ভৌত উৎসের সংখ্যা অনুমান-অযোগ্য এবং জানায় তারা কোথা থেকে এসেছে। একটি ভালো জেনারেটরের তুলনায় এ পর্যন্ত গবেষণায় নির্ভুলতায় কোনো পার্থক্য পাওয়া যায়নি; নির্দেশিকা প্রমাণগুলোর সারসংক্ষেপ দেয়।
 	Hide the sources	উৎস লুকান
 	Sources and keys…	উৎস ও কী…
 	No key	কী নেই

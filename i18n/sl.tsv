@@ -1519,7 +1519,7 @@ connection	Flow	Tok
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, zagnan iz semena poskusa: ponovljiv in to, kar simulacija običajno uporablja.
 	Draw a seed	Izžrebaj seme
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Brezplačna raven ANU (100 zahtev na mesec) pokriva semena, ne zagonov v živo: zagon v živo potrebuje plačljivo raven. Vsak zagon čaka na svoje bajte in vsak bajt se zapiše v datoteko, zato se zagon lahko ponovi iz nje.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Števila iz fizičnega vira so nenapovedljiva in povedo, od kod prihajajo; odgovorov ne naredijo natančnejših.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Števila iz fizičnega vira so nenapovedljiva in povedo, od kod prihajajo. V primerjavi z dobrim generatorjem dosedanje raziskave ne najdejo razlike v natančnosti; priročnik povzema dokaze.
 	Hide the sources	Skrij vire
 	Sources and keys…	Viri in ključi…
 	No key	Brez ključa

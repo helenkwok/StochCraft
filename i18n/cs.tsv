@@ -1519,7 +1519,7 @@ connection	Flow	Tok
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, nastavený z počáteční hodnoty experimentu: opakovatelný a to, co simulace běžně používá.
 	Draw a seed	Vylosovat počáteční hodnotu
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Bezplatná úroveň ANU (100 požadavků měsíčně) pokrývá počáteční hodnoty, ne živé běhy: živý běh potřebuje placenou úroveň. Každý běh čeká na své bajty a každý bajt se zapisuje do souboru, takže se běh dá z něj zopakovat.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Čísla z fyzického zdroje jsou nepředvídatelná a říkají, odkud pocházejí; neučiní odpovědi přesnějšími.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Čísla z fyzického zdroje jsou nepředvídatelná a říkají, odkud pocházejí. Oproti dobrému generátoru dosavadní studie nenacházejí v přesnosti žádný rozdíl; příručka shrnuje důkazy.
 	Hide the sources	Skrýt zdroje
 	Sources and keys…	Zdroje a klíče…
 	No key	Žádný klíč

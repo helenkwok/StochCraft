@@ -1519,7 +1519,7 @@ connection	Flow	Ροή
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, με αρχικό σπόρο αυτόν του πειράματος: επαναλήψιμη, και αυτό που συνήθως χρησιμοποιεί η προσομοίωση.
 	Draw a seed	Τράβηγμα σπόρου
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Το δωρεάν επίπεδο του ANU (100 αιτήματα τον μήνα) καλύπτει σπόρους, όχι ζωντανές εκτελέσεις: μια ζωντανή εκτέλεση χρειάζεται το επί πληρωμή επίπεδο. Κάθε εκτέλεση περιμένει τα byte της και κάθε byte καταγράφεται στο αρχείο, ώστε η εκτέλεση να επαναλαμβάνεται από αυτό.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Οι αριθμοί από φυσική πηγή είναι απρόβλεπτοι και δηλώνουν από πού προήλθαν· δεν κάνουν τις απαντήσεις πιο ακριβείς.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Οι αριθμοί από φυσική πηγή είναι απρόβλεπτοι και δηλώνουν από πού προήλθαν. Σε σύγκριση με μια καλή γεννήτρια, οι μελέτες μέχρι σήμερα δεν βρίσκουν διαφορά στην ακρίβεια· ο οδηγός συνοψίζει τα στοιχεία.
 	Hide the sources	Απόκρυψη των πηγών
 	Sources and keys…	Πηγές και κλειδιά…
 	No key	Χωρίς κλειδί

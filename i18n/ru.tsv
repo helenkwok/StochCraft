@@ -1519,7 +1519,7 @@ connection	Flow	Поток
 	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, запущенный от начального значения эксперимента: воспроизводимый, и то, что обычно использует моделирование.
 	Draw a seed	Получить начальное значение
 	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Бесплатный уровень ANU (100 запросов в месяц) покрывает начальные значения, но не запуски вживую: для запуска вживую нужен платный уровень. Каждый запуск ждёт свои байты, и каждый байт записывается в файл, так что запуск можно повторить по нему.
-	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Числа из физического источника непредсказуемы и сообщают, откуда они взяты; они не делают ответы точнее.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Числа из физического источника непредсказуемы и сообщают, откуда они взяты. По сравнению с хорошим генератором исследования до сих пор не находят разницы в точности; руководство подытоживает данные.
 	Hide the sources	Скрыть источники
 	Sources and keys…	Источники и ключи…
 	No key	Нет ключа
