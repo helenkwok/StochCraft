@@ -219,6 +219,42 @@ fn first_middle(pts: &[(f64, f64)]) -> Option<(f64, f64)> {
     Some(((a.0 + b.0) / 2.0, (a.1 + b.1) / 2.0))
 }
 
+/// Names in natural order: runs of digits compare as numbers, so `u2` comes before `u10`; the
+/// rest compares as text, and names equal that way by their text, so the order is total.
+pub(crate) fn natural_cmp(a: &str, b: &str) -> std::cmp::Ordering {
+    fn chunks(s: &str) -> Vec<(bool, &str)> {
+        let mut out = Vec::new();
+        let mut start = 0;
+        let mut digit = None;
+        for (i, c) in s.char_indices() {
+            let d = c.is_ascii_digit();
+            if digit.is_some_and(|x| x != d) {
+                out.push((digit == Some(true), s.get(start..i).unwrap_or_default()));
+                start = i;
+            }
+            digit = Some(d);
+        }
+        if let Some(d) = digit {
+            out.push((d, s.get(start..).unwrap_or_default()));
+        }
+        out
+    }
+    let (ca, cb) = (chunks(a), chunks(b));
+    for (x, y) in ca.iter().zip(cb.iter()) {
+        let order = match (x, y) {
+            ((true, p), (true, q)) => {
+                let (p, q) = (p.trim_start_matches('0'), q.trim_start_matches('0'));
+                p.len().cmp(&q.len()).then_with(|| p.cmp(q))
+            }
+            ((_, p), (_, q)) => p.cmp(q),
+        };
+        if order.is_ne() {
+            return order;
+        }
+    }
+    ca.len().cmp(&cb.len()).then_with(|| a.cmp(b))
+}
+
 fn overlaps(a: (f64, f64, f64, f64), b: (f64, f64, f64, f64)) -> bool {
     (a.0 - b.0).abs() * 2.0 < a.2 + b.2 && (a.1 - b.1).abs() * 2.0 < a.3 + b.3
 }
@@ -250,14 +286,14 @@ impl Layout {
             .filter(|v| matches!(v.kind, VarKind::Stock { .. }))
             .map(|v| canonical(&v.name))
             .collect();
-        stocks.sort();
+        stocks.sort_by(|a, b| natural_cmp(a, b));
         let mut flows: Vec<String> = model
             .vars
             .iter()
             .filter(|v| matches!(v.kind, VarKind::Flow { .. }))
             .map(|v| canonical(&v.name))
             .collect();
-        flows.sort();
+        flows.sort_by(|a, b| natural_cmp(a, b));
         let flow_ends: BTreeMap<String, (Option<String>, Option<String>)> =
             flows.iter().map(|f| (f.clone(), ends(model, f))).collect();
 
@@ -485,7 +521,7 @@ impl Layout {
             .filter(|v| matches!(v.kind, VarKind::Aux))
             .map(|v| canonical(&v.name))
             .collect();
-        aux.sort();
+        aux.sort_by(|a, b| natural_cmp(a, b));
         let uses: BTreeMap<String, BTreeSet<String>> = model
             .vars
             .iter()
@@ -606,7 +642,7 @@ impl Layout {
                     VarKind::Aux => 2,
                 })
         };
-        names.sort_by_key(|n| (rank(n), n.clone()));
+        names.sort_by(|a, b| rank(a).cmp(&rank(b)).then_with(|| natural_cmp(a, b)));
         let mut done: Vec<(f64, f64, f64, f64)> = Vec::new();
         for n in names {
             let Some(r) = self.rect(model, &n) else {
@@ -965,6 +1001,32 @@ mod tests {
         assert_eq!(l.connectors.len(), 3);
         // Stable.
         assert_eq!(l, Layout::auto(&m));
+    }
+
+    #[test]
+    fn numbered_names_are_in_natural_order() {
+        use std::cmp::Ordering::{Equal, Greater, Less};
+        assert_eq!(natural_cmp("u2", "u10"), Less);
+        assert_eq!(natural_cmp("u10", "u9"), Greater);
+        assert_eq!(natural_cmp("u10", "u10"), Equal);
+        assert_eq!(natural_cmp("stock_2_b", "stock_10_a"), Less);
+        assert_eq!(natural_cmp("a", "a1"), Less);
+        assert_eq!(
+            natural_cmp("x01", "x1"),
+            Less,
+            "equal numbers, then by text"
+        );
+        assert_eq!(natural_cmp("rate", "ratio"), "rate".cmp("ratio"));
+        // Twelve stocks with no flow between them: placed u1, u2 … u12, not u1, u10, u11, u12, u2.
+        let m = SdModel {
+            vars: (1..=12)
+                .map(|i| Variable::stock(&format!("u{i}"), "0", &[], &[]))
+                .collect(),
+            ..SdModel::default()
+        };
+        let l = Layout::auto(&m);
+        let ys: Vec<f64> = (1..=12).map(|i| l.shapes[&format!("u{i}")].y).collect();
+        assert!(ys.windows(2).all(|w| w[0] < w[1]), "{ys:?}");
     }
 
     #[test]

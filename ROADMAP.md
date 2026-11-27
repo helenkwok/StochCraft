@@ -2799,7 +2799,8 @@ linearly between it and the step before; a stock or flow that stops being a fini
 (an overflow, a division by 0) ends the run at the last step where all were, naming them and
 the time, so results never hold such a value (at the start, the run is refused). Runs in
 replications each end on their own, and the results end at the last saved time all reached.
-Only the values at each step are checked, not Runge-Kutta's stages between. XMILE namespaces are resolved by
+Only the values at each step are checked, not Runge-Kutta's stages between. The automatic
+layout orders names naturally (u2 before u10), not as text. XMILE namespaces are resolved by
 URI (a prefix bound to the XMILE namespace is read; another namespace is refused), a change of
 time unit converts `dt` and the halved `dt` as well, and under RK4 a `STEP` on a step boundary
 is integrated as under Euler (a jump inside a step is first order, documented). Part 2 so far: a model can be edited, undone and saved. The
@@ -4978,7 +4979,8 @@ are.
     u_t = u_xx + u² on (0, 1), u = 0 at both ends, u(x, 0) = 20 sin(πx), by the method of lines:
     19 stocks u1…u19 at x_i = i h, h = 0.05, each with one flow
     (u_{i−1} − 2u_i + u_{i+1}) / h² + source · u_i² (the ends are 0), RK4 at a step of 2.5e-5 to
-    0.1, saved every 0.0005, and the stop condition u10 > 10,000. The auxiliary `source` is 1
+    0.1, saved every 0.0005, and the stop condition u10 > 10,000. Its diagram is written in the
+    file: the stocks in a row in order, each flow from a cloud above its stock. The auxiliary `source` is 1
     (the file) or 0 (SD has no scenarios, so the guide says to set it on the Diagram tab).
     Without the source the sine is an eigenvector of the second difference, so each stock is
     exactly 20 sin(πx_i) e^(−λ₁t), λ₁ = (4/h²) sin²(πh/2) = 9.8493; `crates/sd/tests/known_answers.rs`

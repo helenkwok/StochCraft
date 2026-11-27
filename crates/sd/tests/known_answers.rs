@@ -1600,3 +1600,29 @@ fn one_stock_squared_crosses_where_its_exact_solution_does() {
     let crossing = r.stopped.unwrap().crossing.unwrap();
     assert!((crossing - (0.05 - 1e-4)).abs() < 1e-7, "{crossing}");
 }
+
+#[test]
+fn the_heat_rods_diagram_is_the_rod() {
+    // The file's own diagram: the stocks in a row in order, as along the rod, each fed by its
+    // flow from a cloud above it, nothing overlapping, and a link for each use in an equation.
+    let m = heat_rod();
+    let l = &m.layout;
+    assert!(l.is_complete(&m));
+    assert_eq!(l.first_overlap(&m), None);
+    let shape = |n: &str| l.shapes.get(n).unwrap_or_else(|| panic!("no shape {n}"));
+    for i in 1..=19 {
+        let (u, f) = (shape(&format!("u{i}")), shape(&format!("f{i}")));
+        assert!((f.x - u.x).abs() < 1e-9 && f.y < u.y, "f{i} above u{i}");
+        if i > 1 {
+            let before = shape(&format!("u{}", i - 1));
+            assert!(before.x < u.x && (before.y - u.y).abs() < 1e-9, "u{i}");
+        }
+    }
+    // 19 own, 18 + 18 neighbours, and h and source into every flow.
+    assert_eq!(l.connectors.len(), 19 + 36 + 38);
+    let width = shape("u19").x - shape("h").x;
+    assert!(width < 1400.0, "{width}");
+    // Written and read again, the diagram is the same.
+    let back = read_xmile(&write_xmile(&m)).unwrap();
+    assert_eq!(&back.model.layout, l);
+}

@@ -194,5 +194,535 @@
         <eqn>1</eqn>
       </aux>
     </variables>
+    <views>
+      <view type="stock_flow">
+        <stock name="u1" x="10" y="300" width="60" height="40"/>
+        <stock name="u2" x="80" y="300" width="60" height="40"/>
+        <stock name="u3" x="150" y="300" width="60" height="40"/>
+        <stock name="u4" x="220" y="300" width="60" height="40"/>
+        <stock name="u5" x="290" y="300" width="60" height="40"/>
+        <stock name="u6" x="360" y="300" width="60" height="40"/>
+        <stock name="u7" x="430" y="300" width="60" height="40"/>
+        <stock name="u8" x="500" y="300" width="60" height="40"/>
+        <stock name="u9" x="570" y="300" width="60" height="40"/>
+        <stock name="u10" x="640" y="300" width="60" height="40"/>
+        <stock name="u11" x="710" y="300" width="60" height="40"/>
+        <stock name="u12" x="780" y="300" width="60" height="40"/>
+        <stock name="u13" x="850" y="300" width="60" height="40"/>
+        <stock name="u14" x="920" y="300" width="60" height="40"/>
+        <stock name="u15" x="990" y="300" width="60" height="40"/>
+        <stock name="u16" x="1060" y="300" width="60" height="40"/>
+        <stock name="u17" x="1130" y="300" width="60" height="40"/>
+        <stock name="u18" x="1200" y="300" width="60" height="40"/>
+        <stock name="u19" x="1270" y="300" width="60" height="40"/>
+        <flow name="f1" uid="1" x="40" y="230">
+          <pts>
+            <pt x="40" y="150"/>
+            <pt x="40" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="2" flow_uid="1" x="40" y="150"/>
+        <flow name="f2" uid="3" x="110" y="230">
+          <pts>
+            <pt x="110" y="150"/>
+            <pt x="110" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="4" flow_uid="3" x="110" y="150"/>
+        <flow name="f3" uid="5" x="180" y="230">
+          <pts>
+            <pt x="180" y="150"/>
+            <pt x="180" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="6" flow_uid="5" x="180" y="150"/>
+        <flow name="f4" uid="7" x="250" y="230">
+          <pts>
+            <pt x="250" y="150"/>
+            <pt x="250" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="8" flow_uid="7" x="250" y="150"/>
+        <flow name="f5" uid="9" x="320" y="230">
+          <pts>
+            <pt x="320" y="150"/>
+            <pt x="320" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="10" flow_uid="9" x="320" y="150"/>
+        <flow name="f6" uid="11" x="390" y="230">
+          <pts>
+            <pt x="390" y="150"/>
+            <pt x="390" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="12" flow_uid="11" x="390" y="150"/>
+        <flow name="f7" uid="13" x="460" y="230">
+          <pts>
+            <pt x="460" y="150"/>
+            <pt x="460" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="14" flow_uid="13" x="460" y="150"/>
+        <flow name="f8" uid="15" x="530" y="230">
+          <pts>
+            <pt x="530" y="150"/>
+            <pt x="530" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="16" flow_uid="15" x="530" y="150"/>
+        <flow name="f9" uid="17" x="600" y="230">
+          <pts>
+            <pt x="600" y="150"/>
+            <pt x="600" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="18" flow_uid="17" x="600" y="150"/>
+        <flow name="f10" uid="19" x="670" y="230">
+          <pts>
+            <pt x="670" y="150"/>
+            <pt x="670" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="20" flow_uid="19" x="670" y="150"/>
+        <flow name="f11" uid="21" x="740" y="230">
+          <pts>
+            <pt x="740" y="150"/>
+            <pt x="740" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="22" flow_uid="21" x="740" y="150"/>
+        <flow name="f12" uid="23" x="810" y="230">
+          <pts>
+            <pt x="810" y="150"/>
+            <pt x="810" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="24" flow_uid="23" x="810" y="150"/>
+        <flow name="f13" uid="25" x="880" y="230">
+          <pts>
+            <pt x="880" y="150"/>
+            <pt x="880" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="26" flow_uid="25" x="880" y="150"/>
+        <flow name="f14" uid="27" x="950" y="230">
+          <pts>
+            <pt x="950" y="150"/>
+            <pt x="950" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="28" flow_uid="27" x="950" y="150"/>
+        <flow name="f15" uid="29" x="1020" y="230">
+          <pts>
+            <pt x="1020" y="150"/>
+            <pt x="1020" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="30" flow_uid="29" x="1020" y="150"/>
+        <flow name="f16" uid="31" x="1090" y="230">
+          <pts>
+            <pt x="1090" y="150"/>
+            <pt x="1090" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="32" flow_uid="31" x="1090" y="150"/>
+        <flow name="f17" uid="33" x="1160" y="230">
+          <pts>
+            <pt x="1160" y="150"/>
+            <pt x="1160" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="34" flow_uid="33" x="1160" y="150"/>
+        <flow name="f18" uid="35" x="1230" y="230">
+          <pts>
+            <pt x="1230" y="150"/>
+            <pt x="1230" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="36" flow_uid="35" x="1230" y="150"/>
+        <flow name="f19" uid="37" x="1300" y="230">
+          <pts>
+            <pt x="1300" y="150"/>
+            <pt x="1300" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="38" flow_uid="37" x="1300" y="150"/>
+        <aux name="h" x="0" y="40" width="20" height="20"/>
+        <aux name="source" x="70" y="40" width="20" height="20"/>
+        <connector>
+          <from>u1</from>
+          <to>f1</to>
+        </connector>
+        <connector>
+          <from>u2</from>
+          <to>f1</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f1</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f1</to>
+        </connector>
+        <connector>
+          <from>u1</from>
+          <to>f2</to>
+        </connector>
+        <connector>
+          <from>u2</from>
+          <to>f2</to>
+        </connector>
+        <connector>
+          <from>u3</from>
+          <to>f2</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f2</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f2</to>
+        </connector>
+        <connector>
+          <from>u2</from>
+          <to>f3</to>
+        </connector>
+        <connector>
+          <from>u3</from>
+          <to>f3</to>
+        </connector>
+        <connector>
+          <from>u4</from>
+          <to>f3</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f3</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f3</to>
+        </connector>
+        <connector>
+          <from>u3</from>
+          <to>f4</to>
+        </connector>
+        <connector>
+          <from>u4</from>
+          <to>f4</to>
+        </connector>
+        <connector>
+          <from>u5</from>
+          <to>f4</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f4</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f4</to>
+        </connector>
+        <connector>
+          <from>u4</from>
+          <to>f5</to>
+        </connector>
+        <connector>
+          <from>u5</from>
+          <to>f5</to>
+        </connector>
+        <connector>
+          <from>u6</from>
+          <to>f5</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f5</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f5</to>
+        </connector>
+        <connector>
+          <from>u5</from>
+          <to>f6</to>
+        </connector>
+        <connector>
+          <from>u6</from>
+          <to>f6</to>
+        </connector>
+        <connector>
+          <from>u7</from>
+          <to>f6</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f6</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f6</to>
+        </connector>
+        <connector>
+          <from>u6</from>
+          <to>f7</to>
+        </connector>
+        <connector>
+          <from>u7</from>
+          <to>f7</to>
+        </connector>
+        <connector>
+          <from>u8</from>
+          <to>f7</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f7</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f7</to>
+        </connector>
+        <connector>
+          <from>u7</from>
+          <to>f8</to>
+        </connector>
+        <connector>
+          <from>u8</from>
+          <to>f8</to>
+        </connector>
+        <connector>
+          <from>u9</from>
+          <to>f8</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f8</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f8</to>
+        </connector>
+        <connector>
+          <from>u8</from>
+          <to>f9</to>
+        </connector>
+        <connector>
+          <from>u9</from>
+          <to>f9</to>
+        </connector>
+        <connector>
+          <from>u10</from>
+          <to>f9</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f9</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f9</to>
+        </connector>
+        <connector>
+          <from>u9</from>
+          <to>f10</to>
+        </connector>
+        <connector>
+          <from>u10</from>
+          <to>f10</to>
+        </connector>
+        <connector>
+          <from>u11</from>
+          <to>f10</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f10</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f10</to>
+        </connector>
+        <connector>
+          <from>u10</from>
+          <to>f11</to>
+        </connector>
+        <connector>
+          <from>u11</from>
+          <to>f11</to>
+        </connector>
+        <connector>
+          <from>u12</from>
+          <to>f11</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f11</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f11</to>
+        </connector>
+        <connector>
+          <from>u11</from>
+          <to>f12</to>
+        </connector>
+        <connector>
+          <from>u12</from>
+          <to>f12</to>
+        </connector>
+        <connector>
+          <from>u13</from>
+          <to>f12</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f12</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f12</to>
+        </connector>
+        <connector>
+          <from>u12</from>
+          <to>f13</to>
+        </connector>
+        <connector>
+          <from>u13</from>
+          <to>f13</to>
+        </connector>
+        <connector>
+          <from>u14</from>
+          <to>f13</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f13</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f13</to>
+        </connector>
+        <connector>
+          <from>u13</from>
+          <to>f14</to>
+        </connector>
+        <connector>
+          <from>u14</from>
+          <to>f14</to>
+        </connector>
+        <connector>
+          <from>u15</from>
+          <to>f14</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f14</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f14</to>
+        </connector>
+        <connector>
+          <from>u14</from>
+          <to>f15</to>
+        </connector>
+        <connector>
+          <from>u15</from>
+          <to>f15</to>
+        </connector>
+        <connector>
+          <from>u16</from>
+          <to>f15</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f15</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f15</to>
+        </connector>
+        <connector>
+          <from>u15</from>
+          <to>f16</to>
+        </connector>
+        <connector>
+          <from>u16</from>
+          <to>f16</to>
+        </connector>
+        <connector>
+          <from>u17</from>
+          <to>f16</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f16</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f16</to>
+        </connector>
+        <connector>
+          <from>u16</from>
+          <to>f17</to>
+        </connector>
+        <connector>
+          <from>u17</from>
+          <to>f17</to>
+        </connector>
+        <connector>
+          <from>u18</from>
+          <to>f17</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f17</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f17</to>
+        </connector>
+        <connector>
+          <from>u17</from>
+          <to>f18</to>
+        </connector>
+        <connector>
+          <from>u18</from>
+          <to>f18</to>
+        </connector>
+        <connector>
+          <from>u19</from>
+          <to>f18</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f18</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f18</to>
+        </connector>
+        <connector>
+          <from>u18</from>
+          <to>f19</to>
+        </connector>
+        <connector>
+          <from>u19</from>
+          <to>f19</to>
+        </connector>
+        <connector>
+          <from>h</from>
+          <to>f19</to>
+        </connector>
+        <connector>
+          <from>source</from>
+          <to>f19</to>
+        </connector>
+      </view>
+    </views>
   </model>
 </xmile>
