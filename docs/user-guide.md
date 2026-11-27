@@ -777,23 +777,25 @@ engine command `data.analyse`, with the file's text as `csv`.
 `.tsv` or `.txt`), or drop it on the window. It opens over the model, which stays as it is
 (nothing is asked about unsaved changes), and **Close** goes back to the model.
 
-1. When the columns' roles can be guessed from their names, the answers show at once; otherwise,
-   or after **Change the columns**, the step **What each column holds** lists each column with
-   its role: scenario, run number, measure (or, for a table with one row per value, measure name
-   and value), time, or not used. Choose the shape: **One row per run**, **One row per value** or
-   **A time series**.
+1. **What each column holds** lists each column with the role guessed from its name and
+   contents: scenario, run number, measure (or, for a table with one row per value, measure name
+   and value), time, or not used; change any that are wrong. The shape is guessed too: **One row
+   per run**, **One row per value** or **A time series**. A column headed with the name of a role
+   (`scenario`, `replication`, `run`, …) is taken in that role even when set to not used, and the
+   step shows it so. A problem with the table (a text cell in a measure, pairing
+   without run numbers) is said under the columns, and the answers wait until it is fixed.
 2. With more than one scenario, choose the **Baseline** the others are compared with, tick
    **These scenarios used common random numbers (paired)** only if the tool that made the runs
    did so (StochCraft cannot check it from the numbers), and give a tolerance per measure if
    agreement is to be tested (0 for none).
-3. **Show the answers** shows, as the Results tab shows a run: what the runs found, in
-   sentences, first; **How sure are these numbers?**, with about how many runs would pin the
-   widest measure to ± 5%; the means with their 95% intervals, a table per scenario, with a
-   sentence under any measure whose runs split into two outcomes; and each scenario against the
-   baseline, measure by measure, with the two means, the difference and its interval, a mark of
-   the change against a zero line (in a wide window) and the verdict: **Differs**, **No
-   difference detected**, **Agrees within ±** the tolerance, or **Inconclusive at current
-   precision**.
+3. **Show the answers** shows, as the Results tab shows a run (**Change the columns** goes back):
+   what the runs found, in sentences, first; **How sure are these numbers?**, with about how many
+   runs would pin the widest measure to ± 5%; the means with their 95% intervals, a table per
+   scenario, with a sentence under any measure whose runs split into two outcomes; and each
+   scenario against the baseline, measure by measure, with the two means, the difference and its
+   interval, a mark of the change against a zero line (in a wide window) and the verdict:
+   **Differs**, **No difference detected**, **Agrees within ±** the tolerance, or **Inconclusive
+   at current precision**.
 
 A time series (a time column; see **Warm-up** below) shows, per measure, the series averaged over
 the runs at each time, with the part before the MSER-5 cut shaded and the suggested warm-up in

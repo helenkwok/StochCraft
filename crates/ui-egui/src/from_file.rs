@@ -15,6 +15,7 @@
 //! The table is not a model: opening it leaves the model as it is, and Close goes back to it.
 
 use std::collections::BTreeMap;
+use std::rc::Rc;
 
 use egui::RichText;
 use serde_json::{Value, json};
@@ -122,7 +123,7 @@ pub(crate) struct FromFile {
     /// The answers are shown, not the mapping.
     answers: bool,
     /// The engine's answer for the mapping as it is, or its error; none once the mapping changed.
-    answer: Option<Result<Value, String>>,
+    answer: Option<Result<Rc<Value>, String>>,
 }
 
 /// Whether `name` is a table of runs rather than a model: by its extension.
@@ -149,8 +150,6 @@ impl FromFile {
         };
         f.guess(engine);
         f.refresh(engine);
-        // Straight to the answers when the guess gives some.
-        f.answers = matches!(f.answer, Some(Ok(_)));
         f
     }
 
@@ -226,11 +225,19 @@ impl FromFile {
                 }),
             );
         }
-        // Only the tolerances of measures there are, and only those set.
+        // Only the tolerances of measures there are, and only those set: a wide table's measures
+        // are its columns mapped as measures; a long table's, the names its last answer gave.
+        let known = |m: &String| {
+            if self.shape == Shape::Wide {
+                measures.contains(&m)
+            } else {
+                self.measures.contains(m)
+            }
+        };
         let tolerance: BTreeMap<&String, f64> = self
             .tolerance
             .iter()
-            .filter(|(m, v)| self.measures.contains(m) && v.is_finite() && **v > 0.0)
+            .filter(|(m, v)| known(m) && v.is_finite() && **v > 0.0)
             .map(|(m, v)| (m, *v))
             .collect();
         let baseline = self.baseline.clone().filter(|b| self.scenarios.contains(b));
@@ -251,29 +258,69 @@ impl FromFile {
         ("data.analyse", p)
     }
 
-    /// Asks the engine for the answer to the mapping as it is.
+    /// Asks the engine for the answer to the mapping as it is. The roles are then set to the
+    /// columns the engine used: a column left without a role is still taken by its name (a
+    /// column headed `scenario` is the scenario), so the mapping shows what the answer is of.
     fn refresh(&mut self, engine: &mut Engine) {
-        let (command, params) = self.request();
-        let answer = engine.execute(command, params).map_err(|e| e.message);
-        if let Ok(a) = &answer
-            && command == "data.analyse"
-        {
-            let names = |v: &Value| -> Vec<String> {
-                v.as_array()
-                    .into_iter()
-                    .flatten()
-                    .filter_map(Value::as_str)
-                    .map(str::to_owned)
-                    .collect()
-            };
-            self.scenarios = names(&a["scenarios"]);
-            self.measures = names(&a["measures"]);
+        // A second time when a long table's measures were not known yet and one has a tolerance.
+        for _ in 0..2 {
+            let (command, params) = self.request();
+            let answer = engine.execute(command, params).map_err(|e| e.message);
+            let mut again = false;
+            if let Ok(a) = &answer {
+                let c = &a["columns"];
+                let used: &[(&str, Role)] = if command == "data.warmup" {
+                    &[
+                        ("time", Role::Time),
+                        ("replication", Role::Run),
+                        ("scenario", Role::Scenario),
+                    ]
+                } else {
+                    &[
+                        ("scenario", Role::Scenario),
+                        ("replication", Role::Run),
+                        ("measure", Role::MeasureName),
+                        ("value", Role::Value),
+                    ]
+                };
+                for (key, role) in used {
+                    if let Some(i) = self.column(&c[*key])
+                        && self.roles.get(i) != Some(role)
+                    {
+                        self.set_role(i, *role);
+                    }
+                }
+                if command == "data.analyse" {
+                    let names = |v: &Value| -> Vec<String> {
+                        v.as_array()
+                            .into_iter()
+                            .flatten()
+                            .filter_map(Value::as_str)
+                            .map(str::to_owned)
+                            .collect()
+                    };
+                    let measures = names(&a["measures"]);
+                    again = self.shape == Shape::Long
+                        && measures != self.measures
+                        && measures
+                            .iter()
+                            .any(|m| self.tolerance.get(m).is_some_and(|v| *v > 0.0));
+                    self.scenarios = names(&a["scenarios"]);
+                    self.measures = measures;
+                }
+            }
+            self.answer = Some(answer.map(Rc::new));
+            if !again {
+                break;
+            }
         }
-        self.answer = Some(answer);
     }
 
     fn set_shape(&mut self, shape: Shape) {
         self.shape = shape;
+        // The scenarios and a long table's measures are known again from the next answer.
+        self.baseline = None;
+        self.measures.clear();
         let allowed = shape.roles();
         for r in &mut self.roles {
             if !allowed.contains(r) {
@@ -293,6 +340,11 @@ impl FromFile {
         }
         if let Some(r) = self.roles.get_mut(column) {
             *r = role;
+        }
+        // The scenarios and a long table's measures are known again from the next answer.
+        self.baseline = None;
+        if self.shape == Shape::Long {
+            self.measures.clear();
         }
         self.answer = None;
     }
@@ -502,7 +554,7 @@ impl App {
                 ui.label(theme::weak(ui, f.name.clone()));
                 ui.add_space(12.0);
                 let answer = match &f.answer {
-                    Some(Ok(a)) if f.answers => Some(a.clone()),
+                    Some(Ok(a)) if f.answers => Some(Rc::clone(a)),
                     _ => None,
                 };
                 match answer {
@@ -710,11 +762,21 @@ fn trust(ui: &mut egui::Ui, p: &theme::Palette, a: &Value, file: &str) {
                 );
                 results::trust_row(ui, p, false, &text, None);
             }
-            let judged = all
-                .iter()
-                .filter(|r| matches!(status(r).as_str(), "settled" | "wide"))
-                .count();
-            let settled = all.iter().filter(|r| status(r) == "settled").count();
+            // By measure: settled when it is settled in every scenario.
+            let (mut judged, mut settled) = (0, 0);
+            for m in list(&a["measures"]) {
+                let of: Vec<String> = all
+                    .iter()
+                    .filter(|r| r["measure"] == *m)
+                    .map(|r| status(r))
+                    .collect();
+                if of.iter().any(|s| matches!(s.as_str(), "settled" | "wide")) {
+                    judged += 1;
+                }
+                if !of.is_empty() && of.iter().all(|s| s == "settled") {
+                    settled += 1;
+                }
+            }
             if settled > 0 {
                 let text = tf(
                     "{k} of {m} measures are settled: each is known to ± 5% or better.",
