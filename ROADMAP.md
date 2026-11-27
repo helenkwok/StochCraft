@@ -4054,8 +4054,10 @@ without being rebuilt, in steps:
    with an optional tolerance per measure. `data.warmup` and `stochcraft-cli warmup` take a time
    series per replication and suggest a warm-up by MSER-5 on the average across replications.
    One CSV reader (RFC 4180, a comma, semicolon or tab, a decimal comma with semicolons, at most
-   5 million cells) serves these and `fit`. Next: the app opens such a file (File menu), with a
-   step that maps the columns and a results view built from the Results tab's parts.
+   5 million cells) serves these and `fit`. The app opens such a file (File ▸ Analyse runs from
+   another tool…, or dropped on the window) without replacing the model: a step that maps the
+   columns (roles guessed, the baseline, pairing declared, tolerances), then the answers built
+   from the Results tab's parts, and for a time series the averaged series with the MSER-5 cut.
 2. **The Python package (planned):** M6.1 gains the same analysis as an API, and StochCraft's
    keyed random streams, with the random-number sources, for use inside a model written in
    Python, so that its scenarios can share their random numbers as StochCraft's own do.

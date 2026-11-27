@@ -770,8 +770,34 @@ it is that nothing it did not try is better.
 
 A model built elsewhere can still have StochCraft's output analysis, without being rebuilt: any
 simulation tool, spreadsheet or script that can write CSV writes one row per replication, and
-`stochcraft-cli analyse` reads it. Agents and programs use the same analysis as the engine command
-`data.analyse`, with the file's text as `csv`.
+the window or `stochcraft-cli analyse` reads it. Agents and programs use the same analysis as the
+engine command `data.analyse`, with the file's text as `csv`.
+
+**In the window.** Choose **File ▸ Analyse runs from another tool…** and pick the file (`.csv`,
+`.tsv` or `.txt`), or drop it on the window. It opens over the model, which stays as it is
+(nothing is asked about unsaved changes), and **Close** goes back to the model.
+
+1. When the columns' roles can be guessed from their names, the answers show at once; otherwise,
+   or after **Change the columns**, the step **What each column holds** lists each column with
+   its role: scenario, run number, measure (or, for a table with one row per value, measure name
+   and value), time, or not used. Choose the shape: **One row per run**, **One row per value** or
+   **A time series**.
+2. With more than one scenario, choose the **Baseline** the others are compared with, tick
+   **These scenarios used common random numbers (paired)** only if the tool that made the runs
+   did so (StochCraft cannot check it from the numbers), and give a tolerance per measure if
+   agreement is to be tested (0 for none).
+3. **Show the answers** shows, as the Results tab shows a run: what the runs found, in
+   sentences, first; **How sure are these numbers?**, with about how many runs would pin the
+   widest measure to ± 5%; the means with their 95% intervals, a table per scenario, with a
+   sentence under any measure whose runs split into two outcomes; and each scenario against the
+   baseline, measure by measure, with the two means, the difference and its interval, a mark of
+   the change against a zero line (in a wide window) and the verdict: **Differs**, **No
+   difference detected**, **Agrees within ±** the tolerance, or **Inconclusive at current
+   precision**.
+
+A time series (a time column; see **Warm-up** below) shows, per measure, the series averaged over
+the runs at each time, with the part before the MSER-5 cut shaded and the suggested warm-up in
+words.
 
 **The file.** The first row is the header. A *wide* table has a column per measure, and
 optionally a `scenario` column and a `replication` column:
@@ -1118,6 +1144,7 @@ standards that process-modelling tools share.
 | Open | **File ▸ Open…**, or drop a file on the window | **File ▸ Open…**, or drop a file on the page |
 | Save | **File ▸ Save** writes back to the file; **Save As…** writes a new one | **File ▸ Download** saves a copy to your downloads |
 | Recent files | **File ▸ Open Recent** | not available |
+| Runs from another tool (CSV) | **File ▸ Analyse runs from another tool…**, or drop the `.csv` on the window | **File ▸ Analyse runs from another tool…**, or drop the `.csv` on the page |
 
 - A new model is saved as BPMN. An XPDL file can be saved back as XPDL.
 - An **XMILE** file (a system dynamics model, `.xmile` or `.stmx`) is saved as XMILE: **Save**
