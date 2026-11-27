@@ -1505,3 +1505,8 @@ connection	Flow	흐름
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	기준선과 이 실행은 같은 실행에 대해 난수를 같은 곳(난수 시드 또는 난수 파일)에서 가져오지 않았으므로 독립 실행으로 비교되며 구간이 더 넓습니다.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	파일 {file}의 난수 (SHA-256 {sha}…), 실행마다 바이트 {offset}부터 {bytes}바이트
 	Seed {seed} taken from {source}	{source}에서 가져온 난수 시드 {seed}
+	One machine's availability	기계 한 대의 가용성
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	평균 90시간마다 고장 나고 수리에 4.5시간이 걸리는 기계 한 대 (Hristova, Denev, Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	기계 한 대가 얼마나 자주 멈추고, 그로 인해 얼마나 많은 일이 손실되는가?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90시간 가동, 4.5시간 정지: 기계는 시간의 95.2%를 가동하며 94.5시간마다 고장이 난다. 수리 시간을 절반으로 줄이면 97.6%로 올라간다.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block}은(는) 시간의 {down} 동안 멈춰 있습니다(가용성 {up}). 기다리는 것은 없습니다.

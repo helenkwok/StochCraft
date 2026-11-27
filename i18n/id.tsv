@@ -1505,3 +1505,8 @@ connection	Flow	Alur
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Acuan dan eksekusi ini tidak mengambil bilangan acaknya dari tempat yang sama (benih acak atau berkas bilangan acak) untuk eksekusi yang sama, sehingga keduanya dibandingkan sebagai eksekusi independen dan intervalnya lebih lebar.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Bilangan acak dari berkas {file} (SHA-256 {sha}…), {bytes} byte untuk setiap eksekusi mulai dari byte {offset}
 	Seed {seed} taken from {source}	Benih acak {seed} diambil dari {source}
+	One machine's availability	Ketersediaan satu mesin
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Satu mesin yang rata-rata rusak setiap 90 jam dan butuh 4.5 jam untuk diperbaiki (Hristova, Denev, dan Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Seberapa sering satu mesin berhenti, dan berapa banyak pekerjaan yang hilang karenanya?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Hidup 90 jam, mati 4.5 jam: mesin bekerja 95.2% dari waktu dan kerusakan terjadi setiap 94.5 jam. Memangkas waktu perbaikan setengahnya menaikkan angka itu menjadi 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} berhenti {down} dari waktu (ketersediaan {up}); tidak ada yang menunggunya.

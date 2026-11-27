@@ -1161,9 +1161,40 @@ fn answers(results: &Value) -> Vec<(String, String)> {
     // the split's own finding says what happened instead.
     let split = |m: &Value| m["split"].is_object();
 
+    // Where nothing waits but a machine goes down, the answer is how much of the time it is down.
+    let least_available = if crate::charts::availability_leads(results) {
+        elements
+            .iter()
+            .filter(|e| {
+                e["metrics"]["time_failed"]["mean"].as_f64().is_some()
+                    && !split(&e["metrics"]["availability"])
+            })
+            .filter(|e| e["metrics"]["availability"]["mean"].as_f64().is_some())
+            .min_by(|a, b| {
+                let u = |e: &Value| e["metrics"]["availability"]["mean"].as_f64().unwrap_or(1.0);
+                u(a).total_cmp(&u(b))
+            })
+    } else {
+        None
+    };
+    if let Some(e) = least_available {
+        let m = &e["metrics"];
+        let up = said(&m["availability"], &Unit::Share, time).unwrap_or_default();
+        let down = said(&m["time_failed"], &Unit::Share, time).unwrap_or_default();
+        out.push((
+            tf(
+                "{block} is down {down} of the time (available {up}); nothing waits for it.",
+                &[("block", block_name(e)), ("down", &down), ("up", &up)],
+            ),
+            e["id"].as_str().unwrap_or("").to_owned(),
+        ));
+    }
+
     // What limits the flow.
     if let Some(e) = busiest(results).filter(|e| {
-        !split(&e["metrics"]["utilisation"]) && !split(&e["metrics"]["mean_queue_length"])
+        least_available.is_none()
+            && !split(&e["metrics"]["utilisation"])
+            && !split(&e["metrics"]["mean_queue_length"])
     }) {
         let m = &e["metrics"];
         let busy = m["utilisation"]["mean"].as_f64().unwrap_or(0.0);

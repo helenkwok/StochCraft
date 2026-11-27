@@ -790,7 +790,13 @@ impl App {
             .or_else(|| {
                 options
                     .iter()
-                    .find(|(k, _)| k.ends_with("/mean_wait") || k.ends_with("/mean_time_in_system"))
+                    .find(|(k, _)| {
+                        if crate::charts::availability_leads(results) {
+                            k.ends_with("/availability")
+                        } else {
+                            k.ends_with("/mean_wait") || k.ends_with("/mean_time_in_system")
+                        }
+                    })
                     .or(options.first())
                     .map(|(k, _)| k.clone())
             });
@@ -1489,7 +1495,13 @@ fn ecdf_chart(ui: &mut egui::Ui, d: &Value, unit: &str) {
     }
     let first = points.first().map_or(0.0, |p| p.0);
     let last = points.last().map_or(0.0, |p| p.0);
-    for (v, align) in [(first, Align2::LEFT_TOP), (last, Align2::RIGHT_TOP)] {
+    // One label where every run has the same value (two would print on top of each other).
+    let ends: &[(f64, Align2)] = if first == last {
+        &[(first, Align2::CENTER_TOP)]
+    } else {
+        &[(first, Align2::LEFT_TOP), (last, Align2::RIGHT_TOP)]
+    };
+    for &(v, align) in ends {
         let text = if unit.is_empty() {
             grouped(v)
         } else {

@@ -1505,3 +1505,8 @@ connection	Flow	โฟลว์
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	เส้นฐานและการรันนี้ไม่ได้นำตัวเลขสุ่มมาจากที่เดียวกัน (เมล็ดสุ่ม หรือไฟล์ตัวเลขสุ่ม) สำหรับการรันชุดเดียวกัน จึงเปรียบเทียบแบบการรันที่เป็นอิสระต่อกันและช่วงจะกว้างขึ้น
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ตัวเลขสุ่มจากไฟล์ {file} (SHA-256 {sha}…), {bytes} ไบต์ต่อการรันแต่ละครั้ง เริ่มจากไบต์ที่ {offset}
 	Seed {seed} taken from {source}	เมล็ดสุ่ม {seed} ที่นำมาจาก {source}
+	One machine's availability	ความพร้อมใช้งานของเครื่องจักรหนึ่งเครื่อง
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	เครื่องจักรหนึ่งเครื่องที่เสียเฉลี่ยทุก 90 ชั่วโมงและใช้เวลาซ่อม 4.5 ชั่วโมง (Hristova, Denev และ Tsankov, Environment. Technology. Resources, 2024)
+	How often is one machine down, and how much work does that cost?	เครื่องจักรหนึ่งเครื่องหยุดบ่อยแค่ไหน และทำให้เสียงานไปเท่าใด
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	ทำงาน 90 ชั่วโมง หยุด 4.5 ชั่วโมง: เครื่องทำงาน 95.2% ของเวลา และเกิดเหตุขัดข้องทุก 94.5 ชั่วโมง ถ้าลดเวลาซ่อมลงครึ่งหนึ่ง จะเพิ่มเป็น 97.6%
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} หยุด {down} ของเวลา (ความพร้อมใช้งาน {up}) และไม่มีอะไรรออยู่
