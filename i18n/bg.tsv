@@ -1049,6 +1049,7 @@ unit	yr	г.
 	In “{field}” of {block}, set “{param}” to 1 or more.	В „{field}“ на блок {block} задайте „{param}“ да е 1 или повече.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	В „{field}“ на блок {block} задайте „{param}“ да е число от 0 до 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	В „{field}“ на блок {block} задайте „Минимум“ под „Максимум“, а евентуалната „Най-вероятна стойност“ между тях.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	В „{field}“ на блок {block} задайте „Минимум“ под „Максимум“.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	В „{field}“ на блок {block} добавете точки от данни, чиито вероятности се събират до повече от 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Блокът {block} никога не би имал единица, с която да работи. Задайте поне 1 единица.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блокът {block} би създавал същности безкрай, защото „Време между пристиганията“ винаги е 0. Задайте време над 0 или задайте „Лимит на пристиганията“.
@@ -1491,6 +1492,35 @@ connection	Flow	Поток
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блокът {block} е поставен на {s} по протежение на конвейера {conveyor}, чийто път е дълъг {length}. Поставете го между 0 и {length} по пътя.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Същностите по конвейера {conveyor} достигат {before} преди {block}, но {block} е поставен по-близо до началото ({s} по него, {before} при {before_s}). Поставете {block} по-нататък по пътя от {before} или ги разменете в потоците.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Съединението по потока {flow} отнема {time} за преминаване. Задайте времето му за пренос на 0 или повече.
+	A path needs at least two points.	Трасето трябва да има поне две точки.
+	Finish	Готово
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Чертаене на трасето на {name}: щракнете, за да добавите точки, двукратно щракване или Enter за край, Backspace премахва последната точка, Esc отменя.
+	Draw path	Начертай трасе
+	Select a conveyor to draw its path	Изберете конвейер, за да начертаете трасето му
+	Remove path	Премахни трасето
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Щракнете, за да добавите точка · Двукратно щракване или Enter за край · Esc за отказ
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Щракнете върху лента, за да я изберете · Плъзнете точките ѝ или лентата · Двукратно щракване добавя точка · Плъзнете пода за преместване · Превъртете за мащаб
+	Point {n} of {name}, x {x} m, y {y} m	Точка {n} от {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Щракнете върху конвейер тук, за да начертаете трасето му.
+	Path	Трасе
+	Not drawn in the layout yet.	Още не е начертан в планировката.
+	Draw in the Layout view	Начертай в изгледа Планировка
+	Add a straight path	Добави право трасе
+	Drawn length: {length} {unit}	Начертана дължина: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Това трасе се изкачва или има спирала: точките му не могат да се редактират тук.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Това трасе прави пълен кръг или повече в една дъга: точките му не могат да се редактират тук.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Това трасе завива рязко в началото или в края си: точките му не могат да се редактират тук.
+	Point {n}	Точка {n}
+	x of point {n}	x на точка {n}
+	y of point {n}	y на точка {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Радиус на завоя в точка {n}
+	bend	завой
+	tightened to {radius} to fit	стеснен до {radius}, за да се побере
+	Remove point {n}	Премахни точка {n}
+	Add a point at the end	Добави точка в края
+	Change Path	Промяна на трасе
 	Search examples	Търсене в примерите
 	Clear search	Изчистване на търсенето
 	Logistics and warehousing	Логистика и складиране

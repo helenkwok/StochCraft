@@ -76,14 +76,89 @@ fn beside(s: &Station, along: f32, up: f32) -> [f32; 3] {
     [s.x - sn * along, s.y + cs * along, s.z + up]
 }
 
-/// A cross-section at `s` from `left` to `right` (offsets to the left, `left > right`), between
-/// heights `bottom` and `top`.
-fn section(s: &Station, left: f32, right: f32, bottom: f32, top: f32) -> Section {
+/// The longest a mitred cross-section's inner side reaches, as a multiple of its width, so a
+/// sharp turn of most of a half turn does not throw a spike.
+const MOST_MITRE: f32 = 4.0;
+
+/// The inner side of a sharp turn: its corner on the centre line, the heading half way round,
+/// how far an offset reaches there (`1 / cos(turn / 2)`), how far along the path the inner
+/// corner is from the turn (`tan(turn / 2)` an offset), and whether the turn is to the left.
+#[derive(Debug, Clone, Copy)]
+struct Mitre {
+    corner: [f32; 2],
+    heading: f32,
+    reach: f32,
+    back: f32,
+    left: bool,
+}
+
+/// For each station, the [`Mitre`] of a sharp turn it is part of or near (within `widest`, the
+/// largest offset, times how far back the inner corner is), and how far along the path it is
+/// from the turn. Stations at one place and distance whose headings turn (a turn with no radius)
+/// share one inner corner, and the stations either side of it stop their inner side there, so
+/// the belt neither runs past the corner into the belt beyond nor folds back.
+fn mitres(stations: &[Station], at: &[f32], widest: f32) -> Vec<Option<(Mitre, f32)>> {
+    let mut out = vec![None; stations.len()];
+    let same = |i: usize, j: usize| {
+        let (a, b) = (&stations[i], &stations[j]);
+        a.x == b.x && a.y == b.y && a.z == b.z && at[i] == at[j]
+    };
+    let mut i = 0;
+    while i < stations.len() {
+        let mut j = i;
+        while j + 1 < stations.len() && same(j, j + 1) {
+            j += 1;
+        }
+        let turn = stations[j].heading - stations[i].heading;
+        let half = turn / 2.0;
+        let c = libm::cosf(half);
+        if j > i && turn.abs() > 1e-6 && c > 1.0 / MOST_MITRE {
+            let m = Mitre {
+                corner: [stations[i].x, stations[i].y],
+                heading: stations[i].heading + half,
+                reach: 1.0 / c,
+                back: libm::tanf(half.abs()),
+                left: turn > 0.0,
+            };
+            let window = widest * m.back;
+            for (k, slot) in out.iter_mut().enumerate() {
+                let d = (at[k] - at[i]).abs();
+                if d <= window {
+                    *slot = Some((m, d));
+                }
+            }
+        }
+        i = j + 1;
+    }
+    out
+}
+
+/// A cross-section at station `i` from `left` to `right` (offsets to the left, `left > right`),
+/// between heights `bottom` and `top`; near a sharp turn, its inner side stops at the turn's
+/// inner corner.
+fn section_at(
+    stations: &[Station],
+    mitres: &[Option<(Mitre, f32)>],
+    i: usize,
+    left: f32,
+    right: f32,
+    bottom: f32,
+    top: f32,
+) -> Section {
+    let s = &stations[i];
+    let at = |along: f32, up: f32| match mitres.get(i).copied().flatten() {
+        Some((m, d)) if along != 0.0 && (along > 0.0) == m.left && d <= along.abs() * m.back => {
+            let (sn, cs) = (libm::sinf(m.heading), libm::cosf(m.heading));
+            let a = along * m.reach;
+            [m.corner[0] - sn * a, m.corner[1] + cs * a, s.z + up]
+        }
+        _ => beside(s, along, up),
+    };
     Section {
-        rt: beside(s, right, top),
-        lt: beside(s, left, top),
-        lb: beside(s, left, bottom),
-        rb: beside(s, right, bottom),
+        rt: at(right, top),
+        lt: at(left, top),
+        lb: at(left, bottom),
+        rb: at(right, bottom),
     }
 }
 
@@ -131,7 +206,7 @@ fn runs(
     stations: &[Station],
     at: &[f32],
     gaps: &[(f32, f32)],
-    make: &dyn Fn(&Station) -> Section,
+    make: &dyn Fn(usize) -> Section,
 ) -> Vec<Vec<Section>> {
     let mut out: Vec<Vec<Section>> = Vec::new();
     let mut current: Vec<Section> = Vec::new();
@@ -145,9 +220,9 @@ fn runs(
             continue;
         }
         if current.is_empty() {
-            current.push(make(&stations[i - 1]));
+            current.push(make(i - 1));
         }
-        current.push(make(&stations[i]));
+        current.push(make(i));
     }
     if current.len() >= 2 {
         out.push(current);
@@ -161,15 +236,30 @@ fn runs(
 /// in `gaps_left` (from, to, in metres along the stations) and the right one those in
 /// `gaps_right`, where another belt joins or leaves. Empty for fewer than two stations or
 /// parameters that are not positive. The stripe's dashes follow the stations, so they show only
-/// where stations are closer than half a `stripe_pitch`.
+/// where stations are closer than half a `stripe_pitch`. Distances are measured along the
+/// straight lines between the stations; [`belt_along_at`] takes them from the path instead.
 pub fn belt_along(
     stations: &[Station],
     p: Belt,
     gaps_left: &[(f32, f32)],
     gaps_right: &[(f32, f32)],
 ) -> BeltParts {
+    belt_along_at(stations, &distances(stations), p, gaps_left, gaps_right)
+}
+
+/// [`belt_along`] with each station's distance along the path given (`at`, one per station, in
+/// order), so the gaps and the legs fall where the path's own metres put them, round curves too.
+/// Empty if `at` is not one per station.
+pub fn belt_along_at(
+    stations: &[Station],
+    at: &[f32],
+    p: Belt,
+    gaps_left: &[(f32, f32)],
+    gaps_right: &[(f32, f32)],
+) -> BeltParts {
     let mut parts = BeltParts::default();
     if stations.len() < 2
+        || at.len() != stations.len()
         || !valid_positive(&[
             p.width,
             p.height,
@@ -183,7 +273,6 @@ pub fn belt_along(
     {
         return parts;
     }
-    let at = distances(stations);
     let total = at.last().copied().unwrap_or(0.0);
     let flat = stations.iter().all(|s| (s.z - stations[0].z).abs() < 1e-6);
     let hw = p.width / 2.0;
@@ -191,24 +280,25 @@ pub fn belt_along(
     let top = p.height;
     let under = p.height - p.frame_depth;
 
+    let mitres = mitres(stations, at, out);
+    let sections = |left: f32, right: f32, bottom: f32, top: f32| -> Vec<Section> {
+        (0..stations.len())
+            .map(|i| section_at(stations, &mitres, i, left, right, bottom, top))
+            .collect()
+    };
+
     // The belt, whole.
-    let belt: Vec<Section> = stations
-        .iter()
-        .map(|s| section(s, hw, -hw, top - p.belt_thickness, top))
-        .collect();
+    let belt = sections(hw, -hw, top - p.belt_thickness, top);
     emit_swept_strip(&mut parts.belt, &belt, flat);
 
     // Each side: the frame below the belt's top, whole; the rail above it, with its gaps.
     for (left, gaps) in [(true, gaps_left), (false, gaps_right)] {
         let (a, b) = if left { (out, hw) } else { (-hw, -out) };
-        let frame: Vec<Section> = stations
-            .iter()
-            .map(|s| section(s, a, b, under, top))
-            .collect();
+        let frame = sections(a, b, under, top);
         emit_swept_strip(&mut parts.frame, &frame, flat);
         if p.rail_height > 0.0 {
-            for run in runs(stations, &at, gaps, &|s| {
-                section(s, a, b, top, top + p.rail_height)
+            for run in runs(stations, at, gaps, &|i| {
+                section_at(stations, &mitres, i, a, b, top, top + p.rail_height)
             }) {
                 emit_swept_strip(&mut parts.frame, &run, flat);
             }
@@ -218,7 +308,8 @@ pub fn belt_along(
         let (lo, hi) = (under + p.frame_depth * 0.3, under + p.frame_depth * 0.7);
         for i in 1..stations.len() {
             let mid = (at[i - 1] + at[i]) / 2.0;
-            if libm::fmodf(mid, p.stripe_pitch) >= p.stripe_pitch / 2.0 {
+            // A sharp turn's stations share one distance: its dashes would bunch up there.
+            if at[i] <= at[i - 1] || libm::fmodf(mid, p.stripe_pitch) >= p.stripe_pitch / 2.0 {
                 continue;
             }
             let (s0, s1) = (&stations[i - 1], &stations[i]);
@@ -247,7 +338,7 @@ pub fn belt_along(
         ]);
         for k in 0..=count {
             let d = first + (last - first) * (k as f32 / count as f32);
-            let s = station_at(stations, &at, d);
+            let s = station_at(stations, at, d);
             let mut pair = Mesh::new();
             for side in [1.0_f32, -1.0] {
                 let y = side * (hw + p.rail_width / 2.0);
@@ -658,6 +749,88 @@ mod tests {
                 ..Station::default()
             })
             .collect()
+    }
+
+    /// 2 m east, a sharp left turn at (2, 0) (cross-sections every 6 degrees, all there), 2 m
+    /// north; and each one's distance along the path.
+    fn sharp_left() -> (Vec<Station>, Vec<f32>) {
+        let (mut st, mut at) = (Vec::new(), Vec::new());
+        for i in 0..=8 {
+            let d = i as f32 * 0.25;
+            st.push(Station {
+                x: d,
+                ..Station::default()
+            });
+            at.push(d);
+        }
+        for k in 1..=15 {
+            st.push(Station {
+                x: 2.0,
+                heading: (6.0 * k as f32).to_radians(),
+                ..Station::default()
+            });
+            at.push(2.0);
+        }
+        for i in 1..=8 {
+            let d = i as f32 * 0.25;
+            st.push(Station {
+                x: 2.0,
+                y: d,
+                heading: core::f32::consts::FRAC_PI_2,
+                ..Station::default()
+            });
+            at.push(2.0 + d);
+        }
+        (st, at)
+    }
+
+    #[test]
+    fn a_sharp_turn_is_mitred_on_its_inner_side() {
+        let p = Belt::default();
+        let (st, at) = sharp_left();
+        let parts = belt_along_at(&st, &at, p, &[], &[]);
+        let hw = p.width / 2.0;
+        // Nothing of the belt or its frames reaches past the inner corner into the belt beyond:
+        // left of the way in (y > 0), every point is either on the inner side of the way out
+        // (x at most 2 - hw) or on its outer side (x at least 2 + hw).
+        for m in [&parts.belt, &parts.frame] {
+            for v in &m.positions {
+                if v[1] > 1e-3 {
+                    assert!(v[0] <= 2.0 - hw + 1e-3 || v[0] >= 2.0 + hw - 1e-3, "{v:?}");
+                }
+            }
+        }
+        // The inner corner is the mitre: hw to the left of both centre lines.
+        assert!(
+            parts
+                .belt
+                .positions
+                .iter()
+                .any(|v| { (v[0] - (2.0 - hw)).abs() < 1e-4 && (v[1] - hw).abs() < 1e-4 })
+        );
+    }
+
+    #[test]
+    fn a_sharp_turn_has_no_bunch_of_dashes() {
+        let p = Belt::default();
+        let (st, at) = sharp_left();
+        let parts = belt_along_at(&st, &at, p, &[], &[]);
+        // No dash lies wholly at the turn, on the circle its stations' faces sweep round it.
+        let r = p.width / 2.0 + p.rail_width + 0.004;
+        let on_turn = |v: &[f32; 3]| (libm::hypotf(v[0] - 2.0, v[1]) - r).abs() < 1e-3;
+        for tri in parts.accent.indices.chunks(3) {
+            let all = tri
+                .iter()
+                .all(|k| on_turn(&parts.accent.positions[*k as usize]));
+            assert!(!all, "a dash at the turn");
+        }
+        // The legs stand along the path, the same with or without the turn's stations.
+        let mut plain: Vec<Station> = st.clone();
+        let mut plain_at = at.clone();
+        plain.drain(9..23);
+        plain_at.drain(9..23);
+        let without = belt_along_at(&plain, &plain_at, p, &[], &[]);
+        assert_eq!(parts.legs.positions.len(), without.legs.positions.len());
     }
 
     #[test]

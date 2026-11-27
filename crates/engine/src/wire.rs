@@ -47,8 +47,16 @@ pub enum DistSpec {
     LogNormal { mean: f64, std_dev: f64 },
     /// Gamma with shape k and scale θ (mean kθ).
     Gamma { shape: f64, scale: f64 },
-    /// Beta on [0, 1] with shape parameters α = `shape`, β = `scale` (BPSim's names).
-    Beta { shape: f64, scale: f64 },
+    /// Beta on [`min`, `max`] (by default [0, 1], BPSim's) with shape parameters α = `shape`,
+    /// β = `scale` (BPSim's names): mean min + (max − min) α / (α + β).
+    Beta {
+        shape: f64,
+        scale: f64,
+        #[serde(default, skip_serializing_if = "is_zero")]
+        min: f64,
+        #[serde(default = "one_f64", skip_serializing_if = "is_one")]
+        max: f64,
+    },
     /// The sum of `k` exponentials with overall mean `mean`.
     Erlang { mean: f64, k: u64 },
     /// Weibull with shape k and scale λ.
@@ -95,7 +103,17 @@ impl From<&Dist> for DistSpec {
             },
             Dist::LogNormal { mean, std_dev } => DistSpec::LogNormal { mean, std_dev },
             Dist::Gamma { shape, scale } => DistSpec::Gamma { shape, scale },
-            Dist::Beta { shape, scale } => DistSpec::Beta { shape, scale },
+            Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            } => DistSpec::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            },
             Dist::Erlang { mean, k } => DistSpec::Erlang { mean, k },
             Dist::Weibull { shape, scale } => DistSpec::Weibull { shape, scale },
             Dist::Poisson { mean } => DistSpec::Poisson { mean },
@@ -138,7 +156,17 @@ impl From<DistSpec> for Dist {
             },
             DistSpec::LogNormal { mean, std_dev } => Dist::LogNormal { mean, std_dev },
             DistSpec::Gamma { shape, scale } => Dist::Gamma { shape, scale },
-            DistSpec::Beta { shape, scale } => Dist::Beta { shape, scale },
+            DistSpec::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            } => Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            },
             DistSpec::Erlang { mean, k } => Dist::Erlang { mean, k },
             DistSpec::Weibull { shape, scale } => Dist::Weibull { shape, scale },
             DistSpec::Poisson { mean } => Dist::Poisson { mean },
@@ -3420,9 +3448,12 @@ mod tests {
                 shape: 2.0,
                 scale: 0.5,
             },
+            Dist::beta(2.0, 3.0),
             Dist::Beta {
-                shape: 2.0,
-                scale: 3.0,
+                shape: 3.0,
+                scale: 5.0,
+                min: 1.0,
+                max: 4.0,
             },
             Dist::Erlang { mean: 4.0, k: 3 },
             Dist::Weibull {
@@ -3447,6 +3478,44 @@ mod tests {
         let e: Result<DistSpec, _> =
             serde_json::from_value(json!({"type": "exponential", "mean": 1, "rate": 2}));
         assert!(e.is_err(), "unknown fields are refused");
+    }
+
+    /// A beta on [0, 1] is written without a range, as before, and one given without a range is
+    /// on [0, 1]; a beta on another range writes it and reads back.
+    #[test]
+    fn a_beta_writes_its_range_only_when_it_is_not_0_to_1() {
+        let plain = json!({"type": "beta", "shape": 2.0, "scale": 3.0});
+        assert_eq!(
+            serde_json::to_value(DistSpec::from(&Dist::beta(2.0, 3.0))).ok(),
+            Some(plain.clone())
+        );
+        let read: Option<DistSpec> = serde_json::from_value(plain).ok();
+        assert_eq!(read.map(Dist::from), Some(Dist::beta(2.0, 3.0)));
+        let ranged = Dist::Beta {
+            shape: 3.0,
+            scale: 5.0,
+            min: 1.0,
+            max: 4.0,
+        };
+        let v = serde_json::to_value(DistSpec::from(&ranged)).unwrap_or(Value::Null);
+        assert_eq!(
+            v,
+            json!({"type": "beta", "shape": 3.0, "scale": 5.0, "min": 1.0, "max": 4.0})
+        );
+        let back: Option<DistSpec> = serde_json::from_value(v).ok();
+        assert_eq!(back.map(Dist::from), Some(ranged));
+        // Only the maximum given: from 0.
+        let up_to: Option<DistSpec> =
+            serde_json::from_value(json!({"type": "beta", "shape": 3, "scale": 5, "max": 4})).ok();
+        assert_eq!(
+            up_to.map(Dist::from),
+            Some(Dist::Beta {
+                shape: 3.0,
+                scale: 5.0,
+                min: 0.0,
+                max: 4.0,
+            })
+        );
     }
 
     #[test]

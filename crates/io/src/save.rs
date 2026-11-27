@@ -127,7 +127,12 @@ fn dist_parts(d: &Dist) -> (u8, Vec<f64>, Vec<f64>) {
         } => (5, vec![*mean, *std_dev, *min, *max], vec![]),
         Dist::LogNormal { mean, std_dev } => (6, vec![*mean, *std_dev], vec![]),
         Dist::Gamma { shape, scale } => (7, vec![*scale], vec![*shape]),
-        Dist::Beta { shape, scale } => (8, vec![], vec![*shape, *scale]),
+        Dist::Beta {
+            shape,
+            scale,
+            min,
+            max,
+        } => (8, vec![*min, *max], vec![*shape, *scale]),
         Dist::Erlang { mean, k } => (9, vec![*mean], vec![*k as f64]),
         Dist::Weibull { shape, scale } => (10, vec![*scale], vec![*shape]),
         Dist::Poisson { mean } => (11, vec![], vec![*mean]),
@@ -3656,8 +3661,9 @@ fn ancestors<'a>(root: &'a Element, id: Option<&str>) -> Vec<&'a Element> {
 /// Whether a scenario has values that name their own time unit.
 fn has_own_units(s: &Element) -> bool {
     s.descendants().iter().any(|v| {
-        v.ns.as_deref().is_some_and(|n| NSS.contains(&n))
-            && (v.attr("timeUnit").is_some() || v.local() == "DurationParameter")
+        (v.ns.as_deref().is_some_and(|n| NSS.contains(&n))
+            && (v.attr("timeUnit").is_some() || v.local() == "DurationParameter"))
+            || (crate::bpsim::is_scaled_beta(v) && v.attr("timeUnit").is_some())
     })
 }
 
@@ -3847,8 +3853,8 @@ fn written_as(v: f64, chain: &[(Unit, Unit)], base: TimeUnit) -> f64 {
 /// its smallest component: `PT1000M` becomes `PT60000M`, and `PT16H40M` (1000 min) also
 /// `PT60000M`; days and longer stay date designators (`P1D` under hours becomes
 /// `P0.016666666666666666D` under minutes, 24 min). A count
-/// distribution (beta, Poisson, binomial) does not scale; one naming the old base unit names
-/// the new one. Values in the base unit are left as they are. `outer` and `ctx` give the units
+/// distribution (BPSim's beta on [0, 1], Poisson, binomial) does not scale; one naming the old
+/// base unit names the new one. StochCraft's beta on a range scales its `min` and `max`. Values in the base unit are left as they are. `outer` and `ctx` give the units
 /// of the user distributions around `e` (see [`read_as`]); a scenario starts with none and the
 /// base unit.
 fn rescale_own_units(
@@ -3859,6 +3865,11 @@ fn rescale_own_units(
     to: TimeUnit,
 ) {
     for v in e.elements_mut() {
+        // StochCraft's beta on a range: its range is in its own time unit.
+        if crate::bpsim::is_scaled_beta(v) {
+            rescale_attrs(v, &["min", "max"], outer, ctx, from, to);
+            continue;
+        }
         // StochCraft's vendor extensions hold BPSim values (a breakdown's times, a transfer's).
         if v.ns.as_deref() == Some(STOCHCRAFT_NS) {
             rescale_own_units(v, outer, ctx, from, to);
@@ -3893,26 +3904,36 @@ fn rescale_own_units(
                 }
             }
             l => match time_attrs(l) {
-                Some(attrs) => {
-                    let mut chain = outer.to_vec();
-                    chain.push((Unit::of(v, ctx), ctx));
-                    // All in the base unit: relabelled as they are.
-                    if chain.iter().all(|(own, _)| *own == Unit::Base) {
-                        continue;
-                    }
-                    for a in attrs {
-                        let Some(x) = v.attr(a).and_then(|s| s.trim().parse::<f64>().ok()) else {
-                            continue;
-                        };
-                        let new = written_as(read_as(x, &chain, from), &chain, to);
-                        // A number that stays keeps its spelling.
-                        if new != x {
-                            v.set_attr(a, &num(new));
-                        }
-                    }
-                }
+                Some(attrs) => rescale_attrs(v, attrs, outer, ctx, from, to),
                 None => rescale_own_units(v, outer, ctx, from, to),
             },
+        }
+    }
+}
+
+/// Rewrites the time attributes `attrs` of value `v` as [`rescale_own_units`] does.
+fn rescale_attrs(
+    v: &mut Element,
+    attrs: &[&str],
+    outer: &[(Unit, Unit)],
+    ctx: Unit,
+    from: TimeUnit,
+    to: TimeUnit,
+) {
+    let mut chain = outer.to_vec();
+    chain.push((Unit::of(v, ctx), ctx));
+    // All in the base unit: relabelled as they are.
+    if chain.iter().all(|(own, _)| *own == Unit::Base) {
+        return;
+    }
+    for a in attrs {
+        let Some(x) = v.attr(a).and_then(|s| s.trim().parse::<f64>().ok()) else {
+            continue;
+        };
+        let new = written_as(read_as(x, &chain, from), &chain, to);
+        // A number that stays keeps its spelling.
+        if new != x {
+            v.set_attr(a, &num(new));
         }
     }
 }

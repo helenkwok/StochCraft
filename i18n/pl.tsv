@@ -1049,6 +1049,7 @@ unit	yr	r.
 	In “{field}” of {block}, set “{param}” to 1 or more.	W polu „{field}” bloku {block} ustaw „{param}” na 1 lub więcej.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	W polu „{field}” bloku {block} ustaw „{param}” na liczbę od 0 do 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	W polu „{field}” bloku {block} ustaw „Minimum” poniżej „Maksimum”, a ewentualną wartość „Najbardziej prawdopodobna” między nimi.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	W polu „{field}” bloku {block} ustaw „Minimum” poniżej „Maksimum”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	W polu „{field}” bloku {block} dodaj punkty danych, których prawdopodobieństwa sumują się do więcej niż 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Blok {block} nigdy nie miałby zasobu do pracy. Dodaj mu co najmniej 1 zasób.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Blok {block} tworzyłby jednostki bez końca, bo jego „Czas między przybyciami” zawsze wynosi 0. Ustaw czas większy od 0 albo ustaw „Limit przybyć”.
@@ -1491,6 +1492,35 @@ connection	Flow	Przepływ
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Blok {block} jest umieszczony {s} wzdłuż przenośnika {conveyor}, którego ścieżka ma długość {length}. Umieść go między 0 a {length} wzdłuż ścieżki.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Jednostki na przenośniku {conveyor} docierają do {before} przed {block}, ale {block} jest umieszczony bliżej początku ({s} wzdłuż niego, {before} przy {before_s}). Umieść {block} dalej na ścieżce niż {before} albo zamień je miejscami w przepływach.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Złącze na przepływie {flow} przekracza się w czasie {time}. Ustaw jego czas transferu na 0 lub więcej.
+	A path needs at least two points.	Trasa musi mieć co najmniej dwa punkty.
+	Finish	Zakończ
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Rysowanie trasy {name}: kliknij, aby dodać punkty, kliknij dwukrotnie lub naciśnij Enter, aby zakończyć, Backspace cofa ostatni punkt, Esc anuluje.
+	Draw path	Rysuj trasę
+	Select a conveyor to draw its path	Wybierz przenośnik, aby narysować jego trasę
+	Remove path	Usuń trasę
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Kliknij, aby dodać punkt · Dwukrotne kliknięcie lub Enter kończy · Esc anuluje
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Kliknij taśmę, aby ją wybrać · Przeciągnij jej punkty lub taśmę · Dwukrotne kliknięcie dodaje punkt · Przeciągnij podłogę, aby przesuwać · Przewiń, aby powiększać
+	Point {n} of {name}, x {x} m, y {y} m	Punkt {n} z {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Kliknij tutaj przenośnik, aby narysować jego trasę.
+	Path	Trasa
+	Not drawn in the layout yet.	Jeszcze nie narysowano w układzie.
+	Draw in the Layout view	Rysuj w widoku Układ
+	Add a straight path	Dodaj prostą trasę
+	Drawn length: {length} {unit}	Narysowana długość: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ta trasa wznosi się lub ma spiralę: jej punktów nie można tu edytować.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ta trasa zatacza w jednym łuku pełne koło lub więcej: jej punktów nie można tu edytować.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ta trasa ostro skręca na początku lub na końcu: jej punktów nie można tu edytować.
+	Point {n}	Punkt {n}
+	x of point {n}	x punktu {n}
+	y of point {n}	y punktu {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Promień łuku w punkcie {n}
+	bend	łuk
+	tightened to {radius} to fit	zwężono do {radius}, aby się zmieścił
+	Remove point {n}	Usuń punkt {n}
+	Add a point at the end	Dodaj punkt na końcu
+	Change Path	Zmień trasę
 	Search examples	Szukaj w przykładach
 	Clear search	Wyczyść wyszukiwanie
 	Logistics and warehousing	Logistyka i magazynowanie
