@@ -89,7 +89,9 @@ pub fn check(bytes: &[u8]) -> Health {
     }
     let mut seen = HashSet::new();
     let repeated = bytes
-        .chunks_exact(BLOCK)
+        .as_chunks::<BLOCK>()
+        .0
+        .iter()
         .filter(|b| !seen.insert(*b))
         .count() as u64;
     if repeated > 0 {

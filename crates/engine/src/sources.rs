@@ -14,7 +14,7 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde_json::{Value, json};
 use stochcraft_qrng::record::Manifest;
-use stochcraft_qrng::{Download, Source, Sources, estimate, seed};
+use stochcraft_qrng::{Download, Source, estimate, seed};
 
 use crate::commands::parse;
 use crate::{CommandError, Engine, ErrorCode};

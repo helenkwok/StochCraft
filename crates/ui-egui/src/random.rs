@@ -412,7 +412,7 @@ impl App {
                 .selected_text(if r.new_encoding.is_empty() {
                     "hex"
                 } else {
-                    &r.new_encoding
+                    r.new_encoding.as_str()
                 })
                 .show_ui(ui, |ui| {
                     for e in ["hex", "base64", "numbers", "raw"] {
