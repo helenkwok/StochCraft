@@ -4638,6 +4638,12 @@ const MAX_COMBINATIONS: usize = 4096;
 /// choose, it only asks whether each could be met alone, which is weaker but still never says
 /// no to a take that could be met.
 fn feasible(current: Option<(&[usize], u32)>, rest: &[Vec<Alternative>], free: &[i64]) -> bool {
+    let current_alone = || current.is_none_or(|(pools, left)| have(pools, free) >= i64::from(left));
+    // With nothing after it, the current one only needs enough free in its own pools: the
+    // common case of a task with one requirement, checked without building a flow.
+    if rest.is_empty() {
+        return current_alone();
+    }
     let choices: Vec<Vec<&Alternative>> = rest
         .iter()
         .map(|r| r.iter().filter(|alt| alt.quantity > 0).collect())
@@ -4646,7 +4652,7 @@ fn feasible(current: Option<(&[usize], u32)>, rest: &[Vec<Alternative>], free: &
         n.checked_mul(c.len()).filter(|&n| n <= MAX_COMBINATIONS)
     });
     let Some(combinations) = combinations else {
-        return current.is_none_or(|(pools, left)| have(pools, free) >= i64::from(left))
+        return current_alone()
             && choices.iter().all(|c| {
                 c.iter()
                     .any(|alt| have(&alt.pools, free) >= i64::from(alt.quantity))
@@ -6003,11 +6009,11 @@ mod tests {
 
     #[test]
     fn too_many_ways_to_choose_still_find_the_first_take_or_none() {
-        // A spare in pool 13 goes to the first need; each of thirteen more takes the spare or
-        // else its own pool, 2^13 ways to choose, more than are tried one by one.
+        // A spare in pool 13 goes to the first need; each of thirteen more takes its own pool or
+        // else the spare, 2^13 ways to choose, more than are tried one by one.
         let mut free = vec![1_i64; 14];
         let mut needs = vec![vec![alt(13..14, 1)]];
-        needs.extend((0..13).map(|p| vec![alt(13..14, 1), alt(p..p + 1, 1)]));
+        needs.extend((0..13).map(|p| vec![alt(p..p + 1, 1), alt(13..14, 1)]));
         let mut taken = Taken::new();
         assert!(take_all(&needs, &mut free, &mut taken));
         let mut want: Taken = vec![(13, 1)];
