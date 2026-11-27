@@ -1527,7 +1527,7 @@ connection	Flow	Tok
 	Bytes per run	Bajtova po pokretanju
 	from a pilot	iz probnog pokretanja
 	Estimate	Procena
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bajtova za {runs} pokretanja: {requests} zahteva, najmanje {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bajtova za {runs} pokretanja: {requests} zahteva, najmanje {time}
 	More than a month of the free tier allows.	Više nego što besplatni nivo dozvoljava za mesec dana.
 	Key kept	Ključ sačuvan
 	Forget key	Zaboravi ključ

@@ -52,6 +52,16 @@ fn sources(app: &mut App) -> Vec<Value> {
         .unwrap_or_default()
 }
 
+/// `seconds` in the unit that reads best: seconds under a minute, then minutes, then hours (to
+/// one decimal place), as SI symbols.
+pub(crate) fn duration(seconds: u64) -> String {
+    match seconds {
+        0..60 => format!("{seconds} s"),
+        60..3600 => format!("{} min", seconds.div_ceil(60)),
+        _ => format!("{:.1} h", seconds as f64 / 3600.0),
+    }
+}
+
 fn kind_label(kind: &str) -> &'static str {
     match kind {
         "quantum" => t("quantum"),
@@ -121,7 +131,7 @@ impl App {
     pub(crate) fn random_section(&mut self, ui: &mut egui::Ui) {
         section(ui, t("Random numbers"));
         let before = self.random.mode;
-        ui.horizontal_wrapped(|ui| {
+        ui.vertical(|ui| {
             let m = &mut self.random.mode;
             ui.radio_value(m, Mode::Generator, t("Generator"));
             ui.radio_value(m, Mode::Seed, t("Seed from a source"));
@@ -158,14 +168,23 @@ impl App {
                     {
                         self.random.drawing = true;
                     }
-                    if let Some(d) = &self.random.drawn {
-                        let source = d["random"]["source"].as_str().unwrap_or("");
-                        ui.label(tf(
-                            "Seed {seed} taken from {source}",
-                            &[("seed", &d["seed"].to_string()), ("source", source)],
-                        ));
-                    }
                 });
+                if let Some(d) = &self.random.drawn {
+                    // The source's name, wrapped in the panel; its address (one long word) only
+                    // on hover.
+                    let source = d["random"]["source"].as_str().unwrap_or("");
+                    ui.add(
+                        egui::Label::new(tf(
+                            "Seed {seed} taken from {source}",
+                            &[
+                                ("seed", &d["seed"].to_string()),
+                                ("source", crate::results::source_name(source)),
+                            ],
+                        ))
+                        .wrap(),
+                    )
+                    .on_hover_text(source);
+                }
                 self.follow_draw(ui);
             }
             Mode::File => {
@@ -259,26 +278,31 @@ impl App {
                 egui::TextEdit::singleline(&mut self.random.segment)
                     .id_salt("random/segment")
                     .hint_text(t("from a pilot"))
-                    .desired_width(80.0),
+                    .desired_width(160.0),
             );
         });
     }
 
     fn estimate_row(&mut self, ui: &mut egui::Ui, mode: &str) {
-        ui.horizontal_wrapped(|ui| {
+        {
             if ui.button(t("Estimate")).clicked() {
                 let mut p = json!({ "mode": mode, "source": self.random.source });
                 if let Ok(l) = self.random.segment.trim().parse::<u64>() {
                     p["segment_bytes"] = json!(l);
                 }
+                let numbers = self.numbers.clone();
+                let n = move |v: &Value| numbers.format(v.as_f64().unwrap_or(0.0), 0..=0);
                 self.random.estimate = self.execute("random.estimate", p).map(|v| {
                     let mut s = tf(
-                        "{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s",
+                        "{bytes} bytes for {runs} runs: {requests} requests, at least {time}",
                         &[
-                            ("bytes", &v["bytes"].to_string()),
-                            ("runs", &v["replications"].to_string()),
-                            ("requests", &v["requests"].to_string()),
-                            ("seconds", &v["seconds_at_least"].to_string()),
+                            ("bytes", &n(&v["bytes"])),
+                            ("runs", &n(&v["replications"])),
+                            ("requests", &n(&v["requests"])),
+                            (
+                                "time",
+                                &duration(v["seconds_at_least"].as_u64().unwrap_or(0)),
+                            ),
                         ],
                     );
                     if v["within_free_tier"] == false {
@@ -289,9 +313,9 @@ impl App {
                 });
             }
             if let Some(e) = &self.random.estimate {
-                ui.label(e.clone());
+                ui.add(egui::Label::new(e.clone()).wrap());
             }
-        });
+        }
     }
 
     /// Follows a seed draw in progress, a frame at a time.

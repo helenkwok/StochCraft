@@ -1527,7 +1527,7 @@ connection	Flow	Srautas
 	Bytes per run	Baitų per vykdymą
 	from a pilot	iš bandomojo vykdymo
 	Estimate	Įvertis
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} baitų {runs} vykdymų: {requests} užklausų, ne mažiau kaip {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} baitų {runs} vykdymų: {requests} užklausų, ne mažiau kaip {time}
 	More than a month of the free tier allows.	Daugiau, nei leidžia nemokamas lygis per mėnesį.
 	Key kept	Raktas išsaugotas
 	Forget key	Užmiršti raktą

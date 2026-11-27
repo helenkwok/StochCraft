@@ -1527,7 +1527,7 @@ connection	Flow	Tok
 	Bytes per run	Bajtů na běh
 	from a pilot	z pilotního běhu
 	Estimate	Odhad
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bajtů pro {runs} běhů: {requests} požadavků, nejméně {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bajtů pro {runs} běhů: {requests} požadavků, nejméně {time}
 	More than a month of the free tier allows.	Více, než dovoluje bezplatná úroveň za měsíc.
 	Key kept	Klíč uložen
 	Forget key	Zapomenout klíč

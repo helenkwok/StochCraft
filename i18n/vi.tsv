@@ -1527,7 +1527,7 @@ connection	Flow	Luồng
 	Bytes per run	Byte mỗi lần chạy
 	from a pilot	từ lần chạy thử
 	Estimate	Ước lượng
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} byte cho {runs} lần chạy: {requests} yêu cầu, ít nhất {seconds} giây
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} byte cho {runs} lần chạy: {requests} yêu cầu, ít nhất {time}
 	More than a month of the free tier allows.	Nhiều hơn mức gói miễn phí cho phép trong một tháng.
 	Key kept	Đã giữ khóa
 	Forget key	Quên khóa

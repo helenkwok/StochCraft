@@ -1527,7 +1527,7 @@ connection	Flow	Flow
 	Bytes per run	Bytes pr. kørsel
 	from a pilot	fra en pilotkørsel
 	Estimate	Skøn
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bytes til {runs} kørsler: {requests} forespørgsler, mindst {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bytes til {runs} kørsler: {requests} forespørgsler, mindst {time}
 	More than a month of the free tier allows.	Mere, end det gratis niveau tillader på en måned.
 	Key kept	Nøgle gemt
 	Forget key	Glem nøgle

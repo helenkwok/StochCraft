@@ -1527,7 +1527,7 @@ connection	Flow	顺序流
 	Bytes per run	每次运行的字节数
 	from a pilot	来自试运行
 	Estimate	估计
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} 次运行需要 {bytes} 字节：{requests} 次请求，至少 {seconds} 秒
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs} 次运行需要 {bytes} 字节：{requests} 次请求，至少 {time}
 	More than a month of the free tier allows.	超过免费额度一个月的上限。
 	Key kept	密钥已保留
 	Forget key	忘记密钥

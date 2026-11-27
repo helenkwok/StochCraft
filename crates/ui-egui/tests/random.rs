@@ -47,13 +47,17 @@ fn click(h: &mut Harness<'static, App>, label: &str) {
 #[test]
 fn a_seed_is_drawn_from_the_beacon_and_shown() {
     let mut h = harness();
-    h.get_by_label("Random numbers");
     click(&mut h, "Seed from a source");
+    let before = h.get_by_label("Random numbers").rect();
     click(&mut h, "Draw a seed");
     for _ in 0..10 {
         h.run_steps(2);
     }
+    // The source by its name: its address, one long word, would widen the panel.
     h.get_by_label_contains("taken from NIST Randomness Beacon");
+    assert!(h.query_by_label_contains("beacon.nist.gov").is_none());
+    let after = h.get_by_label("Random numbers").rect();
+    assert_eq!(before, after, "the panel kept its width and place");
     assert!(
         h.state()
             .engine()

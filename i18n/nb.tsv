@@ -1527,7 +1527,7 @@ connection	Flow	Flyt
 	Bytes per run	Byte per kjøring
 	from a pilot	fra en pilotkjøring
 	Estimate	Anslag
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} byte for {runs} kjøringer: {requests} forespørsler, minst {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} byte for {runs} kjøringer: {requests} forespørsler, minst {time}
 	More than a month of the free tier allows.	Mer enn gratisnivået tillater i måneden.
 	Key kept	Nøkkel lagret
 	Forget key	Glem nøkkel

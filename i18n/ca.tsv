@@ -1527,7 +1527,7 @@ connection	Flow	Flux
 	Bytes per run	Bytes per execució
 	from a pilot	d'una execució pilot
 	Estimate	Estimació
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bytes per a {runs} execucions: {requests} sol·licituds, almenys {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bytes per a {runs} execucions: {requests} sol·licituds, almenys {time}
 	More than a month of the free tier allows.	Més del que permet el nivell gratuït en un mes.
 	Key kept	Clau desada
 	Forget key	Oblida la clau

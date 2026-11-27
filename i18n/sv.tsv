@@ -1527,7 +1527,7 @@ connection	Flow	Flöde
 	Bytes per run	Byte per körning
 	from a pilot	från en pilotkörning
 	Estimate	Uppskattning
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} byte för {runs} körningar: {requests} förfrågningar, minst {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} byte för {runs} körningar: {requests} förfrågningar, minst {time}
 	More than a month of the free tier allows.	Mer än gratisnivån tillåter på en månad.
 	Key kept	Nyckel sparad
 	Forget key	Glöm nyckeln

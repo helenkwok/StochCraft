@@ -1527,7 +1527,7 @@ connection	Flow	Tok
 	Bytes per run	Bajtov na zagon
 	from a pilot	iz pilotnega zagona
 	Estimate	Ocena
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bajtov za {runs} zagonov: {requests} zahtev, vsaj {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bajtov za {runs} zagonov: {requests} zahtev, vsaj {time}
 	More than a month of the free tier allows.	Več, kot dovoljuje brezplačna raven na mesec.
 	Key kept	Ključ shranjen
 	Forget key	Pozabi ključ

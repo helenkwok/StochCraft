@@ -1527,7 +1527,7 @@ connection	Flow	Alur
 	Bytes per run	Byte per eksekusi
 	from a pilot	dari uji coba
 	Estimate	Perkiraan
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} byte untuk {runs} eksekusi: {requests} permintaan, minimal {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} byte untuk {runs} eksekusi: {requests} permintaan, minimal {time}
 	More than a month of the free tier allows.	Lebih dari yang diizinkan tingkat gratis dalam sebulan.
 	Key kept	Kunci disimpan
 	Forget key	Lupakan kunci

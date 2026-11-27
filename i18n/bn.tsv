@@ -1527,7 +1527,7 @@ connection	Flow	প্রবাহ
 	Bytes per run	প্রতি পুনরাবৃত্তিতে বাইট
 	from a pilot	পাইলট থেকে
 	Estimate	অনুমান
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs}টি পুনরাবৃত্তির জন্য {bytes} বাইট: {requests}টি অনুরোধ, কমপক্ষে {seconds} সেকেন্ড
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs}টি পুনরাবৃত্তির জন্য {bytes} বাইট: {requests}টি অনুরোধ, কমপক্ষে {time}
 	More than a month of the free tier allows.	বিনামূল্যের স্তর এক মাসে যতটা দেয়, তার চেয়ে বেশি।
 	Key kept	কী রাখা হয়েছে
 	Forget key	কী ভুলুন

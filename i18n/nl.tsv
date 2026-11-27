@@ -1527,7 +1527,7 @@ connection	Flow	Stroom
 	Bytes per run	Bytes per uitvoering
 	from a pilot	uit een proefuitvoering
 	Estimate	Schatting
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bytes voor {runs} uitvoeringen: {requests} verzoeken, minstens {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bytes voor {runs} uitvoeringen: {requests} verzoeken, minstens {time}
 	More than a month of the free tier allows.	Meer dan de gratis variant per maand toestaat.
 	Key kept	Sleutel bewaard
 	Forget key	Sleutel vergeten

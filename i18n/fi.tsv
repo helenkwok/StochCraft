@@ -1527,7 +1527,7 @@ connection	Flow	Virta
 	Bytes per run	Tavuja ajoa kohden
 	from a pilot	pilottiajosta
 	Estimate	Arvio
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} tavua {runs} ajolle: {requests} pyyntöä, vähintään {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} tavua {runs} ajolle: {requests} pyyntöä, vähintään {time}
 	More than a month of the free tier allows.	Enemmän kuin ilmainen taso sallii kuukaudessa.
 	Key kept	Avain tallennettu
 	Forget key	Unohda avain

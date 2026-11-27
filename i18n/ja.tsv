@@ -1527,7 +1527,7 @@ connection	Flow	フロー
 	Bytes per run	実行あたりのバイト数
 	from a pilot	パイロット実行から
 	Estimate	見積もり
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} 回の実行に {bytes} バイト: リクエスト {requests} 件、最短 {seconds} 秒
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs} 回の実行に {bytes} バイト: リクエスト {requests} 件、最短 {time}
 	More than a month of the free tier allows.	無料枠が 1 か月に許す量を超えています。
 	Key kept	キーを保持しました
 	Forget key	キーを忘れる

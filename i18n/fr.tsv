@@ -1527,7 +1527,7 @@ connection	Flow	Flux
 	Bytes per run	Octets par exécution
 	from a pilot	d'un essai pilote
 	Estimate	Estimation
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} octets pour {runs} exécutions : {requests} requêtes, au moins {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} octets pour {runs} exécutions : {requests} requêtes, au moins {time}
 	More than a month of the free tier allows.	Plus que ce que permet l'offre gratuite en un mois.
 	Key kept	Clé conservée
 	Forget key	Oublier la clé

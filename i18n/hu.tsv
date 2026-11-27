@@ -1527,7 +1527,7 @@ connection	Flow	Folyamat
 	Bytes per run	Bájt futásonként
 	from a pilot	próbafutásból
 	Estimate	Becslés
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bájt {runs} futáshoz: {requests} kérés, legalább {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bájt {runs} futáshoz: {requests} kérés, legalább {time}
 	More than a month of the free tier allows.	Több, mint amit az ingyenes szint egy hónapban megenged.
 	Key kept	Kulcs megőrizve
 	Forget key	Kulcs elfelejtése

@@ -1527,7 +1527,7 @@ connection	Flow	ஓட்டம்
 	Bytes per run	ஒரு இயக்கத்திற்கான பைட்டுகள்
 	from a pilot	முன்னோட்ட இயக்கத்திலிருந்து
 	Estimate	மதிப்பீடு
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} இயக்கங்களுக்கு {bytes} பைட்டுகள்: {requests} கோரிக்கைகள், குறைந்தது {seconds} விநாடி
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs} இயக்கங்களுக்கு {bytes} பைட்டுகள்: {requests} கோரிக்கைகள், குறைந்தது {time}
 	More than a month of the free tier allows.	இலவச நிலை ஒரு மாதத்தில் அனுமதிப்பதை விட அதிகம்.
 	Key kept	திறவுகோல் வைக்கப்பட்டது
 	Forget key	திறவுகோலை மற

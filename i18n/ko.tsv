@@ -1527,7 +1527,7 @@ connection	Flow	흐름
 	Bytes per run	실행당 바이트
 	from a pilot	파일럿 실행에서
 	Estimate	추정
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs}회 실행에 {bytes}바이트: 요청 {requests}건, 최소 {seconds}초
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs}회 실행에 {bytes}바이트: 요청 {requests}건, 최소 {time}
 	More than a month of the free tier allows.	무료 등급이 한 달에 허용하는 양을 넘습니다.
 	Key kept	키 보관됨
 	Forget key	키 잊기

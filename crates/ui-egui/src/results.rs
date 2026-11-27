@@ -175,7 +175,16 @@ pub fn record_line(ui: &mut egui::Ui, results: &Value) {
         ),
     ));
     if let Some(line) = random_line(r) {
-        ui.label(theme::weak(ui, line));
+        ui.add(egui::Label::new(theme::weak(ui, line)).wrap());
+    }
+}
+
+/// A source as the window names it: its name, without the address a record gives after it in
+/// brackets (`NIST Randomness Beacon (https://…)`), which has no spaces to wrap at.
+pub(crate) fn source_name(source: &str) -> &str {
+    match source.find(" (http") {
+        Some(i) if source.ends_with(')') => &source[..i],
+        _ => source,
     }
 }
 
@@ -213,7 +222,7 @@ pub fn random_line(record: &Value) -> Option<String> {
             "Seed {seed} taken from {source}",
             &[
                 ("seed", &record["seed"].to_string()),
-                ("source", r["source"].as_str().unwrap_or("")),
+                ("source", source_name(r["source"].as_str().unwrap_or(""))),
             ],
         )),
         _ => None,

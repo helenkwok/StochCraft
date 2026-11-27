@@ -1527,7 +1527,7 @@ connection	Flow	ప్రవాహం
 	Bytes per run	ఒక అమలుకు బైట్లు
 	from a pilot	పైలట్ అమలు నుండి
 	Estimate	అంచనా
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} అమలులకు {bytes} బైట్లు: {requests} అభ్యర్థనలు, కనీసం {seconds} సెకన్లు
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs} అమలులకు {bytes} బైట్లు: {requests} అభ్యర్థనలు, కనీసం {time}
 	More than a month of the free tier allows.	ఉచిత స్థాయి ఒక నెలలో అనుమతించే దానికంటే ఎక్కువ.
 	Key kept	కీ ఉంచబడింది
 	Forget key	కీని మర్చిపో

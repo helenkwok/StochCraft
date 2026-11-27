@@ -1527,7 +1527,7 @@ connection	Flow	प्रवाह
 	Bytes per run	प्रति रन बाइट
 	from a pilot	पायलट रन से
 	Estimate	अनुमान
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} रन के लिए {bytes} बाइट: {requests} अनुरोध, कम से कम {seconds} सेकंड
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs} रन के लिए {bytes} बाइट: {requests} अनुरोध, कम से कम {time}
 	More than a month of the free tier allows.	मुफ़्त स्तर एक महीने में जितना देता है, उससे ज़्यादा।
 	Key kept	कुंजी रखी गई
 	Forget key	कुंजी भुलाएँ

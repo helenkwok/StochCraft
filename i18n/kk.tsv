@@ -1527,7 +1527,7 @@ connection	Flow	Ағын
 	Bytes per run	Әр іске қосуға байт
 	from a pilot	пилоттық іске қосудан
 	Estimate	Бағалау
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} байт {runs} іске қосуға: {requests} сұрау, кемінде {seconds} с
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} байт {runs} іске қосуға: {requests} сұрау, кемінде {time}
 	More than a month of the free tier allows.	Тегін деңгей бір айда рұқсат ететіннен көп.
 	Key kept	Кілт сақталды
 	Forget key	Кілтті ұмыту

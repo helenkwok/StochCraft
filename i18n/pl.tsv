@@ -1527,7 +1527,7 @@ connection	Flow	Przepływ
 	Bytes per run	Bajtów na uruchomienie
 	from a pilot	z uruchomienia próbnego
 	Estimate	Szacunek
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bajtów na {runs} uruchomień: {requests} żądań, co najmniej {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bajtów na {runs} uruchomień: {requests} żądań, co najmniej {time}
 	More than a month of the free tier allows.	Więcej, niż pozwala darmowy poziom w ciągu miesiąca.
 	Key kept	Klucz zapamiętany
 	Forget key	Zapomnij klucz

@@ -1527,7 +1527,7 @@ connection	Flow	ნაკადი
 	Bytes per run	ბაიტები თითო გაშვებაზე
 	from a pilot	საპილოტე გაშვებიდან
 	Estimate	შეფასება
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} ბაიტი {runs} გაშვებისთვის: {requests} მოთხოვნა, მინიმუმ {seconds} წმ
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} ბაიტი {runs} გაშვებისთვის: {requests} მოთხოვნა, მინიმუმ {time}
 	More than a month of the free tier allows.	უფრო მეტი, ვიდრე უფასო დონე თვეში იძლევა.
 	Key kept	გასაღები შენახულია
 	Forget key	გასაღების დავიწყება

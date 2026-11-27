@@ -1527,7 +1527,7 @@ connection	Flow	Rrjedhë
 	Bytes per run	Bajte për ekzekutim
 	from a pilot	nga një provë pilot
 	Estimate	Vlerësim
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bajte për {runs} ekzekutime: {requests} kërkesa, të paktën {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bajte për {runs} ekzekutime: {requests} kërkesa, të paktën {time}
 	More than a month of the free tier allows.	Më shumë se sa lejon niveli falas në një muaj.
 	Key kept	Çelësi u ruajt
 	Forget key	Harro çelësin

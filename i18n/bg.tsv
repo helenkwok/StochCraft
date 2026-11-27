@@ -1527,7 +1527,7 @@ connection	Flow	Поток
 	Bytes per run	Байтове на изпълнение
 	from a pilot	от пилотно изпълнение
 	Estimate	Оценка
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} байта за {runs} изпълнения: {requests} заявки, поне {seconds} с
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} байта за {runs} изпълнения: {requests} заявки, поне {time}
 	More than a month of the free tier allows.	Повече, отколкото позволява безплатното ниво за месец.
 	Key kept	Ключът е запазен
 	Forget key	Забравяне на ключа

@@ -1527,7 +1527,7 @@ connection	Flow	順序流
 	Bytes per run	每次執行的位元組數
 	from a pilot	來自試執行
 	Estimate	估計
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} 次執行需要 {bytes} 位元組：{requests} 次請求，至少 {seconds} 秒
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs} 次執行需要 {bytes} 位元組：{requests} 次請求，至少 {time}
 	More than a month of the free tier allows.	超過免費額度一個月的上限。
 	Key kept	金鑰已保留
 	Forget key	忘記金鑰

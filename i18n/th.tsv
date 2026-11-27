@@ -1527,7 +1527,7 @@ connection	Flow	โฟลว์
 	Bytes per run	ไบต์ต่อการรัน
 	from a pilot	จากการรันนำร่อง
 	Estimate	การประมาณ
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} ไบต์สำหรับ {runs} การรัน: {requests} คำขอ อย่างน้อย {seconds} วินาที
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} ไบต์สำหรับ {runs} การรัน: {requests} คำขอ อย่างน้อย {time}
 	More than a month of the free tier allows.	มากกว่าที่ระดับฟรีอนุญาตในหนึ่งเดือน
 	Key kept	เก็บคีย์ไว้แล้ว
 	Forget key	ลืมคีย์

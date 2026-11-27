@@ -1527,7 +1527,7 @@ connection	Flow	Voog
 	Bytes per run	Baite käivitamise kohta
 	from a pilot	pilootkäivitusest
 	Estimate	Hinnang
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} baiti {runs} käivitamise jaoks: {requests} päringut, vähemalt {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} baiti {runs} käivitamise jaoks: {requests} päringut, vähemalt {time}
 	More than a month of the free tier allows.	Rohkem, kui tasuta tase kuus lubab.
 	Key kept	Võti salvestatud
 	Forget key	Unusta võti

@@ -1527,7 +1527,7 @@ connection	Flow	ເສັ້ນທາງ
 	Bytes per run	ໄບຕ໌ຕໍ່ຮອບ
 	from a pilot	ຈາກຮອບທົດລອງນຳ
 	Estimate	ການປະມານ
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} ໄບຕ໌ ສຳລັບ {runs} ຮອບ: {requests} ຄຳຂໍ, ຢ່າງໜ້ອຍ {seconds} ວິນາທີ
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} ໄບຕ໌ ສຳລັບ {runs} ຮອບ: {requests} ຄຳຂໍ, ຢ່າງໜ້ອຍ {time}
 	More than a month of the free tier allows.	ຫຼາຍກວ່າທີ່ລະດັບຟຣີອະນຸຍາດໃນໜຶ່ງເດືອນ.
 	Key kept	ເກັບກະແຈແລ້ວ
 	Forget key	ລືມກະແຈ

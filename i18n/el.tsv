@@ -1527,7 +1527,7 @@ connection	Flow	Ροή
 	Bytes per run	Byte ανά εκτέλεση
 	from a pilot	από δοκιμαστική εκτέλεση
 	Estimate	Εκτίμηση
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} byte για {runs} εκτελέσεις: {requests} αιτήματα, τουλάχιστον {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} byte για {runs} εκτελέσεις: {requests} αιτήματα, τουλάχιστον {time}
 	More than a month of the free tier allows.	Περισσότερο από όσο επιτρέπει το δωρεάν επίπεδο σε έναν μήνα.
 	Key kept	Το κλειδί διατηρείται
 	Forget key	Λήθη κλειδιού

@@ -1527,7 +1527,7 @@ connection	Flow	Verbindung
 	Bytes per run	Bytes pro Lauf
 	from a pilot	aus einem Pilotlauf
 	Estimate	Schätzung
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} Bytes für {runs} Läufe: {requests} Anfragen, mindestens {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} Bytes für {runs} Läufe: {requests} Anfragen, mindestens {time}
 	More than a month of the free tier allows.	Mehr, als das kostenlose Kontingent im Monat erlaubt.
 	Key kept	Schlüssel gespeichert
 	Forget key	Schlüssel vergessen

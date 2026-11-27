@@ -1527,7 +1527,7 @@ connection	Flow	Akış
 	Bytes per run	Çalıştırma başına bayt
 	from a pilot	pilot çalıştırmadan
 	Estimate	Tahmin
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} çalıştırma için {bytes} bayt: {requests} istek, en az {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs} çalıştırma için {bytes} bayt: {requests} istek, en az {time}
 	More than a month of the free tier allows.	Ücretsiz katmanın bir ayda izin verdiğinden fazla.
 	Key kept	Anahtar saklandı
 	Forget key	Anahtarı unut

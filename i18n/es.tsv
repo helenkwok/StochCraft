@@ -1527,7 +1527,7 @@ connection	Flow	Flujo
 	Bytes per run	Bytes por ejecución
 	from a pilot	de una ejecución piloto
 	Estimate	Estimación
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bytes para {runs} ejecuciones: {requests} solicitudes, al menos {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bytes para {runs} ejecuciones: {requests} solicitudes, al menos {time}
 	More than a month of the free tier allows.	Más de lo que permite el nivel gratuito en un mes.
 	Key kept	Clave guardada
 	Forget key	Olvidar clave

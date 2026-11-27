@@ -1527,7 +1527,7 @@ connection	Flow	Flux
 	Bytes per run	Octeți per rulare
 	from a pilot	dintr-o rulare pilot
 	Estimate	Estimare
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} octeți pentru {runs} rulări: {requests} cereri, cel puțin {seconds} s
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} octeți pentru {runs} rulări: {requests} cereri, cel puțin {time}
 	More than a month of the free tier allows.	Mai mult decât permite nivelul gratuit într-o lună.
 	Key kept	Cheie păstrată
 	Forget key	Uită cheia

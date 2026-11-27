@@ -1527,7 +1527,7 @@ connection	Flow	Потік
 	Bytes per run	Байтів на запуск
 	from a pilot	із пробного запуску
 	Estimate	Оцінка
-	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} байтів на {runs} запусків: {requests} запитів, щонайменше {seconds} с
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} байтів на {runs} запусків: {requests} запитів, щонайменше {time}
 	More than a month of the free tier allows.	Більше, ніж дозволяє безкоштовний рівень за місяць.
 	Key kept	Ключ збережено
 	Forget key	Забути ключ
