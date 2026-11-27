@@ -4974,8 +4974,10 @@ are.
     a day (Poisson); 18.52% need a nursing home and go to a discharge-to-assess (D2A) inpatient
     bed (75), the rest need care at home and go to a D2A home place (500 in the baseline). Those
     who find no place free wait in hospital, with no limit. On each day a nursing home accepts a
-    patient with chance 1/7 and care at home with chance 1/3; the paper runs a year after 8 weeks
-    of warm-up, 5 times. The model is two independent loss systems: a gateway splits the
+    patient with chance 1/7 and care at home with chance 1/3. The paper runs "1 year of simulated
+    time with a warm-up period of 8 weeks", 5 times; the file reads that as 365 days in all, 56
+    of them warm-up (BPSim's duration includes the warm-up, so 309 days are measured). The exact
+    values below are for the steady state, so that reading does not change them. The model is two independent loss systems: a gateway splits the
     patients, each D2A task has its places and no waiting room, and those turned away take a
     `stochcraft:turnedAway` way to an unlimited "Waiting in hospital" task. The stay, in D2A or
     in hospital, is 1 + 2(N − 1) days with N geometric on 1, 2, …, mean 2/p − 1 (13 days for a

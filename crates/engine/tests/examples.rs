@@ -1369,7 +1369,10 @@ fn delayed_in_hospital(m: &Model) -> [f64; 2] {
 ///
 /// Exact, by Erlang B: 202.14 patients wait in hospital on average (199.84 for a nursing home,
 /// 2.31 for care at home); the paper's Table 2 has 205 (203, 207) and the NHS data 208. The run
-/// uses the paper's 8 weeks of warm-up and a year, with 20 replications rather than its 5.
+/// is the file's: the paper's "1 year of simulated time with a warm-up period of 8 weeks" read as
+/// 365 days in all, 56 of them warm-up, so 309 days measured (BPSim's duration includes the
+/// warm-up). The exact values are for the steady state, so the reading does not change them.
+/// It runs 20 replications rather than the paper's 5.
 #[test]
 fn delayed_discharge_matches_erlang_b() {
     let m = model_of("delayed-discharge.bpmn", None);
@@ -1389,10 +1392,7 @@ fn delayed_discharge_matches_erlang_b() {
         "{nursing_home} + {care_at_home}"
     );
 
-    let mut e = open(
-        "delayed-discharge.bpmn",
-        json!({ "replications": 20, "warmup": 56.0, "duration": 365.0 }),
-    );
+    let mut e = open("delayed-discharge.bpmn", json!({ "replications": 20 }));
     let r = ok(&mut e, "run", json!({}));
     let behaviour = behaviour_warnings(&r);
     assert!(behaviour.is_empty(), "{behaviour:?}");
@@ -1459,8 +1459,8 @@ fn delayed_discharge_sits_just_below_the_published_tables() {
 /// [`delayed_in_hospital`]: D2A home places 350, 400, 450, 550 and 650; a nursing home accepting
 /// 1 day in 5, 6, 8, 9 or 10; care at home accepting 1 day in 2, 4 or 5; D2A inpatient beds 85
 /// and 95. Exact totals: 317.1, 269.5, 226.6, 199.8, 199.8; 118.0, 160.0, 244.3, 286.5, 328.7;
-/// 199.8, 353.2, 537.3; 192.2, 182.3. The runs warm up for 200 days: with stays of 19 days on
-/// average, 8 weeks would leave the hospital wait about 0.3% low. Where the exact wait is all
+/// 199.8, 353.2, 537.3; 192.2, 182.3. The runs warm up for 200 days and measure 365: with stays
+/// of 19 days on average, the file's 8 weeks would leave the hospital wait about 0.3% low. Where the exact wait is all
 /// but 0 (care at home with 550 or 650 places, or accepted 1 day in 2), the run is bounded
 /// instead, since its interval is then 0 wide.
 #[test]
