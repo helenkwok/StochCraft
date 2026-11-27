@@ -1545,6 +1545,18 @@ connection	Flow	Voog
 	Root mean square	Ruutkeskmine
 	A step towards an answer: the results list it folded away under the answers.	Samm vastuse poole: tulemused näitavad seda vastuste all kokkuvolditult.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Ruudus suuruse, näiteks vea ruudu jaoks: tulemused annavad selle keskmise ruutjuure suuruse enda ühikus.
+	Median time in system	Süsteemis oleku aja mediaan
+	Time in system, 90th percentile	Aeg süsteemis, 90. protsentiil
+	Time in system, 95th percentile	Aeg süsteemis, 95. protsentiil
+	Share done within the target time	Sihtaja jooksul valmis saanute osa
+	Percentiles of time in system	Süsteemis oleku aja protsentiilid
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Näitab iga olemi loomisest nende väljumisteni kulunud aja mediaani, 90. ja 95. protsentiili ning sihtaja korral selle jooksul valmis saanute osa.
+	Target time ({unit})	Sihtaeg ({unit})
+	The target time is a time above 0	Sihtaeg peab olema suurem kui 0
+	Count only working time on	Loe ainult tööaega kalendri järgi
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Olemid, mis on käivitamise lõppedes veel sees, jäetakse välja, seega peata käivitamine, kui kõik on valmis.
+	Set the target time in system of {block} to a time above 0.	Määra ploki {block} sihtaeg süsteemis suuremaks kui 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Ploki {block} aeg süsteemis loeb tööaega kalendri järgi, mida pole olemas. Vali olemasolev kalender.
 	One machine's availability	Ühe masina käideldavus
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Masin, mis läheb keskmiselt iga 90 tunni järel rikki ja mille parandamine võtab 4.5 tundi (Hristova, Denev ja Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Kui tihti seisab üks masin ja kui palju tööd see maksab?

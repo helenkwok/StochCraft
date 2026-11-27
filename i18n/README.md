@@ -1095,6 +1095,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   for an intermediate or working calculation; the placeholders are kept as they are. Not checked
   against any other source and not reviewed by native speakers; the least certain are lo, th,
   ta, te, bn, ka, kk, hi and sq.
+- The rows for time in system by percentile on Departures (the three percentile results and the
+  share done within the target time, the inspector's checkbox, its hint, target time, working
+  time and censoring note, and the two validation messages) were machine-drafted from the plain
+  meaning of the English, with each catalog's own words for time in system, 95th percentile,
+  "The whole clock" and its calendar messages from its existing rows; "median" is the
+  language's statistical term, and "working time" its everyday word for time at work. Not
+  checked against any other source and not reviewed by native speakers; the least certain are
+  lo, th, ta, te, bn, ka, kk and sq.
 - The row for the validation message of a uniform, truncated normal or beta whose minimum is not
   below its maximum ("set “Minimum” below “Maximum”", a beta on a range) is each catalog's own
   row for the triangular's message with its clause about the most likely value left out. Not

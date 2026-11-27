@@ -1545,6 +1545,18 @@ connection	Flow	Tok
 	Root mean square	Koren povprečnega kvadrata
 	A step towards an answer: the results list it folded away under the answers.	Korak proti odgovoru: rezultati ga prikažejo zloženega pod odgovori.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Za kvadrirano količino, na primer kvadrat napake: rezultati podajo kvadratni koren njenega povprečja, v enoti same količine.
+	Median time in system	Mediana časa v sistemu
+	Time in system, 90th percentile	Čas v sistemu, 90. percentil
+	Time in system, 95th percentile	Čas v sistemu, 95. percentil
+	Share done within the target time	Delež končanih v ciljnem času
+	Percentiles of time in system	Percentili časa v sistemu
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Prikaže mediano ter 90. in 95. percentil časa, ki ga je vsaka entiteta porabila od nastanka do teh izhodov, s ciljnim časom pa delež končanih v njem.
+	Target time ({unit})	Ciljni čas ({unit})
+	The target time is a time above 0	Ciljni čas je čas, večji od 0
+	Count only working time on	Štej samo delovni čas po
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitete, ki so ob koncu zagona še znotraj, niso upoštevane, zato zagon ustavite, ko so vse končane.
+	Set the target time in system of {block} to a time above 0.	Nastavite ciljni čas v sistemu bloka {block} na čas, večji od 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Čas v sistemu bloka {block} šteje delovni čas po koledarju, ki ne obstaja. Izberite koledar, ki obstaja.
 	One machine's availability	Razpoložljivost enega stroja
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	En stroj, ki se v povprečju pokvari vsakih 90 ur, popravilo pa traja 4.5 ure (Hristova, Denev in Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Kako pogosto stoji en stroj in koliko dela to stane?

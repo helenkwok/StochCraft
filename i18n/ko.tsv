@@ -1545,6 +1545,18 @@ connection	Flow	흐름
 	Root mean square	제곱평균제곱근
 	A step towards an answer: the results list it folded away under the answers.	답으로 가는 한 단계입니다. 결과에서는 답 아래에 접혀서 표시됩니다.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	오차의 제곱처럼 제곱된 양에 씁니다. 결과는 그 평균의 제곱근을 원래 양의 단위로 보여 줍니다.
+	Median time in system	시스템 내 체류 시간 중앙값
+	Time in system, 90th percentile	시스템 내 체류 시간, 90번째 백분위수
+	Time in system, 95th percentile	시스템 내 체류 시간, 95번째 백분위수
+	Share done within the target time	목표 시간 안에 끝난 비율
+	Percentiles of time in system	시스템 내 체류 시간 백분위수
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	각 개체가 생성된 뒤 이 출구에 도착하기까지 걸린 시간의 중앙값과 90번째, 95번째 백분위수를 보여 주며, 목표 시간을 정하면 그 안에 끝난 비율도 보여 줍니다.
+	Target time ({unit})	목표 시간 ({unit})
+	The target time is a time above 0	목표 시간은 0보다 큰 시간이어야 합니다
+	Count only working time on	근무 시간만 셀 캘린더
+	Entities still inside when the run ends are left out, so stop the run once all are done.	실행이 끝날 때 아직 내부에 있는 개체는 빠지므로, 모두 끝난 뒤에 실행을 멈추세요.
+	Set the target time in system of {block} to a time above 0.	{block}의 시스템 내 목표 시간을 0보다 큰 시간으로 설정하세요.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block}의 시스템 내 체류 시간이 존재하지 않는 캘린더로 근무 시간을 셉니다. 존재하는 캘린더를 선택하세요.
 	One machine's availability	기계 한 대의 가용성
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	평균 90시간마다 고장 나고 수리에 4.5시간이 걸리는 기계 한 대 (Hristova, Denev, Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	기계 한 대가 얼마나 자주 멈추고, 그로 인해 얼마나 많은 일이 손실되는가?

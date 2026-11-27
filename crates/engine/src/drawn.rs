@@ -133,7 +133,11 @@ fn kind_draws(id: &ElementId, kind: &ElementKind, connections: &[Connection]) ->
             processing_by,
         } => dist(duration) || processing_by.as_ref().is_some_and(by_value),
         // Scrap counts as drawn: whether an entity is scrap may come from a drawn way.
-        ElementKind::Sink { scrap, demand: _ } => scrap.is_some(),
+        ElementKind::Sink {
+            scrap,
+            demand: _,
+            time_in_system: _,
+        } => scrap.is_some(),
         ElementKind::ExclusiveGateway {
             default: _,
             routing,

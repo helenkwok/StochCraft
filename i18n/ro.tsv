@@ -1545,6 +1545,18 @@ connection	Flow	Flux
 	Root mean square	Medie pătratică
 	A step towards an answer: the results list it folded away under the answers.	Un pas spre un răspuns: rezultatele îl arată restrâns sub răspunsuri.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Pentru o mărime la pătrat, cum ar fi o eroare la pătrat: rezultatele dau rădăcina pătrată a mediei ei, în unitatea mărimii însăși.
+	Median time in system	Mediana timpului în sistem
+	Time in system, 90th percentile	Timp în sistem, percentila 90
+	Time in system, 95th percentile	Timp în sistem, percentila 95
+	Share done within the target time	Proporția terminată în timpul țintă
+	Percentiles of time in system	Percentilele timpului în sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Arată mediana, percentilele 90 și 95 ale timpului pe care fiecare entitate l-a petrecut de la creare până la aceste ieșiri și, cu un timp țintă, proporția terminată în el.
+	Target time ({unit})	Timp țintă ({unit})
+	The target time is a time above 0	Timpul țintă este un timp mai mare decât 0
+	Count only working time on	Numără doar timpul de lucru după
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitățile încă în interior când se încheie rularea sunt lăsate în afară, așa că opriți rularea când toate sunt gata.
+	Set the target time in system of {block} to a time above 0.	Setați timpul țintă în sistem al blocului {block} la un timp mai mare decât 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Timpul în sistem al blocului {block} numără timpul de lucru după un calendar care nu există. Alegeți un calendar existent.
 	One machine's availability	Disponibilitatea unei mașini
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	O mașină care se defectează în medie la fiecare 90 de ore și necesită 4.5 ore pentru reparație (Hristova, Denev și Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Cât de des stă o mașină și cât de multă muncă costă asta?
