@@ -868,6 +868,16 @@ pub struct FileOpen {
 
 #[derive(Debug, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
+pub struct FileReopen {
+    /// The id of the scenario to open, as `file.scenarios` lists it.
+    pub scenario: String,
+    /// Reopen even though the model has unsaved changes, which are lost.
+    #[serde(default)]
+    pub discard_changes: bool,
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct FileSave {
     /// Where to save; by default the file the model was opened from or last saved to.
     #[serde(default)]
@@ -1678,6 +1688,14 @@ fn results_distribution(e: &mut Engine, p: Value) -> Result<Value, CommandError>
         )
     })?;
     crate::distribution::describe(results, &p)
+}
+
+fn data_analyse(_: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    crate::data::analyse(parse(p)?)
+}
+
+fn data_warmup(_: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    crate::data::warmup(parse(p)?)
 }
 
 fn results_compare(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -2738,6 +2756,110 @@ fn file_open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     })
 }
 
+fn file_scenarios(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    parse::<NoParams>(p)?;
+    Ok(e.scenarios())
+}
+
+fn file_reopen(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: FileReopen = parse(p)?;
+    // An agent-based model's charts and lists of links, and a process model's decision tables,
+    // are read from beside the file, as `file.open` reads them; a model opened from texts has
+    // no file, so nothing on disk is read for it.
+    let dir = e.path().map(|name| {
+        std::path::Path::new(name)
+            .parent()
+            .map(std::path::Path::to_path_buf)
+            .unwrap_or_default()
+    });
+    e.reopen_scenario(&p.scenario, p.discard_changes, &mut |href: &str| {
+        let Some(dir) = &dir else {
+            return Err("not among the texts the model was opened with".to_owned());
+        };
+        let path = crate::agents::beside(dir, href)?;
+        std::fs::read(path).map_err(|err| err.to_string())
+    })
+}
+
+impl Engine {
+    /// Opens scenario `scenario` of the opened file, from the file as it was opened or last
+    /// saved, as `file.reopen` does, reading the files the model names with `resolve` (as
+    /// [`Engine::open_bytes_with`] does). Unsaved changes are refused ([`ErrorCode::Conflict`])
+    /// unless `discard_changes`, and a scenario the file does not have is
+    /// [`ErrorCode::InvalidParams`]; either way the model is left as it was.
+    pub fn reopen_scenario(
+        &mut self,
+        scenario: &str,
+        discard_changes: bool,
+        resolve: &mut dyn FnMut(&str) -> Result<Vec<u8>, String>,
+    ) -> Result<Value, CommandError> {
+        let Some(f) = self.file.as_ref().filter(|_| self.sd.is_none()) else {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                "no file with scenarios is open: open one with file.open",
+            ));
+        };
+        let ids: Vec<&str> = f
+            .opened
+            .scenario_details()
+            .iter()
+            .map(|s| s.id.as_str())
+            .collect();
+        if !ids.contains(&scenario) {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                if ids.is_empty() {
+                    format!("the file has no scenario `{scenario}`; it has none")
+                } else {
+                    format!(
+                        "the file has no scenario `{scenario}`; its scenarios are {}",
+                        ids.join(", ")
+                    )
+                },
+            ));
+        }
+        if self.is_dirty() && !discard_changes {
+            return Err(CommandError::new(
+                ErrorCode::Conflict,
+                "the model has unsaved changes, which opening another scenario drops: save them first, or `\"discard_changes\": true` opens it anyway",
+            ));
+        }
+        let bytes = f.opened.bytes().to_vec();
+        let path = f.path.clone();
+        // A model opened from texts (`agents.open`) has no path: it keeps the name it was
+        // opened under.
+        let name = path
+            .clone()
+            .or_else(|| self.journal_start.name.clone())
+            .unwrap_or_default();
+        // The files an agent-based model was opened with are read from what it holds (the
+        // texts `agents.open` was given, or the files read from beside it), and only the rest
+        // with `resolve`.
+        let (read, given) = self
+            .agents
+            .as_ref()
+            .map(|d| (d.files.clone(), d.given.clone()))
+            .unwrap_or_default();
+        let result =
+            self.open_bytes_with(&name, &bytes, Some(scenario), &mut |href: &str| match read
+                .get(href)
+                .or_else(|| given.get(href))
+            {
+                Some(b) => Ok(b.clone()),
+                None => resolve(href),
+            })?;
+        if path.is_none()
+            && let Some(f) = self.file.as_mut()
+        {
+            f.path = None;
+        }
+        if let Some(d) = self.agents.as_mut() {
+            d.given = given;
+        }
+        Ok(result)
+    }
+}
+
 /// A file to write beside the model: its reference, where, its bytes, and what was there when the
 /// save looked (`None`: nothing).
 type Sibling = (String, std::path::PathBuf, Vec<u8>, Option<Vec<u8>>);
@@ -3489,6 +3611,22 @@ pub static COMMANDS: &[Command] = &[
         run: results_compare,
     },
     Command {
+        name: "data.analyse",
+        summary: "Analyse per-replication results made by any simulation tool, spreadsheet or script that can write CSV, without a model: a wide table (a row per replication, a column per measure) or a long one (measure and value columns), with optional scenario and replication columns. Per scenario and measure: n, the mean with its 95% half-width, min and max, the precision against a target with the runs needed, and two outcomes where the runs split; each scenario against the baseline: the difference with its 95% interval (paired-t when `paired` is declared, Welch's otherwise) and a verdict, judged as the check against observed data judges a difference (an optional per-measure `tolerance` for agreement).",
+        kind: CommandKind::Query,
+        schema: schema::<crate::data::AnalyseParams>,
+        example: || json!({ "csv": "scenario,replication,wait\nnow,1,4.2\nnow,2,5.1\nnow,3,4.6\nsecond desk,1,2.1\nsecond desk,2,2.9\nsecond desk,3,2.4\n", "baseline": "now", "paired": true, "tolerance": { "wait": 0.5 } }),
+        run: data_analyse,
+    },
+    Command {
+        name: "data.warmup",
+        summary: "Suggest a warm-up from a time series per replication made by any simulation tool, spreadsheet or script that can write CSV (time, replication, measure columns, optional scenario): each measure averaged across the replications at each time (Welch's plot) and MSER-5 on the average, with the averaged series for a plot.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::data::WarmupParams>,
+        example: || json!({ "csv": "time,replication,queue\n1,1,0\n2,1,2\n3,1,3\n1,2,1\n2,2,2\n3,2,4\n", "time": "time", "replication": "replication" }),
+        run: data_warmup,
+    },
+    Command {
         name: "run.start",
         summary: "Start the experiment in the background; follow it with run.status.",
         kind: CommandKind::Action,
@@ -3535,6 +3673,22 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<FileOpen>,
         example: || json!({ "path": "help-desk.bpmn" }),
         run: file_open,
+    },
+    Command {
+        name: "file.scenarios",
+        summary: "The opened file's input scenarios (BPSim): each with its id, name, description and the scenario it inherits from, and which one is open.",
+        kind: CommandKind::Query,
+        schema: schema::<NoParams>,
+        example: || json!({}),
+        run: file_scenarios,
+    },
+    Command {
+        name: "file.reopen",
+        summary: "Open another of the opened file's scenarios (file.scenarios), from the file as it was opened or last saved, replacing the model, clearing the history and starting a new journal. Unsaved changes are refused unless `discard_changes` is true.",
+        kind: CommandKind::Action,
+        schema: schema::<FileReopen>,
+        example: || json!({ "scenario": "scenario" }),
+        run: file_reopen,
     },
     Command {
         name: "model.new",

@@ -1535,6 +1535,11 @@ connection	Flow	ஓட்டம்
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ஒப்பீட்டு அடிப்படையும் இந்த இயக்கமும் அதே மீள் இயக்கங்களுக்கு தங்கள் சீரற்ற எண்களை ஒரே இடத்திலிருந்து (ஒரு சீரற்ற விதை, அல்லது சீரற்ற எண்கள் கொண்ட கோப்பு) எடுக்கவில்லை, எனவே அவை சார்பற்ற மீள் இயக்கங்களாக ஒப்பிடப்படுகின்றன, இடைவெளிகள் அகலமாக உள்ளன.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	கோப்பு {file} இலிருந்து சீரற்ற எண்கள் (SHA-256 {sha}…), ஒவ்வொரு மீள் இயக்கத்திற்கும் பைட் {offset} முதல் {bytes} பைட்டுகள்
 	Seed {seed} taken from {source}	{source} இலிருந்து எடுத்த சீரற்ற விதை {seed}
+	Scenario	சூழ்நிலை
+	Scenario: {name}	சூழ்நிலை: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ஐத் திறந்தால் {name} இல் சேமிக்கப்படாத மாற்றங்கள் நீக்கப்படும். முதலில் சேமிக்கவா?
+@plural	{n} scenario to compare|{n} scenarios to compare	ஒப்பிட {n} சூழ்நிலை|ஒப்பிட {n} சூழ்நிலைகள்
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	திறந்துள்ள சூழ்நிலை மட்டும் உள்ள புதிய கோப்பாக இது சேமிக்கப்பட்டது, எனவே {scenario} க்கு மாற்றப்படவில்லை.
 	Median time in system	அமைப்பில் கழித்த நேரத்தின் இடைநிலை
 	Time in system, 90th percentile	அமைப்பில் கழித்த நேரம், 90-ஆம் சதமானம்
 	Time in system, 95th percentile	அமைப்பில் கழித்த நேரம், 95-ஆம் சதமானம்
@@ -1552,3 +1557,18 @@ connection	Flow	ஓட்டம்
 	How often is one machine down, and how much work does that cost?	ஒரு இயந்திரம் எவ்வளவு அடிக்கடி நின்றுவிடுகிறது, அதனால் எவ்வளவு வேலை இழப்பு?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 மணிநேரம் இயக்கம், 4.5 நிறுத்தம்: இயந்திரம் 95.2% நேரம் வேலை செய்கிறது, ஒவ்வொரு 94.5 மணிநேரத்திற்கும் ஒரு பழுது ஏற்படுகிறது. பழுதுபார்க்கும் நேரத்தை பாதியாக்கினால் அது 97.6% ஆகிறது.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} நேரம் நின்றிருக்கிறது (தயார்நிலை {up}); அதற்காக எதுவும் காத்திருக்கவில்லை.
+	Choose a warm-up	தொடக்கச் சீராக்க நேரத்தைத் தேர்ந்தெடு
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	வெல்ச் வரைபடம்: பதிவான ஒவ்வொரு நேரத்திலும் இயக்கங்களின் சராசரி, நகரும் சராசரியால் மென்மையாக்கப்பட்டது. வளைவு சமமாகும் இடத்தில் தொடக்கச் சீராக்க நேரத்தை அமைக்கவும்; MSER-5 இன் வெட்டு ஒரு தொடக்கப் புள்ளி மட்டுமே.
+	Number inside	உள்ளே உள்ள எண்ணிக்கை
+	Busy units	பணியிலுள்ள அலகுகள்
+	Leaving per interval	இடைவெளிக்கு வெளியேறுபவை
+	Entering per interval	இடைவெளிக்கு நுழைபவை
+	The run recorded too few times to plot.	வரைபடத்துக்கு இயக்கம் மிகக் குறைவான நேரங்களைப் பதிவுசெய்தது.
+	Points each side	ஒவ்வொரு பக்கமும் உள்ள புள்ளிகள்
+	1 to {max}	1 முதல் {max} வரை
+	Welch's plot of {measure} at {block}	{block} இல் {measure} இன் வெல்ச் வரைபடம்
+	MSER-5 suggests {value}.	MSER-5 பரிந்துரைப்பது {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 இங்கே எதையும் பரிந்துரைக்கவில்லை: இயக்கத்தின் பாதியிலும் தொடர் இன்னும் நிலைபெறலாம்.
+	The warm-up now is {value}.	இப்போது தொடக்கச் சீராக்க நேரம் {value}.
+	Later times, which fewer runs reached, are left out.	குறைவான இயக்கங்கள் அடைந்த பிந்தைய நேரங்கள் விடப்பட்டுள்ளன.
+	New warm-up	புதிய தொடக்கச் சீராக்க நேரம்

@@ -55,10 +55,17 @@
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
 //!   be written into that file is refused with the reason, and `as_new` then writes a new BPMN
 //!   file from the model alone.
+//! - Results made elsewhere (by any simulation tool, spreadsheet or script that can write CSV)
+//!   are analysed without a model: `data.analyse` takes a table of per-replication results and
+//!   gives each scenario's means with their precision, two outcomes where the runs split, and
+//!   each scenario against a baseline, judged as the check against observed data judges a
+//!   difference (the same rule as `results.compare`'s intervals); `data.warmup` takes a time
+//!   series per replication and suggests a warm-up by MSER-5. [`table`] reads the CSV.
 
 pub mod agents;
 mod commands;
 mod compare;
+mod data;
 mod decide;
 mod design;
 mod distribution;
@@ -77,6 +84,7 @@ pub mod sd;
 mod sd_edit;
 mod sd_window;
 pub mod site;
+pub mod table;
 pub mod wire;
 mod workers;
 
@@ -92,6 +100,9 @@ use stochcraft_model::Model;
 pub use commands::{COMMANDS, Command, CommandKind};
 pub use run::{RunMode, SLICE_EVENTS};
 pub use stochcraft_blocks::{Live, LiveState, RunError};
+/// A mean and its 95% half-width rounded to what the interval supports: the rule every table of
+/// results uses, in the window, on the command line and in `data.analyse`'s answers.
+pub use stochcraft_stats::round;
 pub use workers::Worker;
 
 use edit::Op;
@@ -590,6 +601,12 @@ struct FileState {
     inherited: Option<Model>,
     /// What StochCraft noted when reading the file, for run records.
     notes: Vec<Value>,
+}
+
+/// The input scenarios of the model file `bytes` (BPSim), in the file's order: what
+/// `file.scenarios` would list once it is opened. None for a file without BPSim data.
+pub fn file_scenarios(bytes: &[u8]) -> Vec<stochcraft_io::bpsim::ScenarioInfo> {
+    stochcraft_io::scenarios(bytes)
 }
 
 /// A model, its undo history, its journal, its file and its background run.
@@ -1128,6 +1145,32 @@ impl Engine {
     /// inherits from none. Edits leave it as the file has it.
     pub fn inherited_model(&self) -> Option<&Model> {
         self.file.as_ref()?.inherited.as_ref()
+    }
+
+    /// The opened file's input scenarios, as `file.scenarios` gives them: `open`, the id of the
+    /// one the model was read from, and `scenarios`, each with its `id`, `name`, `description`,
+    /// the scenario it `inherits` from and whether it is the `open` one. None without a file,
+    /// and none for a system dynamics model.
+    pub fn scenarios(&self) -> Value {
+        let Some(f) = self.file.as_ref().filter(|_| self.sd.is_none()) else {
+            return json!({ "open": null, "scenarios": [] });
+        };
+        let open = f.opened.scenario.as_deref();
+        let list: Vec<Value> = f
+            .opened
+            .scenario_details()
+            .iter()
+            .map(|s| {
+                json!({
+                    "id": s.id,
+                    "name": s.name,
+                    "description": s.description,
+                    "inherits": s.inherits,
+                    "open": open == Some(s.id.as_str()),
+                })
+            })
+            .collect();
+        json!({ "open": open, "scenarios": list })
     }
 
     /// Whether the opened file uses `id` for something it keeps that the model does not have, so

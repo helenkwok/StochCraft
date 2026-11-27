@@ -1535,6 +1535,11 @@ connection	Flow	顺序流
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	基线与此次运行在相同的运行中没有从同一来源（随机种子或随机数文件）获取随机数，因此按独立运行进行比较，区间更宽。
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	来自文件 {file} 的随机数 (SHA-256 {sha}…)，每次运行从字节 {offset} 起取 {bytes} 字节
 	Seed {seed} taken from {source}	取自 {source} 的随机种子 {seed}
+	Scenario	场景
+	Scenario: {name}	场景：{name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	打开 {scenario} 会丢弃 {name} 中未保存的更改。先保存吗？
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} 个可比较的场景
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	已另存为只含当前打开场景的新文件，因此没有切换到 {scenario}。
 	Median time in system	系统内时间中位数
 	Time in system, 90th percentile	系统内时间，第 90 百分位数
 	Time in system, 95th percentile	系统内时间，第 95 百分位数
@@ -1552,3 +1557,18 @@ connection	Flow	顺序流
 	How often is one machine down, and how much work does that cost?	一台机器多久停机一次，这会损失多少工作？
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	运行 90 小时，停机 4.5 小时：机器 95.2% 的时间在工作，每 94.5 小时发生一次故障。修理时间减半，可用率升至 97.6%。
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} 有 {down} 的时间处于停机状态（可用率 {up}），没有任何东西在等待它。
+	Choose a warm-up	选择预热期
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	韦尔奇图：每个记录时刻各次运行的平均值，经移动平均平滑。请在曲线趋平处设置预热期；MSER-5 的截断点只是起点。
+	Number inside	内部数量
+	Busy units	忙碌单位
+	Leaving per interval	每个间隔的离开数
+	Entering per interval	每个间隔的进入数
+	The run recorded too few times to plot.	运行记录的时刻太少，无法绘图。
+	Points each side	每侧点数
+	1 to {max}	1 到 {max}
+	Welch's plot of {measure} at {block}	{block} 的 {measure} 韦尔奇图
+	MSER-5 suggests {value}.	MSER-5 建议 {value}。
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 在此没有建议：序列在运行过半时可能仍在趋于稳定。
+	The warm-up now is {value}.	当前预热期为 {value}。
+	Later times, which fewer runs reached, are left out.	较少运行到达的后续时刻已略去。
+	New warm-up	新预热期

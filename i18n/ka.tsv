@@ -1535,6 +1535,11 @@ connection	Flow	ნაკადი
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	საბაზისო ვარიანტმა და ამ გაშვებამ თავიანთი შემთხვევითი რიცხვები ერთი და იგივე გაშვებებისთვის ერთი და იმავე ადგილიდან (საწყისი მნიშვნელობიდან ან შემთხვევითი რიცხვების ფაილიდან) არ აიღეს, ამიტომ ისინი დამოუკიდებელ გაშვებებად შედარდება და ინტერვალები უფრო ფართოა.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	შემთხვევითი რიცხვები ფაილიდან {file} (SHA-256 {sha}…), {bytes} ბაიტი თითოეული გაშვებისთვის {offset}-ე ბაიტიდან
 	Seed {seed} taken from {source}	საწყისი მნიშვნელობა {seed}, აღებული {source}-დან
+	Scenario	სცენარი
+	Scenario: {name}	სცენარი: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}-ის გახსნა {name}-ში შეუნახავ ცვლილებებს გააუქმებს. ჯერ შევინახო?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} სცენარი შესადარებლად|{n} სცენარი შესადარებლად
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	შენახულია ახალ ფაილად, რომელშიც მხოლოდ გახსნილი სცენარია, ამიტომ {scenario}-ზე გადასვლა არ მოხდა.
 	Median time in system	სისტემაში გატარებული დროის მედიანა
 	Time in system, 90th percentile	სისტემაში გატარებული დრო, 90-ე პროცენტილი
 	Time in system, 95th percentile	სისტემაში გატარებული დრო, 95-ე პროცენტილი
@@ -1552,3 +1557,18 @@ connection	Flow	ნაკადი
 	How often is one machine down, and how much work does that cost?	რა ხშირად ჩერდება ერთი მანქანა და რამდენი სამუშაო ღირს ეს?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	მუშაობს 90 საათი, დგას 4.5: მანქანა დროის 95.2%-ში მუშაობს და გაუმართაობა ყოველ 94.5 საათში ერთხელ ხდება. შეკეთების დროის განახევრება მას 97.6%-მდე ზრდის.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} დროის {down}-ში დგას (ხელმისაწვდომობა {up}); მას არაფერი ელოდება.
+	Choose a warm-up	აირჩიეთ გახურების პერიოდი
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	უელჩის გრაფიკი: გაშვებების საშუალო თითოეულ ჩაწერილ მომენტში, მოცურავე საშუალოთი გასწორებული. გახურების პერიოდი დააყენეთ იქ, სადაც მრუდი სწორდება; MSER-5-ის ჭრილი მხოლოდ საწყისი წერტილია.
+	Number inside	რაოდენობა შიგნით
+	Busy units	დაკავებული ერთეულები
+	Leaving per interval	გასვლები ინტერვალში
+	Entering per interval	შესვლები ინტერვალში
+	The run recorded too few times to plot.	გაშვებამ გრაფიკისთვის ძალიან ცოტა მომენტი ჩაწერა.
+	Points each side	წერტილები თითო მხარეს
+	1 to {max}	1-დან {max}-მდე
+	Welch's plot of {measure} at {block}	უელჩის გრაფიკი: {measure}, {block}
+	MSER-5 suggests {value}.	MSER-5 გვთავაზობს {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 აქ არაფერს გვთავაზობს: მწკრივი გაშვების შუაშიც შეიძლება ჯერ კიდევ სტაბილიზდებოდეს.
+	The warm-up now is {value}.	გახურების პერიოდი ახლა არის {value}.
+	Later times, which fewer runs reached, are left out.	გვიანდელი მომენტები, რომლებსაც ნაკლები გაშვება მიაღწია, გამოტოვებულია.
+	New warm-up	ახალი გახურების პერიოდი

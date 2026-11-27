@@ -1535,6 +1535,11 @@ connection	Flow	Ροή
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Η βάση αναφοράς και αυτή η εκτέλεση δεν πήραν τους τυχαίους αριθμούς τους από το ίδιο σημείο (έναν σπόρο ή ένα αρχείο τυχαίων αριθμών) για τις ίδιες εκτελέσεις, οπότε συγκρίνονται ως ανεξάρτητες εκτελέσεις και τα διαστήματα είναι ευρύτερα.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Τυχαίοι αριθμοί από το αρχείο {file} (SHA-256 {sha}…), {bytes} byte για κάθε εκτέλεση από το byte {offset}
 	Seed {seed} taken from {source}	Σπόρος {seed} από {source}
+	Scenario	Σενάριο
+	Scenario: {name}	Σενάριο: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Το άνοιγμα του {scenario} απορρίπτει τις μη αποθηκευμένες αλλαγές στο {name}. Να αποθηκευτούν πρώτα;
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} σενάριο για σύγκριση|{n} σενάρια για σύγκριση
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Αποθηκεύτηκε ως νέο αρχείο που περιέχει μόνο το ανοιχτό σενάριο, οπότε η μετάβαση στο {scenario} δεν έγινε.
 	Median time in system	Διάμεσος χρόνου στο σύστημα
 	Time in system, 90th percentile	Χρόνος στο σύστημα, 90ό εκατοστημόριο
 	Time in system, 95th percentile	Χρόνος στο σύστημα, 95ο εκατοστημόριο
@@ -1552,3 +1557,18 @@ connection	Flow	Ροή
 	How often is one machine down, and how much work does that cost?	Πόσο συχνά είναι εκτός λειτουργίας ένα μηχάνημα και πόση δουλειά κοστίζει αυτό;
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Σε λειτουργία 90 ώρες, εκτός 4.5: το μηχάνημα δουλεύει το 95.2% του χρόνου και μια βλάβη συμβαίνει κάθε 94.5 ώρες. Αν ο χρόνος επισκευής μειωθεί στο μισό, το ποσοστό ανεβαίνει στο 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} είναι εκτός λειτουργίας το {down} του χρόνου (διαθεσιμότητα {up}), και τίποτα δεν περιμένει γι' αυτό.
+	Choose a warm-up	Επιλογή προθέρμανσης
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Διάγραμμα Welch: ο μέσος όρος των εκτελέσεων σε κάθε καταγεγραμμένη χρονική στιγμή, εξομαλυμένος με κινητό μέσο όρο. Ορίστε την προθέρμανση εκεί όπου η καμπύλη ισορροπεί· η τομή του MSER-5 είναι μόνο σημείο εκκίνησης.
+	Number inside	Πλήθος εντός
+	Busy units	Απασχολημένες μονάδες
+	Leaving per interval	Αναχωρήσεις ανά διάστημα
+	Entering per interval	Αφίξεις ανά διάστημα
+	The run recorded too few times to plot.	Η εκτέλεση κατέγραψε πολύ λίγες χρονικές στιγμές για διάγραμμα.
+	Points each side	Σημεία σε κάθε πλευρά
+	1 to {max}	1 έως {max}
+	Welch's plot of {measure} at {block}	Διάγραμμα Welch: {measure} στο {block}
+	MSER-5 suggests {value}.	Το MSER-5 προτείνει {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	Το MSER-5 δεν προτείνει τίποτα εδώ: η σειρά ίσως σταθεροποιείται ακόμη στη μέση της εκτέλεσης.
+	The warm-up now is {value}.	Η προθέρμανση είναι τώρα {value}.
+	Later times, which fewer runs reached, are left out.	Οι μεταγενέστερες στιγμές, στις οποίες έφτασαν λιγότερες εκτελέσεις, παραλείπονται.
+	New warm-up	Νέα προθέρμανση

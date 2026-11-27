@@ -1535,6 +1535,11 @@ connection	Flow	Srautas
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Atskaitos taškas ir šis vykdymas atsitiktinių skaičių tiems patiems vykdymams neėmė iš tos pačios vietos (sėklos arba atsitiktinių skaičių failo), todėl jie lyginami kaip nepriklausomi vykdymai, o intervalai platesni.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Atsitiktiniai skaičiai iš failo {file} (SHA-256 {sha}…), {bytes} baitų kiekvienam vykdymui nuo baito {offset}
 	Seed {seed} taken from {source}	Sėkla {seed}, paimta iš {source}
+	Scenario	Scenarijus
+	Scenario: {name}	Scenarijus: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Atidarius {scenario}, neįrašyti {name} pakeitimai bus atmesti. Pirmiau juos įrašyti?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenarijus palyginti|{n} scenarijai palyginti|{n} scenarijų palyginti
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Įrašyta kaip naujas failas, kuriame yra tik atidarytas scenarijus, todėl į {scenario} neperjungta.
 	Median time in system	Laiko sistemoje mediana
 	Time in system, 90th percentile	Laikas sistemoje, 90-asis procentilis
 	Time in system, 95th percentile	Laikas sistemoje, 95-asis procentilis
@@ -1552,3 +1557,18 @@ connection	Flow	Srautas
 	How often is one machine down, and how much work does that cost?	Kaip dažnai stovi vienas įrenginys ir kiek darbo tai kainuoja?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Veikia 90 valandų, stovi 4.5: įrenginys dirba 95.2 % laiko, o gedimas įvyksta kas 94.5 valandos. Perpus sutrumpinus remontą, rodiklis pakyla iki 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stovi {down} laiko (parengtis {up}); niekas jo nelaukia.
+	Choose a warm-up	Pasirinkti įšilimo laikotarpį
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welcho grafikas: vykdymų vidurkis kiekvienu užrašytu laiku, išlygintas slenkančiuoju vidurkiu. Nustatykite įšilimo laikotarpį ten, kur kreivė išsilygina; MSER-5 pjūvis tėra atspirties taškas.
+	Number inside	Skaičius viduje
+	Busy units	Užimti vienetai
+	Leaving per interval	Išėjimai per intervalą
+	Entering per interval	Atėjimai per intervalą
+	The run recorded too few times to plot.	Vykdymas užrašė per mažai laikų grafikui.
+	Points each side	Taškų kiekvienoje pusėje
+	1 to {max}	Nuo 1 iki {max}
+	Welch's plot of {measure} at {block}	Welcho grafikas: {measure}, {block}
+	MSER-5 suggests {value}.	MSER-5 siūlo {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 čia nieko nesiūlo: eilutė vykdymo viduryje galbūt dar nusistovi.
+	The warm-up now is {value}.	Dabar įšilimo laikotarpis yra {value}.
+	Later times, which fewer runs reached, are left out.	Vėlesni laikai, kuriuos pasiekė mažiau vykdymų, praleisti.
+	New warm-up	Naujas įšilimo laikotarpis

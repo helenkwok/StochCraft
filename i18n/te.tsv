@@ -1535,6 +1535,11 @@ connection	Flow	ప్రవాహం
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ప్రాతిపదిక మరియు ఈ అమలు అవే అమలుల కోసం తమ యాదృచ్ఛిక సంఖ్యలను ఒకే చోట నుండి (ఒక యాదృచ్ఛిక బీజం, లేదా యాదృచ్ఛిక సంఖ్యల ఫైల్) తీసుకోలేదు, కాబట్టి వాటిని స్వతంత్ర అమలులుగా పోలుస్తారు మరియు అంతరాలు విశాలంగా ఉంటాయి.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ఫైల్ {file} నుండి యాదృచ్ఛిక సంఖ్యలు (SHA-256 {sha}…), ప్రతి అమలుకు బైట్ {offset} నుండి {bytes} బైట్లు
 	Seed {seed} taken from {source}	{source} నుండి తీసుకున్న యాదృచ్ఛిక బీజం {seed}
+	Scenario	దృశ్యం
+	Scenario: {name}	దృశ్యం: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ను తెరిస్తే {name} లో సేవ్ చేయని మార్పులు పోతాయి. ముందుగా సేవ్ చేయాలా?
+@plural	{n} scenario to compare|{n} scenarios to compare	పోల్చడానికి {n} దృశ్యం|పోల్చడానికి {n} దృశ్యాలు
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	తెరిచి ఉన్న దృశ్యం మాత్రమే ఉన్న కొత్త ఫైల్‌గా ఇది సేవ్ చేయబడింది, కాబట్టి {scenario} కు మారలేదు.
 	Median time in system	వ్యవస్థలో గడిపిన సమయం మధ్యగతం
 	Time in system, 90th percentile	వ్యవస్థలో గడిపిన సమయం, 90వ శతాంశం
 	Time in system, 95th percentile	వ్యవస్థలో గడిపిన సమయం, 95వ శతాంశం
@@ -1552,3 +1557,18 @@ connection	Flow	ప్రవాహం
 	How often is one machine down, and how much work does that cost?	ఒక యంత్రం ఎంత తరచుగా ఆగిపోతుంది, దానివల్ల ఎంత పని పోతుంది?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 గంటలు పని, 4.5 గంటలు ఆగుదల: యంత్రం 95.2% సమయం పనిచేస్తుంది, ప్రతి 94.5 గంటలకు ఒక చెడిపోవడం జరుగుతుంది. మరమ్మతు సమయాన్ని సగం చేస్తే అది 97.6% అవుతుంది.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} సమయం ఆగిపోతుంది (అందుబాటు {up}); దాని కోసం ఏదీ వేచి ఉండదు.
+	Choose a warm-up	ప్రారంభ సర్దుబాటు సమయాన్ని ఎంచుకోండి
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	వెల్చ్ గ్రాఫ్: నమోదైన ప్రతి సమయంలో అమలుల సగటు, కదిలే సగటుతో సున్నితం చేసింది. వక్రరేఖ సమమయ్యే చోట ప్రారంభ సర్దుబాటు సమయాన్ని సెట్ చేయండి; MSER-5 కోత కేవలం ఒక ప్రారంభ బిందువు.
+	Number inside	లోపల ఉన్న సంఖ్య
+	Busy units	పనిలో ఉన్న యూనిట్లు
+	Leaving per interval	ప్రతి వ్యవధికి వెళ్లేవి
+	Entering per interval	ప్రతి వ్యవధికి వచ్చేవి
+	The run recorded too few times to plot.	గ్రాఫ్ కోసం అమలు చాలా తక్కువ సమయాలను నమోదు చేసింది.
+	Points each side	ప్రతి వైపు బిందువులు
+	1 to {max}	1 నుండి {max} వరకు
+	Welch's plot of {measure} at {block}	{block} వద్ద {measure} వెల్చ్ గ్రాఫ్
+	MSER-5 suggests {value}.	MSER-5 సూచన {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 ఇక్కడ ఏమీ సూచించదు: అమలు మధ్యలోనూ శ్రేణి ఇంకా స్థిరపడుతుండవచ్చు.
+	The warm-up now is {value}.	ఇప్పుడు ప్రారంభ సర్దుబాటు సమయం {value}.
+	Later times, which fewer runs reached, are left out.	తక్కువ అమలులు చేరిన తర్వాతి సమయాలు వదిలివేయబడ్డాయి.
+	New warm-up	కొత్త ప్రారంభ సర్దుబాటు సమయం

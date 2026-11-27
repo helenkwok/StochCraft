@@ -1535,6 +1535,11 @@ connection	Flow	Fluxo
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	A referência e esta execução não tomaram seus números aleatórios do mesmo lugar (uma semente ou um arquivo de números aleatórios) para as mesmas execuções, então elas são comparadas como execuções independentes e os intervalos são mais largos.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Números aleatórios do arquivo {file} (SHA-256 {sha}…), {bytes} bytes para cada execução a partir do byte {offset}
 	Seed {seed} taken from {source}	Semente {seed} tirada de {source}
+	Scenario	Cenário
+	Scenario: {name}	Cenário: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Abrir {scenario} descarta as alterações não salvas em {name}. Salvá-las primeiro?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} cenário para comparar|{n} cenários para comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Foi salvo como um arquivo novo que contém só o cenário aberto, então a troca para {scenario} não foi feita.
 	Median time in system	Mediana do tempo no sistema
 	Time in system, 90th percentile	Tempo no sistema, percentil 90
 	Time in system, 95th percentile	Tempo no sistema, percentil 95
@@ -1552,3 +1557,18 @@ connection	Flow	Fluxo
 	How often is one machine down, and how much work does that cost?	Com que frequência uma máquina fica parada e quanto trabalho isso custa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Funciona 90 horas, fica parada 4.5: a máquina trabalha 95.2% do tempo e uma quebra acontece a cada 94.5 horas. Reduzir o tempo de conserto pela metade eleva isso a 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} fica parado {down} do tempo (disponibilidade {up}); nada espera por ela.
+	Choose a warm-up	Escolher um aquecimento
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Gráfico de Welch: a média das execuções em cada instante registrado, suavizada por uma média móvel. Defina o aquecimento onde a curva se nivela; o corte do MSER-5 é apenas um ponto de partida.
+	Number inside	Número no sistema
+	Busy units	Unidades ocupadas
+	Leaving per interval	Saídas por intervalo
+	Entering per interval	Entradas por intervalo
+	The run recorded too few times to plot.	A execução registrou instantes de menos para um gráfico.
+	Points each side	Pontos de cada lado
+	1 to {max}	De 1 a {max}
+	Welch's plot of {measure} at {block}	Gráfico de Welch de {measure} em {block}
+	MSER-5 suggests {value}.	O MSER-5 sugere {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	O MSER-5 não sugere nada aqui: a série talvez ainda esteja se estabilizando na metade da execução.
+	The warm-up now is {value}.	O aquecimento agora é de {value}.
+	Later times, which fewer runs reached, are left out.	Os instantes posteriores, alcançados por menos execuções, foram omitidos.
+	New warm-up	Novo aquecimento

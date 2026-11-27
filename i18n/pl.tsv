@@ -1535,6 +1535,11 @@ connection	Flow	Przepływ
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Punkt odniesienia i to uruchomienie nie wzięły swoich liczb losowych z tego samego miejsca (ziarna lub pliku z liczbami losowymi) dla tych samych uruchomień, więc są porównywane jako niezależne uruchomienia, a przedziały są szersze.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Liczby losowe z pliku {file} (SHA-256 {sha}…), {bytes} bajtów na każde uruchomienie od bajtu {offset}
 	Seed {seed} taken from {source}	Ziarno {seed} pobrane z {source}
+	Scenario	Scenariusz
+	Scenario: {name}	Scenariusz: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otwarcie scenariusza {scenario} odrzuci niezapisane zmiany w {name}. Najpierw je zapisać?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenariusz do porównania|{n} scenariusze do porównania|{n} scenariuszy do porównania
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Zapisano jako nowy plik, który zawiera tylko otwarty scenariusz, więc nie przełączono na {scenario}.
 	Median time in system	Mediana czasu w systemie
 	Time in system, 90th percentile	Czas w systemie, 90. percentyl
 	Time in system, 95th percentile	Czas w systemie, 95. percentyl
@@ -1552,3 +1557,18 @@ connection	Flow	Przepływ
 	How often is one machine down, and how much work does that cost?	Jak często stoi jedna maszyna i ile pracy to kosztuje?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Pracuje 90 godzin, stoi 4.5: maszyna pracuje przez 95.2% czasu, a awaria zdarza się co 94.5 godziny. Dwa razy krótsza naprawa podnosi to do 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stoi przez {down} czasu (dostępność {up}); nic na nią nie czeka.
+	Choose a warm-up	Wybierz rozgrzewkę
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Wykres Welcha: średnia z uruchomień w każdej zapisanej chwili, wygładzona średnią ruchomą. Ustaw rozgrzewkę tam, gdzie krzywa się wyrównuje; cięcie MSER-5 to tylko punkt wyjścia.
+	Number inside	Liczba wewnątrz
+	Busy units	Zajęte jednostki
+	Leaving per interval	Wyjścia na przedział
+	Entering per interval	Wejścia na przedział
+	The run recorded too few times to plot.	Uruchomienie zapisało za mało chwil do wykresu.
+	Points each side	Punkty z każdej strony
+	1 to {max}	Od 1 do {max}
+	Welch's plot of {measure} at {block}	Wykres Welcha: {measure} w {block}
+	MSER-5 suggests {value}.	MSER-5 sugeruje {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 nic tu nie sugeruje: seria może wciąż się stabilizować w połowie uruchomienia.
+	The warm-up now is {value}.	Rozgrzewka wynosi teraz {value}.
+	Later times, which fewer runs reached, are left out.	Późniejsze chwile, do których dotarło mniej uruchomień, pominięto.
+	New warm-up	Nowa rozgrzewka

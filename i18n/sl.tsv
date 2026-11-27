@@ -1535,6 +1535,11 @@ connection	Flow	Tok
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referenca in ta zagon nista vzela svojih naključnih števil z istega mesta (seme ali datoteka z naključnimi števili) za iste zagone, zato se primerjata kot neodvisna zagona in intervali so širši.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Naključna števila iz datoteke {file} (SHA-256 {sha}…), {bytes} bajtov za vsak zagon od bajta {offset}
 	Seed {seed} taken from {source}	Seme {seed}, vzeto iz {source}
+	Scenario	Scenarij
+	Scenario: {name}	Scenarij: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Odpiranje scenarija {scenario} zavrže neshranjene spremembe v {name}. Jih najprej shranim?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenarij za primerjavo|{n} scenarija za primerjavo|{n} scenariji za primerjavo|{n} scenarijev za primerjavo
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Shranjen je bil kot nova datoteka, ki vsebuje samo odprti scenarij, zato preklop na {scenario} ni bil narejen.
 	Median time in system	Mediana časa v sistemu
 	Time in system, 90th percentile	Čas v sistemu, 90. percentil
 	Time in system, 95th percentile	Čas v sistemu, 95. percentil
@@ -1552,3 +1557,18 @@ connection	Flow	Tok
 	How often is one machine down, and how much work does that cost?	Kako pogosto stoji en stroj in koliko dela to stane?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Dela 90 ur, stoji 4.5: stroj dela 95.2 % časa, okvara pa nastopi vsakih 94.5 ure. Pol krajše popravilo to dvigne na 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stoji {down} časa (razpoložljivost {up}); nič ne čaka nanj.
+	Choose a warm-up	Izberite ogrevanje
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welchov graf: povprečje zagonov ob vsakem zabeleženem času, zglajeno z drsečim povprečjem. Ogrevanje nastavite tam, kjer se krivulja izravna; rez MSER-5 je le izhodišče.
+	Number inside	Število znotraj
+	Busy units	Zasedene enote
+	Leaving per interval	Odhodi na interval
+	Entering per interval	Prihodi na interval
+	The run recorded too few times to plot.	Zagon je zabeležil premalo časov za graf.
+	Points each side	Točk na vsaki strani
+	1 to {max}	1 do {max}
+	Welch's plot of {measure} at {block}	Welchov graf: {measure} pri {block}
+	MSER-5 suggests {value}.	MSER-5 predlaga {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 tu ne predlaga ničesar: niz se morda na polovici zagona še ustaljuje.
+	The warm-up now is {value}.	Ogrevanje je zdaj {value}.
+	Later times, which fewer runs reached, are left out.	Kasnejši časi, do katerih je prišlo manj zagonov, so izpuščeni.
+	New warm-up	Novo ogrevanje
