@@ -1583,6 +1583,10 @@ pub struct Experiment {
     /// Real measurements the results are checked against (black-box validation), at most one
     /// for each result. A StochCraft vendor extension on the scenario (`stochcraft:observed`).
     pub observed: Vec<Observation>,
+    /// The confidence level of the results' intervals: 0.90, 0.95 (the default) or 0.99. A
+    /// StochCraft vendor extension on the scenario (`stochcraft:confidence`), written only when
+    /// not 0.95, since BPSim says nothing of intervals.
+    pub confidence: f64,
 }
 
 /// A measurement of the real system for one result of the model to be checked against: an
@@ -1716,6 +1720,7 @@ impl Default for Experiment {
             result_frequency: None,
             sequential: None,
             observed: Vec::new(),
+            confidence: 0.95,
         }
     }
 }

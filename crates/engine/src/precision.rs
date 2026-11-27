@@ -2,12 +2,19 @@
 //! the results as `run` gives them: the one rule the window's "How sure are these numbers?" and
 //! sequential runs both use, so the two cannot disagree. The numbers behind it (the targets,
 //! the score, the stopping rule) are [`stochcraft_stats::precision`]'s.
+//!
+//! A relative target γ is judged on the true mean, so a half-width meets it when it is within
+//! γ′ = γ/(1 + γ) of the estimated mean ([`stochcraft_stats::precision::relative_target`]): the
+//! default ± 5% is met at ± 4.76% of the estimate. The half-widths are at the experiment's
+//! confidence level ([`stochcraft_model::Experiment::confidence`]).
 
 use serde_json::{Value, json};
 use stochcraft_model::{Sequential, SequentialMeasure};
 use stochcraft_stats::precision::{self as rule, Reason, Scale, Verdict};
 
-pub use stochcraft_stats::precision::{SETTLED, SETTLED_POINTS, runs_needed, unseen_rate};
+pub use stochcraft_stats::precision::{
+    MIN_RUNS, SETTLED, SETTLED_POINTS, relative_target, runs_needed, unseen_rate,
+};
 
 /// How a metric reads: `Time` takes the model's time unit, `Share` is a fraction shown as a
 /// percentage (and judged in percentage points).
@@ -66,12 +73,35 @@ pub fn unit(name: &str) -> Unit {
 }
 
 /// The target a key measure of unit `unit` is judged against by default: points for a share,
-/// a share of the mean otherwise.
+/// a share of the true mean otherwise (`relative` as γ, judged at γ′ = γ/(1 + γ) of the
+/// estimate).
 fn scale(unit: Unit, relative: f64, points: f64) -> Scale {
     match unit {
         Unit::Share => Scale::Points(points),
-        _ => Scale::Relative(relative),
+        _ => Scale::Relative(relative_target(relative)),
     }
+}
+
+/// A confidence level as a percentage, as the results' words give it: 0.9 is "90%".
+pub fn percent(level: f64) -> String {
+    format!("{}%", (level * 1000.0).round() / 10.0)
+}
+
+/// The run record's words for the uncertainty of a fixed run's results at confidence `level`.
+pub fn uncertainty(level: f64) -> String {
+    format!(
+        "{} Student-t confidence interval of the mean across independent replications (half_width); std_dev is the sample standard deviation across replications",
+        percent(level)
+    )
+}
+
+/// The run record's words for the uncertainty of a sequential run's results at confidence
+/// `level`: [`SEQUENTIAL_UNCERTAINTY`] at 95%.
+pub fn sequential_uncertainty(level: f64) -> String {
+    let p = percent(level);
+    format!(
+        "estimated precision after adaptive stopping: the half-width of a {p} Student-t confidence interval of the mean across independent replications, whose number was chosen from the results themselves (sequential replications), so the interval's coverage is not guaranteed to be {p}; std_dev is the sample standard deviation across replications"
+    )
 }
 
 /// How sure the runs are of result `m` (`{mean, half_width, …}` in the results) of unit `unit`:
@@ -262,7 +292,8 @@ mod tests {
         let m = |mean: f64, hw: f64| json!({ "mean": mean, "half_width": hw });
         assert!(score(&m(0.017, 0.006), Unit::Share).is_some_and(|s| s <= 1.0));
         assert!(score(&m(0.92, 0.03), Unit::Share).is_some_and(|s| s > 2.0));
-        assert!(score(&m(38.0, 12.16), Unit::Time).is_some_and(|s| (s - 6.4).abs() < 1e-9));
+        // 12.16 / 38 = 32% of the mean, against 5/1.05 = 4.76%.
+        assert!(score(&m(38.0, 12.16), Unit::Time).is_some_and(|s| (s - 6.4 * 1.05).abs() < 1e-9));
         assert!(score(&m(0.0, 0.0), Unit::Time).is_none());
         // Infinite half-widths are written as null.
         assert!(score(&json!({ "mean": 3.0, "half_width": null }), Unit::Time).is_none());
@@ -287,6 +318,26 @@ mod tests {
                 "mean_time_in_system": m(0.0, 0.3, 0.4),
             }},
         ]})
+    }
+
+    #[test]
+    fn the_record_s_words_at_each_level() {
+        assert_eq!(
+            uncertainty(0.95),
+            "95% Student-t confidence interval of the mean across independent replications (half_width); std_dev is the sample standard deviation across replications"
+        );
+        assert_eq!(sequential_uncertainty(0.95), SEQUENTIAL_UNCERTAINTY);
+        assert_eq!((percent(0.9), percent(0.99)), ("90%".into(), "99%".into()));
+        assert!(uncertainty(0.99).starts_with("99% Student-t"));
+    }
+
+    /// ± 5% of the true mean: 2.03 ± 0.0960 (4.73% of itself) is settled, 2.03 ± 0.0974
+    /// (4.80%) is not, though it is within 5% of itself.
+    #[test]
+    fn a_relative_target_is_judged_on_the_true_mean() {
+        let m = |hw: f64| json!({ "mean": 2.03, "half_width": hw });
+        assert!(score(&m(0.0960), Unit::Time).is_some_and(|s| s <= 1.0));
+        assert!(score(&m(0.0974), Unit::Time).is_some_and(|s| s > 1.0));
     }
 
     #[test]

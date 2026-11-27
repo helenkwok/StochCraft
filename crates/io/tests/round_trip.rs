@@ -217,6 +217,7 @@ pub fn showcase() -> Model {
         result_frequency: Some(1_800.0),
         sequential: None,
         observed: Vec::new(),
+        confidence: 0.95,
     });
     model.name = "Showcase & <friends>".into();
     model
@@ -2488,6 +2489,53 @@ fn sequential_replications_are_written_saved_and_removed() {
     let text = String::from_utf8_lossy(&removed);
     assert!(!text.contains("stochcraft:sequential"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// The confidence level (`stochcraft:confidence` on the scenario) is left out at 95%, written
+/// for 90% or 99%, saved into an opened file when it changes (written even when set back to 95%,
+/// so it overrides an inherited scenario), and a level that is not offered is ignored with a note.
+#[test]
+fn the_confidence_level_is_written_saved_and_checked() {
+    let model = showcase();
+    let text = String::from_utf8_lossy(&write_new(&model)).into_owned();
+    assert!(!text.contains("stochcraft:confidence"), "{text}");
+
+    let mut at99 = model.clone();
+    at99.experiment.confidence = 0.99;
+    let bytes = write_new(&at99);
+    let text = String::from_utf8_lossy(&bytes).into_owned();
+    assert!(
+        text.contains(r#"name="stochcraft:confidence""#)
+            && text.contains(r#"stochcraft:value="0.99""#),
+        "{text}"
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(at99.clone()));
+
+    for level in [0.9, 0.95] {
+        let mut edited = loaded.model.clone();
+        edited.experiment.confidence = level;
+        let saved = loaded.opened.save(&edited);
+        let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+        assert_eq!(back, Ok(Ok(edited)), "{level}");
+    }
+
+    let odd = text.replacen(r#"stochcraft:value="0.99""#, r#"stochcraft:value="0.8""#, 1);
+    let Ok(read_odd) = read(odd.as_bytes()) else {
+        unreachable!()
+    };
+    assert_eq!(read_odd.model.experiment.confidence, 0.95);
+    assert!(
+        read_odd
+            .notes
+            .iter()
+            .any(|n| n.message.contains("confidence level `0.8`")),
+        "{:#?}",
+        read_odd.notes
+    );
 }
 
 /// Observed data for the showcase model: an observed value with and without its own interval,

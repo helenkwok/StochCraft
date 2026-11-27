@@ -187,6 +187,10 @@ pub const MOBILITY: &str = "stochcraft:mobility";
 /// scenario's `ScenarioParameters`, a number.
 pub const LAYOUT_SCALE: &str = "stochcraft:layoutScale";
 
+/// The confidence level of the results' intervals (`0.9`, `0.95` or `0.99`; 0.95 without
+/// it): `stochcraft:confidence` on the scenario.
+pub const CONFIDENCE: &str = "stochcraft:confidence";
+
 /// The unit lengths are in (`mm`, `cm`, `m`, `km`, `in` or `ft`; metres without it):
 /// `stochcraft:lengthUnit` on the scenario's `ScenarioParameters`.
 pub const LENGTH_UNIT: &str = "stochcraft:lengthUnit";
@@ -321,6 +325,8 @@ pub struct ScenarioSettings {
     pub length_unit: LengthUnit,
     /// Length units per drawing unit ([`LAYOUT_SCALE`]); 1 unless given.
     pub layout_scale: Option<f64>,
+    /// The confidence level of the results ([`CONFIDENCE`]); 0.95 unless given.
+    pub confidence: Option<f64>,
     /// Sequential replications ([`SEQUENTIAL`]); `None` without them or where turned off.
     pub sequential: Option<Sequential>,
     /// The observed data ([`OBSERVED`]); empty without any or where turned off.
@@ -695,6 +701,16 @@ fn read_extensions(exts: &[&Element], s: &mut ScenarioSettings, notes: &mut Vec<
                     Err(_) => notes.push(Note::warning(
                         None,
                         format!("layout scale `{raw}` is not a number and is ignored"),
+                    )),
+                }
+            }
+            Some(CONFIDENCE) => {
+                let raw = raw();
+                match raw.trim().parse::<f64>() {
+                    Ok(x) if [0.9, 0.95, 0.99].contains(&x) => s.confidence = Some(x),
+                    _ => notes.push(Note::warning(
+                        None,
+                        format!("confidence level `{raw}` is not 0.9, 0.95 or 0.99 and is ignored"),
                     )),
                 }
             }

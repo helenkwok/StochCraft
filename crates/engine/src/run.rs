@@ -28,7 +28,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_blocks::checks::check_reports;
-use stochcraft_blocks::{Compiled, Live, Report, RunError, summarise};
+use stochcraft_blocks::{Compiled, Live, Report, RunError, summarise_at};
 use stochcraft_experiment::{Control, Experiment, ExperimentError};
 use stochcraft_model::Sequential;
 use stochcraft_stats::precision::{Step, Verdict, next_count};
@@ -161,7 +161,8 @@ impl Plan {
                 v["sequential"] = precision::summary(x, stages, reason, &watched);
                 let r = &mut v["record"];
                 r["replications"] = json!(n);
-                r["uncertainty"] = json!(precision::SEQUENTIAL_UNCERTAINTY);
+                let level = self.compiled.model().experiment.confidence;
+                r["uncertainty"] = json!(precision::sequential_uncertainty(level));
                 let mut settings = json!(wire::SequentialSpec::from(x));
                 settings["first"] = json!(self.experiment.replications);
                 r["sequential"] = settings;
@@ -176,7 +177,7 @@ impl Plan {
             model,
             reports.len() as u64,
             self.experiment.seed,
-            &summarise(reports),
+            &summarise_at(reports, model.experiment.confidence),
             &check_reports(model, reports),
         );
         v["record"] = self.record.clone();

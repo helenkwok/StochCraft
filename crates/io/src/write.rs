@@ -334,6 +334,9 @@ pub(crate) fn scenario_extensions(x: &Experiment) -> Vec<Element> {
     if let Some(u) = layout_scale_element(x.layout_scale) {
         out.push(u);
     }
+    if let Some(c) = confidence_element(x.confidence) {
+        out.push(c);
+    }
     if let Some(q) = &x.sequential {
         out.push(sequential_element(q));
     }
@@ -444,6 +447,12 @@ pub(crate) fn length_unit_element(unit: LengthUnit) -> Option<Element> {
 pub(crate) fn layout_scale_element(scale: f64) -> Option<Element> {
     ((scale - 1.0).abs() > f64::EPSILON)
         .then(|| vendor_value_element(crate::bpsim::LAYOUT_SCALE, &num(scale)))
+}
+
+/// The scenario's confidence level as StochCraft's vendor extension
+/// ([`crate::bpsim::CONFIDENCE`]), unless it is the default, 0.95.
+pub(crate) fn confidence_element(level: f64) -> Option<Element> {
+    (level != 0.95).then(|| vendor_value_element(crate::bpsim::CONFIDENCE, &num(level)))
 }
 
 /// Sequential replications as StochCraft's vendor extension ([`crate::bpsim::SEQUENTIAL`]):

@@ -121,13 +121,15 @@ fn one_named_result_and_a_target_out_of_reach() {
             "max": 30,
         }}),
     );
-    // ± 50 points on a utilisation is met at once.
+    // ± 50 points on a utilisation is met at once, but a precision rule stops a run only after
+    // at least 10 replications.
     assert_eq!(
         r["sequential"]["reason"], "target_met",
         "{}",
         r["sequential"]
     );
-    assert_eq!(r["sequential"]["replications"], 4);
+    assert_eq!(r["sequential"]["replications"], 10);
+    assert_eq!(r["sequential"]["stages"], json!([4, 10]));
     assert_eq!(r["sequential"]["measures"][0]["metric"], "utilisation");
     // ± 0.0000001% of the mean wait: out of reach of 12 replications.
     let r = ok(
@@ -176,7 +178,8 @@ fn zero_spread_runs_to_the_maximum_and_says_so() {
     assert_eq!(q["reason"], "no_spread", "{q}");
     assert_eq!(q["met"], false);
     assert_eq!(q["replications"], 12);
-    assert_eq!(q["stages"], json!([3, 6, 12]));
+    // At least 10 before a rule may stop it, then doubled up to the maximum.
+    assert_eq!(q["stages"], json!([3, 10, 12]));
     let no_spread = q["no_spread"].as_array().expect("a list");
     assert!(
         no_spread.contains(&json!({ "element": "desk", "metric": "utilisation" })),
@@ -387,4 +390,60 @@ fn a_sequential_run_can_be_cancelled() {
     }
     let cancelled = ok(&mut e, "run.cancel", json!({}));
     assert_eq!(cancelled["state"], "cancelled", "{cancelled}");
+}
+
+/// The confidence level: the same replications and means at 90%, 95% and 99%, the half-widths
+/// in the ratio of their t values, the record saying which, and only the three levels taken.
+#[test]
+fn the_confidence_level_sets_every_half_width() {
+    let mut e = mm1();
+    let at = |e: &mut Engine, level: f64| {
+        ok(e, "experiment.set", json!({ "confidence": level }));
+        ok(e, "run", json!({ "replications": 8 }))
+    };
+    let r95 = at(&mut e, 0.95);
+    let r90 = at(&mut e, 0.90);
+    let r99 = at(&mut e, 0.99);
+    assert_eq!(r95["record"]["confidence"], 0.95);
+    assert_eq!(r90["record"]["confidence"], 0.9);
+    assert!(
+        r99["record"]["uncertainty"]
+            .as_str()
+            .is_some_and(|u| u.starts_with("99% Student-t"))
+    );
+    let wait = |r: &Value| {
+        let m = &r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|e| e["id"] == "serve"))
+            .expect("the server")["metrics"]["mean_wait"];
+        (
+            m["mean"].as_f64().expect("a mean"),
+            m["half_width"].as_f64().expect("a half-width"),
+        )
+    };
+    let ((m95, h95), (m90, h90), (m99, h99)) = (wait(&r95), wait(&r90), wait(&r99));
+    assert_eq!((m90, m99), (m95, m95));
+    // 7 degrees of freedom: 1.895 (90%), 2.365 (95%, the table), 3.499 (99%).
+    let t90 = stochcraft_stats::critical::t_two_sided(0.90, 7).expect("t");
+    let t99 = stochcraft_stats::critical::t_two_sided(0.99, 7).expect("t");
+    assert!((t90 - 1.894579).abs() < 1e-6 && (t99 - 3.499483).abs() < 1e-6);
+    assert!((h90 / h95 - t90 / 2.365).abs() < 1e-12, "{h90} {h95}");
+    assert!((h99 / h95 - t99 / 2.365).abs() < 1e-12, "{h99} {h95}");
+    // Back to 95%: the results are the same as before, bit for bit.
+    let again = at(&mut e, 0.95);
+    assert_eq!(numbers(&again), numbers(&r95));
+    // Only the levels offered.
+    for bad in [0.8, 0.0, 1.0, 95.0] {
+        let err = e
+            .execute("experiment.set", json!({ "confidence": bad }))
+            .expect_err("refused");
+        assert_eq!(err.code, ErrorCode::InvalidParams, "{bad}");
+    }
+    // Saved in the model's JSON only when it is not 95%.
+    ok(&mut e, "experiment.set", json!({ "confidence": 0.99 }));
+    let model = ok(&mut e, "model.get", json!({}));
+    assert_eq!(model["experiment"]["confidence"], 0.99, "{model}");
+    ok(&mut e, "experiment.set", json!({ "confidence": 0.95 }));
+    let model = ok(&mut e, "model.get", json!({}));
+    assert!(model["experiment"].get("confidence").is_none());
 }

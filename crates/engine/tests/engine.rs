@@ -4548,3 +4548,99 @@ fn cancelling_a_run_that_already_finished_keeps_its_results() {
     assert_eq!(cancelled["state"], "finished", "{cancelled}");
     ok(&mut e, "results.compare", json!({}));
 }
+
+/// Several comparisons that must hold together (Bonferroni): Law, 5th ed., Table 10.6 (p. 567),
+/// four inventory policies each against the first (data of Table 10.5), at 90% together, so
+/// 97.5% each. Paired here, as the runs share their seed and replications; the paired-t
+/// intervals reproduce the book's to two decimals. Without the option each is at 90% alone.
+#[test]
+fn compare_holds_several_comparisons_together_by_bonferroni() {
+    let mut e = Engine::new();
+    let policies = [
+        [126.97, 124.31, 126.68, 122.66, 127.23],
+        [118.21, 120.22, 122.45, 122.68, 119.40],
+        [120.77, 129.32, 120.61, 123.65, 127.34],
+        [131.64, 137.07, 129.91, 129.97, 131.08],
+        [141.09, 143.86, 144.30, 141.72, 142.61],
+    ];
+    let run = |pick: &dyn Fn(usize) -> usize| {
+        let values: serde_json::Map<String, Value> = (1..5)
+            .map(|i| {
+                (
+                    format!("p{}", i + 1),
+                    json!({ "mean_wait": policies[pick(i)] }),
+                )
+            })
+            .collect();
+        json!({ "seed": 1, "replications": 5, "time_unit": "minute", "values": values })
+    };
+    let (a, b) = (run(&|_| 0), run(&|i| i));
+    let together = ok(
+        &mut e,
+        "results.compare",
+        json!({ "a": a, "b": b, "confidence": 0.9, "bonferroni": true }),
+    );
+    assert_eq!(together["paired"], true);
+    assert_eq!(together["bonferroni"], true);
+    assert!(
+        together["each_confidence"]
+            .as_f64()
+            .is_some_and(|c| (c - 0.975).abs() < 1e-12),
+        "{together}"
+    );
+    let r2 = |x: f64| (x * 100.0).round() / 100.0;
+    let ends = |r: &Value, id: &str| {
+        let c = comparison(r, id, "mean_wait");
+        let (d, h) = (
+            c["difference"].as_f64().unwrap_or(f64::NAN),
+            c["half_width"].as_f64().unwrap_or(f64::NAN),
+        );
+        (r2(d - h), r2(d + h))
+    };
+    for (id, want) in [
+        ("p2", (-10.44, 0.48)),
+        ("p3", (-8.80, 6.34)),
+        ("p4", (0.27, 12.46)),
+        ("p5", (13.48, 20.81)),
+    ] {
+        assert_eq!(ends(&together, id), want, "{id}");
+    }
+    assert!(
+        together["method"]
+            .as_str()
+            .is_some_and(|m| m.contains("hold together (Bonferroni)")),
+        "{together}"
+    );
+    // Each on its own at 90%: narrower, so the second policy now differs from the first.
+    let alone = ok(
+        &mut e,
+        "results.compare",
+        json!({ "a": a, "b": b, "confidence": 0.9 }),
+    );
+    assert_eq!(alone["each_confidence"], 0.9);
+    let c = comparison(&alone, "p2", "mean_wait");
+    assert_eq!(c["significant"], true, "{c}");
+    assert_eq!(
+        comparison(&together, "p2", "mean_wait")["significant"],
+        false
+    );
+    // The default is 95% on its own, as before.
+    let default = ok(&mut e, "results.compare", json!({ "a": a, "b": b }));
+    assert_eq!(
+        (&default["confidence"], &default["bonferroni"]),
+        (&json!(0.95), &json!(false))
+    );
+    assert!(
+        default["method"]
+            .as_str()
+            .is_some_and(|m| m.contains("its 95% paired-t half-width"))
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "results.compare",
+            json!({ "a": a, "b": b, "confidence": 0.8 })
+        ),
+        ErrorCode::InvalidParams
+    );
+}

@@ -3417,6 +3417,19 @@ impl Editor {
                 &ns,
             );
         }
+        if b.confidence != a.confidence {
+            // Written even for 0.95, so it overrides what an inherited scenario says.
+            set_scenario_extension(
+                s,
+                crate::bpsim::CONFIDENCE,
+                Some(vendor_value_element(
+                    crate::bpsim::CONFIDENCE,
+                    &trim_float(a.confidence),
+                )),
+                &prefix,
+                &ns,
+            );
+        }
         if b.sequential != a.sequential {
             // Turned off: said only where an inherited scenario would otherwise turn them on.
             let written = match &a.sequential {

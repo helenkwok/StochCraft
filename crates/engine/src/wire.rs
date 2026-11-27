@@ -465,6 +465,26 @@ fn is_one(x: &f64) -> bool {
     *x == 1.0
 }
 
+fn default_confidence() -> f64 {
+    stochcraft_stats::critical::DEFAULT_LEVEL
+}
+
+fn is_default_confidence(x: &f64) -> bool {
+    *x == stochcraft_stats::critical::DEFAULT_LEVEL
+}
+
+/// A confidence level, refused unless it is one an experiment offers (0.9, 0.95 or 0.99).
+pub(crate) fn offered_confidence<'de, D: serde::Deserializer<'de>>(d: D) -> Result<f64, D::Error> {
+    let x = f64::deserialize(d)?;
+    if stochcraft_stats::critical::is_offered(x) {
+        Ok(x)
+    } else {
+        Err(serde::de::Error::custom(format!(
+            "confidence {x} is not 0.9, 0.95 or 0.99"
+        )))
+    }
+}
+
 /// What a task with shared resources needs for each entity: units of one pool (BPSim
 /// `getResource`), or units from the pools that have all of `roles`, in model order
 /// (`getResourceByRoles`).
@@ -2228,6 +2248,13 @@ pub struct ExperimentDoc {
     /// `observation.add`, `observation.set` and `observation.remove`.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub observed: Vec<ObservationSpec>,
+    /// The confidence level of the results' intervals: 0.9, 0.95 or 0.99; left out when 0.95.
+    #[serde(
+        default = "default_confidence",
+        skip_serializing_if = "is_default_confidence",
+        deserialize_with = "offered_confidence"
+    )]
+    pub confidence: f64,
 }
 
 /// A real measurement for one result of the model to be checked against, in the result's own
@@ -2458,6 +2485,7 @@ impl From<&Experiment> for ExperimentDoc {
             result_frequency: x.result_frequency,
             sequential: x.sequential.as_ref().map(Into::into),
             observed: x.observed.iter().map(Into::into).collect(),
+            confidence: x.confidence,
         }
     }
 }
@@ -2477,6 +2505,7 @@ impl From<ExperimentDoc> for Experiment {
             result_frequency: x.result_frequency,
             sequential: x.sequential.map(Into::into),
             observed: x.observed.into_iter().map(Into::into).collect(),
+            confidence: x.confidence,
         }
     }
 }

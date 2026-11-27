@@ -1334,7 +1334,15 @@ impl ExperimentSummary {
 /// statistics from the warm-up alone, which describe the start-up rather than the system: they
 /// are left out of every metric and property (as `None` in the samples), and only its stop time
 /// counts. [`run_warnings`] says so.
+///
+/// The intervals are 95%; [`summarise_at`] gives them at another level.
 pub fn summarise(reports: &[Report]) -> ExperimentSummary {
+    summarise_at(reports, stochcraft_stats::critical::DEFAULT_LEVEL)
+}
+
+/// [`summarise`] with every interval at confidence `level` (0.90 for 90%,
+/// [`Summary::at`]); at 0.95 exactly [`summarise`].
+pub fn summarise_at(reports: &[Report], level: f64) -> ExperimentSummary {
     let elements = reports.first().map_or_else(Vec::new, |first| {
         first
             .elements
@@ -1350,7 +1358,7 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                             .map(|r| r.elements.get(i).filter(|_| r.after_warmup)?.metric(m))
                             .collect();
                         let values: Vec<f64> = each.iter().flatten().copied().collect();
-                        let s = Summary::of(&values)?;
+                        let s = Summary::at(&values, level)?;
                         samples.push((m, each));
                         Some((m, s))
                     })
@@ -1365,7 +1373,7 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                             .filter(|r| r.after_warmup)
                             .filter_map(|r| r.elements.get(i)?.properties.get(j)?.1)
                             .collect();
-                        Summary::of(&values).map(|s| (name.clone(), s))
+                        Summary::at(&values, level).map(|s| (name.clone(), s))
                     })
                     .collect();
                 let histograms: Vec<Histogram> = reports
@@ -1389,7 +1397,7 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
     ExperimentSummary {
         replications: reports.len() as u64,
         elements,
-        stopped: Summary::of(&times).map(|s| (times.len() as u64, s)),
+        stopped: Summary::at(&times, level).map(|s| (times.len() as u64, s)),
         stop_times: reports.iter().map(|r| r.stopped_at).collect(),
         measured: reports
             .iter()

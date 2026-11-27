@@ -744,6 +744,11 @@ pub struct ExperimentSet {
     /// fixed number again.
     #[serde(default, deserialize_with = "some")]
     pub sequential: Option<Option<wire::SequentialSpec>>,
+    /// The confidence level of the results' intervals: 0.9, 0.95 (the default) or 0.99. It
+    /// sets every half-width the run reports, the sequential stopping rule and the checks
+    /// against observed data.
+    #[serde(default)]
+    pub confidence: Option<f64>,
 }
 
 /// A three-point estimate to fit an element's time distribution to: a source's time between
@@ -1675,7 +1680,14 @@ fn results_compare(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         Some(a) => a,
         None => need(e.previous_results.as_ref(), "earlier")?,
     };
-    crate::compare::compare(&a, &b, p.results.as_deref())
+    crate::compare::compare_at(
+        &a,
+        &b,
+        p.results.as_deref(),
+        p.confidence
+            .unwrap_or(stochcraft_stats::critical::DEFAULT_LEVEL),
+        p.bonferroni,
+    )
 }
 
 fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -2447,7 +2459,17 @@ fn experiment_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     if let Some(q) = &p.sequential {
         x.sequential = sequential(e.model(), q.clone())?;
     }
+    if let Some(c) = p.confidence {
+        if !stochcraft_stats::critical::is_offered(c) {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                format!("confidence {c} is not 0.9, 0.95 or 0.99"),
+            ));
+        }
+        x.confidence = c;
+    }
     let given = [
+        p.confidence.is_some(),
         p.sequential.is_some(),
         p.stop.is_some(),
         p.start.is_some(),
@@ -3224,7 +3246,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.set",
-        summary: "Change the experiment: time unit, warm-up, duration, replications, seed, start, an event that ends each replication early, and sequential replications (more until the key measures are precise enough).",
+        summary: "Change the experiment: time unit, warm-up, duration, replications, seed, start, an event that ends each replication early, sequential replications (more until the key measures are precise enough), and the confidence level of the results' intervals (90, 95 or 99%).",
         kind: CommandKind::Edit,
         schema: schema::<ExperimentSet>,
         example: || json!({ "replications": 5, "duration": 240.0 }),
@@ -3400,7 +3422,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "results.compare",
-        summary: "Compare two runs' results, by default the last run with the one before it: per element and metric both means and the difference with its 95% interval, paired-t when the runs share their seed and replications (common random numbers), Welch's two-sample t otherwise.",
+        summary: "Compare two runs' results, by default the last run with the one before it: per element and metric both means and the difference with its 95% interval (or 90% or 99%, `confidence`), paired-t when the runs share their seed and replications (common random numbers), Welch's two-sample t otherwise. With `bonferroni` the intervals hold together: each of the k comparisons is at 1 − (1 − confidence)/k.",
         kind: CommandKind::Query,
         schema: schema::<crate::compare::Params>,
         example: || {

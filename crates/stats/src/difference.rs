@@ -1,5 +1,8 @@
-//! The difference between two systems' results, b − a, with a 95% confidence interval (A. M.
-//! Law, *Simulation Modeling and Analysis*, 5th ed., McGraw-Hill, 2015, section 10.2).
+//! The difference between two systems' results, b − a, with a 95% confidence interval, or one
+//! at another level ([`paired_at`], [`welch_at`]) (A. M. Law, *Simulation Modeling and
+//! Analysis*, 5th ed., McGraw-Hill, 2015, section 10.2). Several differences that must hold
+//! together take Bonferroni's level for each ([`crate::critical::bonferroni`]; Law, section
+//! 10.3).
 //!
 //! - [`paired`]: the paired-t interval on the per-replication differences, for two runs whose
 //!   replication i shares its random numbers (common random numbers: the same seed and
@@ -7,7 +10,8 @@
 //! - [`welch`]: Welch's two-sample t interval, for independent runs, with the
 //!   Welch–Satterthwaite degrees of freedom rounded down (the wider, safer interval).
 
-use crate::{Summary, Tally, t_critical_95};
+use crate::critical::{DEFAULT_LEVEL, t_two_sided};
+use crate::{Summary, Tally};
 
 /// A difference b − a with its 95% confidence interval.
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -37,6 +41,11 @@ impl Difference {
 /// The paired-t difference b − a over the replications where both have a finite value, in
 /// replication order. `None` when no replication has both.
 pub fn paired(a: &[Option<f64>], b: &[Option<f64>]) -> Option<Difference> {
+    paired_at(a, b, DEFAULT_LEVEL)
+}
+
+/// [`paired`] with the interval at confidence `level` (0.90 for 90%); at 0.95 the same.
+pub fn paired_at(a: &[Option<f64>], b: &[Option<f64>], level: f64) -> Option<Difference> {
     let d: Vec<f64> = a
         .iter()
         .zip(b)
@@ -45,7 +54,7 @@ pub fn paired(a: &[Option<f64>], b: &[Option<f64>]) -> Option<Difference> {
             _ => None,
         })
         .collect();
-    let s = Summary::of(&d)?;
+    let s = Summary::at(&d, level)?;
     Some(Difference {
         n_a: s.n,
         n_b: s.n,
@@ -58,6 +67,11 @@ pub fn paired(a: &[Option<f64>], b: &[Option<f64>]) -> Option<Difference> {
 /// Welch's two-sample t difference mean(b) − mean(a), ignoring non-finite values. `None` when
 /// either side has no value; an infinite half-width when either has only one.
 pub fn welch(a: &[f64], b: &[f64]) -> Option<Difference> {
+    welch_at(a, b, DEFAULT_LEVEL)
+}
+
+/// [`welch`] with the interval at confidence `level` (0.90 for 90%); at 0.95 the same.
+pub fn welch_at(a: &[f64], b: &[f64], level: f64) -> Option<Difference> {
     let tally = |xs: &[f64]| {
         let mut t = Tally::new();
         xs.iter().for_each(|x| t.add(*x));
@@ -86,7 +100,7 @@ pub fn welch(a: &[f64], b: &[f64]) -> Option<Difference> {
     } else {
         na + nb - 2
     };
-    if let Some(t) = t_critical_95(df) {
+    if let Some(t) = t_two_sided(level, df) {
         d.half_width = t * se2.sqrt();
         d.df = Some(df);
     }
@@ -176,5 +190,79 @@ mod tests {
             && d.df == Some(3)
             && d.significant() == Some(true)));
         assert!(welch(&[2.0, 2.0], &[2.0, 2.0]).is_some_and(|d| d.significant() == Some(false)));
+    }
+
+    /// Law, 5th ed., Table 10.5 (p. 567): five inventory policies, five independent
+    /// replications each (average monthly cost).
+    const POLICIES: [[f64; 5]; 5] = [
+        [126.97, 124.31, 126.68, 122.66, 127.23],
+        [118.21, 120.22, 122.45, 122.68, 119.40],
+        [120.77, 129.32, 120.61, 123.65, 127.34],
+        [131.64, 137.07, 129.91, 129.97, 131.08],
+        [141.09, 143.86, 144.30, 141.72, 142.61],
+    ];
+
+    /// Table 10.6 (p. 567): each of the four policies against the first, at 97.5% each so that
+    /// all four hold together with at least 90% (Bonferroni). Every paired-t and Welch interval
+    /// reproduces to the two decimals printed. (The book prints the last Welch half-length as
+    /// 6.15, which is that interval's whole width; its half-length is 3.08.)
+    #[test]
+    fn comparisons_with_a_standard_at_bonferroni_s_level() {
+        let level = crate::critical::bonferroni(0.90, 4).unwrap_or(f64::NAN);
+        let paired_want = [(-10.44, 0.48), (-8.80, 6.34), (0.27, 12.46), (13.48, 20.81)];
+        let welch_want = [(-8.52, -1.44), (-7.44, 4.97), (1.82, 10.91), (14.07, 20.22)];
+        let r2 = |x: f64| (x * 100.0).round() / 100.0;
+        let ends = |d: Option<Difference>| {
+            d.map_or((f64::NAN, f64::NAN), |d| {
+                (r2(d.mean - d.half_width), r2(d.mean + d.half_width))
+            })
+        };
+        let some = |xs: &[f64; 5]| xs.map(Some);
+        for i in 1..5 {
+            let p = paired_at(&some(&POLICIES[0]), &some(&POLICIES[i]), level);
+            assert_eq!(ends(p), paired_want[i - 1], "paired {i}");
+            let w = welch_at(&POLICIES[0], &POLICIES[i], level);
+            assert_eq!(ends(w), welch_want[i - 1], "Welch {i}");
+            assert_eq!(w.and_then(|w| w.df), Some([7, 5, 7, 7][i - 1]));
+        }
+    }
+
+    /// Table 10.7 (p. 568): all ten pairs at 99% each, for 90% together; the paired-t
+    /// half-lengths computed from Table 10.5. Within 0.02 of every printed one: 2–3, 2–4 and 2–5
+    /// reproduce (9.58, 8.38, 3.80); the book prints 7.18, 9.99, 8.01, 4.83, 5.66, 7.73 and 5.85
+    /// for the others.
+    #[test]
+    fn all_pairwise_comparisons_at_bonferroni_s_level() {
+        let level = crate::critical::bonferroni(0.90, 10).unwrap_or(f64::NAN);
+        let want = [
+            ((0, 1), 7.19),
+            ((0, 2), 9.97),
+            ((0, 3), 8.03),
+            ((0, 4), 4.82),
+            ((1, 2), 9.58),
+            ((1, 3), 8.38),
+            ((1, 4), 3.80),
+            ((2, 3), 5.65),
+            ((2, 4), 7.74),
+            ((3, 4), 5.84),
+        ];
+        let some = |xs: &[f64; 5]| xs.map(Some);
+        for ((a, b), hw) in want {
+            let d = paired_at(&some(&POLICIES[a]), &some(&POLICIES[b]), level);
+            let got = d.map_or(f64::NAN, |d| (d.half_width * 100.0).round() / 100.0);
+            assert_eq!(got, hw, "{a}-{b}");
+        }
+    }
+
+    #[test]
+    fn the_default_level_is_the_difference_of_before() {
+        let a = [Some(10.0), Some(11.0), Some(9.0), Some(12.0)];
+        let b = [Some(11.0), Some(13.0), Some(12.0), Some(14.0)];
+        assert_eq!(paired_at(&a, &b, 0.95), paired(&a, &b));
+        let (x, y) = (
+            [2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0],
+            [8.0, 9.0, 10.0, 9.0],
+        );
+        assert_eq!(welch_at(&x, &y, 0.95), welch(&x, &y));
     }
 }

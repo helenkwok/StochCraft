@@ -6,6 +6,12 @@
 //! replication by replication (common random numbers), so their replications are paired and the
 //! difference is judged by the paired-t interval (section 10.2.1). Otherwise the runs are
 //! independent and Welch's two-sample t interval is used (section 10.2.2).
+//!
+//! The intervals are at 95% unless `confidence` says otherwise. With `bonferroni`, the k
+//! comparisons made hold together: each interval is at 1 − (1 − confidence)/k, so all k cover
+//! their differences with probability at least `confidence` (the Bonferroni inequality; Law,
+//! section 10.3). Without it, each comparison is judged on its own, and among many some will
+//! seem to differ by chance alone.
 
 use schemars::JsonSchema;
 use serde::Deserialize;
@@ -29,6 +35,13 @@ pub struct Params {
     /// The results to compare; by default every element's metrics that both runs report.
     #[serde(default)]
     pub results: Option<Vec<Output>>,
+    /// The confidence level of the intervals: 0.9, 0.95 (the default) or 0.99.
+    #[serde(default)]
+    pub confidence: Option<f64>,
+    /// Make the intervals hold together (Bonferroni): each of the k comparisons at
+    /// 1 − (1 − confidence)/k. Off by default: each is judged on its own.
+    #[serde(default)]
+    pub bonferroni: bool,
 }
 
 fn invalid(message: impl Into<String>) -> CommandError {
@@ -96,8 +109,25 @@ fn mean(xs: &[Option<f64>]) -> (Option<f64>, u64) {
     ((n > 0).then(|| v.iter().sum::<f64>() / n as f64), n)
 }
 
-/// Compares `a` with `b` (results as `run` returns them).
+/// Compares `a` with `b` (results as `run` returns them), at 95%, each comparison on its own.
 pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, CommandError> {
+    compare_at(a, b, only, stochcraft_stats::critical::DEFAULT_LEVEL, false)
+}
+
+/// Compares `a` with `b` with intervals at confidence `level`, held together by Bonferroni's
+/// rule over the comparisons made when `bonferroni` is set.
+pub fn compare_at(
+    a: &Value,
+    b: &Value,
+    only: Option<&[Output]>,
+    level: f64,
+    bonferroni: bool,
+) -> Result<Value, CommandError> {
+    if !stochcraft_stats::critical::is_offered(level) {
+        return Err(invalid(format!(
+            "confidence {level} is not 0.9, 0.95 or 0.99"
+        )));
+    }
     let (ra, rb) = (RunResults::read(a, "a")?, RunResults::read(b, "b")?);
     let paired = ra.seed == rb.seed && ra.replications == rb.replications;
     let wanted: Vec<(String, String)> = match only {
@@ -131,6 +161,8 @@ pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, C
             .filter(|(id, m)| ra.samples(id, m).is_some() && rb.samples(id, m).is_some())
             .collect(),
     };
+    let k = if bonferroni { wanted.len() as u64 } else { 1 };
+    let each = stochcraft_stats::critical::bonferroni(level, k.max(1)).unwrap_or(level);
     let comparisons: Vec<Value> = wanted
         .iter()
         .map(|(element, metric)| {
@@ -140,10 +172,10 @@ pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, C
             );
             let ((mean_a, n_a), (mean_b, n_b)) = (mean(&xa), mean(&xb));
             let d: Option<Difference> = if paired {
-                difference::paired(&xa, &xb)
+                difference::paired_at(&xa, &xb, each)
             } else {
                 let flat = |xs: &[Option<f64>]| xs.iter().flatten().copied().collect::<Vec<_>>();
-                difference::welch(&flat(&xa), &flat(&xb))
+                difference::welch_at(&flat(&xa), &flat(&xb), each)
             };
             let mut c = json!({
                 "element": element,
@@ -170,15 +202,31 @@ pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, C
             notes.push(format!("the runs differ in `{k}` ({x} and {y})"));
         }
     }
+    let pct = crate::precision::percent(each);
     let method = if paired {
-        "the runs have the same seed and replications, so replication i of each meets the same random numbers (common random numbers) and they are compared in pairs: difference is the mean over the replications where both have a value (pairs) of b minus a, with half_width its 95% paired-t half-width (pairs − 1 degrees of freedom); significant: that interval excludes 0 (null with fewer than two pairs)"
+        format!(
+            "the runs have the same seed and replications, so replication i of each meets the same random numbers (common random numbers) and they are compared in pairs: difference is the mean over the replications where both have a value (pairs) of b minus a, with half_width its {pct} paired-t half-width (pairs − 1 degrees of freedom); significant: that interval excludes 0 (null with fewer than two pairs)"
+        )
     } else {
-        "the runs differ in seed or replications, so they are independent: difference is b's mean minus a's, with half_width its 95% Welch two-sample t half-width (Welch–Satterthwaite degrees of freedom, rounded down); significant: that interval excludes 0 (null when either run has fewer than two values). Running both with the same seed and replications gives a paired comparison, usually much tighter"
+        format!(
+            "the runs differ in seed or replications, so they are independent: difference is b's mean minus a's, with half_width its {pct} Welch two-sample t half-width (Welch–Satterthwaite degrees of freedom, rounded down); significant: that interval excludes 0 (null when either run has fewer than two values). Running both with the same seed and replications gives a paired comparison, usually much tighter"
+        )
+    };
+    let method = if bonferroni && k > 1 {
+        format!(
+            "{method}. The {k} intervals hold together (Bonferroni): each is at 1 − (1 − {level})/{k}, so all {k} cover their differences with probability at least {}",
+            crate::precision::percent(level)
+        )
+    } else {
+        method
     };
     Ok(json!({
         "a": { "seed": ra.seed, "replications": ra.replications },
         "b": { "seed": rb.seed, "replications": rb.replications },
         "paired": paired,
+        "confidence": level,
+        "bonferroni": bonferroni,
+        "each_confidence": each,
         "comparisons": comparisons,
         "notes": notes,
         "method": method,

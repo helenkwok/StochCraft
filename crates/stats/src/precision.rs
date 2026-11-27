@@ -15,6 +15,14 @@
 //! zero is never met. The interval after such adaptive stopping is an estimate of precision; its
 //! coverage is not guaranteed to be 95%.
 //!
+//! A relative target γ (± 5% of the true mean) is met when hw/|mean| ≤ γ′ = γ/(1 + γ)
+//! ([`relative_target`]): with an interval that wide, the estimate is within γ of the true mean
+//! itself, not only of the estimate (A. M. Law, *Simulation Modeling and Analysis*, 5th ed.,
+//! McGraw-Hill, 2015, section 9.4.1, pp. 504–505). A run stops on a precision rule only after at
+//! least [`MIN_RUNS`] replications (or its maximum, if that is fewer): with fewer, the
+//! variance the half-width comes from is itself too unsure (Law, p. 506, recommends at least 10
+//! to begin with, after Law, Kelton and Koenig, 1981).
+//!
 //! A result with no spread does not hold a run back once the results with a spread are settled
 //! (a count fixed by the model, such as arrivals on a timetable, would otherwise always run to
 //! the maximum); it is named in the results with [`unseen_rate`], the most often per run an
@@ -28,6 +36,18 @@ pub const SETTLED: f64 = 0.05;
 /// settled. Against its own mean a small share always looks unsure (1.7% ± 0.6 points is ± 32% of
 /// itself), so shares are judged in points.
 pub const SETTLED_POINTS: f64 = 1.0;
+
+/// The fewest replications a sequential run makes before a precision rule may stop it (Law,
+/// section 9.4.1, starts its sequential procedure from at least 10).
+pub const MIN_RUNS: u64 = 10;
+
+/// The half-width as a share of the estimated mean that meets a relative target `gamma` on the
+/// true mean: γ′ = γ/(1 + γ) (0.05 gives 0.047619). If |X̄ − μ| ≤ γ′|X̄|, then
+/// |X̄ − μ| ≤ γ|μ| (Law, section 9.4.1, p. 505). Give this to [`Scale::Relative`] to judge a
+/// result against the true mean.
+pub fn relative_target(gamma: f64) -> f64 {
+    gamma / (1.0 + gamma)
+}
 
 /// What a result's half-width is judged against.
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -67,11 +87,11 @@ pub fn score(mean: f64, half_width: f64, scale: Scale) -> Option<f64> {
 
 /// About how many replications bring a result whose [`score`] is `score` after `n` down to
 /// settled (a score of 1): the interval narrows with the square root of the replications.
-/// Rounded up to a multiple of ten, and always more than `n`.
+/// Rounded up to a multiple of ten, always more than `n`, and at least [`MIN_RUNS`].
 pub fn runs_needed(n: u64, score: f64) -> u64 {
     let wanted = (n as f64 * score * score).ceil().min(1.0e6) as u64;
     let wanted = wanted.div_ceil(10) * 10;
-    wanted.max(n + 1)
+    wanted.max(n + 1).max(MIN_RUNS)
 }
 
 /// After `n` replications in which an event never happened, the most often per replication it
@@ -196,13 +216,14 @@ pub enum Step {
 /// `verdicts`, with at most `max` replications in all.
 ///
 /// It stops when every verdict is settled (a run watching nothing stops at once), or when the
-/// only ones not settled had no spread and some other result is settled; or at `max`: then the
+/// only ones not settled had no spread and some other result is settled, once it has at least
+/// [`MIN_RUNS`] replications (or `max`, if that is fewer); or at `max`: then the
 /// reason is [`Reason::NoSpread`] if every result not settled had no spread, else
 /// [`Reason::MeanNearZero`] if some mean was at or near zero, else [`Reason::MaxReached`].
 /// Otherwise the next batch runs up to [`runs_needed`] for the widest score among the results
 /// with a spread not settled; where one of them has no score to estimate from (no interval, no
 /// value, a mean of zero), or every result has no spread, at least twice `n`. Always more than
-/// `n`, at most `max`.
+/// `n`, at least [`MIN_RUNS`] and at most `max`.
 pub fn next_count(n: u64, max: u64, verdicts: &[Verdict]) -> Step {
     let open: Vec<Verdict> = verdicts
         .iter()
@@ -215,8 +236,12 @@ pub fn next_count(n: u64, max: u64, verdicts: &[Verdict]) -> Step {
         .filter(|v| *v != Verdict::NoSpread)
         .collect();
     let some_settled = verdicts.iter().any(|v| v.is_settled());
+    let fewest = MIN_RUNS.min(max);
     if open.is_empty() || (spread.is_empty() && some_settled) {
-        return Step::Stop(Reason::TargetMet);
+        if n >= fewest {
+            return Step::Stop(Reason::TargetMet);
+        }
+        return Step::Continue(fewest);
     }
     if n >= max {
         let reason = if spread.is_empty() {
@@ -236,7 +261,7 @@ pub fn next_count(n: u64, max: u64, verdicts: &[Verdict]) -> Step {
     let estimated = widest.map_or(n + 1, |s| runs_needed(n.max(1), s));
     let unknown = open.iter().any(|v| v.score().is_none());
     let doubled = if unknown { n.max(1) * 2 } else { 0 };
-    Step::Continue(estimated.max(doubled).max(n + 1).min(max))
+    Step::Continue(estimated.max(doubled).max(n + 1).max(fewest).min(max))
 }
 
 #[cfg(test)]
@@ -374,7 +399,8 @@ mod tests {
         let zero = [-1.0, 1.0];
         let v = judge(&zero, Scale::Relative(SETTLED));
         assert_eq!(v, Verdict::MeanNearZero(None));
-        assert_eq!(next_count(2, 200, &[v]), Step::Continue(4));
+        assert_eq!(next_count(2, 200, &[v]), Step::Continue(MIN_RUNS));
+        assert_eq!(next_count(10, 200, &[v]), Step::Continue(20));
         // The same values against an absolute half-width can be met.
         let v = judge(&values, Scale::Absolute(1.0));
         assert!(v.is_settled(), "{v:?}");
@@ -434,6 +460,66 @@ mod tests {
         assert!(!v.is_settled());
     }
 
+    /// Law, 5th ed., section 9.4.1 (p. 505): ± 10% of the true mean needs hw/|X̄| ≤ 0.1/1.1, and
+    /// ± 5% needs 0.047619.
+    #[test]
+    fn a_relative_target_on_the_true_mean_is_a_little_tighter() {
+        assert!((relative_target(0.10) - 0.1 / 1.1).abs() < 1e-15);
+        assert!((relative_target(SETTLED) - 0.047_619_047_619_047_6).abs() < 1e-15);
+        // 2.03 ± 0.0960 is ± 4.73% of itself: within 0.05, and within 0.047619 too; ± 4.8% is
+        // within 0.05 but not 0.047619.
+        let gamma = Scale::Relative(relative_target(SETTLED));
+        assert!(score(2.03, 0.0960, gamma).is_some_and(|s| s <= 1.0));
+        assert!(score(2.03, 0.0974, Scale::Relative(SETTLED)).is_some_and(|s| s <= 1.0));
+        assert!(score(2.03, 0.0974, gamma).is_some_and(|s| s > 1.0));
+    }
+
+    /// Law, 5th ed., Example 9.18 (p. 505): for the bank's delays (Table 9.1, S² = 0.31 from
+    /// 10 replications, mean 2.03), ± 10% of the true mean at 90% needs 27 replications, the
+    /// first n ≥ 10 with t(n−1, 0.95) √(0.31/n) / 2.03 ≤ 0.1/1.1.
+    #[test]
+    fn the_bank_needs_27_replications_for_ten_percent() {
+        let target = relative_target(0.10);
+        let first = (MIN_RUNS..1000).find(|&n| {
+            let t = crate::critical::t_two_sided(0.90, n - 1).unwrap_or(f64::INFINITY);
+            t * (0.31 / n as f64).sqrt() / 2.03 <= target
+        });
+        assert_eq!(first, Some(27));
+    }
+
+    /// A rule may stop a run only after the least number of replications, or its maximum if that
+    /// is fewer.
+    #[test]
+    fn a_run_is_not_stopped_on_precision_before_ten_replications() {
+        assert_eq!(
+            next_count(4, 200, &[Verdict::Settled(0.5)]),
+            Step::Continue(MIN_RUNS)
+        );
+        assert_eq!(
+            next_count(9, 200, &[Verdict::Settled(0.5), Verdict::NoSpread]),
+            Step::Continue(MIN_RUNS)
+        );
+        assert_eq!(
+            next_count(10, 200, &[Verdict::Settled(0.5)]),
+            Step::Stop(Reason::TargetMet)
+        );
+        // A maximum below the least: it stops there.
+        assert_eq!(
+            next_count(5, 5, &[Verdict::Settled(0.5)]),
+            Step::Stop(Reason::TargetMet)
+        );
+        assert_eq!(
+            next_count(3, 5, &[Verdict::Settled(0.5)]),
+            Step::Continue(5)
+        );
+        // A wide result after 4 is sized from its score, and never to fewer than the least.
+        assert_eq!(
+            next_count(4, 200, &[Verdict::Wide(1.1)]),
+            Step::Continue(10)
+        );
+        assert_eq!(runs_needed(4, 1.1), 10);
+    }
+
     #[test]
     fn the_rule_of_three() {
         assert_eq!(unseen_rate(0), None);
@@ -461,10 +547,10 @@ mod tests {
             next_count(10, 200, &[Verdict::Wide(1.1), Verdict::NoInterval]),
             Step::Continue(20)
         );
-        // One replication: no interval yet.
+        // One replication: no interval yet, and fewer than the least a run makes.
         assert_eq!(
             next_count(1, 200, &[Verdict::NoInterval]),
-            Step::Continue(2)
+            Step::Continue(MIN_RUNS)
         );
         assert_eq!(judge(&[3.0], Scale::Relative(SETTLED)), Verdict::NoInterval);
         assert_eq!(judge(&[], Scale::Relative(SETTLED)), Verdict::NoValue);

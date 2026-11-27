@@ -4,8 +4,10 @@
 //!   numerically stable in one pass), e.g. time in system per customer.
 //! - [`TimeWeighted`]: the time-average of a quantity that changes at discrete instants, e.g.
 //!   queue length or machine utilisation.
-//! - [`Summary`]: the mean of independent replications with a 95% confidence interval from
-//!   Student's t distribution.
+//! - [`Summary`]: the mean of independent replications with a confidence interval from
+//!   Student's t distribution, 95% unless another level is asked for ([`Summary::at`]).
+//! - [`critical`]: Student's t at any confidence level, and Bonferroni's level for several
+//!   intervals that must hold together.
 //! - [`spread`]: the distribution of a result across replications: percentiles, the empirical
 //!   cumulative distribution with its Dvoretzky–Kiefer–Wolfowitz band, and the probability of
 //!   meeting a target with Wilson's interval.
@@ -20,6 +22,7 @@
 //! - [`precision`]: how precisely the replications pin a result down, and the stopping rule of a
 //!   sequential run (more replications until every result it watches is settled).
 
+pub mod critical;
 pub mod difference;
 pub mod observed;
 pub mod precision;
@@ -200,12 +203,14 @@ pub struct Summary {
     pub mean: f64,
     /// Sample standard deviation across replications (0 for a single one).
     pub std_dev: f64,
-    /// Half-width of the 95% confidence interval for the mean (infinite for a single one).
+    /// Half-width of the confidence interval for the mean (infinite for a single one): 95%
+    /// from [`Summary::of`], the level asked for from [`Summary::at`].
     pub half_width: f64,
 }
 
 impl Summary {
-    /// Summarises `values`, ignoring non-finite ones. `None` if none are left.
+    /// Summarises `values`, ignoring non-finite ones, with a 95% interval. `None` if none are
+    /// left.
     pub fn of(values: &[f64]) -> Option<Self> {
         let mut t = Tally::new();
         values.iter().for_each(|v| t.add(*v));
@@ -224,7 +229,21 @@ impl Summary {
         })
     }
 
-    /// Whether `value` lies inside the 95% confidence interval.
+    /// Summarises `values` as [`Summary::of`] does, with the interval at confidence `level`
+    /// (0.90 for 90%; [`critical::t_two_sided`]): at 0.95 exactly the same as [`Summary::of`].
+    /// An unusable level gives an infinite half-width, as with a single value.
+    pub fn at(values: &[f64], level: f64) -> Option<Self> {
+        let mut s = Self::of(values)?;
+        if level != critical::DEFAULT_LEVEL {
+            s.half_width = match critical::t_two_sided(level, s.n - 1) {
+                Some(tc) => tc * s.std_dev / (s.n as f64).sqrt(),
+                None => f64::INFINITY,
+            };
+        }
+        Some(s)
+    }
+
+    /// Whether `value` lies inside the confidence interval.
     pub fn contains(&self, value: f64) -> bool {
         (value - self.mean).abs() <= self.half_width
     }
@@ -419,5 +438,58 @@ mod tests {
         assert!(s.contains(15.0) && !s.contains(18.0));
         assert_eq!(Summary::of(&[]), None);
         assert!(Summary::of(&[1.0]).is_some_and(|s| s.half_width.is_infinite()));
+    }
+
+    /// The default level leaves every interval as it was, to the last bit.
+    #[test]
+    fn a_summary_at_95_percent_is_the_summary_of_before() {
+        let sets: [&[f64]; 5] = [
+            &[4.0, 6.0],
+            &[2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0],
+            &[1.0],
+            &[3.5; 12],
+            &[
+                0.1, 0.25, 0.33, 0.41, 0.2, 0.18, 0.3, 0.27, 0.26, 0.19, 0.4, 0.35, 0.22, 0.31,
+                0.24, 0.29, 0.21, 0.38, 0.36, 0.23, 0.28, 0.32, 0.34, 0.37, 0.39, 0.17, 0.16, 0.15,
+                0.14, 0.13, 0.12, 0.11, 0.42, 0.43, 0.44,
+            ],
+        ];
+        for xs in sets {
+            assert_eq!(Summary::at(xs, 0.95), Summary::of(xs));
+        }
+    }
+
+    /// Law, 5th ed., Example 9.14 (p. 498; data in Table 9.1, p. 490): the bank's average delay
+    /// over 10 replications, 2.03 with a 90% interval [1.71, 2.35]; and Example 9.34 (Table
+    /// 9.13, p. 546), the three measures at 96.667% each so that they hold together with at
+    /// least 90%: queue length 1.97 [1.55, 2.40], delay 2.03 [1.59, 2.47], share delayed under
+    /// 5 minutes 0.85 [0.80, 0.90]. The queue length's upper end is 2.3944 computed, so 2.39
+    /// here; the book prints 2.40.
+    #[test]
+    fn the_bank_s_intervals_at_90_percent_and_with_bonferroni() {
+        let delay = [1.53, 1.66, 1.24, 2.34, 2.00, 1.69, 2.69, 2.86, 1.70, 2.60];
+        let queue = [1.52, 1.62, 1.23, 2.34, 1.89, 1.56, 2.50, 2.83, 1.74, 2.50];
+        let share = [
+            0.917, 0.916, 0.952, 0.822, 0.840, 0.866, 0.783, 0.782, 0.873, 0.779,
+        ];
+        let r2 = |x: f64| (x * 100.0).round() / 100.0;
+        let s = Summary::at(&delay, 0.90);
+        assert!(s.is_some_and(|s| r2(s.mean) == 2.03
+            && r2(s.mean - s.half_width) == 1.71
+            && r2(s.mean + s.half_width) == 2.35));
+        let each = critical::bonferroni(0.90, 3).unwrap_or(f64::NAN);
+        for (xs, mean, lo, hi) in [
+            (&queue[..], 1.97, 1.55, 2.39),
+            (&delay[..], 2.03, 1.59, 2.47),
+            (&share[..], 0.85, 0.80, 0.90),
+        ] {
+            let s = Summary::at(xs, each);
+            assert!(
+                s.is_some_and(|s| r2(s.mean) == mean
+                    && r2(s.mean - s.half_width) == lo
+                    && r2(s.mean + s.half_width) == hi),
+                "{s:?}"
+            );
+        }
     }
 }
