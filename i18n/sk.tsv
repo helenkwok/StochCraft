@@ -1501,3 +1501,8 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Desať strojov musí bežať, štyri záložné čakajú v pohotovosti a traja opravári opravujú tie, ktoré sa pokazia (Crane a Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koľko záložných strojov a opravárov udrží desať strojov v chode?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Záložné stroje v pohotovosti sa nemôžu pokaziť: v priemere je pokazených 3.47 strojov a beží 9.29. Štvrtý opravár pomôže zhruba toľko ako štyri záložné stroje navyše.
+	One machine's availability	Dostupnosť jedného stroja
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jeden stroj, ktorý sa v priemere pokazí každých 90 hodín a oprava trvá 4.5 hodiny (Hristova, Denev a Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Ako často stojí jeden stroj a koľko práce to stojí?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	V prevádzke 90 hodín, mimo prevádzky 4.5: stroj pracuje 95.2 % času a porucha nastane každých 94.5 hodiny. Polovičná doba opravy to zvýši na 97.6 %.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stojí {down} času (dostupnosť {up}); nič naň nečaká.

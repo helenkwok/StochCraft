@@ -1501,3 +1501,8 @@ connection	Flow	Потік
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десять верстатів мають працювати, чотири резервні стоять напоготові, а троє слюсарів лагодять ті, що виходять з ладу (Crane і Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Скільки резервних верстатів і слюсарів потрібно, щоб десять верстатів працювали?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервні верстати напоготові не можуть вийти з ладу: у середньому 3.47 верстата несправні, а 9.29 працюють. Четвертий слюсар дає приблизно стільки ж, скільки ще чотири резервні верстати.
+	One machine's availability	Готовність одного верстата
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Один верстат, який у середньому ламається кожні 90 годин, а ремонт триває 4.5 години (Hristova, Denev і Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Як часто простоює один верстат і скільки роботи це коштує?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Працює 90 годин, простоює 4.5: верстат працює 95.2% часу, а поломка трапляється кожні 94.5 години. Якщо ремонт удвічі коротший, показник зростає до 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} простоює {down} часу (готовність {up}); ніщо його не чекає.

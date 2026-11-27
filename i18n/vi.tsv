@@ -1501,3 +1501,8 @@ connection	Flow	Luồng
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Mười máy phải chạy, bốn máy dự phòng chờ sẵn và ba thợ máy sửa những máy bị hỏng (Crane và Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Cần bao nhiêu máy dự phòng và thợ máy để mười máy luôn chạy?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máy dự phòng đang chờ không thể hỏng: trung bình 3.47 máy bị hỏng và 9.29 máy chạy. Thêm một thợ máy thứ tư được việc gần bằng thêm bốn máy dự phòng.
+	One machine's availability	Độ sẵn sàng của một máy
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Một máy trung bình cứ 90 giờ lại hỏng và cần 4.5 giờ để sửa (Hristova, Denev và Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Một máy dừng thường xuyên đến mức nào, và việc đó làm mất bao nhiêu công việc?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Chạy 90 giờ, dừng 4.5 giờ: máy làm việc 95.2% thời gian và cứ 94.5 giờ lại có một lần hỏng. Rút ngắn thời gian sửa một nửa thì tỷ lệ này tăng lên 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} dừng {down} thời gian (độ sẵn sàng {up}); không có gì chờ nó.
