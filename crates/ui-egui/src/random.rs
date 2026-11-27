@@ -306,7 +306,8 @@ impl App {
                         ],
                     );
                     if v["within_free_tier"] == false {
-                        s.push(' ');
+                        // Its own line: the estimate has no full stop to end on.
+                        s.push('\n');
                         s.push_str(t("More than a month of the free tier allows."));
                     }
                     s
