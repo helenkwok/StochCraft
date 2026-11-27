@@ -1535,6 +1535,18 @@ connection	Flow	Tok
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dva stroje a jeden pracovník: každá zákazka potrebuje súčasne svoj stroj a pracovníka (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Obmedzuje prevádzku pracovník, alebo stroje?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Zákazka drží svoj stroj a pracovníka naraz, takže obmedzením je jediný pracovník: zákazky čakajú ako v rade s jednou obsluhou, 3 doby obsluhy pri vyťažení 75 % a 9 pri 90 %.
+	Median time in system	Medián času v systéme
+	Time in system, 90th percentile	Čas v systéme, 90. percentil
+	Time in system, 95th percentile	Čas v systéme, 95. percentil
+	Share done within the target time	Podiel hotových v cieľovom čase
+	Percentiles of time in system	Percentily času v systéme
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Zobrazí medián, 90. a 95. percentil času, ktorý každá entita strávila od svojho vzniku po tieto výstupy, a s cieľovým časom podiel hotových v ňom.
+	Target time ({unit})	Cieľový čas ({unit})
+	The target time is a time above 0	Cieľový čas je čas väčší ako 0
+	Count only working time on	Počítať len pracovný čas podľa
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entity, ktoré sú na konci behu stále vnútri, nie sú zahrnuté, preto beh zastavte, až budú všetky hotové.
+	Set the target time in system of {block} to a time above 0.	Nastavte cieľový čas v systéme bloku {block} na čas väčší ako 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Čas v systéme bloku {block} počíta pracovný čas podľa kalendára, ktorý neexistuje. Vyberte existujúci kalendár.
 	One machine's availability	Dostupnosť jedného stroja
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jeden stroj, ktorý sa v priemere pokazí každých 90 hodín a oprava trvá 4.5 hodiny (Hristova, Denev a Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Ako často stojí jeden stroj a koľko práce to stojí?

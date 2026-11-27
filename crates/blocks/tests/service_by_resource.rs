@@ -405,6 +405,7 @@ fn the_model_looks_an_entry_up_by_pool() {
     let mut sink = ElementKind::Sink {
         scrap: None,
         demand: None,
+        time_in_system: None,
     };
     assert!(sink.processing_by_resource().is_none());
     assert!(sink.processing_by_resource_mut().is_none());

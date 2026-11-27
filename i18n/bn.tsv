@@ -1535,6 +1535,18 @@ connection	Flow	প্রবাহ
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	দুটি মেশিন ও একজন কর্মী: প্রতিটি কাজের একই সময়ে নিজের মেশিন ও কর্মীকে দরকার (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973)।
 	Is the worker or the machines the constraint?	সীমাবদ্ধতা কি কর্মী, না মেশিনগুলো?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	একটি কাজ তার মেশিন ও কর্মীকে একসঙ্গে ধরে রাখে, তাই একমাত্র কর্মীই সীমাবদ্ধতা: কাজগুলো এক-সেবাদাতার সারির মতো অপেক্ষা করে, 75% ব্যস্ততায় 3টি সেবা-সময় আর 90%-এ 9টি।
+	Median time in system	সিস্টেমে সময়ের মধ্যমা
+	Time in system, 90th percentile	সিস্টেমে সময়, ৯০তম শতাংশক
+	Time in system, 95th percentile	সিস্টেমে সময়, ৯৫তম শতাংশক
+	Share done within the target time	লক্ষ্য সময়ের মধ্যে শেষ হওয়ার অংশ
+	Percentiles of time in system	সিস্টেমে সময়ের শতাংশক
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	প্রতিটি সত্তা তৈরি হওয়া থেকে এই প্রস্থানগুলিতে পৌঁছাতে যে সময় নিয়েছে তার মধ্যমা, ৯০তম ও ৯৫তম শতাংশক দেখায়, আর লক্ষ্য সময় দিলে তার মধ্যে শেষ হওয়ার অংশ।
+	Target time ({unit})	লক্ষ্য সময় ({unit})
+	The target time is a time above 0	লক্ষ্য সময় 0-এর বেশি একটি সময় হতে হবে
+	Count only working time on	শুধু কাজের সময় গুনুন এতে
+	Entities still inside when the run ends are left out, so stop the run once all are done.	রান শেষ হলে যেগুলো এখনও ভেতরে, সেগুলো বাদ থাকে, তাই সবগুলো শেষ হলে রান থামান।
+	Set the target time in system of {block} to a time above 0.	{block}-এর সিস্টেমে লক্ষ্য সময় 0-এর বেশি একটি সময়ে সেট করুন।
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block}-এর সিস্টেমে সময় এমন একটি ক্যালেন্ডারে কাজের সময় গোনে যা নেই। এমন ক্যালেন্ডার বেছে নিন যা আছে।
 	One machine's availability	একটি যন্ত্রের প্রাপ্যতা
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	একটি যন্ত্র গড়ে প্রতি ৯০ ঘণ্টায় বিকল হয় এবং মেরামত হতে ৪.৫ ঘণ্টা লাগে (Hristova, Denev ও Tsankov, Environment. Technology. Resources, 2024)।
 	How often is one machine down, and how much work does that cost?	একটি যন্ত্র কত ঘন ঘন বিকল থাকে, এবং তাতে কত কাজ নষ্ট হয়?

@@ -223,6 +223,15 @@ More settings are folded under headings; open them when you need them:
   restart.
 - **Properties:** values set on each entity as it enters, for example a product type that
   changes the service time (**Service time by property**).
+- **Time in system** (on Departures): tick **Percentiles of time in system** to see the median,
+  90th and 95th percentile of the time each entity took from its creation to these departures,
+  not only the mean. Give a **Target time** to see the **Share done within the target time**
+  (a service level such as "95% done within 3 days"). With **Count only working time on** set to
+  a calendar, only the time that calendar is active counts, so a part started on Friday and
+  finished on Monday has not waited the weekend. Entities still inside when the run ends are
+  left out, which biases these low when work piles up: stop each run once all are done
+  (**Ends early**, when as many entities as arrive have left these departures). The mean time
+  in system stays on the clock.
 - **Takt** (on Departures): the customer demand, to see takt time, cycle time and whether demand
   is met.
 - **Quality** (on Departures): mark the parts that leave here as scrap.
@@ -470,7 +479,8 @@ The **Results** tab shows, from the top:
 6. **All measures:** every other result in a table per block, folded. Tasks with a resource also
    report the time spent processing, starved, blocked, failed, off shift and setting up, and OEE
    when a planned run time is set. Departures with a demand report takt time, demand met and
-   cycle time.
+   cycle time, and those with **Time in system** its percentiles and the share within the
+   target, for each run over the entities that reached them.
 7. **Spread across runs:** pick a result to see its percentiles and how often it met a
    target, for example "the wait is at most 5 minutes in 14 of 16 runs".
 

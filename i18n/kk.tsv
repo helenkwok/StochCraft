@@ -1535,6 +1535,18 @@ connection	Flow	Ағын
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Екі станок және бір жұмысшы: әр жұмысқа бір мезгілде өз станогы мен жұмысшы керек (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Шектеу жұмысшы ма, әлде станоктар ма?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Жұмыс өз станогы мен жұмысшыны бірге ұстайды, сондықтан жалғыз жұмысшы шектеу болады: жұмыстар бір қызмет көрсетушісі бар кезектегідей күтеді, 75% жүктемеде 3 қызмет уақыты, 90%-да 9.
+	Median time in system	Жүйедегі уақыттың медианасы
+	Time in system, 90th percentile	Жүйедегі уақыт, 90-шы процентиль
+	Time in system, 95th percentile	Жүйедегі уақыт, 95-ші процентиль
+	Share done within the target time	Мақсатты уақыт ішінде аяқталғандардың үлесі
+	Percentiles of time in system	Жүйедегі уақыттың процентильдері
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Әр нысанның жасалғаннан бастап осы шығуларға жеткенге дейінгі уақытының медианасын, 90-шы және 95-ші процентильдерін, ал мақсатты уақыт берілсе, сол уақыт ішінде аяқталғандардың үлесін көрсетеді.
+	Target time ({unit})	Мақсатты уақыт ({unit})
+	The target time is a time above 0	Мақсатты уақыт 0-ден үлкен уақыт болуы керек
+	Count only working time on	Тек жұмыс уақытын санау күнтізбесі
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Іске қосу аяқталғанда әлі ішінде қалған нысандар есепке алынбайды, сондықтан бәрі аяқталғанда іске қосуды тоқтатыңыз.
+	Set the target time in system of {block} to a time above 0.	{block} блогының жүйедегі мақсатты уақытын 0-ден үлкен уақытқа орнатыңыз.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} блогының жүйедегі уақыты жоқ күнтізбе бойынша жұмыс уақытын санайды. Бар күнтізбені таңдаңыз.
 	One machine's availability	Бір станоктың дайындығы
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Орта есеппен әр 90 сағат сайын бұзылатын және жөндеуге 4.5 сағат кететін бір станок (Hristova, Denev және Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Бір станок қаншалықты жиі тоқтап қалады және бұл қанша жұмысқа тұрады?

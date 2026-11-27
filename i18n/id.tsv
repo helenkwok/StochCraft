@@ -1535,6 +1535,18 @@ connection	Flow	Alur
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dua mesin dan satu pekerja: setiap pekerjaan membutuhkan mesinnya dan pekerja itu pada saat yang sama (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Kendalanya pekerja atau mesin?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Sebuah pekerjaan menahan mesinnya dan pekerja itu bersamaan, jadi satu-satunya pekerja itulah kendalanya: pekerjaan menunggu seperti dalam antrean satu pelayan, 3 kali waktu layanan pada sibuk 75% dan 9 pada 90%.
+	Median time in system	Median waktu dalam sistem
+	Time in system, 90th percentile	Waktu dalam sistem, persentil ke-90
+	Time in system, 95th percentile	Waktu dalam sistem, persentil ke-95
+	Share done within the target time	Bagian yang selesai dalam waktu target
+	Percentiles of time in system	Persentil waktu dalam sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Menampilkan median, persentil ke-90 dan ke-95 dari waktu yang diperlukan setiap entitas sejak dibuat hingga mencapai keluaran ini, dan dengan waktu target, bagian yang selesai di dalamnya.
+	Target time ({unit})	Waktu target ({unit})
+	The target time is a time above 0	Waktu target harus berupa waktu di atas 0
+	Count only working time on	Hitung hanya waktu kerja menurut
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitas yang masih di dalam saat eksekusi berakhir tidak dihitung, jadi hentikan eksekusi setelah semuanya selesai.
+	Set the target time in system of {block} to a time above 0.	Atur waktu target dalam sistem untuk {block} ke waktu di atas 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Waktu dalam sistem untuk {block} menghitung waktu kerja menurut kalender yang tidak ada. Pilih kalender yang ada.
 	One machine's availability	Ketersediaan satu mesin
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Satu mesin yang rata-rata rusak setiap 90 jam dan butuh 4.5 jam untuk diperbaiki (Hristova, Denev, dan Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Seberapa sering satu mesin berhenti, dan berapa banyak pekerjaan yang hilang karenanya?

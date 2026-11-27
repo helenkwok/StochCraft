@@ -1535,6 +1535,18 @@ connection	Flow	Voog
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Kaks masinat ja üks töötaja: iga töö vajab korraga oma masinat ja töötajat (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Kas piirab töötaja või masinad?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Töö hoiab oma masinat ja töötajat koos, seega on ainus töötaja kitsaskoht: tööd ootavad nagu ühe teenindajaga järjekorras, 3 teenindusaega 75% hõivatuse juures ja 9 90% juures.
+	Median time in system	Süsteemis oleku aja mediaan
+	Time in system, 90th percentile	Aeg süsteemis, 90. protsentiil
+	Time in system, 95th percentile	Aeg süsteemis, 95. protsentiil
+	Share done within the target time	Sihtaja jooksul valmis saanute osa
+	Percentiles of time in system	Süsteemis oleku aja protsentiilid
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Näitab iga olemi loomisest nende väljumisteni kulunud aja mediaani, 90. ja 95. protsentiili ning sihtaja korral selle jooksul valmis saanute osa.
+	Target time ({unit})	Sihtaeg ({unit})
+	The target time is a time above 0	Sihtaeg peab olema suurem kui 0
+	Count only working time on	Loe ainult tööaega kalendri järgi
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Olemid, mis on käivitamise lõppedes veel sees, jäetakse välja, seega peata käivitamine, kui kõik on valmis.
+	Set the target time in system of {block} to a time above 0.	Määra ploki {block} sihtaeg süsteemis suuremaks kui 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Ploki {block} aeg süsteemis loeb tööaega kalendri järgi, mida pole olemas. Vali olemasolev kalender.
 	One machine's availability	Ühe masina käideldavus
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Masin, mis läheb keskmiselt iga 90 tunni järel rikki ja mille parandamine võtab 4.5 tundi (Hristova, Denev ja Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Kui tihti seisab üks masin ja kui palju tööd see maksab?

@@ -1535,6 +1535,18 @@ connection	Flow	Ροή
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Δύο μηχανές και ένας εργάτης: κάθε εργασία χρειάζεται ταυτόχρονα τη μηχανή της και τον εργάτη (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Ο περιορισμός είναι ο εργάτης ή οι μηχανές;
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Μια εργασία κρατά τη μηχανή της και τον εργάτη μαζί, οπότε ο ένας εργάτης είναι ο περιορισμός: οι εργασίες περιμένουν όπως σε ουρά με έναν εξυπηρετητή, 3 χρόνοι εξυπηρέτησης στο 75% απασχόληση και 9 στο 90%.
+	Median time in system	Διάμεσος χρόνου στο σύστημα
+	Time in system, 90th percentile	Χρόνος στο σύστημα, 90ό εκατοστημόριο
+	Time in system, 95th percentile	Χρόνος στο σύστημα, 95ο εκατοστημόριο
+	Share done within the target time	Ποσοστό που ολοκληρώθηκε εντός του χρόνου-στόχου
+	Percentiles of time in system	Εκατοστημόρια του χρόνου στο σύστημα
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Δείχνει τη διάμεσο, το 90ό και το 95ο εκατοστημόριο του χρόνου που χρειάστηκε κάθε οντότητα από τη δημιουργία της έως αυτές τις αναχωρήσεις και, με χρόνο-στόχο, το ποσοστό που ολοκληρώθηκε εντός του.
+	Target time ({unit})	Χρόνος-στόχος ({unit})
+	The target time is a time above 0	Ο χρόνος-στόχος είναι χρόνος μεγαλύτερος από 0
+	Count only working time on	Μέτρηση μόνο του χρόνου εργασίας κατά
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Οι οντότητες που είναι ακόμη εντός όταν τελειώνει η εκτέλεση δεν περιλαμβάνονται, οπότε σταματήστε την εκτέλεση όταν ολοκληρωθούν όλες.
+	Set the target time in system of {block} to a time above 0.	Ορίστε τον χρόνο-στόχο στο σύστημα του μπλοκ {block} σε χρόνο μεγαλύτερο από 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Ο χρόνος στο σύστημα του μπλοκ {block} μετρά χρόνο εργασίας κατά ένα ημερολόγιο που δεν υπάρχει. Επιλέξτε ένα ημερολόγιο που υπάρχει.
 	One machine's availability	Διαθεσιμότητα ενός μηχανήματος
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Ένα μηχάνημα που χαλάει κατά μέσο όρο κάθε 90 ώρες και χρειάζεται 4.5 ώρες για επισκευή (Hristova, Denev και Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Πόσο συχνά είναι εκτός λειτουργίας ένα μηχάνημα και πόση δουλειά κοστίζει αυτό;

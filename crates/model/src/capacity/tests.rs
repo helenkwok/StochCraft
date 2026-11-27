@@ -61,6 +61,7 @@ fn sink(i: &str) -> Element {
         ElementKind::Sink {
             scrap: None,
             demand: None,
+            time_in_system: None,
         },
     )
 }

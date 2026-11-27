@@ -1535,6 +1535,18 @@ connection	Flow	Flux
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Două mașini și un muncitor: fiecare lucrare are nevoie în același timp de mașina ei și de muncitor (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Constrângerea este muncitorul sau mașinile?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	O lucrare ține împreună mașina ei și muncitorul, așa că singurul muncitor este constrângerea: lucrările așteaptă ca într-o coadă cu un singur server, 3 timpi de servire la 75% ocupare și 9 la 90%.
+	Median time in system	Mediana timpului în sistem
+	Time in system, 90th percentile	Timp în sistem, percentila 90
+	Time in system, 95th percentile	Timp în sistem, percentila 95
+	Share done within the target time	Proporția terminată în timpul țintă
+	Percentiles of time in system	Percentilele timpului în sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Arată mediana, percentilele 90 și 95 ale timpului pe care fiecare entitate l-a petrecut de la creare până la aceste ieșiri și, cu un timp țintă, proporția terminată în el.
+	Target time ({unit})	Timp țintă ({unit})
+	The target time is a time above 0	Timpul țintă este un timp mai mare decât 0
+	Count only working time on	Numără doar timpul de lucru după
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitățile încă în interior când se încheie rularea sunt lăsate în afară, așa că opriți rularea când toate sunt gata.
+	Set the target time in system of {block} to a time above 0.	Setați timpul țintă în sistem al blocului {block} la un timp mai mare decât 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Timpul în sistem al blocului {block} numără timpul de lucru după un calendar care nu există. Alegeți un calendar existent.
 	One machine's availability	Disponibilitatea unei mașini
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	O mașină care se defectează în medie la fiecare 90 de ore și necesită 4.5 ore pentru reparație (Hristova, Denev și Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Cât de des stă o mașină și cât de multă muncă costă asta?

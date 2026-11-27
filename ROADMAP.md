@@ -2210,7 +2210,14 @@ A line that makes several products, and results in the terms lean practice uses.
     at (it travels as properties do), or one the scrap sink names; each pass counts as produced,
     and good = produced − scrap − rework (deduced from ISO 22400-2's definitions in 5.5). And
     `oee`, availability × effectiveness × quality ratio, with quality counted as 1 (and said so)
-    when the model marks no scrap or rework. Not yet: ISO's NEE index and per-product plans.
+    when the model marks no scrap or rework. Not yet: ISO's NEE index and per-product plans;
+  - lead time by percentile and service level: done. A departures block can report
+    `time_in_system_p50`, `_p90` and `_p95` (from each entity's exact time, Hyndman and Fan's
+    type 7 quantile) and, with a target time, `within_target_share`, the share done within it
+    (the vendor extension `stochcraft:timeInSystem`). With a calendar, these count only its
+    active time (working time, from prefix sums over its periods). Entities still inside at the
+    end are left out, so a run should stop once all are done; `mean_time_in_system` is
+    unchanged. Checked against M/M/1's exponential sojourn time and a part held over a weekend.
 - **Current and future state:** a current-state and a future-state value stream map as two
   scenarios of one model, compared with `results.compare` (paired when they share their seed
   and replications, #73).

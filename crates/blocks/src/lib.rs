@@ -49,7 +49,7 @@ use stochcraft_model::expr;
 pub use stochcraft_model::{
     BalkJoin, BalkRow, Balking, Breakdown, ByResource, ByValue, Change, ConveyorShape, Demand,
     DemandPer, HealthCheck, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
-    ProcessingBy, ProcessingByResource, QueueLimit, Routing, Scrap, Setup, Transfer,
+    ProcessingBy, ProcessingByResource, QueueLimit, Routing, Scrap, Setup, TimeInSystem, Transfer,
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
@@ -708,6 +708,20 @@ pub enum Metric {
     /// inside the model at the end (see [`Metric::WorkInProgress`]) are left out, so when work
     /// piles up the mean is biased low.
     MeanTimeInSystem,
+    /// Sinks that report time in system ([`stochcraft_model::TimeInSystem`]): the median of the
+    /// times from creation to arrival of the entities that arrived in the measured window (Hyndman
+    /// and Fan's type 7 sample quantile), counting only the calendar's active time when it names
+    /// one. Entities still inside the model at the end are left out (censored), so with work
+    /// piling up it is biased low: stop the run once all are done.
+    TimeInSystemP50,
+    /// Sinks that report time in system: the 90th percentile, as [`Metric::TimeInSystemP50`].
+    TimeInSystemP90,
+    /// Sinks that report time in system: the 95th percentile, as [`Metric::TimeInSystemP50`].
+    TimeInSystemP95,
+    /// Sinks that report time in system with a target: the share of the entities that arrived
+    /// whose time in system (working time, with a calendar) was at most the target. Entities
+    /// still inside at the end are left out, as for [`Metric::TimeInSystemP50`].
+    WithinTargetShare,
     /// Servers and delays sending to a finite buffer: mean time an entity that left waited,
     /// after its service or delay, for room in the next buffer (zero when there was room).
     MeanBlockedTime,
@@ -848,7 +862,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 45] = [
+    pub const ALL: [Metric; 49] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -858,6 +872,10 @@ impl Metric {
         Metric::WorkInProgress,
         Metric::MeanWorkInProgress,
         Metric::MeanTimeInSystem,
+        Metric::TimeInSystemP50,
+        Metric::TimeInSystemP90,
+        Metric::TimeInSystemP95,
+        Metric::WithinTargetShare,
         Metric::MeanBlockedTime,
         Metric::MeanTimeOn,
         Metric::BlockingProbability,
@@ -913,6 +931,10 @@ impl Metric {
             Metric::WorkInProgress => "work_in_progress",
             Metric::MeanWorkInProgress => "mean_work_in_progress",
             Metric::MeanTimeInSystem => "mean_time_in_system",
+            Metric::TimeInSystemP50 => "time_in_system_p50",
+            Metric::TimeInSystemP90 => "time_in_system_p90",
+            Metric::TimeInSystemP95 => "time_in_system_p95",
+            Metric::WithinTargetShare => "within_target_share",
             Metric::MeanBlockedTime => "mean_blocked_time",
             Metric::MeanTimeOn => "mean_time_on",
             Metric::BlockingProbability => "blocking_probability",
@@ -1057,6 +1079,13 @@ pub struct ElementReport {
     /// [`Metric::MeanWorkInProgress`]: the time-average number inside.
     pub mean_work_in_progress: Option<f64>,
     pub mean_time_in_system: Option<f64>,
+    /// Sinks that report time in system: [`Metric::TimeInSystemP50`], [`Metric::TimeInSystemP90`]
+    /// and [`Metric::TimeInSystemP95`], and with a target [`Metric::WithinTargetShare`] (`None`
+    /// elsewhere, and where no entity arrived).
+    pub time_in_system_p50: Option<f64>,
+    pub time_in_system_p90: Option<f64>,
+    pub time_in_system_p95: Option<f64>,
+    pub within_target_share: Option<f64>,
     /// Only where a finite buffer is involved (`None` otherwise, so models without one report
     /// as before): see [`Metric::MeanBlockedTime`] and the metrics after it. `lost` is also
     /// reported by every exclusive gateway, buffer or not.
@@ -1166,6 +1195,10 @@ impl ElementReport {
             Metric::WorkInProgress => self.work_in_progress.map(|n| n as f64),
             Metric::MeanWorkInProgress => self.mean_work_in_progress,
             Metric::MeanTimeInSystem => self.mean_time_in_system,
+            Metric::TimeInSystemP50 => self.time_in_system_p50,
+            Metric::TimeInSystemP90 => self.time_in_system_p90,
+            Metric::TimeInSystemP95 => self.time_in_system_p95,
+            Metric::WithinTargetShare => self.within_target_share,
             Metric::MeanBlockedTime => self.mean_blocked_time,
             Metric::MeanTimeOn => self.mean_time_on,
             Metric::BlockingProbability => self.blocking_probability,
@@ -2057,6 +2090,7 @@ impl Builder {
             ElementKind::Sink {
                 scrap: None,
                 demand: None,
+                time_in_system: None,
             },
         )
     }
@@ -2155,6 +2189,16 @@ impl Builder {
             .map(|(name, ..)| ElementId::unchecked(name));
         if let Some((_, ElementKind::Sink { scrap, .. }, _)) = self.elements.get_mut(block.0) {
             *scrap = Some(Scrap { charged_to });
+        }
+    }
+
+    /// Makes sink `block` report the percentiles of each entity's time in system, and the share
+    /// within a target (see [`TimeInSystem`]).
+    pub fn time_in_system(&mut self, block: BlockId, x: TimeInSystem) {
+        if let Some((_, ElementKind::Sink { time_in_system, .. }, _)) =
+            self.elements.get_mut(block.0)
+        {
+            *time_in_system = Some(x);
         }
     }
 

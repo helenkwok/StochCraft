@@ -1535,6 +1535,18 @@ connection	Flow	Stroom
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Twee machines en één werknemer: elke opdracht heeft tegelijk zijn machine en de werknemer nodig (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Is de werknemer of zijn de machines de beperking?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Een opdracht houdt zijn machine en de werknemer samen vast, dus de ene werknemer is de beperking: opdrachten wachten als in een wachtrij met één bediende, 3 bedieningstijden bij 75% bezetting en 9 bij 90%.
+	Median time in system	Mediaan van de tijd in het systeem
+	Time in system, 90th percentile	Tijd in het systeem, 90e percentiel
+	Time in system, 95th percentile	Tijd in het systeem, 95e percentiel
+	Share done within the target time	Aandeel klaar binnen de doeltijd
+	Percentiles of time in system	Percentielen van de tijd in het systeem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Toont de mediaan, het 90e en het 95e percentiel van de tijd die elke entiteit nodig had van haar ontstaan tot deze uitgangen, en met een doeltijd het aandeel dat daarbinnen klaar was.
+	Target time ({unit})	Doeltijd ({unit})
+	The target time is a time above 0	De doeltijd is een tijd boven 0
+	Count only working time on	Alleen werktijd tellen volgens
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entiteiten die nog binnen zijn als de uitvoering eindigt, tellen niet mee, dus stop de uitvoering pas als alle klaar zijn.
+	Set the target time in system of {block} to a time above 0.	Stel de doeltijd in het systeem van {block} in op een tijd boven 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	De tijd in het systeem van {block} telt werktijd volgens een kalender die niet bestaat. Kies een bestaande kalender.
 	One machine's availability	Beschikbaarheid van één machine
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Eén machine die gemiddeld elke 90 uur uitvalt en 4.5 uur nodig heeft om gerepareerd te worden (Hristova, Denev en Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Hoe vaak staat één machine stil, en hoeveel werk kost dat?

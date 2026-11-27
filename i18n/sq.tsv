@@ -1535,6 +1535,18 @@ connection	Flow	Rrjedhë
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dy makineri dhe një punëtor: çdo punë ka nevojë njëkohësisht për makinerinë e saj dhe për punëtorin (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Kufizimi është punëtori apo makineritë?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Një punë mban bashkë makinerinë e saj dhe punëtorin, ndaj punëtori i vetëm është kufizimi: punët presin si në një radhë me një shërbyes, 3 kohë shërbimi në 75% ngarkesë dhe 9 në 90%.
+	Median time in system	Mediana e kohës në sistem
+	Time in system, 90th percentile	Koha në sistem, përqindëshi i 90-të
+	Time in system, 95th percentile	Koha në sistem, përqindëshi i 95-të
+	Share done within the target time	Pjesa e përfunduar brenda kohës së synuar
+	Percentiles of time in system	Përqindëshat e kohës në sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Tregon medianën, përqindëshin e 90-të dhe të 95-të të kohës që i duhej çdo entiteti nga krijimi deri te këto dalje dhe, me një kohë të synuar, pjesën e përfunduar brenda saj.
+	Target time ({unit})	Koha e synuar ({unit})
+	The target time is a time above 0	Koha e synuar është një kohë mbi 0
+	Count only working time on	Numëro vetëm kohën e punës sipas
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitetet që janë ende brenda kur mbaron ekzekutimi lihen jashtë, prandaj ndaleni ekzekutimin kur të kenë përfunduar të gjitha.
+	Set the target time in system of {block} to a time above 0.	Vendosni kohën e synuar në sistem të bllokut {block} në një kohë mbi 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Koha në sistem e bllokut {block} numëron kohën e punës sipas një kalendari që nuk ekziston. Zgjidhni një kalendar që ekziston.
 	One machine's availability	Disponueshmëria e një makine
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Një makinë që prishet mesatarisht çdo 90 orë dhe riparohet për 4.5 orë (Hristova, Denev dhe Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Sa shpesh ndalet një makinë dhe sa punë kushton kjo?
