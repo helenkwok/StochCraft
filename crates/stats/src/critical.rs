@@ -81,7 +81,7 @@ pub fn incomplete_beta(a: f64, b: f64, x: f64) -> Option<f64> {
 /// t ≥ 0; by symmetry 1 − P(T > −t) below 0. `None` for no degrees of freedom or a t that is
 /// not a number.
 pub fn t_upper_tail(t: f64, df: f64) -> Option<f64> {
-    if !(df > 0.0) || t.is_nan() {
+    if df.is_nan() || df <= 0.0 || t.is_nan() {
         return None;
     }
     if t.is_infinite() {
