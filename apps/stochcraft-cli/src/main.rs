@@ -3,6 +3,7 @@
 //! Everything goes through the engine's commands (`stochcraft-engine`), as the desktop app and
 //! agents do, so a command line session can be replayed as a script and vice versa.
 
+mod data;
 mod fit;
 mod output;
 mod templates;
@@ -354,6 +355,59 @@ enum Command {
         min_count: Option<u32>,
         #[arg(long, value_enum, default_value_t = Format::Table)]
         format: Format,
+    },
+    /// Analyse per-replication results made by any simulation tool, spreadsheet or script that
+    /// can write CSV (the engine's `data.analyse`), without a model: each scenario's measures
+    /// with their 95% intervals and how sure they are, two outcomes where the runs split, and
+    /// each scenario against the baseline with a verdict. A wide table has a row per
+    /// replication and a column per measure; a long one has measure and value columns.
+    Analyse {
+        /// The CSV file (comma, semicolon or tab delimited); `-` reads standard input.
+        file: PathBuf,
+        /// The scenario column (default: one headed `scenario`, if any).
+        #[arg(long)]
+        scenario: Option<String>,
+        /// The replication column (default: one headed `replication`, `rep` or `run`, if any).
+        #[arg(long)]
+        replication: Option<String>,
+        /// A long table's column naming the measure (default: one headed `measure` or `metric`).
+        #[arg(long)]
+        measure: Option<String>,
+        /// A long table's column of values (default: one headed `value`).
+        #[arg(long)]
+        value: Option<String>,
+        /// The scenario the others are compared with (default: the first).
+        #[arg(long)]
+        baseline: Option<String>,
+        /// The scenarios used common random numbers: compare them in pairs, by replication id.
+        /// Only the tool that made the runs can say so.
+        #[arg(long)]
+        paired: bool,
+        /// A tolerance for agreement, as `measure=value`; may be given more than once.
+        #[arg(long)]
+        tolerance: Vec<String>,
+        /// Print the engine's answer as JSON.
+        #[arg(long)]
+        json: bool,
+    },
+    /// Suggest a warm-up from a time series per replication made by any simulation tool,
+    /// spreadsheet or script that can write CSV (the engine's `data.warmup`): each measure
+    /// averaged across the replications at each time, and MSER-5 on the average.
+    Warmup {
+        /// The CSV file; `-` reads standard input.
+        file: PathBuf,
+        /// The time column (default: one headed `time` or `t`).
+        #[arg(long)]
+        time: Option<String>,
+        /// The replication column (default: one headed `replication`, `rep` or `run`).
+        #[arg(long)]
+        replication: Option<String>,
+        /// The scenario column, if any (default: one headed `scenario`, if any).
+        #[arg(long)]
+        scenario: Option<String>,
+        /// Print the engine's answer as JSON.
+        #[arg(long)]
+        json: bool,
     },
     /// Replay engine commands from a JSON script (an array of {"command", "params"}) or from a
     /// journal written by `--journal` (an object with its version and starting state). Prints
@@ -2127,6 +2181,40 @@ fn main() -> ExitCode {
             families: &families,
             min_count,
             format,
+        }),
+        Command::Analyse {
+            file,
+            scenario,
+            replication,
+            measure,
+            value,
+            baseline,
+            paired,
+            tolerance,
+            json,
+        } => data::analyse(&data::AnalyseArgs {
+            file: &file,
+            scenario: scenario.as_deref(),
+            replication: replication.as_deref(),
+            measure: measure.as_deref(),
+            value: value.as_deref(),
+            baseline: baseline.as_deref(),
+            paired,
+            tolerance: &tolerance,
+            json,
+        }),
+        Command::Warmup {
+            file,
+            time,
+            replication,
+            scenario,
+            json,
+        } => data::warmup(&data::WarmupArgs {
+            file: &file,
+            time: time.as_deref(),
+            replication: replication.as_deref(),
+            scenario: scenario.as_deref(),
+            json,
         }),
         Command::Exec {
             script,

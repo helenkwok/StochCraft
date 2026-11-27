@@ -184,6 +184,17 @@ fn an_agent_opens_builds_checks_runs_and_saves() {
     let wait = &compared["comparisons"][0];
     assert!(wait["difference"].as_f64().unwrap() < 0.0, "{wait}");
     assert_eq!(wait["significant"], true, "{wait}");
+    // Results made by another tool, analysed without a model: declared pairs by replication.
+    let csv = "scenario,replication,wait\na,1,4\na,2,6\na,3,5\nb,1,3\nb,2,4\nb,3,4\n";
+    let analysed = s.ok(
+        "execute",
+        json!({"command": "data.analyse", "params": {"csv": csv, "paired": true}}),
+    );
+    assert_eq!(
+        analysed["comparisons"][0]["interval"], "paired_t",
+        "{analysed}"
+    );
+    assert_eq!(analysed["comparisons"][0]["pairs"], 3, "{analysed}");
     s.ok("undo", json!({}));
     s.ok("undo", json!({}));
     assert_eq!(

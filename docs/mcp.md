@@ -220,6 +220,15 @@ as `a` and `b`). Runs with the same seed and replications share their random num
 compares them replication by replication (a paired-t interval); otherwise it uses Welch's
 two-sample t interval and says so.
 
+Results made by another tool need no model. `data.analyse` takes per-replication results as CSV
+text (`csv`: a wide table with a column per measure, or a long one with `measure` and `value`
+columns, each with optional `scenario` and `replication` columns) and gives each scenario's
+means with their 95% intervals, how sure they are and two outcomes where the runs split, and each
+scenario against the `baseline`, judged as the check against observed data judges a difference
+(with an optional `tolerance` per measure). Pairing by replication id is used only when `paired`
+is declared: whether the scenarios shared their random numbers cannot be seen from the numbers.
+`data.warmup` takes a time series per replication and suggests a warm-up by MSER-5.
+
 Each metric in `run`'s results carries `n`, the replications that had a value for it, which can
 be fewer than `replications` (a server no entity reached, or replications that stopped inside
 the warm-up). `experiment.size` takes `target_share`, the share of replications that must meet

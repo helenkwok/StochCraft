@@ -42,7 +42,10 @@ range of replications, for a search of your own; experiment.optimise finds the b
 constraints, and says how sure it is); to \
 check a model against real data, `execute` observation.add \
 {check: value | at_most | at_least, element, metric, ...} and `run`: the results' `observed` says, by the \
-95% interval, whether each agrees; `save`. \
+95% interval, whether each agrees; `save`. Results made by another tool need no model: `execute` \
+data.analyse {csv, scenario, replication, baseline, paired, tolerance} on per-replication results as \
+CSV (each scenario's means with how sure they are, and each scenario against the baseline with a \
+verdict), or data.warmup {csv, time, replication} on a time series per replication. \
 Every failure leaves the model unchanged and says why; `undo` takes back an edit.";
 
 pub struct Server {

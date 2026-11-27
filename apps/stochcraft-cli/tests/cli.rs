@@ -1771,3 +1771,99 @@ fn optimize_refuses_numbers_that_are_not_finite() {
         assert!(stderr(&o).contains(flag), "{flag}: {}", stderr(&o));
     }
 }
+
+fn data(name: &str) -> String {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/data")
+        .join(name)
+        .to_string_lossy()
+        .into_owned()
+}
+
+#[test]
+fn analyse_reads_runs_from_another_tool() {
+    let wide = data("runs-wide.csv");
+    let text = ok(&["analyse", &wide]);
+    assert!(
+        text.starts_with(&format!(
+            "runs from {wide}: 10 rows, a wide table, 2 measures, scenarios one desk, two desks"
+        )),
+        "{text}"
+    );
+    let row = |text: &str, starts: &str| {
+        text.lines()
+            .find(|l| l.starts_with(starts))
+            .map(|l| l.split_whitespace().collect::<Vec<_>>().join(" "))
+            .unwrap_or_else(|| panic!("no {starts} row:\n{text}"))
+    };
+    // 6 ± 1.96 rounded to what the interval supports; ±33% of the mean, so about 220 runs.
+    assert_eq!(
+        row(&text, "one desk   wait"),
+        "one desk wait 5 6 ± 2 wide (about 220 runs) 4 8"
+    );
+    assert!(
+        row(&text, "one desk   served").contains("4 (1 empty)"),
+        "{text}"
+    );
+    // Independent: Welch's interval −1.6 ± 2.06 holds 0.
+    let against = text
+        .split_once("against the baseline one desk, as independent runs")
+        .map_or("", |(_, rest)| rest);
+    assert_eq!(
+        row(against, "two desks  wait"),
+        "two desks wait -2 ± 2 no difference detected"
+    );
+    assert!(
+        text.contains("note: every scenario has the same replication ids"),
+        "{text}"
+    );
+
+    // Declared pairs: −1.6 ± 0.68, and within ±3 it agrees.
+    let paired = ok(&["analyse", &wide, "--paired", "--tolerance", "wait=3"]);
+    assert!(
+        paired.contains("in pairs by replication (paired t)"),
+        "{paired}"
+    );
+    assert!(
+        paired.lines().any(|l| l.starts_with("two desks")
+            && l.contains("-1.6 ± 0.7")
+            && l.contains("agrees within tolerance (±3)")),
+        "{paired}"
+    );
+    let r = json(&ok(&["analyse", &wide, "--paired", "--json"]));
+    assert_eq!(r["comparisons"][0]["verdict"], "differs");
+
+    // A replication column whose ids repeat is refused, saying which.
+    let o = cli(&["analyse", &wide, "--paired", "--replication", "note"]);
+    assert!(
+        !o.status.success() && stderr(&o).contains("`ok` appears twice"),
+        "{}",
+        stderr(&o)
+    );
+    let o = cli(&["analyse", &wide, "--tolerance", "wait"]);
+    assert!(
+        !o.status.success() && stderr(&o).contains("--tolerance"),
+        "{}",
+        stderr(&o)
+    );
+}
+
+#[test]
+fn warmup_finds_the_end_of_the_start_up() {
+    let text = ok(&[
+        "warmup",
+        &data("series-step.csv"),
+        "--time",
+        "time",
+        "--replication",
+        "replication",
+    ]);
+    assert!(
+        text.contains(
+            "queue (2 replications): delete the first 10 of 40 times: steady from time 11"
+        ),
+        "{text}"
+    );
+    let r = json(&ok(&["warmup", &data("series-step.csv"), "--json"]));
+    assert_eq!(r["series"][0]["warmup"]["time"], 11.0);
+}

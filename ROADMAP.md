@@ -46,7 +46,7 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 | `agents` | L2 | State charts with SCXML 1.0's semantics; populations, messages, statistics over time and the stepped mode; networks and grids |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation; selection and feasibility (KN, Batur and Kim, comparison with a standard), racing and the clean-up, COMPASS, Nelder–Mead |
 | `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, calendars, diagram layout, `stochcraft:` vendor extensions, the physical layout), write new, save edits into opened files; SCXML state charts |
-| `engine` | L4 | Commands with JSON schemas, undo and redo, a journal with its format, version and starting state; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `experiment.evaluate` and `experiment.optimise`; `results.distribution` and `results.compare`; `model.capacity`, `estimate.fit` and `line.balance`; Monte Carlo (`mc.*`), system dynamics (`sd.*`) and agent-based (`agents.*`) models; live runs |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, a journal with its format, version and starting state; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `experiment.evaluate` and `experiment.optimise`; `results.distribution` and `results.compare`; `data.analyse` and `data.warmup` on results made elsewhere; `model.capacity`, `estimate.fit` and `line.balance`; Monte Carlo (`mc.*`), system dynamics (`sd.*`) and agent-based (`agents.*`) models; live runs |
 | `stochcraft-cli` | app | `new`, `validate`, `explain`, `balance`, `run` with a run record, `design`, `evaluate`, `optimize`, `inputs`, `fit`, `exec` (with `--journal`, `--all`, `--force`), `schema`, `mcp` |
 | `render` | L5 | Parametric low-poly meshes (machines, straight, curved and spiral conveyors, racks, totes, operators, forklifts, AGVs, and the sorter's pieces: belts swept along a path, a scanner arch, packing stations, pallets, roll cages, a control cabinet, parcels) as plain vertex and index buffers |
 | `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis and Capacity views; the 3D view and a Layout view, both drawn from the model's layout, where a conveyor's path is drawn and dragged; the properties of the selection with bold and reset; Monte Carlo and system dynamics models; the dashboard; watching a run from the run bar; autosave; 44 languages besides English |
@@ -4038,6 +4038,34 @@ modules run in `wasmi`, acting through the app's commands). StochCraft takes bot
 the Python package first, since it only wraps the engine (M1.4); command plugins after M3.7;
 logic plugins with or after M4.3, which needs the same calls into a running model.
 
+### M6.0 Runs from another tool (decided 2026-11-27)
+
+Models built in any simulation tool, spreadsheet or script get StochCraft's output analysis
+without being rebuilt, in steps:
+
+1. **Results as CSV (built):** a table of per-replication results, wide (a row per replication,
+   a column per measure) or long (measure and value columns), with optional scenario and
+   replication columns, read by the engine command `data.analyse` and `stochcraft-cli analyse`.
+   Each scenario's measures with their 95% intervals rounded to what they support, how sure they
+   are against a target with the runs needed, and two outcomes where the runs split; each
+   scenario against a baseline with the difference's 95% interval (Welch's, or paired-t by
+   replication id when the user declares common random numbers, which cannot be checked from
+   the numbers) and a verdict judged as the check against observed data judges a difference,
+   with an optional tolerance per measure. `data.warmup` and `stochcraft-cli warmup` take a time
+   series per replication and suggest a warm-up by MSER-5 on the average across replications.
+   One CSV reader (RFC 4180, a comma, semicolon or tab, a decimal comma with semicolons, at most
+   5 million cells) serves these and `fit`. Next: the app opens such a file (File menu), with a
+   step that maps the columns and a results view built from the Results tab's parts.
+2. **The Python package (planned):** M6.1 gains the same analysis as an API, and StochCraft's
+   keyed random streams, with the random-number sources, for use inside a model written in
+   Python, so that its scenarios can share their random numbers as StochCraft's own do.
+3. **The command line as a bridge (planned):** any tool that can start a program sends JSON to
+   `stochcraft-cli` and reads JSON back, as `evaluate` already does; mostly documentation of the
+   commands that exist.
+
+A native library (a C interface, or bindings for other languages) is recorded as a
+consideration only: it is not planned to be built at present.
+
 ### M6.1 The Python package (settled 2026-11-16)
 
 - `pip install stochcraft`: the Rust engine compiled into a Python module with PyO3 and maturin,
@@ -4049,6 +4077,9 @@ logic plugins with or after M4.3, which needs the same calls into a running mode
   experiment and get the results as a table (a pandas DataFrame when pandas is installed, plain
   lists otherwise) with the means, half-widths and the run record; sweeps, sensitivity, sizing
   and paired comparisons; the per-replication values for the user's own statistics and plots.
+- **Runs from another tool (M6.0, step 2):** the same analysis of per-replication results as
+  `data.analyse` and `data.warmup`, and StochCraft's keyed random streams for a model written in
+  Python.
 - **Shape:** a thin, typed Python layer over the engine (`stochcraft.Model`, `model.run(...)`,
   `results.table()`), with type stubs and docstrings generated from the command schemas, so
   editors and AI assistants complete it; examples as notebooks.

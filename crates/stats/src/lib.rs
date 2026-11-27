@@ -17,12 +17,15 @@
 //! - [`observed`]: a simulated result checked against real data: an observed value (with its own
 //!   interval where known) agrees or differs, and a bound passes, fails or cannot yet be told,
 //!   by the 95% interval.
+//! - [`round`]: a mean and its 95% half-width rounded to what the interval supports, as every
+//!   table of results shows them.
 //! - [`precision`]: how precisely the replications pin a result down, and the stopping rule of a
 //!   sequential run (more replications until every result it watches is settled).
 
 pub mod difference;
 pub mod observed;
 pub mod precision;
+pub mod round;
 pub mod split;
 pub mod spread;
 pub mod warmup;

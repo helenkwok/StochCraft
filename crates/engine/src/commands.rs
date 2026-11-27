@@ -1655,6 +1655,14 @@ fn results_distribution(e: &mut Engine, p: Value) -> Result<Value, CommandError>
     crate::distribution::describe(results, &p)
 }
 
+fn data_analyse(_: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    crate::data::analyse(parse(p)?)
+}
+
+fn data_warmup(_: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    crate::data::warmup(parse(p)?)
+}
+
 fn results_compare(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: crate::compare::Params = parse(p)?;
     let need = |r: Option<&Value>, which: &str| {
@@ -3408,6 +3416,22 @@ pub static COMMANDS: &[Command] = &[
             json!({ "a": run([1.2, 0.8, 1.5]), "b": run([0.9, 0.7, 1.1]), "results": [{ "element": "desk", "metric": "mean_wait" }] })
         },
         run: results_compare,
+    },
+    Command {
+        name: "data.analyse",
+        summary: "Analyse per-replication results made by any simulation tool, spreadsheet or script that can write CSV, without a model: a wide table (a row per replication, a column per measure) or a long one (measure and value columns), with optional scenario and replication columns. Per scenario and measure: n, the mean with its 95% half-width, min and max, the precision against a target with the runs needed, and two outcomes where the runs split; each scenario against the baseline: the difference with its 95% interval (paired-t when `paired` is declared, Welch's otherwise) and a verdict, judged as the check against observed data judges a difference (an optional per-measure `tolerance` for agreement).",
+        kind: CommandKind::Query,
+        schema: schema::<crate::data::AnalyseParams>,
+        example: || json!({ "csv": "scenario,replication,wait\nnow,1,4.2\nnow,2,5.1\nnow,3,4.6\nsecond desk,1,2.1\nsecond desk,2,2.9\nsecond desk,3,2.4\n", "baseline": "now", "paired": true, "tolerance": { "wait": 0.5 } }),
+        run: data_analyse,
+    },
+    Command {
+        name: "data.warmup",
+        summary: "Suggest a warm-up from a time series per replication made by any simulation tool, spreadsheet or script that can write CSV (time, replication, measure columns, optional scenario): each measure averaged across the replications at each time (Welch's plot) and MSER-5 on the average, with the averaged series for a plot.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::data::WarmupParams>,
+        example: || json!({ "csv": "time,replication,queue\n1,1,0\n2,1,2\n3,1,3\n1,2,1\n2,2,2\n3,2,4\n", "time": "time", "replication": "replication" }),
+        run: data_warmup,
     },
     Command {
         name: "run.start",

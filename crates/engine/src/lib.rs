@@ -55,10 +55,17 @@
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
 //!   be written into that file is refused with the reason, and `as_new` then writes a new BPMN
 //!   file from the model alone.
+//! - Results made elsewhere (by any simulation tool, spreadsheet or script that can write CSV)
+//!   are analysed without a model: `data.analyse` takes a table of per-replication results and
+//!   gives each scenario's means with their precision, two outcomes where the runs split, and
+//!   each scenario against a baseline, judged as the check against observed data judges a
+//!   difference (the same rule as `results.compare`'s intervals); `data.warmup` takes a time
+//!   series per replication and suggests a warm-up by MSER-5. [`table`] reads the CSV.
 
 pub mod agents;
 mod commands;
 mod compare;
+mod data;
 mod decide;
 mod design;
 mod distribution;
@@ -76,6 +83,7 @@ pub mod sd;
 mod sd_edit;
 mod sd_window;
 pub mod site;
+pub mod table;
 pub mod wire;
 mod workers;
 
@@ -91,6 +99,9 @@ use stochcraft_model::Model;
 pub use commands::{COMMANDS, Command, CommandKind};
 pub use run::{RunMode, SLICE_EVENTS};
 pub use stochcraft_blocks::{Live, LiveState, RunError};
+/// A mean and its 95% half-width rounded to what the interval supports: the rule every table of
+/// results uses, in the window, on the command line and in `data.analyse`'s answers.
+pub use stochcraft_stats::round;
 pub use workers::Worker;
 
 use edit::Op;
