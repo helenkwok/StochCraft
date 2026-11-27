@@ -118,4 +118,3 @@ fn fnv1a64(s: &str) -> u64 {
         (h ^ u64::from(b)).wrapping_mul(0x0000_0100_0000_01b3)
     })
 }
-
