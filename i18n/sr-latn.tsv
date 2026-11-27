@@ -1538,6 +1538,11 @@ connection	Flow	Tok
 	Share turned away	Udeo odbijenih
 	{label}: {value}	{label}: {value}
 	{label}: {value} ({terms})	{label}: {value} ({terms})
+	Scenario	Scenario
+	Scenario: {name}	Scenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvaranjem scenarija {scenario} odbacuju se nesačuvane izmene u {name}. Prvo ih sačuvati?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenario za poređenje|{n} scenarija za poređenje|{n} scenarija za poređenje
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Sačuvan je kao nova datoteka koja sadrži samo otvoreni scenario, pa prelazak na {scenario} nije izvršen.
 	Median time in system	Medijana vremena u sistemu
 	Time in system, 90th percentile	Vreme u sistemu, 90. percentil
 	Time in system, 95th percentile	Vreme u sistemu, 95. percentil
@@ -1555,3 +1560,18 @@ connection	Flow	Tok
 	How often is one machine down, and how much work does that cost?	Koliko često jedna mašina ne radi i koliko posla to košta?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Radi 90 sati, stoji 4.5: mašina radi 95.2% vremena, a kvar se javlja na svakih 94.5 sati. Duplo kraći popravak to podiže na 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} ne radi {down} vremena (raspoloživost {up}); ništa ne čeka na nju.
+	Choose a warm-up	Izaberite zagrevanje
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Velčov grafikon: prosek pokretanja u svakom zabeleženom trenutku, izglađen pokretnim prosekom. Postavite zagrevanje gde se kriva izravnava; rez MSER-5 je samo polazna tačka.
+	Number inside	Broj unutra
+	Busy units	Zauzete jedinice
+	Leaving per interval	Izlasci po intervalu
+	Entering per interval	Ulasci po intervalu
+	The run recorded too few times to plot.	Pokretanje je zabeležilo premalo trenutaka za grafikon.
+	Points each side	Tačaka sa svake strane
+	1 to {max}	1 do {max}
+	Welch's plot of {measure} at {block}	Velčov grafikon: {measure} na {block}
+	MSER-5 suggests {value}.	MSER-5 predlaže {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 ovde ništa ne predlaže: niz se možda još ustaljuje na polovini pokretanja.
+	The warm-up now is {value}.	Zagrevanje je sada {value}.
+	Later times, which fewer runs reached, are left out.	Kasniji trenuci, do kojih je stiglo manje pokretanja, izostavljeni su.
+	New warm-up	Novo zagrevanje

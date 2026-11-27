@@ -42,6 +42,7 @@ mod prefs;
 mod props;
 mod results;
 mod runs;
+mod scenarios;
 mod sd;
 mod sd_canvas;
 mod start;
@@ -50,6 +51,7 @@ pub mod theme;
 mod theme_editor;
 mod view3d;
 mod views;
+mod welch;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -58,6 +60,17 @@ use serde_json::Value;
 use stochcraft_engine::Engine;
 
 use crate::i18n::{t, tf};
+
+/// How many scenarios each of [`EXAMPLES`] holds, read from its file once.
+pub(crate) fn example_scenarios() -> &'static [usize] {
+    static COUNTS: std::sync::OnceLock<Vec<usize>> = std::sync::OnceLock::new();
+    COUNTS.get_or_init(|| {
+        EXAMPLES
+            .iter()
+            .map(|e| stochcraft_engine::file_scenarios(e.bytes).len())
+            .collect()
+    })
+}
 
 /// The models offered on the start page and under File ▸ Open Example, built in so the browser
 /// app has something to open: the golden models of `stochcraft-testkit` and the published
@@ -702,6 +715,8 @@ enum Replace {
     Recent(usize),
     /// A file dropped on the window (held in `App::dropped`).
     Dropped,
+    /// Another scenario of the opened file (held in `App::scenario_next`).
+    Scenario,
     Quit,
 }
 
@@ -931,6 +946,10 @@ pub struct App {
     about: bool,
     /// A file dropped on the window, waiting on the unsaved-changes question.
     dropped: Option<(String, Vec<u8>)>,
+    /// The scenario to open once the save in progress is written ([`Replace::Scenario`]).
+    scenario_next: Option<String>,
+    /// A scenario chosen with unsaved changes, waiting on the question beside the choice.
+    scenario_ask: Option<scenarios::Ask>,
     requests: Vec<Request>,
     /// The title last shown, so the shell sets it only when it changes.
     title: String,
@@ -995,6 +1014,8 @@ pub struct App {
     capacity: capacity::State,
     /// The M2.8 screens' choices and last answers.
     decide: decide::Decide,
+    /// "Choose a warm-up" under the results: Welch's plot and its choices.
+    welch: welch::Welch,
     /// The Help panel.
     help: help::Help,
     /// The guided first model: "Show me" in Getting started.
@@ -1101,6 +1122,8 @@ impl App {
             pick_for: None,
             about: false,
             dropped: None,
+            scenario_next: None,
+            scenario_ask: None,
             requests: Vec::new(),
             title: String::new(),
             styled: None,
@@ -1129,6 +1152,7 @@ impl App {
             layout_view: layout_view::LayoutView::default(),
             capacity: capacity::State::default(),
             decide: decide::Decide::default(),
+            welch: welch::Welch::default(),
             help: help::Help::default(),
             guide: guide::Guide::default(),
             start: start::Start::default(),

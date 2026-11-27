@@ -1538,6 +1538,11 @@ connection	Flow	प्रवाह
 	Share turned away	लौटाई गईं का अनुपात
 	{label}: {value}	{label}: {value}
 	{label}: {value} ({terms})	{label}: {value} ({terms})
+	Scenario	परिदृश्य
+	Scenario: {name}	परिदृश्य: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} खोलने पर {name} के बिना सहेजे गए बदलाव हट जाएँगे। पहले सहेजें?
+@plural	{n} scenario to compare|{n} scenarios to compare	तुलना के लिए {n} परिदृश्य|तुलना के लिए {n} परिदृश्य
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	इसे एक नई फ़ाइल के रूप में सहेजा गया, जिसमें केवल खुला परिदृश्य है, इसलिए {scenario} पर नहीं बदला गया।
 	Median time in system	सिस्टम में समय की माध्यिका
 	Time in system, 90th percentile	सिस्टम में समय, 90वाँ प्रतिशतक
 	Time in system, 95th percentile	सिस्टम में समय, 95वाँ प्रतिशतक
@@ -1555,3 +1560,18 @@ connection	Flow	प्रवाह
 	How often is one machine down, and how much work does that cost?	एक मशीन कितनी बार बंद रहती है, और इससे कितना काम घटता है?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 घंटे चालू, 4.5 घंटे बंद: मशीन 95.2% समय काम करती है और हर 94.5 घंटे में एक खराबी आती है। मरम्मत का समय आधा करने पर यह 97.6% हो जाता है।
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} समय बंद रहता है (उपलब्धता {up}); उसके लिए कुछ भी प्रतीक्षा नहीं करता।
+	Choose a warm-up	वार्म-अप चुनें
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	वेल्च प्लॉट: हर दर्ज समय पर रनों का औसत, चल औसत से समतल किया गया। वार्म-अप वहाँ सेट करें जहाँ वक्र समतल होता है; MSER-5 का कट केवल एक शुरुआती बिंदु है।
+	Number inside	अंदर की संख्या
+	Busy units	व्यस्त इकाइयाँ
+	Leaving per interval	प्रति अंतराल निकलने वाले
+	Entering per interval	प्रति अंतराल आने वाले
+	The run recorded too few times to plot.	रन ने प्लॉट के लिए बहुत कम समय दर्ज किए।
+	Points each side	हर ओर के बिंदु
+	1 to {max}	1 से {max}
+	Welch's plot of {measure} at {block}	{block} पर {measure} का वेल्च प्लॉट
+	MSER-5 suggests {value}.	MSER-5 {value} सुझाता है।
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 यहाँ कुछ नहीं सुझाता: शृंखला रन के आधे रास्ते पर भी शायद स्थिर हो रही है।
+	The warm-up now is {value}.	अब वार्म-अप {value} है।
+	Later times, which fewer runs reached, are left out.	बाद के समय, जहाँ कम रन पहुँचे, छोड़ दिए गए हैं।
+	New warm-up	नया वार्म-अप

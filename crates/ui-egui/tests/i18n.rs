@@ -39,8 +39,9 @@ fn pseudo_sized(size: egui::Vec2) -> Harness<'static, App> {
 /// through the catalogs ([`a_problem_is_shown_in_the_interface_language`]).
 const ENGINE: &[&str] = &[];
 
-/// Text that is the model's or the user's, not the interface's: names and ids from the model,
-/// numbers and units, file names, shortcuts; and egui's own ("Resize panel").
+/// Text that is the model's or the user's, not the interface's: names and ids from the model and
+/// its file's scenarios, numbers and units, file names, shortcuts; and egui's own ("Resize
+/// panel").
 fn is_data(label: &str, model_words: &BTreeSet<String>) -> bool {
     let words: String = label
         .chars()
@@ -76,6 +77,15 @@ fn untranslated(h: &Harness<'static, App>) -> BTreeSet<String> {
     }
     if let Some(n) = model["name"].as_str() {
         model_words.insert(n.to_owned());
+    }
+    // The file's scenarios, by name and id.
+    let scenarios = h.state().engine().scenarios();
+    for s in scenarios["scenarios"].as_array().into_iter().flatten() {
+        for f in ["id", "name"] {
+            if let Some(n) = s[f].as_str() {
+                model_words.insert(n.to_owned());
+            }
+        }
     }
     fn text_of(n: &egui_kittest::Node<'_>) -> Option<String> {
         let a = n.accesskit_node();

@@ -102,6 +102,7 @@ impl App {
     pub fn save_failed(&mut self, message: impl Into<String>) {
         self.report_error(message);
         self.after_save = None;
+        self.scenario_next = None;
         self.as_new = false;
         self.pick_for = None;
     }
@@ -135,34 +136,38 @@ impl App {
     /// does. A scenario that inherits from another shows, in bold, the values it changes.
     pub fn open_scenario(&mut self, name: &str, bytes: &[u8], scenario: Option<&str>) {
         match self.engine.open_bytes(name, bytes, scenario) {
-            Ok(opened) => {
-                self.forget_view();
-                // Warnings and errors from reading the file and checking the model; information
-                // notes are left for the model view.
-                let count = |k: &str| {
-                    opened[k]
-                        .as_array()
-                        .into_iter()
-                        .flatten()
-                        .filter(|n| n["severity"] != "info")
-                        .count()
-                };
-                let n = count("notes") + count("diagnostics");
-                let file = file_name(name);
-                let message = if n > 0 {
-                    tnf(
-                        n as u64,
-                        "Opened {file} ({n} warning)",
-                        "Opened {file} ({n} warnings)",
-                        &[("file", file)],
-                    )
-                } else {
-                    tf("Opened {file}", &[("file", file)])
-                };
-                self.info(message);
-            }
+            Ok(opened) => self.opened(name, &opened),
             Err(e) => self.report_error(e.message),
         }
+    }
+
+    /// The file `name` was opened (`opened`: what the engine said of it): the view of the last
+    /// model goes, and the status bar says so, with the number of warnings.
+    pub(crate) fn opened(&mut self, name: &str, opened: &Value) {
+        self.forget_view();
+        // Warnings and errors from reading the file and checking the model; information
+        // notes are left for the model view.
+        let count = |k: &str| {
+            opened[k]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .filter(|n| n["severity"] != "info")
+                .count()
+        };
+        let n = count("notes") + count("diagnostics");
+        let file = file_name(name);
+        let message = if n > 0 {
+            tnf(
+                n as u64,
+                "Opened {file} ({n} warning)",
+                "Opened {file} ({n} warnings)",
+                &[("file", file)],
+            )
+        } else {
+            tf("Opened {file}", &[("file", file)])
+        };
+        self.info(message);
     }
 
     /// What the window shows of a model that has been replaced: results, selection, the
@@ -213,7 +218,7 @@ impl App {
         let before = matches!(command, "run" | "mc.run").then(|| comparable(self.engine.model()));
         let result = self.engine.execute(command, params)?;
         match command {
-            "file.open" | "model.new" | "model.set" | "sd.open" | "agents.open" => {
+            "file.open" | "file.reopen" | "model.new" | "model.set" | "sd.open" | "agents.open" => {
                 self.forget_view();
                 if let Some(path) = result["path"].as_str() {
                     self.info(tf("Opened {file}", &[("file", file_name(path))]));
@@ -549,6 +554,7 @@ impl App {
     /// to follow the save (quit, new, open) is dropped rather than run after a later save.
     pub fn save_cancelled(&mut self) {
         self.after_save = None;
+        self.scenario_next = None;
         self.as_new = false;
         self.pick_for = None;
     }
@@ -572,16 +578,39 @@ impl App {
     /// (quit, new, open) goes ahead only if the model is saved now: a model whose decision tables
     /// are still unsaved (the app writes only the model's file) is kept open, rather than closed
     /// or replaced with its tables lost.
+    ///
+    /// A save before another scenario opens that wrote a new file, which holds only the open
+    /// scenario, keeps the model open too, and the status says why.
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
+        // The scenario to open next, by name, while the file still lists it.
+        let switch_to = self
+            .scenario_next
+            .clone()
+            .map(|id| (self.scenario_label(&id), id));
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
                 let saved = tf("Saved {file}", &[("file", file_name(path))]);
                 self.remember(path);
+                // Written as a new file, which holds only the open scenario: the one to open
+                // next is not in it.
+                let (listed, _) = self.scenarios();
+                let not_in_file = switch_to
+                    .filter(|(_, id)| !listed.iter().any(|s| &s.id == id))
+                    .map(|(label, _)| label);
                 match self.after_save.take() {
                     Some(_) if self.unsaved_changes() => self.info(format!(
                         "{saved}. {}",
                         t("Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.")
                     )),
+                    Some(Replace::Scenario) if not_in_file.is_some() => {
+                        self.scenario_next = None;
+                        let label = not_in_file.unwrap_or_default();
+                        let why = tf(
+                            "It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.",
+                            &[("scenario", &label)],
+                        );
+                        self.info(format!("{saved}{}. {why}", self.tables_not_written()));
+                    }
                     next => {
                         self.info(saved + &self.tables_not_written());
                         if let Some(next) = next {
@@ -719,6 +748,11 @@ impl App {
             Replace::Dropped => {
                 if let Some((name, bytes)) = self.dropped.take() {
                     self.open_file(&name, &bytes);
+                }
+            }
+            Replace::Scenario => {
+                if let Some(id) = self.scenario_next.take() {
+                    self.open_other_scenario(&id);
                 }
             }
             Replace::Quit => {

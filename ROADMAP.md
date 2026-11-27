@@ -13,7 +13,7 @@ answer the question, has steps 1–5 done, and M5's sorter is built alongside it
 are done, and so is M2.10 (abandonment and balking) apart from the gaps listed in it. M2.11
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
 state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
-MSER-5's warm-up suggestion, its warnings, streams by element id, starting contents and
+MSER-5's warm-up suggestion and Welch's plot in the window, its warnings, streams by element id, starting contents and
 validation against observed data (values and bounds, #226) done. M4
 is being planned, and M4.1 (Monte Carlo) has its engine, files and command line (part 1), its
 window (part 2) and which inputs matter (part 3: tornado, rank correlations and Sobol shares) done.
@@ -46,7 +46,7 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 | `agents` | L2 | State charts with SCXML 1.0's semantics; populations, messages, statistics over time and the stepped mode; networks and grids |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation; selection and feasibility (KN, Batur and Kim, comparison with a standard), racing and the clean-up, COMPASS, Nelder–Mead |
 | `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, calendars, diagram layout, `stochcraft:` vendor extensions, the physical layout), write new, save edits into opened files; SCXML state charts |
-| `engine` | L4 | Commands with JSON schemas, undo and redo, a journal with its format, version and starting state; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `experiment.evaluate` and `experiment.optimise`; `results.distribution` and `results.compare`; `model.capacity`, `estimate.fit` and `line.balance`; Monte Carlo (`mc.*`), system dynamics (`sd.*`) and agent-based (`agents.*`) models; live runs |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, a journal with its format, version and starting state; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `experiment.evaluate` and `experiment.optimise`; `results.distribution` and `results.compare`; `data.analyse` and `data.warmup` on results made elsewhere; `model.capacity`, `estimate.fit` and `line.balance`; Monte Carlo (`mc.*`), system dynamics (`sd.*`) and agent-based (`agents.*`) models; live runs |
 | `stochcraft-cli` | app | `new`, `validate`, `explain`, `balance`, `run` with a run record, `design`, `evaluate`, `optimize`, `inputs`, `fit`, `exec` (with `--journal`, `--all`, `--force`), `schema`, `mcp` |
 | `render` | L5 | Parametric low-poly meshes (machines, straight, curved and spiral conveyors, racks, totes, operators, forklifts, AGVs, and the sorter's pieces: belts swept along a path, a scanner arch, packing stations, pallets, roll cages, a control cabinet, parcels) as plain vertex and index buffers |
 | `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis and Capacity views; the 3D view and a Layout view, both drawn from the model's layout, where a conveyor's path is drawn and dragged; the properties of the selection with bold and reset; Monte Carlo and system dynamics models; the dashboard; watching a run from the run bar; autosave; 44 languages besides English |
@@ -1651,8 +1651,7 @@ treats these as standard practice (Robinson, ch. 2; Morecroft and Robinson, ch. 
 ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and already done:
 `overloaded` and `no_steady_state` (M2.8, #68, #75) and `ended_in_warmup` (#67).
 
-- **Choosing a warm-up.** The default warm-up is 0. Done in the engine and the CLI; the window's
-  Welch plot is not yet (M3.7 step 3 draws its charts over the run from the same series).
+- **Choosing a warm-up.** The default warm-up is 0. Done in the engine, the CLI and the window.
   - **Done:** a recorder of values at fixed times in every replication (`blocks/src/series.rs`,
     `Compiled::record_every`): each element's queue length, number inside, busy units, and
     counts entered and left since time 0, and each pool's busy units, at time 0 and every
@@ -1675,6 +1674,18 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     replications. A start-up too small to tell from the noise of few replications is not warned
     about; the suggestion is there whenever the series has at least 20 points (a 50-unit run
     recorded every 5 units has 11, and gets none).
+  - **Done:** Welch's plot (Law, *Simulation Modeling and Analysis*, 5th ed., section 9.5.1,
+    pp. 513–515) under the results, **Choose a warm-up**: a block's number inside, waiting or
+    busy, or leaving or entering per interval, as the mean across runs at each recorded time,
+    smoothed by Welch's moving average (`stats::warmup::welch_moving_average`: centred on
+    2w + 1 points, shrunk to 2i − 1 near the start, w from 1 to a quarter of the points; Law's
+    Example 9.24 is its test). MSER-5's cut on the same series is marked, the current warm-up
+    shaded, and a warm-up clicked on the plot or typed becomes the experiment's. The guide calls
+    the plot the main tool and MSER-5 a starting point: a test re-simulates Law's Example 9.28
+    (M/M/1 at ρ = 0.9 from empty, 5 runs of 65,000 delays), where MSER-5 cuts a few batches
+    while the exact mean delay there is under a third of its steady state 8.1. Example 9.29 (a
+    network model) has no data to reproduce. Times later than some runs reached (a stop
+    condition) are left out of the plot.
   - Tests: `blocks/tests/series.rs` (a D/D/1 trace; the values a live run shows at each time;
     no result changes, in slices too; M/M/1's mean queue ρ²/(1 − ρ) at late times; the
     start-up at ρ = 0.9 and none at 0.3; the warnings), `engine/tests/series.rs` (the JSON, the
@@ -3934,10 +3945,15 @@ straight to its divert point needs L5's points along a section). U1, the run bar
 with a reset per field, one undo step each; a model opened in a scenario that inherits from
 another is measured against that scenario instead; a selected flow has its own page; and
 several selected blocks show the parameters they share, values that differ marked as mixed,
-an edit to all of them one undo step. Left from U2: collapsible groups for the parameters,
-flows and shared properties (the folds below them already collapse), units typed with the
-value, a scenario picker in the window, and the experiment fields and connections table
-leaving the model page (with U5).
+an edit to all of them one undo step. U2's scenario picker is done too: a file with more than
+one scenario shows a **Scenario** choice in the model page's Experiment section and in the
+sidebar's summary, which reopens the file in the one chosen (engine `file.reopen`, from the file
+as opened or last saved; `file.scenarios` lists them, and so does the MCP server's `scenarios`
+tool), asking beside the choice before unsaved changes are dropped; the status bar names the
+open scenario and the start page's cards count them. Left from U2: collapsible groups for the
+parameters, flows and shared properties (the folds below them already collapse), units typed
+with the value, and the experiment fields and connections table leaving the model page (with
+U5, whose scenario grid compares scenarios side by side).
 L10 is done: `stochcraft-model::dmn` holds decision tables with the hit policies
 UNIQUE, FIRST, PRIORITY and COLLECT (with SUM, COUNT, MIN or MAX) and S-FEEL's simple unary tests
 in their cells (comparisons, a value alone, ranges, lists, `not(...)` and `-`), evaluated as
@@ -4055,6 +4071,34 @@ modules run in `wasmi`, acting through the app's commands). StochCraft takes bot
 the Python package first, since it only wraps the engine (M1.4); command plugins after M3.7;
 logic plugins with or after M4.3, which needs the same calls into a running model.
 
+### M6.0 Runs from another tool (decided 2026-11-27)
+
+Models built in any simulation tool, spreadsheet or script get StochCraft's output analysis
+without being rebuilt, in steps:
+
+1. **Results as CSV (built):** a table of per-replication results, wide (a row per replication,
+   a column per measure) or long (measure and value columns), with optional scenario and
+   replication columns, read by the engine command `data.analyse` and `stochcraft-cli analyse`.
+   Each scenario's measures with their 95% intervals rounded to what they support, how sure they
+   are against a target with the runs needed, and two outcomes where the runs split; each
+   scenario against a baseline with the difference's 95% interval (Welch's, or paired-t by
+   replication id when the user declares common random numbers, which cannot be checked from
+   the numbers) and a verdict judged as the check against observed data judges a difference,
+   with an optional tolerance per measure. `data.warmup` and `stochcraft-cli warmup` take a time
+   series per replication and suggest a warm-up by MSER-5 on the average across replications.
+   One CSV reader (RFC 4180, a comma, semicolon or tab, a decimal comma with semicolons, at most
+   5 million cells) serves these and `fit`. Next: the app opens such a file (File menu), with a
+   step that maps the columns and a results view built from the Results tab's parts.
+2. **The Python package (planned):** M6.1 gains the same analysis as an API, and StochCraft's
+   keyed random streams, with the random-number sources, for use inside a model written in
+   Python, so that its scenarios can share their random numbers as StochCraft's own do.
+3. **The command line as a bridge (planned):** any tool that can start a program sends JSON to
+   `stochcraft-cli` and reads JSON back, as `evaluate` already does; mostly documentation of the
+   commands that exist.
+
+A native library (a C interface, or bindings for other languages) is recorded as a
+consideration only: it is not planned to be built at present.
+
 ### M6.1 The Python package (settled 2026-11-16)
 
 - `pip install stochcraft`: the Rust engine compiled into a Python module with PyO3 and maturin,
@@ -4066,6 +4110,9 @@ logic plugins with or after M4.3, which needs the same calls into a running mode
   experiment and get the results as a table (a pandas DataFrame when pandas is installed, plain
   lists otherwise) with the means, half-widths and the run record; sweeps, sensitivity, sizing
   and paired comparisons; the per-replication values for the user's own statistics and plots.
+- **Runs from another tool (M6.0, step 2):** the same analysis of per-replication results as
+  `data.analyse` and `data.warmup`, and StochCraft's keyed random streams for a model written in
+  Python.
 - **Shape:** a thin, typed Python layer over the engine (`stochcraft.Model`, `model.run(...)`,
   `results.table()`), with type stubs and docstrings generated from the command schemas, so
   editors and AI assistants complete it; examples as notebooks.

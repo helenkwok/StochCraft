@@ -77,6 +77,10 @@ pub(crate) const EXAMPLE_SCXML: &str = r#"<scxml xmlns="http://www.w3.org/2005/0
 pub(crate) struct AgentsDoc {
     /// Each file the model names, by its reference, as it was read.
     pub files: BTreeMap<String, Vec<u8>>,
+    /// The texts `agents.open` was given, by their references: what another of the file's
+    /// scenarios reads in place of files beside it (`file.reopen`). Empty for a model opened
+    /// from disk.
+    pub given: BTreeMap<String, Vec<u8>>,
     /// The last run's results, and the engine's revision when it ran.
     pub last: Option<(Value, u64)>,
 }
@@ -281,7 +285,11 @@ impl Engine {
         self.dmn = dmn;
         self.dmn_at = self.path().map(str::to_owned);
         if is_agents {
-            self.agents = Some(AgentsDoc { files, last: None });
+            self.agents = Some(AgentsDoc {
+                files,
+                given: BTreeMap::new(),
+                last: None,
+            });
             self.journal_start.model_digest = self.agents_digest();
         }
         Ok(result)
@@ -334,6 +342,13 @@ pub(crate) fn open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     // Opened from text, it has no file yet: `file.save` needs a path.
     if let Some(f) = e.file.as_mut() {
         f.path = None;
+    }
+    // Another of the file's scenarios reads its charts and lists from these texts too.
+    if let Some(d) = e.agents.as_mut() {
+        d.given = files
+            .into_iter()
+            .map(|(href, text)| (href, text.into_bytes()))
+            .collect();
     }
     Ok(result)
 }
