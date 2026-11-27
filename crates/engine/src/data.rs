@@ -261,7 +261,7 @@ impl Sheet {
     }
 
     /// The text of row `r`'s cell in column `col` ("" where the row is short).
-    fn cell<'a>(r: &'a Record, col: usize) -> &'a str {
+    fn cell(r: &Record, col: usize) -> &str {
         r.cells.get(col).map_or("", String::as_str)
     }
 
@@ -329,12 +329,15 @@ impl Sheet {
     }
 }
 
-/// The values read: per scenario and measure, each replication's id and value in row order.
+/// Each replication's id and value (`None` for an empty cell), in row order.
+type Series = Vec<(String, Option<f64>)>;
+
+/// The values read: per scenario and measure, its [`Series`].
 struct Runs {
     /// The scenarios in the order they first appear; one, unnamed, without a scenario column.
     scenarios: Vec<Option<String>>,
     measures: Vec<String>,
-    series: BTreeMap<(usize, usize), Vec<(String, Option<f64>)>>,
+    series: BTreeMap<(usize, usize), Series>,
 }
 
 impl Runs {
@@ -674,14 +677,14 @@ pub fn analyse(p: AnalyseParams) -> Result<Value, CommandError> {
         }
     }
     let mut results = Vec::new();
-    for si in 0..runs.scenarios.len() {
+    for (si, name) in names.iter().enumerate() {
         for (mi, m) in runs.measures.iter().enumerate() {
             let Some(list) = runs.series.get(&(si, mi)) else {
                 continue;
             };
             let values: Vec<Option<f64>> = list.iter().map(|(_, v)| *v).collect();
             let mut r = describe(&values, targets[mi]);
-            r["scenario"] = json!(names[si]);
+            r["scenario"] = json!(name);
             r["measure"] = json!(m);
             results.push(r);
         }

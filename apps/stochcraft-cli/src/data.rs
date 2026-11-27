@@ -312,17 +312,19 @@ mod tests {
 
     #[test]
     fn a_tolerance_is_a_measure_and_a_number() {
-        let args = |t: &[String]| AnalyseArgs {
-            file: Path::new("x.csv"),
-            scenario: None,
-            replication: Some("rep"),
-            measure: None,
-            value: None,
-            baseline: None,
-            paired: true,
-            tolerance: t,
-            json: false,
-        };
+        fn args(t: &[String]) -> AnalyseArgs<'_> {
+            AnalyseArgs {
+                file: Path::new("x.csv"),
+                scenario: None,
+                replication: Some("rep"),
+                measure: None,
+                value: None,
+                baseline: None,
+                paired: true,
+                tolerance: t,
+                json: false,
+            }
+        }
         let t = vec!["wait = 0.5".to_owned(), "a=b=2".to_owned()];
         let p =
             analyse_params(&args(&t), "w\n1\n".into()).unwrap_or_else(|Failure(m)| panic!("{m}"));
