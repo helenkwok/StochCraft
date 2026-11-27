@@ -62,7 +62,27 @@ pub fn describe(d: &Dist) -> (&'static str, String) {
             pairs(&[("mean", *mean), ("std_dev", *std_dev)]),
         ),
         Dist::Gamma { shape, scale } => ("gamma", pairs(&[("shape", *shape), ("scale", *scale)])),
-        Dist::Beta { shape, scale } => ("beta", pairs(&[("shape", *shape), ("scale", *scale)])),
+        // On [0, 1] as BPSim's; a range only where it is another.
+        Dist::Beta {
+            shape,
+            scale,
+            min,
+            max,
+        } if *min == 0.0 && *max == 1.0 => ("beta", pairs(&[("shape", *shape), ("scale", *scale)])),
+        Dist::Beta {
+            shape,
+            scale,
+            min,
+            max,
+        } => (
+            "beta",
+            pairs(&[
+                ("shape", *shape),
+                ("scale", *scale),
+                ("min", *min),
+                ("max", *max),
+            ]),
+        ),
         Dist::Weibull { shape, scale } => {
             ("weibull", pairs(&[("shape", *shape), ("scale", *scale)]))
         }
@@ -145,10 +165,24 @@ pub fn distribution(family: &str, parameters: &str) -> Result<Dist, String> {
             shape: f("shape")?,
             scale: f("scale")?,
         },
-        "beta" => Dist::Beta {
-            shape: f("shape")?,
-            scale: f("scale")?,
-        },
+        "beta" => {
+            let (shape, scale) = (f("shape")?, f("scale")?);
+            // On [0, 1] unless a range is given.
+            let min = match take("min") {
+                Ok(s) => number(s, "min")?,
+                Err(_) => 0.0,
+            };
+            let max = match take("max") {
+                Ok(s) => number(s, "max")?,
+                Err(_) => 1.0,
+            };
+            Dist::Beta {
+                shape,
+                scale,
+                min,
+                max,
+            }
+        }
         "weibull" => Dist::Weibull {
             shape: f("shape")?,
             scale: f("scale")?,
@@ -319,9 +353,12 @@ mod tests {
                 shape: 2.0,
                 scale: 0.25,
             },
+            Dist::beta(2.0, 5.0),
             Dist::Beta {
-                shape: 2.0,
+                shape: 3.0,
                 scale: 5.0,
+                min: 1.0,
+                max: 4.0,
             },
             Dist::Weibull {
                 shape: 1.5,

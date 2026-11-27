@@ -150,7 +150,8 @@ impl App {
         }
         // The block list from the keyboard, when no field is being edited.
         let typing = ctx.memory(|m| m.focused().is_some());
-        if !typing && !self.show_results {
+        // The Layout view takes Delete, Esc and the arrows while it draws or has a point picked.
+        if !typing && !self.show_results && !self.layout_takes_keys() {
             // The run bar's Space: play or pause (or start watching), where the bar is.
             if (self.is_watching() || self.run_bar_shown())
                 && ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Space))

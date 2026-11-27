@@ -1049,6 +1049,7 @@ unit	yr	წელი
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block}-ის ველში „{field}“ დააყენეთ „{param}“ 1-ზე ან მეტზე.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block}-ის ველში „{field}“ დააყენეთ „{param}“ 0-დან 1-მდე რიცხვზე.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block}-ის ველში „{field}“ დააყენეთ „მინიმუმი“ „მაქსიმუმზე“ ნაკლებად, ხოლო „ყველაზე სავარაუდო“ მნიშვნელობა (თუ არის) მათ შორის.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block}-ის ველში „{field}“ დააყენეთ „მინიმუმი“ „მაქსიმუმზე“ ნაკლებად.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block}-ის ველში „{field}“ დაამატეთ მონაცემთა წერტილები, რომელთა ალბათობების ჯამი 0-ზე მეტია.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block}-ს არასოდეს ექნება მუშა ერთეული. მიეცით სულ მცირე 1 ერთეული.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} ერთეულებს დაუსრულებლად შექმნიდა, რადგან მისი „შემოსვლებს შორის დრო“ ყოველთვის 0-ია. მიუთითეთ 0-ზე მეტი დრო ან დააყენეთ „შემოსვლის ლიმიტი“.
@@ -1491,6 +1492,35 @@ connection	Flow	ნაკადი
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} მოთავსებულია კონვეიერის {conveyor} გასწვრივ {s}-ზე, რომლის გზის სიგრძეა {length}. განათავსეთ ის გზის გასწვრივ 0-სა და {length}-ს შორის.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	კონვეიერზე {conveyor} ერთეულები {before}-ს აღწევენ {block}-მდე, მაგრამ {block} დასაწყისთან უფრო ახლოსაა მოთავსებული ({s} მის გასწვრივ, {before} {before_s}-ზე). განათავსეთ {block} გზაზე {before}-ზე უფრო შორს ან გაცვალეთ ისინი ნაკადებში.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ნაკადზე {flow} შეერთების გადაკვეთას {time} სჭირდება. გადატანის დრო გახადეთ 0 ან მეტი.
+	A path needs at least two points.	ბილიკს სჭირდება მინიმუმ ორი წერტილი.
+	Finish	დასრულება
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	იხატება {name}-ის ბილიკი: დააწკაპუნეთ წერტილების დასამატებლად, ორმაგი დაწკაპუნება ან Enter დასასრულებლად, Backspace ბოლო წერტილის მოსაშორებლად, Esc გასაუქმებლად.
+	Draw path	ბილიკის დახატვა
+	Select a conveyor to draw its path	აირჩიეთ კონვეიერი მისი ბილიკის დასახატად
+	Remove path	ბილიკის წაშლა
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	დააწკაპუნეთ წერტილის დასამატებლად · ორმაგი დაწკაპუნება ან Enter დასასრულებლად · Esc გასაუქმებლად
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	დააწკაპუნეთ ლენტზე მის ასარჩევად · გადაათრიეთ მისი წერტილები ან ლენტი · ორმაგი დაწკაპუნება ამატებს წერტილს · გადაათრიეთ იატაკი გადასაადგილებლად · გადაახვიეთ გასადიდებლად
+	Point {n} of {name}, x {x} m, y {y} m	{name}-ის წერტილი {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	დააწკაპუნეთ აქ კონვეიერზე მისი ბილიკის დასახატად.
+	Path	ბილიკი
+	Not drawn in the layout yet.	განლაგებაში ჯერ არ არის დახატული.
+	Draw in the Layout view	დახატვა განლაგების ხედში
+	Add a straight path	სწორი ბილიკის დამატება
+	Drawn length: {length} {unit}	დახატული სიგრძე: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	ეს ბილიკი ადის ან აქვს სპირალი: მისი წერტილების რედაქტირება აქ შეუძლებელია.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	ეს ბილიკი ერთ რკალში სრულ წრეს ან მეტს უხვევს: მისი წერტილების რედაქტირება აქ შეუძლებელია.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	ეს ბილიკი მკვეთრად უხვევს დასაწყისში ან ბოლოში: მისი წერტილების რედაქტირება აქ შეუძლებელია.
+	Point {n}	წერტილი {n}
+	x of point {n}	წერტილი {n}-ის x
+	y of point {n}	წერტილი {n}-ის y
+	x	x
+	y	y
+	Bend radius at point {n}	მოხვევის რადიუსი წერტილ {n}-ში
+	bend	მოხვევა
+	tightened to {radius} to fit	შემცირდა {radius}-მდე, რომ დაეტიოს
+	Remove point {n}	წერტილი {n}-ის წაშლა
+	Add a point at the end	წერტილის დამატება ბოლოში
+	Change Path	ბილიკის შეცვლა
 	Search examples	მაგალითებში ძიება
 	Clear search	ძიების გასუფთავება
 	Logistics and warehousing	ლოჯისტიკა და საწყობი

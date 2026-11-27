@@ -142,6 +142,7 @@ fn samples() -> Vec<Diagnostic> {
             },
         ),
         dist("planned_run_time", DistError::BadBounds),
+        dist("service", DistError::BadRange),
         dist("property value", DistError::EmptyUserDistribution),
         found(task, Problem::ZeroCapacity),
         found(task, Problem::NoTimeBetweenArrivals),
