@@ -229,53 +229,374 @@ fn a_file_is_read_from_its_path() {
     let _ = std::fs::remove_file(&path);
 }
 
+/// The `random` parameter for the loaded file, from byte `offset` in segments of `segment` bytes.
+fn file_at(offset: u64, segment: u64) -> Value {
+    json!({ "mode": "byte_file", "file": "data", "offset": offset, "segment_bytes": segment })
+}
+
+fn compared(e: &mut Engine, a: &Value, b: &Value) -> Value {
+    ok(e, "results.compare", json!({ "a": a, "b": b }))
+}
+
+/// Every comparison's (`interval`, `difference`, `half_width`).
+fn intervals(r: &Value) -> Vec<(Value, Option<f64>, Option<f64>)> {
+    r["comparisons"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .map(|c| {
+            (
+                c["interval"].clone(),
+                c["difference"].as_f64(),
+                c["half_width"].as_f64(),
+            )
+        })
+        .collect()
+}
+
+/// Two runs are paired when replication i of each read the same bytes, independent when they
+/// share none, and dependent when they share some but not replication for replication.
 #[test]
-fn runs_are_paired_only_when_they_read_the_same_bytes() {
+fn runs_are_compared_by_which_bytes_they_read() {
     let mut e = help_desk(bytes(1 << 18, 21));
-    let a = ok(
-        &mut e,
-        "run",
-        json!({ "replications": 4, "random": from_file(16_384) }),
+    let run = |e: &mut Engine, n: u64, random: Value| {
+        ok(e, "run", json!({ "replications": n, "random": random }))
+    };
+    // Bytes 0 to 65,535 in four segments.
+    let a = run(&mut e, 4, file_at(0, 16_384));
+    let b = run(&mut e, 4, file_at(0, 16_384));
+    let same = compared(&mut e, &a, &b);
+    assert_eq!(
+        (&same["class"], &same["basis"], &same["paired"]),
+        (&json!("paired"), &json!("same_file"), &json!(true)),
+        "{same}"
     );
-    let b = ok(
-        &mut e,
-        "run",
-        json!({ "replications": 4, "random": from_file(16_384) }),
-    );
-    let same = ok(&mut e, "results.compare", json!({ "a": a, "b": b }));
-    assert_eq!(same["paired"], true, "{same}");
+    assert_eq!(same["paired_replications"], 4, "{same}");
+    assert!(same.get("reason").is_none(), "{same}");
     assert!(
         same["method"]
             .as_str()
-            .is_some_and(|m| m.contains("same random-data file")),
+            .is_some_and(|m| m.contains("same random-data file") && m.contains("shift")),
         "{same}"
     );
-    // Another file.
+    // The same model on the same bytes: exactly no difference.
+    for (interval, d, hw) in intervals(&same) {
+        assert_eq!(interval, "paired_t", "{same}");
+        assert!(
+            d.is_none_or(|d| d == 0.0) && hw.is_none_or(|h| h == 0.0),
+            "{same}"
+        );
+    }
+
+    // More replications from the same place: paired over the first four, each the same.
+    let eight = run(&mut e, 8, file_at(0, 16_384));
+    let longer = compared(&mut e, &a, &eight);
+    assert_eq!(
+        (&longer["class"], &longer["paired_replications"]),
+        (&json!("paired"), &json!(4)),
+        "{longer}"
+    );
+    for c in longer["comparisons"].as_array().into_iter().flatten() {
+        assert!(c["pairs"].as_u64().is_some_and(|p| p <= 4), "{c}");
+        assert!(c["difference"].as_f64().is_none_or(|d| d == 0.0), "{c}");
+    }
+
+    // One segment further on: b's replication i reads a's replication i + 1's bytes.
+    let shifted = run(&mut e, 4, file_at(16_384, 16_384));
+    // Segments twice as long from the same place: b's first reads a's first two.
+    let wide = run(&mut e, 4, file_at(0, 32_768));
+    for other in [&shifted, &wide] {
+        let r = compared(&mut e, &a, other);
+        assert_eq!(
+            (&r["class"], &r["basis"], &r["paired"]),
+            (
+                &json!("dependent"),
+                &json!("overlapping_parts"),
+                &json!(false)
+            ),
+            "{r}"
+        );
+        assert!(
+            r["reason"]
+                .as_str()
+                .is_some_and(|m| m.contains("neither independent nor paired")),
+            "{r}"
+        );
+        assert!(r.get("paired_replications").is_none(), "{r}");
+        for c in r["comparisons"].as_array().into_iter().flatten() {
+            assert_eq!(c["interval"], "none", "{c}");
+            assert!(
+                c["half_width"].is_null() && c["df"].is_null() && c["significant"].is_null(),
+                "{c}"
+            );
+            assert!(c.get("pairs").is_none(), "{c}");
+            // Only the means, and b's minus a's.
+            if let (Some(ma), Some(mb), Some(d)) = (
+                c["a"]["mean"].as_f64(),
+                c["b"]["mean"].as_f64(),
+                c["difference"].as_f64(),
+            ) {
+                assert!((d - (mb - ma)).abs() <= 1e-9 * (1.0 + mb.abs()), "{c}");
+            }
+        }
+    }
+
+    // The next four segments, which a never read: independent.
+    let apart = run(&mut e, 4, file_at(65_536, 16_384));
+    let r = compared(&mut e, &a, &apart);
+    assert_eq!(
+        (&r["class"], &r["basis"]),
+        (&json!("independent"), &json!("disjoint_parts")),
+        "{r}"
+    );
+    assert!(intervals(&r).iter().all(|(i, _, _)| i == "welch_t"), "{r}");
+    // Touching but not overlapping is still apart: a's eight segments end where it starts.
+    let next = run(&mut e, 4, file_at(131_072, 16_384));
+    assert_eq!(compared(&mut e, &eight, &next)["class"], "independent");
+    assert_eq!(compared(&mut e, &apart, &eight)["class"], "dependent");
+
+    // Another file: taken as independent, and said to be assumed.
     e.load_random_data("data", bytes(1 << 18, 22));
-    let c = ok(
-        &mut e,
-        "run",
-        json!({ "replications": 4, "random": from_file(16_384) }),
+    let c = run(&mut e, 4, file_at(0, 16_384));
+    let r = compared(&mut e, &a, &c);
+    assert_eq!(
+        (&r["class"], &r["basis"], &r["paired"]),
+        (
+            &json!("independent"),
+            &json!("different_files"),
+            &json!(false)
+        ),
+        "{r}"
     );
-    let other = ok(&mut e, "results.compare", json!({ "a": a, "b": c }));
-    assert_eq!(other["paired"], false, "{other}");
-    // Another segment length of the same file.
-    let d = ok(
-        &mut e,
-        "run",
-        json!({ "replications": 4, "random": from_file(32_768) }),
+    assert!(
+        r["method"].as_str().is_some_and(|m| m.contains("assumed")),
+        "{r}"
     );
-    let longer = ok(&mut e, "results.compare", json!({ "a": c, "b": d }));
-    assert_eq!(longer["paired"], false, "{longer}");
+
     // The seed's pseudo-random numbers, with the same seed as the file runs recorded.
     let p = ok(&mut e, "run", json!({ "replications": 4 }));
     assert_eq!(p["seed"], a["seed"]);
-    let mixed = ok(&mut e, "results.compare", json!({ "a": p, "b": a }));
-    assert_eq!(mixed["paired"], false, "{mixed}");
+    let mixed = compared(&mut e, &p, &a);
+    assert_eq!(
+        (&mixed["class"], &mixed["basis"]),
+        (&json!("independent"), &json!("seed_and_file")),
+        "{mixed}"
+    );
     // Two pseudo-random runs with one seed are paired, as always.
     let q = ok(&mut e, "run", json!({ "replications": 4 }));
-    let prng = ok(&mut e, "results.compare", json!({ "a": p, "b": q }));
-    assert_eq!(prng["paired"], true, "{prng}");
+    let prng = compared(&mut e, &p, &q);
+    assert_eq!(
+        (&prng["class"], &prng["basis"], &prng["paired"]),
+        (&json!("paired"), &json!("same_seed"), &json!(true)),
+        "{prng}"
+    );
+}
+
+/// Replication i's pseudo-random numbers depend only on the seed and i: runs of 10 and of 20
+/// replications with one seed are paired over the first 10, which are the same runs.
+#[test]
+fn the_same_seed_pairs_the_first_replications_of_runs_of_different_lengths() {
+    let mut e = help_desk(Vec::new());
+    let ten = ok(&mut e, "run", json!({ "replications": 10 }));
+    let twenty = ok(&mut e, "run", json!({ "replications": 20 }));
+    let r = compared(&mut e, &ten, &twenty);
+    assert_eq!(
+        (
+            &r["class"],
+            &r["basis"],
+            &r["paired"],
+            &r["paired_replications"]
+        ),
+        (
+            &json!("paired"),
+            &json!("same_seed"),
+            &json!(true),
+            &json!(10)
+        ),
+        "{r}"
+    );
+    let mut checked = 0;
+    for c in r["comparisons"].as_array().into_iter().flatten() {
+        assert_eq!(c["interval"], "paired_t", "{c}");
+        assert!(c["pairs"].as_u64().is_some_and(|p| p <= 10), "{c}");
+        // The same first ten replications: no difference at all.
+        assert!(c["difference"].as_f64().is_none_or(|d| d == 0.0), "{c}");
+        assert!(c["half_width"].as_f64().is_none_or(|h| h == 0.0), "{c}");
+        // Each run's mean is over all its replications.
+        assert!(c["b"]["n"].as_u64() >= c["a"]["n"].as_u64(), "{c}");
+        if c["pairs"] == 10 {
+            checked += 1;
+        }
+    }
+    assert!(checked > 0, "{r}");
+    // The same the other way round.
+    let back = compared(&mut e, &twenty, &ten);
+    assert_eq!(back["paired_replications"], 10, "{back}");
+}
+
+/// A record that cannot say which bytes a run read, or values that are not one per
+/// replication, are refused rather than compared.
+#[test]
+fn malformed_results_are_refused_by_the_comparison() {
+    let mut e = help_desk(bytes(1 << 18, 5));
+    let a = ok(
+        &mut e,
+        "run",
+        json!({ "replications": 2, "random": from_file(16_384) }),
+    );
+    let b = a.clone();
+    for (path, value) in [
+        ("sha256", Value::Null),
+        ("sha256", json!("not a hash")),
+        ("offset", json!("zero")),
+        ("segment_bytes", json!(0)),
+        ("mode", json!("dice")),
+    ] {
+        let mut bad = a.clone();
+        bad["record"]["random"][path] = value.clone();
+        let (code, message) = refused(&mut e, "results.compare", json!({ "a": bad, "b": b }));
+        assert_eq!(
+            code,
+            ErrorCode::InvalidParams,
+            "{path} = {value}: {message}"
+        );
+    }
+    // Two records each missing their SHA-256 are not the same file.
+    let mut x = a.clone();
+    if let Some(o) = x["record"]["random"].as_object_mut() {
+        o.remove("sha256");
+    }
+    let (code, _) = refused(&mut e, "results.compare", json!({ "a": x, "b": x }));
+    assert_eq!(code, ErrorCode::InvalidParams);
+    // A list of values that is not one per replication.
+    let mut short = a.clone();
+    short["values"]["desk"]["mean_wait"] = json!([1.0]);
+    let (code, message) = refused(&mut e, "results.compare", json!({ "a": short, "b": b }));
+    assert_eq!(code, ErrorCode::InvalidParams, "{message}");
+    assert!(message.contains("one per replication"), "{message}");
+    // A value that is neither a number nor null.
+    let mut text = a.clone();
+    text["values"]["desk"]["mean_wait"] = json!(["1", 2.0]);
+    let (code, _) = refused(&mut e, "results.compare", json!({ "a": text, "b": b }));
+    assert_eq!(code, ErrorCode::InvalidParams);
+}
+
+/// A worker's answer is matched to its replication first: one for a replication the run does
+/// not have is refused, one for a replication that has answered is ignored (even an error), and
+/// a worker that stopped fails the run whatever has answered.
+#[test]
+fn a_workers_answer_is_checked_by_its_index_first_and_counted_once() {
+    let mut e = help_desk(bytes(1 << 20, 7));
+    ok(
+        &mut e,
+        "run.start",
+        json!({ "replications": 3, "mode": "workers", "random": from_file(32_768) }),
+    );
+    let task = e.worker_task().expect("a task").to_owned();
+    let worker = Worker::new(&task).expect("a worker");
+    let first = worker.run(0);
+    e.deliver(&first).expect("taken");
+    e.deliver(&first).expect("a second copy is ignored");
+    let status = ok(&mut e, "run.status", json!({}));
+    assert_eq!(
+        (&status["state"], &status["done"]),
+        (&json!("running"), &json!(1)),
+        "{status}"
+    );
+    let error = r#""error": {"code": "time_stopped", "message": "replication 0: time stopped"}"#;
+    e.deliver(&format!(r#"{{"index": 0, {error}}}"#))
+        .expect("an error for a replication that answered is ignored");
+    assert_eq!(ok(&mut e, "run.status", json!({}))["state"], "running");
+    let err = e
+        .deliver(&format!(r#"{{"index": 9, {error}}}"#))
+        .expect_err("no replication 9");
+    assert_eq!(err.code, ErrorCode::InvalidParams);
+    assert_eq!(ok(&mut e, "run.status", json!({}))["state"], "running");
+    let err = e
+        .deliver(r#"{"report": null}"#)
+        .expect_err("no index, no error");
+    assert_eq!(err.code, ErrorCode::InvalidParams);
+    // A worker that stopped, after replication 0 answered.
+    e.deliver(r#"{"error": {"code": "internal", "message": "a web worker stopped: unreachable"}}"#)
+        .expect("taken");
+    let failed = ok(&mut e, "run.status", json!({}));
+    assert_eq!(failed["state"], "failed", "{failed}");
+    assert_eq!(failed["error"]["code"], "internal", "{failed}");
+
+    // A worker asked for a replication past the bytes its task carries answers with an error.
+    let past: Value = serde_json::from_str(&worker.run(3)).expect("an answer");
+    assert_eq!(past["index"], 3, "{past}");
+    assert_eq!(past["error"]["code"], "invalid_params", "{past}");
+}
+
+/// Every worker gets the bytes of every replication the run may have, so a run on workers whose
+/// replications need more than the cap is refused before it starts; in slices it runs.
+#[test]
+fn a_run_on_workers_with_too_many_bytes_is_refused_before_it_starts() {
+    let segment: u64 = 3 << 20;
+    let mut e = help_desk(vec![0x5a; 9 << 20]);
+    let random = from_file(segment);
+    let (code, message) = refused(
+        &mut e,
+        "run.start",
+        json!({ "replications": 3, "mode": "workers", "random": random }),
+    );
+    assert_eq!(code, ErrorCode::InvalidParams, "{message}");
+    assert!(message.contains("slices"), "{message}");
+    let err = e
+        .execute(
+            "run.start",
+            json!({ "replications": 3, "mode": "workers", "random": random }),
+        )
+        .expect_err("refused");
+    assert_eq!(
+        err.details,
+        Some(json!({ "bytes": 3 * segment, "limit_bytes": 8 << 20 }))
+    );
+    assert!(e.worker_task().is_none());
+    // Two replications fit.
+    ok(
+        &mut e,
+        "run.start",
+        json!({ "replications": 2, "mode": "workers", "random": random }),
+    );
+    assert!(e.worker_task().is_some());
+    ok(&mut e, "run.cancel", json!({}));
+}
+
+/// A worker checks its task's bytes before it decodes them.
+#[test]
+fn a_worker_refuses_bytes_that_do_not_fit_its_task() {
+    let mut e = help_desk(bytes(1 << 16, 3));
+    ok(
+        &mut e,
+        "run.start",
+        json!({ "replications": 2, "mode": "workers", "random": from_file(4096) }),
+    );
+    let task: Value = serde_json::from_str(e.worker_task().expect("a task")).expect("json");
+    assert!(Worker::new(&task.to_string()).is_ok());
+    let with = |segment: Value, hex: Value| {
+        let mut t = task.clone();
+        t["random"] = json!({ "segment_bytes": segment, "hex": hex });
+        Worker::new(&t.to_string()).err().map(|e| e.code)
+    };
+    let hex = task["random"]["hex"].clone();
+    let text = hex.as_str().expect("hex").to_owned();
+    for (segment, hex) in [
+        // Segments of fewer than eight bytes.
+        (json!(4), hex.clone()),
+        // Not a whole number of segments.
+        (json!(4096), json!(format!("{text}00"))),
+        // Fewer segments than replications.
+        (json!(4096), json!(text[..8192].to_owned())),
+        // An odd number of digits, and not hexadecimal.
+        (json!(4096), json!(format!("{text}0"))),
+        (json!(4096), json!("zz".repeat(8192))),
+        // More than the cap.
+        (json!(4096), json!("00".repeat((8 << 20) + 4096))),
+    ] {
+        assert_eq!(with(segment, hex), Some(ErrorCode::InvalidParams));
+    }
 }
 
 /// Every draw reads eight bytes of the file, and nothing else does: a model whose only draws are

@@ -723,8 +723,9 @@ unit	yr	a
 	Could be chance	Pode ser azar
 	No change	Sen cambio
 	Too few runs to tell	Poucas execucións para sabelo
+	Not judged	Sen xulgar
 	{value} points	{value} puntos
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	A referencia usou a semente {seed_a} e {n_a} execucións, e esta execución a semente {seed_b} e {n_b} execucións, así que se comparan como execucións independentes e os intervalos son máis anchos. A mesma semente e o mesmo número de execucións dan unha comparación emparellada.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	A referencia usou a semente {seed_a} e esta execución a semente {seed_b}, así que se comparan como execucións independentes e os intervalos son máis anchos. A mesma semente dá unha comparación emparellada.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	A referencia mediu o tempo en {a} e esta execución en {b}, así que os tempos non se comparan.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) baixou de {before} a {after}, en {change}: máis do que explicaría o azar.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) subiu de {before} a {after}, en {change}: máis do que explicaría o azar.
@@ -733,6 +734,7 @@ unit	yr	a
 	Baseline and now, key measures	Referencia e agora, métricas clave
 	Difference (paired, 95%)	Diferenza (emparellada, 95 %)
 	Difference (95%)	Diferenza (95 %)
+	Difference of means	Diferenza de medias
 	Measure	Métrica
 	Baseline	Referencia
 	Now	Agora
@@ -962,7 +964,7 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemas: {blocks}
 @plural	Use {n} run|Use {n} runs	Usar {n} execución|Usar {n} execucións
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usar {n} execución (aprox. ± 5%)|Usar {n} execucións (aprox. ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas usaron a semente {seed} e a mesma {n} execución, así que cada execución recibe os mesmos números aleatorios ca súa parella: as diferenzas veñen do cambio, non de extraccións ao azar.|Ambas usaron a semente {seed} e as mesmas {n} execucións, así que cada execución recibe os mesmos números aleatorios ca súa parella: as diferenzas veñen do cambio, non de extraccións ao azar.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Ambas usaron a semente {seed}, así que cada execución recibe os mesmos números aleatorios ca súa parella e as execucións compáranse por parellas: gran parte da diferenza debida ao azar entre elas anúlase, e o intervalo ten en conta o que queda.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} outra métrica clave non se moveu máis do que podería o azar.|{n} outras métricas clave non se moveron máis do que podería o azar.
 @plural	and {n} more change|and {n} more changes	e {n} cambio máis|e {n} cambios máis
 	Conveyor	Cinta transportadora
@@ -1531,8 +1533,10 @@ connection	Flow	Fluxo
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dez máquinas deben funcionar, catro de reposto agardan listas e tres mecánicos reparan as que se avarían (Crane e Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Cantas máquinas de reposto e cantos mecánicos manteñen en marcha dez máquinas?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	As máquinas de reposto en espera non se poden avariar: de media hai 3.47 máquinas avariadas e 9.29 en marcha. Un cuarto mecánico consegue case o mesmo ca catro máquinas de reposto máis.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas liron os seus números aleatorios do mesmo ficheiro no mesmo lugar, para as mesmas execucións, así que cada execución recibe os mesmos números aleatorios ca súa parella: as diferenzas veñen do cambio, non de extraccións ao azar.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	A referencia e esta execución non tomaron os seus números aleatorios do mesmo lugar (unha semente ou un ficheiro de números aleatorios) para as mesmas execucións, así que se comparan como execucións independentes e os intervalos son máis anchos.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Ambas liron os seus números aleatorios do mesmo ficheiro no mesmo lugar, así que cada execución parte dos mesmos números ca súa parella e as execucións compáranse por parellas. Cada extracción toma os números seguintes do ficheiro, así que un cambio pode desprazar que evento le que número e pode anularse menos da diferenza debida ao azar; o intervalo téno en conta.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	A referencia e esta execución tomaron os seus números aleatorios de lugares distintos (unha semente, outro ficheiro ou partes dun mesmo ficheiro que non se solapan), así que se toman como execucións independentes e os intervalos son máis anchos.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	A referencia e esta execución liron partes solapadas do mesmo ficheiro de números aleatorios, pero non execución por execución, así que non son nin independentes nin emparelladas e ningún intervalo vale: só se comparan as medias. Le ambas do mesmo lugar do ficheiro, ou de partes que non se solapen.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	A referencia ten {n_a} execucións e esta execución {n_b}, así que as primeiras {n} de cada unha se comparan por parellas; a referencia e agora son as súas medias sobre esas execucións.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Números aleatorios do ficheiro {file} (SHA-256 {sha}…), {bytes} bytes para cada execución desde o byte {offset}
 	Seed {seed} taken from {source}	Semente {seed} tomada de {source}
 	Scenario	Escenario

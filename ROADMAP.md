@@ -431,7 +431,13 @@ Done.
   replication (a sequential run's maximum included) is refused before the run; a segment that
   runs out stops the run with `random_data_exhausted`, and no byte is read twice. The record
   gives the file's SHA-256 (a replay on another file is refused), offset, L and bytes read;
-  `results.compare` pairs two runs only when they read the same bytes (or use the same seed).
+  `results.compare` says how it compared two runs (`class`): paired over their first
+  min(n_a, n_b) replications when they use the same seed or read the same file from the same
+  offset with the same L; independent (Welch) for other seeds or files, or parts of one file that
+  do not overlap; and, for overlapping parts of one file that are not replication for
+  replication, the means with no interval and the reason. A file over 1 GiB (256 MiB in the
+  browser) is refused before it is read, and a run on web workers whose replications need more
+  than 8 MiB of it, since every worker gets them all.
   `seed_source` records where a seed came from. Pseudo-random runs are bit for bit as before
   (the golden digests now cover breakdowns, setups, health checks, patience, balking, transfers,
   times by property, conveyors and diverts). System dynamics, agents, Monte Carlo, sweeps,
@@ -1207,8 +1213,8 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   value, and how much each moved across the range, with whether that is more than the noise
   (a paired-t interval on the replications' differences, issue #66).
 - **Comparing two runs:** `results.compare` gives, per element and metric, both runs' means
-  and the difference with its 95% interval: paired-t when the runs share their seed and
-  replications, Welch's two-sample t otherwise (issue #66).
+  and the difference with its 95% interval: paired-t when the runs share their seed (over the
+  first min(n_a, n_b) replications), Welch's two-sample t otherwise (issue #66).
 - **Common random numbers and the model's shape:** each element's streams are keyed by its id
   and their purpose (#152, M2.9), so a sweep's points share their streams, and so does a variant
   that adds, removes or reorders an element, for every element it leaves in place (#70).

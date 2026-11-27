@@ -723,8 +723,9 @@ unit	yr	v
 	Could be chance	Voi olla sattumaa
 	No change	Ei muutosta
 	Too few runs to tell	Liian vähän ajoja arvioon
+	Not judged	Ei arvioitu
 	{value} points	{value} prosenttiyksikköä
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Vertailukohta käytti siementä {seed_a} ja {n_a} ajoa, tämä ajo siementä {seed_b} ja {n_b} ajoa, joten niitä verrataan riippumattomina ajoina ja välit ovat leveämpiä. Sama siemen ja ajojen määrä antavat parittaisen vertailun.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Vertailukohta käytti siementä {seed_a} ja tämä ajo siementä {seed_b}, joten niitä verrataan riippumattomina ajoina ja välit ovat leveämpiä. Sama siemen antaa parittaisen vertailun.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Vertailukohta mittasi ajan yksikössä {a} ja tämä ajo yksikössä {b}, joten aikoja ei verrata.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) laski arvosta {before} arvoon {after}, eli {change}: enemmän kuin sattuma selittäisi.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) nousi arvosta {before} arvoon {after}, eli {change}: enemmän kuin sattuma selittäisi.
@@ -733,6 +734,7 @@ unit	yr	v
 	Baseline and now, key measures	Vertailukohta ja nyt, tärkeimmät mittarit
 	Difference (paired, 95%)	Ero (parittainen, 95 %)
 	Difference (95%)	Ero (95 %)
+	Difference of means	Keskiarvojen ero
 	Measure	Mittari
 	Baseline	Vertailukohta
 	Now	Nyt
@@ -962,7 +964,7 @@ unit	yr	v
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} ongelma: {blocks}|{n} ongelmaa: {blocks}
 @plural	Use {n} run|Use {n} runs	Käytä {n} ajo|Käytä {n} ajoa
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Käytä {n} ajo (noin ± 5%)|Käytä {n} ajoa (noin ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Molemmat käyttivät siementä {seed} ja samaa {n} ajoa, joten kukin ajo saa samat satunnaisluvut kuin parinsa: erot johtuvat muutoksesta eivätkä sattumanvaraisista arvonnoista.|Molemmat käyttivät siementä {seed} ja samoja {n} ajoa, joten kukin ajo saa samat satunnaisluvut kuin parinsa: erot johtuvat muutoksesta eivätkä sattumanvaraisista arvonnoista.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Molemmat käyttivät siementä {seed}, joten kukin ajo saa samat satunnaisluvut kuin parinsa ja ajoja verrataan pareittain: suuri osa niiden välisestä satunnaiserosta kumoutuu, ja väli ottaa huomioon sen, mikä jää jäljelle.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} muu tärkeä mittari ei muuttunut enempää kuin sattuma voisi.|{n} muuta tärkeää mittaria ei muuttunut enempää kuin sattuma voisi.
 @plural	and {n} more change|and {n} more changes	ja {n} muu muutos|ja {n} muuta muutosta
 	Conveyor	Kuljetin
@@ -1531,8 +1533,10 @@ connection	Flow	Virta
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Kymmenen koneen on oltava käynnissä, neljä varakonetta odottaa valmiina ja kolme asentajaa korjaa vikaantuneet (Crane ja Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Montako varakonetta ja asentajaa pitää kymmenen konetta käynnissä?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Valmiina odottavat varakoneet eivät voi vikaantua: keskimäärin 3.47 konetta on rikki ja 9.29 käy. Neljäs asentaja auttaa suunnilleen yhtä paljon kuin neljä varakonetta lisää.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Molemmat lukivat satunnaislukunsa samasta tiedostosta samasta kohdasta samoille ajoille, joten kukin ajo saa samat satunnaisluvut kuin parinsa: erot johtuvat muutoksesta eivätkä sattumanvaraisista arvonnoista.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Vertailukohta ja tämä ajo eivät ottaneet satunnaislukujaan samoille ajoille samasta paikasta (siemenestä tai satunnaislukutiedostosta), joten niitä verrataan riippumattomina ajoina ja välit ovat leveämpiä.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Molemmat lukivat satunnaislukunsa samasta tiedostosta samasta kohdasta, joten kukin ajo lähtee samoista luvuista kuin parinsa ja ajoja verrataan pareittain. Jokainen arvonta ottaa tiedoston seuraavat luvut, joten muutos voi siirtää sitä, mikä tapahtuma lukee minkäkin luvun, ja satunnaiserosta voi kumoutua vähemmän; väli ottaa tämän huomioon.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Vertailukohta ja tämä ajo ottivat satunnaislukunsa eri paikoista (siemenestä, toisesta tiedostosta tai saman tiedoston osista, jotka eivät mene päällekkäin), joten niitä käsitellään riippumattomina ajoina ja välit ovat leveämpiä.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Vertailukohta ja tämä ajo lukivat saman satunnaislukutiedoston päällekkäisiä osia, mutta eivät ajo ajolta, joten ne eivät ole riippumattomia eivätkä parittaisia, eikä mikään väli päde: vain keskiarvoja verrataan. Lue molemmat samasta kohdasta tiedostoa tai osista, jotka eivät mene päällekkäin.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Vertailukohdassa on {n_a} ajoa ja tässä ajossa {n_b}, joten kummankin {n} ensimmäistä verrataan pareittain; vertailukohta ja nyt ovat niiden keskiarvot näiden ajojen yli.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Satunnaisluvut tiedostosta {file} (SHA-256 {sha}…), {bytes} tavua kutakin ajoa kohden tavusta {offset} alkaen
 	Seed {seed} taken from {source}	Siemen {seed} otettu kohteesta {source}
 	Scenario	Skenaario

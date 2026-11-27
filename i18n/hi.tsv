@@ -723,8 +723,9 @@ unit	yr	वर्ष
 	Could be chance	संयोग हो सकता है
 	No change	कोई बदलाव नहीं
 	Too few runs to tell	कहने के लिए बहुत कम रन
+	Not judged	आकलन नहीं किया गया
 	{value} points	{value} प्रतिशत अंक
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	आधार रेखा ने यादृच्छिक बीज {seed_a} और {n_a} रन इस्तेमाल किए, इस रन ने यादृच्छिक बीज {seed_b} और {n_b} रन, इसलिए उनकी तुलना स्वतंत्र रन के रूप में होती है और अंतराल अधिक चौड़े होते हैं। एक ही यादृच्छिक बीज और रन की एक ही संख्या से युग्मित तुलना मिलती है।
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	आधार रेखा ने यादृच्छिक बीज {seed_a} इस्तेमाल किया और इस रन ने यादृच्छिक बीज {seed_b}, इसलिए उनकी तुलना स्वतंत्र रन के रूप में होती है और अंतराल अधिक चौड़े होते हैं। एक ही यादृच्छिक बीज से युग्मित तुलना मिलती है।
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	आधार रेखा ने समय {a} में मापा और इस रन ने {b} में, इसलिए समय की तुलना नहीं की जाती।
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} से घटकर {after} हुआ, {change} की कमी: संयोग जितना समझा सकता है उससे अधिक।
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} से बढ़कर {after} हुआ, {change} की वृद्धि: संयोग जितना समझा सकता है उससे अधिक।
@@ -733,6 +734,7 @@ unit	yr	वर्ष
 	Baseline and now, key measures	आधार रेखा और अभी, मुख्य मापदंड
 	Difference (paired, 95%)	अंतर (युग्मित, 95%)
 	Difference (95%)	अंतर (95%)
+	Difference of means	माध्य का अंतर
 	Measure	मापदंड
 	Baseline	आधार रेखा
 	Now	अभी
@@ -962,7 +964,7 @@ unit	yr	वर्ष
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} समस्या: {blocks}|{n} समस्याएँ: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} रन उपयोग करें|{n} रन उपयोग करें
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} रन उपयोग करें (लगभग ± 5%)|{n} रन उपयोग करें (लगभग ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	दोनों ने यादृच्छिक बीज {seed} और वही {n} रन इस्तेमाल किया, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं: अंतर बदलाव से आते हैं, संयोग से निकली संख्याओं से नहीं।|दोनों ने यादृच्छिक बीज {seed} और वही {n} रन इस्तेमाल किए, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं: अंतर बदलाव से आते हैं, संयोग से निकली संख्याओं से नहीं।
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	दोनों ने यादृच्छिक बीज {seed} इस्तेमाल किया, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं और रन की तुलना जोड़ियों में होती है: उनके बीच के संयोग-जनित अंतर का बड़ा हिस्सा आपस में कट जाता है, और अंतराल बचे हुए हिस्से को ध्यान में रखता है।
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} अन्य मुख्य मापदंड संयोग की सीमा से अधिक नहीं बदला।|{n} अन्य मुख्य मापदंड संयोग की सीमा से अधिक नहीं बदले।
 @plural	and {n} more change|and {n} more changes	और {n} अन्य बदलाव|और {n} अन्य बदलाव
 	Conveyor	कन्वेयर
@@ -1531,8 +1533,10 @@ connection	Flow	प्रवाह
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	दस मशीनों को चलते रहना है, चार अतिरिक्त मशीनें तैयार रखी हैं और तीन मिस्त्री खराब होने वाली मशीनें ठीक करते हैं (Crane और Iglehart, Winter Simulation Conference, 1973)।
 	How many spares and repairmen keep ten machines running?	दस मशीनों को चालू रखने के लिए कितनी अतिरिक्त मशीनें और कितने मिस्त्री चाहिए?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	तैयार रखी अतिरिक्त मशीनें खराब नहीं हो सकतीं: औसतन 3.47 मशीनें खराब रहती हैं और 9.29 चलती हैं। चौथा मिस्त्री लगभग उतना ही करता है जितना चार और अतिरिक्त मशीनें।
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	दोनों ने अपनी यादृच्छिक संख्याएँ एक ही फ़ाइल से, एक ही जगह से, उन्हीं रन के लिए पढ़ीं, इसलिए हर रन को अपने जोड़ीदार जैसी ही यादृच्छिक संख्याएँ मिलती हैं: अंतर बदलाव से आते हैं, संयोग से निकली संख्याओं से नहीं।
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	आधार रेखा और इस रन ने उन्हीं रन के लिए अपनी यादृच्छिक संख्याएँ एक ही जगह से (एक यादृच्छिक बीज, या यादृच्छिक संख्याओं की एक फ़ाइल) नहीं ली, इसलिए उनकी तुलना स्वतंत्र रन के रूप में होती है और अंतराल अधिक चौड़े होते हैं।
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	दोनों ने अपनी यादृच्छिक संख्याएँ एक ही फ़ाइल से, एक ही जगह से पढ़ीं, इसलिए हर रन अपने जोड़ीदार वाली ही संख्याओं से शुरू होता है और रन की तुलना जोड़ियों में होती है। हर बार फ़ाइल की अगली संख्याएँ ली जाती हैं, इसलिए कोई बदलाव यह खिसका सकता है कि कौन-सी घटना कौन-सी संख्या पढ़ती है, और संयोग-जनित अंतर का कम हिस्सा कट सकता है; अंतराल इसे ध्यान में रखता है।
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	आधार रेखा और इस रन ने अपनी यादृच्छिक संख्याएँ अलग-अलग जगहों से (एक यादृच्छिक बीज, दूसरी फ़ाइल, या एक फ़ाइल के ऐसे हिस्से जो ओवरलैप नहीं करते) लीं, इसलिए उन्हें स्वतंत्र रन माना जाता है और अंतराल अधिक चौड़े होते हैं।
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	आधार रेखा और इस रन ने यादृच्छिक संख्याओं की एक ही फ़ाइल के आपस में मिलते-जुलते (ओवरलैप करने वाले) हिस्से पढ़े, पर रन-दर-रन नहीं, इसलिए वे न स्वतंत्र हैं और न युग्मित, और कोई अंतराल लागू नहीं होता: केवल माध्य की तुलना होती है। दोनों को फ़ाइल में एक ही जगह से पढ़ें, या ऐसे हिस्सों से जो ओवरलैप न करें।
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	आधार रेखा में {n_a} रन हैं और इस रन में {n_b}, इसलिए दोनों के पहले {n} रन की तुलना जोड़ियों में होती है; आधार रेखा और अब उन रन पर उनके माध्य हैं।
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	फ़ाइल {file} से यादृच्छिक संख्याएँ (SHA-256 {sha}…), हर रन के लिए बाइट {offset} से {bytes} बाइट
 	Seed {seed} taken from {source}	यादृच्छिक बीज {seed}, {source} से लिया गया
 	Scenario	परिदृश्य

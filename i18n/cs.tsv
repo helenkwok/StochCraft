@@ -723,8 +723,9 @@ unit	yr	r.
 	Could be chance	Může být náhoda
 	No change	Beze změny
 	Too few runs to tell	Příliš málo běhů k posouzení
+	Not judged	Neposouzeno
 	{value} points	{value} p. b.
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Reference použila počáteční hodnotu generátoru {seed_a} a počet běhů {n_a}, tento běh hodnotu {seed_b} a počet běhů {n_b}, takže se porovnávají jako nezávislé běhy a intervaly jsou širší. Stejná počáteční hodnota a stejný počet běhů dávají párové porovnání.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Reference použila počáteční hodnotu generátoru {seed_a} a tento běh hodnotu {seed_b}, takže se porovnávají jako nezávislé běhy a intervaly jsou širší. Stejná počáteční hodnota dává párové porovnání.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Reference měřila čas v jednotkách {a} a tento běh v {b}, takže časy se neporovnávají.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) klesl z {before} na {after}, o {change}: víc, než by vysvětlila náhoda.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) stoupl z {before} na {after}, o {change}: víc, než by vysvětlila náhoda.
@@ -733,6 +734,7 @@ unit	yr	r.
 	Baseline and now, key measures	Reference a nyní, klíčové metriky
 	Difference (paired, 95%)	Rozdíl (párový, 95%)
 	Difference (95%)	Rozdíl (95%)
+	Difference of means	Rozdíl průměrů
 	Measure	Metrika
 	Baseline	Reference
 	Now	Nyní
@@ -962,7 +964,7 @@ unit	yr	r.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problém: {blocks}|{n} problémy: {blocks}|{n} problémů: {blocks}
 @plural	Use {n} run|Use {n} runs	Použít {n} běh|Použít {n} běhy|Použít {n} běhů
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Použít {n} běh (asi ± 5%)|Použít {n} běhy (asi ± 5%)|Použít {n} běhů (asi ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba použily počáteční hodnotu generátoru {seed} a tentýž {n} běh, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.|Oba použily počáteční hodnotu generátoru {seed} a tytéž {n} běhy, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.|Oba použily počáteční hodnotu generátoru {seed} a tytéž {n} běhů, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Oba použily počáteční hodnotu generátoru {seed}, takže každý běh dostane stejná náhodná čísla jako jeho protějšek a běhy se porovnávají po párech: velká část náhodného rozdílu mezi nimi se vzájemně vyruší a interval počítá s tím, co zbyde.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ještě {n} klíčová metrika se nepohnula víc, než by dokázala náhoda.|Ještě {n} klíčové metriky se nepohnuly víc, než by dokázala náhoda.|Ještě {n} klíčových metrik se nepohnulo víc, než by dokázala náhoda.
 @plural	and {n} more change|and {n} more changes	a ještě {n} změna|a ještě {n} změny|a ještě {n} změn
 	Conveyor	Dopravník
@@ -1531,8 +1533,10 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset strojů musí běžet, čtyři záložní čekají v pohotovosti a tři opraváři opravují ty, které se porouchají (Crane a Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kolik záložních strojů a opravářů udrží deset strojů v chodu?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Záložní stroje v pohotovosti se nemohou porouchat: v průměru je porouchaných 3.47 strojů a běží 9.29. Čtvrtý opravář pomůže zhruba tolik jako čtyři záložní stroje navíc.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba četly svá náhodná čísla ze stejného souboru na stejném místě pro tytéž běhy, takže každý běh dostane stejná náhodná čísla jako jeho protějšek: rozdíly pocházejí ze změny, ne z náhodných tahů.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Reference a tento běh nevzaly svá náhodná čísla ze stejného místa (počáteční hodnota generátoru nebo soubor s náhodnými čísly) pro tytéž běhy, takže se porovnávají jako nezávislé běhy a intervaly jsou širší.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Oba četly svá náhodná čísla ze stejného souboru na stejném místě, takže každý běh začíná ze stejných čísel jako jeho protějšek a běhy se porovnávají po párech. Každé losování bere další čísla v souboru, takže změna může posunout, která událost čte které číslo, a méně náhodného rozdílu se může vyrušit; interval s tím počítá.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Reference a tento běh vzaly svá náhodná čísla z různých míst (počáteční hodnota, jiný soubor nebo části jednoho souboru, které se nepřekrývají), takže se berou jako nezávislé běhy a intervaly jsou širší.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Reference a tento běh četly překrývající se části téhož souboru náhodných čísel, ale ne běh po běhu, takže nejsou ani nezávislé, ani párové a žádný interval neplatí: porovnávají se jen průměry. Čtěte obojí ze stejného místa v souboru nebo z částí, které se nepřekrývají.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Reference má {n_a} běhů a tento běh {n_b}, takže prvních {n} z každého se porovnává po párech; reference a nyní jsou jejich průměry z těchto běhů.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Náhodná čísla ze souboru {file} (SHA-256 {sha}…), {bytes} bajtů pro každý běh od bajtu {offset}
 	Seed {seed} taken from {source}	Počáteční hodnota generátoru {seed} převzatá z {source}
 	Scenario	Scénář

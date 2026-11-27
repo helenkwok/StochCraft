@@ -723,8 +723,9 @@ unit	yr	år
 	Could be chance	Kan vara slump
 	No change	Ingen ändring
 	Too few runs to tell	För få körningar för att avgöra
+	Not judged	Ej bedömt
 	{value} points	{value} procentenheter
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referensen använde slumpfrö {seed_a} och {n_a} körningar, den här körningen slumpfrö {seed_b} och {n_b} körningar, så de jämförs som oberoende körningar och intervallen blir bredare. Samma slumpfrö och antal körningar ger en parvis jämförelse.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Referensen använde slumpfrö {seed_a} och den här körningen slumpfrö {seed_b}, så de jämförs som oberoende körningar och intervallen blir bredare. Samma slumpfrö ger en parvis jämförelse.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referensen mätte tid i {a} och den här körningen i {b}, så tider jämförs inte.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) sjönk från {before} till {after}, med {change}: mer än slumpen skulle förklara.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) steg från {before} till {after}, med {change}: mer än slumpen skulle förklara.
@@ -733,6 +734,7 @@ unit	yr	år
 	Baseline and now, key measures	Referens och nu, viktigaste mått
 	Difference (paired, 95%)	Skillnad (parvis, 95 %)
 	Difference (95%)	Skillnad (95 %)
+	Difference of means	Skillnad i medelvärden
 	Measure	Mått
 	Baseline	Referens
 	Now	Nu
@@ -962,7 +964,7 @@ unit	yr	år
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problem: {blocks}
 @plural	Use {n} run|Use {n} runs	Använd {n} körning|Använd {n} körningar
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Använd {n} körning (ungefär ± 5%)|Använd {n} körningar (ungefär ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Båda använde slumpfrö {seed} och samma {n} körning, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.|Båda använde slumpfrö {seed} och samma {n} körningar, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Båda använde slumpfrö {seed}, så varje körning får samma slumptal som sin partner och körningarna jämförs parvis: mycket av den slumpmässiga skillnaden mellan dem tar ut varandra, och intervallet tar hänsyn till det som är kvar.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annat viktigt mått rörde sig inte mer än slumpen kunde.|{n} andra viktiga mått rörde sig inte mer än slumpen kunde.
 @plural	and {n} more change|and {n} more changes	och {n} ändring till|och {n} ändringar till
 	Conveyor	Transportband
@@ -1531,8 +1533,10 @@ connection	Flow	Flöde
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tio maskiner måste gå, fyra reservmaskiner står redo och tre reparatörer lagar dem som havererar (Crane och Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hur många reservmaskiner och reparatörer håller tio maskiner i gång?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservmaskiner som står redo kan inte haverera: i genomsnitt är 3.47 maskiner trasiga och 9.29 går. En fjärde reparatör gör ungefär lika mycket som fyra reservmaskiner till.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Båda läste sina slumptal från samma fil på samma ställe, för samma körningar, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referensen och den här körningen tog inte sina slumptal från samma ställe (ett slumpfrö eller en fil med slumptal) för samma körningar, så de jämförs som oberoende körningar och intervallen blir bredare.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Båda läste sina slumptal från samma fil på samma ställe, så varje körning utgår från samma tal som sin partner och körningarna jämförs parvis. Varje dragning tar nästa tal i filen, så en ändring kan förskjuta vilken händelse som läser vilket tal, och mindre av den slumpmässiga skillnaden kan ta ut varandra; intervallet tar hänsyn till det.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Referensen och den här körningen hämtade sina slumptal från olika ställen (ett slumpfrö, en annan fil eller delar av en fil som inte överlappar), så de behandlas som oberoende körningar och intervallen blir bredare.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Referensen och den här körningen läste överlappande delar av samma fil med slumptal, men inte körning för körning, så de är varken oberoende eller parade och inget intervall gäller: bara medelvärdena jämförs. Läs båda från samma ställe i filen eller från delar som inte överlappar.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referensen har {n_a} körningar och den här körningen {n_b}, så de första {n} av varje jämförs parvis; referensen och nu är deras medelvärden över de körningarna.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Slumptal från filen {file} (SHA-256 {sha}…), {bytes} byte för varje körning från byte {offset}
 	Seed {seed} taken from {source}	Slumpfrö {seed} hämtat från {source}
 	Scenario	Scenario

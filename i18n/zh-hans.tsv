@@ -723,8 +723,9 @@ unit	yr	年
 	Could be chance	可能是偶然
 	No change	无变化
 	Too few runs to tell	运行次数太少，无法判断
+	Not judged	未作判断
 	{value} points	{value} 个百分点
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	基线使用随机种子 {seed_a} 和 {n_a} 次运行，此次运行使用随机种子 {seed_b} 和 {n_b} 次运行，因此按独立运行进行比较，区间更宽。使用相同的随机种子和运行次数可以进行配对比较。
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	基线使用随机种子 {seed_a}，此次运行使用随机种子 {seed_b}，因此按独立运行进行比较，区间更宽。使用相同的随机种子可以进行配对比较。
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	基线以 {a} 计时，此次运行以 {b} 计时，因此不比较时间。
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure}（{block}）从 {before} 降至 {after}，下降 {change}：超出偶然所能解释的程度。
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure}（{block}）从 {before} 升至 {after}，上升 {change}：超出偶然所能解释的程度。
@@ -733,6 +734,7 @@ unit	yr	年
 	Baseline and now, key measures	基线与当前的关键指标
 	Difference (paired, 95%)	差值（配对，95%）
 	Difference (95%)	差值（95%）
+	Difference of means	均值之差
 	Measure	指标
 	Baseline	基线
 	Now	当前
@@ -962,7 +964,7 @@ unit	yr	年
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} 个问题：{blocks}
 @plural	Use {n} run|Use {n} runs	使用 {n} 次运行
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	使用 {n} 次运行（约 ± 5%）
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	两者都使用随机种子 {seed} 和相同的 {n} 次运行，因此每次运行与其配对的运行得到相同的随机数：差异来自更改，而不是随机抽取。
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	两者都使用随机种子 {seed}，因此每次运行与其配对的运行得到相同的随机数，各次运行按配对比较：两者之间由偶然造成的差异大部分会相互抵消，区间则把剩下的部分考虑在内。
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	其他 {n} 个关键指标的变动没有超出偶然所能造成的程度。
 @plural	and {n} more change|and {n} more changes	以及另外 {n} 项更改
 	Conveyor	传送带
@@ -1531,8 +1533,10 @@ connection	Flow	顺序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台机器必须运转，四台备用机待命，三名维修工修理出故障的机器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台备用机和多少名维修工，才能让十台机器保持运转？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的备用机不会故障：平均 3.47 台机器在故障中，9.29 台在运转。增加第四名维修工的效果与再增加四台备用机相当。
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	两者都从同一个文件的同一位置读取随机数，用于相同的运行，因此每次运行与其配对的运行得到相同的随机数：差异来自更改，而不是随机抽取。
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	基线与此次运行在相同的运行中没有从同一来源（随机种子或随机数文件）获取随机数，因此按独立运行进行比较，区间更宽。
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	两者都从同一个文件的同一位置读取随机数，因此每次运行与其配对的运行从相同的随机数开始，各次运行按配对比较。每次抽取都会取文件中接下来的随机数，所以一项更改可能改变哪个事件读取哪个随机数，由偶然造成的差异可能抵消得较少；区间已把这一点考虑在内。
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	基线和此次运行从不同的位置（随机种子、另一个文件，或同一文件中互不重叠的部分）获取随机数，因此按独立运行处理，区间更宽。
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	基线和此次运行读取了同一个随机数文件中相互重叠的部分，但并非逐次运行对应，因此既不是独立的也不是配对的，没有任何区间成立：只比较均值。请从文件中的同一位置读取两者，或从互不重叠的部分读取。
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	基线有 {n_a} 次运行，此次运行有 {n_b} 次，因此各取前 {n} 次运行进行配对比较；基线和当前是它们在这些运行上的均值。
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	来自文件 {file} 的随机数 (SHA-256 {sha}…)，每次运行从字节 {offset} 起取 {bytes} 字节
 	Seed {seed} taken from {source}	取自 {source} 的随机种子 {seed}
 	Scenario	场景

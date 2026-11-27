@@ -174,10 +174,12 @@ impl ByteHandle {
         self.0.asked.load(std::sync::atomic::Ordering::Relaxed)
     }
 
-    /// Bytes of the file read so far (at most the segment's length; a pilot's are all counted).
+    /// Bytes of the file read so far: at most the segment's length rounded down to a multiple of
+    /// eight, since a draw reads eight bytes or none (the last few bytes of a segment whose length
+    /// is not a multiple of eight are never read). A pilot's are all counted.
     pub fn used(&self) -> u64 {
         match &self.0.feed {
-            Feed::File { len, .. } => self.asked().min(*len),
+            Feed::File { len, .. } => self.asked().min(*len - *len % 8),
             Feed::Pilot => self.asked(),
         }
     }
@@ -585,6 +587,20 @@ mod tests {
         let mut short = Rng::from_bytes(data, 60, 16);
         let _ = short.next_u64();
         assert!(short.byte_handle().is_some_and(|h| h.exhausted()));
+    }
+
+    /// A draw reads eight bytes or none, so the bytes used are a multiple of eight: a 12-byte
+    /// segment gives one draw, and its last four bytes are never read.
+    #[test]
+    fn the_bytes_used_are_whole_draws() {
+        let data: std::sync::Arc<[u8]> = (0..64u8).collect::<Vec<u8>>().into();
+        let mut r = Rng::from_bytes(data, 0, 12);
+        let handle = r.byte_handle().expect("a stream over bytes");
+        assert_eq!(r.next_u64(), u64::from_le_bytes([0, 1, 2, 3, 4, 5, 6, 7]));
+        assert_eq!((handle.used(), handle.exhausted()), (8, false));
+        let _ = r.next_u64();
+        assert!(handle.exhausted());
+        assert_eq!((handle.used(), handle.asked()), (8, 16));
     }
 
     /// Over xoshiro256**, deriving and the stream root give exactly the streams of the old

@@ -32,7 +32,9 @@ pub(crate) struct Task {
     pub record: Option<f64>,
     /// A run on a file of random bytes: the part of the file its replications read, from the
     /// first replication's segment to the last one's that the run may have, with each
-    /// replication's segment length. Left out for pseudo-random numbers.
+    /// replication's segment length. Left out for pseudo-random numbers. Every worker gets all
+    /// of it, since any worker may be handed any replication; it is at most
+    /// [`crate::random::MAX_TASK_WINDOW_BYTES`].
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub random: Option<TaskBytes>,
 }
@@ -59,16 +61,7 @@ impl Worker {
         let task: Task = serde_json::from_str(task)
             .map_err(|e| CommandError::new(ErrorCode::InvalidParams, format!("task: {e}")))?;
         let random = match &task.random {
-            Some(b) => {
-                let data = crate::random::from_hex(&b.hex).ok_or_else(|| {
-                    CommandError::new(ErrorCode::InvalidParams, "task: `random.hex` is not hex")
-                })?;
-                Some(crate::random::ByteFeed::new(
-                    data.into(),
-                    0,
-                    b.segment_bytes,
-                ))
-            }
+            Some(b) => Some(task_bytes(b, task.replications)?),
             None => None,
         };
         let model: stochcraft_model::Model = task.model.into();
@@ -90,17 +83,30 @@ impl Worker {
     /// stopped, for [`crate::Engine::deliver`].
     pub fn run(&self, index: u64) -> String {
         let rng = match &self.random {
+            // The task carries the segments of the replications the run may have, no more.
+            Some(feed) if feed.window(index.saturating_add(1)).is_none() => {
+                let error = CommandError::new(
+                    ErrorCode::InvalidParams,
+                    format!("replication {index} is past the bytes the task carries"),
+                );
+                return serde_json::to_string(&Answer {
+                    index: Some(index),
+                    report: None,
+                    error: Some(error.to_json()),
+                })
+                .unwrap_or_default();
+            }
             Some(feed) => feed.stream(index),
             None => self.experiment.stream(index),
         };
         let answer = match self.compiled.run(rng) {
             Ok(report) => Answer {
-                index,
+                index: Some(index),
                 report: Some(Encoded::of(&report)),
                 error: None,
             },
             Err(e) => Answer {
-                index,
+                index: Some(index),
                 report: None,
                 error: Some(run_failed(index, &e).to_json()),
             },
@@ -109,10 +115,50 @@ impl Worker {
     }
 }
 
-/// What a worker sends back for one replication.
+/// The bytes of a task, checked before they are decoded: segments of at least 8 bytes, no more
+/// than [`crate::random::MAX_TASK_WINDOW_BYTES`] in all, a whole number of segments, and at
+/// least one for each of the run's `replications`.
+fn task_bytes(b: &TaskBytes, replications: u64) -> Result<crate::random::ByteFeed, CommandError> {
+    let bad = |why: String| CommandError::new(ErrorCode::InvalidParams, format!("task: {why}"));
+    let segment = b.segment_bytes;
+    if segment < 8 {
+        return Err(bad(format!(
+            "`random.segment_bytes` is {segment}, less than 8"
+        )));
+    }
+    let digits = u64::try_from(b.hex.len()).unwrap_or(u64::MAX);
+    let len = digits / 2;
+    let limit = crate::random::MAX_TASK_WINDOW_BYTES;
+    if len > limit {
+        return Err(crate::random::too_large(
+            "task: `random.hex`",
+            len,
+            limit,
+            "run in slices instead",
+        ));
+    }
+    if !digits.is_multiple_of(2) || !len.is_multiple_of(segment) {
+        return Err(bad(format!(
+            "`random.hex` is not a whole number of {segment}-byte segments"
+        )));
+    }
+    if len / segment < replications {
+        return Err(bad(format!(
+            "`random.hex` holds {} segments, fewer than the {replications} replications",
+            len / segment
+        )));
+    }
+    let data =
+        crate::random::from_hex(&b.hex).ok_or_else(|| bad("`random.hex` is not hex".to_owned()))?;
+    Ok(crate::random::ByteFeed::new(data.into(), 0, segment))
+}
+
+/// What a worker sends back for one replication. An answer with no index and an error is not a
+/// replication's: the pool sends it when a worker stopped, and it fails the run.
 #[derive(Debug, Serialize, Deserialize)]
 pub(crate) struct Answer {
-    pub index: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub index: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub report: Option<Encoded>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -476,20 +522,44 @@ impl Encoded {
     }
 }
 
-/// The task for a run of `plan`.
-pub(crate) fn task(plan: &crate::run::Plan) -> String {
+/// The task for a run of `plan`. A run on a file whose replications need more than
+/// [`crate::random::MAX_TASK_WINDOW_BYTES`] is refused: every worker would hold all of it.
+pub(crate) fn task(plan: &crate::run::Plan) -> Result<String, CommandError> {
     let (compiled, experiment) = (&plan.compiled, &plan.experiment);
+    let random = match plan.random.as_ref() {
+        None => None,
+        Some(feed) => {
+            let max = plan.max_replications();
+            let limit = crate::random::MAX_TASK_WINDOW_BYTES;
+            let need = max.saturating_mul(feed.segment());
+            if need > limit {
+                return Err(crate::random::too_large(
+                    &format!("a run on workers of {max} replications of the file"),
+                    need,
+                    limit,
+                    "run it in slices (`\"mode\": \"slices\"`), or with a shorter segment or fewer replications",
+                ));
+            }
+            let window = feed.window(max).ok_or_else(|| {
+                CommandError::new(
+                    ErrorCode::Internal,
+                    "the file is shorter than the run's replications need",
+                )
+            })?;
+            Some(TaskBytes {
+                segment_bytes: feed.segment(),
+                hex: crate::random::to_hex(window),
+            })
+        }
+    };
     let task = Task {
         model: compiled.model().into(),
         seed: experiment.seed,
         replications: experiment.replications,
         record: compiled.recorded_every(),
-        random: plan.random.as_ref().map(|feed| TaskBytes {
-            segment_bytes: feed.segment(),
-            hex: crate::random::to_hex(feed.window(plan.max_replications())),
-        }),
+        random,
     };
-    serde_json::to_string(&task).unwrap_or_default()
+    serde_json::to_string(&task).map_err(|e| CommandError::new(ErrorCode::Internal, e.to_string()))
 }
 
 fn is_zero(n: &u64) -> bool {

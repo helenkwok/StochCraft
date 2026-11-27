@@ -1133,6 +1133,16 @@ fields (`“Service time”`) are named in the messages by their own rows.
   checked against any other source and not reviewed by native speakers; the least certain are
   lo, th, ta, te, bn, ka and kk.
 
+- The rows for how the baseline and the new run were compared (runs paired on one seed, runs
+  paired on one place in a file of random numbers, independent runs on other seeds or other
+  places, runs that read overlapping parts of one file and so are not judged, and paired runs of
+  different lengths), with the verdict "Not judged" and the column header "Difference of means",
+  were machine-drafted from the plain meaning of the English. They replace earlier rows that said
+  the differences came from the change and not from chance draws, and they reuse each catalog's
+  own words for seed, run, random numbers, file, interval and baseline from the rows they
+  replace. Not checked against any other source and not reviewed by native speakers; the least
+  certain are lo, th, ta, te, bn, ka, kk and sq.
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

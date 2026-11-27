@@ -723,8 +723,9 @@ unit	yr	ж.
 	Could be chance	Кездейсоқтық болуы мүмкін
 	No change	Өзгеріс жоқ
 	Too few runs to tell	Қорытынды үшін іске қосулар тым аз
+	Not judged	Бағаланбаған
 	{value} points	{value} пайыздық тармақ
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Базалық нұсқа {seed_a} кездейсоқ тұқымын және {n_a} іске қосуды, ал бұл іске қосу {seed_b} кездейсоқ тұқымын және {n_b} іске қосуды пайдаланды, сондықтан олар тәуелсіз іске қосулар ретінде салыстырылады және аралықтар кеңірек. Бірдей тұқым мен іске қосулар саны жұптық салыстыру береді.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Базалық нұсқа {seed_a} кездейсоқ тұқымын, ал бұл іске қосу {seed_b} кездейсоқ тұқымын пайдаланды, сондықтан олар тәуелсіз іске қосулар ретінде салыстырылады және аралықтар кеңірек. Бірдей тұқым жұптық салыстыру береді.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Базалық нұсқа уақытты {a} бірлігімен, ал бұл іске қосу {b} бірлігімен өлшеді, сондықтан уақыттар салыстырылмайды.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} мәнінен {after} мәніне дейін {change} төмендеді: кездейсоқтық түсіндіретіннен көп.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} мәнінен {after} мәніне дейін {change} өсті: кездейсоқтық түсіндіретіннен көп.
@@ -733,6 +734,7 @@ unit	yr	ж.
 	Baseline and now, key measures	Базалық нұсқа және қазір, негізгі көрсеткіштер
 	Difference (paired, 95%)	Айырма (жұптық, 95%)
 	Difference (95%)	Айырма (95%)
+	Difference of means	Орташалардың айырмасы
 	Measure	Көрсеткіш
 	Baseline	Базалық нұсқа
 	Now	Қазір
@@ -962,7 +964,7 @@ unit	yr	ж.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} мәселе: {blocks}|{n} мәселе: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} іске қосуды пайдалану|{n} іске қосуды пайдалану
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} іске қосуды пайдалану (шамамен ± 5%)|{n} іске қосуды пайдалану (шамамен ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Екеуі де {seed} кездейсоқ тұқымын және сол {n} іске қосуды пайдаланды, сондықтан әр іске қосу өз жұбымен бірдей кездейсоқ сандар алады: айырмашылықтар кездейсоқ таңдаудан емес, өзгерістен шығады.|Екеуі де {seed} кездейсоқ тұқымын және сол {n} іске қосуды пайдаланды, сондықтан әр іске қосу өз жұбымен бірдей кездейсоқ сандар алады: айырмашылықтар кездейсоқ таңдаудан емес, өзгерістен шығады.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Екеуі де {seed} кездейсоқ тұқымын пайдаланды, сондықтан әр іске қосу өз жұбымен бірдей кездейсоқ сандар алады және іске қосулар жұптасып салыстырылады: олардың арасындағы кездейсоқ айырмашылықтың көп бөлігі өзара жойылады, ал аралық қалғанын ескереді.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Тағы {n} негізгі көрсеткіш кездейсоқтық істей алатыннан көп өзгерген жоқ.|Тағы {n} негізгі көрсеткіш кездейсоқтық істей алатыннан көп өзгерген жоқ.
 @plural	and {n} more change|and {n} more changes	және тағы {n} өзгеріс|және тағы {n} өзгеріс
 	Conveyor	Конвейер
@@ -1531,8 +1533,10 @@ connection	Flow	Ағын
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Он машина жұмыс істеуі керек, төрт қосалқы машина дайын тұрады, ал үш слесарь бұзылғандарын жөндейді (Crane және Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Он машинаның жұмысын қанша қосалқы машина мен слесарь қамтамасыз етеді?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Дайын тұрған қосалқы машиналар бұзыла алмайды: орташа есеппен 3.47 машина бұзық, 9.29 машина жұмыс істейді. Төртінші слесарь тағы төрт қосалқы машинамен шамамен бірдей пайда береді.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Екеуі де кездейсоқ сандарын сол файлдың сол жерінен, сол іске қосулар үшін оқыды, сондықтан әр іске қосу өз жұбымен бірдей кездейсоқ сандар алады: айырмашылықтар кездейсоқ таңдаудан емес, өзгерістен шығады.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Базалық нұсқа мен бұл іске қосу кездейсоқ сандарын сол іске қосулар үшін бір жерден (кездейсоқ тұқымнан немесе кездейсоқ сандар файлынан) алмады, сондықтан олар тәуелсіз іске қосулар ретінде салыстырылады және аралықтар кеңірек.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Екеуі де кездейсоқ сандарын сол файлдың сол жерінен оқыды, сондықтан әр іске қосу өз жұбымен бірдей сандардан басталады және іске қосулар жұптасып салыстырылады. Әр таңдау файлдағы келесі сандарды алады, сондықтан өзгеріс қай оқиғаның қай санды оқитынын жылжытуы мүмкін және кездейсоқ айырмашылықтың азырақ бөлігі жойылуы мүмкін; аралық мұны ескереді.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Базалық нұсқа мен бұл іске қосу кездейсоқ сандарын әртүрлі жерлерден (тұқымнан, басқа файлдан немесе бір файлдың қабаттаспайтын бөліктерінен) алды, сондықтан олар тәуелсіз іске қосулар ретінде қабылданады және аралықтар кеңірек.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Базалық нұсқа мен бұл іске қосу кездейсоқ сандар файлының бір-бірімен қабаттасатын бөліктерін оқыды, бірақ іске қосу сайын емес, сондықтан олар тәуелсіз де, жұптық та емес және ешбір аралық жарамайды: тек орташалар салыстырылады. Екеуін де файлдың сол жерінен немесе қабаттаспайтын бөліктерінен оқыңыз.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Базалық нұсқада {n_a} іске қосу, ал бұл іске қосуда {n_b} бар, сондықтан олардың әрқайсысының алғашқы {n} жұптасып салыстырылады; базалық нұсқа және қазір — сол іске қосулар бойынша олардың орташалары.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	{file} файлындағы кездейсоқ сандар (SHA-256 {sha}…), әр іске қосуға {offset}-байттан бастап {bytes} байт
 	Seed {seed} taken from {source}	{source} көзінен алынған {seed} кездейсоқ тұқымы
 	Scenario	Сценарий

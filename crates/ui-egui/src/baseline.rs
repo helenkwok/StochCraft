@@ -1,9 +1,11 @@
 //! Baseline and now (#148): results kept as a baseline, and the results of a later run compared
-//! with them, measure by measure. The comparison is the engine's `results.compare`: two runs with
-//! the same seed and number of runs meet the same random numbers run by run, so their runs are
-//! compared in pairs (the paired-t interval); otherwise they are compared as independent runs
-//! (Welch's interval), which is wider. A difference is called real when its 95% interval leaves
-//! out zero, each measure on its own.
+//! with them, measure by measure. The comparison is the engine's `results.compare`, whose
+//! `class` says how: two runs with the same seed (or the same place in the same file of random
+//! numbers) meet the same random numbers run by run, so their first runs are compared in pairs
+//! (the paired-t interval); independent runs are compared by Welch's interval, which is wider;
+//! and runs that read overlapping parts of one file, not run for run, get only their means and
+//! the verdict "Not judged". A difference is called real when its 95% interval leaves out zero,
+//! each measure on its own.
 //!
 //! The window shows, over the rest of the results: how the two runs were run, what the change
 //! did in sentences, and a table of each block's key measures with the baseline, now, the
@@ -81,10 +83,15 @@ pub enum Verdict {
     Same,
     /// Too few runs had a value to give an interval.
     Unknown,
+    /// No interval holds: the runs shared some random numbers, but not run for run.
+    NotJudged,
 }
 
 /// The verdict on comparison `c` (an entry of `results.compare`'s `comparisons`).
 pub fn verdict(c: &Value) -> Verdict {
+    if c["interval"] == "none" {
+        return Verdict::NotJudged;
+    }
     let d = c["difference"].as_f64();
     let hw = c["half_width"].as_f64();
     match (c["significant"].as_bool(), d) {
@@ -104,6 +111,7 @@ impl Verdict {
             Verdict::Chance => t("Could be chance"),
             Verdict::Same => t("No change"),
             Verdict::Unknown => t("Too few runs to tell"),
+            Verdict::NotJudged => t("Not judged"),
         }
     }
 
@@ -178,8 +186,11 @@ fn rows(baseline: &Value, now: &Value, comparison: &Value) -> Vec<Row> {
                 _ => (m_base.clone(), m_now.clone()),
             };
             let base = m_base["mean"].as_f64();
+            let judged = verdict(c) != Verdict::NotJudged;
             let relative = match (d, base) {
-                (Some(d), Some(a)) if a != 0.0 => Some((d / a.abs(), hw.unwrap_or(0.0) / a.abs())),
+                (Some(d), Some(a)) if a != 0.0 && judged => {
+                    Some((d / a.abs(), hw.unwrap_or(0.0) / a.abs()))
+                }
                 _ => None,
             };
             Some(Row {
@@ -219,39 +230,43 @@ fn paired_means(baseline: &Value, now: &Value, id: &str, key: &str) -> Option<(f
     })
 }
 
-/// How the two runs were run: paired (the same seed and runs) or not, and a time unit that
-/// differs.
+/// How the two runs were compared (`results.compare`'s `basis`: in pairs, as independent runs,
+/// or not judged), and a time unit that differs.
 fn how_compared(baseline: &Value, now: &Value, comparison: &Value) -> Vec<String> {
     let (a, b) = (&comparison["a"], &comparison["b"]);
     let n = |v: &Value| v["replications"].as_u64().unwrap_or(0);
     let seed = |v: &Value| v["seed"].to_string();
     let mut lines = Vec::new();
-    // Whether either run read its random numbers from a file of random bytes (`results.compare`
-    // pairs runs by where their numbers came from, not by seed alone).
-    let file = |v: &Value| v["random"]["mode"] == "byte_file";
-    if comparison["paired"] == true && file(b) {
-        lines.push(t(
-            "Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.",
-        ).to_owned());
-    } else if comparison["paired"] != true && (file(a) || file(b)) {
-        lines.push(t(
-            "The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.",
-        ).to_owned());
-    } else if comparison["paired"] == true {
-        lines.push(tnf(
-            n(b),
-            "Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.",
-            "Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.",
+    match comparison["basis"].as_str().unwrap_or("") {
+        "same_seed" => lines.push(tf(
+            "Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.",
             &[("seed", &seed(b))],
-        ));
-    } else {
+        )),
+        "same_file" => lines.push(t(
+            "Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.",
+        ).to_owned()),
+        "different_seeds" => lines.push(tf(
+            "The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.",
+            &[("seed_a", &seed(a)), ("seed_b", &seed(b))],
+        )),
+        "overlapping_parts" => lines.push(t(
+            "The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.",
+        ).to_owned()),
+        _ => lines.push(t(
+            "The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.",
+        ).to_owned()),
+    }
+    // Paired runs of different lengths are paired over the first runs of each.
+    if comparison["paired"] == true && n(a) != n(b) {
+        let first = comparison["paired_replications"]
+            .as_u64()
+            .unwrap_or_else(|| n(a).min(n(b)));
         lines.push(tf(
-            "The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.",
+            "The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.",
             &[
-                ("seed_a", &seed(a)),
                 ("n_a", &n(a).to_string()),
-                ("seed_b", &seed(b)),
                 ("n_b", &n(b).to_string()),
+                ("n", &first.to_string()),
             ],
         ));
     }
@@ -374,7 +389,12 @@ pub fn show(
             });
         ui.add_space(10.0);
     }
-    table(ui, &p, &rows, comparison["paired"] == true);
+    let difference = match comparison["class"].as_str() {
+        Some("dependent") => t("Difference of means"),
+        _ if comparison["paired"] == true => t("Difference (paired, 95%)"),
+        _ => t("Difference (95%)"),
+    };
+    table(ui, &p, &rows, difference);
 }
 
 /// The most changes "Changed since the baseline" lists before "and n more changes".
@@ -435,7 +455,7 @@ const COLUMNS: [(f32, f32); 6] = [
 /// The verdict's column where the window is too narrow for the change mark.
 const NARROW_VERDICT: (f32, f32) = (622.0, 770.0);
 
-fn table(ui: &mut egui::Ui, p: &theme::Palette, rows: &[Row], paired: bool) {
+fn table(ui: &mut egui::Ui, p: &theme::Palette, rows: &[Row], difference: &'static str) {
     if rows.is_empty() {
         return;
     }
@@ -451,11 +471,6 @@ fn table(ui: &mut egui::Ui, p: &theme::Palette, rows: &[Row], paired: bool) {
             (lo.min(d - hw), hi.max(d + hw))
         });
     let scale = (-nice(-lo), nice(hi));
-    let difference = if paired {
-        t("Difference (paired, 95%)")
-    } else {
-        t("Difference (95%)")
-    };
     let header = [
         t("Measure"),
         t("Baseline"),
@@ -665,6 +680,11 @@ mod tests {
             verdict(&json!({ "difference": 1.0, "half_width": null, "significant": null })),
             Verdict::Unknown
         );
+        // Runs that shared some random numbers, not run for run: no interval holds.
+        let dependent = json!({ "difference": 1.0, "half_width": null, "significant": null,
+                                "interval": "none" });
+        assert_eq!(verdict(&dependent), Verdict::NotJudged);
+        assert!(!Verdict::NotJudged.real());
     }
 
     #[test]
@@ -741,29 +761,48 @@ mod tests {
         assert!(w.iter().all(|x| x["metric"] != "mean_wait"));
     }
 
-    /// The sentence on how two runs were compared follows where their random numbers came
-    /// from, not their seeds alone.
+    /// The sentence on how two runs were compared follows `results.compare`'s basis, and says
+    /// over which runs paired runs of different lengths are paired.
     #[test]
     fn how_runs_were_compared_follows_their_random_numbers() {
-        let file = json!({ "seed": 1, "replications": 4, "random": { "mode": "byte_file" } });
-        let seed = json!({ "seed": 1, "replications": 4, "random": { "mode": "prng" } });
-        let said = |a: &Value, b: &Value, paired: bool| {
-            how_compared(
-                &json!({}),
-                &json!({}),
-                &json!({ "a": a, "b": b, "paired": paired }),
-            )
-            .join(" ")
+        let run = |seed: u64, n: u64| json!({ "seed": seed, "replications": n });
+        let said = |a: Value, b: Value, basis: &str, paired: bool| {
+            let mut c = json!({ "a": a, "b": b, "basis": basis, "paired": paired });
+            if paired {
+                c["paired_replications"] = json!(4);
+            }
+            how_compared(&json!({}), &json!({}), &c).join(" ")
         };
+        let same_file = said(run(1, 4), run(1, 4), "same_file", true);
+        assert!(same_file.starts_with("Both read their random numbers from the same file"));
+        assert!(same_file.contains("shift which event reads which number"));
+        assert!(!same_file.contains("not from chance"));
         assert!(
-            said(&file, &file, true)
-                .starts_with("Both read their random numbers from the same file")
+            said(run(1, 4), run(1, 4), "seed_and_file", false).starts_with(
+                "The baseline and this run took their random numbers from different places"
+            )
         );
-        assert!(said(&seed, &file, false).starts_with("The baseline and this run did not take"));
-        assert!(said(&seed, &seed, true).starts_with("Both used seed 1"));
         assert!(
-            said(&seed, &json!({ "seed": 2, "replications": 4 }), false)
-                .starts_with("The baseline used seed 1")
+            said(run(1, 4), run(1, 4), "disjoint_parts", false)
+                .starts_with("The baseline and this run took")
+        );
+        let seed = said(run(1, 4), run(1, 4), "same_seed", true);
+        assert!(seed.starts_with("Both used seed 1"), "{seed}");
+        assert!(!seed.contains("not from chance") && !seed.contains("The baseline has"));
+        assert!(
+            said(run(1, 4), run(2, 4), "different_seeds", false)
+                .starts_with("The baseline used seed 1 and this run seed 2")
+        );
+        // Ten runs against four with one seed: paired over the first four.
+        let longer = said(run(1, 4), run(1, 10), "same_seed", true);
+        assert!(
+            longer.contains("The baseline has 4 runs and this run 10, so the first 4 of each"),
+            "{longer}"
+        );
+        let dependent = said(run(1, 4), run(1, 4), "overlapping_parts", false);
+        assert!(
+            dependent.contains("neither independent nor paired"),
+            "{dependent}"
         );
     }
 }
