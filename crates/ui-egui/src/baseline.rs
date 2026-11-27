@@ -128,7 +128,7 @@ struct Row {
 }
 
 /// `-` as a minus sign, and `+` before a number above zero.
-fn signed(text: String, v: f64) -> String {
+pub(crate) fn signed(text: String, v: f64) -> String {
     if let Some(rest) = text.strip_prefix('-') {
         format!("\u{2212}{rest}")
     } else if v > 0.0 && text.chars().any(|c| c.is_ascii_digit() && c != '0') {
@@ -400,7 +400,7 @@ fn changed_line(ui: &mut egui::Ui, changes: &[String]) {
 }
 
 /// "≈", the mark of a difference that could be chance.
-fn paint_about_equal(painter: &egui::Painter, centre: egui::Pos2, p: &theme::Palette) {
+pub(crate) fn paint_about_equal(painter: &egui::Painter, centre: egui::Pos2, p: &theme::Palette) {
     painter.text(
         centre,
         egui::Align2::CENTER_CENTER,
@@ -412,7 +412,7 @@ fn paint_about_equal(painter: &egui::Painter, centre: egui::Pos2, p: &theme::Pal
 
 /// Column edges of the table, from the left: the measure, the baseline, now (both right-aligned),
 /// the difference (right-aligned), the change mark, the verdict (its icon just before it).
-const COLUMNS: [(f32, f32); 6] = [
+pub(crate) const COLUMNS: [(f32, f32); 6] = [
     (8.0, 250.0),
     (250.0, 330.0),
     (330.0, 410.0),
@@ -532,7 +532,7 @@ fn table(ui: &mut egui::Ui, p: &theme::Palette, rows: &[Row], paired: bool) {
 }
 
 /// A table row: its stripe, and a `cell(ui, column, text)` to fill it with.
-fn row_frame(
+pub(crate) fn row_frame(
     ui: &mut egui::Ui,
     p: &theme::Palette,
     stripe: Option<bool>,
@@ -562,7 +562,7 @@ fn row_frame(
 }
 
 /// Where column `c` goes: the verdict moves left into the mark's place in a narrow window.
-fn column(c: usize, wide: bool) -> (f32, f32) {
+pub(crate) fn column(c: usize, wide: bool) -> (f32, f32) {
     if c == 5 && !wide {
         NARROW_VERDICT
     } else {
@@ -572,7 +572,7 @@ fn column(c: usize, wide: bool) -> (f32, f32) {
 
 /// The smallest of 5%, 10%, 20%, 25%, 50% and the same times powers of ten at or above `v` (a
 /// share), so the axis reads in round numbers; 0 for nothing to show.
-fn nice(v: f64) -> f64 {
+pub(crate) fn nice(v: f64) -> f64 {
     if !(v.is_finite() && v > 0.0) {
         return 0.0;
     }
@@ -590,7 +590,7 @@ fn nice(v: f64) -> f64 {
 
 /// Where `v` (a change as a share of the baseline) goes across `rect` on the axis `scale` (its
 /// lowest and highest values).
-fn at_x(rect: egui::Rect, scale: (f64, f64), v: f64) -> f32 {
+pub(crate) fn at_x(rect: egui::Rect, scale: (f64, f64), v: f64) -> f32 {
     let span = scale.1 - scale.0;
     if span > 0.0 {
         rect.left() + ((v - scale.0) / span) as f32 * rect.width()
@@ -600,7 +600,7 @@ fn at_x(rect: egui::Rect, scale: (f64, f64), v: f64) -> f32 {
 }
 
 /// The change mark: a dot at the difference, a bar across its interval, against a zero line.
-fn paint_mark(
+pub(crate) fn paint_mark(
     ui: &mut egui::Ui,
     p: &theme::Palette,
     rect: egui::Rect,

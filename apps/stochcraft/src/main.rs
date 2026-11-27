@@ -32,6 +32,8 @@ mod recovery;
 /// What a file dialog's answer is for.
 enum Then {
     Open,
+    /// A table of runs from another tool, which does not replace the model.
+    Runs,
     Save,
     /// An export's bytes, to write where the user chose.
     Export(Vec<u8>),
@@ -144,6 +146,12 @@ impl Desktop {
                         .filter(t("Process models with BPSim"), &["bpmn", "xpdl", "xml"]),
                     Then::Open,
                 ),
+                Request::PickRuns => self.dialogs.ask(
+                    FileDialog::open()
+                        .title(t("Analyse runs from another tool…"))
+                        .filter(t("CSV table"), &["csv", "tsv", "txt"]),
+                    Then::Runs,
+                ),
                 Request::OpenPath { path } => open(&mut self.app, Path::new(&path)),
                 Request::PickSave { name, xpdl } => {
                     // A system dynamics model is suggested under a `.xmile` name, and is saved as
@@ -201,6 +209,15 @@ impl Desktop {
                 (Then::Open, Answer::Paths(paths)) => {
                     if let Some(path) = paths.first() {
                         open(&mut self.app, path);
+                    }
+                }
+                (Then::Runs, Answer::Paths(paths)) => {
+                    if let Some(path) = paths.first() {
+                        let name = path.to_string_lossy();
+                        match std::fs::read(path) {
+                            Ok(bytes) => self.app.open_runs(&name, &bytes),
+                            Err(e) => self.app.report_error(format!("{name}: {e}")),
+                        }
                     }
                 }
                 (Then::Save, Answer::Paths(paths)) => match paths.first() {

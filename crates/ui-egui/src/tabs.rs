@@ -192,6 +192,11 @@ impl App {
         // Here rather than at the top of the frame: the header's menus and the outline, drawn
         // before the work area, can change the model (Edit ▸ Undo, + Add block).
         self.mark_stale_results();
+        // A table of runs from another tool, over the model until it is closed.
+        if self.from_file.is_some() {
+            self.from_file_view(ui);
+            return;
+        }
         let has_model = self.has_model();
         if !has_model && self.results.is_none() && self.running.is_none() {
             self.start_page(ui);

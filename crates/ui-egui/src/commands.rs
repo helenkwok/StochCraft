@@ -22,6 +22,7 @@ pub const NEW_MONTE_CARLO: &str = "file.new_monte_carlo";
 pub const OPEN: &str = "file.open";
 pub const OPEN_EXAMPLE: &str = "file.open_example";
 pub const OPEN_RECENT: &str = "file.open_recent";
+pub const ANALYSE_RUNS: &str = "file.analyse_runs";
 pub const CLEAR_RECENT: &str = "file.clear_recent";
 pub const SAVE: &str = "file.save";
 pub const SAVE_AS: &str = "file.save_as";
@@ -158,6 +159,7 @@ impl App {
                 Node::submenu(t("Open Recent"), recent)
                     .platforms(Platforms::ALL.without(Platforms::WEB)),
                 Node::submenu(t("Open Example"), examples),
+                item(ANALYSE_RUNS, "Analyse runs from another tool…"),
                 Node::Separator,
                 Node::Item(Item::new(SAVE, save)),
                 Node::Item(
@@ -404,6 +406,7 @@ impl App {
                 }
             }
             CLEAR_RECENT => self.recent.clear(),
+            ANALYSE_RUNS => self.requests.push(crate::Request::PickRuns),
             SAVE => self.save(),
             SAVE_AS => self.save_as(),
             QUIT if self.platform.can_quit => self.replace(Replace::Quit),

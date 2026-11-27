@@ -30,6 +30,7 @@ pub use autosave::Autosave;
 pub use documents::OpenTicket;
 mod editor;
 pub mod form;
+mod from_file;
 mod guide;
 mod help;
 pub mod i18n;
@@ -618,6 +619,9 @@ pub struct Example {
 pub enum Request {
     /// Ask for a model file; answer with [`App::open_file`] (or nothing, if the user cancels).
     PickOpen,
+    /// Ask for a table of runs from another tool (CSV); answer with [`App::open_runs`] (or
+    /// nothing, if the user cancels). It does not replace the model.
+    PickRuns,
     /// Read the file at `path` (File ▸ Open Recent); answer with [`App::open_file`], or
     /// [`App::report_error`] if it can't be read.
     OpenPath { path: String },
@@ -1014,6 +1018,8 @@ pub struct App {
     chart_colours: Option<chart_editor::Editor>,
     /// The decision table window, while it is open.
     dmn_table: Option<dmn_table::Grid>,
+    /// A table of runs from another tool, shown in the work area over the model while it is open.
+    from_file: Option<from_file::FromFile>,
     /// The interface language as the user chose it (`None`: the system's), and as shown.
     language: Option<String>,
     lang: craft_i18n::Lang,
@@ -1128,6 +1134,7 @@ impl App {
             custom_palettes: Vec::new(),
             chart_colours: None,
             dmn_table: None,
+            from_file: None,
             language: None,
             lang: i18n::I18N.system_lang(),
             applied_theme: None,

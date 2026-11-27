@@ -193,7 +193,13 @@ impl eframe::App for Web {
             match request {
                 Request::PickOpen => {
                     let ticket = self.app.begin_open();
-                    pick(&self.inbox, &ctx, ticket);
+                    pick(&self.inbox, &ctx, ticket, MODELS);
+                }
+                // Answered through the same inbox: `finish_open` knows a table of runs by its
+                // extension.
+                Request::PickRuns => {
+                    let ticket = self.app.begin_open();
+                    pick(&self.inbox, &ctx, ticket, RUNS);
                 }
                 // Started, not necessarily kept: the browser doesn't say whether the user saved
                 // the file or cancelled, so the model is not marked saved.
@@ -249,9 +255,14 @@ impl Web {
     }
 }
 
-/// Shows the browser's file picker; the chosen file is read in the background into `inbox`, with
-/// the `ticket` from when the picker was asked for.
-fn pick(inbox: &Inbox, ctx: &egui::Context, ticket: OpenTicket) {
+/// The files the picker offers for a model.
+const MODELS: &str = ".bpmn,.xpdl,.xml,.xmile,.stmx";
+/// The files the picker offers for a table of runs from another tool.
+const RUNS: &str = ".csv,.tsv,.txt";
+
+/// Shows the browser's file picker for files of the kinds `accept` lists; the chosen file is read
+/// in the background into `inbox`, with the `ticket` from when the picker was asked for.
+fn pick(inbox: &Inbox, ctx: &egui::Context, ticket: OpenTicket, accept: &str) {
     let Some(document) = web_sys::window().and_then(|w| w.document()) else {
         return;
     };
@@ -262,7 +273,7 @@ fn pick(inbox: &Inbox, ctx: &egui::Context, ticket: OpenTicket) {
         return;
     };
     input.set_type("file");
-    input.set_accept(".bpmn,.xpdl,.xml,.xmile,.stmx");
+    input.set_accept(accept);
     let (inbox, ctx, target) = (Rc::clone(inbox), ctx.clone(), input.clone());
     let on_change = Closure::once(move |_: web_sys::Event| {
         let Some(file) = target.files().and_then(|f| f.get(0)) else {

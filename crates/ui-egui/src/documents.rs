@@ -196,6 +196,8 @@ impl App {
         self.show_analysis = false;
         self.show_capacity = false;
         self.show_3d = false;
+        // A model opened over a table of runs is shown.
+        self.from_file = None;
     }
 
     /// Runs an engine command for an agent (the MCP server, through the desktop app's control
@@ -260,6 +262,13 @@ impl App {
     /// unsaved changes were asked about before that; if it was edited since, the question is
     /// asked again, as for a dropped file, which is always asked about unsaved changes.
     pub fn finish_open(&mut self, ticket: OpenTicket, name: &str, bytes: Vec<u8>, dropped: bool) {
+        // A table of runs replaces nothing: opened if it is still the newest file asked for.
+        if crate::from_file::is_runs_file(name) {
+            if ticket.serial == self.open_serial {
+                self.open_runs(name, &bytes);
+            }
+            return;
+        }
         if ticket.serial != self.open_serial || ticket.doc != self.doc_gen {
             self.info(tf(
                 "Did not open {file}: a different model was opened in the meantime",
@@ -272,8 +281,13 @@ impl App {
         }
     }
 
-    /// Opens a file dropped on the window, first asking about unsaved changes.
+    /// Opens a file dropped on the window, first asking about unsaved changes. A table of runs
+    /// from another tool (`.csv`, `.tsv`, `.txt`) opens at once: it does not replace the model.
     pub fn drop_file(&mut self, name: &str, bytes: Vec<u8>) {
+        if crate::from_file::is_runs_file(name) {
+            self.open_runs(name, &bytes);
+            return;
+        }
         self.dropped = Some((name.to_owned(), bytes));
         self.replace(Replace::Dropped);
     }

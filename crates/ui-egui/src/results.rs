@@ -392,7 +392,7 @@ fn round_warmup(w: f64) -> f64 {
 
 /// One row of "How sure are these numbers?": its mark, its words and, where there is one, the
 /// button for its fix. Returns whether the button was clicked.
-fn trust_row(
+pub(crate) fn trust_row(
     ui: &mut egui::Ui,
     p: &theme::Palette,
     ok: bool,
@@ -945,7 +945,7 @@ fn with_unit(v: f64, scale: f64, unit: &str) -> String {
 
 /// What a result whose replications split into two outcomes (its `split`) says in words: the
 /// two groups, and that the mean mixes them. `None` when it does not split.
-fn split_sentence(m: &Value, scale: f64, unit: &str) -> Option<String> {
+pub(crate) fn split_sentence(m: &Value, scale: f64, unit: &str) -> Option<String> {
     let s = &m["split"];
     let (low_n, high_n) = (s["low"]["n"].as_u64()?, s["high"]["n"].as_u64()?);
     let v = |x: &Value| x.as_f64().map(|x| with_unit(x, scale, unit));
@@ -1308,7 +1308,7 @@ const COLUMNS: [(f32, f32); 5] = [
 ];
 
 /// One row of an element's results. `stripe` is `None` for the header row.
-fn row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str; 5]) {
+pub(crate) fn row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str; 5]) {
     let height = if stripe.is_some() { 28.0 } else { 22.0 };
     let width = COLUMNS[4].1;
     let (rect, _) = ui.allocate_exact_size(egui::vec2(width, height), egui::Sense::hover());
