@@ -43,6 +43,12 @@ pub(crate) const BELT_HEIGHT: f32 = 0.85;
 pub(crate) const RAIL: f32 = 0.07;
 /// The longest step between two cross-sections of a belt, in metres.
 const STEP: f64 = 0.25;
+/// The most a curve turns, in degrees, between two cross-sections of a belt.
+const TURN_STEP: f64 = 6.0;
+/// The most cross-sections [`stations`] makes of a path, past its start and one for each
+/// segment: a longer path has its steps stretched, so one hundreds of kilometres long is drawn
+/// at no more cost.
+const MOST_STATIONS: f64 = 4096.0;
 /// The most parcels drawn at a block; more are counted by a number.
 const MOST_AT_A_BLOCK: usize = 3;
 /// The most parcels drawn on one conveyor.
@@ -389,52 +395,222 @@ fn floor_rect(c: [f32; 2], along: f32, across: f32, heading: f32, z: f32) -> Mes
 }
 
 /// The cross-sections of a belt along `path` (in metres): at most [`STEP`] apart, closer on a
-/// tight curve, and at every segment's ends.
+/// tight curve, at least one every [`TURN_STEP`] degrees of a curve, and at every segment's ends;
+/// on a path long enough to need more than [`MOST_STATIONS`], the steps are stretched to fit, the
+/// straights' first (a curve's only if curves alone would take more than half), never past one
+/// every [`TURN_STEP`] degrees. No segment has more than [`MOST_STATIONS`], however far it turns.
+/// A sharp turn (an arc of radius 0) has its cross-sections turn round at one place, from the
+/// heading it comes in on to the one it leaves on.
 pub(crate) fn stations(path: &Path) -> Vec<Station> {
-    let mut out = Vec::new();
+    stations_with(path, &[]).0
+}
+
+/// [`stations`] and each one's distance along the path. Where the steps are stretched, there is
+/// one more at each distance in `cuts` (the ends of the rails' gaps), so a gap shorter than a
+/// step still has stations at its ends and its rail left out.
+pub(crate) fn stations_with(path: &Path, cuts: &[f64]) -> (Vec<Station>, Vec<f32>) {
+    let step_of = |seg: &PathSegment| match *seg {
+        PathSegment::Line { .. } => STEP,
+        PathSegment::Arc { radius, .. } | PathSegment::Helix { radius, .. } => {
+            (radius.abs() * TURN_STEP.to_radians()).clamp(0.05, STEP)
+        }
+    };
+    let turn_of = |seg: &PathSegment| match *seg {
+        PathSegment::Line { .. } => 0.0,
+        PathSegment::Arc { angle_deg, .. } => angle_deg.abs(),
+        PathSegment::Helix { turns, .. } => 360.0 * turns.abs(),
+    };
+    let straight = |seg: &PathSegment| matches!(seg, PathSegment::Line { .. });
+    let wanted = |line: bool| -> f64 {
+        path.segments
+            .iter()
+            .filter(|s| straight(s) == line)
+            .map(|s| s.length() / step_of(s))
+            .sum()
+    };
+    let (lines, curves) = (wanted(true), wanted(false));
+    let (line_stretch, curve_stretch) = if lines + curves <= MOST_STATIONS {
+        (1.0, 1.0)
+    } else if curves <= MOST_STATIONS / 2.0 {
+        ((lines / (MOST_STATIONS - curves)).max(1.0), 1.0)
+    } else {
+        let all = (lines + curves) / MOST_STATIONS;
+        (all, all)
+    };
+    // Each segment's frames from its own start, so a sharp turn's come in and go out at one
+    // place and distance.
+    let mut frames: Vec<(f64, Frame)> = Vec::new();
+    let mut from = path.start;
     let mut done = 0.0;
     for seg in &path.segments {
         let len = seg.length();
-        let step = match *seg {
-            PathSegment::Line { .. } => STEP,
-            PathSegment::Arc { radius, .. } | PathSegment::Helix { radius, .. } => {
-                (radius.abs() * 6.0_f64.to_radians()).clamp(0.05, STEP)
-            }
+        let stretch = if straight(seg) {
+            line_stretch
+        } else {
+            curve_stretch
         };
-        let n = (len / step).ceil().max(1.0) as u32;
-        let first = u32::from(!out.is_empty());
+        let by_length = (len / (step_of(seg) * stretch)).ceil();
+        let by_turn = (turn_of(seg) / TURN_STEP).ceil();
+        // A file may hold an arc or helix that turns millions of times round.
+        let n = by_length.max(by_turn).clamp(1.0, MOST_STATIONS) as u32;
+        let first = u32::from(!frames.is_empty());
         for k in first..=n {
-            let f = path.point_at(done + len * f64::from(k) / f64::from(n));
-            out.push(Station {
-                x: f.x as f32,
-                y: f.y as f32,
-                z: f.z as f32,
-                heading: f.heading_deg.to_radians() as f32,
-            });
+            let f = f64::from(k) / f64::from(n);
+            frames.push((done + len * f, seg.frame_at(from, f)));
         }
+        from = seg.frame_at(from, 1.0);
         done += len;
     }
-    out
+    if line_stretch.max(curve_stretch) > 1.0 {
+        frames.extend(
+            cuts.iter()
+                .filter(|c| **c > 0.0 && **c < done)
+                .map(|c| (*c, path.point_at(*c))),
+        );
+        // Stable, so the frames of a sharp turn keep their order.
+        frames.sort_by(|a, b| a.0.total_cmp(&b.0));
+    }
+    // A point on a straight (an arc of no length or turn) gives one frame twice.
+    frames.dedup_by(|b, a| a.0 == b.0 && a.1.heading_deg == b.1.heading_deg);
+    frames
+        .into_iter()
+        .map(|(s, f)| {
+            (
+                Station {
+                    x: f.x as f32,
+                    y: f.y as f32,
+                    z: f.z as f32,
+                    heading: f.heading_deg.to_radians() as f32,
+                },
+                s as f32,
+            )
+        })
+        .unzip()
+}
+
+/// The shadow under a belt of `width` along `stations`: a strip on the floor between each two.
+/// Two at one place (a sharp turn's) cast none, as their strip would have no direction.
+fn belt_shadows(stations: &[Station], width: f32) -> Vec<Mesh> {
+    stations
+        .windows(2)
+        .filter_map(|w| {
+            let (a, b) = (w[0], w[1]);
+            let along = libm::hypotf(b.x - a.x, b.y - a.y);
+            (along > 1e-4).then(|| {
+                let c = [(a.x + b.x) / 2.0, (a.y + b.y) / 2.0];
+                let h = libm::atan2f(b.y - a.y, b.x - a.x);
+                floor_rect(c, along + 0.02, width + 0.35, h, 0.002)
+            })
+        })
+        .collect()
 }
 
 /// The distance along `path` of the point nearest `q`, how far `q` is from it, and on which side
-/// (1 left of the direction of travel, -1 right).
+/// (1 left of the direction of travel, -1 right), to within 5 cm along the path. A path of up to
+/// [`MOST_STATIONS`] steps of 5 cm is looked at every 5 cm. A longer one is looked at in that many
+/// steps, then each step that could hold a nearer point is looked at more closely, until the
+/// steps are 5 cm: no point of a step is nearer than its ends' distances allow, since a point
+/// moves no further than it goes along the path. At most [`NEAREST_LOOKS`] points in all.
 fn nearest(path: &Path, q: [f64; 2]) -> (f64, f64, f64) {
     let total = path.length();
-    let n = (total / 0.05).ceil().max(1.0) as u32;
-    let mut best = (0.0, f64::INFINITY, 1.0);
-    for k in 0..=n {
-        let s = total * f64::from(k) / f64::from(n);
+    let look = |s: f64| {
         let f = path.point_at(s);
         let (dx, dy) = (q[0] - f.x, q[1] - f.y);
-        let d = (dx * dx + dy * dy).sqrt();
-        if d < best.1 {
-            let h = f.heading_deg.to_radians();
-            let side = cos(h) * dy - sin(h) * dx;
-            best = (s, d, if side >= 0.0 { 1.0 } else { -1.0 });
+        let h = f.heading_deg.to_radians();
+        let side = cos(h) * dy - sin(h) * dx;
+        (
+            s,
+            (dx * dx + dy * dy).sqrt(),
+            if side >= 0.0 { 1.0 } else { -1.0 },
+        )
+    };
+    let n = ((total / 0.05).ceil().clamp(1.0, MOST_STATIONS) as u32).max(1);
+    let first: Vec<(f64, f64, f64)> = (0..=n)
+        .map(|k| look(total * f64::from(k) / f64::from(n)))
+        .collect();
+    let mut best = (0.0, f64::INFINITY, 1.0);
+    for p in &first {
+        if p.1 < best.1 {
+            best = *p;
+        }
+    }
+    if !total.is_finite() || total / f64::from(n) <= 0.05 {
+        return best;
+    }
+    // The steps that may hold a nearer point, the most promising first.
+    let mut open = std::collections::BinaryHeap::new();
+    for w in first.windows(2) {
+        open.push(Step::new(w[0], w[1]));
+    }
+    let mut looks = NEAREST_LOOKS;
+    while let Some(step) = open.pop() {
+        if step.bound >= best.1 || looks == 0 {
+            break;
+        }
+        let (a, b) = (step.a, step.b);
+        let len = b.0 - a.0;
+        if len <= 0.05 {
+            continue;
+        }
+        let m = (len / 0.05).ceil().min(16.0) as u32;
+        let mut prev = a;
+        for k in 1..=m {
+            let here = if k == m {
+                b
+            } else {
+                looks = looks.saturating_sub(1);
+                look(a.0 + len * f64::from(k) / f64::from(m))
+            };
+            if here.1 < best.1 {
+                best = here;
+            }
+            let part = Step::new(prev, here);
+            if part.bound < best.1 {
+                open.push(part);
+            }
+            prev = here;
         }
     }
     best
+}
+
+/// The most points [`nearest`] looks at past its first [`MOST_STATIONS`].
+const NEAREST_LOOKS: u32 = 65_536;
+
+/// A step along a path between two points [`nearest`] looked at (distance along, distance from
+/// the point sought, side), with the least distance any point between them can have.
+struct Step {
+    a: (f64, f64, f64),
+    b: (f64, f64, f64),
+    bound: f64,
+}
+
+impl Step {
+    fn new(a: (f64, f64, f64), b: (f64, f64, f64)) -> Self {
+        Self {
+            a,
+            b,
+            bound: (a.1 + b.1 - (b.0 - a.0)) / 2.0,
+        }
+    }
+}
+
+// Ordered so that a `BinaryHeap` gives the step of the least bound first.
+impl PartialEq for Step {
+    fn eq(&self, other: &Self) -> bool {
+        self.bound.total_cmp(&other.bound).is_eq()
+    }
+}
+impl Eq for Step {}
+impl PartialOrd for Step {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+impl Ord for Step {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        other.bound.total_cmp(&self.bound)
+    }
 }
 
 /// A belt's rail gaps on its left and right (from, to, in metres along it), and the transfer
@@ -527,13 +703,19 @@ pub(crate) fn scene(model: &Model) -> Scene {
                 .map(|(_, p, w)| (p, *w))
                 .collect();
             let (left, right, plates) = gaps_of(path, *width, &others);
-            let st = stations(path);
+            let cuts: Vec<f64> = left
+                .iter()
+                .chain(&right)
+                .flat_map(|(a, b)| [f64::from(*a), f64::from(*b)])
+                .collect();
+            // The gaps are distances along the path, so the stations' are too.
+            let (st, at) = stations_with(path, &cuts);
             let belt = kit::Belt {
                 width: *width,
                 height: BELT_HEIGHT,
                 ..kit::Belt::default()
             };
-            let parts = kit::belt_along(&st, belt, &left, &right);
+            let parts = kit::belt_along_at(&st, &at, belt, &left, &right);
             let rails = named_colour(&e.name).map_or(Paint::Frame, Paint::Lane);
             push_mesh(&mut tris, &parts.belt, Paint::Belt);
             push_mesh(&mut tris, &parts.frame, rails);
@@ -542,13 +724,7 @@ pub(crate) fn scene(model: &Model) -> Scene {
             for p in &plates {
                 push_mesh(&mut tris, p, Paint::Steel);
             }
-            for w in st.windows(2) {
-                let (a, b) = (w[0], w[1]);
-                let along = libm::hypotf(b.x - a.x, b.y - a.y);
-                let c = [(a.x + b.x) / 2.0, (a.y + b.y) / 2.0];
-                let h = libm::atan2f(b.y - a.y, b.x - a.x);
-                shadows.push(floor_rect(c, along + 0.02, width + 0.35, h, 0.002));
-            }
+            shadows.extend(belt_shadows(&st, *width));
             anchors.push(Anchor {
                 id,
                 order,
@@ -1270,6 +1446,243 @@ mod tests {
         )
         .unwrap();
         e.model().clone()
+    }
+
+    #[test]
+    fn a_belt_hundreds_of_kilometres_long_has_a_bounded_number_of_stations() {
+        let straight = |length: f64| {
+            Path::new(
+                Frame::default(),
+                vec![PathSegment::Line { length, rise: 0.0 }],
+            )
+        };
+        // 500 km would be two million quarter-metre steps.
+        let long = stations(&straight(500_000.0));
+        // At most the budget, past the start and one for its segment.
+        assert!(long.len() <= MOST_STATIONS as usize + 2, "{}", long.len());
+        let last = long.last().unwrap();
+        assert!((last.x - 500_000.0).abs() < 1.0, "{}", last.x);
+        // An ordinary length keeps its quarter-metre steps: 10 m is 41 stations.
+        assert_eq!(stations(&straight(10.0)).len(), 41);
+    }
+
+    #[test]
+    fn a_turn_of_millions_of_degrees_has_a_bounded_number_of_stations() {
+        let turn = |seg: PathSegment| stations(&Path::new(Frame::default(), vec![seg])).len();
+        // A billion degrees at 6° a station would be over 166 million.
+        let sharp = turn(PathSegment::Arc {
+            radius: 0.0,
+            angle_deg: 1.0e9,
+            rise: 0.0,
+        });
+        assert!(sharp <= MOST_STATIONS as usize + 1, "{sharp}");
+        let helix = turn(PathSegment::Helix {
+            radius: 1.0,
+            rise: 0.0,
+            turns: 1.0e7,
+        });
+        assert!(helix <= MOST_STATIONS as usize + 1, "{helix}");
+    }
+
+    #[test]
+    fn the_nearest_point_on_a_very_long_belt_is_found_to_5_cm() {
+        // A million kilometres: 5 cm steps all along would be twenty billion points.
+        let path = Path::new(
+            Frame::default(),
+            vec![PathSegment::Line {
+                length: 1.0e9,
+                rise: 0.0,
+            }],
+        );
+        let (s, d, side) = nearest(&path, [654_321_987.6, -3.0]);
+        assert!((s - 654_321_987.6).abs() <= 0.05, "{s}");
+        assert!((d - 3.0).abs() < 1e-3, "{d}");
+        assert_eq!(side, -1.0);
+        // On an ordinary belt, the 5 cm steps as before.
+        let short = Path::new(
+            Frame::default(),
+            vec![PathSegment::Line {
+                length: 10.0,
+                rise: 0.0,
+            }],
+        );
+        let (s, d, side) = nearest(&short, [4.0, 1.0]);
+        assert!((s - 4.0).abs() < 1e-9 && (d - 1.0).abs() < 1e-9, "{s} {d}");
+        assert_eq!(side, 1.0);
+    }
+
+    #[test]
+    fn a_bend_on_a_very_long_belt_keeps_its_steps() {
+        // 500 km on, then a half circle of 10 m: the straight's steps stretch, the bend's do not.
+        let path = Path::new(
+            Frame::default(),
+            vec![
+                PathSegment::Line {
+                    length: 500_000.0,
+                    rise: 0.0,
+                },
+                PathSegment::Arc {
+                    radius: 10.0,
+                    angle_deg: 180.0,
+                    rise: 0.0,
+                },
+            ],
+        );
+        let st = stations(&path);
+        assert!(st.len() <= MOST_STATIONS as usize + 3, "{}", st.len());
+        // The bend's 31.4 m keeps its quarter-metre steps: over a hundred stations round it.
+        let round = st.iter().filter(|s| s.x > 500_000.5).count();
+        assert!(round >= 100, "{round}");
+    }
+
+    #[test]
+    fn a_rail_gap_on_a_very_long_belt_is_left_out() {
+        // 10 km: the stations are about 2.4 m apart, wider than a gap of 0.72 m.
+        let path = Path::new(
+            Frame::default(),
+            vec![PathSegment::Line {
+                length: 10_000.0,
+                rise: 0.0,
+            }],
+        );
+        let gap = (9.64_f32, 10.36_f32);
+        let (st, at) = stations_with(&path, &[f64::from(gap.0), f64::from(gap.1)]);
+        let belt = kit::Belt::default();
+        let gapped = kit::belt_along_at(&st, &at, belt, &[gap], &[]);
+        let whole = kit::belt_along_at(&st, &at, belt, &[], &[]);
+        assert!(gapped.frame.triangle_count() < whole.frame.triangle_count());
+    }
+
+    /// 500 km on, then 17 half circles of 10 m turning left and right in turn, then 10 m on:
+    /// the half circles alone want more than half the stations.
+    fn snake() -> Path {
+        let mut segments = vec![PathSegment::Line {
+            length: 500_000.0,
+            rise: 0.0,
+        }];
+        for k in 0..17 {
+            segments.push(PathSegment::Arc {
+                radius: 10.0,
+                angle_deg: if k % 2 == 0 { 180.0 } else { -180.0 },
+                rise: 0.0,
+            });
+        }
+        segments.push(PathSegment::Line {
+            length: 10.0,
+            rise: 0.0,
+        });
+        Path::new(Frame::default(), segments)
+    }
+
+    #[test]
+    fn many_bends_on_a_very_long_belt_are_not_drawn_as_chords() {
+        let (st, at) = stations_with(&snake(), &[]);
+        // Round the bends, no two stations are further apart than 6 degrees of a 10 m circle
+        // (1.05 m), so the drawing and a click on it follow the curve.
+        let bends = 500_000.0_f32;
+        let longest = st
+            .windows(2)
+            .zip(at.windows(2))
+            .filter(|(_, s)| s[0] >= bends && s[1] <= bends + 17.0 * 31.4)
+            .map(|(w, _)| libm::hypotf(w[1].x - w[0].x, w[1].y - w[0].y))
+            .fold(0.0_f32, f32::max);
+        assert!(longest > 0.0 && longest < 1.2, "{longest}");
+    }
+
+    #[test]
+    fn a_rail_gap_after_the_bends_is_where_the_path_puts_it() {
+        let path = snake();
+        let end = path.length();
+        // A metre-long gap 5 m before the end, on the straight after the bends.
+        let gap = ((end - 5.0) as f32, (end - 4.0) as f32);
+        let (st, at) = stations_with(&path, &[f64::from(gap.0), f64::from(gap.1)]);
+        assert!((at[at.len() - 1] - end as f32).abs() < 0.1);
+        let belt = kit::Belt::default();
+        let gapped = kit::belt_along_at(&st, &at, belt, &[gap], &[]);
+        let whole = kit::belt_along_at(&st, &at, belt, &[], &[]);
+        assert!(gapped.frame.triangle_count() < whole.frame.triangle_count());
+    }
+
+    #[test]
+    fn a_sharp_corner_on_a_stretched_belt_turns_where_it_is() {
+        // 10 km east, a sharp left turn, 10 km north: stations about 4.9 m apart on each.
+        let path = Path::new(
+            Frame::default(),
+            vec![
+                PathSegment::Line {
+                    length: 10_000.0,
+                    rise: 0.0,
+                },
+                PathSegment::Arc {
+                    radius: 0.0,
+                    angle_deg: 90.0,
+                    rise: 0.0,
+                },
+                PathSegment::Line {
+                    length: 10_000.0,
+                    rise: 0.0,
+                },
+            ],
+        );
+        let st = stations(&path);
+        let north = std::f32::consts::FRAC_PI_2;
+        let at_corner = |s: &&Station| (s.x - 10_000.0).abs() < 0.01 && s.y.abs() < 0.01;
+        // At the corner, the cross-sections come in facing east and leave facing north.
+        assert!(st.iter().filter(at_corner).any(|s| s.heading.abs() < 1e-4));
+        assert!(
+            st.iter()
+                .filter(at_corner)
+                .any(|s| (s.heading - north).abs() < 1e-4)
+        );
+        // Past it, every one faces north: no twist along the next step.
+        for s in st.iter().filter(|s| s.y > 0.01) {
+            assert!((s.heading - north).abs() < 1e-4, "{s:?}");
+        }
+        // The turn's stations, all at the corner, cast no shadow of their own: no strip of the
+        // shadow lies across the corner where the belt has no direction.
+        let pairs = st
+            .windows(2)
+            .filter(|w| libm::hypotf(w[1].x - w[0].x, w[1].y - w[0].y) > 1e-4)
+            .count();
+        assert_eq!(belt_shadows(&st, 0.6).len(), pairs);
+        assert!(pairs < st.len() - 1);
+    }
+
+    #[test]
+    fn the_nearest_point_is_found_on_the_nearer_of_two_close_runs() {
+        // A long U: 2047.25 m east, a sharp left turn, 1 m north, another, 2047.75 m west. The
+        // point is 0.45 m from the first run and 0.55 m from the way back.
+        let path = Path::new(
+            Frame::default(),
+            vec![
+                PathSegment::Line {
+                    length: 2047.25,
+                    rise: 0.0,
+                },
+                PathSegment::Arc {
+                    radius: 0.0,
+                    angle_deg: 90.0,
+                    rise: 0.0,
+                },
+                PathSegment::Line {
+                    length: 1.0,
+                    rise: 0.0,
+                },
+                PathSegment::Arc {
+                    radius: 0.0,
+                    angle_deg: 90.0,
+                    rise: 0.0,
+                },
+                PathSegment::Line {
+                    length: 2047.75,
+                    rise: 0.0,
+                },
+            ],
+        );
+        let (s, d, side) = nearest(&path, [100.5, 0.45]);
+        assert!((s - 100.5).abs() <= 0.05, "{s}");
+        assert!((d - 0.45).abs() < 1e-3, "{d}");
+        assert_eq!(side, 1.0);
     }
 
     #[test]

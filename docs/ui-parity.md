@@ -49,12 +49,15 @@ which moved "Edit several objects at once" from missing to done: the rows now co
   the properties they share and take an edit in one step (#309). The window has no scenario
   picker yet.
 - **Layout, 2D/3D and animation (area 6):** a 3D view of the model with parametric low-poly
-  shapes (#205, #208, #210, #213), and a read-only Layout view to scale (#216). Both now draw only
-  from the model's layout, kept in the file: conveyor tracks, places and scenery (#295), diverts
-  at points along a conveyor and junctions between conveyors (#308); a watched run's parcels
-  ride the belts (#297). The layout is not edited in the window yet, and only the parcel sorter
-  example has one. The Transport block and mobile pools are in the model and its files (#202),
-  without a runtime yet. Entities moving on the flowchart are still missing (#151).
+  shapes (#205, #208, #210, #213), and a Layout view to scale (#216). Both draw only from the
+  model's layout, kept in the file: conveyor tracks, places and scenery (#295), diverts at points
+  along a conveyor and junctions between conveyors (#308); a watched run's parcels ride the
+  belts (#297). A conveyor's path is drawn and edited in the Layout view by clicking and
+  dragging its points, with bends at the corners, the keyboard and the properties panel as
+  other ways in (M5.5 L4, part 1); snapping and a background drawing to trace come next. Only
+  the parcel sorter example has a layout so far. The Transport block and mobile pools are in
+  the model and its files (#202), without a runtime yet. Entities moving on the flowchart are
+  still missing (#151).
 - **Experiments (area 9):** "How many runs" can be "More until precise enough": runs are added
   until the key measures are within their targets, and the results say why the runs stopped
   (#232). The search for the best design (`experiment.optimise`: whole-number decisions, rules
@@ -144,9 +147,9 @@ which moved "Edit several objects at once" from missing to done: the rows now co
 | Entities seen moving between stations and queuing | missing | **[1h]** The 3D-first tool: on the first tutorial's first run, items appear and pile up in the queue. The flowchart-first tool: entities animated along paths once the space is drawn and assigned to blocks (from public summaries, not confirmed). StochCraft: counts in badges and a busy bar per block; entities moving along the connections is "not yet" in ROADMAP M3.5 |
 | Counts on the flowchart during a run | done | **[1h]** The flowchart-first tool: counts beside the blocks during a run (from public summaries, not confirmed). The 3D-first tool: tokens in the logic view stack and turn into a count. StochCraft: badges per block (created, waiting, busy, inside, done) |
 | Floor plan or CAD drawing under the model | missing | The 3D-first tool: CAD drawings and floor plans imported as a guide. StochCraft: none (M5 mentions an optional background image) |
-| Space: paths, nodes, travel networks, transporters | missing | The 3D-first tool: travel networks, path finding and vehicle paths. The flowchart-first tool: paths and nodes with attraction points (from public summaries, not confirmed). StochCraft: planned in M5 |
+| Space: paths, nodes, travel networks, transporters | partial | The 3D-first tool: travel networks, path finding and vehicle paths. The flowchart-first tool: paths and nodes with attraction points (from public summaries, not confirmed). StochCraft: conveyors' paths drawn and edited on the Layout view (click points, corners bend, drag points or the whole path, keyboard and panel fields too), their lengths the run's; walkways and travel networks planned in M5.5 (L7) |
 | 3D shapes and custom looks for objects and items | missing | The 3D-first tool: item shapes (a person instead of a box) and custom 3D objects. The flowchart-first tool: 3D figures such as people and machines (from public summaries, not confirmed) |
-| Separate logic view and layout view | partial | The 3D-first tool: a 3D layout and a separate logic flowchart, linked. StochCraft has one view, the BPMN flowchart, which is both: familiar to flowchart users, unfamiliar to 3D-first users |
+| Separate logic view and layout view | partial | The 3D-first tool: a 3D layout and a separate logic flowchart, linked. StochCraft: the BPMN flowchart for the logic, and a Layout view (2D, to scale) and a 3D view drawn from the layout; a click selects a block in the flowchart or the Layout view alike; in the Layout view conveyors' paths are drawn and edited, blocks are not yet placed there |
 
 ## 7 Running and run controls
 
