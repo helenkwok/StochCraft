@@ -1514,3 +1514,8 @@ connection	Flow	順序流
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	兩端保持為 0 的棒按其溫度的平方產生熱量：沿棒設 19 個存量，採用線方法（Soheili 和 Stockie，Applied Numerical Mathematics，2008）。
 	When does a rod heated from within run away?	從內部加熱的棒何時失控？
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	線方法把熱方程變成存量和流量，模型也可能在有限時間內爆破：中點在 t = 0.0821 越過 10,000，因此棒約在 0.0822 失控，與已發表的 0.0824 相差不到 0.3%。
+	One machine's availability	單台機器的可用率
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	一台機器平均每 90 小時故障一次，修理需要 4.5 小時（Hristova、Denev 和 Tsankov，Environment. Technology. Resources，2024）。
+	How often is one machine down, and how much work does that cost?	一台機器多久停機一次，這會損失多少工作？
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	運轉 90 小時，停機 4.5 小時：機器 95.2% 的時間在工作，每 94.5 小時發生一次故障。修理時間減半，可用率升至 97.6%。
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} 有 {down} 的時間處於停機狀態（可用率 {up}），沒有任何東西在等待它。

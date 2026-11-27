@@ -1514,3 +1514,8 @@ connection	Flow	フロー
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	両端を 0 に保った棒が、温度の 2 乗に比例して熱を出す。棒に沿った 19 個のストックで、線の方法（method of lines）を使う（Soheili と Stockie、Applied Numerical Mathematics、2008）。
 	When does a rod heated from within run away?	内部から熱せられる棒は、いつ暴走するか？
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	線の方法で熱方程式をストックとフローに変え、モデルが有限時間で爆発することもある。中央は t = 0.0821 で 10,000 を越えるので、棒は約 0.0822 で暴走する。公表値 0.0824 との差は 0.3% 以内。
+	One machine's availability	機械 1 台の稼働率
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	平均 90 時間ごとに故障し、修理に 4.5 時間かかる機械 1 台（Hristova、Denev、Tsankov、Environment. Technology. Resources、2024）。
+	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	稼働 90 時間、停止 4.5 時間：機械は時間の 95.2% で稼働し、94.5 時間ごとに故障が起きる。修理時間を半分にすると 97.6% に上がる。
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} は時間の {down} で停止している（稼働率 {up}）。待っているものはない。
