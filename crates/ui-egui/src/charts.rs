@@ -68,6 +68,29 @@ const MEASURES: &[Measure] = &[
     },
 ];
 
+/// The chart that leads where nothing waits but a machine goes down: availability per block.
+const AVAILABILITY: Measure = Measure {
+    title: "Availability",
+    metric: "availability",
+    share: true,
+    time: false,
+};
+
+/// Whether availability is the answer to lead with: every block's mean wait is 0 (or none is
+/// reported) and some block is up less than all the time. Otherwise the mean wait leads.
+pub(crate) fn availability_leads(results: &Value) -> bool {
+    let mean = |e: &Value, metric: &str| e["metrics"][metric]["mean"].as_f64();
+    let elements = results["elements"]
+        .as_array()
+        .map_or(&[][..], Vec::as_slice);
+    elements
+        .iter()
+        .all(|e| mean(e, "mean_wait").is_none_or(|w| w.abs() < 1e-9))
+        && elements
+            .iter()
+            .any(|e| mean(e, "availability").is_some_and(|a| a < 1.0))
+}
+
 /// One bar: the block's name, mean, half-width and replications.
 struct Bar {
     name: String,
@@ -149,7 +172,8 @@ pub fn show(ui: &mut egui::Ui, results: &Value, line: Option<&[String]>) -> Opti
     let parts = line
         .and_then(|l| parts(results, l))
         .filter(|p| !p.is_empty());
-    let busiest = crate::results::busiest(results);
+    // A line of zeros says nothing: the second chart is then the utilisation of each block.
+    let busiest = crate::results::busiest(results).filter(|b| !queue_never_forms(results, b));
     let measure = |metric: &str| MEASURES.iter().find(|m| m.metric == metric);
     let mut used: Vec<&str> = Vec::new();
     let mut drew = false;
@@ -159,7 +183,11 @@ pub fn show(ui: &mut egui::Ui, results: &Value, line: Option<&[String]>) -> Opti
             time_chart(ui, results, parts, unit, chart_w);
             return true;
         }
-        let Some(m) = measure("mean_wait") else {
+        let m = if availability_leads(results) {
+            &AVAILABILITY
+        } else if let Some(m) = measure("mean_wait") {
+            m
+        } else {
             return false;
         };
         let b = bars(results, m);
@@ -445,6 +473,16 @@ fn time_chart(ui: &mut egui::Ui, results: &Value, parts: &[Part], unit: &str, wi
     }
 }
 
+/// Whether the mean number waiting before `block` is 0 at every time recorded (a line that says
+/// nothing, so another chart takes its place). Without the series: no.
+fn queue_never_forms(results: &Value, block: &Value) -> bool {
+    let id = block["id"].as_str().unwrap_or("");
+    let mean = results["series"]["elements"][id]["queue_length"]["mean"]
+        .as_array()
+        .map(|a| a.iter().filter_map(Value::as_f64).collect::<Vec<_>>());
+    mean.is_some_and(|m| !m.is_empty() && m.iter().all(|v| *v == 0.0))
+}
+
 /// "Waiting before {block} over the run": the mean number waiting at the busiest task at each
 /// recorded time across the runs, with its 95% band, the warm-up shaded, a crosshair and a
 /// tooltip on hover, and a note where it is still settling at the end.
@@ -547,7 +585,12 @@ fn over_run_chart(
     while v <= x_top + x_step * 0.01 {
         painter.text(
             pos2(x(v), plot.bottom() + 3.0),
-            Align2::CENTER_TOP,
+            // The last label ends at the plot's edge, not centred on it (half of it would be clipped).
+            if v + x_step * 0.5 > x_top {
+                Align2::RIGHT_TOP
+            } else {
+                Align2::CENTER_TOP
+            },
             format!("{} {unit}", grouped(v)),
             FontId::proportional(11.0),
             p.text_weak,
