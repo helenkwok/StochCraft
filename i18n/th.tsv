@@ -1531,6 +1531,20 @@ connection	Flow	โฟลว์
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	เครื่องจักรสิบเครื่องต้องทำงาน เครื่องจักรสำรองสี่เครื่องรอพร้อมใช้ และช่างซ่อมสามคนซ่อมเครื่องที่ขัดข้อง (Crane และ Iglehart, Winter Simulation Conference, 1973)
 	How many spares and repairmen keep ten machines running?	ต้องมีเครื่องจักรสำรองและช่างซ่อมเท่าใด จึงจะให้เครื่องจักรสิบเครื่องทำงานต่อไปได้?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	เครื่องจักรสำรองที่รออยู่ขัดข้องไม่ได้: โดยเฉลี่ยเครื่องจักรเสีย 3.47 เครื่องและทำงาน 9.29 เครื่อง ช่างซ่อมคนที่สี่ช่วยได้พอ ๆ กับเครื่องจักรสำรองอีกสี่เครื่อง
+	Locating a sensor	การหาตำแหน่งของเซนเซอร์
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	จุดอ้างอิงสามจุดที่รู้ตำแหน่งวัดระยะทางไปยังเซนเซอร์ แต่ละจุดมีความคลาดเคลื่อนแบบสุ่ม และเซนเซอร์ที่หาตำแหน่งได้แล้วจะกลายเป็นจุดอ้างอิงต่อไป (Simeonov และ Marinov, Environment. Technology. Resources., 2024)
+	How precisely can a sensor be located from three noisy distance readings?	หาตำแหน่งของเซนเซอร์ได้แม่นยำเพียงใดจากการอ่านระยะทางสามค่าที่มีความคลาดเคลื่อน?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	ความคลาดเคลื่อนส่งผ่านเรขาคณิต: ระยะทางที่คลาดเคลื่อน 5 m หาตำแหน่งเซนเซอร์ได้แม่นยำ 6.2 m ด้วยวิธีกำลังสองน้อยที่สุด (10.7 m ด้วยสูตรลัด) และ 10.9 m ในระดับที่ห้า ซึ่งจุดอ้างอิงเองก็ถูกหาตำแหน่งมาแล้ว
+	Science and engineering	วิทยาศาสตร์และวิศวกรรม
+	Working steps ({n})	ขั้นตอนการคำนวณ ({n})
+	Working steps in detail ({n})	ขั้นตอนการคำนวณโดยละเอียด ({n})
+	The root mean square of {output} is {value} ± {half_width}.	ค่ารากที่สองของค่าเฉลี่ยกำลังสองของ {output} คือ {value} ± {half_width}
+	The root mean square of {output} is {value}.	ค่ารากที่สองของค่าเฉลี่ยกำลังสองของ {output} คือ {value}
+	In the results	ในผลลัพธ์
+	Working step	ขั้นตอนการคำนวณ
+	Root mean square	รากที่สองของค่าเฉลี่ยกำลังสอง
+	A step towards an answer: the results list it folded away under the answers.	ขั้นตอนหนึ่งไปสู่คำตอบ: ผลลัพธ์แสดงขั้นตอนนี้แบบพับไว้ใต้คำตอบ
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	สำหรับปริมาณกำลังสอง เช่น ความคลาดเคลื่อนกำลังสอง: ผลลัพธ์ให้รากที่สองของค่าเฉลี่ย ในหน่วยของปริมาณนั้นเอง
 	Scenario	สถานการณ์
 	Scenario: {name}	สถานการณ์: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	การเปิด {scenario} จะทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกใน {name} บันทึกก่อนหรือไม่

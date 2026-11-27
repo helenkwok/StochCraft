@@ -25,13 +25,17 @@
 //! </bpsim:Scenario>
 //! ```
 //!
+//! An output may say it is a working step (`role="working"`; the default, `key`, is not
+//! written), which results fold away below the answers, and may ask for a summary beside its
+//! mean (`summary="rms"`: the root mean square of a squared quantity).
+//!
 //! The number of trials is the scenario's `replication` and the seed its `seed`, as for a
 //! process model. A scenario that inherits from another takes its inputs, replacing those it
 //! names again, and the whole vendor extension of the nearest scenario that has one.
 
 use stochcraft_model::{
-    Control, Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
-    TimeUnit,
+    Control, Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, OutputRole,
+    OutputSummary, Sampling, TimeUnit,
 };
 
 use crate::Note;
@@ -78,6 +82,12 @@ pub(crate) fn extension_element(m: &MonteCarlo) -> Element {
             .with_attr("expression", &o.expression);
         if !o.unit.is_empty() {
             e = e.with_attr("unit", &o.unit);
+        }
+        if o.role != OutputRole::Key {
+            e = e.with_attr("role", o.role.file_name());
+        }
+        if let Some(x) = o.summary {
+            e = e.with_attr("summary", x.file_name());
         }
         match o.target {
             Some(McTarget::AtMost(x)) => e = e.with_attr("atMost", &trim_float(x)),
@@ -268,12 +278,34 @@ pub(crate) fn read(
                     }
                 };
                 let controls = controls(e, &name, notes);
+                let role = match e.attr("role") {
+                    None => OutputRole::Key,
+                    Some(raw) => OutputRole::from_file_name(raw.trim()).unwrap_or_else(|| {
+                        notes.push(Note::warning(
+                            Some(name.as_str()),
+                            format!("role `{raw}` is not key or working; key is used"),
+                        ));
+                        OutputRole::Key
+                    }),
+                };
+                let summary = e.attr("summary").and_then(|raw| {
+                    let s = OutputSummary::from_file_name(raw.trim());
+                    if s.is_none() {
+                        notes.push(Note::warning(
+                            Some(name.as_str()),
+                            format!("summary `{raw}` is not rms and is ignored"),
+                        ));
+                    }
+                    s
+                });
                 m.outputs.push(McOutput {
                     expression: e.attr("expression").unwrap_or_default(),
                     unit: e.attr("unit").unwrap_or_default(),
                     target,
                     controls,
                     name,
+                    role,
+                    summary,
                 });
             }
             "correlation" => {
@@ -366,6 +398,8 @@ mod tests {
                                 name: "materials".into(),
                             },
                         ],
+                        role: Default::default(),
+                        summary: Some(OutputSummary::Rms),
                     },
                     McOutput {
                         name: "over".into(),
@@ -376,6 +410,8 @@ mod tests {
                             name: "cost".into(),
                             expected: 5_100.5,
                         }],
+                        role: OutputRole::Working,
+                        summary: None,
                     },
                 ],
                 correlations: vec![McCorrelation {
@@ -408,6 +444,10 @@ mod tests {
             text.contains(r#"<bpsim:Property name="labour" type="double">"#),
             "{text}"
         );
+        // A working step and a summary are written; a key output's role, the default, is not.
+        assert!(text.contains(r#"summary="rms""#), "{text}");
+        assert_eq!(text.matches("role=").count(), 1, "{text}");
+        assert!(text.contains(r#"role="working""#), "{text}");
         let loaded = crate::read(&bytes).unwrap_or_else(|e| unreachable!("{e}"));
         assert_eq!(loaded.model, m, "{text}");
         assert!(loaded.model.is_monte_carlo());
@@ -611,5 +651,42 @@ mod tests {
             "{:?}",
             loaded.notes
         );
+    }
+
+    /// A role or summary this reader does not know is reported and left at its default.
+    #[test]
+    fn an_unknown_role_or_summary_is_reported_and_ignored() {
+        let xml = format!(
+            r#"<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpsim="{NS2}" xmlns:stochcraft="{STOCHCRAFT_NS}" id="d">
+  <bpmn:relationship type="BPSimData"><bpmn:extensionElements><bpsim:BPSimData>
+    <bpsim:Scenario id="base">
+      <bpsim:ScenarioParameters replication="100"><bpsim:PropertyParameters>
+        <bpsim:Property name="a"><bpsim:FloatingParameter value="1"/></bpsim:Property>
+      </bpsim:PropertyParameters></bpsim:ScenarioParameters>
+      <bpsim:VendorExtension name="stochcraft:monteCarlo"><stochcraft:monteCarlo>
+        <stochcraft:output name="s" expression="$a" role="decoration" summary="median"/>
+        <stochcraft:output name="t" expression="$s" role="working" summary="rms"/>
+      </stochcraft:monteCarlo></bpsim:VendorExtension>
+    </bpsim:Scenario>
+  </bpsim:BPSimData></bpmn:extensionElements><bpmn:source>d</bpmn:source><bpmn:target>d</bpmn:target></bpmn:relationship>
+</bpmn:definitions>"#
+        );
+        let loaded = crate::read(xml.as_bytes()).unwrap_or_else(|e| unreachable!("{e}"));
+        let m = loaded.model.monte_carlo.unwrap_or_default();
+        let got: Vec<_> = m.outputs.iter().map(|o| (o.role, o.summary)).collect();
+        assert_eq!(
+            got,
+            [
+                (OutputRole::Key, None),
+                (OutputRole::Working, Some(OutputSummary::Rms))
+            ]
+        );
+        for word in ["decoration", "median"] {
+            assert!(
+                loaded.notes.iter().any(|n| n.message.contains(word)),
+                "{:?}",
+                loaded.notes
+            );
+        }
     }
 }

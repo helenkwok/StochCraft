@@ -591,10 +591,10 @@ fn results_are_marked_out_of_date_once_the_model_is_changed() {
 }
 
 #[test]
-fn the_start_page_offers_the_example_among_26() {
-    assert_eq!(EXAMPLES.len(), 26);
+fn the_start_page_offers_the_example_among_27() {
+    assert_eq!(EXAMPLES.len(), 27);
     let mut h = harness();
-    h.get_by_label("See all 26 examples, including reference models")
+    h.get_by_label("See all 27 examples, including reference models")
         .click_accesskit();
     settle(&mut h);
     click(&mut h, Role::Button, "How fast does a new product spread?");

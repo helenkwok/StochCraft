@@ -98,7 +98,8 @@ use std::collections::BTreeMap;
 
 use stochcraft_model::expr::{self, Expr, Kind, Value};
 pub use stochcraft_model::{
-    Control, Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
+    Control, Dist, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, OutputRole,
+    OutputSummary, Sampling,
 };
 use stochcraft_random::Rng;
 use stochcraft_stats::precision::{self, Reason, Scale, Step};
@@ -1653,6 +1654,10 @@ pub struct InputResult {
 pub struct OutputResult {
     pub name: String,
     pub unit: String,
+    /// The output's role in the model: an answer, or a working step.
+    pub role: OutputRole,
+    /// The summary the model asks for beside the mean, if any ([`OutputSummary::of`]).
+    pub summary: Option<OutputSummary>,
     /// Trials whose value is a finite number.
     pub valid: u64,
     /// Trials whose value is not (left out of everything below).
@@ -1935,6 +1940,8 @@ fn describe_output(out: &McOutput, sorted: &[f64], total: usize, ps: &[f64]) -> 
     OutputResult {
         name: out.name.clone(),
         unit: out.unit.clone(),
+        role: out.role,
+        summary: out.summary,
         valid,
         invalid: (total as u64).saturating_sub(valid),
         mean: s.map(|s| s.mean),
@@ -2018,6 +2025,8 @@ mod tests {
             unit: String::new(),
             target: None,
             controls: Vec::new(),
+            role: Default::default(),
+            summary: None,
         }
     }
 

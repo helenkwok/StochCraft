@@ -26,6 +26,8 @@ fn output(name: &str, expression: &str) -> McOutput {
         unit: String::new(),
         target: None,
         controls: Vec::new(),
+        role: Default::default(),
+        summary: None,
     }
 }
 

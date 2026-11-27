@@ -2783,7 +2783,12 @@ the uncertainty around a process model.
 **In the window:** a third kind of document beside process models. A table of inputs (name,
 distribution, unit, correlation) and outputs (name, expression, unit, target), using the
 existing distribution editor and expression language; then Run and the results above. A model
-can be built from a spreadsheet's columns by pasting them.
+can be built from a spreadsheet's columns by pasting them. An output can be a working step
+(`role="working"`), which the results fold away under the answers, and a squared quantity can
+ask for its root mean square (`summary="rms"`): √mean in the quantity's own unit, with the
+half-width of the mean over 2√mean (the delta method), in the results, their CSV and the
+finding that leads them. Built with the sensor-location example, whose 47 working steps would
+otherwise come before its six answers.
 
 **Engine:** a new L2 crate, `mc`, on `stochcraft-random` and `stochcraft-stats`; each trial is a
 replication with its own random stream, so results are reproducible and independent of the
@@ -5070,6 +5075,42 @@ are.
     It differs from the machine repair crew above because spares on cold standby do not fail.
     Once regenerative intervals (M2.9) are built, this example is their first check: the
     paper's own intervals come from cycles back to X = 0.
+- **An example from the Environment. Technology. Resources. conference (Rezekne, 2024):** checked
+  the same way.
+  - **Locating a sensor** (`sensor-location.bpmn`, a Monte Carlo model, "Science and
+    engineering", a field added for it): Simeonov and Marinov, *Determine the Location of Nodes in
+    Wireless Sensor Network by Using Genetic Algorithm*, Environment. Technology. Resources.,
+    Proceedings of the 15th International Scientific and Practical Conference, 2024, vol. II,
+    pp. 247–252 (inputs on p. 249, equations (7) to (10) on p. 250, Table 1 on p. 251). Anchors
+    at (−1000, −1000), (−400, 800) and (1000, −1000) m, a node at (1400, 300) m, and each
+    measured distance the true one plus a normal error of standard deviation σ_d (5 m; 1 m and
+    10 m are scenarios). The paper finds the position with a genetic algorithm; each trial here
+    solves the circles' equations in closed form (subtracting the first from the other two leaves
+    a 2 × 2 linear system, solved by Cramer's rule), then takes one Gauss–Newton step of least
+    squares from there, every step an output: 53 outputs, of which the six squared position
+    errors are the answers, reported by their root mean square in metres (`summary="rms"`), and
+    the other 47 working steps (`role="working"`), folded away in the results.
+    One step is enough: a second changes the root mean square error by under 0.01% at 10 m.
+    Least squares is 1.2335 σ_d root mean square, the GDOP √trace((HᵀH)⁻¹) of the anchors seen
+    from the node, which is the paper's level 1 (1.23 for 1 m); the closed form alone is
+    2.1402 σ_d, worse because subtracting squared distances multiplies each error by twice its
+    distance, weighting the far anchors too heavily. At level k
+    the node's anchors were themselves located, each coordinate off by N(0, 0.5 σ_{k−1}²) as in
+    the paper. The paper takes σ_{k−1} from its own runs at the level before; the model takes
+    the first-order value σ_k = G √(σ_d² + 0.5 σ_{k−1}²), G = 1.2335, which is exact to first
+    order (an anchor's error moves its distance by the same variance along its unit vector):
+    6.17, 8.18, 9.43, 10.28 and 10.88 m for σ_d = 5 m. Every level reuses the same standard
+    normal draws, scaled, so the levels are compared on common random numbers, and the three
+    scenarios are the same draws rescaled, not independent checks. `crates/engine/tests/examples.rs`
+    computes G and the closed form's factor from the anchors and checks each level's root mean
+    square error against σ_k and the closed form's against 2.1402 σ_d, in all three
+    scenarios. Against the paper's Table 1: its 1,000 runs give each value to within about 3.3%
+    (95%; the squared error of a two-dimensional normal error has a coefficient of variation of
+    1.06 here), and 47 of the 50 values are within that of the first-order levels. The other
+    three are 9–10% low: σ_d = 6 m at levels 4 and 5 (11.19 and 11.91 against 12.34 and 13.06)
+    and 10 m at level 1 (11.13 against 12.34). The paper's text says the level-5 error is under
+    1.82 times the level-1 error; to first order it is 1.765 times at every σ_d, but its own
+    10 m row gives 1.93.
 - **An example on reliability:** checked the same way.
   - **One machine's availability** (`machine-availability.bpmn`, "Manufacturing"): Hristova,
     Denev and Tsankov, *Environment. Technology. Resources*, 2024, vol. II, pp. 120–126 (the

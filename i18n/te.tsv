@@ -1531,6 +1531,20 @@ connection	Flow	ప్రవాహం
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	పది యంత్రాలు నడుస్తూ ఉండాలి, నాలుగు విడి యంత్రాలు సిద్ధంగా వేచి ఉంటాయి, ముగ్గురు మెకానిక్‌లు పాడైనవాటిని బాగుచేస్తారు (Crane మరియు Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	పది యంత్రాలను నడుపుతూ ఉంచడానికి ఎన్ని విడి యంత్రాలు, ఎంతమంది మెకానిక్‌లు కావాలి?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	సిద్ధంగా వేచి ఉన్న విడి యంత్రాలు పాడవవు: సగటున 3.47 యంత్రాలు పాడై ఉంటాయి, 9.29 నడుస్తాయి. నాలుగో మెకానిక్ మరో నాలుగు విడి యంత్రాలంత ఉపయోగపడతాడు.
+	Locating a sensor	సెన్సర్ స్థానాన్ని కనుగొనడం
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	తెలిసిన చోట్ల ఉన్న మూడు యాంకర్లు ఒక సెన్సర్ వరకు దూరాన్ని కొలుస్తాయి, ప్రతి దానిలో యాదృచ్ఛిక దోషం ఉంటుంది; స్థానం కనుగొన్న సెన్సర్లు తరువాత యాంకర్లుగా పనిచేస్తాయి (Simeonov మరియు Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	దోషాలున్న మూడు దూర కొలతల నుంచి ఒక సెన్సర్ స్థానాన్ని ఎంత ఖచ్చితంగా కనుగొనవచ్చు?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	దోషాలు జ్యామితి ద్వారా వ్యాపిస్తాయి: 5 m దోషమున్న దూరాలు కనిష్ఠ వర్గాల పద్ధతిలో సెన్సర్‌ను 6.2 m ఖచ్చితత్వంతో కనుగొంటాయి (సంక్షిప్త సూత్రంతో 10.7 m), యాంకర్ల స్థానాలు కూడా కనుగొనబడిన ఐదవ స్థాయిలో 10.9 m.
+	Science and engineering	విజ్ఞానం మరియు ఇంజినీరింగ్
+	Working steps ({n})	మధ్యంతర దశలు ({n})
+	Working steps in detail ({n})	మధ్యంతర దశలు వివరంగా ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output} యొక్క వర్గ సగటు మూలం {value} ± {half_width}.
+	The root mean square of {output} is {value}.	{output} యొక్క వర్గ సగటు మూలం {value}.
+	In the results	ఫలితాల్లో
+	Working step	మధ్యంతర దశ
+	Root mean square	వర్గ సగటు మూలం
+	A step towards an answer: the results list it folded away under the answers.	సమాధానం వైపు ఒక దశ: ఫలితాలు దీన్ని సమాధానాల కింద మడిచి చూపుతాయి.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	దోష వర్గం వంటి వర్గ రాశికి: ఫలితాలు దాని సగటు యొక్క వర్గమూలాన్ని ఆ రాశి స్వంత ప్రమాణంలో ఇస్తాయి.
 	Scenario	దృశ్యం
 	Scenario: {name}	దృశ్యం: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ను తెరిస్తే {name} లో సేవ్ చేయని మార్పులు పోతాయి. ముందుగా సేవ్ చేయాలా?

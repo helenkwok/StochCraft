@@ -1531,6 +1531,20 @@ connection	Flow	Luồng
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Mười máy phải chạy, bốn máy dự phòng chờ sẵn và ba thợ máy sửa những máy bị hỏng (Crane và Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Cần bao nhiêu máy dự phòng và thợ máy để mười máy luôn chạy?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máy dự phòng đang chờ không thể hỏng: trung bình 3.47 máy bị hỏng và 9.29 máy chạy. Thêm một thợ máy thứ tư được việc gần bằng thêm bốn máy dự phòng.
+	Locating a sensor	Xác định vị trí cảm biến
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Ba điểm neo ở vị trí đã biết đo khoảng cách đến một cảm biến, mỗi lần đo có sai số ngẫu nhiên, và các cảm biến đã được định vị lần lượt trở thành điểm neo (Simeonov và Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	Có thể định vị một cảm biến chính xác đến mức nào từ ba lần đo khoảng cách có nhiễu?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Sai số truyền qua hình học: khoảng cách sai 5 m định vị cảm biến chính xác đến 6.2 m bằng bình phương tối thiểu (10.7 m với công thức tắt), và đến 10.9 m ở cấp thứ năm, nơi chính các điểm neo cũng đã được định vị.
+	Science and engineering	Khoa học và kỹ thuật
+	Working steps ({n})	Các bước trung gian ({n})
+	Working steps in detail ({n})	Chi tiết các bước trung gian ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Căn quân phương của {output} là {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Căn quân phương của {output} là {value}.
+	In the results	Trong kết quả
+	Working step	Bước trung gian
+	Root mean square	Căn quân phương
+	A step towards an answer: the results list it folded away under the answers.	Một bước dẫn tới câu trả lời: kết quả hiển thị nó thu gọn bên dưới các câu trả lời.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Cho một đại lượng bình phương, như sai số bình phương: kết quả cho căn bậc hai của giá trị trung bình, theo đơn vị của chính đại lượng đó.
 	Scenario	Kịch bản
 	Scenario: {name}	Kịch bản: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Mở {scenario} sẽ bỏ các thay đổi chưa lưu của {name}. Lưu trước?

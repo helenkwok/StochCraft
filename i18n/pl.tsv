@@ -1531,6 +1531,20 @@ connection	Flow	Przepływ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dziesięć maszyn musi pracować, cztery zapasowe czekają w gotowości, a trzech mechaników naprawia te, które ulegną awarii (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Ile maszyn zapasowych i mechaników utrzyma w ruchu dziesięć maszyn?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Maszyny zapasowe w gotowości nie mogą ulec awarii: średnio 3.47 maszyny są zepsute, a 9.29 pracuje. Czwarty mechanik daje mniej więcej tyle, co cztery dodatkowe maszyny zapasowe.
+	Locating a sensor	Lokalizacja czujnika
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Trzy kotwice w znanych miejscach mierzą swoją odległość do czujnika, każda z losowym błędem, a zlokalizowane czujniki same stają się kotwicami (Simeonov i Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	Jak dokładnie można zlokalizować czujnik na podstawie trzech zaszumionych pomiarów odległości?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Błędy przenoszą się przez geometrię: odległości z błędem 5 m lokalizują czujnik z dokładnością 6.2 m metodą najmniejszych kwadratów (10.7 m wzorem skróconym) i 10.9 m na piątym poziomie, gdzie same kotwice były zlokalizowane.
+	Science and engineering	Nauka i inżynieria
+	Working steps ({n})	Kroki pośrednie ({n})
+	Working steps in detail ({n})	Kroki pośrednie szczegółowo ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Średnia kwadratowa {output} wynosi {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Średnia kwadratowa {output} wynosi {value}.
+	In the results	W wynikach
+	Working step	Krok pośredni
+	Root mean square	Średnia kwadratowa
+	A step towards an answer: the results list it folded away under the answers.	Krok w stronę odpowiedzi: wyniki pokazują go zwiniętego pod odpowiedziami.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Dla wielkości podniesionej do kwadratu, np. kwadratu błędu: wyniki podają pierwiastek z jej średniej, w jednostce samej wielkości.
 	Scenario	Scenariusz
 	Scenario: {name}	Scenariusz: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otwarcie scenariusza {scenario} odrzuci niezapisane zmiany w {name}. Najpierw je zapisać?

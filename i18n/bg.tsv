@@ -1531,6 +1531,20 @@ connection	Flow	Поток
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десет машини трябва да работят, четири резервни чакат в готовност, а трима монтьори поправят повредените (Crane и Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Колко резервни машини и монтьори поддържат десет машини в работа?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервните машини в готовност не могат да се повредят: средно 3.47 машини са повредени и 9.29 работят. Четвърти монтьор помага почти колкото четири резервни машини повече.
+	Locating a sensor	Определяне на местоположението на сензор
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Три опорни точки с известно положение измерват разстоянието си до сензор, всяко със случайна грешка, а вече локализирани сензори на свой ред служат като опорни точки (Simeonov и Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	Колко точно може да се определи местоположението на сензор по три неточни измервания на разстояние?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Грешките се пренасят през геометрията: разстояния с грешка 5 m определят сензора с точност 6.2 m по метода на най-малките квадрати (10.7 m по бързата формула) и 10.9 m на петото ниво, където самите опорни точки са били локализирани.
+	Science and engineering	Наука и инженерство
+	Working steps ({n})	Работни стъпки ({n})
+	Working steps in detail ({n})	Работни стъпки подробно ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Средноквадратичната стойност на {output} е {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Средноквадратичната стойност на {output} е {value}.
+	In the results	В резултатите
+	Working step	Работна стъпка
+	Root mean square	Средноквадратична стойност
+	A step towards an answer: the results list it folded away under the answers.	Стъпка към отговор: резултатите я показват сгъната под отговорите.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	За величина на квадрат, например квадрат на грешка: резултатите дават квадратния корен от средното ѝ, в единицата на самата величина.
 	Scenario	Сценарий
 	Scenario: {name}	Сценарий: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Отварянето на {scenario} отхвърля незаписаните промени в {name}. Да се запишат ли първо?

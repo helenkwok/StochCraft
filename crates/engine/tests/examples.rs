@@ -27,6 +27,9 @@
 //!   beside Poisson arrivals at the same rate (M/M/1).
 //! - Able and Baker, two servers that differ in speed behind one queue (a service time by
 //!   resource), against the exact long-run answer of their discrete-time Markov chain.
+//! - locating a sensor from three noisy distances (Simeonov and Marinov, Environment. Technology.
+//!   Resources., 2024), a Monte Carlo model, against the first-order error of least squares
+//!   (the GDOP of its anchors) at each of five levels of located anchors.
 //! - one machine's availability (Hristova, Denev and Tsankov, 2024) against the alternating
 //!   renewal share MTBF / (MTBF + MTTR) of time up and the failures an hour.
 //!
@@ -34,7 +37,8 @@
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
 //! added by hand, as in `mm1.bpmn`. The starting contents of the prison and of Penny Fab were
 //! added by hand too, and the repairmen-with-spares file was written by hand in the same form. The
-//! zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`.
+//! zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`, and the
+//! sensor-location file was written by hand like the budget's.
 //!
 //! Each check allows √2 times the 95% half-width, since several checks read the same runs (as in
 //! `crates/blocks/tests/queueing_cases.rs`).
@@ -1312,6 +1316,252 @@ fn able_and_baker_match_their_markov_chain() {
         served("able"),
         served("baker")
     );
+}
+
+/// The sensor-location example's geometry, read from its file: the three anchors and the node,
+/// each a constant input, and the range error's standard deviation σ_d (m).
+struct Sensors {
+    anchors: [(f64, f64); 3],
+    node: (f64, f64),
+    sigma_d: f64,
+}
+
+impl Sensors {
+    fn of(scenario: Option<&str>) -> Self {
+        let m = model_of("sensor-location.bpmn", scenario);
+        let mc = m
+            .monte_carlo
+            .unwrap_or_else(|| panic!("not a Monte Carlo model"));
+        let value = |name: &str| match mc.input(name).map(|i| &i.dist) {
+            Some(Dist::Constant(v)) => *v,
+            other => panic!("{name} is not a constant: {other:?}"),
+        };
+        Self {
+            anchors: [1, 2, 3].map(|i| (value(&format!("x{i}")), value(&format!("y{i}")))),
+            node: (value("node_x"), value("node_y")),
+            sigma_d: value("sigma_d"),
+        }
+    }
+
+    /// The true distances from the node to the anchors.
+    fn distances(&self) -> [f64; 3] {
+        self.anchors
+            .map(|(x, y)| (self.node.0 - x).hypot(self.node.1 - y))
+    }
+
+    /// (HᵀH)⁻¹ as (c11, c12, c22), where H's rows are the unit vectors from the anchors to the
+    /// node: the covariance of the least-squares position per unit variance of the ranges, to
+    /// first order.
+    fn covariance(&self) -> (f64, f64, f64) {
+        let t = self.distances();
+        let (mut a, mut b, mut d) = (0.0, 0.0, 0.0);
+        for (&(x, y), r) in self.anchors.iter().zip(t) {
+            let (hx, hy) = ((self.node.0 - x) / r, (self.node.1 - y) / r);
+            a += hx * hx;
+            b += hx * hy;
+            d += hy * hy;
+        }
+        let det = a * d - b * b;
+        (d / det, -b / det, a / det)
+    }
+
+    /// The geometric dilution of precision √trace((HᵀH)⁻¹): the root mean square position
+    /// error of least squares per metre of range error.
+    fn gdop(&self) -> f64 {
+        let (c11, _, c22) = self.covariance();
+        (c11 + c22).sqrt()
+    }
+
+    /// The same for the closed-form solve that subtracts the first circle's equation from the
+    /// other two: x = A⁻¹b, with A from the anchors and b from the squared ranges, so a range
+    /// error δrᵢ moves b by 2rᵢδrᵢ and the position by A⁻¹ times that.
+    fn closed_form_factor(&self) -> f64 {
+        let [(x1, y1), (x2, y2), (x3, y3)] = self.anchors;
+        let t = self.distances();
+        let (a11, a12, a21, a22) = (
+            2.0 * (x2 - x1),
+            2.0 * (y2 - y1),
+            2.0 * (x3 - x1),
+            2.0 * (y3 - y1),
+        );
+        let det = a11 * a22 - a12 * a21;
+        let inv = [[a22 / det, -a12 / det], [-a21 / det, a11 / det]];
+        let m = [
+            [2.0 * t[0], -2.0 * t[1], 0.0],
+            [2.0 * t[0], 0.0, -2.0 * t[2]],
+        ];
+        let mut sum = 0.0;
+        for row in inv {
+            for (p, q) in m[0].iter().zip(m[1]) {
+                let k = row[0] * p + row[1] * q;
+                sum += k * k;
+            }
+        }
+        sum.sqrt()
+    }
+
+    /// The root mean square position error at levels 1 to 5, to first order. Level 1 uses the
+    /// true anchors: G σ_d. At level k each anchor coordinate is off by N(0, 0.5 σ_{k−1}²), which
+    /// moves each range by the same variance along its unit vector, so it adds to the range
+    /// error: σ_k = G √(σ_d² + 0.5 σ_{k−1}²).
+    fn levels(&self) -> [f64; 5] {
+        let g = self.gdop();
+        let mut last = g * self.sigma_d;
+        [0, 1, 2, 3, 4].map(|k| {
+            if k > 0 {
+                last = g * (self.sigma_d * self.sigma_d + 0.5 * last * last).sqrt();
+            }
+            last
+        })
+    }
+}
+
+/// The run of the sensor-location example's `scenario`, checked against the first-order theory:
+/// each level's root mean square position error is σ_k within its interval, as is the
+/// closed-form solve's; the model's own GDOP and predictions are the test's; and only the six
+/// errors are answers, the rest working steps.
+fn sensor_location_checks(scenario: Option<&str>) {
+    let s = Sensors::of(scenario);
+    let mut e = Engine::new();
+    let mut params = json!({ "path": model_path("sensor-location.bpmn").to_string_lossy() });
+    if let Some(id) = scenario {
+        params["scenario"] = json!(id);
+    }
+    let opened = ok(&mut e, "file.open", params);
+    assert_eq!(opened["notes"], json!([]), "{opened}");
+    assert_eq!(opened["kind"], "monte_carlo", "{opened}");
+    assert_eq!(opened["diagnostics"], json!([]), "{opened}");
+    let r = ok(&mut e, "mc.run", json!({}));
+    assert_eq!(r["trials"], 10_000);
+    let outputs = r["outputs"].as_array().cloned().unwrap_or_default();
+    let output = |name: &str| {
+        outputs
+            .iter()
+            .find(|o| o["name"] == name)
+            .cloned()
+            .unwrap_or_else(|| panic!("no output {name}: {r}"))
+    };
+    let answers: Vec<String> = (1..=5)
+        .map(|k| format!("position_error_level_{k}"))
+        .chain(["closed_form_error_level_1".to_owned()])
+        .collect();
+    let key: Vec<&str> = outputs
+        .iter()
+        .filter(|o| o["role"] != "working")
+        .filter_map(|o| o["name"].as_str())
+        .collect();
+    assert_eq!(key, answers, "only the errors are answers");
+    let near = |name: &str, want: f64| {
+        let got = output(name)["mean"].as_f64().unwrap_or(f64::NAN);
+        assert!(
+            (got - want).abs() <= 1e-9 * want,
+            "{name}: {got}, not {want}"
+        );
+    };
+    // The root mean square, √mean, in m, with the mean's half-width over 2 √mean.
+    let covers_rms = |name: &str, theory: f64| {
+        let o = output(name);
+        let summary = &o["summary"];
+        assert_eq!(summary["kind"], "rms", "{o}");
+        assert_eq!(summary["unit"], "m", "{o}");
+        let (rms, hw) = (
+            summary["value"].as_f64().unwrap_or(f64::NAN),
+            summary["half_width"].as_f64().unwrap_or(f64::NAN),
+        );
+        let (mean, mean_hw) = (
+            o["mean"].as_f64().unwrap_or(f64::NAN),
+            o["half_width"].as_f64().unwrap_or(f64::NAN),
+        );
+        assert_eq!(rms, mean.sqrt());
+        assert_eq!(hw, mean_hw / (2.0 * mean.sqrt()));
+        eprintln!("{scenario:?} {name}: {rms} ± {hw} m, theory {theory}");
+        assert!(
+            (rms - theory).abs() <= SQRT_2 * hw,
+            "{name}: {rms} ± {hw}, theory {theory}"
+        );
+    };
+    near("gdop", s.gdop());
+    for (k, p) in s.levels().iter().enumerate() {
+        near(&format!("predicted{}", k + 1), *p);
+        covers_rms(&format!("position_error_level_{}", k + 1), *p);
+    }
+    covers_rms(
+        "closed_form_error_level_1",
+        s.closed_form_factor() * s.sigma_d,
+    );
+}
+
+/// Locating a sensor from three noisy distances (Simeonov and Marinov, Environment. Technology.
+/// Resources., Rezekne, 2024, vol. II, pp. 247–252). Anchors at (−1000, −1000), (−400, 800) and
+/// (1000, −1000) m and the node at (1400, 300) m, so the GDOP is 1.2335: least squares locates
+/// the node to 1.2335 σ_d root mean square, the paper's Table 1 at level 1 (1.23 for 1 m). The
+/// closed-form solve that one Gauss–Newton step refines is 2.1402 σ_d. The paper's 1,000 runs
+/// give each σ_p to within about 3.3% (95%), the spread of the squared error of a
+/// two-dimensional normal error; 47 of its 50 cells are within that of the first-order levels,
+/// and the other three are more than twice that below them.
+#[test]
+fn the_sensor_location_matches_its_geometry() {
+    let s = Sensors::of(None);
+    assert!((s.gdop() - 1.233_505).abs() < 1e-6, "{}", s.gdop());
+    assert!((s.closed_form_factor() - 2.140_151).abs() < 1e-6);
+    // The paper's Table 1: σ_p for σ_d = 1 to 10 m, levels 1 to 5.
+    let table: [[f64; 5]; 10] = [
+        [1.23, 1.65, 1.94, 2.10, 2.20],
+        [2.44, 3.26, 3.77, 4.03, 4.30],
+        [3.68, 4.89, 5.68, 6.11, 6.55],
+        [4.96, 6.66, 7.51, 8.22, 8.78],
+        [6.09, 8.17, 9.53, 10.40, 11.04],
+        [7.24, 9.53, 11.10, 11.19, 11.91],
+        [8.75, 11.50, 13.19, 14.62, 15.60],
+        [10.00, 13.21, 15.27, 16.73, 17.74],
+        [10.84, 14.58, 16.60, 18.18, 19.00],
+        [11.13, 16.03, 18.33, 20.46, 21.43],
+    ];
+    // The squared error of a normal error with covariance C has mean trace C and variance
+    // 2 trace C², so the root mean square of 1,000 of them is within 1.96 CV / (2 √1000).
+    let (c11, c12, c22) = s.covariance();
+    let cv = (2.0 * (c11 * c11 + 2.0 * c12 * c12 + c22 * c22)).sqrt() / (c11 + c22);
+    let band = 1.96 * cv / (2.0 * 1000_f64.sqrt());
+    assert!((band - 0.0329).abs() < 0.0005, "{band}");
+    let outside = [(6, 4), (6, 5), (10, 1)];
+    for (row, published) in table.iter().enumerate() {
+        let sigma_d = (row + 1) as f64;
+        let levels = Sensors {
+            sigma_d,
+            anchors: s.anchors,
+            node: s.node,
+        }
+        .levels();
+        for (k, (&paper, theory)) in published.iter().zip(levels).enumerate() {
+            let off = paper / theory - 1.0;
+            if outside.contains(&(row + 1, k + 1)) {
+                assert!(
+                    off < -2.0 * band,
+                    "{sigma_d} m level {}: {paper} vs {theory}",
+                    k + 1
+                );
+            } else {
+                assert!(
+                    off.abs() <= band,
+                    "{sigma_d} m level {}: {paper} vs {theory}",
+                    k + 1
+                );
+            }
+        }
+        // The level-5 error is 1.765 times the level-1 error at every σ_d to first order, under
+        // the paper's 1.82; its own 10 m row, with level 1 low, gives 1.93.
+        assert!((levels[4] / levels[0] - 1.765).abs() < 0.001);
+    }
+    sensor_location_checks(None);
+}
+
+/// The sensor-location example's scenarios, with range errors of 1 m and 10 m: the same draws
+/// as the base scenario scaled, so the same checks, and at 10 m the non-linearity is still
+/// small enough for the first-order levels.
+#[test]
+fn the_sensor_location_scenarios_match_their_geometry() {
+    sensor_location_checks(Some("one-metre"));
+    sensor_location_checks(Some("ten-metres"));
 }
 
 /// One barista at ρ = 0.8: each customer's time in the shop (FIFO M/M/1) is exponential with

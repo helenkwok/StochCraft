@@ -1531,6 +1531,20 @@ connection	Flow	흐름
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	기계 10대가 돌아가야 하고, 예비 기계 4대가 대기하며, 정비공 3명이 고장 난 기계를 수리함 (Crane과 Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	예비 기계와 정비공이 몇이면 기계 10대를 계속 돌릴 수 있을까?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	대기 중인 예비 기계는 고장 나지 않음: 평균 3.47대가 고장 나 있고 9.29대가 돌아감. 정비공 한 명을 더 두면 예비 기계 4대를 더 두는 것과 거의 같은 효과가 있음.
+	Locating a sensor	센서 위치 찾기
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	위치를 아는 세 개의 앵커가 센서까지의 거리를 재며, 각 측정에는 무작위 오차가 있습니다. 위치를 찾은 센서는 다시 앵커가 됩니다 (Simeonov과 Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	오차가 있는 세 개의 거리 측정값으로 센서 위치를 얼마나 정확히 찾을 수 있을까요?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	오차는 기하를 거쳐 전달됩니다. 거리 오차가 5 m이면 최소제곱법으로 센서 위치는 6.2 m(간편 공식으로는 10.7 m), 앵커 자체도 추정된 다섯 번째 단계에서는 10.9 m 정확도로 찾아집니다.
+	Science and engineering	과학 및 공학
+	Working steps ({n})	중간 계산 ({n})
+	Working steps in detail ({n})	중간 계산 자세히 ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output}의 제곱평균제곱근은 {value} ± {half_width}입니다.
+	The root mean square of {output} is {value}.	{output}의 제곱평균제곱근은 {value}입니다.
+	In the results	결과에서
+	Working step	중간 계산
+	Root mean square	제곱평균제곱근
+	A step towards an answer: the results list it folded away under the answers.	답으로 가는 한 단계입니다. 결과에서는 답 아래에 접혀서 표시됩니다.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	오차의 제곱처럼 제곱된 양에 씁니다. 결과는 그 평균의 제곱근을 원래 양의 단위로 보여 줍니다.
 	Scenario	시나리오
 	Scenario: {name}	시나리오: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}을(를) 열면 {name}의 저장하지 않은 변경 사항이 사라집니다. 먼저 저장할까요?

@@ -1531,6 +1531,20 @@ connection	Flow	Flyt
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Ti maskiner må gå, fire reservemaskiner står klare, og tre mekanikere reparerer dem som svikter (Crane og Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hvor mange reservemaskiner og mekanikere holder ti maskiner i gang?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemaskiner som står klare, kan ikke svikte: i snitt er 3.47 maskiner i stykker og 9.29 går. En fjerde mekaniker gjør omtrent like mye som fire reservemaskiner til.
+	Locating a sensor	Finne posisjonen til en sensor
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Tre ankere på kjente steder måler avstanden sin til en sensor, hver med en tilfeldig feil, og sensorer med funnet posisjon blir selv ankere (Simeonov og Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	Hvor nøyaktig kan en sensor stedfestes ut fra tre unøyaktige avstandsmålinger?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Feil forplanter seg gjennom geometrien: avstander med 5 m feil stedfester sensoren til 6.2 m med minste kvadraters metode (10.7 m med snarveisformelen) og til 10.9 m på femte nivå, der ankrene selv var stedfestet.
+	Science and engineering	Vitenskap og teknikk
+	Working steps ({n})	Arbeidstrinn ({n})
+	Working steps in detail ({n})	Arbeidstrinn i detalj ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Kvadratisk middelverdi av {output} er {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Kvadratisk middelverdi av {output} er {value}.
+	In the results	I resultatene
+	Working step	Arbeidstrinn
+	Root mean square	Kvadratisk middelverdi
+	A step towards an answer: the results list it folded away under the answers.	Et steg mot et svar: resultatene viser det sammenfoldet under svarene.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	For en kvadrert størrelse, som en kvadrert feil: resultatene gir kvadratroten av middelverdien i størrelsens egen enhet.
 	Scenario	Scenario
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Å åpne {scenario} forkaster de ulagrede endringene i {name}. Lagre dem først?

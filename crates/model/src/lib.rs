@@ -30,7 +30,8 @@ pub mod site;
 
 pub use calendar::{Calendar, DateTime, Timed};
 pub use montecarlo::{
-    Control, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
+    Control, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, OutputRole,
+    OutputSummary, Sampling,
 };
 pub use path::{Frame, Outline, Path, Segment};
 pub use site::{Junction, JunctionKind, Place, Point, Scenery, Site, Track};

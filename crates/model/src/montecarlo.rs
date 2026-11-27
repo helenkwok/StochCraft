@@ -54,6 +54,95 @@ pub struct McOutput {
     /// Control variates: quantities with a known mean whose deviation from it is used to
     /// narrow this output's interval (Law, *Simulation Modeling and Analysis*, 5th ed., §11.4).
     pub controls: Vec<Control>,
+    /// Whether it answers the model's question or is a step towards an answer.
+    pub role: OutputRole,
+    /// A summary reported beside the mean, such as the root mean square of a squared error.
+    pub summary: Option<OutputSummary>,
+}
+
+/// What an output is for. Results list the key outputs first and fold the working ones.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum OutputRole {
+    /// An answer to the model's question.
+    #[default]
+    Key,
+    /// A step towards an answer (a distance, an intermediate estimate), kept to be checked.
+    Working,
+}
+
+impl OutputRole {
+    /// Its name in files (`stochcraft:output`'s `role`).
+    pub fn file_name(self) -> &'static str {
+        match self {
+            OutputRole::Key => "key",
+            OutputRole::Working => "working",
+        }
+    }
+
+    pub fn from_file_name(s: &str) -> Option<Self> {
+        match s {
+            "key" => Some(OutputRole::Key),
+            "working" => Some(OutputRole::Working),
+            _ => None,
+        }
+    }
+}
+
+/// A summary of an output reported beside its mean.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OutputSummary {
+    /// The output is a squared quantity (a squared error); its root mean square √mean is
+    /// reported, in the unit of the quantity, with a 95% half-width by the delta method,
+    /// half-width / (2 √mean).
+    Rms,
+}
+
+impl OutputSummary {
+    /// Its name in files (`stochcraft:output`'s `summary`).
+    pub fn file_name(self) -> &'static str {
+        match self {
+            OutputSummary::Rms => "rms",
+        }
+    }
+
+    pub fn from_file_name(s: &str) -> Option<Self> {
+        match s {
+            "rms" => Some(OutputSummary::Rms),
+            _ => None,
+        }
+    }
+
+    /// The summary's value and 95% half-width from the output's mean and half-width: `None`
+    /// for a mean that is negative or not a number, and no half-width for a mean of 0.
+    pub fn of(self, mean: f64, half_width: Option<f64>) -> Option<(f64, Option<f64>)> {
+        match self {
+            OutputSummary::Rms => {
+                if !mean.is_finite() || mean < 0.0 {
+                    return None;
+                }
+                let rms = mean.sqrt();
+                let hw = half_width.filter(|_| rms > 0.0).map(|h| h / (2.0 * rms));
+                Some((rms, hw))
+            }
+        }
+    }
+
+    /// The summary's unit from the output's: a squared unit (`m²`, `m^2`) loses its square, any
+    /// other is put under a root (`√(USD)`), and none stays none.
+    pub fn unit(self, unit: &str) -> String {
+        match self {
+            OutputSummary::Rms => {
+                let u = unit.trim();
+                if u.is_empty() {
+                    String::new()
+                } else if let Some(base) = u.strip_suffix('²').or_else(|| u.strip_suffix("^2")) {
+                    base.trim_end().to_owned()
+                } else {
+                    format!("√({u})")
+                }
+            }
+        }
+    }
 }
 
 /// A control variate for an output.
@@ -169,5 +258,39 @@ impl MonteCarlo {
 
     pub fn output(&self, name: &str) -> Option<&McOutput> {
         self.outputs.iter().find(|o| o.name == name)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_root_mean_square_has_the_unit_and_interval_of_the_quantity() {
+        let rms = OutputSummary::Rms;
+        assert_eq!(rms.unit("m²"), "m");
+        assert_eq!(rms.unit("m^2"), "m");
+        assert_eq!(rms.unit("USD"), "√(USD)");
+        assert_eq!(rms.unit(""), "");
+        // √38.0689 = 6.17; the delta method: 0.8 / (2 × 6.17).
+        let (v, hw) = rms.of(38.0689, Some(0.8)).unwrap_or_default();
+        assert!((v - 6.17).abs() < 1e-12);
+        assert!((hw.unwrap_or_default() - 0.8 / 12.34).abs() < 1e-12);
+        assert_eq!(rms.of(0.0, Some(1.0)), Some((0.0, None)));
+        assert_eq!(rms.of(-1.0, None), None);
+        assert_eq!(rms.of(f64::NAN, None), None);
+    }
+
+    #[test]
+    fn roles_and_summaries_have_file_names_both_ways() {
+        for r in [OutputRole::Key, OutputRole::Working] {
+            assert_eq!(OutputRole::from_file_name(r.file_name()), Some(r));
+        }
+        assert_eq!(OutputRole::default(), OutputRole::Key);
+        assert_eq!(
+            OutputSummary::from_file_name(OutputSummary::Rms.file_name()),
+            Some(OutputSummary::Rms)
+        );
+        assert_eq!(OutputSummary::from_file_name("mean"), None);
     }
 }

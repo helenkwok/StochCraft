@@ -1531,6 +1531,20 @@ connection	Flow	Srautas
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dešimt mašinų turi veikti, keturios atsarginės laukia parengtos, o trys mechanikai taiso sugedusias (Crane ir Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kiek atsarginių mašinų ir mechanikų reikia, kad veiktų dešimt mašinų?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Parengtos atsarginės mašinos negali sugesti: vidutiniškai 3.47 mašinos sugedusios, o 9.29 veikia. Ketvirtas mechanikas duoda maždaug tiek pat, kiek keturios papildomos atsarginės mašinos.
+	Locating a sensor	Jutiklio vietos nustatymas
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Trys žinomose vietose esantys inkarai matuoja savo atstumą iki jutiklio, kiekvienas su atsitiktine paklaida, o jutikliai, kurių vieta nustatyta, savo ruožtu tampa inkarais (Simeonov ir Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	Kaip tiksliai galima nustatyti jutiklio vietą iš trijų netikslių atstumo matavimų?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Paklaidos perduodamos per geometriją: atstumai su 5 m paklaida mažiausiųjų kvadratų metodu nustato jutiklį 6.2 m tikslumu (sutrumpinta formule 10.7 m), o penktame lygyje, kur ir pačių inkarų vieta buvo nustatyta, 10.9 m tikslumu.
+	Science and engineering	Mokslas ir inžinerija
+	Working steps ({n})	Darbo žingsniai ({n})
+	Working steps in detail ({n})	Darbo žingsniai išsamiai ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output} kvadratinis vidurkis yra {value} ± {half_width}.
+	The root mean square of {output} is {value}.	{output} kvadratinis vidurkis yra {value}.
+	In the results	Rezultatuose
+	Working step	Darbo žingsnis
+	Root mean square	Kvadratinis vidurkis
+	A step towards an answer: the results list it folded away under the answers.	Žingsnis link atsakymo: rezultatuose jis rodomas suskleistas po atsakymais.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Kvadratu pakeltam dydžiui, pvz., paklaidos kvadratui: rezultatai pateikia jo vidurkio kvadratinę šaknį paties dydžio vienetais.
 	Scenario	Scenarijus
 	Scenario: {name}	Scenarijus: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Atidarius {scenario}, neįrašyti {name} pakeitimai bus atmesti. Pirmiau juos įrašyti?

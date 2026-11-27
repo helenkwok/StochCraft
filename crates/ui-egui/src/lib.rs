@@ -598,6 +598,23 @@ pub const EXAMPLES: &[Example] = &[
         },
     },
     Example {
+        title: "Locating a sensor",
+        about: "Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).",
+        file: "sensor-location.bpmn",
+        bytes: include_bytes!("../../../tests/models/sensor-location.bpmn"),
+        card: start::Card {
+            question: "How precisely can a sensor be located from three noisy distance readings?",
+            industry: start::Industry::ScienceEngineering,
+            topics: &[],
+            teaches: "Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.",
+            minutes: 3,
+            proof: Some(start::Proof::Probability),
+            // A calculation, not a process: no blocks to show.
+            flow: &[],
+            featured: false,
+        },
+    },
+    Example {
         title: "One machine's availability",
         about: "One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).",
         file: "machine-availability.bpmn",

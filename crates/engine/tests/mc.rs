@@ -877,3 +877,121 @@ fn results_say_what_the_trials_show_and_no_more() {
     assert_eq!(flag("u"), Some(json!(true)), "{inputs:?}");
     assert_eq!(flag("x"), Some(json!(false)), "{inputs:?}");
 }
+
+/// A working step and a root-mean-square summary: set by command, kept by mc.get, saved and
+/// opened, and in the results and their CSV. The error of a uniform draw on [-1, 1] squared has
+/// mean 1/3, so its root mean square is √(1/3), with the half-width of the mean over 2√(1/3).
+#[test]
+fn a_working_step_and_a_root_mean_square_go_through_to_the_results() {
+    let mut e = Engine::new();
+    ok(&mut e, "model.new", json!({ "name": "Error" }));
+    ok(
+        &mut e,
+        "mc.input.set",
+        json!({ "name": "x", "distribution": { "type": "uniform", "min": -1.0, "max": 1.0 }, "unit": "m" }),
+    );
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "error", "expression": "$x", "unit": "m", "role": "working" }),
+    );
+    ok(
+        &mut e,
+        "mc.output.set",
+        json!({ "name": "squared_error", "expression": "$error * $error", "unit": "m²", "summary": "rms" }),
+    );
+    let got = ok(&mut e, "mc.get", json!({}));
+    let outputs = &got["monte_carlo"]["outputs"];
+    assert_eq!(outputs[0]["role"], "working", "{got}");
+    assert!(outputs[0].get("summary").is_none(), "{got}");
+    // A key output's role, the default, is not written out.
+    assert!(outputs[1].get("role").is_none(), "{got}");
+    assert_eq!(outputs[1]["summary"], "rms", "{got}");
+
+    // Saved and opened, they stay.
+    let path = scratch("roles.bpmn");
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    let mut f = Engine::new();
+    ok(
+        &mut f,
+        "file.open",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    assert_eq!(
+        ok(&mut f, "mc.get", json!({}))["monte_carlo"],
+        got["monte_carlo"]
+    );
+
+    let r = ok(&mut f, "mc.run", json!({ "trials": 20_000, "seed": 5 }));
+    assert_eq!(r["outputs"][0]["role"], "working");
+    assert!(r["outputs"][0].get("summary").is_none());
+    let o = &r["outputs"][1];
+    assert_eq!(o["role"], "key");
+    let mean = o["mean"].as_f64().unwrap_or(f64::NAN);
+    let hw = o["half_width"].as_f64().unwrap_or(f64::NAN);
+    let s = &o["summary"];
+    assert_eq!(s["kind"], "rms");
+    assert_eq!(s["unit"], "m");
+    assert_eq!(s["value"].as_f64(), Some(mean.sqrt()));
+    assert_eq!(s["half_width"].as_f64(), Some(hw / (2.0 * mean.sqrt())));
+    let rms = (1.0_f64 / 3.0).sqrt();
+    let (v, h) = (
+        s["value"].as_f64().unwrap_or(f64::NAN),
+        s["half_width"].as_f64().unwrap_or(f64::NAN),
+    );
+    assert!(
+        (v - rms).abs() <= std::f64::consts::SQRT_2 * h,
+        "{v} ± {h}, not {rms}"
+    );
+
+    let csv = stochcraft_engine::mc::results_csv(&r);
+    let mut lines = csv.lines();
+    let header: Vec<&str> = lines.next().unwrap_or("").split(',').collect();
+    let col = |name: &str| header.iter().position(|h| *h == name);
+    let rows: Vec<Vec<&str>> = lines.map(|l| l.split(',').collect()).collect();
+    let cell = |row: usize, name: &str| {
+        col(name)
+            .and_then(|c| rows.get(row).and_then(|r| r.get(c)))
+            .copied()
+            .unwrap_or("?")
+    };
+    assert_eq!(cell(0, "role"), "working");
+    assert_eq!(cell(0, "summary"), "");
+    assert_eq!(cell(1, "role"), "key");
+    assert_eq!(cell(1, "summary"), "rms");
+    assert_eq!(cell(1, "summary_value"), v.to_string());
+    assert_eq!(cell(1, "summary_unit"), "m");
+
+    // Back to a key output with no summary.
+    ok(
+        &mut f,
+        "mc.output.set",
+        json!({ "name": "error", "role": "key" }),
+    );
+    ok(
+        &mut f,
+        "mc.output.set",
+        json!({ "name": "squared_error", "summary": null }),
+    );
+    let got = ok(&mut f, "mc.get", json!({}));
+    assert!(
+        got["monte_carlo"]["outputs"][0].get("role").is_none(),
+        "{got}"
+    );
+    assert!(
+        got["monte_carlo"]["outputs"][1].get("summary").is_none(),
+        "{got}"
+    );
+    assert_eq!(
+        err(
+            &mut f,
+            "mc.output.set",
+            json!({ "name": "error", "role": "answer" })
+        ),
+        ErrorCode::InvalidParams
+    );
+}

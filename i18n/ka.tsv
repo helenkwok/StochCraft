@@ -1531,6 +1531,20 @@ connection	Flow	ნაკადი
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ათი მანქანა უნდა მუშაობდეს, ოთხი სათადარიგო მზადყოფნაში ელოდება, ხოლო სამი ზეინკალი აკეთებს გაფუჭებულებს (Crane და Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	რამდენი სათადარიგო მანქანა და ზეინკალი ინარჩუნებს ათ მანქანას მუშა მდგომარეობაში?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	მზადყოფნაში მყოფი სათადარიგო მანქანები ვერ გაფუჭდება: საშუალოდ 3.47 მანქანაა გაფუჭებული და 9.29 მუშაობს. მეოთხე ზეინკალი დაახლოებით იმდენს აკეთებს, რამდენსაც კიდევ ოთხი სათადარიგო მანქანა.
+	Locating a sensor	სენსორის მდებარეობის განსაზღვრა
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	ცნობილ ადგილებში მდგარი სამი საყრდენი წერტილი ზომავს მანძილს სენსორამდე, თითოეული შემთხვევითი ცდომილებით, ხოლო უკვე განსაზღვრული სენსორები თავის მხრივ საყრდენ წერტილებად გამოიყენება (Simeonov და Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	რამდენად ზუსტად შეიძლება სენსორის მდებარეობის განსაზღვრა მანძილის სამი ხმაურიანი გაზომვით?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	ცდომილებები გეომეტრიის გავლით გადადის: 5 m ცდომილების მქონე მანძილები უმცირეს კვადრატთა მეთოდით სენსორს 6.2 m სიზუსტით განსაზღვრავს (მოკლე ფორმულით 10.7 m), ხოლო მეხუთე დონეზე, სადაც საყრდენი წერტილებიც განსაზღვრული იყო, 10.9 m სიზუსტით.
+	Science and engineering	მეცნიერება და ინჟინერია
+	Working steps ({n})	სამუშაო ნაბიჯები ({n})
+	Working steps in detail ({n})	სამუშაო ნაბიჯები დეტალურად ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output}-ის საშუალო კვადრატული არის {value} ± {half_width}.
+	The root mean square of {output} is {value}.	{output}-ის საშუალო კვადრატული არის {value}.
+	In the results	შედეგებში
+	Working step	სამუშაო ნაბიჯი
+	Root mean square	საშუალო კვადრატული
+	A step towards an answer: the results list it folded away under the answers.	ნაბიჯი პასუხისკენ: შედეგები მას პასუხების ქვეშ ჩაკეცილს აჩვენებს.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	კვადრატში აყვანილი სიდიდისთვის, მაგალითად ცდომილების კვადრატისთვის: შედეგები იძლევა მისი საშუალოს კვადრატულ ფესვს თავად სიდიდის ერთეულში.
 	Scenario	სცენარი
 	Scenario: {name}	სცენარი: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}-ის გახსნა {name}-ში შეუნახავ ცვლილებებს გააუქმებს. ჯერ შევინახო?

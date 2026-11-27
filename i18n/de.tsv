@@ -1531,6 +1531,20 @@ connection	Flow	Verbindung
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Zehn Maschinen müssen laufen, vier Reservemaschinen stehen bereit, und drei Instandhalter reparieren die ausgefallenen (Crane und Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Wie viele Reservemaschinen und Instandhalter halten zehn Maschinen am Laufen?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Bereitstehende Reservemaschinen können nicht ausfallen: Im Mittel sind 3.47 Maschinen ausgefallen und 9.29 laufen. Ein vierter Instandhalter bringt etwa so viel wie vier Reservemaschinen mehr.
+	Locating a sensor	Einen Sensor orten
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Drei Anker an bekannten Orten messen ihren Abstand zu einem Sensor, jeder mit einem zufälligen Fehler, und geortete Sensoren dienen ihrerseits als Anker (Simeonov und Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	Wie genau lässt sich ein Sensor aus drei verrauschten Abstandsmessungen orten?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Fehler wirken über die Geometrie: Abstände mit 5 m Fehler orten den Sensor auf 6.2 m genau mit der Methode der kleinsten Quadrate (10.7 m mit der Kurzformel) und auf 10.9 m auf der fünften Stufe, deren Anker selbst geortet wurden.
+	Science and engineering	Wissenschaft und Technik
+	Working steps ({n})	Arbeitsschritte ({n})
+	Working steps in detail ({n})	Arbeitsschritte im Detail ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Der quadratische Mittelwert von {output} ist {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Der quadratische Mittelwert von {output} ist {value}.
+	In the results	In den Ergebnissen
+	Working step	Arbeitsschritt
+	Root mean square	Quadratischer Mittelwert
+	A step towards an answer: the results list it folded away under the answers.	Ein Schritt zu einer Antwort: Die Ergebnisse zeigen ihn eingeklappt unter den Antworten.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Für eine quadrierte Größe, etwa einen quadrierten Fehler: Die Ergebnisse geben die Wurzel ihres Mittelwerts an, in der Einheit der Größe selbst.
 	Scenario	Szenario
 	Scenario: {name}	Szenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Beim Öffnen von {scenario} gehen die ungespeicherten Änderungen an {name} verloren. Zuerst speichern?

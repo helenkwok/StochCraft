@@ -1531,6 +1531,20 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Desať strojov musí bežať, štyri záložné čakajú v pohotovosti a traja opravári opravujú tie, ktoré sa pokazia (Crane a Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koľko záložných strojov a opravárov udrží desať strojov v chode?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Záložné stroje v pohotovosti sa nemôžu pokaziť: v priemere je pokazených 3.47 strojov a beží 9.29. Štvrtý opravár pomôže zhruba toľko ako štyri záložné stroje navyše.
+	Locating a sensor	Určenie polohy senzora
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Tri kotvy na známych miestach merajú vzdialenosť k senzoru, každá s náhodnou chybou, a senzory s určenou polohou slúžia ďalej ako kotvy (Simeonov a Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	Ako presne možno určiť polohu senzora z troch nepresných meraní vzdialenosti?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Chyby sa prenášajú geometriou: vzdialenosti s chybou 5 m určia senzor na 6.2 m metódou najmenších štvorcov (10.7 m skráteným vzorcom) a na 10.9 m na piatej úrovni, kde boli polohy kotiev samy určené.
+	Science and engineering	Veda a technika
+	Working steps ({n})	Pracovné kroky ({n})
+	Working steps in detail ({n})	Pracovné kroky podrobne ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Kvadratický priemer {output} je {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Kvadratický priemer {output} je {value}.
+	In the results	Vo výsledkoch
+	Working step	Pracovný krok
+	Root mean square	Kvadratický priemer
+	A step towards an answer: the results list it folded away under the answers.	Krok k odpovedi: výsledky ho ukazujú zbalený pod odpoveďami.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Pre umocnenú veličinu, napríklad štvorec chyby: výsledky uvádzajú odmocninu jej priemeru, v jednotke samotnej veličiny.
 	Scenario	Scenár
 	Scenario: {name}	Scenár: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvorením scenára {scenario} sa zahodia neuložené zmeny v {name}. Najprv ich uložiť?

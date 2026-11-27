@@ -1079,6 +1079,22 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The rows for the sensor-location example (its title, the line about it, its question and what
+  it teaches) were machine-drafted from the plain meaning of the English. An anchor is the
+  language's word for a reference point of known position (an anchor node where that is the
+  usual term), "least squares" the language's name for the method, and "the shortcut formula" a
+  plain phrase for a quick direct formula. The authors' names and the proceedings' title stay in
+  English and Latin script, the "and" between the names is the catalog's own, and decimals keep
+  the point. Not checked against any other source and not reviewed by native speakers; the least
+  certain are lo, th, ta, te, bn, ka, kk, hi and sq.
+- The rows for the start page's "Science and engineering" field and for a Monte Carlo output's
+  role and summary (Working steps, In the results, Working step, Root mean square, their two
+  hints and the root-mean-square findings) were machine-drafted from the plain meaning of the
+  English. "Root mean square" is the language's usual statistical term (quadratic mean, or the
+  root of the mean square, where that is what textbooks use); a working step is a plain phrase
+  for an intermediate or working calculation; the placeholders are kept as they are. Not checked
+  against any other source and not reviewed by native speakers; the least certain are lo, th,
+  ta, te, bn, ka, kk, hi and sq.
 - The rows for time in system by percentile on Departures (the three percentile results and the
   share done within the target time, the inspector's checkbox, its hint, target time, working
   time and censoring note, and the two validation messages) were machine-drafted from the plain

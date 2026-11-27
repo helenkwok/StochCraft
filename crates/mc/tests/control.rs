@@ -33,6 +33,8 @@ fn output(name: &str, expression: &str, controls: Vec<Control>) -> McOutput {
         unit: String::new(),
         target: None,
         controls,
+        role: Default::default(),
+        summary: None,
     }
 }
 

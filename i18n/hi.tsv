@@ -1531,6 +1531,20 @@ connection	Flow	प्रवाह
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	दस मशीनों को चलते रहना है, चार अतिरिक्त मशीनें तैयार रखी हैं और तीन मिस्त्री खराब होने वाली मशीनें ठीक करते हैं (Crane और Iglehart, Winter Simulation Conference, 1973)।
 	How many spares and repairmen keep ten machines running?	दस मशीनों को चालू रखने के लिए कितनी अतिरिक्त मशीनें और कितने मिस्त्री चाहिए?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	तैयार रखी अतिरिक्त मशीनें खराब नहीं हो सकतीं: औसतन 3.47 मशीनें खराब रहती हैं और 9.29 चलती हैं। चौथा मिस्त्री लगभग उतना ही करता है जितना चार और अतिरिक्त मशीनें।
+	Locating a sensor	सेंसर की स्थिति का पता लगाना
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	ज्ञात स्थानों पर तीन एंकर एक सेंसर तक अपनी दूरी मापते हैं, हर एक में एक यादृच्छिक त्रुटि होती है, और जिन सेंसरों की स्थिति निकाल ली गई है वे बारी-बारी से एंकर बनते हैं (Simeonov और Marinov, Environment. Technology. Resources., 2024)।
+	How precisely can a sensor be located from three noisy distance readings?	दूरी की तीन त्रुटिपूर्ण मापों से किसी सेंसर की स्थिति कितनी सटीकता से निकाली जा सकती है?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	त्रुटियाँ ज्यामिति से होकर आगे बढ़ती हैं: 5 m त्रुटि वाली दूरियों से न्यूनतम वर्ग विधि सेंसर की स्थिति 6.2 m तक सटीक बताती है (संक्षिप्त सूत्र से 10.7 m), और पाँचवें स्तर पर, जहाँ एंकरों की स्थिति भी निकाली गई थी, 10.9 m तक।
+	Science and engineering	विज्ञान और अभियांत्रिकी
+	Working steps ({n})	कार्य-चरण ({n})
+	Working steps in detail ({n})	कार्य-चरण विस्तार से ({n})
+	The root mean square of {output} is {value} ± {half_width}.	{output} का वर्ग माध्य मूल {value} ± {half_width} है।
+	The root mean square of {output} is {value}.	{output} का वर्ग माध्य मूल {value} है।
+	In the results	परिणामों में
+	Working step	कार्य-चरण
+	Root mean square	वर्ग माध्य मूल
+	A step towards an answer: the results list it folded away under the answers.	उत्तर की ओर एक चरण: परिणाम इसे उत्तरों के नीचे मोड़कर दिखाते हैं।
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	वर्ग की गई राशि के लिए, जैसे त्रुटि का वर्ग: परिणाम उसके माध्य का वर्गमूल देते हैं, राशि की अपनी इकाई में।
 	Scenario	परिदृश्य
 	Scenario: {name}	परिदृश्य: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} खोलने पर {name} के बिना सहेजे गए बदलाव हट जाएँगे। पहले सहेजें?

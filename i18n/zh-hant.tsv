@@ -1531,6 +1531,20 @@ connection	Flow	順序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台機器必須運轉，四台備用機待命，三名維修技師修理故障的機器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台備用機和多少名維修技師，才能讓十台機器保持運轉？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的備用機不會故障：平均 3.47 台機器在故障中，9.29 台在運轉。增加第四名維修技師的效果與再增加四台備用機相當。
+	Locating a sensor	定位感測器
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	三個位置已知的錨點測量到感測器的距離，每次測量都有隨機誤差；已定位的感測器又依次充當錨點（Simeonov 和 Marinov，Environment. Technology. Resources.，2024）。
+	How precisely can a sensor be located from three noisy distance readings?	從三個帶雜訊的距離讀數中，能把感測器定位到多精確？
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	誤差經由幾何傳遞：距離誤差為 5 m 時，最小平方法把感測器定位到 6.2 m（簡便公式為 10.7 m），在錨點本身也是定位得來的第五級為 10.9 m。
+	Science and engineering	科學與工程
+	Working steps ({n})	中間步驟（{n}）
+	Working steps in detail ({n})	中間步驟詳情（{n}）
+	The root mean square of {output} is {value} ± {half_width}.	{output} 的均方根為 {value} ± {half_width}。
+	The root mean square of {output} is {value}.	{output} 的均方根為 {value}。
+	In the results	在結果中
+	Working step	中間步驟
+	Root mean square	均方根
+	A step towards an answer: the results list it folded away under the answers.	通往答案的一步：結果中把它摺疊在答案下方。
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	用於平方量，例如誤差的平方：結果給出其平均值的平方根，單位為該量本身的單位。
 	Scenario	情境
 	Scenario: {name}	情境：{name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	開啟 {scenario} 會捨棄 {name} 中未儲存的變更。要先儲存嗎？

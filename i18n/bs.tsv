@@ -1531,6 +1531,20 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset mašina mora raditi, četiri rezervne čekaju u pripravnosti, a tri mehaničara popravljaju one koje se pokvare (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koliko rezervnih mašina i mehaničara drži deset mašina u radu?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Rezervne mašine u pripravnosti ne mogu se pokvariti: u prosjeku je 3.47 mašina pokvareno, a 9.29 radi. Četvrti mehaničar postiže otprilike koliko i četiri rezervne mašine više.
+	Locating a sensor	Određivanje položaja senzora
+	Three anchors at known places measure their distance to a sensor, each with a random error, and located sensors serve as anchors in turn (Simeonov and Marinov, Environment. Technology. Resources., 2024).	Tri sidra na poznatim mjestima mjere udaljenost do senzora, svako sa slučajnom greškom, a senzori čiji je položaj određen zauzvrat služe kao sidra (Simeonov i Marinov, Environment. Technology. Resources., 2024).
+	How precisely can a sensor be located from three noisy distance readings?	Koliko se precizno može odrediti položaj senzora iz tri neprecizna mjerenja udaljenosti?
+	Errors carry through geometry: distances off by 5 m locate the sensor to 6.2 m by least squares (10.7 m by the shortcut formula), and to 10.9 m at the fifth level, where the anchors were located themselves.	Greške se prenose kroz geometriju: udaljenosti s greškom od 5 m određuju senzor na 6.2 m metodom najmanjih kvadrata (10.7 m skraćenom formulom), a na 10.9 m na petom nivou, gdje su i sidra sama bila locirana.
+	Science and engineering	Nauka i inženjerstvo
+	Working steps ({n})	Radni koraci ({n})
+	Working steps in detail ({n})	Radni koraci detaljno ({n})
+	The root mean square of {output} is {value} ± {half_width}.	Korijen srednjeg kvadrata za {output} je {value} ± {half_width}.
+	The root mean square of {output} is {value}.	Korijen srednjeg kvadrata za {output} je {value}.
+	In the results	U rezultatima
+	Working step	Radni korak
+	Root mean square	Korijen srednjeg kvadrata
+	A step towards an answer: the results list it folded away under the answers.	Korak prema odgovoru: rezultati ga prikazuju sklopljenog ispod odgovora.
+	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Za kvadriranu veličinu, poput kvadrata greške: rezultati daju kvadratni korijen njene srednje vrijednosti, u jedinici same veličine.
 	Scenario	Scenarij
 	Scenario: {name}	Scenarij: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvaranjem scenarija {scenario} gube se nesačuvane promjene u {name}. Prvo ih sačuvati?
