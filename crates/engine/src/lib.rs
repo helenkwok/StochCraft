@@ -1647,9 +1647,7 @@ impl Engine {
         if status["state"] != "running"
             && let Some((feed, next)) = self.job.as_ref().and_then(Job::live)
         {
-            if let Err(e) = self.step_live(&feed, next, true) {
-                let _ = e;
-            }
+            let _ = self.step_live(&feed, next, true);
         }
         self.keep_if_finished(&status);
         status
