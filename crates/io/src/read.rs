@@ -12,9 +12,8 @@ use stochcraft_model::{
     ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck, Mobility, Model, Need,
     OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy,
     ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit, Requirement,
-    ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
-    ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing,
-    Scrap, Setup, Stop, ThreePoint, TimeInSystem, TimeUnit, Timed, Transfer, Upper,
+    ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeInSystem, TimeUnit, Timed, Transfer,
+    Upper,
 };
 
 use stochcraft_model::dmn::DecisionUse;

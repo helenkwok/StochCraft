@@ -487,15 +487,14 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<DemandSpec>")]
     pub demand: Option<Option<DemandSpec>>,
-    /// Tasks with shared resources: what each entity needs, the alternatives in order (the
-    /// first requirement; any others are kept).
     /// Sinks: report the percentiles of each entity's time in system here, and with `within`
     /// the share done within that time, counting only `calendar`'s active time if given;
     /// `null` removes it.
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<TimeInSystemSpec>")]
     pub time_in_system: Option<Option<TimeInSystemSpec>>,
-    /// Tasks with shared resources: what each entity needs, the alternatives in order.
+    /// Tasks with shared resources: what each entity needs, the alternatives in order (the
+    /// first requirement; any others are kept).
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
     /// Tasks with shared resources: the further requirements, each a list of alternatives in

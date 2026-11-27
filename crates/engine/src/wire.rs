@@ -18,9 +18,7 @@ use stochcraft_model::{
     Observation, Observed, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
     ProcessingBy, ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit,
     Requirement, ResourcePool, Routing, Scrap, Sequential, SequentialMeasure, Setup, Severity,
-    Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
-    ResourcePool, Routing, Scrap, Sequential, SequentialMeasure, Setup, Severity, Stop, ThreePoint,
-    TimeInSystem, TimeUnit, Timed, Transfer, Upper,
+    Stop, ThreePoint, TimeInSystem, TimeUnit, Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
