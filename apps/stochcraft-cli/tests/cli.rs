@@ -1867,3 +1867,39 @@ fn warmup_finds_the_end_of_the_start_up() {
     let r = json(&ok(&["warmup", &data("series-step.csv"), "--json"]));
     assert_eq!(r["series"][0]["warmup"]["time"], 11.0);
 }
+
+#[test]
+fn a_column_headed_like_a_role_can_be_said_to_be_none() {
+    let path = scratch("roles.csv");
+    let _ = std::fs::write(&path, "scenario,run,wait\nbusy,3,4\nbusy,5,6\nquiet,4,5\n");
+    let p = path.to_string_lossy();
+    // Guessed: `scenario` and `run` are taken for their roles.
+    let r = json(&ok(&["analyse", &p, "--json"]));
+    assert_eq!(r["scenarios"], serde_json::json!(["busy", "quiet"]));
+    // Said to be none: one scenario, `run` a measure, `scenario` left out.
+    let r = json(&ok(&[
+        "analyse",
+        &p,
+        "--no-scenario",
+        "--no-replication",
+        "--json",
+    ]));
+    assert_eq!(r["scenarios"], serde_json::json!([null]));
+    assert_eq!(r["measures"], serde_json::json!(["run", "wait"]));
+    assert_eq!(r["columns"]["ignored"], serde_json::json!(["scenario"]));
+    // A name and "none" for the same role cannot both be given.
+    let o = cli(&["analyse", &p, "--scenario", "scenario", "--no-scenario"]);
+    assert!(!o.status.success());
+
+    let series = scratch("roles-series.csv");
+    let _ = std::fs::write(
+        &series,
+        "time,replication,scenario,queue\n1,1,7,2\n2,1,7,3\n1,2,8,1\n2,2,8,2\n",
+    );
+    let s = series.to_string_lossy();
+    let r = json(&ok(&["warmup", &s, "--no-scenario", "--json"]));
+    assert_eq!(
+        r["columns"]["measures"],
+        serde_json::json!(["scenario", "queue"])
+    );
+}

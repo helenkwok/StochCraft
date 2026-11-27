@@ -367,9 +367,15 @@ enum Command {
         /// The scenario column (default: one headed `scenario`, if any).
         #[arg(long)]
         scenario: Option<String>,
+        /// No scenario column, even if one is headed `scenario`: the table is one scenario.
+        #[arg(long, conflicts_with = "scenario")]
+        no_scenario: bool,
         /// The replication column (default: one headed `replication`, `rep` or `run`, if any).
         #[arg(long)]
         replication: Option<String>,
+        /// No replication column, even if one is headed like one: rows are numbered in order.
+        #[arg(long, conflicts_with = "replication")]
+        no_replication: bool,
         /// A long table's column naming the measure (default: one headed `measure` or `metric`).
         #[arg(long)]
         measure: Option<String>,
@@ -405,6 +411,9 @@ enum Command {
         /// The scenario column, if any (default: one headed `scenario`, if any).
         #[arg(long)]
         scenario: Option<String>,
+        /// No scenario column, even if one is headed `scenario`.
+        #[arg(long, conflicts_with = "scenario")]
+        no_scenario: bool,
         /// Print the engine's answer as JSON.
         #[arg(long)]
         json: bool,
@@ -2185,7 +2194,9 @@ fn main() -> ExitCode {
         Command::Analyse {
             file,
             scenario,
+            no_scenario,
             replication,
+            no_replication,
             measure,
             value,
             baseline,
@@ -2195,7 +2206,9 @@ fn main() -> ExitCode {
         } => data::analyse(&data::AnalyseArgs {
             file: &file,
             scenario: scenario.as_deref(),
+            no_scenario,
             replication: replication.as_deref(),
+            no_replication,
             measure: measure.as_deref(),
             value: value.as_deref(),
             baseline: baseline.as_deref(),
@@ -2208,12 +2221,14 @@ fn main() -> ExitCode {
             time,
             replication,
             scenario,
+            no_scenario,
             json,
         } => data::warmup(&data::WarmupArgs {
             file: &file,
             time: time.as_deref(),
             replication: replication.as_deref(),
             scenario: scenario.as_deref(),
+            no_scenario,
             json,
         }),
         Command::Exec {

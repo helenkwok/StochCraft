@@ -798,7 +798,9 @@ two desks,1,served,110
 Cells may be separated by commas, semicolons or tabs, and quoted; with semicolons a number may
 have a decimal comma (`4,0`). An empty cell is a replication with no value for that measure. Any
 other cell of a measure that is not a number is an error naming its line and column. Columns
-named otherwise are given with `--scenario`, `--replication`, `--measure` and `--value`.
+named otherwise are given with `--scenario`, `--replication`, `--measure` and `--value`. A column
+headed like a role that is not one (a `run` column that counts something, say) is kept from it with
+`--no-scenario` or `--no-replication`: it is then a measure if it holds numbers, and left out if not.
 
 ```bash
 stochcraft-cli analyse runs.csv

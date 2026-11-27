@@ -92,26 +92,41 @@ impl Target {
     }
 }
 
+/// Which column has a role (the scenario, the replication…): its name, or `false` for none, so
+/// that a column headed like the role is not taken for it. Left out, the column is guessed from
+/// the headers.
+#[derive(Debug, Clone, PartialEq, Deserialize, JsonSchema)]
+#[serde(untagged)]
+pub enum Column {
+    /// The column's header.
+    Named(String),
+    /// `false`: there is no such column; do not guess one.
+    None(bool),
+}
+
 #[derive(Debug, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct AnalyseParams {
     /// The table as CSV text (comma, semicolon or tab delimited; the first row is the header).
     pub csv: String,
-    /// The column naming each row's scenario; by default one headed `scenario`, if any. Without
-    /// one, the table is a single scenario.
+    /// The column naming each row's scenario; by default one headed `scenario`, if any; `false`
+    /// for none. Without one, the table is a single scenario.
     #[serde(default)]
-    pub scenario: Option<String>,
+    pub scenario: Option<Column>,
     /// The column giving each row's replication id; by default one headed `replication`, `rep`
-    /// or `run`, if any. Without one, rows are numbered in order within each scenario.
+    /// or `run`, if any; `false` for none. Without one, rows are numbered in order within each
+    /// scenario.
     #[serde(default)]
-    pub replication: Option<String>,
+    pub replication: Option<Column>,
     /// A long table's column naming the measure of each row; by default one headed `measure` or
-    /// `metric` (with a `value` column, the table is then read as long).
+    /// `metric` (with a `value` column, the table is then read as long); `false` for a wide table
+    /// whatever the headers.
     #[serde(default)]
-    pub measure: Option<String>,
-    /// A long table's column holding the values; by default one headed `value`.
+    pub measure: Option<Column>,
+    /// A long table's column holding the values; by default one headed `value`; `false` for
+    /// none.
     #[serde(default)]
-    pub value: Option<String>,
+    pub value: Option<Column>,
     /// The measures to analyse: a wide table's columns, or a long table's measure names. By
     /// default every column with numbers (wide), or every measure named (long).
     #[serde(default)]
@@ -145,13 +160,13 @@ pub struct WarmupParams {
     pub csv: String,
     /// The time column; by default one headed `time` or `t`.
     #[serde(default)]
-    pub time: Option<String>,
+    pub time: Option<Column>,
     /// The replication column; by default one headed `replication`, `rep` or `run`.
     #[serde(default)]
-    pub replication: Option<String>,
-    /// The scenario column, if any; by default one headed `scenario`, if any.
+    pub replication: Option<Column>,
+    /// The scenario column, if any; by default one headed `scenario`, if any; `false` for none.
     #[serde(default)]
-    pub scenario: Option<String>,
+    pub scenario: Option<Column>,
     /// The measure columns; by default every other column with numbers.
     #[serde(default)]
     pub measures: Option<Vec<String>>,
@@ -244,15 +259,20 @@ impl Sheet {
             })
     }
 
-    /// The column for a role: the one named, or else the first headed one of `names`.
+    /// The column for a role: the one named, none for `false`, or else the first headed one of
+    /// `names`.
     fn role(
         &self,
-        given: Option<&str>,
+        given: Option<&Column>,
         names: &[&str],
         role: &str,
     ) -> Result<Option<usize>, CommandError> {
         match given {
-            Some(name) => self.find(name, role).map(Some),
+            Some(Column::Named(name)) => self.find(name, role).map(Some),
+            Some(Column::None(false)) => Ok(None),
+            Some(Column::None(true)) => Err(invalid(format!(
+                "the {role} column is `true`: give the column's name, or `false` for none"
+            ))),
             None => Ok(self
                 .header
                 .iter()
@@ -537,11 +557,12 @@ const ANALYSE_METHOD: &str = "each scenario's measure: n replications with a val
 /// `data.analyse`.
 pub fn analyse(p: AnalyseParams) -> Result<Value, CommandError> {
     let s = Sheet::read(&p.csv)?;
-    let scenario = s.role(p.scenario.as_deref(), SCENARIO_NAMES, "scenario")?;
-    let replication = s.role(p.replication.as_deref(), REPLICATION_NAMES, "replication")?;
-    let measure = s.role(p.measure.as_deref(), MEASURE_NAMES, "measure name")?;
-    let value = s.role(p.value.as_deref(), VALUE_NAMES, "value")?;
-    let long = p.measure.is_some() || p.value.is_some() || (measure.is_some() && value.is_some());
+    let scenario = s.role(p.scenario.as_ref(), SCENARIO_NAMES, "scenario")?;
+    let replication = s.role(p.replication.as_ref(), REPLICATION_NAMES, "replication")?;
+    let measure = s.role(p.measure.as_ref(), MEASURE_NAMES, "measure name")?;
+    let value = s.role(p.value.as_ref(), VALUE_NAMES, "value")?;
+    let named = |c: &Option<Column>| matches!(c, Some(Column::Named(_)));
+    let long = named(&p.measure) || named(&p.value) || (measure.is_some() && value.is_some());
     let roles = [scenario, replication];
     let (runs, ignored) = if long {
         let (Some(m), Some(v)) = (measure, value) else {
@@ -776,12 +797,12 @@ const WARMUP_METHOD: &str = "each measure averaged across the replications at ea
 pub fn warmup(p: WarmupParams) -> Result<Value, CommandError> {
     let s = Sheet::read(&p.csv)?;
     let time = s
-        .role(p.time.as_deref(), TIME_NAMES, "time")?
+        .role(p.time.as_ref(), TIME_NAMES, "time")?
         .ok_or_else(|| invalid("which column is the time? give `time`"))?;
     let replication = s
-        .role(p.replication.as_deref(), REPLICATION_NAMES, "replication")?
+        .role(p.replication.as_ref(), REPLICATION_NAMES, "replication")?
         .ok_or_else(|| invalid("which column is the replication? give `replication`"))?;
-    let scenario = s.role(p.scenario.as_deref(), SCENARIO_NAMES, "scenario")?;
+    let scenario = s.role(p.scenario.as_ref(), SCENARIO_NAMES, "scenario")?;
     if time == replication || scenario == Some(time) || scenario == Some(replication) {
         return Err(invalid(
             "the time, replication and scenario columns must be different columns",

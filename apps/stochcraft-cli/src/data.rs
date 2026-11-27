@@ -29,7 +29,11 @@ fn read(file: &Path) -> Result<(String, String), Failure> {
 pub struct AnalyseArgs<'a> {
     pub file: &'a Path,
     pub scenario: Option<&'a str>,
+    /// No scenario column, whatever the headers.
+    pub no_scenario: bool,
     pub replication: Option<&'a str>,
+    /// No replication column, whatever the headers.
+    pub no_replication: bool,
     pub measure: Option<&'a str>,
     pub value: Option<&'a str>,
     pub baseline: Option<&'a str>,
@@ -67,6 +71,13 @@ fn analyse_params(a: &AnalyseArgs, csv: String) -> Result<Value, Failure> {
             t.insert(name.to_owned(), json!(value));
         }
         p["tolerance"] = Value::Object(t);
+    }
+    // `false`: no such column, so the engine does not guess one from the headers.
+    if a.no_scenario {
+        p["scenario"] = json!(false);
+    }
+    if a.no_replication {
+        p["replication"] = json!(false);
     }
     Ok(p)
 }
@@ -247,6 +258,8 @@ pub struct WarmupArgs<'a> {
     pub time: Option<&'a str>,
     pub replication: Option<&'a str>,
     pub scenario: Option<&'a str>,
+    /// No scenario column, whatever the headers.
+    pub no_scenario: bool,
     pub json: bool,
 }
 
@@ -261,6 +274,9 @@ pub fn warmup(a: &WarmupArgs) -> Result<u8, Failure> {
         if let Some(v) = v {
             p[key] = json!(v);
         }
+    }
+    if a.no_scenario {
+        p["scenario"] = json!(false);
     }
     let r = Engine::new().execute("data.warmup", p)?;
     if a.json {
@@ -316,7 +332,9 @@ mod tests {
             AnalyseArgs {
                 file: Path::new("x.csv"),
                 scenario: None,
+                no_scenario: true,
                 replication: Some("rep"),
+                no_replication: false,
                 measure: None,
                 value: None,
                 baseline: None,
@@ -333,7 +351,8 @@ mod tests {
             (p["replication"].as_str(), p["paired"].as_bool()),
             (Some("rep"), Some(true))
         );
-        assert!(p.get("scenario").is_none());
+        assert_eq!(p["scenario"], false);
+        assert!(p.get("measure").is_none());
         let bad = vec!["wait".to_owned()];
         assert!(analyse_params(&args(&bad), String::new()).is_err());
     }

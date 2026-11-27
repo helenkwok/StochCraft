@@ -227,7 +227,10 @@ means with their 95% intervals, how sure they are and two outcomes where the run
 scenario against the `baseline`, judged as the check against observed data judges a difference
 (with an optional `tolerance` per measure). Pairing by replication id is used only when `paired`
 is declared: whether the scenarios shared their random numbers cannot be seen from the numbers.
-`data.warmup` takes a time series per replication and suggests a warm-up by MSER-5.
+`data.warmup` takes a time series per replication and suggests a warm-up by MSER-5. In both, a
+column role (`scenario`, `replication`, `measure`, `value`, `time`) left out is guessed from the
+headers, a string names the column, and `false` says there is none, so a column headed like the
+role is read as a measure (or left out, without numbers) instead.
 
 Each metric in `run`'s results carries `n`, the replications that had a value for it, which can
 be fewer than `replications` (a server no entity reached, or replications that stopped inside

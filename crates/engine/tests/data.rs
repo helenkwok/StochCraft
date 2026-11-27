@@ -485,3 +485,57 @@ fn a_precision_target_of_its_own_per_measure() {
         json!({ "points": 1.0 })
     );
 }
+
+/// A column headed like a role (`scenario`, `run`) that is not one: `false` says there is no
+/// such column, so it is not guessed, and the column is a measure when it has numbers, or is
+/// left out by name when it has none.
+#[test]
+fn a_column_headed_like_a_role_can_be_said_to_be_none() {
+    // `run` counts a machine's runs, and `scenario` is a remark.
+    let csv = "scenario,run,wait\nbusy,3,4\nbusy,5,6\nquiet,4,5\n";
+    let guessed = ok("data.analyse", json!({ "csv": csv }));
+    assert_eq!(guessed["scenarios"], json!(["busy", "quiet"]));
+    assert_eq!(guessed["columns"]["replication"], "run");
+    let r = ok(
+        "data.analyse",
+        json!({ "csv": csv, "scenario": false, "replication": false }),
+    );
+    assert_eq!(r["scenarios"], json!([null]));
+    assert!(r["columns"]["scenario"].is_null() && r["columns"]["replication"].is_null());
+    assert_eq!(r["columns"]["ignored"], json!(["scenario"]));
+    assert_eq!(r["measures"], json!(["run", "wait"]));
+    let run = result(&r, "", "run");
+    assert_eq!(run["n"], 3);
+    assert!(close(f(&run["mean"]), 4.0));
+    // A name still names the column, and `true` is refused.
+    let named = ok(
+        "data.analyse",
+        json!({ "csv": csv, "scenario": "scenario", "replication": false }),
+    );
+    assert_eq!(named["scenarios"], json!(["busy", "quiet"]));
+    let (code, message) = err("data.analyse", json!({ "csv": csv, "scenario": true }));
+    assert_eq!(code, ErrorCode::InvalidParams);
+    assert!(message.contains("`false` for none"), "{message}");
+
+    // A long table read as wide: no measure column, so `value` is the only measure and
+    // `measure` is left out.
+    let wide = ok(
+        "data.analyse",
+        json!({ "csv": LONG, "measure": false, "replication": false }),
+    );
+    assert_eq!(wide["shape"], "wide");
+    assert_eq!(wide["measures"], json!(["value"]));
+    assert_eq!(wide["columns"]["ignored"], json!(["measure"]));
+
+    // A time series whose `scenario` column is a number per row (a code, say).
+    let series = "time,replication,scenario,queue\n1,1,7,2\n2,1,7,3\n1,2,8,1\n2,2,8,2\n";
+    let guessed = ok("data.warmup", json!({ "csv": series }));
+    assert_eq!(guessed["columns"]["scenario"], "scenario");
+    let r = ok("data.warmup", json!({ "csv": series, "scenario": false }));
+    assert!(r["columns"]["scenario"].is_null());
+    assert_eq!(r["columns"]["measures"], json!(["scenario", "queue"]));
+    assert_eq!(r["series"][0]["replications"], 2);
+    let (code, message) = err("data.warmup", json!({ "csv": series, "time": false }));
+    assert_eq!(code, ErrorCode::InvalidParams);
+    assert!(message.contains("which column is the time"), "{message}");
+}
