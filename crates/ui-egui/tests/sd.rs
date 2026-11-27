@@ -834,7 +834,10 @@ fn the_stop_condition_is_edited_on_the_model_tab_and_explained_in_the_results() 
     assert!(h.state().is_system_dynamics());
     // The file's condition, in its field on the Model tab.
     let field = h.get_by_role_and_label(Role::TextInput, "Stop when");
-    assert_eq!(field.value().as_deref(), Some("u10 > 10000"));
+    assert_eq!(
+        field.accesskit_node().value().as_deref(),
+        Some("u10 > 10000")
+    );
     h.get_by_label_contains("The run ends at the first step where the condition holds");
 
     // The run stops there, and the results say when, before anything else.
