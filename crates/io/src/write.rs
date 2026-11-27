@@ -11,7 +11,7 @@ use stochcraft_model::{
     ElementKind, Estimate, Experiment, HealthCheck, LengthUnit, Model, MonteCarlo, Need,
     Observation, Observed, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
     ProcessingBy, ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit,
-    ResourcePool, Routing, Scrap, Sequential, Setup, Stop, Timed, Transfer,
+    ResourcePool, Routing, Scrap, Sequential, Setup, Stop, TimeInSystem, Timed, Transfer,
 };
 
 use stochcraft_model::dmn::DecisionUse;
@@ -86,9 +86,26 @@ pub fn dist_element(d: &Dist) -> Element {
         Dist::Gamma { shape, scale } => s("GammaDistribution")
             .with_attr("shape", &num(*shape))
             .with_attr("scale", &num(*scale)),
-        Dist::Beta { shape, scale } => s("BetaDistribution")
+        // BPSim's beta lies on [0, 1]; one on another range is StochCraft's own value.
+        Dist::Beta {
+            shape,
+            scale,
+            min,
+            max,
+        } if *min == 0.0 && *max == 1.0 => s("BetaDistribution")
             .with_attr("shape", &num(*shape))
             .with_attr("scale", &num(*scale)),
+        Dist::Beta {
+            shape,
+            scale,
+            min,
+            max,
+        } => Element::new(crate::bpsim::SCALED_BETA, Some(crate::bpsim::STOCHCRAFT_NS))
+            .with_attr("xmlns:stochcraft", crate::bpsim::STOCHCRAFT_NS)
+            .with_attr("shape", &num(*shape))
+            .with_attr("scale", &num(*scale))
+            .with_attr("min", &num(*min))
+            .with_attr("max", &num(*max)),
         Dist::Weibull { shape, scale } => s("WeibullDistribution")
             .with_attr("shape", &num(*shape))
             .with_attr("scale", &num(*scale)),
@@ -670,6 +687,27 @@ pub(crate) fn demand_element(d: &Demand) -> Element {
         .with_child(body)
 }
 
+/// A sink's time in system by percentile as StochCraft's vendor extension
+/// ([`crate::bpsim::TIME_IN_SYSTEM`]): the target time, if any, as a BPSim value in the
+/// scenario's time unit.
+pub(crate) fn time_in_system_element(x: &TimeInSystem) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:timeInSystem", Some(ns));
+    if let Some(c) = &x.calendar {
+        body = body.with_attr("calendar", c.as_str());
+    }
+    if let Some(w) = x.within {
+        body.push(
+            Element::new("stochcraft:within", Some(ns))
+                .with_child(dist_element(&Dist::Constant(w))),
+        );
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::TIME_IN_SYSTEM)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
+}
+
 /// A sink's scrap as StochCraft's vendor extension ([`crate::bpsim::SCRAP`]).
 pub(crate) fn scrap_element(x: &Scrap) -> Element {
     let ns = crate::bpsim::STOCHCRAFT_NS;
@@ -1177,6 +1215,13 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let ElementKind::Sink { scrap: Some(x), .. } = &e.kind {
             ep.push(scrap_element(x));
+        }
+        if let ElementKind::Sink {
+            time_in_system: Some(x),
+            ..
+        } = &e.kind
+        {
+            ep.push(time_in_system_element(x));
         }
         if let ElementKind::Sink {
             demand: Some(d), ..

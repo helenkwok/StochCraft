@@ -1049,6 +1049,7 @@ unit	yr	năm
 	In “{field}” of {block}, set “{param}” to 1 or more.	Trong “{field}” của {block}, đặt “{param}” thành 1 hoặc lớn hơn.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Trong “{field}” của {block}, đặt “{param}” thành một số từ 0 đến 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Trong “{field}” của {block}, đặt “Giá trị nhỏ nhất” nhỏ hơn “Giá trị lớn nhất”, và giá trị “Có khả năng nhất” (nếu có) nằm giữa hai giá trị đó.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Trong “{field}” của {block}, đặt “Giá trị nhỏ nhất” nhỏ hơn “Giá trị lớn nhất”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Trong “{field}” của {block}, thêm các điểm dữ liệu có tổng xác suất lớn hơn 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} sẽ không bao giờ có đơn vị nào để làm việc. Hãy cho nó ít nhất 1 đơn vị.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} sẽ tạo thực thể không ngừng, vì “Thời gian giữa các lượt đến” luôn bằng 0. Hãy đặt một thời gian lớn hơn 0, hoặc đặt “Giới hạn lượt đến”.
@@ -1491,6 +1492,35 @@ connection	Flow	Luồng
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} được đặt cách đầu {s} dọc theo băng tải {conveyor}, có đường vẽ dài {length}. Hãy đặt nó trong khoảng từ 0 đến {length} dọc theo đường vẽ.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Các thực thể trên băng tải {conveyor} đến {before} trước {block}, nhưng {block} được đặt gần đầu hơn ({s} dọc theo băng tải, {before} ở {before_s}). Hãy đặt {block} xa hơn {before} dọc theo đường vẽ, hoặc hoán đổi chúng trong các luồng.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Mối nối trên luồng {flow} mất {time} để đi qua. Hãy cho thời gian chuyển của nó là 0 hoặc lớn hơn.
+	A path needs at least two points.	Một đường đi cần ít nhất hai điểm.
+	Finish	Hoàn tất
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Đang vẽ đường đi của {name}: nhấp để thêm điểm, nhấp đúp hoặc Enter để hoàn tất, Backspace để bỏ điểm cuối, Esc để hủy.
+	Draw path	Vẽ đường đi
+	Select a conveyor to draw its path	Chọn một băng tải để vẽ đường đi của nó
+	Remove path	Xóa đường đi
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Nhấp để thêm điểm · Nhấp đúp hoặc Enter để hoàn tất · Esc để hủy
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Nhấp vào băng để chọn · Kéo các điểm hoặc cả băng · Nhấp đúp để thêm điểm · Kéo sàn để dịch chuyển · Cuộn để thu phóng
+	Point {n} of {name}, x {x} m, y {y} m	Điểm {n} của {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Nhấp vào một băng tải ở đây để vẽ đường đi của nó.
+	Path	Đường đi
+	Not drawn in the layout yet.	Chưa được vẽ trên mặt bằng.
+	Draw in the Layout view	Vẽ trong chế độ xem Mặt bằng
+	Add a straight path	Thêm đường đi thẳng
+	Drawn length: {length} {unit}	Chiều dài đã vẽ: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Đường đi này đi lên hoặc có đường xoắn: không thể sửa các điểm của nó ở đây.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Đường đi này quay trọn một vòng hoặc hơn trong một cung: không thể sửa các điểm của nó ở đây.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Đường đi này rẽ gấp ở điểm đầu hoặc điểm cuối: không thể sửa các điểm của nó ở đây.
+	Point {n}	Điểm {n}
+	x of point {n}	x của điểm {n}
+	y of point {n}	y của điểm {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Bán kính khúc cua tại điểm {n}
+	bend	khúc cua
+	tightened to {radius} to fit	thu hẹp còn {radius} cho vừa
+	Remove point {n}	Xóa điểm {n}
+	Add a point at the end	Thêm một điểm ở cuối
+	Change Path	Thay đổi đường đi
 	Search examples	Tìm trong ví dụ
 	Clear search	Xóa tìm kiếm
 	Logistics and warehousing	Hậu cần và kho bãi
@@ -1505,6 +1535,18 @@ connection	Flow	Luồng
 	Scenario: {name}	Kịch bản: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Mở {scenario} sẽ bỏ các thay đổi chưa lưu của {name}. Lưu trước?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} kịch bản để so sánh
+	Median time in system	Trung vị thời gian trong hệ thống
+	Time in system, 90th percentile	Thời gian trong hệ thống, phân vị thứ 90
+	Time in system, 95th percentile	Thời gian trong hệ thống, phân vị thứ 95
+	Share done within the target time	Tỷ lệ xong trong thời gian mục tiêu
+	Percentiles of time in system	Phân vị thời gian trong hệ thống
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Hiển thị trung vị, phân vị thứ 90 và 95 của thời gian mỗi thực thể cần từ khi được tạo đến các lối ra này, và với thời gian mục tiêu, tỷ lệ xong trong thời gian đó.
+	Target time ({unit})	Thời gian mục tiêu ({unit})
+	The target time is a time above 0	Thời gian mục tiêu là một thời gian lớn hơn 0
+	Count only working time on	Chỉ tính thời gian làm việc theo
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Các thực thể vẫn còn bên trong khi lần chạy kết thúc không được tính, vì vậy hãy dừng lần chạy khi tất cả đã xong.
+	Set the target time in system of {block} to a time above 0.	Đặt thời gian mục tiêu trong hệ thống của {block} thành một thời gian lớn hơn 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Thời gian trong hệ thống của {block} tính thời gian làm việc theo một lịch không tồn tại. Hãy chọn một lịch đang có.
 	One machine's availability	Độ sẵn sàng của một máy
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Một máy trung bình cứ 90 giờ lại hỏng và cần 4.5 giờ để sửa (Hristova, Denev và Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Một máy dừng thường xuyên đến mức nào, và việc đó làm mất bao nhiêu công việc?

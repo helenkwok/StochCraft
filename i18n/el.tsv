@@ -1049,6 +1049,7 @@ unit	yr	έτ
 	In “{field}” of {block}, set “{param}” to 1 or more.	Στο «{field}» του μπλοκ {block}, ορίστε το «{param}» σε 1 ή περισσότερο.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Στο «{field}» του μπλοκ {block}, ορίστε το «{param}» σε αριθμό από 0 έως 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Στο «{field}» του μπλοκ {block}, ορίστε το «Ελάχιστο» κάτω από το «Μέγιστο» και κάθε τιμή «Πιθανότερη τιμή» ανάμεσά τους.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Στο «{field}» του μπλοκ {block}, ορίστε το «Ελάχιστο» κάτω από το «Μέγιστο».
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Στο «{field}» του μπλοκ {block}, προσθέστε σημεία δεδομένων με πιθανότητες που αθροίζουν σε περισσότερο από 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Το μπλοκ {block} δεν θα είχε ποτέ μονάδα για να δουλέψει. Δώστε του τουλάχιστον 1 μονάδα.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Το μπλοκ {block} θα δημιουργούσε οντότητες χωρίς τέλος, επειδή ο «Χρόνος μεταξύ αφίξεων» είναι πάντα 0. Δώστε του χρόνο μεγαλύτερο από 0 ή ορίστε ένα «Όριο αφίξεων».
@@ -1491,6 +1492,35 @@ connection	Flow	Ροή
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Το μπλοκ {block} είναι τοποθετημένο σε απόσταση {s} κατά μήκος του μεταφορέα {conveyor}, του οποίου η διαδρομή έχει μήκος {length}. Τοποθετήστε το μεταξύ 0 και {length} κατά μήκος της διαδρομής.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Οι οντότητες στον μεταφορέα {conveyor} φτάνουν στο {before} πριν από το {block}, αλλά το {block} είναι τοποθετημένο πιο κοντά στην αρχή ({s} κατά μήκος του, το {before} στο {before_s}). Τοποθετήστε το {block} πιο πέρα στη διαδρομή από το {before} ή αντιμεταθέστε τα στις ροές.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Ο κόμβος στη ροή {flow} χρειάζεται {time} για να διασχιστεί. Ορίστε τον χρόνο μεταφοράς του σε 0 ή περισσότερο.
+	A path needs at least two points.	Μια διαδρομή χρειάζεται τουλάχιστον δύο σημεία.
+	Finish	Τέλος
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Σχεδίαση της διαδρομής του {name}: κάντε κλικ για να προσθέσετε σημεία, διπλό κλικ ή Enter για τέλος, Backspace για να αφαιρέσετε το τελευταίο σημείο, Esc για ακύρωση.
+	Draw path	Σχεδίαση διαδρομής
+	Select a conveyor to draw its path	Επιλέξτε έναν μεταφορέα για να σχεδιάσετε τη διαδρομή του
+	Remove path	Αφαίρεση διαδρομής
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Κλικ για προσθήκη σημείου · Διπλό κλικ ή Enter για τέλος · Esc για ακύρωση
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Κλικ σε ταινία για επιλογή · Σύρετε τα σημεία της ή την ταινία · Διπλό κλικ για προσθήκη σημείου · Σύρετε το δάπεδο για μετακίνηση · Κύλιση για ζουμ
+	Point {n} of {name}, x {x} m, y {y} m	Σημείο {n} του {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Κάντε κλικ σε έναν μεταφορέα εδώ για να σχεδιάσετε τη διαδρομή του.
+	Path	Διαδρομή
+	Not drawn in the layout yet.	Δεν έχει σχεδιαστεί ακόμη στη διάταξη.
+	Draw in the Layout view	Σχεδίαση στην προβολή Διάταξη
+	Add a straight path	Προσθήκη ευθείας διαδρομής
+	Drawn length: {length} {unit}	Σχεδιασμένο μήκος: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Αυτή η διαδρομή ανεβαίνει ή έχει έλικα: τα σημεία της δεν επεξεργάζονται εδώ.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Αυτή η διαδρομή κάνει έναν πλήρη κύκλο ή περισσότερο σε ένα τόξο: τα σημεία της δεν επεξεργάζονται εδώ.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Αυτή η διαδρομή στρίβει απότομα στην αρχή ή στο τέλος της: τα σημεία της δεν επεξεργάζονται εδώ.
+	Point {n}	Σημείο {n}
+	x of point {n}	x του σημείου {n}
+	y of point {n}	y του σημείου {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Ακτίνα καμπύλης στο σημείο {n}
+	bend	καμπύλη
+	tightened to {radius} to fit	μειώθηκε σε {radius} για να χωρέσει
+	Remove point {n}	Αφαίρεση σημείου {n}
+	Add a point at the end	Προσθήκη σημείου στο τέλος
+	Change Path	Αλλαγή διαδρομής
 	Search examples	Αναζήτηση στα παραδείγματα
 	Clear search	Απαλοιφή αναζήτησης
 	Logistics and warehousing	Εφοδιαστική και αποθήκευση
@@ -1505,6 +1535,18 @@ connection	Flow	Ροή
 	Scenario: {name}	Σενάριο: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Το άνοιγμα του {scenario} απορρίπτει τις μη αποθηκευμένες αλλαγές στο {name}. Να αποθηκευτούν πρώτα;
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} σενάριο για σύγκριση|{n} σενάρια για σύγκριση
+	Median time in system	Διάμεσος χρόνου στο σύστημα
+	Time in system, 90th percentile	Χρόνος στο σύστημα, 90ό εκατοστημόριο
+	Time in system, 95th percentile	Χρόνος στο σύστημα, 95ο εκατοστημόριο
+	Share done within the target time	Ποσοστό που ολοκληρώθηκε εντός του χρόνου-στόχου
+	Percentiles of time in system	Εκατοστημόρια του χρόνου στο σύστημα
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Δείχνει τη διάμεσο, το 90ό και το 95ο εκατοστημόριο του χρόνου που χρειάστηκε κάθε οντότητα από τη δημιουργία της έως αυτές τις αναχωρήσεις και, με χρόνο-στόχο, το ποσοστό που ολοκληρώθηκε εντός του.
+	Target time ({unit})	Χρόνος-στόχος ({unit})
+	The target time is a time above 0	Ο χρόνος-στόχος είναι χρόνος μεγαλύτερος από 0
+	Count only working time on	Μέτρηση μόνο του χρόνου εργασίας κατά
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Οι οντότητες που είναι ακόμη εντός όταν τελειώνει η εκτέλεση δεν περιλαμβάνονται, οπότε σταματήστε την εκτέλεση όταν ολοκληρωθούν όλες.
+	Set the target time in system of {block} to a time above 0.	Ορίστε τον χρόνο-στόχο στο σύστημα του μπλοκ {block} σε χρόνο μεγαλύτερο από 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Ο χρόνος στο σύστημα του μπλοκ {block} μετρά χρόνο εργασίας κατά ένα ημερολόγιο που δεν υπάρχει. Επιλέξτε ένα ημερολόγιο που υπάρχει.
 	One machine's availability	Διαθεσιμότητα ενός μηχανήματος
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Ένα μηχάνημα που χαλάει κατά μέσο όρο κάθε 90 ώρες και χρειάζεται 4.5 ώρες για επισκευή (Hristova, Denev και Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Πόσο συχνά είναι εκτός λειτουργίας ένα μηχάνημα και πόση δουλειά κοστίζει αυτό;

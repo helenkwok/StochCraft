@@ -97,7 +97,12 @@ fn continuous(d: &Dist, p: f64) -> f64 {
             invert_positive(d, p, mean, sd)
         }
         Dist::Erlang { mean, k } => invert_positive(d, p, *mean, mean / (*k as f64).sqrt()),
-        Dist::Beta { shape: a, scale: b } => beta(p, *a, *b),
+        Dist::Beta {
+            shape: a,
+            scale: b,
+            min,
+            max,
+        } => min + (max - min) * beta(p, *a, *b),
         Dist::User { points, .. } => user_continuous(points, p),
         // Counts are handled by `discrete`.
         Dist::Poisson { .. } | Dist::Binomial { .. } => {
@@ -427,14 +432,19 @@ mod tests {
     #[test]
     fn beta_and_truncated_normal_and_constants() {
         for p in [0.01, 0.4, 0.9] {
-            let x = quantile(
+            let x = quantile(&Dist::beta(2.0, 5.0), p);
+            assert!(close(estimate::beta_cdf(x, 2.0, 5.0), p, 1e-9), "{p}: {x}");
+            // The same beta stretched to [1, 4]: its quantile stretches with it.
+            let scaled = quantile(
                 &Dist::Beta {
                     shape: 2.0,
                     scale: 5.0,
+                    min: 1.0,
+                    max: 4.0,
                 },
                 p,
             );
-            assert!(close(estimate::beta_cdf(x, 2.0, 5.0), p, 1e-9), "{p}: {x}");
+            assert!(close(scaled, 1.0 + 3.0 * x, 1e-12), "{p}: {scaled}");
         }
         // A normal truncated far in its upper tail stays inside its bounds and is monotone.
         let t = Dist::TruncatedNormal {

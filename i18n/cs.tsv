@@ -1049,6 +1049,7 @@ unit	yr	r.
 	In “{field}” of {block}, set “{param}” to 1 or more.	V poli „{field}“ bloku {block} nastavte „{param}“ na 1 nebo více.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	V poli „{field}“ bloku {block} nastavte „{param}“ na číslo od 0 do 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	V poli „{field}“ bloku {block} nastavte „Minimum“ pod „Maximum“ a případnou hodnotu „Nejpravděpodobnější“ mezi ně.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	V poli „{field}“ bloku {block} nastavte „Minimum“ pod „Maximum“.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	V poli „{field}“ bloku {block} přidejte datové body, jejichž pravděpodobnosti dohromady dávají víc než 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} by nikdy neměl jednotku, se kterou by pracoval. Dejte mu alespoň 1 jednotku.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} by vytvářel entity donekonečna, protože jeho „Doba mezi příchody“ je vždy 0. Zadejte dobu větší než 0, nebo nastavte „Limit příchodů“.
@@ -1491,6 +1492,35 @@ connection	Flow	Tok
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} je umístěn {s} podél dopravníku {conveyor}, jehož dráha je dlouhá {length}. Umístěte ho mezi 0 a {length} podél dráhy.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entity na dopravníku {conveyor} dorazí k {before} dřív než k {block}, ale {block} je umístěn blíž začátku ({s} podél něj, {before} na {before_s}). Umístěte {block} na dráze dál než {before}, nebo je v tocích prohoďte.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Spoj na toku {flow} se překonává {time}. Nastavte jeho dobu přesunu na 0 nebo více.
+	A path needs at least two points.	Trasa potřebuje alespoň dva body.
+	Finish	Dokončit
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Kreslení trasy {name}: kliknutím přidáte body, dvojklikem nebo Enter dokončíte, Backspace vrátí poslední bod, Esc zruší.
+	Draw path	Nakreslit trasu
+	Select a conveyor to draw its path	Vyberte dopravník, abyste nakreslili jeho trasu
+	Remove path	Odebrat trasu
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Kliknutím přidáte bod · Dvojklik nebo Enter dokončí · Esc zruší
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Kliknutím vyberete pás · Táhněte jeho body nebo pás · Dvojklikem přidáte bod · Tažením podlahy posouváte · Kolečkem přibližujete
+	Point {n} of {name}, x {x} m, y {y} m	Bod {n} z {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klikněte zde na dopravník a nakreslete jeho trasu.
+	Path	Trasa
+	Not drawn in the layout yet.	V rozvržení zatím nenakresleno.
+	Draw in the Layout view	Nakreslit v zobrazení Rozvržení
+	Add a straight path	Přidat rovnou trasu
+	Drawn length: {length} {unit}	Nakreslená délka: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Tato trasa stoupá nebo má šroubovici: její body zde nelze upravit.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Tato trasa se v jednom oblouku otočí o celý kruh nebo víc: její body zde nelze upravit.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Tato trasa ostře zatáčí na svém začátku nebo konci: její body zde nelze upravit.
+	Point {n}	Bod {n}
+	x of point {n}	x bodu {n}
+	y of point {n}	y bodu {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Poloměr oblouku v bodě {n}
+	bend	oblouk
+	tightened to {radius} to fit	zúženo na {radius}, aby se vešlo
+	Remove point {n}	Odebrat bod {n}
+	Add a point at the end	Přidat bod na konec
+	Change Path	Změna trasy
 	Search examples	Hledat v příkladech
 	Clear search	Vymazat hledání
 	Logistics and warehousing	Logistika a skladování
@@ -1505,6 +1535,18 @@ connection	Flow	Tok
 	Scenario: {name}	Scénář: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otevřením scénáře {scenario} se zahodí neuložené změny v {name}. Uložit je nejprve?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} scénář k porovnání|{n} scénáře k porovnání|{n} scénářů k porovnání
+	Median time in system	Medián doby v systému
+	Time in system, 90th percentile	Doba v systému, 90. percentil
+	Time in system, 95th percentile	Doba v systému, 95. percentil
+	Share done within the target time	Podíl hotových v cílové době
+	Percentiles of time in system	Percentily doby v systému
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Zobrazí medián, 90. a 95. percentil doby, kterou každá entita strávila od svého vzniku do těchto výstupů, a s cílovou dobou podíl hotových v ní.
+	Target time ({unit})	Cílová doba ({unit})
+	The target time is a time above 0	Cílová doba je doba větší než 0
+	Count only working time on	Počítat jen pracovní dobu podle
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entity, které jsou na konci běhu stále uvnitř, nejsou zahrnuty, proto běh zastavte, až budou všechny hotové.
+	Set the target time in system of {block} to a time above 0.	Nastavte cílovou dobu v systému bloku {block} na dobu větší než 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Doba v systému bloku {block} počítá pracovní dobu podle kalendáře, který neexistuje. Vyberte existující kalendář.
 	One machine's availability	Dostupnost jednoho stroje
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jeden stroj, který se v průměru porouchá každých 90 hodin a oprava trvá 4.5 hodiny (Hristova, Denev a Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Jak často stojí jeden stroj a kolik práce to stojí?

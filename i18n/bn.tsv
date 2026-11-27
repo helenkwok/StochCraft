@@ -1049,6 +1049,7 @@ unit	yr	বছর
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block}-এর “{field}”-এ “{param}”-কে 1 বা তার বেশি করুন।
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block}-এর “{field}”-এ “{param}”-কে 0 থেকে 1-এর মধ্যে একটি সংখ্যা করুন।
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block}-এর “{field}”-এ “সর্বনিম্ন” “সর্বাধিক”-এর কম করুন, আর “সবচেয়ে সম্ভাব্য” কোনো মান থাকলে তা এ দুটির মাঝে রাখুন।
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block}-এর “{field}”-এ “সর্বনিম্ন” “সর্বাধিক”-এর কম করুন।
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block}-এর “{field}”-এ এমন ডেটা বিন্দু যোগ করুন যাদের সম্ভাবনার যোগফল 0-এর বেশি।
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block}-এর কাজ করার মতো কোনো একক কখনো থাকবে না। কমপক্ষে 1টি একক দিন।
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} অবিরাম সত্তা তৈরি করবে, কারণ এর “আগমনের মধ্যবর্তী সময়” সব সময় 0। 0-এর বেশি একটি সময় দিন, অথবা একটি “আগমনের সীমা” ঠিক করুন।
@@ -1491,6 +1492,35 @@ connection	Flow	প্রবাহ
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} কনভেয়ার {conveyor}-এর বরাবর {s} দূরত্বে রাখা হয়েছে, কিন্তু এর পথ মাত্র {length} লম্বা। এটিকে পথ বরাবর 0 থেকে {length}-এর মধ্যে রাখুন।
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	কনভেয়ার {conveyor}-এ সত্তারা {block}-এর আগে {before}-এ পৌঁছায়, কিন্তু {block} শুরুর কাছাকাছি রাখা হয়েছে (এর বরাবর {s}, আর {before} আছে {before_s}-এ)। {block}-কে পথ বরাবর {before}-এর চেয়ে সামনে রাখুন, অথবা প্রবাহগুলিতে ওদের অদলবদল করুন।
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	প্রবাহ {flow}-এর সংযোগস্থল পার হতে {time} লাগে। এর স্থানান্তরের সময় 0 বা তার বেশি করুন।
+	A path needs at least two points.	একটি পথে অন্তত দুটি বিন্দু লাগে।
+	Finish	শেষ করুন
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name}-এর পথ আঁকা হচ্ছে: বিন্দু যোগ করতে ক্লিক করুন, শেষ করতে ডাবল-ক্লিক বা Enter, শেষ বিন্দু ফেরাতে Backspace, বাতিল করতে Esc।
+	Draw path	পথ আঁকুন
+	Select a conveyor to draw its path	পথ আঁকতে একটি কনভেয়র নির্বাচন করুন
+	Remove path	পথ সরান
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	বিন্দু যোগ করতে ক্লিক করুন · শেষ করতে ডাবল-ক্লিক বা Enter · বাতিল করতে Esc
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	নির্বাচন করতে একটি বেল্টে ক্লিক করুন · এর বিন্দু বা বেল্ট টানুন · বিন্দু যোগ করতে ডাবল-ক্লিক করুন · সরাতে মেঝে টানুন · জুম করতে স্ক্রল করুন
+	Point {n} of {name}, x {x} m, y {y} m	{name}-এর বিন্দু {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	পথ আঁকতে এখানে একটি কনভেয়রে ক্লিক করুন।
+	Path	পথ
+	Not drawn in the layout yet.	লেআউটে এখনো আঁকা হয়নি।
+	Draw in the Layout view	লেআউট দৃশ্যে আঁকুন
+	Add a straight path	একটি সোজা পথ যোগ করুন
+	Drawn length: {length} {unit}	আঁকা দৈর্ঘ্য: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	এই পথ ওপরে ওঠে বা এতে হেলিক্স আছে: এর বিন্দু এখানে সম্পাদনা করা যায় না।
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	এই পথ একটি বাঁকে পুরো এক বৃত্ত বা তার বেশি ঘোরে: এর বিন্দু এখানে সম্পাদনা করা যায় না।
+	This path turns sharply where it starts or ends: its points cannot be edited here.	এই পথ শুরুতে বা শেষে তীক্ষ্ণভাবে বাঁক নেয়: এর বিন্দু এখানে সম্পাদনা করা যায় না।
+	Point {n}	বিন্দু {n}
+	x of point {n}	বিন্দু {n}-এর x
+	y of point {n}	বিন্দু {n}-এর y
+	x	x
+	y	y
+	Bend radius at point {n}	বিন্দু {n}-এ বাঁকের ব্যাসার্ধ
+	bend	বাঁক
+	tightened to {radius} to fit	মানাতে {radius} পর্যন্ত ছোট করা হয়েছে
+	Remove point {n}	বিন্দু {n} সরান
+	Add a point at the end	শেষে একটি বিন্দু যোগ করুন
+	Change Path	পথ পরিবর্তন
 	Search examples	উদাহরণ খুঁজুন
 	Clear search	খোঁজা মুছুন
 	Logistics and warehousing	লজিস্টিকস ও গুদামজাতকরণ
@@ -1505,6 +1535,18 @@ connection	Flow	প্রবাহ
 	Scenario: {name}	দৃশ্যকল্প: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} খুললে {name}-এর অসংরক্ষিত পরিবর্তনগুলি হারিয়ে যাবে। আগে সংরক্ষণ করবেন?
 @plural	{n} scenario to compare|{n} scenarios to compare	তুলনার জন্য {n}টি দৃশ্যকল্প|তুলনার জন্য {n}টি দৃশ্যকল্প
+	Median time in system	সিস্টেমে সময়ের মধ্যমা
+	Time in system, 90th percentile	সিস্টেমে সময়, ৯০তম শতাংশক
+	Time in system, 95th percentile	সিস্টেমে সময়, ৯৫তম শতাংশক
+	Share done within the target time	লক্ষ্য সময়ের মধ্যে শেষ হওয়ার অংশ
+	Percentiles of time in system	সিস্টেমে সময়ের শতাংশক
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	প্রতিটি সত্তা তৈরি হওয়া থেকে এই প্রস্থানগুলিতে পৌঁছাতে যে সময় নিয়েছে তার মধ্যমা, ৯০তম ও ৯৫তম শতাংশক দেখায়, আর লক্ষ্য সময় দিলে তার মধ্যে শেষ হওয়ার অংশ।
+	Target time ({unit})	লক্ষ্য সময় ({unit})
+	The target time is a time above 0	লক্ষ্য সময় 0-এর বেশি একটি সময় হতে হবে
+	Count only working time on	শুধু কাজের সময় গুনুন এতে
+	Entities still inside when the run ends are left out, so stop the run once all are done.	রান শেষ হলে যেগুলো এখনও ভেতরে, সেগুলো বাদ থাকে, তাই সবগুলো শেষ হলে রান থামান।
+	Set the target time in system of {block} to a time above 0.	{block}-এর সিস্টেমে লক্ষ্য সময় 0-এর বেশি একটি সময়ে সেট করুন।
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block}-এর সিস্টেমে সময় এমন একটি ক্যালেন্ডারে কাজের সময় গোনে যা নেই। এমন ক্যালেন্ডার বেছে নিন যা আছে।
 	One machine's availability	একটি যন্ত্রের প্রাপ্যতা
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	একটি যন্ত্র গড়ে প্রতি ৯০ ঘণ্টায় বিকল হয় এবং মেরামত হতে ৪.৫ ঘণ্টা লাগে (Hristova, Denev ও Tsankov, Environment. Technology. Resources, 2024)।
 	How often is one machine down, and how much work does that cost?	একটি যন্ত্র কত ঘন ঘন বিকল থাকে, এবং তাতে কত কাজ নষ্ট হয়?

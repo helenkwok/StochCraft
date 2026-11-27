@@ -85,10 +85,7 @@ pub fn showcase() -> Model {
             min: 1.0,
             max: 1000.0,
         },
-        Dist::Beta {
-            shape: 2.0,
-            scale: 5.0,
-        },
+        Dist::beta(2.0, 5.0),
         Dist::Weibull {
             shape: 1.5,
             scale: 2.0,
@@ -1319,6 +1316,99 @@ fn scrap_and_rework_are_written_saved_and_removed() {
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
 }
 
+/// Beta(3, 5) on [1, 4].
+fn ranged_beta() -> Dist {
+    Dist::Beta {
+        shape: 3.0,
+        scale: 5.0,
+        min: 1.0,
+        max: 4.0,
+    }
+}
+
+/// A beta on a range is StochCraft's `stochcraft:BetaDistribution` wherever a BPSim value goes
+/// (a time between arrivals, a service, a delay, a repair time inside a vendor extension, a
+/// property's random value), and BPSim's own on [0, 1] is written as before; both read back,
+/// and a saved edit turns one into the other in place.
+#[test]
+fn a_beta_on_a_range_is_written_read_back_and_saved() {
+    let mut m = Builder::new();
+    let src = m.source("arrivals", ranged_beta(), Some(100));
+    let desk = m.server("desk", 2, ranged_beta());
+    m.breakdown(
+        desk,
+        stochcraft_blocks::Breakdown {
+            time_to_failure: Dist::Exponential { mean: 120.0 },
+            repair: ranged_beta(),
+            interruptible: true,
+            hands_on_while_down: true,
+        },
+    );
+    m.property(
+        src,
+        "score",
+        Some(PropertyType::Double),
+        PropertyValue::Random(Dist::Beta {
+            shape: 2.0,
+            scale: 2.0,
+            min: -1.0,
+            max: 2.0,
+        }),
+    );
+    let wait = m.delay("wait", Dist::beta(2.0, 5.0));
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, wait);
+    m.connect(wait, out);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    let ranged = r#"shape="3" scale="5" min="1" max="4"/>"#;
+    assert_eq!(
+        text.matches(&format!("<stochcraft:BetaDistribution xmlns:stochcraft=\"https://helenkwok.github.io/StochCraft/bpsim/1\" {ranged}")).count(),
+        3,
+        "{text}"
+    );
+    assert!(
+        text.contains(r#"shape="2" scale="2" min="-1" max="2"/>"#),
+        "{text}"
+    );
+    assert!(
+        text.contains(r#"<bpsim:BetaDistribution shape="2" scale="5"/>"#),
+        "{text}"
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+
+    // The delay's beta on [0, 1] becomes one on [1, 4], and back.
+    let mut edited = loaded.model.clone();
+    let set_wait = |m: &mut Model, d: Dist| {
+        for e in &mut m.elements {
+            if let ElementKind::Delay { duration, .. } = &mut e.kind
+                && e.id.as_str() == "wait"
+            {
+                *duration = d.clone();
+            }
+        }
+    };
+    set_wait(&mut edited, ranged_beta());
+    let Ok(saved) = loaded.opened.save(&edited) else {
+        unreachable!()
+    };
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    set_wait(&mut edited, Dist::beta(2.0, 5.0));
+    let Ok(back) = again.opened.save(&edited) else {
+        unreachable!()
+    };
+    assert_eq!(read(&back).map(|l| l.model).ok(), Some(edited));
+}
+
 /// A customer demand per shift of a calendar is StochCraft's vendor extension: written, read
 /// back, changed and removed in place.
 #[test]
@@ -1385,6 +1475,106 @@ fn a_demand_is_written_saved_and_removed() {
     };
     let text = String::from_utf8_lossy(&removed);
     assert!(!text.contains("stochcraft:demand"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// Time in system by percentile is StochCraft's vendor extension: a target time and a calendar
+/// of working time, written, read back, changed and removed in place. A target written as a
+/// BPSim duration reads in the scenario's time unit; one that is not above 0 is left out with
+/// a note.
+#[test]
+fn a_time_in_system_is_written_saved_and_removed() {
+    let mut m = Builder::new();
+    m.calendar(
+        "weekdays",
+        vec![stochcraft_blocks::Event {
+            start: stochcraft_model::DateTime::new(2016, 1, 4, 0, 0, 0)
+                .unwrap_or(stochcraft_model::DateTime(0)),
+            end: stochcraft_model::DateTime::new(2016, 1, 9, 0, 0, 0)
+                .unwrap_or(stochcraft_model::DateTime(0)),
+            rule: stochcraft_blocks::Rule::parse("FREQ=WEEKLY").ok(),
+        }],
+    );
+    let src = m.source("parts", Dist::Exponential { mean: 5.0 }, None);
+    let out = m.sink("out");
+    m.time_in_system(
+        out,
+        stochcraft_blocks::TimeInSystem {
+            within: Some(60.0),
+            calendar: Some(stochcraft_model::ElementId::unchecked("weekdays")),
+        },
+    );
+    m.connect(src, out);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    let target = r#"<bpsim:FloatingParameter value="60"/>"#;
+    assert!(
+        text.contains(r#"<stochcraft:timeInSystem calendar="weekdays">"#)
+            && text.contains("<stochcraft:within>")
+            && text.matches(target).count() == 1,
+        "{text}"
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model.clone()));
+
+    // An hour as a BPSim duration is 60 minutes; a target of 0 is refused.
+    let hour = text.replace(target, r#"<bpsim:DurationParameter value="PT1H"/>"#);
+    assert_eq!(
+        read(hour.as_bytes()).map(|l| l.model).ok(),
+        Some(laid_out(model.clone()))
+    );
+    let zero = text.replace(target, r#"<bpsim:FloatingParameter value="0"/>"#);
+    let Ok(bad) = read(zero.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(
+        bad.notes
+            .iter()
+            .any(|n| n.message.contains("target time in system")),
+        "{:#?}",
+        bad.notes
+    );
+    assert!(bad.model.elements.iter().any(|e| matches!(
+        &e.kind,
+        ElementKind::Sink {
+            time_in_system: Some(x),
+            ..
+        } if x.within.is_none()
+    )));
+
+    let mut edited = loaded.model.clone();
+    for e in &mut edited.elements {
+        if let ElementKind::Sink {
+            time_in_system: Some(x),
+            ..
+        } = &mut e.kind
+        {
+            x.within = Some(90.0);
+            x.calendar = None;
+        }
+    }
+    let Ok(saved) = loaded.opened.save(&edited) else {
+        unreachable!()
+    };
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    for e in &mut edited.elements {
+        if let ElementKind::Sink { time_in_system, .. } = &mut e.kind {
+            *time_in_system = None;
+        }
+    }
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let Ok(removed) = again.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("stochcraft:timeInSystem"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
 }
 
@@ -2160,6 +2350,7 @@ fn belt_model() -> Model {
                 ElementKind::Sink {
                     scrap: None,
                     demand: None,
+                    time_in_system: None,
                 },
             ),
         ],
@@ -2350,6 +2541,7 @@ fn carry_model() -> Model {
                 ElementKind::Sink {
                     scrap: None,
                     demand: None,
+                    time_in_system: None,
                 },
             ),
         ],

@@ -1,5 +1,5 @@
 //! Control variates for a Monte Carlo output (Law, *Simulation Modeling and Analysis*, 5th ed.,
-//! §11.3; Glasserman, *Monte Carlo Methods in Financial Engineering*, Springer, 2003, §4.1;
+//! §11.4; Glasserman, *Monte Carlo Methods in Financial Engineering*, Springer, 2003, §4.1;
 //! Nelson, "Control variate remedies", *Operations Research* 38(6), 1990).
 //!
 //! A control C is a quantity computed in every trial whose mean μ is known exactly. The output Y
@@ -8,7 +8,7 @@
 //! vector, which minimises that variance.
 //!
 //! **Unbiased.** Estimating b from the trials that are then averaged makes the estimate slightly
-//! biased (Law, §11.3; Nelson, 1990). So b is fitted on a **pilot**, the first batch (1,000
+//! biased (Law, §11.4; Nelson, 1990). So b is fitted on a **pilot**, the first batch (1,000
 //! trials; for a run of fewer than 2,000 trials the first half), and the pilot's trials are not
 //! used in the controlled estimate: the remaining trials are independent of b, so E[Y_c] = E[Y]
 //! exactly. The controlled mean and its interval come from those remaining trials on the run's

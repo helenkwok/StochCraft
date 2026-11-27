@@ -1049,6 +1049,7 @@ unit	yr	г.
 	In “{field}” of {block}, set “{param}” to 1 or more.	В поле «{field}» блока {block} задайте для «{param}» число не меньше 1.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	В поле «{field}» блока {block} задайте для «{param}» число от 0 до 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	В поле «{field}» блока {block} задайте «Минимум» меньше «Максимум», а «Наиболее вероятное значение», если оно есть, между ними.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	В поле «{field}» блока {block} задайте «Минимум» меньше «Максимум».
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	В поле «{field}» блока {block} добавьте точки данных, вероятности которых в сумме больше 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	У блока {block} никогда не было бы единицы для работы. Задайте хотя бы 1 единицу.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блок {block} создавал бы сущности без конца, потому что «Время между прибытиями» всегда равно 0. Задайте время больше 0 или укажите «Ограничение числа прибытий».
@@ -1491,6 +1492,35 @@ connection	Flow	Поток
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} размещён на расстоянии {s} вдоль конвейера {conveyor}, путь которого имеет длину {length}. Разместите его между 0 и {length} вдоль пути.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Сущности на конвейере {conveyor} доходят до {before} раньше, чем до {block}, но {block} размещён ближе к началу ({s} вдоль него, {before} на {before_s}). Разместите {block} дальше по пути, чем {before}, или поменяйте их местами в потоках.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Стык на потоке {flow} проходится за {time}. Задайте время передачи 0 или больше.
+	A path needs at least two points.	У трассы должно быть не менее двух точек.
+	Finish	Готово
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Рисуется трасса {name}: щёлкайте, чтобы добавить точки, двойной щелчок или Enter — завершить, Backspace — убрать последнюю точку, Esc — отменить.
+	Draw path	Нарисовать трассу
+	Select a conveyor to draw its path	Выберите конвейер, чтобы нарисовать его трассу
+	Remove path	Удалить трассу
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Щёлкните, чтобы добавить точку · Двойной щелчок или Enter — завершить · Esc — отменить
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Щёлкните ленту, чтобы выбрать её · Перетаскивайте её точки или ленту · Двойной щелчок добавляет точку · Перетащите пол для сдвига · Прокрутите для масштаба
+	Point {n} of {name}, x {x} m, y {y} m	Точка {n} из {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Щёлкните здесь конвейер, чтобы нарисовать его трассу.
+	Path	Трасса
+	Not drawn in the layout yet.	Ещё не нарисован на планировке.
+	Draw in the Layout view	Нарисовать в виде «Планировка»
+	Add a straight path	Добавить прямую трассу
+	Drawn length: {length} {unit}	Нарисованная длина: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Эта трасса поднимается или имеет спираль: её точки здесь не редактируются.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Эта трасса делает полный круг или больше в одной дуге: её точки здесь не редактируются.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Эта трасса резко поворачивает в начале или в конце: её точки здесь не редактируются.
+	Point {n}	Точка {n}
+	x of point {n}	x точки {n}
+	y of point {n}	y точки {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Радиус поворота в точке {n}
+	bend	поворот
+	tightened to {radius} to fit	сужен до {radius}, чтобы поместиться
+	Remove point {n}	Удалить точку {n}
+	Add a point at the end	Добавить точку в конце
+	Change Path	Изменение трассы
 	Search examples	Поиск по примерам
 	Clear search	Очистить поиск
 	Logistics and warehousing	Логистика и склад
@@ -1505,6 +1535,18 @@ connection	Flow	Поток
 	Scenario: {name}	Сценарий: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	При открытии {scenario} несохранённые изменения в {name} будут потеряны. Сначала сохранить их?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарий для сравнения|{n} сценария для сравнения|{n} сценариев для сравнения
+	Median time in system	Медиана времени в системе
+	Time in system, 90th percentile	Время в системе, 90-й процентиль
+	Time in system, 95th percentile	Время в системе, 95-й процентиль
+	Share done within the target time	Доля завершённых в пределах целевого времени
+	Percentiles of time in system	Процентили времени в системе
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Показывает медиану, 90-й и 95-й процентили времени, которое каждый объект провёл с момента создания до этих выходов, а при целевом времени — долю завершённых в его пределах.
+	Target time ({unit})	Целевое время ({unit})
+	The target time is a time above 0	Целевое время должно быть больше 0
+	Count only working time on	Считать только рабочее время по
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Объекты, оставшиеся внутри в конце запуска, не учитываются, поэтому останавливайте запуск, когда все завершены.
+	Set the target time in system of {block} to a time above 0.	Задайте для блока {block} целевое время в системе больше 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Время в системе блока {block} считает рабочее время по несуществующему календарю. Выберите существующий календарь.
 	One machine's availability	Готовность одного станка
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Один станок, который в среднем ломается каждые 90 часов, а ремонт занимает 4.5 часа (Hristova, Denev и Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Как часто простаивает один станок и сколько работы это стоит?

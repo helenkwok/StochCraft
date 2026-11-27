@@ -161,10 +161,7 @@ pub(crate) fn draw(name: &str, args: &[Value], rng: &RefCell<Rng>) -> Option<Val
             shape: a(0),
             scale: a(1),
         },
-        "beta" => Dist::Beta {
-            shape: a(0),
-            scale: a(1),
-        },
+        "beta" => Dist::beta(a(0), a(1)),
         "erlang" => match count(a(1)) {
             Some(k) => Dist::Erlang { mean: a(0), k },
             None => return nan,

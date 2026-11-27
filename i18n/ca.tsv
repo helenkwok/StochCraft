@@ -1049,6 +1049,7 @@ unit	yr	a
 	In “{field}” of {block}, set “{param}” to 1 or more.	A «{field}» del bloc {block}, establiu «{param}» en 1 o més.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	A «{field}» del bloc {block}, establiu «{param}» en un nombre de 0 a 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	A «{field}» del bloc {block}, establiu «Mínim» per sota de «Màxim», i qualsevol valor de «Més probable» entre tots dos.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	A «{field}» del bloc {block}, establiu «Mínim» per sota de «Màxim».
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	A «{field}» del bloc {block}, afegiu punts de dades les probabilitats dels quals sumin més de 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} no tindria mai cap unitat amb què treballar. Doneu-li almenys 1 unitat.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} crearia entitats sense fi, perquè el seu «Temps entre arribades» és sempre 0. Doneu-li un temps més gran que 0 o definiu un «Límit d'arribades».
@@ -1491,6 +1492,35 @@ connection	Flow	Flux
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} està col·locat a {s} al llarg de la cinta transportadora {conveyor}, el traçat de la qual fa {length}. Col·loqueu-lo entre 0 i {length} al llarg del traçat.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Les entitats de la cinta transportadora {conveyor} arriben a {before} abans que a {block}, però {block} està col·locat més a prop de l'inici ({s} al llarg de la cinta, {before} a {before_s}). Col·loqueu {block} més endavant al llarg del traçat que {before} o intercanvieu-los als fluxos.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	El punt d'unió del flux {flow} triga {time} a creuar-se. Feu que el seu temps de transferència sigui 0 o més.
+	A path needs at least two points.	Un recorregut necessita almenys dos punts.
+	Finish	Acaba
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	S'està dibuixant el recorregut de {name}: feu clic per afegir punts, doble clic o Retorn per acabar, Retrocés per treure l'últim punt, Esc per cancel·lar.
+	Draw path	Dibuixa el recorregut
+	Select a conveyor to draw its path	Seleccioneu un transportador per dibuixar-ne el recorregut
+	Remove path	Elimina el recorregut
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Feu clic per afegir un punt · Doble clic o Retorn per acabar · Esc per cancel·lar
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Feu clic en una cinta per seleccionar-la · Arrossegueu-ne els punts o la cinta · Doble clic per afegir un punt · Arrossegueu el terra per desplaçar · Desplaceu per ampliar
+	Point {n} of {name}, x {x} m, y {y} m	Punt {n} de {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Feu clic aquí en un transportador per dibuixar-ne el recorregut.
+	Path	Recorregut
+	Not drawn in the layout yet.	Encara no dibuixat a la disposició.
+	Draw in the Layout view	Dibuixa a la vista Disposició
+	Add a straight path	Afegeix un recorregut recte
+	Drawn length: {length} {unit}	Longitud dibuixada: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Aquest recorregut puja o té una hèlix: els seus punts no es poden editar aquí.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Aquest recorregut fa un cercle sencer o més en un sol arc: els seus punts no es poden editar aquí.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Aquest recorregut gira bruscament on comença o on acaba: els seus punts no es poden editar aquí.
+	Point {n}	Punt {n}
+	x of point {n}	x del punt {n}
+	y of point {n}	y del punt {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Radi de la corba al punt {n}
+	bend	corba
+	tightened to {radius} to fit	reduït a {radius} perquè hi càpiga
+	Remove point {n}	Elimina el punt {n}
+	Add a point at the end	Afegeix un punt al final
+	Change Path	Canvia el recorregut
 	Search examples	Cerca als exemples
 	Clear search	Esborra la cerca
 	Logistics and warehousing	Logística i emmagatzematge
@@ -1505,6 +1535,18 @@ connection	Flow	Flux
 	Scenario: {name}	Escenari: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Obrir {scenario} descarta els canvis no desats de {name}. Voleu desar-los primer?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} escenari per comparar|{n} escenaris per comparar
+	Median time in system	Mediana del temps al sistema
+	Time in system, 90th percentile	Temps al sistema, percentil 90
+	Time in system, 95th percentile	Temps al sistema, percentil 95
+	Share done within the target time	Proporció acabada dins el temps objectiu
+	Percentiles of time in system	Percentils del temps al sistema
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Mostra la mediana i els percentils 90 i 95 del temps que cada entitat ha trigat des de la seva creació fins a aquestes sortides i, amb un temps objectiu, la proporció acabada dins d'aquest temps.
+	Target time ({unit})	Temps objectiu ({unit})
+	The target time is a time above 0	El temps objectiu és un temps més gran que 0
+	Count only working time on	Compta només el temps de treball de
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Les entitats encara a dins quan acaba l'execució no es tenen en compte; atureu l'execució quan totes hagin acabat.
+	Set the target time in system of {block} to a time above 0.	Definiu el temps objectiu al sistema del bloc {block} com un temps més gran que 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	El temps al sistema del bloc {block} compta el temps de treball d'un calendari que no existeix. Trieu un calendari que existeixi.
 	One machine's availability	Disponibilitat d'una màquina
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Una màquina que falla de mitjana cada 90 hores i triga 4.5 hores a reparar-se (Hristova, Denev i Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Amb quina freqüència està aturada una màquina i quanta feina costa?

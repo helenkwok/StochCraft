@@ -1049,6 +1049,7 @@ unit	yr	v
 	In “{field}” of {block}, set “{param}” to 1 or more.	Aseta lohkon {block} kentässä ”{field}” parametri ”{param}” luvuksi, joka on 1 tai suurempi.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Aseta lohkon {block} kentässä ”{field}” parametri ”{param}” luvuksi väliltä 0–1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Aseta lohkon {block} kentässä ”{field}” ”Minimi” pienemmäksi kuin ”Maksimi” ja mahdollinen ”Todennäköisin” arvo niiden väliin.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Aseta lohkon {block} kentässä ”{field}” ”Minimi” pienemmäksi kuin ”Maksimi”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Lisää lohkon {block} kenttään ”{field} datapisteitä, joiden todennäköisyydet summautuvat yli 0:n.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Lohkolla {block} ei olisi koskaan yksikköä, jonka kanssa työskennellä. Anna sille vähintään 1 yksikkö.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Lohko {block} tekisi entiteettejä loputtomasti, koska sen ”Saapumisten välinen aika” on aina 0. Anna sille aika, joka on yli 0, tai aseta ”Saapumisraja”.
@@ -1491,6 +1492,35 @@ connection	Flow	Virta
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Lohko {block} on sijoitettu {s} etäisyydelle kuljettimen {conveyor} reitillä, jonka pituus on {length}. Sijoita se välille 0–{length} reitillä.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteetit kuljettimella {conveyor} saavuttavat kohdan {before} ennen kohtaa {block}, mutta {block} on sijoitettu lähemmäs alkua ({s} reitillä, {before} kohdassa {before_s}). Sijoita {block} reitillä kauemmas kuin {before} tai vaihda niiden paikat virroissa.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Liitoskohdan ylittäminen virrassa {flow} kestää {time}. Aseta sen siirtoaika arvoon 0 tai suuremmaksi.
+	A path needs at least two points.	Reitillä on oltava vähintään kaksi pistettä.
+	Finish	Valmis
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Piirretään kohteen {name} reittiä: lisää pisteitä napsauttamalla, lopeta kaksoisnapsautuksella tai Enterillä, Askelpalautin poistaa viimeisen pisteen, Esc peruu.
+	Draw path	Piirrä reitti
+	Select a conveyor to draw its path	Valitse kuljetin piirtääksesi sen reitin
+	Remove path	Poista reitti
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Lisää piste napsauttamalla · Lopeta kaksoisnapsautuksella tai Enterillä · Esc peruu
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Valitse hihna napsauttamalla · Vedä sen pisteitä tai hihnaa · Kaksoisnapsautus lisää pisteen · Vedä lattiaa panoroidaksesi · Vieritä zoomataksesi
+	Point {n} of {name}, x {x} m, y {y} m	Kohteen {name} piste {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Napsauta tässä kuljetinta piirtääksesi sen reitin.
+	Path	Reitti
+	Not drawn in the layout yet.	Ei vielä piirretty asetteluun.
+	Draw in the Layout view	Piirrä Asettelu-näkymässä
+	Add a straight path	Lisää suora reitti
+	Drawn length: {length} {unit}	Piirretty pituus: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Tämä reitti nousee tai siinä on kierre: sen pisteitä ei voi muokata tässä.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Tämä reitti kääntyy yhdessä kaaressa kokonaisen ympyrän tai enemmän: sen pisteitä ei voi muokata tässä.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Tämä reitti kääntyy jyrkästi alussa tai lopussa: sen pisteitä ei voi muokata tässä.
+	Point {n}	Piste {n}
+	x of point {n}	pisteen {n} x
+	y of point {n}	pisteen {n} y
+	x	x
+	y	y
+	Bend radius at point {n}	Kaarresäde pisteessä {n}
+	bend	kaarre
+	tightened to {radius} to fit	kavennettu arvoon {radius}, jotta se mahtuu
+	Remove point {n}	Poista piste {n}
+	Add a point at the end	Lisää piste loppuun
+	Change Path	Muuta reittiä
 	Search examples	Hae esimerkeistä
 	Clear search	Tyhjennä haku
 	Logistics and warehousing	Logistiikka ja varastointi
@@ -1505,6 +1535,18 @@ connection	Flow	Virta
 	Scenario: {name}	Skenaario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Skenaarion {scenario} avaaminen hylkää kohteen {name} tallentamattomat muutokset. Tallennetaanko ne ensin?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} vertailtava skenaario|{n} vertailtavaa skenaariota
+	Median time in system	Järjestelmässä vietetyn ajan mediaani
+	Time in system, 90th percentile	Aika järjestelmässä, 90. persentiili
+	Time in system, 95th percentile	Aika järjestelmässä, 95. persentiili
+	Share done within the target time	Tavoiteajassa valmistuneiden osuus
+	Percentiles of time in system	Järjestelmässä vietetyn ajan persentiilit
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Näyttää mediaanin sekä 90. ja 95. persentiilin ajasta, jonka kukin yksikkö käytti syntymästään näihin poistumiin, ja tavoiteajan kanssa sen ajan sisällä valmistuneiden osuuden.
+	Target time ({unit})	Tavoiteaika ({unit})
+	The target time is a time above 0	Tavoiteajan on oltava yli 0
+	Count only working time on	Laske vain työaika kalenterista
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Ajon päättyessä yhä sisällä olevat yksiköt jäävät pois, joten pysäytä ajo, kun kaikki ovat valmiita.
+	Set the target time in system of {block} to a time above 0.	Aseta lohkon {block} tavoiteaika järjestelmässä yli 0:n.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Lohkon {block} aika järjestelmässä laskee työaikaa kalenterista, jota ei ole olemassa. Valitse olemassa oleva kalenteri.
 	One machine's availability	Yhden koneen käytettävyys
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Kone, joka rikkoutuu keskimäärin 90 tunnin välein ja jonka korjaus kestää 4.5 tuntia (Hristova, Denev ja Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Kuinka usein yksi kone seisoo ja kuinka paljon työtä se maksaa?

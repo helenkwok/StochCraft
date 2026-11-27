@@ -32,7 +32,7 @@ pub use calendar::{Calendar, DateTime, Timed};
 pub use montecarlo::{
     Control, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
 };
-pub use path::{Frame, Path, Segment};
+pub use path::{Frame, Outline, Path, Segment};
 pub use site::{Junction, JunctionKind, Place, Point, Scenery, Site, Track};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
@@ -296,10 +296,13 @@ pub enum ElementKind {
         processing_by: Option<ProcessingBy>,
     },
     /// Removes entities (a BPMN end event). With `scrap`, what reaches it is scrap, for the
-    /// OEE quality results; with `demand`, the customer demand it serves, for takt.
+    /// OEE quality results; with `demand`, the customer demand it serves, for takt; with
+    /// `time_in_system`, the percentiles of each entity's time in system, and the share within a
+    /// target.
     Sink {
         scrap: Option<Scrap>,
         demand: Option<Demand>,
+        time_in_system: Option<TimeInSystem>,
     },
     /// Sends each entity down one outgoing connection, at once (a BPMN exclusive gateway). With
     /// [`Routing::Standard`]: if any outgoing connection has a condition, the first in model
@@ -1482,6 +1485,20 @@ pub struct Demand {
     pub calendar: Option<ElementId>,
 }
 
+/// The time each entity spends in the system, from its creation to reaching a sink, reported at
+/// that sink by percentile (the median, 90th and 95th) and, with `within`, as the share of the
+/// entities reaching it that took at most that long (a service level: "done within 3 days").
+/// With `calendar`, these count only the time the calendar is active (working time: a part made
+/// on Friday and finished on Monday has not waited the weekend). Entities still inside when the
+/// run ends are left out, so a run should stop once all are done. A StochCraft vendor
+/// extension (`stochcraft:timeInSystem`).
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct TimeInSystem {
+    /// The target time, in the model's time unit (above 0).
+    pub within: Option<f64>,
+    pub calendar: Option<ElementId>,
+}
+
 /// The period a [`Demand`]'s quantity is for.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum DemandPer {
@@ -1964,6 +1981,12 @@ pub enum Problem {
     ShiftWithoutCalendar,
     /// A demand's calendar does not exist.
     DemandCalendarUnknown {
+        id: ElementId,
+    },
+    /// A target time in system that is not a time above 0.
+    TimeInSystemWithinNotPositive,
+    /// The calendar a time in system counts working time on does not exist.
+    TimeInSystemCalendarUnknown {
         id: ElementId,
     },
     /// A probability outside 0 to 1.
@@ -2459,6 +2482,8 @@ impl Problem {
             Problem::DemandNotPositive => "demand_not_positive",
             Problem::ShiftWithoutCalendar => "shift_without_calendar",
             Problem::DemandCalendarUnknown { .. } => "demand_calendar_unknown",
+            Problem::TimeInSystemWithinNotPositive => "time_in_system_within_not_positive",
+            Problem::TimeInSystemCalendarUnknown { .. } => "time_in_system_calendar_unknown",
             Problem::BadProbability { .. } => "bad_probability",
             Problem::ProbabilitySum { .. } => "probability_sum",
             Problem::BadCondition { .. } => "bad_condition",
@@ -2570,7 +2595,8 @@ fn never_negative(d: &Dist) -> bool {
         Dist::Constant(v) => *v >= 0.0,
         Dist::Uniform { min, .. }
         | Dist::Triangular { min, .. }
-        | Dist::TruncatedNormal { min, .. } => *min >= 0.0,
+        | Dist::TruncatedNormal { min, .. }
+        | Dist::Beta { min, .. } => *min >= 0.0,
         Dist::Normal { .. } => false,
         Dist::User { points, .. } => points.iter().all(|(_, v)| *v >= 0.0),
         Dist::Exponential { .. }
@@ -2578,7 +2604,6 @@ fn never_negative(d: &Dist) -> bool {
         | Dist::Erlang { .. }
         | Dist::LogNormal { .. }
         | Dist::Gamma { .. }
-        | Dist::Beta { .. }
         | Dist::Weibull { .. }
         | Dist::Binomial { .. } => true,
     }
@@ -3091,6 +3116,26 @@ impl Model {
                         ));
                     }
                     _ => {}
+                }
+            }
+            if let ElementKind::Sink {
+                time_in_system: Some(x),
+                ..
+            } = &e.kind
+            {
+                if x.within.is_some_and(|w| !(w.is_finite() && w > 0.0)) {
+                    out.push(Diagnostic::error(
+                        Some(&e.id),
+                        Problem::TimeInSystemWithinNotPositive,
+                    ));
+                }
+                if let Some(c) = &x.calendar
+                    && !self.calendars.iter().any(|k| k.id == *c)
+                {
+                    out.push(Diagnostic::error(
+                        Some(&e.id),
+                        Problem::TimeInSystemCalendarUnknown { id: c.clone() },
+                    ));
                 }
             }
             if let ElementKind::Server {
@@ -5018,6 +5063,7 @@ mod tests {
             ElementKind::Sink {
                 scrap: None,
                 demand: None,
+                time_in_system: None,
             },
         ));
         m.elements.push(el("join", ElementKind::ParallelGateway));
@@ -5096,6 +5142,7 @@ mod tests {
             ElementKind::Sink {
                 scrap: None,
                 demand: None,
+                time_in_system: None,
             },
         ));
         let mut a = Connection::new(id("a"), id("pick"), id("machine"));
@@ -5187,6 +5234,7 @@ mod tests {
                     ElementKind::Sink {
                         scrap: None,
                         demand: None,
+                        time_in_system: None,
                     },
                 ),
             ],
@@ -5473,6 +5521,7 @@ mod tests {
             ElementKind::Sink {
                 scrap: None,
                 demand: None,
+                time_in_system: None,
             },
         ));
         m.connections.push(link("f3", "machine", "scrap"));
@@ -5636,6 +5685,7 @@ mod tests {
                 ElementKind::Sink {
                     scrap: None,
                     demand: None,
+                    time_in_system: None,
                 },
             )],
             ..Model::default()

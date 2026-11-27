@@ -1049,6 +1049,7 @@ unit	yr	år
 	In “{field}” of {block}, set “{param}” to 1 or more.	Sett «{param}» i «{field}» for {block} til 1 eller mer.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Sett «{param}» i «{field}» for {block} til et tall fra 0 til 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Sett «Minimum» under «Maksimum» i «{field}» for {block}, og en eventuell verdi for «Mest sannsynlig» mellom dem.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Sett «Minimum» under «Maksimum» i «{field}» for {block}.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Legg til datapunkter i «{field}» for {block} hvis sannsynligheter til sammen er over 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} ville aldri ha noen ressursenhet å arbeide med. Gi blokken minst 1 ressursenhet.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} ville lage enheter uten ende, fordi «Tid mellom ankomster» alltid er 0. Gi den en tid over 0, eller angi en «Grense for ankomster».
@@ -1491,6 +1492,35 @@ connection	Flow	Flyt
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} er plassert {s} langs transportbåndet {conveyor}, hvis bane er {length} lang. Plasser den mellom 0 og {length} langs banen.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Enheter på transportbåndet {conveyor} når {before} før {block}, men {block} er plassert nærmere starten ({s} langs det, {before} ved {before_s}). Plasser {block} lenger ut langs banen enn {before}, eller bytt dem om i flytene.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Overgangen på flyten {flow} tar {time} å krysse. Sett overføringstiden til 0 eller mer.
+	A path needs at least two points.	En bane må ha minst to punkter.
+	Finish	Fullfør
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Tegner banen til {name}: klikk for å legge til punkter, dobbeltklikk eller Enter for å fullføre, Tilbake fjerner det siste punktet, Esc avbryter.
+	Draw path	Tegn bane
+	Select a conveyor to draw its path	Velg en transportør for å tegne banen dens
+	Remove path	Fjern bane
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klikk for å legge til et punkt · Dobbeltklikk eller Enter for å fullføre · Esc for å avbryte
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Klikk på et bånd for å velge det · Dra punktene eller båndet · Dobbeltklikk for å legge til et punkt · Dra gulvet for å panorere · Rull for å zoome
+	Point {n} of {name}, x {x} m, y {y} m	Punkt {n} av {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klikk på en transportør her for å tegne banen dens.
+	Path	Bane
+	Not drawn in the layout yet.	Ikke tegnet i layouten ennå.
+	Draw in the Layout view	Tegn i Layout-visningen
+	Add a straight path	Legg til en rett bane
+	Drawn length: {length} {unit}	Tegnet lengde: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Denne banen stiger eller har en spiral: punktene kan ikke redigeres her.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Denne banen svinger en hel sirkel eller mer i én bue: punktene kan ikke redigeres her.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Denne banen svinger skarpt der den begynner eller slutter: punktene kan ikke redigeres her.
+	Point {n}	Punkt {n}
+	x of point {n}	x for punkt {n}
+	y of point {n}	y for punkt {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Kurveradius ved punkt {n}
+	bend	kurve
+	tightened to {radius} to fit	strammet til {radius} for å passe
+	Remove point {n}	Fjern punkt {n}
+	Add a point at the end	Legg til et punkt på slutten
+	Change Path	Endre bane
 	Search examples	Søk i eksempler
 	Clear search	Tøm søket
 	Logistics and warehousing	Logistikk og lager
@@ -1505,6 +1535,18 @@ connection	Flow	Flyt
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Å åpne {scenario} forkaster de ulagrede endringene i {name}. Lagre dem først?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} scenario å sammenligne|{n} scenarioer å sammenligne
+	Median time in system	Median for tid i systemet
+	Time in system, 90th percentile	Tid i systemet, 90. persentil
+	Time in system, 95th percentile	Tid i systemet, 95. persentil
+	Share done within the target time	Andel ferdige innen måltiden
+	Percentiles of time in system	Persentiler for tid i systemet
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Viser medianen, 90. og 95. persentil av tiden hver enhet brukte fra den ble laget til den nådde disse avgangene, og med en måltid andelen som ble ferdige innen den.
+	Target time ({unit})	Måltid ({unit})
+	The target time is a time above 0	Måltiden er en tid over 0
+	Count only working time on	Tell bare arbeidstid etter
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Enheter som fortsatt er inne når kjøringen slutter, er utelatt, så stopp kjøringen når alle er ferdige.
+	Set the target time in system of {block} to a time above 0.	Sett måltiden i systemet for {block} til en tid over 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Tiden i systemet for {block} teller arbeidstid etter en kalender som ikke finnes. Velg en kalender som finnes.
 	One machine's availability	Én maskins oppetid
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	En maskin som i gjennomsnitt svikter hver 90. time og bruker 4.5 timer på å repareres (Hristova, Denev og Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Hvor ofte står én maskin stille, og hvor mye arbeid koster det?

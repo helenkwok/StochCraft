@@ -1049,6 +1049,7 @@ unit	yr	év
 	In “{field}” of {block}, set “{param}” to 1 or more.	A(z) {block} blokk „{field}” mezőjében a(z) „{param}” legyen 1 vagy nagyobb szám.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	A(z) {block} blokk „{field}” mezőjében a(z) „{param}” legyen 0 és 1 közötti szám.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	A(z) {block} blokk „{field}” mezőjében a „Minimum” értéke legyen kisebb, mint a „Maximum” értéke, és az esetleges „Legvalószínűbb” érték essen közéjük.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	A(z) {block} blokk „{field}” mezőjében a „Minimum” értéke legyen kisebb, mint a „Maximum” értéke.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	A(z) {block} blokk „{field}” mezőjében adjon meg olyan adatpontokat, amelyek valószínűségeinek összege nagyobb 0-nál.
 	{block} would never have a unit to work with. Give it at least 1 unit.	A(z) {block} blokknak soha nem lenne egysége, amellyel dolgozhatna. Adjon neki legalább 1 egységet.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	A(z) {block} blokk véget nem érően hozna létre entitásokat, mert az „Érkezések közötti idő” mindig 0. Adjon meg 0-nál nagyobb időt, vagy adjon meg „Érkezési korlát” értéket.
@@ -1491,6 +1492,35 @@ connection	Flow	Folyamat
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	A(z) {block} blokk a(z) {conveyor} szállítószalag mentén {s} távolságra van elhelyezve, amelynek útvonala {length} hosszú. Helyezze 0 és {length} közé az útvonal mentén.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	A(z) {conveyor} szállítószalagon az entitások a(z) {before} elemet előbb érik el, mint a(z) {block} blokkot, de a(z) {block} közelebb van elhelyezve az elejéhez ({s} távolságra rajta, a(z) {before} pedig {before_s} távolságra). Helyezze a(z) {block} blokkot az útvonalon a(z) {before} után, vagy cserélje fel őket a folyamatokban.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A(z) {flow} folyamat csatlakozásának átlépése {time} ideig tart. Állítsa a továbbítási időt 0 vagy nagyobb értékre.
+	A path needs at least two points.	Egy útvonalhoz legalább két pont kell.
+	Finish	Befejezés
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name} útvonalának rajzolása: kattintással pontot ad hozzá, dupla kattintás vagy Enter befejezi, a Backspace visszaveszi az utolsó pontot, az Esc megszakítja.
+	Draw path	Útvonal rajzolása
+	Select a conveyor to draw its path	Válasszon ki egy szállítószalagot az útvonala megrajzolásához
+	Remove path	Útvonal eltávolítása
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Kattintás: pont hozzáadása · Dupla kattintás vagy Enter: befejezés · Esc: megszakítás
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Kattintás egy szalagra: kijelölés · Pontjai vagy a szalag húzása · Dupla kattintás: pont hozzáadása · Padló húzása: eltolás · Görgetés: nagyítás
+	Point {n} of {name}, x {x} m, y {y} m	{name} {n}. pontja, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Kattintson itt egy szállítószalagra az útvonala megrajzolásához.
+	Path	Útvonal
+	Not drawn in the layout yet.	Még nincs megrajzolva az elrendezésben.
+	Draw in the Layout view	Rajzolás az Elrendezés nézetben
+	Add a straight path	Egyenes útvonal hozzáadása
+	Drawn length: {length} {unit}	Megrajzolt hossz: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ez az útvonal emelkedik vagy csavarvonalat tartalmaz: pontjai itt nem szerkeszthetők.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ez az útvonal egyetlen ívben egy teljes kört vagy többet fordul: pontjai itt nem szerkeszthetők.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ez az útvonal az elején vagy a végén élesen fordul: pontjai itt nem szerkeszthetők.
+	Point {n}	{n}. pont
+	x of point {n}	{n}. pont x
+	y of point {n}	{n}. pont y
+	x	x
+	y	y
+	Bend radius at point {n}	Ívsugár a(z) {n}. pontban
+	bend	ív
+	tightened to {radius} to fit	{radius} értékre szűkítve, hogy elférjen
+	Remove point {n}	{n}. pont eltávolítása
+	Add a point at the end	Pont hozzáadása a végére
+	Change Path	Útvonal módosítása
 	Search examples	Keresés a példákban
 	Clear search	Keresés törlése
 	Logistics and warehousing	Logisztika és raktározás
@@ -1505,6 +1535,18 @@ connection	Flow	Folyamat
 	Scenario: {name}	Forgatókönyv: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	A(z) {scenario} megnyitása elveti a(z) {name} mentetlen módosításait. Előbb menti őket?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} összehasonlítható forgatókönyv|{n} összehasonlítható forgatókönyv
+	Median time in system	A rendszerben töltött idő mediánja
+	Time in system, 90th percentile	Rendszerben töltött idő, 90. percentilis
+	Time in system, 95th percentile	Rendszerben töltött idő, 95. percentilis
+	Share done within the target time	A célidőn belül elkészültek aránya
+	Percentiles of time in system	A rendszerben töltött idő percentilisei
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Megmutatja, mennyi idő telt el az egyes egyedek létrejöttétől az itteni kilépésig: a mediánt, a 90. és a 95. percentilist, célidővel pedig az azon belül elkészültek arányát.
+	Target time ({unit})	Célidő ({unit})
+	The target time is a time above 0	A célidő 0-nál nagyobb idő
+	Count only working time on	Csak a munkaidő számít e szerint
+	Entities still inside when the run ends are left out, so stop the run once all are done.	A futás végén még bent lévő egyedek kimaradnak, ezért akkor állítsa le a futást, amikor mind elkészült.
+	Set the target time in system of {block} to a time above 0.	Állítsa a(z) {block} blokk rendszerben töltött célidejét 0-nál nagyobb időre.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	A(z) {block} blokk rendszerben töltött ideje olyan naptár szerint számolja a munkaidőt, amely nem létezik. Válasszon létező naptárat.
 	One machine's availability	Egy gép rendelkezésre állása
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Egy gép, amely átlagosan 90 óránként meghibásodik, és a javítása 4.5 órát vesz igénybe (Hristova, Denev és Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Milyen gyakran áll egy gép, és mennyi munkába kerül ez?

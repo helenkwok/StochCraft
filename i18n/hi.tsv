@@ -1049,6 +1049,7 @@ unit	yr	वर्ष
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} के “{field}” में “{param}” को 1 या उससे अधिक पर सेट करें।
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} के “{field}” में “{param}” को 0 से 1 के बीच की संख्या पर सेट करें।
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} के “{field}” में “न्यूनतम” को “अधिकतम” से कम रखें, और “सर्वाधिक संभावित” मान (यदि हो) को दोनों के बीच रखें।
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} के “{field}” में “न्यूनतम” को “अधिकतम” से कम रखें।
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} के “{field}” में ऐसे डेटा बिंदु जोड़ें जिनकी प्रायिकताओं का योग 0 से अधिक हो।
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} के पास काम करने के लिए कभी कोई संसाधन इकाई नहीं होगी। उसे कम से कम 1 संसाधन इकाई दें।
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} अंतहीन इकाइयाँ बनाएगा, क्योंकि उसका “आगमन के बीच का समय” हमेशा 0 है। 0 से अधिक समय दें, या “आगमन सीमा” सेट करें।
@@ -1491,6 +1492,35 @@ connection	Flow	प्रवाह
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} को कन्वेयर {conveyor} के रास्ते पर {s} की दूरी पर रखा गया है, जबकि उसका रास्ता केवल {length} लंबा है। उसे रास्ते पर 0 और {length} के बीच रखें।
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	कन्वेयर {conveyor} पर इकाइयाँ {block} से पहले {before} तक पहुँचती हैं, पर {block} को शुरुआत के अधिक पास रखा गया है (रास्ते पर {s}, जबकि {before} {before_s} पर है)। {block} को रास्ते पर {before} से आगे रखें, या प्रवाहों में उनकी अदला-बदली करें।
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	प्रवाह {flow} पर जंक्शन को पार करने में {time} लगता है। उसका स्थानांतरण समय 0 या अधिक रखें।
+	A path needs at least two points.	पथ में कम से कम दो बिंदु होने चाहिए।
+	Finish	समाप्त करें
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name} का पथ बनाया जा रहा है: बिंदु जोड़ने के लिए क्लिक करें, समाप्त करने के लिए डबल-क्लिक या Enter, अंतिम बिंदु हटाने के लिए Backspace, रद्द करने के लिए Esc।
+	Draw path	पथ बनाएँ
+	Select a conveyor to draw its path	पथ बनाने के लिए एक कन्वेयर चुनें
+	Remove path	पथ हटाएँ
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	बिंदु जोड़ने के लिए क्लिक करें · समाप्त करने के लिए डबल-क्लिक या Enter · रद्द करने के लिए Esc
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	चुनने के लिए बेल्ट पर क्लिक करें · उसके बिंदु या बेल्ट खींचें · बिंदु जोड़ने के लिए डबल-क्लिक करें · खिसकाने के लिए फ़र्श खींचें · ज़ूम के लिए स्क्रॉल करें
+	Point {n} of {name}, x {x} m, y {y} m	{name} का बिंदु {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	पथ बनाने के लिए यहाँ किसी कन्वेयर पर क्लिक करें।
+	Path	पथ
+	Not drawn in the layout yet.	लेआउट में अभी नहीं बनाया गया।
+	Draw in the Layout view	लेआउट दृश्य में बनाएँ
+	Add a straight path	सीधा पथ जोड़ें
+	Drawn length: {length} {unit}	बनाई गई लंबाई: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	यह पथ ऊपर चढ़ता है या इसमें हेलिक्स है: इसके बिंदु यहाँ संपादित नहीं किए जा सकते।
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	यह पथ एक ही चाप में पूरा एक वृत्त या उससे अधिक घूमता है: इसके बिंदु यहाँ संपादित नहीं किए जा सकते।
+	This path turns sharply where it starts or ends: its points cannot be edited here.	यह पथ अपने आरंभ या अंत में तीखा मुड़ता है: इसके बिंदु यहाँ संपादित नहीं किए जा सकते।
+	Point {n}	बिंदु {n}
+	x of point {n}	बिंदु {n} का x
+	y of point {n}	बिंदु {n} का y
+	x	x
+	y	y
+	Bend radius at point {n}	बिंदु {n} पर मोड़ की त्रिज्या
+	bend	मोड़
+	tightened to {radius} to fit	फ़िट होने के लिए {radius} तक कसा गया
+	Remove point {n}	बिंदु {n} हटाएँ
+	Add a point at the end	अंत में एक बिंदु जोड़ें
+	Change Path	पथ बदलें
 	Search examples	उदाहरण खोजें
 	Clear search	खोज साफ़ करें
 	Logistics and warehousing	लॉजिस्टिक्स और भंडारण
@@ -1505,6 +1535,18 @@ connection	Flow	प्रवाह
 	Scenario: {name}	परिदृश्य: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} खोलने पर {name} के बिना सहेजे गए बदलाव हट जाएँगे। पहले सहेजें?
 @plural	{n} scenario to compare|{n} scenarios to compare	तुलना के लिए {n} परिदृश्य|तुलना के लिए {n} परिदृश्य
+	Median time in system	सिस्टम में समय की माध्यिका
+	Time in system, 90th percentile	सिस्टम में समय, 90वाँ प्रतिशतक
+	Time in system, 95th percentile	सिस्टम में समय, 95वाँ प्रतिशतक
+	Share done within the target time	लक्ष्य समय में पूरे हुए हिस्से
+	Percentiles of time in system	सिस्टम में समय के प्रतिशतक
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	हर इकाई को बनने से इन निकासों तक पहुँचने में लगे समय की माध्यिका, 90वाँ और 95वाँ प्रतिशतक दिखाता है, और लक्ष्य समय देने पर उसके भीतर पूरे हुए हिस्से।
+	Target time ({unit})	लक्ष्य समय ({unit})
+	The target time is a time above 0	लक्ष्य समय 0 से अधिक समय होना चाहिए
+	Count only working time on	केवल कार्य समय गिनें, इसके अनुसार
+	Entities still inside when the run ends are left out, so stop the run once all are done.	रन समाप्त होने पर जो अब भी अंदर हैं, वे शामिल नहीं होते, इसलिए सभी के पूरे होने पर रन रोकें।
+	Set the target time in system of {block} to a time above 0.	{block} का सिस्टम में लक्ष्य समय 0 से अधिक समय पर सेट करें।
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} का सिस्टम में समय ऐसे कैलेंडर के अनुसार कार्य समय गिनता है जो मौजूद नहीं है। कोई मौजूदा कैलेंडर चुनें।
 	One machine's availability	एक मशीन की उपलब्धता
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	एक मशीन जो औसतन हर 90 घंटे में खराब होती है और जिसकी मरम्मत में 4.5 घंटे लगते हैं (Hristova, Denev और Tsankov, Environment. Technology. Resources, 2024)।
 	How often is one machine down, and how much work does that cost?	एक मशीन कितनी बार बंद रहती है, और इससे कितना काम घटता है?

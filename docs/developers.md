@@ -472,7 +472,7 @@ trials (the rule of three) can go unseen in n trials: a 1-in-10,000 event does i
 about 90% of the time.
 
 **Control variates** ([`stochcraft_mc::control`](../crates/mc/src/control.rs); Law, *Simulation
-Modeling and Analysis*, 5th ed., §11.3; Glasserman, 2003, §4.1; Nelson, 1990). An output can name
+Modeling and Analysis*, 5th ed., §11.4; Glasserman, 2003, §4.1; Nelson, 1990). An output can name
 `controls` (`McOutput::controls`, in `mc.output.set` as `[{"input": "labour"}, {"output": "base",
 "expected": 5200}]`, in the file as `stochcraft:control` children of the output): an input, whose
 known mean is `Dist::mean`, or an earlier output with the mean the modeller types. The mean of an

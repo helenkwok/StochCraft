@@ -1049,6 +1049,7 @@ unit	yr	год.
 	In “{field}” of {block}, set “{param}” to 1 or more.	У пољу „{field}” блока {block} поставите „{param}” на 1 или више.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	У пољу „{field}” блока {block} поставите „{param}” на број од 0 до 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	У пољу „{field}” блока {block} поставите „Минимум” испод „Максимум”, а евентуалну вредност „Највјеројатније” између њих.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	У пољу „{field}” блока {block} поставите „Минимум” испод „Максимум”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	У пољу „{field}” блока {block} додајте тачке података чије се вероватноће сабирају у више од 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Блок {block} никада не би имао јединицу за рад. Дајте му најмање 1 јединицу.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блок {block} би стварао ентитете без краја, јер је „Време између долазака” увек 0. Задајте време веће од 0 или поставите „Ограничење долазака”.
@@ -1491,6 +1492,35 @@ connection	Flow	Ток
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} је постављен на {s} дуж транспортера {conveyor}, чија је путања дугачка {length}. Поставите га између 0 и {length} дуж путање.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Ентитети на транспортеру {conveyor} стижу до {before} пре {block}, али је {block} постављен ближе почетку ({s} дуж њега, {before} на {before_s}). Поставите {block} даље дуж путање него {before} или их замените у токовима.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Прелазак преко споја на току {flow} траје {time}. Поставите његово време преноса на 0 или више.
+	A path needs at least two points.	Путања мора имати најмање две тачке.
+	Finish	Заврши
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Цртање путање за {name}: кликните да додате тачке, двоструки клик или Enter за крај, Backspace враћа последњу тачку, Esc отказује.
+	Draw path	Нацртај путању
+	Select a conveyor to draw its path	Изаберите транспортер да бисте нацртали његову путању
+	Remove path	Уклони путању
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Кликните да додате тачку · Двоструки клик или Enter за крај · Esc за отказивање
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Кликните траку да је изаберете · Превуците њене тачке или траку · Двоструки клик додаје тачку · Превуците под за померање · Скролујте за зумирање
+	Point {n} of {name}, x {x} m, y {y} m	Тачка {n} од {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Кликните овде транспортер да бисте нацртали његову путању.
+	Path	Путања
+	Not drawn in the layout yet.	Још није нацртан у распореду.
+	Draw in the Layout view	Нацртај у приказу Распоред
+	Add a straight path	Додај праву путању
+	Drawn length: {length} {unit}	Нацртана дужина: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ова путања се пење или има спиралу: њене тачке се овде не могу уређивати.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ова путања се у једном луку окреће за цео круг или више: њене тачке се овде не могу уређивати.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ова путања оштро скреће на почетку или на крају: њене тачке се овде не могу уређивати.
+	Point {n}	Тачка {n}
+	x of point {n}	x тачке {n}
+	y of point {n}	y тачке {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Полупречник кривине у тачки {n}
+	bend	кривина
+	tightened to {radius} to fit	сужено на {radius} да стане
+	Remove point {n}	Уклони тачку {n}
+	Add a point at the end	Додај тачку на крај
+	Change Path	Измена путање
 	Search examples	Претражи примере
 	Clear search	Обриши претрагу
 	Logistics and warehousing	Логистика и складиштење
@@ -1505,6 +1535,18 @@ connection	Flow	Ток
 	Scenario: {name}	Сценарио: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Отварањем сценарија {scenario} одбацују се несачуване измене у {name}. Прво их сачувати?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарио за поређење|{n} сценарија за поређење|{n} сценарија за поређење
+	Median time in system	Медијана времена у систему
+	Time in system, 90th percentile	Време у систему, 90. перцентил
+	Time in system, 95th percentile	Време у систему, 95. перцентил
+	Share done within the target time	Удео завршених у циљном времену
+	Percentiles of time in system	Перцентили времена у систему
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Приказује медијану, 90. и 95. перцентил времена које је сваки ентитет провео од настанка до ових излаза, а уз циљно време и удео завршених у њему.
+	Target time ({unit})	Циљно време ({unit})
+	The target time is a time above 0	Циљно време је време веће од 0
+	Count only working time on	Бројати само радно време по
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Ентитети који су још унутра кад се покретање заврши нису укључени, па зауставите покретање кад су сви готови.
+	Set the target time in system of {block} to a time above 0.	Поставите циљно време у систему блока {block} на време веће од 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Време у систему блока {block} броји радно време по календару који не постоји. Изаберите календар који постоји.
 	One machine's availability	Расположивост једне машине
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Једна машина која се у просеку квари на сваких 90 сати и поправља се 4.5 сата (Hristova, Denev и Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Колико често једна машина не ради и колико посла то кошта?
