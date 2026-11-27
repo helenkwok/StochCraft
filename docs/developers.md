@@ -1174,6 +1174,104 @@ over the reals, not the values the Rust tests compute, their floating-point arit
 simulator; its README says what each theorem does and does not establish. A separate CI workflow
 (`.github/workflows/lean.yml`) builds it when `formal/` changes.
 
+### Random numbers
+
+**The generator** (`crates/random/src/lib.rs`) is xoshiro256** (Blackman and Vigna, ACM TOMS
+47(4), 2021), period 2^256 − 1. Every generator in StochCraft is made by `Rng::new(seed)` from a
+64-bit seed, which SplitMix64 expands into the 256-bit state. SplitMix64's output is a one-to-one
+function of its input, so different seeds give different starting states. Its tests pin the first
+outputs of SplitMix64 and of xoshiro256** against the published reference values.
+
+**How streams are derived.** No stream is a jump ahead along one sequence; each starts from its
+own seed:
+
+- A replication's stream: `Experiment::stream(i)` seeds it from SplitMix64 of
+  seed XOR (i × 0xd1b54a32d192ed03). The multiplier is odd, so different replications of one
+  experiment always get different seeds. Agents and system dynamics take
+  `Rng::keyed(seed, "replication/<r>")` instead.
+- A named stream: `Rng::keyed(base, key)` hashes the key with 64-bit FNV-1a, mixes the hash
+  through SplitMix64, XORs it with `base` and mixes the result again into the seed. In a process
+  run, `base` is one draw of the replication's stream. The keys are `<purpose>/<element id>`
+  (`element`, `transfer`, `patience`, `balking`, `properties`, `junction`, `divert`). Ids are XML
+  NCNames and contain no `/`, so two different purposes or ids never give the same key string.
+  Agents, Monte Carlo, designs and the optimiser key theirs the same way (see their sections).
+- Within an element, breakdowns, setups, health checks and times by value are seeded from the
+  element stream's next output XOR a fixed constant, without advancing it. Times by resource are
+  keyed `by-resource/<pool id>` under such a seed. Each unit's failures and health checks draw
+  from a fork of their stream.
+
+Because a stream depends only on its seed and key, adding or removing an element leaves every
+other stream as it was, which keeps paired comparisons paired.
+
+**The chance that two streams share numbers.** Two things could make two streams use the same
+numbers:
+
+1. Their seeds are equal, and so are the whole streams.
+2. Their seeds differ but their stretches of the cycle overlap.
+
+The estimate assumes:
+
+- the seeds of different streams behave like independent uniform 64-bit values (FNV-1a and
+  SplitMix64 are treated as random functions; this is assumed, not proved);
+- a starting state is a random point on xoshiro256**'s single cycle of length P = 2^256 − 1.
+
+For n streams of at most L draws each:
+
+- P(some pair of seeds equal) ≈ 1 − exp(−n(n − 1) / 2^65), about n² / 2^65;
+- P(some pair of stretches overlap) ≤ n² L / P.
+
+| Streams n | Example | Equal seeds | Overlap, L = 10^12 draws |
+|---|---|---|---|
+| 10^3 | one replication of a large line | 2.7 × 10^-14 | 8.6 × 10^-60 |
+| 10^6 | 1,000 replications × 1,000 streams | 2.7 × 10^-8 | 8.6 × 10^-54 |
+| 10^7 | 10,000 replications × 1,000 streams | 2.7 × 10^-6 | 8.6 × 10^-52 |
+| 10^9 | 1,000 replications × a million agents' streams | 0.027 | 8.6 × 10^-48 |
+
+The two cases are not equally likely:
+
+- **Overlapping stretches** are out of reach at any size.
+- **Equal seeds** are the realistic case, and only for very large counts.
+  - Replications of one experiment never share a seed. Within a replication, keyed streams under
+    the same base differ unless their keys' 64-bit hashes collide, at the rate of the first rows.
+  - At 10^9 streams over a whole experiment, about 3 runs in 100 contain one pair of identical
+    streams. Such a pair is almost always in two different replications, where it makes those two
+    replications share one element's numbers. That is a small dependence, not a wrong value.
+
+**Empirical tests in CI** (`crates/random/tests/generator_checks.rs`). The tests of Law,
+*Simulation Modeling and Analysis*, 5th ed., §7.4.1, are written once and run on two generators.
+
+They are first checked on the book's own generator (App. 7A, the prime-modulus multiplicative
+generator with multiplier 630,360,016 and streams 100,000 draws apart). There they reproduce the
+book's Examples 7.6–7.9 (pp. 410–413):
+
+- χ² = 4141.0;
+- χ²(2) = 4016.5 and χ²(3) = 4174.5;
+- runs up (808, 1026, 448, 139, 43, 4) with R = 9.3;
+- A₁…A₆ as printed, except A₂. It computes to −1.02498, while −1.03 is printed.
+
+Then StochCraft's generator, on fixed keyed streams, must pass each test at level 0.001. The
+values it gives are pinned:
+
+- χ² = 4111.5 (k = 4096, n = 32,768; 5% point 4245.0, 0.1% point 4380.4);
+- χ²(2) = 4155.5 and χ²(3) = 4100.0;
+- runs up on 100,000 draws, R = 8.45 (0.1% point 22.46);
+- A₁…A₆ on 100,000 draws each: −0.55, 0.10, 0.40, −0.11, −0.42, −0.55;
+- two neighbouring keyed streams side by side, χ²(2) = 3954.0;
+- 100 keyed streams under the χ² test at level 0.05: 10 reject. More than 13 has probability
+  0.00046.
+
+**A standard battery, run once.** PractRand 0.96 (public domain, CC0) was run as a separate
+program, `RNG_test stdin64 -tlmax 64GB -multithreaded`, with the core tests and standard folding.
+Its input was `tools/rng-battery/stream.c`, a C transcription of the generator. The transcription
+checks itself against the values pinned in `lib.rs` before it runs; its keyed streams agree with
+the CI fixtures above. Two inputs were tested:
+
+- one stream, `Rng::new(1)`: no anomalies at any length from 512 MB to 64 GB (2^36 bytes; 308 test results at 64 GB);
+- 1,000 keyed streams `Rng::keyed(12345, "element/<i>")`, interleaved one word each in turn:
+  no anomalies at any length from 512 MB to 64 GB.
+
+The battery tested the transcription, not the Rust build. Run 2026-11-27.
+
 ### Machine-checked proofs
 
 A few invariants are proved, not only tested, with [Kani](https://github.com/model-checking/kani)
@@ -1202,7 +1300,7 @@ Proved, for every input the harness allows:
   half-width of two replications of moderate size (up to 1e6) is finite and not negative.
 
 Not proved: that different seeds, bases or keys give different streams (the 64-bit multiplications
-of SplitMix64 are too slow for the checker; key strings also hash to 64 bits, so collisions exist), the statistical quality of the generator, the shape of any distribution's
+of SplitMix64 are too slow for the checker; key strings also hash to 64 bits, so collisions exist; see [Random numbers](#random-numbers) for their odds), the statistical quality of the generator (tested empirically, see the same section), the shape of any distribution's
 samples or the bounds of `uniform_range` and `triangular` (floating-point arithmetic on symbolic
 values is beyond the checker in CI time; transcendental functions, rejection samplers and loops
 are out of its reach too; the statistical tests cover them), confidence intervals for more than two replications,

@@ -5,9 +5,15 @@
 //! recommends. Both are implemented here from the published description. Everything is `u64`
 //! and `f64` arithmetic, so a seed gives the same stream on native, wasm32 and wasm64.
 //!
-//! [`Dist`] holds the distributions of the BPSim 2.0 specification (WfMC, 2016), each sampled
-//! exactly (no approximations) by the published method named on its variant. [`estimate`]
-//! fits them to experts' three-point estimates.
+//! [`Dist`] holds the distributions of the BPSim 2.0 specification (WfMC, 2016), each sampled by
+//! the published method named on its variant. The samplers are exact up to floating-point
+//! rounding and the limits listed at the top of `dist.rs`: a Poisson mean of 10^15 or more is
+//! drawn as a rounded normal, counts above 2^53 are rounded, and no draw reaches the outermost
+//! 2^-53 of probability. [`estimate`] fits them to experts' three-point estimates.
+//!
+//! How streams are keyed, and the chance that two of them share their numbers, is in
+//! docs/developers.md ("Random numbers"); the generator's empirical tests are in
+//! `tests/generator_checks.rs`.
 //!
 //! Logarithms, exponentials, powers and trigonometric functions come from [`math`] (pure Rust),
 //! never from the platform's maths library, whose results can differ in the last bit between
