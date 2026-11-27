@@ -1535,6 +1535,18 @@ connection	Flow	Akış
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referans ve bu çalıştırma, aynı çalıştırmalar için rastgele sayılarını aynı yerden (bir tohum ya da rastgele sayı dosyası) almadı; bu yüzden bağımsız çalıştırmalar olarak karşılaştırılırlar ve aralıklar daha geniştir.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	{file} dosyasından rastgele sayılar (SHA-256 {sha}…), her çalıştırma için {offset}. bayttan başlayarak {bytes} bayt
 	Seed {seed} taken from {source}	{source} kaynağından alınan {seed} rastgelelik tohumu
+	Median time in system	Sistemdeki sürenin medyanı
+	Time in system, 90th percentile	Sistemdeki süre, 90. yüzdelik
+	Time in system, 95th percentile	Sistemdeki süre, 95. yüzdelik
+	Share done within the target time	Hedef süre içinde biten pay
+	Percentiles of time in system	Sistemdeki sürenin yüzdelikleri
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Her varlığın oluşturulmasından bu çıkışlara ulaşmasına kadar geçen sürenin medyanını, 90. ve 95. yüzdeliğini, bir hedef süre verilirse bu süre içinde bitenlerin payını gösterir.
+	Target time ({unit})	Hedef süre ({unit})
+	The target time is a time above 0	Hedef süre 0'dan büyük bir süredir
+	Count only working time on	Yalnızca çalışma süresini say, takvim
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Çalıştırma bittiğinde hâlâ içeride olan varlıklar dahil edilmez, bu yüzden çalıştırmayı hepsi bittiğinde durdurun.
+	Set the target time in system of {block} to a time above 0.	{block} bloğunun sistemdeki hedef süresini 0'dan büyük bir süreye ayarlayın.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} bloğunun sistemdeki süresi, var olmayan bir takvime göre çalışma süresini sayıyor. Var olan bir takvim seçin.
 	One machine's availability	Bir makinenin kullanılabilirliği
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Ortalama her 90 saatte bir arızalanan ve onarımı 4.5 saat süren bir makine (Hristova, Denev ve Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Bir makine ne sıklıkta duruyor ve bu ne kadar işe mal oluyor?

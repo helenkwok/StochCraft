@@ -54,6 +54,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
                 ElementKind::Sink {
                     scrap: None,
                     demand: None,
+                    time_in_system: None,
                 },
             ),
         ],

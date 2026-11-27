@@ -68,6 +68,10 @@ fn label<'a>(name: &'a str, kind: &str) -> &'a str {
         "work_in_progress" => t("Still inside at the end"),
         "mean_work_in_progress" => t("Mean work in progress"),
         "mean_time_in_system" => t("Mean time in system"),
+        "time_in_system_p50" => t("Median time in system"),
+        "time_in_system_p90" => t("Time in system, 90th percentile"),
+        "time_in_system_p95" => t("Time in system, 95th percentile"),
+        "within_target_share" => t("Share done within the target time"),
         "mean_blocked_time" => t("Mean time blocked"),
         "mean_time_on" => t("Mean time on the conveyor"),
         // A conveyor has no units: the share of time its front item waits at the end.
@@ -882,29 +886,79 @@ fn key_measures(
 /// One row of a block's key measures. `stripe` is `None` for the header row.
 fn key_row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str; 4]) {
     let height = if stripe.is_some() { 26.0 } else { 20.0 };
-    let (rect, _) =
-        ui.allocate_exact_size(egui::vec2(KEY_COLUMNS[3].1, height), egui::Sense::hover());
-    if stripe == Some(true) {
-        ui.painter().rect_filled(rect, 4.0, p.stripe);
-    }
-    for (c, text) in cells.into_iter().enumerate() {
-        if text.is_empty() {
-            continue;
-        }
-        let (l, r) = KEY_COLUMNS[c];
-        let cell = egui::Rect::from_x_y_ranges(rect.left() + l..=rect.left() + r, rect.y_range());
-        let numeric = c == 1 || c == 2;
-        let layout = if numeric {
-            egui::Layout::right_to_left(egui::Align::Center)
-        } else {
-            egui::Layout::left_to_right(egui::Align::Center)
-        };
+    let texts = cells.into_iter().enumerate().map(|(c, text)| {
         let mut t = RichText::new(text);
         if stripe.is_none() {
             t = t.size(12.0).color(p.text_weak);
         } else if c == 2 || c == 3 {
             t = t.color(p.text_weak);
         }
+        t
+    });
+    table_row(ui, p, stripe, &KEY_COLUMNS, height, texts);
+}
+
+/// The gap kept between a row's label and the column after it.
+const LABEL_GAP: f32 = 8.0;
+
+/// One row of a results table with its cells between `columns`' edges: the first (the label)
+/// wrapped within its column, so a long label, or a long translation, takes more lines rather
+/// than run into the mean; the row as tall as that needs, at least `height`. The second and
+/// third cells (the numbers) are right-aligned, the others left-aligned, each on one line.
+fn table_row(
+    ui: &mut egui::Ui,
+    p: &theme::Palette,
+    stripe: Option<bool>,
+    columns: &[(f32, f32)],
+    height: f32,
+    texts: impl Iterator<Item = RichText>,
+) {
+    let texts: Vec<RichText> = texts.collect();
+    let label_width = columns
+        .first()
+        .map_or(0.0, |(l, r)| (r - l - LABEL_GAP).max(1.0));
+    let label = texts.first().filter(|t| !t.text().is_empty()).map(|t| {
+        egui::WidgetText::from(t.clone()).into_galley(
+            ui,
+            Some(egui::TextWrapMode::Wrap),
+            label_width,
+            egui::FontSelection::Default,
+        )
+    });
+    let label_height = label.as_ref().map_or(0.0, |g| g.size().y);
+    let height = height.max(label_height + 8.0);
+    let width = columns.last().map_or(0.0, |(_, r)| *r);
+    let (rect, _) = ui.allocate_exact_size(egui::vec2(width, height), egui::Sense::hover());
+    if stripe == Some(true) {
+        ui.painter().rect_filled(rect, 4.0, p.stripe);
+    }
+    for (c, (t, (l, r))) in texts.into_iter().zip(columns).enumerate() {
+        if t.text().is_empty() {
+            continue;
+        }
+        if c == 0 {
+            // Centred in the row, wrapped to the column.
+            let top = rect.center().y - label_height / 2.0;
+            let cell = egui::Rect::from_min_size(
+                egui::pos2(rect.left() + l, top),
+                egui::vec2(label_width, label_height.max(1.0)),
+            );
+            ui.scope_builder(
+                egui::UiBuilder::new()
+                    .max_rect(cell)
+                    .layout(egui::Layout::top_down(egui::Align::Min)),
+                |ui| {
+                    ui.add(egui::Label::new(t).wrap());
+                },
+            );
+            continue;
+        }
+        let cell = egui::Rect::from_x_y_ranges(rect.left() + l..=rect.left() + r, rect.y_range());
+        let layout = if c == 1 || c == 2 {
+            egui::Layout::right_to_left(egui::Align::Center)
+        } else {
+            egui::Layout::left_to_right(egui::Align::Center)
+        };
         ui.scope_builder(egui::UiBuilder::new().max_rect(cell).layout(layout), |ui| {
             ui.label(t);
         });
@@ -1396,23 +1450,8 @@ const COLUMNS: [(f32, f32); 5] = [
 /// One row of an element's results. `stripe` is `None` for the header row.
 fn row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str; 5]) {
     let height = if stripe.is_some() { 28.0 } else { 22.0 };
-    let width = COLUMNS[4].1;
-    let (rect, _) = ui.allocate_exact_size(egui::vec2(width, height), egui::Sense::hover());
-    if stripe == Some(true) {
-        ui.painter().rect_filled(rect, 4.0, p.stripe);
-    }
-    for (c, text) in cells.into_iter().enumerate() {
-        if text.is_empty() {
-            continue;
-        }
-        let (l, r) = COLUMNS[c];
-        let cell = egui::Rect::from_x_y_ranges(rect.left() + l..=rect.left() + r, rect.y_range());
+    let texts = cells.into_iter().enumerate().map(|(c, text)| {
         let numeric = c == 1 || c == 2;
-        let layout = if numeric {
-            egui::Layout::right_to_left(egui::Align::Center)
-        } else {
-            egui::Layout::left_to_right(egui::Align::Center)
-        };
         let mut t = RichText::new(text);
         if stripe.is_none() {
             t = t.size(12.0).color(p.text_weak);
@@ -1424,10 +1463,9 @@ fn row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str
         } else if c >= 3 {
             t = t.color(p.text_weak);
         }
-        ui.scope_builder(egui::UiBuilder::new().max_rect(cell).layout(layout), |ui| {
-            ui.label(t);
-        });
-    }
+        t
+    });
+    table_row(ui, p, stripe, &COLUMNS, height, texts);
 }
 
 thread_local! {
@@ -1559,6 +1597,56 @@ mod tests {
         h.get_by_label("All measures (2 more)");
         assert!(h.query_by_label("Time failed").is_none());
         assert!(h.query_by_label("OEE availability").is_none());
+    }
+
+    /// A long label wraps within its column in the key measures and in all measures, so it
+    /// never runs into the mean beside it, whatever the language makes of it.
+    #[test]
+    fn long_labels_wrap_clear_of_their_values() {
+        use egui_kittest::kittest::Queryable;
+        let long = "a deliberately long measure name standing in for a long translation of a label";
+        let m = |mean: f64, hw: f64| serde_json::json!({ "mean": mean, "half_width": hw, "std_dev": 1.0, "n": 10 });
+        let mut results = serde_json::json!({
+            "replications": 10,
+            "record": { "replications": 10, "time_unit": "min" },
+            "metrics": ["entered", "mean_time_in_system", "within_target_share",
+                        "time_in_system_p90", long],
+            "elements": [{
+                "id": "out", "name": "Customer leaves", "kind": "sink",
+                "metrics": {
+                    "entered": m(800.0, 30.0),
+                    "mean_time_in_system": m(5.04, 0.21),
+                    "within_target_share": m(0.437, 0.012),
+                    "time_in_system_p90": m(9.53, 0.41),
+                },
+            }],
+        });
+        results["elements"][0]["metrics"][long] = m(123.0, 4.0);
+        let mut h = draw(results);
+        h.get_by_label("All measures (1 more)").click();
+        h.run();
+        let pairs = [
+            ("Share done within the target time", ["43.7%", "43.7"]),
+            ("Time in system, 90th percentile", ["9.5 min", "9.5"]),
+            (long, ["123", "123"]),
+        ];
+        for (label, values) in pairs {
+            let labels: Vec<egui::Rect> = h.get_all_by_label(label).map(|n| n.rect()).collect();
+            assert!(!labels.is_empty(), "no {label}");
+            let mut seen = 0;
+            for value in values {
+                for v in h.get_all_by_label(value).map(|n| n.rect()) {
+                    seen += 1;
+                    for l in &labels {
+                        assert!(!l.intersects(v), "{label} {l:?} overlaps {value} {v:?}");
+                    }
+                }
+            }
+            assert!(seen > 0, "no value for {label}");
+        }
+        // The long one is in all measures only, on more than one line.
+        let tall = h.get_by_label(long).rect();
+        assert!(tall.height() > 30.0, "{tall:?}");
     }
 
     #[test]

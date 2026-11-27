@@ -219,9 +219,12 @@ impl App {
         egui::ScrollArea::horizontal()
             .auto_shrink([false, true])
             .show(ui, |ui| {
+                // One column more than the table fills: a grid gives its last column all the
+                // width left in the row, which would push the right-aligned simulated mean wait
+                // to the panel's edge, away from its header.
                 egui::Grid::new("capacity-table")
                     .striped(true)
-                    .num_columns(headers.len())
+                    .num_columns(headers.len() + 1)
                     .spacing(egui::vec2(18.0, 6.0))
                     .show(ui, |ui| {
                         for (h, hover) in &headers {

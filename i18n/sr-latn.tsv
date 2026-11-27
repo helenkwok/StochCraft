@@ -1535,6 +1535,18 @@ connection	Flow	Tok
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referenca i ovo pokretanje nisu uzeli svoje slučajne brojeve sa istog mesta (seme ili datoteka sa slučajnim brojevima) za ista pokretanja, pa se upoređuju kao nezavisna pokretanja i intervali su širi.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Slučajni brojevi iz datoteke {file} (SHA-256 {sha}…), {bytes} bajtova za svako pokretanje od bajta {offset}
 	Seed {seed} taken from {source}	Seme {seed} preuzeto iz {source}
+	Median time in system	Medijana vremena u sistemu
+	Time in system, 90th percentile	Vreme u sistemu, 90. percentil
+	Time in system, 95th percentile	Vreme u sistemu, 95. percentil
+	Share done within the target time	Udeo završenih u ciljnom vremenu
+	Percentiles of time in system	Percentili vremena u sistemu
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Prikazuje medijanu, 90. i 95. percentil vremena koje je svaki entitet proveo od nastanka do ovih izlaza, a uz ciljno vreme i udeo završenih u njemu.
+	Target time ({unit})	Ciljno vreme ({unit})
+	The target time is a time above 0	Ciljno vreme je vreme veće od 0
+	Count only working time on	Brojati samo radno vreme po
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entiteti koji su još unutra kad se pokretanje završi nisu uključeni, pa zaustavite pokretanje kad su svi gotovi.
+	Set the target time in system of {block} to a time above 0.	Postavite ciljno vreme u sistemu bloka {block} na vreme veće od 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Vreme u sistemu bloka {block} broji radno vreme po kalendaru koji ne postoji. Izaberite kalendar koji postoji.
 	One machine's availability	Raspoloživost jedne mašine
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jedna mašina koja se u proseku kvari na svakih 90 sati i popravlja se 4.5 sata (Hristova, Denev i Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Koliko često jedna mašina ne radi i koliko posla to košta?

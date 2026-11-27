@@ -1535,6 +1535,18 @@ connection	Flow	ప్రవాహం
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ప్రాతిపదిక మరియు ఈ అమలు అవే అమలుల కోసం తమ యాదృచ్ఛిక సంఖ్యలను ఒకే చోట నుండి (ఒక యాదృచ్ఛిక బీజం, లేదా యాదృచ్ఛిక సంఖ్యల ఫైల్) తీసుకోలేదు, కాబట్టి వాటిని స్వతంత్ర అమలులుగా పోలుస్తారు మరియు అంతరాలు విశాలంగా ఉంటాయి.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ఫైల్ {file} నుండి యాదృచ్ఛిక సంఖ్యలు (SHA-256 {sha}…), ప్రతి అమలుకు బైట్ {offset} నుండి {bytes} బైట్లు
 	Seed {seed} taken from {source}	{source} నుండి తీసుకున్న యాదృచ్ఛిక బీజం {seed}
+	Median time in system	వ్యవస్థలో గడిపిన సమయం మధ్యగతం
+	Time in system, 90th percentile	వ్యవస్థలో గడిపిన సమయం, 90వ శతాంశం
+	Time in system, 95th percentile	వ్యవస్థలో గడిపిన సమయం, 95వ శతాంశం
+	Share done within the target time	లక్ష్య సమయంలో పూర్తయిన వాటా
+	Percentiles of time in system	వ్యవస్థలో గడిపిన సమయం శతాంశాలు
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	ప్రతి అంశం సృష్టించబడినప్పటి నుంచి ఈ నిష్క్రమణలకు చేరే వరకు తీసుకున్న సమయం యొక్క మధ్యగతం, 90వ మరియు 95వ శతాంశాలను చూపుతుంది; లక్ష్య సమయం ఇస్తే దానిలో పూర్తయిన వాటాను కూడా చూపుతుంది.
+	Target time ({unit})	లక్ష్య సమయం ({unit})
+	The target time is a time above 0	లక్ష్య సమయం 0 కంటే ఎక్కువ సమయం కావాలి
+	Count only working time on	పని సమయాన్ని మాత్రమే లెక్కించే క్యాలెండర్
+	Entities still inside when the run ends are left out, so stop the run once all are done.	అమలు ముగిసేటప్పుడు ఇంకా లోపల ఉన్నవి లెక్కించబడవు, కాబట్టి అన్నీ పూర్తయిన తర్వాత అమలును ఆపండి.
+	Set the target time in system of {block} to a time above 0.	{block} యొక్క వ్యవస్థలో లక్ష్య సమయాన్ని 0 కంటే ఎక్కువ సమయానికి సెట్ చేయండి.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} యొక్క వ్యవస్థలో గడిపిన సమయం లేని క్యాలెండర్ ప్రకారం పని సమయాన్ని లెక్కిస్తోంది. ఉన్న క్యాలెండర్‌ను ఎంచుకోండి.
 	One machine's availability	ఒక యంత్రం అందుబాటు
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	సగటున ప్రతి 90 గంటలకు చెడిపోయి, మరమ్మతుకు 4.5 గంటలు పట్టే ఒక యంత్రం (Hristova, Denev మరియు Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	ఒక యంత్రం ఎంత తరచుగా ఆగిపోతుంది, దానివల్ల ఎంత పని పోతుంది?
