@@ -88,17 +88,20 @@ fn record_lines(name: &str, results: &Value, out: &mut String) {
         s(&r["stochcraft"]),
         s(&r["model_digest"])
     );
+    // The results' confidence level: 95% unless the experiment set another.
+    let level = r["confidence"].as_f64().unwrap_or(0.95);
+    let level = format!("{}%", (level * 1000.0).round() / 10.0);
     if results["sequential"].is_object() {
         let _ = writeln!(
             out,
-            "± is estimated precision after adaptive stopping: the half-width of a 95% Student-t \
-             interval across replications whose number was chosen from the results, so its \
-             coverage is not guaranteed to be 95%"
+            "± is estimated precision after adaptive stopping: the half-width of a {level} \
+             Student-t interval across replications whose number was chosen from the results, so \
+             its coverage is not guaranteed to be {level}"
         );
     } else {
         let _ = writeln!(
             out,
-            "± is the half-width of a 95% Student-t confidence interval across replications"
+            "± is the half-width of a {level} Student-t confidence interval across replications"
         );
     }
 }

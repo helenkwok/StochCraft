@@ -270,7 +270,11 @@ mod tests {
         }
         // 90% is the 0.95 quantile, 99% the 0.995.
         for df in [1, 4, 9, 30, 120] {
-            assert_eq!(t_two_sided(0.90, df), t_quantile(0.95, df as f64));
+            let (a, b) = (
+                t_two_sided(0.90, df).unwrap_or(f64::NAN),
+                t_quantile(0.95, df as f64).unwrap_or(f64::NAN),
+            );
+            assert!((a - b).abs() < 1e-12 * b, "{a} {b}");
             let a = t_two_sided(0.99, df).unwrap_or(f64::NAN);
             let b = t_quantile(0.995, df as f64).unwrap_or(f64::NAN);
             assert!((a - b).abs() < 1e-12 * b, "{a} {b}");

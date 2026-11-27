@@ -109,12 +109,8 @@ fn mean(xs: &[Option<f64>]) -> (Option<f64>, u64) {
     ((n > 0).then(|| v.iter().sum::<f64>() / n as f64), n)
 }
 
-/// Compares `a` with `b` (results as `run` returns them), at 95%, each comparison on its own.
-pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, CommandError> {
-    compare_at(a, b, only, stochcraft_stats::critical::DEFAULT_LEVEL, false)
-}
-
-/// Compares `a` with `b` with intervals at confidence `level`, held together by Bonferroni's
+/// Compares `a` with `b` (results as `run` returns them) with intervals at confidence `level`,
+/// held together by Bonferroni's
 /// rule over the comparisons made when `bonferroni` is set.
 pub fn compare_at(
     a: &Value,

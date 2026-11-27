@@ -530,7 +530,7 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
         // A sequential run judged its key measures by its own targets, in its own rows above.
         if settled > 0 && !sequential {
             let text = tf(
-                "{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better, with {level}% confidence.",
+                "{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).",
                 &[
                     ("k", &settled.to_string()),
                     ("m", &judged.to_string()),
@@ -1616,10 +1616,11 @@ mod tests {
     #[test]
     fn the_trust_line_says_how_sure_and_offers_the_fixes() {
         use super::Fix;
-        // The widest key measure, with more runs as its fix: 10 × (32 / 5)² = 409.6.
+        // The widest key measure, with more runs as its fix: ± 32% against ± 5% of the true mean,
+        // 5/1.05 = 4.76% of the estimate: 10 × (32 / 4.76)² = 451.6.
         assert_eq!(
-            trust_with(unsure(), Some("Use 410 runs (about ± 5%)")),
-            Some(Fix::Runs(410))
+            trust_with(unsure(), Some("Use 460 runs (about ± 5%)")),
+            Some(Fix::Runs(460))
         );
         // No warm-up: the suggestion, rounded to two figures, as the other fix.
         assert_eq!(
@@ -1696,7 +1697,7 @@ mod tests {
             super::trust(ui, &results);
         });
         h.run();
-        assert!(h.query_by_label("Use 410 runs (about ± 5%)").is_none());
+        assert!(h.query_by_label("Use 460 runs (about ± 5%)").is_none());
         h.get_by_label(
             "Stopped at the most allowed, 10 runs, before every key measure was within its target.",
         );
@@ -1747,7 +1748,7 @@ mod tests {
         );
         h.get_by_label_contains("no warm-up is set");
         h.get_by_label(
-            "2 of 4 key measures are settled: each is known to ± 5% (± 1 point for a share) or better, with 95% confidence.",
+            "2 of 4 key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at 95% confidence).",
         );
     }
 
