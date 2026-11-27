@@ -740,4 +740,30 @@ mod tests {
         let w = wanted(&a, &c);
         assert!(w.iter().all(|x| x["metric"] != "mean_wait"));
     }
+
+    /// The sentence on how two runs were compared follows where their random numbers came
+    /// from, not their seeds alone.
+    #[test]
+    fn how_runs_were_compared_follows_their_random_numbers() {
+        let file = json!({ "seed": 1, "replications": 4, "random": { "mode": "byte_file" } });
+        let seed = json!({ "seed": 1, "replications": 4, "random": { "mode": "prng" } });
+        let said = |a: &Value, b: &Value, paired: bool| {
+            how_compared(
+                &json!({}),
+                &json!({}),
+                &json!({ "a": a, "b": b, "paired": paired }),
+            )
+            .join(" ")
+        };
+        assert!(
+            said(&file, &file, true)
+                .starts_with("Both read their random numbers from the same file")
+        );
+        assert!(said(&seed, &file, false).starts_with("The baseline and this run did not take"));
+        assert!(said(&seed, &seed, true).starts_with("Both used seed 1"));
+        assert!(
+            said(&seed, &json!({ "seed": 2, "replications": 4 }), false)
+                .starts_with("The baseline used seed 1")
+        );
+    }
 }

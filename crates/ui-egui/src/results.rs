@@ -1971,4 +1971,35 @@ mod tests {
                 .is_none()
         );
     }
+
+    /// The line naming where a run's random numbers came from: a file or a seed's source, and
+    /// nothing for the seed's own pseudo-random numbers.
+    #[test]
+    fn the_random_number_source_is_named() {
+        use super::random_line;
+        use serde_json::json;
+        let file = json!({ "seed": 1, "random": {
+            "mode": "byte_file", "file": "/data/qrng/run-7.bin",
+            "sha256": "0123456789abcdef0123", "segment_bytes": 65536, "offset": 0 } });
+        let line = random_line(&file).unwrap_or_default();
+        assert!(
+            line.contains("run-7.bin") && !line.contains("/data"),
+            "{line}"
+        );
+        assert!(
+            line.contains("0123456789ab…") && !line.contains("0123456789abc…"),
+            "{line}"
+        );
+        let source =
+            json!({ "seed": 42, "random": { "mode": "seed_source", "source": "a beacon" } });
+        assert_eq!(
+            random_line(&source).as_deref(),
+            Some("Seed 42 taken from a beacon")
+        );
+        assert_eq!(
+            random_line(&json!({ "seed": 1, "random": { "mode": "prng" } })),
+            None
+        );
+        assert_eq!(random_line(&json!({ "seed": 1 })), None);
+    }
 }

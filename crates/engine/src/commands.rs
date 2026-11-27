@@ -1172,13 +1172,17 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let records = e.sensitivity.len();
     let mut results = Vec::with_capacity(p.commands.len());
     for (i, step) in p.commands.into_iter().enumerate() {
-        let params = if step.params.is_null() {
+        let mut params = if step.params.is_null() {
             json!({})
         } else {
             step.params
         };
         let result = match COMMANDS.iter().find(|c| c.name == step.command) {
-            Some(c) if c.kind == CommandKind::Edit => (c.run)(e, params),
+            // As `Engine::execute` does: a command that cannot read a file of random bytes
+            // refuses one.
+            Some(c) if c.kind == CommandKind::Edit => {
+                crate::random::screen(c.name, &mut params).and_then(|()| (c.run)(e, params))
+            }
             Some(_) => Err(CommandError::new(
                 ErrorCode::InvalidParams,
                 format!("`{}` is not an editing command", step.command),

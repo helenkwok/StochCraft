@@ -142,6 +142,19 @@ On this machine the M/M/1 workloads (`all 1000000 64`, median of three) ran at 5
 (store), 2.6 M (resource), 1.06 M for simu-des (resource), and 51.5 M customers/s for the 64
 parallel replications on 20 threads.
 
+## The generator against its old self
+
+`cargo run --release --manifest-path bench/Cargo.toml -- rng [DRAWS] [ROUNDS]` times
+`stochcraft-random`'s generator, which since streams can read a file of random bytes chooses its
+source inside, against the generator as it was before (main at d4b0441a, copied unchanged into
+`bench/random-before`). Both draw exponential times, uniforms and raw `u64`s from the same seeds,
+in rounds that alternate which goes first, and the median is reported; the run fails unless both
+give exactly the same numbers. CI runs it with 50,000,000 draws and 9 rounds.
+
+On CI's shared runner (27 November 2026): exponential 5.673 ns before and 5.668 ns now (ratio
+0.999), uniform 0.889 and 0.668 ns (0.751: the uniform is now inlined across crates), raw `u64`
+0.561 and 0.561 ns (1.000).
+
 ## Cimba
 
 Cimba (C, stackful coroutines) reports about 45× over SimPy with Python multiprocessing on its

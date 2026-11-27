@@ -540,11 +540,14 @@ the window comes later.
 
 **What it does and does not give you.** Bytes from a physical source are unpredictable, and
 the file, with its SHA-256 in the run record, says exactly which numbers the run used. They do
-not make the answers more accurate. A good pseudo-random generator already passes the
-statistical tests that matter for simulation, and the quality of a run's random numbers matters
-far less than the number of replications and the model itself (L'Ecuyer, "Software for uniform
-random number generation: distinguishing the good and the bad", Proceedings of the 2001 Winter
-Simulation Conference, pp. 95–105). The bytes in the file are taken as they are: StochCraft does
+not make the answers more accurate: a well-designed pseudo-random generator such as
+xoshiro256** is what simulation normally uses, and in practice it works fine. Being repeatable is
+a major advantage of a generator over a physical device, for checking a program and for
+comparing variants on common random numbers (L'Ecuyer, "Software for uniform random number
+generation: distinguishing the good and the bad", Proceedings of the 2001 Winter Simulation
+Conference, pp. 95–105, section 1.3); a file keeps that, since a run on it repeats exactly. The
+same paper shows that simplistic generators fail simple simulation tests, and a file can be no
+better than the device that made it. The bytes in the file are taken as they are: StochCraft does
 not test them, so a file of poor bytes gives poor random numbers.
 
 **How the file is read.**

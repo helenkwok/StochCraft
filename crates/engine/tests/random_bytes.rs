@@ -279,8 +279,9 @@ fn runs_are_paired_only_when_they_read_the_same_bytes() {
 }
 
 /// Every draw reads eight bytes of the file, and nothing else does: a model whose only draws are
-/// one service time per entity (a constant time between arrivals, a server with exponential
-/// times, a delay with uniform ones) reads exactly 8 × 2 bytes per entity. A stream left on the
+/// one time per entity at each step (a constant time between arrivals, a server with a setup and
+/// a service time before every job, both exponential, a delay with uniform times) reads exactly
+/// 8 × 3 bytes per entity. A stream left on the
 /// generator would read fewer.
 #[test]
 fn the_bytes_read_are_eight_per_draw() {
@@ -292,7 +293,8 @@ fn the_bytes_read_are_eight_per_draw() {
             "name": "Counted draws",
             "elements": [
                 { "id": "arrivals", "kind": "source", "interarrival": { "type": "constant", "value": 1.0 }, "limit": 50 },
-                { "id": "desk", "kind": "server", "capacity": 1, "service": { "type": "exponential", "mean": 0.5 } },
+                { "id": "desk", "kind": "server", "capacity": 1, "service": { "type": "exponential", "mean": 0.5 },
+                  "setup": { "time": { "type": "exponential", "mean": 0.1 } } },
                 { "id": "walk", "kind": "delay", "duration": { "type": "uniform", "min": 0.1, "max": 0.3 } },
                 { "id": "exit", "kind": "sink" }
             ],
@@ -314,10 +316,14 @@ fn the_bytes_read_are_eight_per_draw() {
     let walk = element(&r, "walk")["metrics"]["left"]["mean"].as_f64();
     assert_eq!(desk, Some(50.0), "{r}");
     assert_eq!(walk, Some(50.0), "{r}");
-    assert_eq!(r["record"]["random"]["bytes_used"], 8 * (50 + 50), "{r}");
+    assert_eq!(
+        r["record"]["random"]["bytes_used"],
+        8 * (50 + 50 + 50),
+        "{r}"
+    );
     // A pilot counts the same.
     let pilot = ok(&mut e, "random.pilot", json!({ "replications": 1 }));
-    assert_eq!(pilot["bytes"], json!([800]), "{pilot}");
+    assert_eq!(pilot["bytes"], json!([1200]), "{pilot}");
     assert_eq!(pilot["segment_bytes"], 4096, "{pilot}");
 }
 

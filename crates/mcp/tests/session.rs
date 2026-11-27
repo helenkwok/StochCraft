@@ -327,6 +327,25 @@ fn the_agent_is_kept_to_its_folders() {
         "open",
         json!({"path": read.join("mm1.bpmn").to_string_lossy()}),
     );
+    // A run's file of random bytes is read only from the read root.
+    let outside = dir.0.join("bytes.bin");
+    std::fs::write(&outside, vec![7u8; 1 << 16]).unwrap();
+    std::fs::copy(&outside, read.join("bytes.bin")).unwrap();
+    let run_on = |file: &std::path::Path| {
+        json!({"command": "run", "params": {"replications": 2, "random": {
+            "mode": "byte_file", "file": file.to_string_lossy(), "segment_bytes": 16384
+        }}})
+    };
+    let (e, error) = s.call("execute", run_on(&outside));
+    assert!(
+        error && e.as_str().unwrap().contains("outside the read root"),
+        "{e}"
+    );
+    let (e, error) = s.call("execute", run_on(&read.join("bytes.bin")));
+    assert!(
+        !error || e["code"] == "random_data_exhausted",
+        "a file inside the read root is read: {e}"
+    );
     // Saving into the file it came from writes outside the write root.
     let (e, error) = s.call("save", json!({}));
     assert!(
