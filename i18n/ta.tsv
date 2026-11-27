@@ -1049,6 +1049,7 @@ unit	yr	ஆண்டு
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} இன் “{field}” இல் “{param}” ஐ 1 அல்லது அதற்கு மேல் அமைக்கவும்.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} இன் “{field}” இல் “{param}” ஐ 0 முதல் 1 வரையிலான எண்ணாக அமைக்கவும்.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} இன் “{field}” இல் “குறைந்தபட்சம்” ஐ “அதிகபட்சம்” ஐ விடக் குறைவாகவும், “அதிக வாய்ப்புள்ள மதிப்பு” இருந்தால் அவ்விரண்டுக்கும் இடையிலும் அமைக்கவும்.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} இன் “{field}” இல் “குறைந்தபட்சம்” ஐ “அதிகபட்சம்” ஐ விடக் குறைவாக அமைக்கவும்.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} இன் “{field}” இல் நிகழ்தகவுகளின் கூட்டுத்தொகை 0 ஐ விட அதிகமாக உள்ள தரவுப் புள்ளிகளைச் சேர்க்கவும்.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} இல் வேலை செய்ய ஒரு அலகு கூட இருக்காது. குறைந்தது 1 அலகு கொடுக்கவும்.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} இன் “வருகைகளுக்கு இடையிலான நேரம்” எப்போதும் 0 என்பதால் அது முடிவில்லாமல் உருப்படிகளை உருவாக்கும். 0 ஐ விட அதிகமான நேரத்தைக் கொடுக்கவும், அல்லது “வருகை வரம்பு” அமைக்கவும்.
@@ -1491,6 +1492,35 @@ connection	Flow	ஓட்டம்
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} கன்வேயர் {conveyor} வழியே {s} தொலைவில் வைக்கப்பட்டுள்ளது, ஆனால் அதன் பாதை {length} நீளமே. அதைப் பாதை வழியே 0 முதல் {length} வரைக்குள் வைக்கவும்.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	கன்வேயர் {conveyor} இல் உருப்படிகள் {block} ஐ விட முன்பு {before} ஐ அடைகின்றன, ஆனால் {block} தொடக்கத்துக்கு நெருக்கமாக வைக்கப்பட்டுள்ளது (அதன் வழியே {s}, {before} {before_s} இல்). {block} ஐப் பாதையில் {before} ஐ விடப் பின்னால் வைக்கவும், அல்லது ஓட்டங்களில் அவற்றை மாற்றி அமைக்கவும்.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	ஓட்டம் {flow} இல் உள்ள இணைப்பைக் கடக்க {time} ஆகிறது. அதன் இடமாற்ற நேரத்தை 0 அல்லது அதிகமாக்கவும்.
+	A path needs at least two points.	ஒரு பாதைக்கு குறைந்தது இரண்டு புள்ளிகள் தேவை.
+	Finish	முடி
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name} இன் பாதை வரையப்படுகிறது: புள்ளிகளைச் சேர்க்க கிளிக் செய்யவும், முடிக்க இருமுறை கிளிக் அல்லது Enter, கடைசி புள்ளியை நீக்க Backspace, ரத்துசெய்ய Esc.
+	Draw path	பாதையை வரை
+	Select a conveyor to draw its path	பாதையை வரைய ஒரு கன்வேயரைத் தேர்ந்தெடுக்கவும்
+	Remove path	பாதையை அகற்று
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	புள்ளியைச் சேர்க்க கிளிக் செய்யவும் · முடிக்க இருமுறை கிளிக் அல்லது Enter · ரத்துசெய்ய Esc
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	தேர்ந்தெடுக்க பெல்ட்டைக் கிளிக் செய்யவும் · அதன் புள்ளிகளை அல்லது பெல்ட்டை இழுக்கவும் · புள்ளியைச் சேர்க்க இருமுறை கிளிக் செய்யவும் · நகர்த்த தரையை இழுக்கவும் · பெரிதாக்க உருட்டவும்
+	Point {n} of {name}, x {x} m, y {y} m	{name} இன் புள்ளி {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	பாதையை வரைய இங்கே ஒரு கன்வேயரைக் கிளிக் செய்யவும்.
+	Path	பாதை
+	Not drawn in the layout yet.	லேஅவுட்டில் இன்னும் வரையப்படவில்லை.
+	Draw in the Layout view	லேஅவுட் காட்சியில் வரை
+	Add a straight path	நேரான பாதையைச் சேர்
+	Drawn length: {length} {unit}	வரைந்த நீளம்: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	இந்தப் பாதை மேலே ஏறுகிறது அல்லது சுருள் உள்ளது: அதன் புள்ளிகளை இங்கே திருத்த முடியாது.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	இந்தப் பாதை ஒரே வளைவில் ஒரு முழு வட்டம் அல்லது அதற்கு மேல் திரும்புகிறது: அதன் புள்ளிகளை இங்கே திருத்த முடியாது.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	இந்தப் பாதை தொடக்கத்தில் அல்லது முடிவில் கூர்மையாகத் திரும்புகிறது: அதன் புள்ளிகளை இங்கே திருத்த முடியாது.
+	Point {n}	புள்ளி {n}
+	x of point {n}	புள்ளி {n} இன் x
+	y of point {n}	புள்ளி {n} இன் y
+	x	x
+	y	y
+	Bend radius at point {n}	புள்ளி {n} இல் வளைவு ஆரம்
+	bend	வளைவு
+	tightened to {radius} to fit	பொருந்த {radius} ஆகக் குறைக்கப்பட்டது
+	Remove point {n}	புள்ளி {n} ஐ அகற்று
+	Add a point at the end	முடிவில் ஒரு புள்ளியைச் சேர்
+	Change Path	பாதையை மாற்று
 	Search examples	எடுத்துக்காட்டுகளில் தேடு
 	Clear search	தேடலை அழி
 	Logistics and warehousing	சரக்கு போக்குவரத்தும் கிடங்கும்

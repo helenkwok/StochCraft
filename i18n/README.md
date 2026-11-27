@@ -27,7 +27,7 @@ template, with `{block}`, `{flow}` and the like as placeholders, and the labels 
 fields (`“Service time”`) are named in the messages by their own rows.
 
 **Where they come from:**
-- Written with ChatGPT from the plain meaning of the English, then cleaned with Claude Code.
+- Machine-drafted from the plain meaning of the English, then cleaned up by machine.
 - Not reviewed by native speakers.
 - German and both Chinese catalogs had their simulation terminology checked against published
   sources: Einschwingphase, Verweilzeit, Skalen- and Formparameter; Taiwan usage for `zh-hant`.
@@ -39,17 +39,17 @@ fields (`“Service time”`) are named in the messages by their own rows.
   "Zoom" (the window-size toggle) have their own wording where `common.tsv` means something else.
   Slovak has no `common.tsv`; its rows are StochCraft's own.
 - The rows added for issue #39 (shared resource pools, the macOS and Windows menu words, the
-  desktop file dialogs, time-unit abbreviations) were written with Claude Code from the plain
+  desktop file dialogs, time-unit abbreviations) were machine-drafted from the plain
   meaning of the English, the existing terms of each catalog and `common.tsv`; uncertain domain
   terms (resource pool, needs, by role, priority…) were checked against dictionaries, Wikipedia,
   the EU's IATE term base and simulation literature, never against another product's
   translations.
 - The row for "Still inside at the end" (issue #68, entities still inside an element when a
-  replication ends) was written with Claude Code from the plain meaning of the English and each
+  replication ends) was machine-drafted from the plain meaning of the English and each
   catalog's own word for "inside" in "Mean number inside"; not checked against any other source.
 - The rows added for issue #69 (how many replications a result is over, what the means leave
   out, sizing's target share and its 95% interval, the one-replication note in Watch a run) were
-  machine-drafted with Claude Code from the plain meaning of the English, reusing each catalog's
+  machine-drafted from the plain meaning of the English, reusing each catalog's
   own words for replication, target, share, mean wait, mean time in system, stop condition, time
   limit and 95% interval; not checked against any other source, and not reviewed by native
   speakers. "Met in at least" and "Share of replications" were removed with the sizing field they
@@ -62,13 +62,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   rows phrased alike in each language; "starved" is rendered as time without work (waiting for
   parts). Not checked against any other source, and not reviewed by native speakers.
 - The row for "Mean work in progress" (issue #87, the time-average number of parts inside an
-  element) was machine-drafted with Claude Code using each language's term for work in process.
+  element) was machine-drafted using each language's term for work in process.
   The term comes from Wikipedia's interlanguage links where there was one (bn, ca, de, ja, nl,
   pl), and otherwise from general accounting and operations-management usage. It was not checked
   against IATE, and not reviewed by native speakers. The least certain are lo, ta, te, hi, ka,
   kk, sq and it.
 - The rows for the breakdown, transfer and calendar fields and the pool and calendar undo names
-  (PR "forms for breakdowns, transfer and calendars") were machine-drafted with Claude Code from
+  (PR "forms for breakdowns, transfer and calendars") were machine-drafted from
   the plain meaning of the English and each catalog's existing terms (pool, shift, failed, units,
   block): "Breakdowns" and "Time to failure" use the word of that catalog's "Time failed", and the
   undo names follow its "Change Block", "Add Block" and "Remove Block". Where a catalog's
@@ -78,19 +78,19 @@ fields (`“Service time”`) are named in the messages by their own rows.
   reviewed by native speakers. The least certain are lo, th, ta, te, ka, kk, bn, sq and
   zh-hant ("行事曆" for calendar).
 - The rows for the Calendars section of the model page (PR "Calendars section on the model
-  page": periods, their repeats, model time 0) were machine-drafted with Claude Code the same
+  page": periods, their repeats, model time 0) were machine-drafted the same
   way, from the plain meaning of the English and each catalog's existing terms, including the
   calendar, pool, shift, availability and arrivals words of the rows above. The weekday
   abbreviations are each language's usual short names, and "On" (before the weekday buttons) is
   rendered as "Days". Not checked against dictionaries, Wikipedia, IATE or any other source,
   and not reviewed by native speakers. The least certain are lo, th, ta, te, ka, kk, bn and sq.
 - The rows for a property drawn as text values by shares (PR "product mix: a property drawn as
-  text values by shares": Random, Mix, Share, Add value) were machine-drafted with Claude Code
+  text values by shares": Random, Mix, Share, Add value) were machine-drafted
   from the plain meaning of the English, reusing each catalog's word for random (from the
   textbook-queue example) and for share (from "Target share"). Not checked against any other
   source, and not reviewed by native speakers; "Mix" is the least certain.
 - The rows for setups and changeovers (PR "setups and changeovers on a task with a resource")
-  were machine-drafted with Claude Code from the plain meaning of the English and each
+  were machine-drafted from the plain meaning of the English and each
   catalog's existing terms, with "Time setting up" phrased like the other "Time …" rows. The
   manufacturing term for a setup follows Wikipedia's interlanguage links for "Changeover" and
   "Single-minute exchange of die" where they name one (nb Omstilling, sv Ställtid, ja 段取り,
@@ -99,7 +99,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   certain are lo, th, ta, te, ka, kk, bn, sq, ko and vi.
 - The rows for ISO 22400-2's OEE elements (PR "OEE availability, effectiveness and setup ratio":
   Planned run time per item, OEE availability, OEE effectiveness, Setup ratio and the hint to set
-  a planned run time) were machine-drafted with Claude Code from the plain meaning of the English
+  a planned run time) were machine-drafted from the plain meaning of the English
   and each catalog's existing terms: the part word of "Energy per part" for "item", the setup word
   of "Setup", and the share or ratio word. "OEE" is kept as the acronym in every language, although
   some Wikipedia articles name a local one (fr TRS, sv TAK, fi KNL, hu TEH, de GAE, cs CEZ, es
@@ -118,7 +118,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   The least certain are lo, th, ta, te, ka, kk, bn, sq, et, lt and zh-hans.
 - The rows for ISO 22400-2's quality elements (Quality, Scrap, Rework, Counts against, the
   last-task default, Rework on {id}, their two hints, Quality ratio, Scrap ratio, Rework ratio, OEE
-  and the note that OEE counts quality as 100%) were machine-drafted with Claude Code from the
+  and the note that OEE counts quality as 100%) were machine-drafted from the
   plain meaning of the English and each catalog's existing terms: the words for Departures, task
   with a resource, flow, part, block and the share or ratio word, and the previous bullet's OEE
   wording. "OEE" stays the acronym. The scrap and rework words come from the quality sections of
@@ -139,7 +139,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   whose "Udział jakości" keeps the share word although Polish usage tends to say "wskaźnik".
 - The rows for takt (PR "takt from a customer demand on departures": the Takt section of a
   Departures block, its demand, period and time-available pickers, the per-shift hint, and the
-  Takt time, Demand, Demand met and Cycle time results) were machine-drafted with Claude Code from
+  Takt time, Demand, Demand met and Cycle time results) were machine-drafted from
   the plain meaning of the English and each catalog's existing words for Departures, task, part,
   run, shift, period, day, week and share. "Takt time" follows the titles of the interlanguage
   articles of Wikipedia's "Takt time" where there is one (ca Temps de takt, de Taktzeit, es and fr
@@ -170,7 +170,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   two choices and their hints, the Abandoned mark on a flow, and the Gave up, Share that gave up,
   Mean wait before giving up, Work wasted on those who gave up and Share of work wasted results;
   Work wasted on those who gave up was later renamed Work wasted on jobs that did not finish, see
-  the health-check bullet) were machine-drafted with Claude Code from the plain meaning of the
+  the health-check bullet) were machine-drafted from the plain meaning of the
   English and each catalog's existing words for entity, unit, flow, task, service, wait, share,
   mean, work, way out and model, taken from its rows for the Rework mark, "Each entity takes the
   first…", "Mean wait" and "Share of arrivals lost". Where a catalog already tells a unit from an
@@ -205,8 +205,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   In use, Rename, Save name, the name check, the contrast check and its warning "{text} on
   {background}: {ratio}:1, needs {min}:1", the built-in themes High contrast, Warm and StochCraft,
   and the palette roles Header, Side rail, Canvas, Raised surfaces, Weak text, Borders, Table
-  stripes, Accent, Soft accent, Chart hover and the Text on… roles) were machine-drafted with
-  Claude Code from the plain meaning of the English and each catalog's existing words, taken from
+  stripes, Accent, Soft accent, Chart hover and the Text on… roles) were machine-drafted from the plain meaning of the English and each catalog's existing words, taken from
   its rows for Text, Light, Dark, Duplicate, Name, Edit, Rename Model and Download charts (PNG):
   the roles that name text contain that catalog's "Text" word, because the warning puts the
   existing "Text" row next to the new ones; Chart and Chart hover use the word of "Download
@@ -235,7 +234,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   working server, Out for (restart) and Keep at least in service, the choice for a job under way
   on a server taken out, Retry elsewhere or Resume after restart, with their hints, and the Units
   taken out by health checks, Mean units in service, Time restarting and Work wasted on jobs that
-  did not finish results) were machine-drafted with Claude Code from the plain meaning of the
+  did not finish results) were machine-drafted from the plain meaning of the
   English and each catalog's existing words for unit, entity, client, job, queue, wait, mean and
   wasted work, taken from its rows for the patience hint "A client that times out…", "Units that
   several tasks share…", "Each entity takes the first…", "Mean queue length", "Mean number
@@ -306,7 +305,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   dark canvas, All checks pass., the level Fail beside the existing Warning, "{word}: {message}",
   and the seven check messages: contrast with the chart background, a colour that reads as grey, the
   difference for normal colour vision and for red-green colour blindness, the lightness step and a
-  ramp that turns back) were machine-drafted with Claude Code from the plain meaning of the English
+  ramp that turns back) were machine-drafted from the plain meaning of the English
   and each catalog's existing words, taken from its colour-themes rows: the hint is "Built-in themes
   are read-only. Duplicate one to change its colours." with the palette word in place of the theme
   word; chart and table come from Chart and Export table (CSV); the canvas rows reuse Canvas (mostly
@@ -376,7 +375,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   Warning.
 - The rows for units by shift (PR "server shifts": the choice for a job under way on a server
   going off shift, Finish, then go off or Resume when back on shift, with their hints, and the
-  hint of Retry elsewhere in that choice) were machine-drafted with Claude Code from the plain
+  hint of Retry elsewhere in that choice) were machine-drafted from the plain
   meaning of the English and each catalog's existing words. The label, the radios and the hints
   are built on the health-check rows "Job under way on a server taken out:", "Retry elsewhere",
   "Resume after restart", "The connection drops and the client tries again…" and "The entity
@@ -414,7 +413,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
 - The rows for split outcomes (branch "split-outcomes": the heading Finding, the line "Runs split:
   {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at
   each group." under a result whose replications fall into two groups, and "{result} ({element})
-  split into two outcomes: see the table below.") were machine-drafted with Claude Code from the
+  split into two outcomes: see the table below.") were machine-drafted from the
   plain meaning of the English and each catalog's existing words. The runs are called by the
   catalog's word for replications, from "n = k of N: only k of the N replications had a value…",
   "{n} replication · mean {mean} · …" and "One replication of {n}: …" (de Replikationen, fr
@@ -464,7 +463,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   in two.
 - The rows for the place in the waiting room of a server taken out by a health check ("Place in the
   waiting room of a server taken out:", "Kept while it restarts", "Open to entities" and their two
-  hover texts) were machine-drafted with Claude Code from the plain meaning of the English, reusing
+  hover texts) were machine-drafted from the plain meaning of the English, reusing
   each catalog's own words for waiting room, server, taken out (as in "Units taken out by health
   checks"), failed ("Time failed"), off shift, restart and entities. The English says waiting room,
   as the field that sets it is labelled Waiting room, and so does every catalog (ru and uk, whose
@@ -475,7 +474,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and ko, where the choices read as actions (secure, open).
 - The rows for service time by property (the task's "Service time by property" checkbox, its
   "Property" field and the heading "Times for particular values" over the rows that give each value
-  its own service time) were machine-drafted with Claude Code from the plain meaning of the English,
+  its own service time) were machine-drafted from the plain meaning of the English,
   reusing each catalog's own words for service time ("Service time"), property ("Properties", "New
   property", "Only when this property changes"), value ("Value", "Values") and, for the heading, the
   wording of the changeover table's "Times for particular changes" with its word for changes
@@ -490,7 +489,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
 - The rows for admission limits and entities turned away (the task's "Size of the waiting room:"
   choice of "Fixed", "By calendar" or "Per working server" with a hover text for each, the "Waiting
   room by calendar" table and its "Places" column, and a connection's "Turned away" checkbox,
-  "Turned away on {id}" and its hover text) were machine-drafted with Claude Code from the plain
+  "Turned away on {id}" and its hover text) were machine-drafted from the plain
   meaning of the English and the model's own description of each choice, reusing each catalog's own
   words for waiting room ("Waiting room", "Lost (waiting room full)"), by calendar ("Units by
   calendar"), per working server ("Fails above, waiting per working server"), failed, taken out and
@@ -505,8 +504,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   checkbox; and the size word chosen for each label (de Größe, fr Taille, ja 大きさ), which may read
   more naturally as a capacity.
 - The rows for the undo names "Size Resources", "Change Estimate" and "Remove Estimate" (PR "small
-  UI fixes from #47": the Edit menu and status bar name every change) were machine-drafted with
-  Claude Code from each catalog's own undo names and its "Size the resources", "Three-point
+  UI fixes from #47": the Edit menu and status bar name every change) were machine-drafted from each catalog's own undo names and its "Size the resources", "Three-point
   estimate" and "Change the estimate" rows. "Change Estimate" and "Remove Estimate" follow the
   article, case and verbs of "Change Pool" and "Remove Pool" (so "Remove", not the "Forget" of the
   estimate button), with the catalog's noun for an estimate; sv takes uppskattning from the button
@@ -521,7 +519,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   colour role and the "Focused header item" contrast check of the theme editor, "Error: {message}"
   for screen readers, the line under a number field whose text is not a number, the line under the
   live view's Jump to time field, and craft-ui's five number-field messages from "Enter a number" to
-  "Number too large") were machine-drafted with Claude Code from the plain meaning of the English
+  "Number too large") were machine-drafted from the plain meaning of the English
   and each catalog's existing terms: its "Borders" word kept apart from the outline word, its header
   word of "Text on header", its "Error" and the colon of its "{error}" rows, its time word of "Jump
   to time" and its number word of "Number". craft-i18n's `common.tsv` (commit e56d262) has none of
@@ -714,7 +712,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   kk as before, and ko 평균 길이, which keeps the catalog's 길이 for Duration.
 - The rows for the conveyor in the window (M5.1, PR 4: Conveyor, Mean time on the conveyor, Length,
   Accumulating, Item length, Gap, Length unit, the six length units, the hover on Accumulating and
-  the glossary entry) were machine-drafted with Claude Code from the plain meaning of the English
+  the glossary entry) were machine-drafted from the plain meaning of the English
   and each catalog's own rows for conveyor (its word, capitalised), Speed, Entity and Time
   blocked. "Pitch" (the item length plus the gap) is the language's word for a step or spacing
   along a belt, and "Accumulating" its word for building up or queuing; both are guesses, as no
@@ -736,12 +734,12 @@ fields (`“Service time”`) are named in the messages by their own rows.
   column for the mean service time, and the word for congested in el, hu, tr and fi.
 
 - The rows for the 3D view (the tab "3D", its accessible name and the line of mouse hints) were
-  written with Claude Code from the plain meaning of the English; the tab's "3D" stays "3D" in
+  machine-drafted from the plain meaning of the English; the tab's "3D" stays "3D" in
   every catalog. Not reviewed by native speakers. The least certain are lo, th, ta, te, ka, kk,
   bn, hi and sq, and in every language the words for orbit (turn the view around the model) and
   pan (slide the view sideways).
 - The rows added for the Dashboard panel (M5.4: its name, "Throughput", the tiles' titles, empty
-  states, tooltips and descriptions) were machine-drafted with Claude Code from the plain meaning
+  states, tooltips and descriptions) were machine-drafted from the plain meaning
   of the English, reusing each catalog's own words for utilisation, conveyor and 95% interval
   where it has them. "Throughput" (items through the model per unit of time), "Idle" (a
   resource's time with nothing to do, kept apart from "starved" and "off shift") and "Dashboard"
@@ -752,26 +750,26 @@ fields (`“Service time”`) are named in the messages by their own rows.
   the rows are not plural rows, so the form after a count may be wrong for some counts.
 - The rows for the About box's font credits and licence list ("Fonts", the sentence naming
   THIRD-PARTY-LICENSES.html and the link "Full list of third-party licences") were
-  machine-drafted with Claude Code from the plain meaning of the English, with each catalog's
+  machine-drafted from the plain meaning of the English, with each catalog's
   own word for "licence" where it has one (from "Licensed under the MIT License...") and the
   everyday word for a font on a computer; "third party" is rendered as the language's
   ordinary business term. Not checked against any other source, and not reviewed by native
   speakers. The least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 - The rows added for the run bar (M5.5 U1: Reset, As fast as possible, Pause at, Halve Speed,
-  Double Speed) were machine-drafted with Claude Code from the plain meaning of the English,
+  Double Speed) were machine-drafted from the plain meaning of the English,
   reusing each catalog's own words for pause, speed and run ("Pause at" follows the catalog's
   Pause; "Reset" is the usual word for returning to the start, or "back to the start" where
   the language has no short one). Not checked against any other source, and not reviewed by
   native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi, sq, et and lt.
 - The row for a chart export that does not fit ("The charts are taller than the window...")
-  was machine-drafted with Claude Code from the plain meaning of the English, with each
+  was machine-drafted from the plain meaning of the English, with each
   catalog's own words for chart, window and export. Not checked against any other source, and
   not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 
 - The rows added for issue #145 (the window's validation messages, each naming a block and saying
   how to fix it; the labels "Angle", "Failed", "Lost", "Off shift", "Processing", "Radius",
   "Rise", "Speed empty", "Speed loaded", "Turns" and "Unload"; four glossary definitions, for
-  "Gave up", "Balked", "Turned away" and "Lost") were machine-drafted with Claude Code, in groups
+  "Gave up", "Balked", "Turned away" and "Lost") were machine-drafted, in groups
   of languages, from the plain meaning of the English and each catalog's own existing words for
   block, flow, waiting room, entity, run and the labels the messages quote, which are the
   catalog's rows for those labels. The rows whose English changed, so that one word names one idea
@@ -783,7 +781,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   language.
 - The row for a save refused because the model changed while the Save dialog was open ("The
   model changed while choosing where to save it, so it was not saved. Save again.", issue #222)
-  was machine-drafted with Claude Code from the plain meaning of the English, with each
+  was machine-drafted from the plain meaning of the English, with each
   catalog's own words for model and save (its rows for "Save" and "Save Model"). Not checked
   against any other source, and not reviewed by native speakers; the least certain are lo, th,
   ta, te, bn, ka, kk, hi and sq.
@@ -791,14 +789,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   stopped, also for a run watching one named result, the results not yet within the target,
   results the same in every run, the left
   rail's "then more until precise enough", and the ± as estimated precision) were machine-drafted
-  with Claude Code from the plain meaning of the English, with each catalog's own words for run,
+  from the plain meaning of the English, with each catalog's own words for run,
   key measure, settled, target and mean, and its own wording of the 95% interval note. Not
   checked against any other source, and not reviewed by native speakers; the least certain are
   lo, ka, ta and te, the case endings in sl, uk and pl, and the particle after a name in ko. "Cannot be known to a share of
   itself" is reworded in each language as a precision given as a share of the mean.
 - The rows for starting contents (issue #225: the "Inside at the start" field and result, its
   one-line explanation, and the three messages for starting contents on a block that does not
-  exist, cannot hold them or holds fewer) were machine-drafted with Claude Code from the plain
+  exist, cannot hold them or holds fewer) were machine-drafted from the plain
   meaning of the English, with each catalog's own words for entity, run, unit, waiting room,
   task and batch, and "inside" phrased like its "Still inside at the end" (de and pt-br "im
   System" and "no sistema"; fr "présents"). Not checked against any other source, and not
@@ -807,7 +805,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
 - The rows for six more examples (a bank with an ATM, hospital beds, a machine repair crew,
   inspection with rework, a project's finish date and "Same mean, different spread": their
   titles, one-line descriptions, questions and what they teach) and the "Projects" industry were
-  machine-drafted with Claude Code from the plain meaning of the English, with each catalog's own
+  machine-drafted from the plain meaning of the English, with each catalog's own
   words from the earlier example cards (queue, wait, busy for a share of the time, parts turned
   away, Rework, Breakdowns, spread) and its own handling of "%" and punctuation. The book title
   and the authors' names stay in English and Latin script; the ATM is each language's everyday
@@ -821,7 +819,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
 - The rows for Monte Carlo models in the window (ROADMAP M4.1, part 2: the Model and Results tabs
   of a Monte Carlo model, its inputs, correlations, outputs, targets, trials and sampling, the
   findings in words, File ▸ New Monte Carlo Model and the project budget example) were
-  machine-drafted with Claude Code from the plain meaning of the English, reusing each catalog's
+  machine-drafted from the plain meaning of the English, reusing each catalog's
   own words for run, seed, mean, target, interval, percentile, share and distribution. "Trial" is
   a word other than the catalog's "run" (most catalogs build it from their existing "Trials" row;
   de, da, fi, nl, nb, pl, pt-br, ro, sk, sl, lt and bs say "iteration"); "Latin hypercube
@@ -841,8 +839,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 - The rows added after review of the Monte Carlo window (why an interval is withheld when every
   batch gave the same share, the name-already-taken message, the line saying how many trials or
-  batches a ± is across) and the reworded Latin hypercube help text were machine-drafted with
-  Claude Code from the plain meaning of the English, reusing each catalog's own words for
+  batches a ± is across) and the reworded Latin hypercube help text were machine-drafted from the plain meaning of the English, reusing each catalog's own words for
   interval, batch, trial, input, output and Latin hypercube sampling (from its "No interval: too
   few batches of trials for one." and "New input" rows, and the help text's earlier translation
   for the batch sentence). "Equally likely strata" is the least certain term. Not checked against
@@ -850,7 +847,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   bn, ka, kk, hi and sq.
 - The rows for four more examples (a polling place, a mass vaccination hub, Penny Fab and a
   prison population: their titles, one-line descriptions, questions and what they teach) and
-  the "Public services" industry were machine-drafted with Claude Code from the plain meaning of
+  the "Public services" industry were machine-drafted from the plain meaning of
   the English, with each catalog's own words from the earlier example cards (machine, queue,
   wait, busy, run) and its own handling of "%" and punctuation; decimals keep the point, as
   every catalog's rows do. Book and journal titles, authors' names and "Penny Fab" (the name of
@@ -864,8 +861,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   most of them, and the long rows on the hub and the prison in every language.
 - The rows for which inputs matter in the Monte Carlo results (ROADMAP M4.1, part 3a: the
   heading, the sentence naming the input an output depends on most, the tornado chart's caption
-  and "Base {value}", and the two notes on correlated inputs) were machine-drafted with Claude
-  Code from the plain meaning of the English, reusing each catalog's own words for input,
+  and "Base {value}", and the two notes on correlated inputs) were machine-drafted from the plain meaning of the English, reusing each catalog's own words for input,
   output, percentile (its "95th percentile" and "Percentile" rows, with its ordinals for 10th
   and 90th), rank correlation and correlated (from its "Inputs", "Rank correlation" and
   "Correlations" rows). "Median" and "base value" had no row in any catalog, so they are each
@@ -879,7 +875,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   reason a model with correlated inputs has none, the columns "Alone" and "With interactions",
   the sentence "{input} alone explains about {share} of the spread in {output}.", the interval on
   hover, the note on the two columns, and the progress in the status bar) were machine-drafted
-  with Claude Code from the plain meaning of the English, reusing each catalog's own word for
+  from the plain meaning of the English, reusing each catalog's own word for
   inputs (from its "Inputs" and "Which inputs matter" rows). "Correlated", "independent",
   "evaluation" and "interval" are each language's own choice, not looked up in the catalogs
   (the 95% interval rows of other strings were not compared). "Spread" is each language's own word (the statistics term for variation or dispersion as
@@ -898,7 +894,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   saying a run was rounded up to whole pairs or batches, and the line for an interval across
   fewer pairs than the run has, and the two reasons an interval across pairs is missing,
   "every pair gave the same share" and "too few pairs of trials", made from the catalogs' own
-  rows for batches with each language's word for pair) were machine-drafted with Claude Code, one agent for each
+  rows for batches with each language's word for pair) were machine-drafted, one agent for each
   quarter of the languages, from the plain meaning of the English, reusing each catalog's
   own words for trial, input, sampling, batch, half-width, interval and "independent" (where
   a catalog says "trials" in one row and "iterations" in another, the "Trials" row's word is
@@ -912,7 +908,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   hint, the "Controlled mean" row and the lines under a finding saying which controls an output
   has and how much narrower they made its interval, that they did not help or made it wider, why
   there is no controlled result, and that a stated mean is far from the trials') were
-  machine-drafted with Claude Code from the plain meaning of the English, reusing each catalog's
+  machine-drafted from the plain meaning of the English, reusing each catalog's
   own words for input, output, mean, interval, trial and correlation. The word for the control is
   each language's usual one for a control (check) quantity, in German and Dutch the compounds
   Kontrollgröße and controlevariabele; none was checked against any other source or reviewed by
@@ -922,7 +918,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   Results tabs, the kinds stock, flow and auxiliary, the sentences on where a stock ends and the
   median and percentiles it ends between, the chart's caption and tooltips, the table's column
   heads, the line on how the model is changed, the refusal of a run too large for the window, the file dialog's filter and
-  the "Product adoption" example with its card) were machine-drafted with Claude Code from the
+  the "Product adoption" example with its card) were machine-drafted from the
   plain meaning of the English, reusing each catalog's own words for run, seed, mean, median,
   percentile, time and flow. "Stock" (a level that fills and drains) is each language's word for
   a stock of goods or a reserve, and "auxiliary variable" its calque; the 5th and 95th
@@ -934,7 +930,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   the chart's tooltip and its caption: the median, "its 5th to 95th percentiles at the end are
   {low} and {high}", "5th to 95th percentile, at each saved time") and the Model tab's line
   on changing the model with commands from an agent or the command line (ROADMAP M4.2, saving)
-  were machine-drafted with Claude Code from the plain meaning of the English, reusing each
+  were machine-drafted from the plain meaning of the English, reusing each
   catalog's own words for median, mean, percentile, run, time and the earlier rows' wording; not
   checked against any other source or reviewed by native speakers. "Agent", "command line" and
   "canvas" are each language's everyday computing word or calque; the least certain are bn, hi, ka,
@@ -942,21 +938,21 @@ fields (`“Service time”`) are named in the messages by their own rows.
 - The three rows added when a controlled chance was reworded (ROADMAP M4.1: "The estimated
   chance that {output} is more than / less than {value} is {percent}.", used where a controlled
   chance would otherwise read as a count of trials, and "Their interval has no width, which no
-  estimate has, so the plain result stands.") were machine-drafted with Claude Code from the
+  estimate has, so the plain result stands.") were machine-drafted from the
   plain meaning of the English, reusing each catalog's own words for chance, interval and result;
   placeholders checked by script; not checked against any other source or reviewed by native
   speakers. The least certain are bn, hi, ka, kk, lo, sq, ta, te, th and vi, and the case of the
   numbers around {value} and {percent} in the highly inflected languages.
 - The row added when a file read in the background arrived after another model had been opened
   ("Did not open {file}: a different model was opened in the meantime") was machine-drafted
-  with Claude Code from the plain meaning of the English; placeholders checked by script; not
+  from the plain meaning of the English; placeholders checked by script; not
   checked against any other source or reviewed by native speakers. The least certain are bn, hi, ka, kk, lo, sq,
   ta, te, th and vi.
 - The rows for the system dynamics diagram (the Diagram tab: the tools Select and Link, the Initial
   value field, the hint under each tool, the status messages for a move, an addition, an edit, a
   removal and a link, the undo names "Add Variable", "Edit Variable", "Remove Variable",
   "Simulation Settings" and "Change Diagram", and the reworded note at the top of the Model tab)
-  were machine-drafted with Claude Code from the plain meaning of the English, reusing each
+  were machine-drafted from the plain meaning of the English, reusing each
   catalog's own words for stock, flow, auxiliary, diagram, equation and unit and its casing for the
   undo names of blocks; placeholders checked by script; not checked against any other source or
   reviewed by native speakers. The least certain are bn, hi, ka, kk, lo, sq, ta, te, th and vi.
@@ -967,8 +963,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   endpoints, not a share of the spread; "No variation was observed, so there is no interval for
   the mean; …"; "They narrowed the interval by {percent}, but a mean given for a control is far
   from the trials' mean, so the plain result stands."; and "The output does not move in one
-  direction with {inputs} (…), so the swing understates the effect.") were machine-drafted with
-  Claude Code from the plain meaning of the English; placeholders checked by script; not
+  direction with {inputs} (…), so the swing understates the effect.") were machine-drafted from the plain meaning of the English; placeholders checked by script; not
   checked against any other source or reviewed by native speakers. The least certain are bn,
   hi, ka, kk, lo, sq, ta, te, th and vi, and the case of the numbers around {low}, {high} and
   {percent} in the highly inflected languages.
@@ -979,7 +974,7 @@ fields (`“Service time”`) are named in the messages by their own rows.
   {simulated}.", "… must be at most / at least {bound} …" and "Simulated minus observed:
   {difference}.", the verdicts Agrees, Differs, Passes, Fails, Can't tell yet: more runs would
   decide and No result, and the validation message for observed data of a block that does not
-  exist) were machine-drafted with Claude Code from the plain meaning of the English, reusing
+  exist) were machine-drafted from the plain meaning of the English, reusing
   each catalog's own words for block, result, run, at most, at least and remove; "observed" is
   the language's word for what is seen or measured in the real system (not "monitored"), and
   "simulated" its word for what the model gives. Placeholders were checked by script against the
@@ -1059,6 +1054,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   for a junction, so each uses a plain word for a joint or crossing point. Not checked against any
   other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka,
   kk and hi.
+- The rows for drawing and editing a conveyor's path in the Layout view (M5.5, L4 part 1: Draw
+  path, the points and their bends, the properties panel's path fields, the Change Path undo
+  label) were machine-drafted from the plain meaning of the English, with each catalog's own word
+  for the Layout view and its "drag to pan, scroll to zoom" wording from its existing rows. The
+  row for a path that turns a whole circle or more in one arc reuses the second half of each
+  catalog's row for a path that climbs, and the row for one that turns sharply where it starts or
+  ends reuses it in turn. Not checked against any other source and not reviewed by
+  native speakers; the least certain are lo, th, ta, te, bn, ka, kk and hi.
 - The rows for the start page's search and its new field (Search examples, Clear search,
   Logistics and warehousing) and for the parcel sorter example's line about it, its question and
   what it teaches (which had no rows before) were machine-drafted from the plain meaning of the
@@ -1087,6 +1090,10 @@ fields (`“Service time”`) are named in the messages by their own rows.
   "Science and engineering" field is the same as the one the sensor-location example adds. Not
   checked against any other source and not reviewed by native speakers; the least certain are
   lo, th, ta, te, bn, ka, kk, hi and sq.
+- The row for the validation message of a uniform, truncated normal or beta whose minimum is not
+  below its maximum ("set “Minimum” below “Maximum”", a beta on a range) is each catalog's own
+  row for the triangular's message with its clause about the most likely value left out. Not
+  checked against any other source and not reviewed by native speakers.
 - The rows for the one-machine-availability example (its title, the line about it, its question
   and what it teaches) were machine-drafted from the plain meaning of the English, with each
   catalog's own words for machine, breakdown and repair from the earlier example cards;

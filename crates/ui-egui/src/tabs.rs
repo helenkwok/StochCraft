@@ -172,6 +172,12 @@ impl App {
         }
     }
 
+    /// Whether the Layout view is the one shown and takes the editing keys this frame (it is
+    /// drawing, dragging or has a point picked), so the block keys leave them to it.
+    pub(crate) fn layout_takes_keys(&self) -> bool {
+        matches!(self.view_shown(), View::Layout) && self.layout_view.wants_keys()
+    }
+
     /// Whether the run bar is on screen: on the views that show the model (Model, 3D).
     pub(crate) fn run_bar_shown(&self) -> bool {
         matches!(self.view_shown(), View::Model | View::ThreeD)
