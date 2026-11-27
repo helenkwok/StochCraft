@@ -1751,8 +1751,9 @@ impl App {
             .unwrap_or_else(|| clock.to_owned());
         let mut chosen_cal: Option<Option<String>> = None;
         let working = t("Count only working time on");
+        // Above its picker, wrapped: too long for the label column in English already.
+        ui.add(egui::Label::new(working).wrap());
         ui.horizontal(|ui| {
-            form::label_cell(ui, working, 26.0);
             craft_ui::ComboBox::from_id_salt((id, "working"))
                 .selected_text(shown)
                 .width(200.0)

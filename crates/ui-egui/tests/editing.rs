@@ -1367,11 +1367,11 @@ fn time_in_system_is_set_on_departures_in_the_inspector() {
     h.key_press(egui::Key::Enter);
     settle(&mut h);
     assert_eq!(element(&h, "leave")["time_in_system"], json!({}));
-    assert!(
-        h.get_all_by_role_and_label(Role::ComboBox, "Count only working time on")
-            .next()
-            .is_some()
-    );
+    // The calendar picker's label sits above it, in full, not cut short beside it.
+    let working = "Count only working time on";
+    let label = h.get_by_role_and_label(Role::Label, working).rect();
+    let picker = h.get_by_role_and_label(Role::ComboBox, working).rect();
+    assert!(label.bottom() <= picker.top() + 1.0, "{label:?} {picker:?}");
     click(&mut h, Role::CheckBox, "Percentiles of time in system");
     assert!(element(&h, "leave").get("time_in_system").is_none());
 }
