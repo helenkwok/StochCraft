@@ -1540,3 +1540,8 @@ connection	Flow	ஓட்டம்
 	Encoding	குறியாக்கம்
 	Add	சேர்
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	உலாவியில், திறவுகோல்கள் இந்தத் தளத்தின் உள்ளூர் சேமிப்பகத்தில் மறைகுறியாக்கம் இல்லாமல் வைக்கப்படுகின்றன: இந்தப் பக்கத்தில் இயங்கும் எதுவும், இந்த உலாவி சுயவிவரத்தைப் பயன்படுத்தும் எவரும் அவற்றைப் படிக்கலாம். நீங்கள் ரத்துசெய்யக்கூடிய திறவுகோலைப் பயன்படுத்துங்கள், அல்லது திறவுகோல்களைக் கணினியின் கீசெயினில் வைக்கும் டெஸ்க்டாப் செயலியைப் பயன்படுத்துங்கள்.
+	One machine's availability	ஒரு இயந்திரத்தின் இயக்கத் தயார்நிலை
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	சராசரியாக ஒவ்வொரு 90 மணிநேரத்திற்கும் பழுதாகி, பழுதுபார்க்க 4.5 மணிநேரம் ஆகும் ஒரு இயந்திரம் (Hristova, Denev மற்றும் Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	ஒரு இயந்திரம் எவ்வளவு அடிக்கடி நின்றுவிடுகிறது, அதனால் எவ்வளவு வேலை இழப்பு?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 மணிநேரம் இயக்கம், 4.5 நிறுத்தம்: இயந்திரம் 95.2% நேரம் வேலை செய்கிறது, ஒவ்வொரு 94.5 மணிநேரத்திற்கும் ஒரு பழுது ஏற்படுகிறது. பழுதுபார்க்கும் நேரத்தை பாதியாக்கினால் அது 97.6% ஆகிறது.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} நேரம் நின்றிருக்கிறது (தயார்நிலை {up}); அதற்காக எதுவும் காத்திருக்கவில்லை.

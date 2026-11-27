@@ -1540,3 +1540,8 @@ connection	Flow	Srautas
 	Encoding	Kodavimas
 	Add	Pridėti
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Naršyklėje raktai laikomi šios svetainės vietinėje saugykloje neužšifruoti: juos gali perskaityti viskas, kas veikia šiame puslapyje, ir bet kas, kas naudoja šį naršyklės profilį. Naudokite raktą, kurį galite atšaukti, arba darbalaukio programą, kuri raktus laiko sistemos raktų pakabuke.
+	One machine's availability	Vieno įrenginio parengtis
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Vienas įrenginys, kuris vidutiniškai kas 90 valandų genda, o jį suremontuoti reikia 4.5 valandos (Hristova, Denev ir Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Kaip dažnai stovi vienas įrenginys ir kiek darbo tai kainuoja?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Veikia 90 valandų, stovi 4.5: įrenginys dirba 95.2 % laiko, o gedimas įvyksta kas 94.5 valandos. Perpus sutrumpinus remontą, rodiklis pakyla iki 97.6 %.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stovi {down} laiko (parengtis {up}); niekas jo nelaukia.

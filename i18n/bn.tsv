@@ -1540,3 +1540,8 @@ connection	Flow	প্রবাহ
 	Encoding	এনকোডিং
 	Add	যোগ করুন
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	ব্রাউজারে কী এই সাইটের লোকাল স্টোরেজে এনক্রিপ্ট ছাড়া রাখা হয়: এই পাতায় যা কিছু চলে এবং এই ব্রাউজার প্রোফাইল যে-ই ব্যবহার করে, সে-ই তা পড়তে পারে। এমন কী ব্যবহার করুন যা আপনি বাতিল করতে পারেন, অথবা ডেস্কটপ অ্যাপ, যা কী সিস্টেমের কীচেইনে রাখে।
+	One machine's availability	একটি যন্ত্রের প্রাপ্যতা
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	একটি যন্ত্র গড়ে প্রতি ৯০ ঘণ্টায় বিকল হয় এবং মেরামত হতে ৪.৫ ঘণ্টা লাগে (Hristova, Denev ও Tsankov, Environment. Technology. Resources, 2024)।
+	How often is one machine down, and how much work does that cost?	একটি যন্ত্র কত ঘন ঘন বিকল থাকে, এবং তাতে কত কাজ নষ্ট হয়?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	৯০ ঘণ্টা চালু, ৪.৫ ঘণ্টা বন্ধ: যন্ত্রটি ৯৫.২% সময় কাজ করে এবং প্রতি ৯৪.৫ ঘণ্টায় একবার বিকল হয়। মেরামতের সময় অর্ধেক করলে তা ৯৭.৬% হয়।
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} সময় বন্ধ থাকে (প্রাপ্যতা {up}); এর জন্য কিছুই অপেক্ষা করে না।

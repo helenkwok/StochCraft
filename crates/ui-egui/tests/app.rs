@@ -4,7 +4,7 @@
 #![allow(clippy::panic, clippy::expect_used)] // A request or result missing fails the test.
 
 use egui_kittest::Harness;
-use egui_kittest::kittest::Queryable;
+use egui_kittest::kittest::{NodeT, Queryable};
 use serde_json::json;
 use stochcraft_ui_egui::commands::{self, CommandRef};
 use stochcraft_ui_egui::{App, Autosave, Platform, Request};
@@ -332,7 +332,7 @@ fn the_start_page_asks_what_to_find_out() {
     h.get_by_role_and_label(egui::accesskit::Role::Button, case_a);
     click(&mut h, "All");
     // See all (below the fold, so as from the keyboard) shows the reference models too.
-    h.get_by_label("See all 25 examples, including reference models")
+    h.get_by_label("See all 26 examples, including reference models")
         .click_accesskit();
     settle(&mut h);
     h.get_by_role_and_label(
@@ -382,7 +382,7 @@ fn the_start_page_asks_what_to_find_out() {
             .is_none()
     );
     assert!(
-        h.query_by_label("See all 25 examples, including reference models")
+        h.query_by_label("See all 26 examples, including reference models")
             .is_none(),
         "a search already covers every example"
     );
@@ -1590,4 +1590,51 @@ fn a_csv_exported_after_an_edit_says_it_is_of_a_prior_run() {
         );
         assert!(row.contains(&digest), "{row}");
     }
+}
+
+/// Where nothing waits but the machine goes down, the results lead with its availability, and
+/// the spread across runs starts on it, not on a mean wait of 0.
+#[test]
+fn a_machine_that_never_makes_anything_wait_leads_with_its_availability() {
+    // A tall window, so the charts below the findings are all on screen.
+    let mut h = Harness::builder()
+        .with_size(egui::vec2(1000.0, 3000.0))
+        .build_ui_state(
+            |ui, app: &mut App| app.ui(ui),
+            english(App::new(Platform::DESKTOP)),
+        );
+    h.run();
+    menu(
+        &mut h,
+        &["File", "Open Example", "One machine's availability"],
+    );
+    // Short, so the run finishes within the test's patience.
+    h.state_mut().execute(
+        "experiment.set",
+        json!({ "replications": 4, "duration": 3000.0, "warmup": 0.0 }),
+    );
+    settle(&mut h);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    eprintln!("status: {}", h.state().status());
+    h.get_by_label("Availability (%)");
+    assert!(h.query_by_label("Mean wait (h)").is_none());
+    // The finding answers it too, not "limits the flow" with nothing waiting.
+    h.get_by_label_contains("Machine is down ");
+    h.get_by_label_contains("nothing waits for it");
+    assert!(h.query_by_label_contains("limits the flow").is_none());
+    // A queue that never forms is no chart: the second one is each block's utilisation.
+    assert!(
+        h.query_by_label("Waiting before Machine over the run")
+            .is_none()
+    );
+    h.get_by_label("Utilisation (%)");
+    // The spread across runs starts on the same result.
+    let result = h.get_by_role_and_label(egui::accesskit::Role::ComboBox, "Result");
+    let shown = result.accesskit_node().value();
+    assert_eq!(
+        shown.as_deref(),
+        Some("Machine · Availability"),
+        "{shown:?}"
+    );
 }
