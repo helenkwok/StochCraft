@@ -1535,6 +1535,7 @@ connection	Flow	順序流
 	Scenario: {name}	情境：{name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	開啟 {scenario} 會捨棄 {name} 中未儲存的變更。要先儲存嗎？
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} 個可比較的情境
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	已儲存為只含目前開啟情境的新檔案，因此沒有切換到 {scenario}。
 	Median time in system	系統內時間中位數
 	Time in system, 90th percentile	系統內時間，第 90 百分位數
 	Time in system, 95th percentile	系統內時間，第 95 百分位數

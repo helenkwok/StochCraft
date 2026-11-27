@@ -1535,6 +1535,7 @@ connection	Flow	Alur
 	Scenario: {name}	Skenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Membuka {scenario} membuang perubahan {name} yang belum disimpan. Simpan dulu?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} skenario untuk dibandingkan
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Model disimpan sebagai file baru yang hanya berisi skenario yang terbuka, jadi peralihan ke {scenario} tidak dilakukan.
 	Median time in system	Median waktu dalam sistem
 	Time in system, 90th percentile	Waktu dalam sistem, persentil ke-90
 	Time in system, 95th percentile	Waktu dalam sistem, persentil ke-95

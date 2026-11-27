@@ -1535,6 +1535,7 @@ connection	Flow	顺序流
 	Scenario: {name}	场景：{name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	打开 {scenario} 会丢弃 {name} 中未保存的更改。先保存吗？
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} 个可比较的场景
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	已另存为只含当前打开场景的新文件，因此没有切换到 {scenario}。
 	Median time in system	系统内时间中位数
 	Time in system, 90th percentile	系统内时间，第 90 百分位数
 	Time in system, 95th percentile	系统内时间，第 95 百分位数

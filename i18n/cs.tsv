@@ -1535,6 +1535,7 @@ connection	Flow	Tok
 	Scenario: {name}	Scénář: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otevřením scénáře {scenario} se zahodí neuložené změny v {name}. Uložit je nejprve?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} scénář k porovnání|{n} scénáře k porovnání|{n} scénářů k porovnání
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Byl uložen jako nový soubor, který obsahuje jen otevřený scénář, takže k přepnutí na {scenario} nedošlo.
 	Median time in system	Medián doby v systému
 	Time in system, 90th percentile	Doba v systému, 90. percentil
 	Time in system, 95th percentile	Doba v systému, 95. percentil

@@ -1535,6 +1535,7 @@ connection	Flow	প্রবাহ
 	Scenario: {name}	দৃশ্যকল্প: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} খুললে {name}-এর অসংরক্ষিত পরিবর্তনগুলি হারিয়ে যাবে। আগে সংরক্ষণ করবেন?
 @plural	{n} scenario to compare|{n} scenarios to compare	তুলনার জন্য {n}টি দৃশ্যকল্প|তুলনার জন্য {n}টি দৃশ্যকল্প
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	এটি একটি নতুন ফাইল হিসেবে সংরক্ষিত হয়েছে, যাতে কেবল খোলা দৃশ্যকল্পটি আছে, তাই {scenario}-এ যাওয়া হয়নি।
 	Median time in system	সিস্টেমে সময়ের মধ্যমা
 	Time in system, 90th percentile	সিস্টেমে সময়, ৯০তম শতাংশক
 	Time in system, 95th percentile	সিস্টেমে সময়, ৯৫তম শতাংশক

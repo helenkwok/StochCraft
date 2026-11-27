@@ -1535,6 +1535,7 @@ connection	Flow	Flux
 	Scenario: {name}	Escenari: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Obrir {scenario} descarta els canvis no desats de {name}. Voleu desar-los primer?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} escenari per comparar|{n} escenaris per comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	S’ha desat com a fitxer nou, que només conté l’escenari obert, de manera que no s’ha canviat a {scenario}.
 	Median time in system	Mediana del temps al sistema
 	Time in system, 90th percentile	Temps al sistema, percentil 90
 	Time in system, 95th percentile	Temps al sistema, percentil 95

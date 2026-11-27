@@ -578,16 +578,39 @@ impl App {
     /// (quit, new, open) goes ahead only if the model is saved now: a model whose decision tables
     /// are still unsaved (the app writes only the model's file) is kept open, rather than closed
     /// or replaced with its tables lost.
+    ///
+    /// A save before another scenario opens that wrote a new file, which holds only the open
+    /// scenario, keeps the model open too, and the status says why.
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
+        // The scenario to open next, by name, while the file still lists it.
+        let switch_to = self
+            .scenario_next
+            .clone()
+            .map(|id| (self.scenario_label(&id), id));
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
                 let saved = tf("Saved {file}", &[("file", file_name(path))]);
                 self.remember(path);
+                // Written as a new file, which holds only the open scenario: the one to open
+                // next is not in it.
+                let (listed, _) = self.scenarios();
+                let not_in_file = switch_to
+                    .filter(|(_, id)| !listed.iter().any(|s| &s.id == id))
+                    .map(|(label, _)| label);
                 match self.after_save.take() {
                     Some(_) if self.unsaved_changes() => self.info(format!(
                         "{saved}. {}",
                         t("Its decision tables still need saving, so the model was kept open: the app does not write .dmn files yet.")
                     )),
+                    Some(Replace::Scenario) if not_in_file.is_some() => {
+                        self.scenario_next = None;
+                        let label = not_in_file.unwrap_or_default();
+                        let why = tf(
+                            "It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.",
+                            &[("scenario", &label)],
+                        );
+                        self.info(format!("{saved}{}. {why}", self.tables_not_written()));
+                    }
                     next => {
                         self.info(saved + &self.tables_not_written());
                         if let Some(next) = next {

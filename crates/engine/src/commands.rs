@@ -2704,14 +2704,19 @@ fn file_scenarios(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 fn file_reopen(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: FileReopen = parse(p)?;
     // An agent-based model's charts and lists of links, and a process model's decision tables,
-    // are read from beside the file, as `file.open` reads them.
-    let dir = e
-        .path()
-        .and_then(|name| std::path::Path::new(name).parent())
-        .map(std::path::Path::to_path_buf)
-        .unwrap_or_default();
+    // are read from beside the file, as `file.open` reads them; a model opened from texts has
+    // no file, so nothing on disk is read for it.
+    let dir = e.path().map(|name| {
+        std::path::Path::new(name)
+            .parent()
+            .map(std::path::Path::to_path_buf)
+            .unwrap_or_default()
+    });
     e.reopen_scenario(&p.scenario, p.discard_changes, &mut |href: &str| {
-        let path = crate::agents::beside(&dir, href)?;
+        let Some(dir) = &dir else {
+            return Err("not among the texts the model was opened with".to_owned());
+        };
+        let path = crate::agents::beside(dir, href)?;
         std::fs::read(path).map_err(|err| err.to_string())
     })
 }
@@ -2760,8 +2765,38 @@ impl Engine {
             ));
         }
         let bytes = f.opened.bytes().to_vec();
-        let name = f.path.clone().unwrap_or_default();
-        self.open_bytes_with(&name, &bytes, Some(scenario), resolve)
+        let path = f.path.clone();
+        // A model opened from texts (`agents.open`) has no path: it keeps the name it was
+        // opened under.
+        let name = path
+            .clone()
+            .or_else(|| self.journal_start.name.clone())
+            .unwrap_or_default();
+        // The files an agent-based model was opened with are read from what it holds (the
+        // texts `agents.open` was given, or the files read from beside it), and only the rest
+        // with `resolve`.
+        let (read, given) = self
+            .agents
+            .as_ref()
+            .map(|d| (d.files.clone(), d.given.clone()))
+            .unwrap_or_default();
+        let result =
+            self.open_bytes_with(&name, &bytes, Some(scenario), &mut |href: &str| match read
+                .get(href)
+                .or_else(|| given.get(href))
+            {
+                Some(b) => Ok(b.clone()),
+                None => resolve(href),
+            })?;
+        if path.is_none()
+            && let Some(f) = self.file.as_mut()
+        {
+            f.path = None;
+        }
+        if let Some(d) = self.agents.as_mut() {
+            d.given = given;
+        }
+        Ok(result)
     }
 }
 

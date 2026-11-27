@@ -1535,6 +1535,7 @@ connection	Flow	フロー
 	Scenario: {name}	シナリオ: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} を開くと、{name} の保存していない変更は破棄されます。先に保存しますか？
 @plural	{n} scenario to compare|{n} scenarios to compare	比較できるシナリオ {n} 件
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	開いているシナリオだけを含む新しいファイルとして保存したため、{scenario} への切り替えは行いませんでした。
 	Median time in system	システム内の滞在時間の中央値
 	Time in system, 90th percentile	システム内の滞在時間（90 パーセンタイル）
 	Time in system, 95th percentile	システム内の滞在時間（95 パーセンタイル）

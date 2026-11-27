@@ -1535,6 +1535,7 @@ connection	Flow	Przepływ
 	Scenario: {name}	Scenariusz: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otwarcie scenariusza {scenario} odrzuci niezapisane zmiany w {name}. Najpierw je zapisać?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} scenariusz do porównania|{n} scenariusze do porównania|{n} scenariuszy do porównania
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Zapisano jako nowy plik, który zawiera tylko otwarty scenariusz, więc nie przełączono na {scenario}.
 	Median time in system	Mediana czasu w systemie
 	Time in system, 90th percentile	Czas w systemie, 90. percentyl
 	Time in system, 95th percentile	Czas w systemie, 95. percentyl

@@ -1535,6 +1535,7 @@ connection	Flow	Flöde
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Om {scenario} öppnas förloras de osparade ändringarna i {name}. Spara dem först?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} scenario att jämföra|{n} scenarier att jämföra
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Den sparades som en ny fil som bara innehåller det öppna scenariot, så bytet till {scenario} gjordes inte.
 	Median time in system	Median för tid i systemet
 	Time in system, 90th percentile	Tid i systemet, 90:e percentilen
 	Time in system, 95th percentile	Tid i systemet, 95:e percentilen

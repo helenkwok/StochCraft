@@ -1535,6 +1535,7 @@ connection	Flow	प्रवाह
 	Scenario: {name}	परिदृश्य: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} खोलने पर {name} के बिना सहेजे गए बदलाव हट जाएँगे। पहले सहेजें?
 @plural	{n} scenario to compare|{n} scenarios to compare	तुलना के लिए {n} परिदृश्य|तुलना के लिए {n} परिदृश्य
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	इसे एक नई फ़ाइल के रूप में सहेजा गया, जिसमें केवल खुला परिदृश्य है, इसलिए {scenario} पर नहीं बदला गया।
 	Median time in system	सिस्टम में समय की माध्यिका
 	Time in system, 90th percentile	सिस्टम में समय, 90वाँ प्रतिशतक
 	Time in system, 95th percentile	सिस्टम में समय, 95वाँ प्रतिशतक

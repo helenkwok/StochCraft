@@ -1,5 +1,6 @@
 //! The opened file's scenarios: a choice of which one to open, shown where the experiment is
-//! (the model page and the sidebar) when the file has more than one. Choosing another reopens
+//! (the model page and the sidebar, of a process model and of a Monte Carlo model, where it
+//! shows with the trials) when the file has more than one. Choosing another reopens
 //! the file in it, as File ▸ Open would, so its results go with the model they were of; unsaved
 //! changes are asked about first, beside the choice.
 
@@ -66,6 +67,30 @@ impl App {
     /// The opened file's scenarios and the open one's id: none without a file.
     pub(crate) fn scenarios(&self) -> (Vec<Scenario>, Option<String>) {
         scenarios_of(&self.engine.scenarios())
+    }
+
+    /// The name of the file's scenario `id`, or `id` when it has none or the file has no such
+    /// scenario.
+    pub(crate) fn scenario_label(&self, id: &str) -> String {
+        self.scenarios()
+            .0
+            .into_iter()
+            .find(|s| s.id == id)
+            .map_or_else(|| id.to_owned(), |s| s.label)
+    }
+
+    /// The height the sidebar's Scenario choice takes, with the question under it when one
+    /// asked from there is waiting: what a sidebar keeps free for it below its lists.
+    pub(crate) fn sidebar_scenario_height(&self) -> f32 {
+        if self.scenarios().0.len() < 2 {
+            return 0.0;
+        }
+        let asking = self
+            .scenario_ask
+            .as_ref()
+            .is_some_and(|a| a.place == "sidebar" && a.for_doc == self.doc_gen);
+        // The choice's row; the question's text (up to four lines) and its three buttons.
+        if asking { 30.0 + 170.0 } else { 30.0 }
     }
 
     /// The name of the open scenario, when the file has more than one to choose from.

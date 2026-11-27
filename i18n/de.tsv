@@ -1535,6 +1535,7 @@ connection	Flow	Verbindung
 	Scenario: {name}	Szenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Beim Öffnen von {scenario} gehen die ungespeicherten Änderungen an {name} verloren. Zuerst speichern?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} Szenario zum Vergleichen|{n} Szenarien zum Vergleichen
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Es wurde als neue Datei gespeichert, die nur das geöffnete Szenario enthält, daher wurde nicht zu {scenario} gewechselt.
 	Median time in system	Median der Verweilzeit im System
 	Time in system, 90th percentile	Verweilzeit im System, 90. Perzentil
 	Time in system, 95th percentile	Verweilzeit im System, 95. Perzentil

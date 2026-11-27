@@ -1535,6 +1535,7 @@ connection	Flow	Поток
 	Scenario: {name}	Сценарий: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Отварянето на {scenario} отхвърля незаписаните промени в {name}. Да се запишат ли първо?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарий за сравнение|{n} сценария за сравнение
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Записан е като нов файл, който съдържа само отворения сценарий, затова превключването към {scenario} не беше направено.
 	Median time in system	Медиана на времето в системата
 	Time in system, 90th percentile	Време в системата, 90-и персентил
 	Time in system, 95th percentile	Време в системата, 95-и персентил

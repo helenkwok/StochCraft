@@ -1535,6 +1535,7 @@ connection	Flow	Fluxo
 	Scenario: {name}	Escenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Abrir {scenario} descarta os cambios sen gardar de {name}. Gardalos primeiro?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} escenario para comparar|{n} escenarios para comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Gardouse como un ficheiro novo que só contén o escenario aberto, así que non se cambiou a {scenario}.
 	Median time in system	Mediana do tempo no sistema
 	Time in system, 90th percentile	Tempo no sistema, percentil 90
 	Time in system, 95th percentile	Tempo no sistema, percentil 95

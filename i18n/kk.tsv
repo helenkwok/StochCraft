@@ -1535,6 +1535,7 @@ connection	Flow	Ағын
 	Scenario: {name}	Сценарий: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ашылса, {name} ішіндегі сақталмаған өзгерістер жоғалады. Алдымен сақтау керек пе?
 @plural	{n} scenario to compare|{n} scenarios to compare	Салыстыруға {n} сценарий|Салыстыруға {n} сценарий
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Ол тек ашық сценарийі бар жаңа файл ретінде сақталды, сондықтан {scenario} сценарийіне ауысу жасалмады.
 	Median time in system	Жүйедегі уақыттың медианасы
 	Time in system, 90th percentile	Жүйедегі уақыт, 90-шы процентиль
 	Time in system, 95th percentile	Жүйедегі уақыт, 95-ші процентиль

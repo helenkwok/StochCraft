@@ -1535,6 +1535,7 @@ connection	Flow	Потік
 	Scenario: {name}	Сценарій: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Відкриття {scenario} скасує незбережені зміни в {name}. Спершу зберегти їх?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарій для порівняння|{n} сценарії для порівняння|{n} сценаріїв для порівняння
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Збережено як новий файл, що містить лише відкритий сценарій, тому перехід до {scenario} не виконано.
 	Median time in system	Медіана часу в системі
 	Time in system, 90th percentile	Час у системі, 90-й процентиль
 	Time in system, 95th percentile	Час у системі, 95-й процентиль

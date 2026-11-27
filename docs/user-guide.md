@@ -391,9 +391,13 @@ With nothing selected, the **Experiment** section of the inspector sets how the 
   one it inherits from is in **bold** (see
   [Changed values in bold, and their reset](#changed-values-in-bold-and-their-reset)). The same
   choice is in the left rail's experiment summary, and the status bar names the open scenario.
+  A Monte Carlo model's file with several scenarios has the same choice, in the left rail with
+  the trials and on the Model tab under **Trials and sampling**.
   With unsaved changes, the choice asks first, beside it: **Save** them into the file (they are
   then in the scenario they were made in, and in any scenario that inherits from it), **Don't
-  Save**, or **Cancel** to stay. The results (and a baseline) of the scenario that was open go
+  Save**, or **Cancel** to stay. When the file can't take the changes and Save writes a new
+  file instead, that file holds only the open scenario, so the other one is not opened, and the
+  status bar says so. The results (and a baseline) of the scenario that was open go
   with it; run again for the new one. Saving writes into the scenario that is open. The start page's cards say how
   many scenarios an example has to compare.
 - **Runs:** how many independent runs. More runs give narrower confidence intervals but

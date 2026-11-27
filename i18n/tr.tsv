@@ -1535,6 +1535,7 @@ connection	Flow	Akış
 	Scenario: {name}	Senaryo: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} açılırsa {name} içindeki kaydedilmemiş değişiklikler atılır. Önce kaydedilsin mi?
 @plural	{n} scenario to compare|{n} scenarios to compare	Karşılaştırılacak {n} senaryo|Karşılaştırılacak {n} senaryo
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Yalnızca açık senaryoyu içeren yeni bir dosya olarak kaydedildi, bu yüzden {scenario} senaryosuna geçilmedi.
 	Median time in system	Sistemdeki sürenin medyanı
 	Time in system, 90th percentile	Sistemdeki süre, 90. yüzdelik
 	Time in system, 95th percentile	Sistemdeki süre, 95. yüzdelik

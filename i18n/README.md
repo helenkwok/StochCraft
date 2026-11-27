@@ -1113,6 +1113,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   for unsaved changes. Not checked against any other source and not reviewed by native speakers;
   the least certain are lo, th, ta, te, bn, ka and kk.
 
+- The row for the status after a save that wrote a new file, holding only the open scenario,
+  before another scenario was to open ("It was saved as a new file that holds only the open
+  scenario, so the switch to {scenario} was not made.") was machine-drafted from the plain
+  meaning of the English, with each catalog's own word for a scenario as in the rows above. Not
+  checked against any other source and not reviewed by native speakers; the least certain are
+  lo, th, ta, te, bn, ka and kk.
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

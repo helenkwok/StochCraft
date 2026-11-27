@@ -1535,6 +1535,7 @@ connection	Flow	ஓட்டம்
 	Scenario: {name}	சூழ்நிலை: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ஐத் திறந்தால் {name} இல் சேமிக்கப்படாத மாற்றங்கள் நீக்கப்படும். முதலில் சேமிக்கவா?
 @plural	{n} scenario to compare|{n} scenarios to compare	ஒப்பிட {n} சூழ்நிலை|ஒப்பிட {n} சூழ்நிலைகள்
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	திறந்துள்ள சூழ்நிலை மட்டும் உள்ள புதிய கோப்பாக இது சேமிக்கப்பட்டது, எனவே {scenario} க்கு மாற்றப்படவில்லை.
 	Median time in system	அமைப்பில் கழித்த நேரத்தின் இடைநிலை
 	Time in system, 90th percentile	அமைப்பில் கழித்த நேரம், 90-ஆம் சதமானம்
 	Time in system, 95th percentile	அமைப்பில் கழித்த நேரம், 95-ஆம் சதமானம்

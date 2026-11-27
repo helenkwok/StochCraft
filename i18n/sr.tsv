@@ -1535,6 +1535,7 @@ connection	Flow	Ток
 	Scenario: {name}	Сценарио: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Отварањем сценарија {scenario} одбацују се несачуване измене у {name}. Прво их сачувати?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарио за поређење|{n} сценарија за поређење|{n} сценарија за поређење
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Сачуван је као нова датотека која садржи само отворени сценарио, па прелазак на {scenario} није извршен.
 	Median time in system	Медијана времена у систему
 	Time in system, 90th percentile	Време у систему, 90. перцентил
 	Time in system, 95th percentile	Време у систему, 95. перцентил

@@ -1535,6 +1535,7 @@ connection	Flow	Flux
 	Scenario: {name}	Scenariu: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Deschiderea {scenario} renunță la modificările nesalvate din {name}. Le salvați mai întâi?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} scenariu de comparat|{n} scenarii de comparat|{n} de scenarii de comparat
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	A fost salvat ca fișier nou, care conține doar scenariul deschis, așa că trecerea la {scenario} nu s-a făcut.
 	Median time in system	Mediana timpului în sistem
 	Time in system, 90th percentile	Timp în sistem, percentila 90
 	Time in system, 95th percentile	Timp în sistem, percentila 95

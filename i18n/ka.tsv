@@ -1535,6 +1535,7 @@ connection	Flow	ნაკადი
 	Scenario: {name}	სცენარი: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}-ის გახსნა {name}-ში შეუნახავ ცვლილებებს გააუქმებს. ჯერ შევინახო?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} სცენარი შესადარებლად|{n} სცენარი შესადარებლად
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	შენახულია ახალ ფაილად, რომელშიც მხოლოდ გახსნილი სცენარია, ამიტომ {scenario}-ზე გადასვლა არ მოხდა.
 	Median time in system	სისტემაში გატარებული დროის მედიანა
 	Time in system, 90th percentile	სისტემაში გატარებული დრო, 90-ე პროცენტილი
 	Time in system, 95th percentile	სისტემაში გატარებული დრო, 95-ე პროცენტილი

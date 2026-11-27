@@ -1535,6 +1535,7 @@ connection	Flow	Ροή
 	Scenario: {name}	Σενάριο: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Το άνοιγμα του {scenario} απορρίπτει τις μη αποθηκευμένες αλλαγές στο {name}. Να αποθηκευτούν πρώτα;
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} σενάριο για σύγκριση|{n} σενάρια για σύγκριση
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Αποθηκεύτηκε ως νέο αρχείο που περιέχει μόνο το ανοιχτό σενάριο, οπότε η μετάβαση στο {scenario} δεν έγινε.
 	Median time in system	Διάμεσος χρόνου στο σύστημα
 	Time in system, 90th percentile	Χρόνος στο σύστημα, 90ό εκατοστημόριο
 	Time in system, 95th percentile	Χρόνος στο σύστημα, 95ο εκατοστημόριο

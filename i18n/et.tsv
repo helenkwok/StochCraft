@@ -1535,6 +1535,7 @@ connection	Flow	Voog
 	Scenario: {name}	Stsenaarium: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Stsenaariumi {scenario} avamine kaotab faili {name} salvestamata muudatused. Kas salvestada need enne?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} stsenaarium võrdlemiseks|{n} stsenaariumi võrdlemiseks
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	See salvestati uue failina, milles on ainult avatud stsenaarium, seega stsenaariumile {scenario} ei lülitutud.
 	Median time in system	Süsteemis oleku aja mediaan
 	Time in system, 90th percentile	Aeg süsteemis, 90. protsentiil
 	Time in system, 95th percentile	Aeg süsteemis, 95. protsentiil

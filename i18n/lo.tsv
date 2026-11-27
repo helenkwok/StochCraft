@@ -1535,6 +1535,7 @@ connection	Flow	ເສັ້ນທາງ
 	Scenario: {name}	ສະຖານະການ: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	ການເປີດ {scenario} ຈະຍົກເລີກການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ບັນທຶກໃນ {name}. ບັນທຶກກ່ອນບໍ?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} ສະຖານະການໃຫ້ປຽບທຽບ
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	ມັນຖືກບັນທຶກເປັນໄຟລ໌ໃໝ່ທີ່ມີພຽງສະຖານະການທີ່ເປີດຢູ່ ດັ່ງນັ້ນຈຶ່ງບໍ່ໄດ້ປ່ຽນໄປຫາ {scenario}.
 	Median time in system	ຄ່າກາງຂອງເວລາໃນລະບົບ
 	Time in system, 90th percentile	ເວລາໃນລະບົບ, ເປີເຊັນໄທລ໌ທີ 90
 	Time in system, 95th percentile	ເວລາໃນລະບົບ, ເປີເຊັນໄທລ໌ທີ 95

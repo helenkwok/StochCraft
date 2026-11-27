@@ -1535,6 +1535,7 @@ connection	Flow	โฟลว์
 	Scenario: {name}	สถานการณ์: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	การเปิด {scenario} จะทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกใน {name} บันทึกก่อนหรือไม่
 @plural	{n} scenario to compare|{n} scenarios to compare	สถานการณ์ให้เปรียบเทียบ {n} แบบ
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	บันทึกเป็นไฟล์ใหม่ที่มีเฉพาะสถานการณ์ที่เปิดอยู่ จึงไม่ได้สลับไปที่ {scenario}
 	Median time in system	ค่ามัธยฐานของเวลาในระบบ
 	Time in system, 90th percentile	เวลาในระบบ เปอร์เซ็นไทล์ที่ 90
 	Time in system, 95th percentile	เวลาในระบบ เปอร์เซ็นไทล์ที่ 95

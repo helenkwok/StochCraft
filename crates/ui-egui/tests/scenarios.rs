@@ -171,6 +171,138 @@ fn unsaved_changes_are_asked_about_beside_the_choice() {
     assert!(!h.state().has_unsaved_changes());
 }
 
+/// A Save before another scenario opens that can only write a new file, which holds only the
+/// open scenario, saves it and does not open the other one, saying why.
+#[test]
+fn a_save_as_a_new_file_does_not_switch_to_a_scenario_it_does_not_hold() {
+    let mut h = bank();
+    // A pool and two tasks that share it: a change the bank's file can't take.
+    {
+        let app = h.state_mut();
+        app.execute("resource.add", json!({ "id": "agents", "quantity": 2 }));
+        for id in ["triage", "callback"] {
+            app.execute(
+                "block.add",
+                json!({ "kind": "shared_task", "id": id, "needs": [{ "resource": "agents" }] }),
+            );
+        }
+        assert_eq!(app.engine().model().resources.len(), 1, "{}", app.status());
+    }
+    settle(&mut h);
+
+    choose(&mut h, "Six cashiers");
+    h.get_by_role_and_label(Role::Button, "Save").click();
+    settle(&mut h);
+    h.get_by_label("Save as a new BPMN file?");
+    // The question's own button (the last drawn, over the window).
+    h.query_all_by_role_and_label(Role::Button, "Save As…")
+        .last()
+        .expect("the question's Save As…")
+        .click();
+    settle(&mut h);
+    let requests = h.state_mut().take_requests();
+    assert!(
+        matches!(requests.as_slice(), [Request::PickSave { .. }]),
+        "{requests:?}"
+    );
+    h.state_mut().save_to("/tmp/bank-with-a-pool.bpmn");
+    let requests = h.state_mut().take_requests();
+    let [Request::Write { path, bytes }] = requests.as_slice() else {
+        panic!("expected one write, got {requests:?}");
+    };
+    h.state_mut().written(path, bytes);
+    settle(&mut h);
+
+    // Saved, and still the five cashiers with the pool: the new file does not hold the six.
+    assert!(!h.state().has_unsaved_changes());
+    assert_eq!(cashiers(&h), json!(5));
+    assert_eq!(h.state().engine().model().resources.len(), 1);
+    let listed = h.state().engine().scenarios();
+    assert!(
+        listed["scenarios"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .all(|s| s["id"] != "six-cashiers"),
+        "{listed}"
+    );
+    assert_eq!(
+        h.state().status(),
+        "Saved bank-with-a-pool.bpmn. It was saved as a new file that holds only the open scenario, so the switch to Six cashiers was not made."
+    );
+}
+
+/// The budget example, a Monte Carlo model, with a second scenario: the first with 1,000
+/// trials, not 10,000.
+fn budget_with_two_scenarios() -> Harness<'static, App> {
+    let e = EXAMPLES
+        .iter()
+        .find(|e| e.file == "budget.bpmn")
+        .expect("the budget example");
+    let text = std::str::from_utf8(e.bytes).expect("UTF-8");
+    let close = "</bpsim:Scenario>";
+    let start = text.find("<bpsim:Scenario ").expect("a scenario");
+    let end = text.find(close).expect("its end") + close.len();
+    let fewer = text
+        .get(start..end)
+        .expect("the scenario")
+        .replace(
+            "id=\"base\" name=\"Project budget\"",
+            "id=\"fewer\" name=\"Fewer trials\"",
+        )
+        .replace("replication=\"10000\"", "replication=\"1000\"");
+    assert!(fewer.contains("id=\"fewer\"") && fewer.contains("replication=\"1000\""));
+    let file = format!(
+        "{}{fewer}{}",
+        text.get(..end).expect("before"),
+        text.get(end..).expect("after")
+    );
+    let mut h = harness();
+    h.state_mut()
+        .open_file("budget-scenarios.bpmn", file.as_bytes());
+    settle(&mut h);
+    h
+}
+
+#[test]
+fn a_monte_carlo_file_with_scenarios_has_the_choice_with_its_trials() {
+    let mut h = budget_with_two_scenarios();
+    assert_eq!(open(&h), "base");
+    // The sidebar's, with the trials, and the Model tab's, under Trials and sampling.
+    assert_eq!(
+        h.get_all_by_role_and_label(Role::ComboBox, "Scenario")
+            .count(),
+        2
+    );
+    h.get_by_label("Scenario: Project budget");
+    // In the sidebar it shows above the trials line, over neither it nor the heading.
+    let sidebar = h
+        .get_all_by_role_and_label(Role::ComboBox, "Scenario")
+        .map(|n| n.rect())
+        .min_by(|a, b| a.left().total_cmp(&b.left()))
+        .expect("the sidebar's Scenario choice");
+    let trials = h.get_by_label_contains("trials · seed 1").rect();
+    assert!(
+        sidebar.bottom() <= trials.top() + 0.5,
+        "{sidebar:?} over the trials {trials:?}"
+    );
+    let heading = h
+        .get_all_by_label("Trials")
+        .map(|n| n.rect())
+        .find(|r| r.left() < sidebar.right())
+        .expect("the sidebar's Trials heading");
+    assert!(
+        heading.bottom() <= sidebar.top() + 0.5,
+        "{heading:?} over the choice {sidebar:?}"
+    );
+
+    choose(&mut h, "Fewer trials");
+    assert_eq!(open(&h), "fewer");
+    assert_eq!(h.state().engine().model().experiment.replications, 1000);
+    h.get_by_label("Scenario: Fewer trials");
+    assert!(!h.state().has_unsaved_changes());
+}
+
 #[test]
 fn a_file_with_one_scenario_has_no_choice() {
     let mut h = harness();

@@ -1535,6 +1535,7 @@ connection	Flow	Virta
 	Scenario: {name}	Skenaario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Skenaarion {scenario} avaaminen hylkää kohteen {name} tallentamattomat muutokset. Tallennetaanko ne ensin?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} vertailtava skenaario|{n} vertailtavaa skenaariota
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Se tallennettiin uutena tiedostona, jossa on vain avoin skenaario, joten skenaarioon {scenario} ei vaihdettu.
 	Median time in system	Järjestelmässä vietetyn ajan mediaani
 	Time in system, 90th percentile	Aika järjestelmässä, 90. persentiili
 	Time in system, 95th percentile	Aika järjestelmässä, 95. persentiili

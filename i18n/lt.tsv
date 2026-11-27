@@ -1535,6 +1535,7 @@ connection	Flow	Srautas
 	Scenario: {name}	Scenarijus: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Atidarius {scenario}, neįrašyti {name} pakeitimai bus atmesti. Pirmiau juos įrašyti?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} scenarijus palyginti|{n} scenarijai palyginti|{n} scenarijų palyginti
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Įrašyta kaip naujas failas, kuriame yra tik atidarytas scenarijus, todėl į {scenario} neperjungta.
 	Median time in system	Laiko sistemoje mediana
 	Time in system, 90th percentile	Laikas sistemoje, 90-asis procentilis
 	Time in system, 95th percentile	Laikas sistemoje, 95-asis procentilis

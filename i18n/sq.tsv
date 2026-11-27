@@ -1535,6 +1535,7 @@ connection	Flow	Rrjedhë
 	Scenario: {name}	Skenari: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Hapja e {scenario} hedh poshtë ndryshimet e paruajtura në {name}. T’i ruaj së pari?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} skenar për krahasim|{n} skenarë për krahasim
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	U ruajt si skedar i ri që mban vetëm skenarin e hapur, ndaj kalimi te {scenario} nuk u bë.
 	Median time in system	Mediana e kohës në sistem
 	Time in system, 90th percentile	Koha në sistem, përqindëshi i 90-të
 	Time in system, 95th percentile	Koha në sistem, përqindëshi i 95-të
