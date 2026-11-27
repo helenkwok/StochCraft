@@ -517,14 +517,14 @@ fn a_column_headed_like_a_role_can_be_said_to_be_none() {
     assert_eq!(code, ErrorCode::InvalidParams);
     assert!(message.contains("`false` for none"), "{message}");
 
-    // A long table read as wide: no measure column, so `value` is the only measure and
-    // `measure` is left out.
+    // A long table read as wide: no measure column, so `measure` (text) is left out, and with
+    // no replication column `replication` is a number column like any other, so a measure.
     let wide = ok(
         "data.analyse",
         json!({ "csv": LONG, "measure": false, "replication": false }),
     );
     assert_eq!(wide["shape"], "wide");
-    assert_eq!(wide["measures"], json!(["value"]));
+    assert_eq!(wide["measures"], json!(["replication", "value"]));
     assert_eq!(wide["columns"]["ignored"], json!(["measure"]));
 
     // A time series whose `scenario` column is a number per row (a code, say).
