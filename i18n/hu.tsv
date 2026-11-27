@@ -1531,6 +1531,11 @@ connection	Flow	Folyamat
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tíz gépnek kell üzemelnie, négy tartalékgép készenlétben vár, és három szerelő javítja a meghibásodottakat (Crane és Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hány tartalékgép és szerelő tart üzemben tíz gépet?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	A készenlétben álló tartalékgépek nem hibásodhatnak meg: átlagosan 3.47 gép hibás, és 9.29 üzemel. Egy negyedik szerelő nagyjából annyit ér, mint négy további tartalékgép.
+	Scenario	Forgatókönyv
+	Scenario: {name}	Forgatókönyv: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	A(z) {scenario} megnyitása elveti a(z) {name} mentetlen módosításait. Előbb menti őket?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} összehasonlítható forgatókönyv|{n} összehasonlítható forgatókönyv
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Új fájlként lett mentve, amely csak a megnyitott forgatókönyvet tartalmazza, ezért nem történt váltás erre: {scenario}.
 	Median time in system	A rendszerben töltött idő mediánja
 	Time in system, 90th percentile	Rendszerben töltött idő, 90. percentilis
 	Time in system, 95th percentile	Rendszerben töltött idő, 95. percentilis

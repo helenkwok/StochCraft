@@ -1531,6 +1531,11 @@ connection	Flow	顺序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台机器必须运转，四台备用机待命，三名维修工修理出故障的机器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台备用机和多少名维修工，才能让十台机器保持运转？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的备用机不会故障：平均 3.47 台机器在故障中，9.29 台在运转。增加第四名维修工的效果与再增加四台备用机相当。
+	Scenario	场景
+	Scenario: {name}	场景：{name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	打开 {scenario} 会丢弃 {name} 中未保存的更改。先保存吗？
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} 个可比较的场景
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	已另存为只含当前打开场景的新文件，因此没有切换到 {scenario}。
 	Median time in system	系统内时间中位数
 	Time in system, 90th percentile	系统内时间，第 90 百分位数
 	Time in system, 95th percentile	系统内时间，第 95 百分位数

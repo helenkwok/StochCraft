@@ -383,6 +383,23 @@ for example **Undo Rename Block**.
 
 With nothing selected, the **Experiment** section of the inspector sets how the model is run:
 
+- **Scenario:** shown when the file holds more than one BPSim scenario (several examples do:
+  the bank's sixth cashier, the beds' exponential stays and 28 beds, the machine repair crew's
+  one to three fitters, the repairmen's and spares' variants, rework of a quarter, the prison's
+  fewer reoffenders). Choose one to reopen the file in it, as opening the file would: its values
+  come from the file as it was opened or last saved, and a value the scenario changes from the
+  one it inherits from is in **bold** (see
+  [Changed values in bold, and their reset](#changed-values-in-bold-and-their-reset)). The same
+  choice is in the left rail's experiment summary, and the status bar names the open scenario.
+  A Monte Carlo model's file with several scenarios has the same choice, in the left rail with
+  the trials and on the Model tab under **Trials and sampling**.
+  With unsaved changes, the choice asks first, beside it: **Save** them into the file (they are
+  then in the scenario they were made in, and in any scenario that inherits from it), **Don't
+  Save**, or **Cancel** to stay. When the file can't take the changes and Save writes a new
+  file instead, that file holds only the open scenario, so the other one is not opened, and the
+  status bar says so. The results (and a baseline) of the scenario that was open go
+  with it; run again for the new one. Saving writes into the scenario that is open. The start page's cards say how
+  many scenarios an example has to compare.
 - **Runs:** how many independent runs. More runs give narrower confidence intervals but
   take longer.
 - **Seed:** the starting point of the random numbers. The same model and seed always give the same
@@ -1155,8 +1172,9 @@ Shift) while it has the keyboard.
 - The layout (conveyor tracks, places, junctions, scenery) is read from the file and drawn in
   the Layout and 3D views, but can't be edited in the window yet. Of the examples, only the
   parcel sorter has a layout; the others show an empty plan and 3D view.
-- A file with several scenarios opens in its first scenario; the window has no scenario picker
-  yet.
+- A file with several scenarios opens in its first scenario; choose another under **Scenario**
+  in the Experiment section. The window shows one scenario at a time, and a baseline kept in one
+  goes when another is opened, so two scenarios are not yet compared side by side in the window.
 - The app (desktop and browser) opens a model from its file alone, so it does not read the
   `.dmn` files beside it: its blocks that use a decision table report the file as not read.
   `file.open` (the command line or the MCP server) reads them. The app does not write them

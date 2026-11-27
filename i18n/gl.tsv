@@ -1531,6 +1531,11 @@ connection	Flow	Fluxo
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dez máquinas deben funcionar, catro de reposto agardan listas e tres mecánicos reparan as que se avarían (Crane e Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Cantas máquinas de reposto e cantos mecánicos manteñen en marcha dez máquinas?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	As máquinas de reposto en espera non se poden avariar: de media hai 3.47 máquinas avariadas e 9.29 en marcha. Un cuarto mecánico consegue case o mesmo ca catro máquinas de reposto máis.
+	Scenario	Escenario
+	Scenario: {name}	Escenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Abrir {scenario} descarta os cambios sen gardar de {name}. Gardalos primeiro?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} escenario para comparar|{n} escenarios para comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Gardouse como un ficheiro novo que só contén o escenario aberto, así que non se cambiou a {scenario}.
 	Median time in system	Mediana do tempo no sistema
 	Time in system, 90th percentile	Tempo no sistema, percentil 90
 	Time in system, 95th percentile	Tempo no sistema, percentil 95

@@ -1531,6 +1531,11 @@ connection	Flow	Luồng
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Mười máy phải chạy, bốn máy dự phòng chờ sẵn và ba thợ máy sửa những máy bị hỏng (Crane và Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Cần bao nhiêu máy dự phòng và thợ máy để mười máy luôn chạy?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máy dự phòng đang chờ không thể hỏng: trung bình 3.47 máy bị hỏng và 9.29 máy chạy. Thêm một thợ máy thứ tư được việc gần bằng thêm bốn máy dự phòng.
+	Scenario	Kịch bản
+	Scenario: {name}	Kịch bản: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Mở {scenario} sẽ bỏ các thay đổi chưa lưu của {name}. Lưu trước?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} kịch bản để so sánh
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Đã lưu thành tệp mới chỉ chứa kịch bản đang mở, nên chưa chuyển sang {scenario}.
 	Median time in system	Trung vị thời gian trong hệ thống
 	Time in system, 90th percentile	Thời gian trong hệ thống, phân vị thứ 90
 	Time in system, 95th percentile	Thời gian trong hệ thống, phân vị thứ 95

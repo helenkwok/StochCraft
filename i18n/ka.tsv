@@ -1531,6 +1531,11 @@ connection	Flow	ნაკადი
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ათი მანქანა უნდა მუშაობდეს, ოთხი სათადარიგო მზადყოფნაში ელოდება, ხოლო სამი ზეინკალი აკეთებს გაფუჭებულებს (Crane და Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	რამდენი სათადარიგო მანქანა და ზეინკალი ინარჩუნებს ათ მანქანას მუშა მდგომარეობაში?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	მზადყოფნაში მყოფი სათადარიგო მანქანები ვერ გაფუჭდება: საშუალოდ 3.47 მანქანაა გაფუჭებული და 9.29 მუშაობს. მეოთხე ზეინკალი დაახლოებით იმდენს აკეთებს, რამდენსაც კიდევ ოთხი სათადარიგო მანქანა.
+	Scenario	სცენარი
+	Scenario: {name}	სცენარი: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}-ის გახსნა {name}-ში შეუნახავ ცვლილებებს გააუქმებს. ჯერ შევინახო?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} სცენარი შესადარებლად|{n} სცენარი შესადარებლად
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	შენახულია ახალ ფაილად, რომელშიც მხოლოდ გახსნილი სცენარია, ამიტომ {scenario}-ზე გადასვლა არ მოხდა.
 	Median time in system	სისტემაში გატარებული დროის მედიანა
 	Time in system, 90th percentile	სისტემაში გატარებული დრო, 90-ე პროცენტილი
 	Time in system, 95th percentile	სისტემაში გატარებული დრო, 95-ე პროცენტილი

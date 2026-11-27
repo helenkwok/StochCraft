@@ -1531,6 +1531,11 @@ connection	Flow	Ток
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десет машина мора да ради, четири резервне чекају у приправности, а три механичара поправљају оне које се покваре (Crane и Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Колико резервних машина и механичара држи десет машина у раду?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервне машине у приправности не могу да се покваре: у просеку је 3.47 машина покварено, а 9.29 ради. Четврти механичар постиже отприлике колико и четири резервне машине више.
+	Scenario	Сценарио
+	Scenario: {name}	Сценарио: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Отварањем сценарија {scenario} одбацују се несачуване измене у {name}. Прво их сачувати?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарио за поређење|{n} сценарија за поређење|{n} сценарија за поређење
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Сачуван је као нова датотека која садржи само отворени сценарио, па прелазак на {scenario} није извршен.
 	Median time in system	Медијана времена у систему
 	Time in system, 90th percentile	Време у систему, 90. перцентил
 	Time in system, 95th percentile	Време у систему, 95. перцентил

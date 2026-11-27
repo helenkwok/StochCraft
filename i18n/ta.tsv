@@ -1531,6 +1531,11 @@ connection	Flow	ஓட்டம்
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	பத்து இயந்திரங்கள் இயங்க வேண்டும், நான்கு உதிரி இயந்திரங்கள் தயாராகக் காத்திருக்கின்றன, மூன்று மெக்கானிக்குகள் பழுதானவற்றைச் சரிசெய்கிறார்கள் (Crane மற்றும் Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	பத்து இயந்திரங்களை இயங்க வைக்க எத்தனை உதிரி இயந்திரங்களும் மெக்கானிக்குகளும் தேவை?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	தயாராகக் காத்திருக்கும் உதிரி இயந்திரங்கள் பழுதாக முடியாது: சராசரியாக 3.47 இயந்திரங்கள் பழுதாகவும் 9.29 இயங்கியும் இருக்கும். நான்காவது மெக்கானிக் இன்னும் நான்கு உதிரி இயந்திரங்கள் அளவுக்கு உதவுகிறார்.
+	Scenario	சூழ்நிலை
+	Scenario: {name}	சூழ்நிலை: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ஐத் திறந்தால் {name} இல் சேமிக்கப்படாத மாற்றங்கள் நீக்கப்படும். முதலில் சேமிக்கவா?
+@plural	{n} scenario to compare|{n} scenarios to compare	ஒப்பிட {n} சூழ்நிலை|ஒப்பிட {n} சூழ்நிலைகள்
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	திறந்துள்ள சூழ்நிலை மட்டும் உள்ள புதிய கோப்பாக இது சேமிக்கப்பட்டது, எனவே {scenario} க்கு மாற்றப்படவில்லை.
 	Median time in system	அமைப்பில் கழித்த நேரத்தின் இடைநிலை
 	Time in system, 90th percentile	அமைப்பில் கழித்த நேரம், 90-ஆம் சதமானம்
 	Time in system, 95th percentile	அமைப்பில் கழித்த நேரம், 95-ஆம் சதமானம்

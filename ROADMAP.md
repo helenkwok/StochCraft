@@ -3934,10 +3934,15 @@ straight to its divert point needs L5's points along a section). U1, the run bar
 with a reset per field, one undo step each; a model opened in a scenario that inherits from
 another is measured against that scenario instead; a selected flow has its own page; and
 several selected blocks show the parameters they share, values that differ marked as mixed,
-an edit to all of them one undo step. Left from U2: collapsible groups for the parameters,
-flows and shared properties (the folds below them already collapse), units typed with the
-value, a scenario picker in the window, and the experiment fields and connections table
-leaving the model page (with U5).
+an edit to all of them one undo step. U2's scenario picker is done too: a file with more than
+one scenario shows a **Scenario** choice in the model page's Experiment section and in the
+sidebar's summary, which reopens the file in the one chosen (engine `file.reopen`, from the file
+as opened or last saved; `file.scenarios` lists them, and so does the MCP server's `scenarios`
+tool), asking beside the choice before unsaved changes are dropped; the status bar names the
+open scenario and the start page's cards count them. Left from U2: collapsible groups for the
+parameters, flows and shared properties (the folds below them already collapse), units typed
+with the value, and the experiment fields and connections table leaving the model page (with
+U5, whose scenario grid compares scenarios side by side).
 L10 is done: `stochcraft-model::dmn` holds decision tables with the hit policies
 UNIQUE, FIRST, PRIORITY and COLLECT (with SUM, COUNT, MIN or MAX) and S-FEEL's simple unary tests
 in their cells (comparisons, a value alone, ranges, lists, `not(...)` and `-`), evaluated as

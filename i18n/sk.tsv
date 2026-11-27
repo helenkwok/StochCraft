@@ -1531,6 +1531,11 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Desať strojov musí bežať, štyri záložné čakajú v pohotovosti a traja opravári opravujú tie, ktoré sa pokazia (Crane a Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koľko záložných strojov a opravárov udrží desať strojov v chode?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Záložné stroje v pohotovosti sa nemôžu pokaziť: v priemere je pokazených 3.47 strojov a beží 9.29. Štvrtý opravár pomôže zhruba toľko ako štyri záložné stroje navyše.
+	Scenario	Scenár
+	Scenario: {name}	Scenár: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvorením scenára {scenario} sa zahodia neuložené zmeny v {name}. Najprv ich uložiť?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenár na porovnanie|{n} scenáre na porovnanie|{n} scenárov na porovnanie
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Uložil sa ako nový súbor, ktorý obsahuje len otvorený scenár, takže prepnutie na {scenario} sa neurobilo.
 	Median time in system	Medián času v systéme
 	Time in system, 90th percentile	Čas v systéme, 90. percentil
 	Time in system, 95th percentile	Čas v systéme, 95. percentil

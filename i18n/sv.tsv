@@ -1531,6 +1531,11 @@ connection	Flow	Flöde
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tio maskiner måste gå, fyra reservmaskiner står redo och tre reparatörer lagar dem som havererar (Crane och Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hur många reservmaskiner och reparatörer håller tio maskiner i gång?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservmaskiner som står redo kan inte haverera: i genomsnitt är 3.47 maskiner trasiga och 9.29 går. En fjärde reparatör gör ungefär lika mycket som fyra reservmaskiner till.
+	Scenario	Scenario
+	Scenario: {name}	Scenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Om {scenario} öppnas förloras de osparade ändringarna i {name}. Spara dem först?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenario att jämföra|{n} scenarier att jämföra
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Den sparades som en ny fil som bara innehåller det öppna scenariot, så bytet till {scenario} gjordes inte.
 	Median time in system	Median för tid i systemet
 	Time in system, 90th percentile	Tid i systemet, 90:e percentilen
 	Time in system, 95th percentile	Tid i systemet, 95:e percentilen

@@ -585,6 +585,12 @@ struct FileState {
     notes: Vec<Value>,
 }
 
+/// The input scenarios of the model file `bytes` (BPSim), in the file's order: what
+/// `file.scenarios` would list once it is opened. None for a file without BPSim data.
+pub fn file_scenarios(bytes: &[u8]) -> Vec<stochcraft_io::bpsim::ScenarioInfo> {
+    stochcraft_io::scenarios(bytes)
+}
+
 /// A model, its undo history, its journal, its file and its background run.
 pub struct Engine {
     model: Model,
@@ -1107,6 +1113,32 @@ impl Engine {
     /// inherits from none. Edits leave it as the file has it.
     pub fn inherited_model(&self) -> Option<&Model> {
         self.file.as_ref()?.inherited.as_ref()
+    }
+
+    /// The opened file's input scenarios, as `file.scenarios` gives them: `open`, the id of the
+    /// one the model was read from, and `scenarios`, each with its `id`, `name`, `description`,
+    /// the scenario it `inherits` from and whether it is the `open` one. None without a file,
+    /// and none for a system dynamics model.
+    pub fn scenarios(&self) -> Value {
+        let Some(f) = self.file.as_ref().filter(|_| self.sd.is_none()) else {
+            return json!({ "open": null, "scenarios": [] });
+        };
+        let open = f.opened.scenario.as_deref();
+        let list: Vec<Value> = f
+            .opened
+            .scenario_details()
+            .iter()
+            .map(|s| {
+                json!({
+                    "id": s.id,
+                    "name": s.name,
+                    "description": s.description,
+                    "inherits": s.inherits,
+                    "open": open == Some(s.id.as_str()),
+                })
+            })
+            .collect();
+        json!({ "open": open, "scenarios": list })
     }
 
     /// Whether the opened file uses `id` for something it keeps that the model does not have, so

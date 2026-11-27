@@ -1531,6 +1531,11 @@ connection	Flow	Поток
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десять станков должны работать, четыре резервных стоят наготове, а трое слесарей чинят те, что выходят из строя (Crane и Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Сколько резервных станков и слесарей нужно, чтобы десять станков продолжали работать?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервные станки, стоящие наготове, не могут выйти из строя: в среднем 3.47 станка неисправны и 9.29 работают. Четвёртый слесарь даёт примерно столько же, сколько ещё четыре резервных станка.
+	Scenario	Сценарий
+	Scenario: {name}	Сценарий: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	При открытии {scenario} несохранённые изменения в {name} будут потеряны. Сначала сохранить их?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарий для сравнения|{n} сценария для сравнения|{n} сценариев для сравнения
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Сохранено как новый файл, в котором есть только открытый сценарий, поэтому переход к {scenario} не выполнен.
 	Median time in system	Медиана времени в системе
 	Time in system, 90th percentile	Время в системе, 90-й процентиль
 	Time in system, 95th percentile	Время в системе, 95-й процентиль

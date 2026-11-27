@@ -1531,6 +1531,11 @@ connection	Flow	โฟลว์
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	เครื่องจักรสิบเครื่องต้องทำงาน เครื่องจักรสำรองสี่เครื่องรอพร้อมใช้ และช่างซ่อมสามคนซ่อมเครื่องที่ขัดข้อง (Crane และ Iglehart, Winter Simulation Conference, 1973)
 	How many spares and repairmen keep ten machines running?	ต้องมีเครื่องจักรสำรองและช่างซ่อมเท่าใด จึงจะให้เครื่องจักรสิบเครื่องทำงานต่อไปได้?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	เครื่องจักรสำรองที่รออยู่ขัดข้องไม่ได้: โดยเฉลี่ยเครื่องจักรเสีย 3.47 เครื่องและทำงาน 9.29 เครื่อง ช่างซ่อมคนที่สี่ช่วยได้พอ ๆ กับเครื่องจักรสำรองอีกสี่เครื่อง
+	Scenario	สถานการณ์
+	Scenario: {name}	สถานการณ์: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	การเปิด {scenario} จะทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกใน {name} บันทึกก่อนหรือไม่
+@plural	{n} scenario to compare|{n} scenarios to compare	สถานการณ์ให้เปรียบเทียบ {n} แบบ
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	บันทึกเป็นไฟล์ใหม่ที่มีเฉพาะสถานการณ์ที่เปิดอยู่ จึงไม่ได้สลับไปที่ {scenario}
 	Median time in system	ค่ามัธยฐานของเวลาในระบบ
 	Time in system, 90th percentile	เวลาในระบบ เปอร์เซ็นไทล์ที่ 90
 	Time in system, 95th percentile	เวลาในระบบ เปอร์เซ็นไทล์ที่ 95
