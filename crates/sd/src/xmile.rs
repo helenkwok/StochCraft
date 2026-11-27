@@ -24,15 +24,16 @@
 //! diagram, styles, display settings of a variable (`range`, `scale`, `format`, `display`),
 //! another vendor's extensions (elements with a prefix), `pause`, and groups.
 //!
-//! **StochCraft's extension:** the interval results are saved at, `stochcraft:save_step` in
-//! `sim_specs`. Another tool ignores it, as XMILE allows for an element in another namespace.
-//! The random functions take an optional seed (the specification's) and, after it, an interval
+//! **StochCraft's extensions:** the interval results are saved at, `stochcraft:save_step` in
+//! `sim_specs`, and a condition that ends the run early, `<stochcraft:stop_when variable="u10"
+//! above="1000"/>` (or `below=`) in `sim_specs`. Another tool ignores them, as XMILE allows for an
+//! element in another namespace, and runs to the stop time. The random functions take an optional seed (the specification's) and, after it, an interval
 //! between draws: `NORMAL(mean, std_dev, seed, interval)`. `UNIFORM` is read as the
 //! specification's `RANDOM`.
 
 use crate::layout::{AUX_SIZE, Connector, Layout, STOCK_SIZE, Shape, ends};
 use crate::model::{
-    Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, VarKind, Variable, canonical,
+    Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, StopWhen, VarKind, Variable, canonical,
 };
 use crate::xml::{Element, escape, parse, resolve_namespaces};
 use crate::{ErrorKind, SdError};
@@ -259,6 +260,31 @@ fn read_variable(
     })
 }
 
+/// `<stochcraft:stop_when variable="u10" above="1000"/>`, or `below=` in place of `above=`.
+fn read_stop_when(e: &Element) -> Result<StopWhen, SdError> {
+    let variable = e.attr("variable").unwrap_or_default().trim().to_owned();
+    if variable.is_empty() {
+        return Err(xml_err(
+            "<stop_when> has no `variable` attribute".to_owned(),
+        ));
+    }
+    let (above, text) = match (e.attr("above"), e.attr("below")) {
+        (Some(a), None) => (true, a),
+        (None, Some(b)) => (false, b),
+        _ => {
+            return Err(xml_err(
+                "<stop_when> needs one of the attributes `above` and `below`".to_owned(),
+            ));
+        }
+    };
+    let value = number(text, "<stop_when>")?;
+    Ok(StopWhen {
+        variable,
+        above,
+        value,
+    })
+}
+
 fn read_specs(s: &Element, notes: &mut Notes) -> Result<SimSpecs, SdError> {
     let time_units = s.attr("time_units").unwrap_or_default().trim().to_owned();
     let method = match s.attr("method").map(str::to_lowercase).as_deref() {
@@ -306,6 +332,7 @@ fn read_specs(s: &Element, notes: &mut Notes) -> Result<SimSpecs, SdError> {
             (None, "pause") => notes.add("the <pause> setting is not kept".to_owned()),
             (None, "run") => notes.add("the <run> setting is not kept".to_owned()),
             (Some(_), "save_step") => specs.save_step = Some(number(&c.text(), "<save_step>")?),
+            (Some(_), "stop_when") => specs.stop_when = Some(read_stop_when(c)?),
             (Some(p), n) => notes.add(format!("the extension element <{p}:{n}> is not kept")),
             (None, n) => {
                 return Err(unsupported(format!(
@@ -833,6 +860,14 @@ fn write(model: &SdModel, diagram: bool) -> String {
     }
     if let Some(v) = s.save_step {
         push_text(&mut o, 2, "stochcraft:save_step", &format!("{v}"));
+    }
+    if let Some(w) = &s.stop_when {
+        o.push_str(&format!(
+            "    <stochcraft:stop_when variable=\"{}\" {}=\"{}\"/>\n",
+            escape(&w.variable),
+            if w.above { "above" } else { "below" },
+            w.value
+        ));
     }
     o.push_str("  </sim_specs>\n  <model>\n    <variables>\n");
     for v in &model.vars {

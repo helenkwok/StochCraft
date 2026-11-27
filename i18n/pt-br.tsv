@@ -1531,6 +1531,19 @@ connection	Flow	Fluxo
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dez máquinas precisam funcionar, quatro reservas aguardam prontas e três mecânicos consertam as que quebram (Crane e Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Quantas máquinas reservas e quantos mecânicos mantêm dez máquinas funcionando?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máquinas reservas em espera não podem quebrar: em média 3.47 máquinas estão quebradas e 9.29 funcionam. Um quarto mecânico rende quase o mesmo que mais quatro máquinas reservas.
+	Science and engineering	Ciência e engenharia
+	Stop when	Parar quando
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	A execução termina no primeiro passo em que a condição vale, como u10 > 1000 (uma variável, > ou <, e um número), e os resultados dizem quando ela foi cruzada. Deixe vazio para ir até o tempo final.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Escreva a condição como uma variável, > ou <, e um número, como u10 > 1000.
+	Changed the stop condition	Condição de parada alterada
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Parou em t = {time} quando {variable} passou de {value} (cruzou em t = {crossing}, entre os dois últimos passos).
+	Stopped at t = {time}, when the stop condition held.	Parou em t = {time}, quando a condição de parada valeu.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Parou em t = {time}, o último passo em que cada estoque e cada fluxo era um número finito: {variables} ficou infinito ou não numérico em t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Execuções que terminaram antes: {n} de {total}. Esta é a primeira.
+	Heat in a rod	Calor em uma barra
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Uma barra mantida a 0 nas duas pontas gera calor proporcional ao quadrado da sua temperatura: 19 estoques ao longo dela, pelo método das linhas (Soheili e Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Quando uma barra aquecida por dentro dispara?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	O método das linhas transforma uma equação do calor em estoques e fluxos, e um modelo pode explodir em tempo finito: o meio passa de 10.000 em t = 0.0821, então a barra dispara por volta de 0.0822, a 0.3% do valor publicado de 0.0824.
 	Scenario	Cenário
 	Scenario: {name}	Cenário: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Abrir {scenario} descarta as alterações não salvas em {name}. Salvá-las primeiro?

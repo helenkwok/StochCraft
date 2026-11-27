@@ -724,6 +724,13 @@ fn looked_up_on_screen() -> BTreeSet<String> {
         settle(&mut h);
         every_block(&mut h);
     }
+    // What follows edits a process model: open one, whatever kind of model the last example is.
+    let process = EXAMPLES
+        .iter()
+        .find(|e| e.file == "zeta-queue.bpmn")
+        .expect("the zeta queue example");
+    h.state_mut().open_file(process.file, process.bytes);
+    settle(&mut h);
     // No example has a shared pool yet: add one and a task that needs it, then look at the
     // overview (where pools are edited), the add-block menu and every block again.
     let pool = h.state_mut().execute("resource.add", serde_json::json!({}));

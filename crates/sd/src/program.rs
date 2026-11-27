@@ -13,7 +13,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::expr::{Ast, BinOp, parse};
-use crate::model::{GfKind, Method, SdModel, VarKind, canonical};
+use crate::model::{GfKind, Method, SdModel, StopWhen, VarKind, canonical};
 use crate::units::{Units, time_unit};
 use crate::{ErrorKind, SdError};
 
@@ -151,6 +151,9 @@ pub struct Program {
     pub(crate) method: Method,
     pub(crate) time_units: String,
     pub(crate) save_step: Option<f64>,
+    /// The stop condition: the variable's index, and the condition with its name as the model
+    /// writes it.
+    pub(crate) stop_when: Option<(usize, StopWhen)>,
     /// What the checks found that does not stop a run.
     pub warnings: Vec<String>,
 }
@@ -183,6 +186,11 @@ impl Program {
 
     pub fn time_units(&self) -> &str {
         &self.time_units
+    }
+
+    /// The stop condition, its variable named as the model names it.
+    pub fn stop_when(&self) -> Option<&StopWhen> {
+        self.stop_when.as_ref().map(|(_, w)| w)
     }
 
     /// The names of the variables, in the file's order, with their kinds.
@@ -560,6 +568,40 @@ pub fn compile(model: &SdModel) -> Result<Program, SdError> {
             ));
         }
     }
+    let stop_when = match &s.stop_when {
+        Some(w) => {
+            let Some(&i) = names.get(&canonical(&w.variable)) else {
+                return Err(err(
+                    ErrorKind::Model,
+                    format!(
+                        "the stop condition names `{}`, which is not a variable of the model",
+                        w.variable
+                    ),
+                ));
+            };
+            if !w.value.is_finite() {
+                return Err(err(
+                    ErrorKind::Model,
+                    format!(
+                        "the stop condition's value must be a number (it is {})",
+                        w.value
+                    ),
+                ));
+            }
+            let variable = model
+                .vars
+                .get(i)
+                .map_or_else(|| w.variable.clone(), |v| v.name.clone());
+            Some((
+                i,
+                StopWhen {
+                    variable,
+                    ..w.clone()
+                },
+            ))
+        }
+        None => None,
+    };
     let tables: Vec<bool> = model.vars.iter().map(|v| v.gf.is_some()).collect();
     let mut resolver = Resolver {
         names: &names,
@@ -831,6 +873,7 @@ pub fn compile(model: &SdModel) -> Result<Program, SdError> {
         method: s.method,
         time_units: s.time_units.clone(),
         save_step: s.save_step,
+        stop_when,
         warnings: Vec::new(),
     };
     program.warnings = lint(model, &program);

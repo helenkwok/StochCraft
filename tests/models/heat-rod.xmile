@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/xmile/1">
+  <header>
+    <name>Heat in a rod</name>
+    <vendor>StochCraft</vendor>
+    <product version="0.2">StochCraft</product>
+  </header>
+  <sim_specs method="RK4">
+    <start>0</start>
+    <stop>0.1</stop>
+    <dt>2.5e-05</dt>
+    <stochcraft:save_step>0.0005</stochcraft:save_step>
+    <stochcraft:stop_when variable="u10" above="10000"/>
+  </sim_specs>
+  <model>
+    <variables>
+      <stock name="u1">
+        <doc>The temperature at x = 0.05, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>3.1286893008046173</eqn>
+        <inflow>f1</inflow>
+      </stock>
+      <stock name="u2">
+        <doc>The temperature at x = 0.10, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>6.180339887498948</eqn>
+        <inflow>f2</inflow>
+      </stock>
+      <stock name="u3">
+        <doc>The temperature at x = 0.15, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>9.079809994790937</eqn>
+        <inflow>f3</inflow>
+      </stock>
+      <stock name="u4">
+        <doc>The temperature at x = 0.20, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>11.755705045849464</eqn>
+        <inflow>f4</inflow>
+      </stock>
+      <stock name="u5">
+        <doc>The temperature at x = 0.25, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>14.142135623730951</eqn>
+        <inflow>f5</inflow>
+      </stock>
+      <stock name="u6">
+        <doc>The temperature at x = 0.30, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>16.18033988749895</eqn>
+        <inflow>f6</inflow>
+      </stock>
+      <stock name="u7">
+        <doc>The temperature at x = 0.35, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>17.820130483767358</eqn>
+        <inflow>f7</inflow>
+      </stock>
+      <stock name="u8">
+        <doc>The temperature at x = 0.40, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>19.02113032590307</eqn>
+        <inflow>f8</inflow>
+      </stock>
+      <stock name="u9">
+        <doc>The temperature at x = 0.45, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>19.753766811902757</eqn>
+        <inflow>f9</inflow>
+      </stock>
+      <stock name="u10">
+        <doc>The temperature at x = 0.50, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>20.0</eqn>
+        <inflow>f10</inflow>
+      </stock>
+      <stock name="u11">
+        <doc>The temperature at x = 0.55, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>19.753766811902754</eqn>
+        <inflow>f11</inflow>
+      </stock>
+      <stock name="u12">
+        <doc>The temperature at x = 0.60, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>19.02113032590307</eqn>
+        <inflow>f12</inflow>
+      </stock>
+      <stock name="u13">
+        <doc>The temperature at x = 0.65, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>17.820130483767358</eqn>
+        <inflow>f13</inflow>
+      </stock>
+      <stock name="u14">
+        <doc>The temperature at x = 0.70, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>16.18033988749895</eqn>
+        <inflow>f14</inflow>
+      </stock>
+      <stock name="u15">
+        <doc>The temperature at x = 0.75, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>14.142135623730951</eqn>
+        <inflow>f15</inflow>
+      </stock>
+      <stock name="u16">
+        <doc>The temperature at x = 0.80, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>11.755705045849465</eqn>
+        <inflow>f16</inflow>
+      </stock>
+      <stock name="u17">
+        <doc>The temperature at x = 0.85, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>9.07980999479093</eqn>
+        <inflow>f17</inflow>
+      </stock>
+      <stock name="u18">
+        <doc>The temperature at x = 0.90, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>6.18033988749895</eqn>
+        <inflow>f18</inflow>
+      </stock>
+      <stock name="u19">
+        <doc>The temperature at x = 0.95, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>3.1286893008046195</eqn>
+        <inflow>f19</inflow>
+      </stock>
+      <flow name="f1">
+        <doc>The rate of change of u1: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u1 squared.</doc>
+        <eqn>(0 - 2 * u1 + u2) / (h * h) + source * u1 * u1</eqn>
+      </flow>
+      <flow name="f2">
+        <doc>The rate of change of u2: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u2 squared.</doc>
+        <eqn>(u1 - 2 * u2 + u3) / (h * h) + source * u2 * u2</eqn>
+      </flow>
+      <flow name="f3">
+        <doc>The rate of change of u3: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u3 squared.</doc>
+        <eqn>(u2 - 2 * u3 + u4) / (h * h) + source * u3 * u3</eqn>
+      </flow>
+      <flow name="f4">
+        <doc>The rate of change of u4: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u4 squared.</doc>
+        <eqn>(u3 - 2 * u4 + u5) / (h * h) + source * u4 * u4</eqn>
+      </flow>
+      <flow name="f5">
+        <doc>The rate of change of u5: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u5 squared.</doc>
+        <eqn>(u4 - 2 * u5 + u6) / (h * h) + source * u5 * u5</eqn>
+      </flow>
+      <flow name="f6">
+        <doc>The rate of change of u6: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u6 squared.</doc>
+        <eqn>(u5 - 2 * u6 + u7) / (h * h) + source * u6 * u6</eqn>
+      </flow>
+      <flow name="f7">
+        <doc>The rate of change of u7: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u7 squared.</doc>
+        <eqn>(u6 - 2 * u7 + u8) / (h * h) + source * u7 * u7</eqn>
+      </flow>
+      <flow name="f8">
+        <doc>The rate of change of u8: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u8 squared.</doc>
+        <eqn>(u7 - 2 * u8 + u9) / (h * h) + source * u8 * u8</eqn>
+      </flow>
+      <flow name="f9">
+        <doc>The rate of change of u9: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u9 squared.</doc>
+        <eqn>(u8 - 2 * u9 + u10) / (h * h) + source * u9 * u9</eqn>
+      </flow>
+      <flow name="f10">
+        <doc>The rate of change of u10: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u10 squared.</doc>
+        <eqn>(u9 - 2 * u10 + u11) / (h * h) + source * u10 * u10</eqn>
+      </flow>
+      <flow name="f11">
+        <doc>The rate of change of u11: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u11 squared.</doc>
+        <eqn>(u10 - 2 * u11 + u12) / (h * h) + source * u11 * u11</eqn>
+      </flow>
+      <flow name="f12">
+        <doc>The rate of change of u12: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u12 squared.</doc>
+        <eqn>(u11 - 2 * u12 + u13) / (h * h) + source * u12 * u12</eqn>
+      </flow>
+      <flow name="f13">
+        <doc>The rate of change of u13: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u13 squared.</doc>
+        <eqn>(u12 - 2 * u13 + u14) / (h * h) + source * u13 * u13</eqn>
+      </flow>
+      <flow name="f14">
+        <doc>The rate of change of u14: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u14 squared.</doc>
+        <eqn>(u13 - 2 * u14 + u15) / (h * h) + source * u14 * u14</eqn>
+      </flow>
+      <flow name="f15">
+        <doc>The rate of change of u15: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u15 squared.</doc>
+        <eqn>(u14 - 2 * u15 + u16) / (h * h) + source * u15 * u15</eqn>
+      </flow>
+      <flow name="f16">
+        <doc>The rate of change of u16: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u16 squared.</doc>
+        <eqn>(u15 - 2 * u16 + u17) / (h * h) + source * u16 * u16</eqn>
+      </flow>
+      <flow name="f17">
+        <doc>The rate of change of u17: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u17 squared.</doc>
+        <eqn>(u16 - 2 * u17 + u18) / (h * h) + source * u17 * u17</eqn>
+      </flow>
+      <flow name="f18">
+        <doc>The rate of change of u18: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u18 squared.</doc>
+        <eqn>(u17 - 2 * u18 + u19) / (h * h) + source * u18 * u18</eqn>
+      </flow>
+      <flow name="f19">
+        <doc>The rate of change of u19: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u19 squared.</doc>
+        <eqn>(u18 - 2 * u19 + 0) / (h * h) + source * u19 * u19</eqn>
+      </flow>
+      <aux name="h">
+        <doc>The spacing of the points along the rod, which is 1 long.</doc>
+        <eqn>0.05</eqn>
+      </aux>
+      <aux name="source">
+        <doc>1: the rod makes heat in proportion to the square of its temperature, and runs away. 0: it only conducts, and cools towards its ends.</doc>
+        <eqn>1</eqn>
+      </aux>
+    </variables>
+    <views>
+      <view type="stock_flow">
+        <stock name="u1" x="10" y="300" width="60" height="40"/>
+        <stock name="u2" x="80" y="300" width="60" height="40"/>
+        <stock name="u3" x="150" y="300" width="60" height="40"/>
+        <stock name="u4" x="220" y="300" width="60" height="40"/>
+        <stock name="u5" x="290" y="300" width="60" height="40"/>
+        <stock name="u6" x="360" y="300" width="60" height="40"/>
+        <stock name="u7" x="430" y="300" width="60" height="40"/>
+        <stock name="u8" x="500" y="300" width="60" height="40"/>
+        <stock name="u9" x="570" y="300" width="60" height="40"/>
+        <stock name="u10" x="640" y="300" width="60" height="40"/>
+        <stock name="u11" x="710" y="300" width="60" height="40"/>
+        <stock name="u12" x="780" y="300" width="60" height="40"/>
+        <stock name="u13" x="850" y="300" width="60" height="40"/>
+        <stock name="u14" x="920" y="300" width="60" height="40"/>
+        <stock name="u15" x="990" y="300" width="60" height="40"/>
+        <stock name="u16" x="1060" y="300" width="60" height="40"/>
+        <stock name="u17" x="1130" y="300" width="60" height="40"/>
+        <stock name="u18" x="1200" y="300" width="60" height="40"/>
+        <stock name="u19" x="1270" y="300" width="60" height="40"/>
+        <flow name="f1" uid="1" x="40" y="180">
+          <pts>
+            <pt x="40" y="150"/>
+            <pt x="40" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="2" flow_uid="1" x="40" y="150"/>
+        <flow name="f2" uid="3" x="110" y="180">
+          <pts>
+            <pt x="110" y="150"/>
+            <pt x="110" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="4" flow_uid="3" x="110" y="150"/>
+        <flow name="f3" uid="5" x="180" y="180">
+          <pts>
+            <pt x="180" y="150"/>
+            <pt x="180" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="6" flow_uid="5" x="180" y="150"/>
+        <flow name="f4" uid="7" x="250" y="180">
+          <pts>
+            <pt x="250" y="150"/>
+            <pt x="250" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="8" flow_uid="7" x="250" y="150"/>
+        <flow name="f5" uid="9" x="320" y="180">
+          <pts>
+            <pt x="320" y="150"/>
+            <pt x="320" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="10" flow_uid="9" x="320" y="150"/>
+        <flow name="f6" uid="11" x="390" y="180">
+          <pts>
+            <pt x="390" y="150"/>
+            <pt x="390" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="12" flow_uid="11" x="390" y="150"/>
+        <flow name="f7" uid="13" x="460" y="180">
+          <pts>
+            <pt x="460" y="150"/>
+            <pt x="460" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="14" flow_uid="13" x="460" y="150"/>
+        <flow name="f8" uid="15" x="530" y="180">
+          <pts>
+            <pt x="530" y="150"/>
+            <pt x="530" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="16" flow_uid="15" x="530" y="150"/>
+        <flow name="f9" uid="17" x="600" y="180">
+          <pts>
+            <pt x="600" y="150"/>
+            <pt x="600" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="18" flow_uid="17" x="600" y="150"/>
+        <flow name="f10" uid="19" x="670" y="180">
+          <pts>
+            <pt x="670" y="150"/>
+            <pt x="670" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="20" flow_uid="19" x="670" y="150"/>
+        <flow name="f11" uid="21" x="740" y="180">
+          <pts>
+            <pt x="740" y="150"/>
+            <pt x="740" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="22" flow_uid="21" x="740" y="150"/>
+        <flow name="f12" uid="23" x="810" y="180">
+          <pts>
+            <pt x="810" y="150"/>
+            <pt x="810" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="24" flow_uid="23" x="810" y="150"/>
+        <flow name="f13" uid="25" x="880" y="180">
+          <pts>
+            <pt x="880" y="150"/>
+            <pt x="880" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="26" flow_uid="25" x="880" y="150"/>
+        <flow name="f14" uid="27" x="950" y="180">
+          <pts>
+            <pt x="950" y="150"/>
+            <pt x="950" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="28" flow_uid="27" x="950" y="150"/>
+        <flow name="f15" uid="29" x="1020" y="180">
+          <pts>
+            <pt x="1020" y="150"/>
+            <pt x="1020" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="30" flow_uid="29" x="1020" y="150"/>
+        <flow name="f16" uid="31" x="1090" y="180">
+          <pts>
+            <pt x="1090" y="150"/>
+            <pt x="1090" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="32" flow_uid="31" x="1090" y="150"/>
+        <flow name="f17" uid="33" x="1160" y="180">
+          <pts>
+            <pt x="1160" y="150"/>
+            <pt x="1160" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="34" flow_uid="33" x="1160" y="150"/>
+        <flow name="f18" uid="35" x="1230" y="180">
+          <pts>
+            <pt x="1230" y="150"/>
+            <pt x="1230" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="36" flow_uid="35" x="1230" y="150"/>
+        <flow name="f19" uid="37" x="1300" y="180">
+          <pts>
+            <pt x="1300" y="150"/>
+            <pt x="1300" y="300"/>
+          </pts>
+        </flow>
+        <cloud uid="38" flow_uid="37" x="1300" y="150"/>
+        <aux name="h" x="630" y="-70" width="20" height="20"/>
+        <aux name="source" x="690" y="-70" width="20" height="20"/>
+        <connector>
+          <from>u1</from>
+          <to>f1</to>
+        </connector>
+        <connector>
+          <from>u2</from>
+          <to>f1</to>
+        </connector>
+        <connector angle="-158.2">
+          <from>h</from>
+          <to>f1</to>
+        </connector>
+        <connector angle="-160.02">
+          <from>source</from>
+          <to>f1</to>
+        </connector>
+        <connector>
+          <from>u1</from>
+          <to>f2</to>
+        </connector>
+        <connector>
+          <from>u2</from>
+          <to>f2</to>
+        </connector>
+        <connector>
+          <from>u3</from>
+          <to>f2</to>
+        </connector>
+        <connector angle="-155.64">
+          <from>h</from>
+          <to>f2</to>
+        </connector>
+        <connector angle="-157.86">
+          <from>source</from>
+          <to>f2</to>
+        </connector>
+        <connector>
+          <from>u2</from>
+          <to>f3</to>
+        </connector>
+        <connector>
+          <from>u3</from>
+          <to>f3</to>
+        </connector>
+        <connector>
+          <from>u4</from>
+          <to>f3</to>
+        </connector>
+        <connector angle="-152.45">
+          <from>h</from>
+          <to>f3</to>
+        </connector>
+        <connector angle="-155.22">
+          <from>source</from>
+          <to>f3</to>
+        </connector>
+        <connector>
+          <from>u3</from>
+          <to>f4</to>
+        </connector>
+        <connector>
+          <from>u4</from>
+          <to>f4</to>
+        </connector>
+        <connector>
+          <from>u5</from>
+          <to>f4</to>
+        </connector>
+        <connector angle="-148.39">
+          <from>h</from>
+          <to>f4</to>
+        </connector>
+        <connector angle="-151.93">
+          <from>source</from>
+          <to>f4</to>
+        </connector>
+        <connector>
+          <from>u4</from>
+          <to>f5</to>
+        </connector>
+        <connector>
+          <from>u5</from>
+          <to>f5</to>
+        </connector>
+        <connector>
+          <from>u6</from>
+          <to>f5</to>
+        </connector>
+        <connector angle="-143.13">
+          <from>h</from>
+          <to>f5</to>
+        </connector>
+        <connector angle="-147.72">
+          <from>source</from>
+          <to>f5</to>
+        </connector>
+        <connector>
+          <from>u5</from>
+          <to>f6</to>
+        </connector>
+        <connector>
+          <from>u6</from>
+          <to>f6</to>
+        </connector>
+        <connector>
+          <from>u7</from>
+          <to>f6</to>
+        </connector>
+        <connector angle="-136.17">
+          <from>h</from>
+          <to>f6</to>
+        </connector>
+        <connector angle="-142.25">
+          <from>source</from>
+          <to>f6</to>
+        </connector>
+        <connector>
+          <from>u6</from>
+          <to>f7</to>
+        </connector>
+        <connector>
+          <from>u7</from>
+          <to>f7</to>
+        </connector>
+        <connector>
+          <from>u8</from>
+          <to>f7</to>
+        </connector>
+        <connector angle="-126.87">
+          <from>h</from>
+          <to>f7</to>
+        </connector>
+        <connector angle="-135.0">
+          <from>source</from>
+          <to>f7</to>
+        </connector>
+        <connector>
+          <from>u7</from>
+          <to>f8</to>
+        </connector>
+        <connector>
+          <from>u8</from>
+          <to>f8</to>
+        </connector>
+        <connector>
+          <from>u9</from>
+          <to>f8</to>
+        </connector>
+        <connector angle="-114.62">
+          <from>h</from>
+          <to>f8</to>
+        </connector>
+        <connector angle="-125.31">
+          <from>source</from>
+          <to>f8</to>
+        </connector>
+        <connector>
+          <from>u8</from>
+          <to>f9</to>
+        </connector>
+        <connector>
+          <from>u9</from>
+          <to>f9</to>
+        </connector>
+        <connector>
+          <from>u10</from>
+          <to>f9</to>
+        </connector>
+        <connector angle="-99.46">
+          <from>h</from>
+          <to>f9</to>
+        </connector>
+        <connector angle="-112.62">
+          <from>source</from>
+          <to>f9</to>
+        </connector>
+        <connector>
+          <from>u9</from>
+          <to>f10</to>
+        </connector>
+        <connector>
+          <from>u10</from>
+          <to>f10</to>
+        </connector>
+        <connector>
+          <from>u11</from>
+          <to>f10</to>
+        </connector>
+        <connector angle="-82.87">
+          <from>h</from>
+          <to>f10</to>
+        </connector>
+        <connector angle="-97.13">
+          <from>source</from>
+          <to>f10</to>
+        </connector>
+        <connector>
+          <from>u10</from>
+          <to>f11</to>
+        </connector>
+        <connector>
+          <from>u11</from>
+          <to>f11</to>
+        </connector>
+        <connector>
+          <from>u12</from>
+          <to>f11</to>
+        </connector>
+        <connector angle="-67.38">
+          <from>h</from>
+          <to>f11</to>
+        </connector>
+        <connector angle="-80.54">
+          <from>source</from>
+          <to>f11</to>
+        </connector>
+        <connector>
+          <from>u11</from>
+          <to>f12</to>
+        </connector>
+        <connector>
+          <from>u12</from>
+          <to>f12</to>
+        </connector>
+        <connector>
+          <from>u13</from>
+          <to>f12</to>
+        </connector>
+        <connector angle="-54.69">
+          <from>h</from>
+          <to>f12</to>
+        </connector>
+        <connector angle="-65.38">
+          <from>source</from>
+          <to>f12</to>
+        </connector>
+        <connector>
+          <from>u12</from>
+          <to>f13</to>
+        </connector>
+        <connector>
+          <from>u13</from>
+          <to>f13</to>
+        </connector>
+        <connector>
+          <from>u14</from>
+          <to>f13</to>
+        </connector>
+        <connector angle="-45.0">
+          <from>h</from>
+          <to>f13</to>
+        </connector>
+        <connector angle="-53.13">
+          <from>source</from>
+          <to>f13</to>
+        </connector>
+        <connector>
+          <from>u13</from>
+          <to>f14</to>
+        </connector>
+        <connector>
+          <from>u14</from>
+          <to>f14</to>
+        </connector>
+        <connector>
+          <from>u15</from>
+          <to>f14</to>
+        </connector>
+        <connector angle="-37.75">
+          <from>h</from>
+          <to>f14</to>
+        </connector>
+        <connector angle="-43.83">
+          <from>source</from>
+          <to>f14</to>
+        </connector>
+        <connector>
+          <from>u14</from>
+          <to>f15</to>
+        </connector>
+        <connector>
+          <from>u15</from>
+          <to>f15</to>
+        </connector>
+        <connector>
+          <from>u16</from>
+          <to>f15</to>
+        </connector>
+        <connector angle="-32.28">
+          <from>h</from>
+          <to>f15</to>
+        </connector>
+        <connector angle="-36.87">
+          <from>source</from>
+          <to>f15</to>
+        </connector>
+        <connector>
+          <from>u15</from>
+          <to>f16</to>
+        </connector>
+        <connector>
+          <from>u16</from>
+          <to>f16</to>
+        </connector>
+        <connector>
+          <from>u17</from>
+          <to>f16</to>
+        </connector>
+        <connector angle="-28.07">
+          <from>h</from>
+          <to>f16</to>
+        </connector>
+        <connector angle="-31.61">
+          <from>source</from>
+          <to>f16</to>
+        </connector>
+        <connector>
+          <from>u16</from>
+          <to>f17</to>
+        </connector>
+        <connector>
+          <from>u17</from>
+          <to>f17</to>
+        </connector>
+        <connector>
+          <from>u18</from>
+          <to>f17</to>
+        </connector>
+        <connector angle="-24.78">
+          <from>h</from>
+          <to>f17</to>
+        </connector>
+        <connector angle="-27.55">
+          <from>source</from>
+          <to>f17</to>
+        </connector>
+        <connector>
+          <from>u17</from>
+          <to>f18</to>
+        </connector>
+        <connector>
+          <from>u18</from>
+          <to>f18</to>
+        </connector>
+        <connector>
+          <from>u19</from>
+          <to>f18</to>
+        </connector>
+        <connector angle="-22.14">
+          <from>h</from>
+          <to>f18</to>
+        </connector>
+        <connector angle="-24.36">
+          <from>source</from>
+          <to>f18</to>
+        </connector>
+        <connector>
+          <from>u18</from>
+          <to>f19</to>
+        </connector>
+        <connector>
+          <from>u19</from>
+          <to>f19</to>
+        </connector>
+        <connector angle="-19.98">
+          <from>h</from>
+          <to>f19</to>
+        </connector>
+        <connector angle="-21.8">
+          <from>source</from>
+          <to>f19</to>
+        </connector>
+      </view>
+    </views>
+  </model>
+</xmile>

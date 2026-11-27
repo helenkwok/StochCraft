@@ -3781,7 +3781,7 @@ materials,normal,mean=500;std_dev=50,USD
     },
     Command {
         name: "sd.specs.set",
-        summary: "System dynamics: change the open model's simulation settings: start, stop, the time step `dt` (with `dt_reciprocal` true, the step is 1/dt), the method (`euler` or `rk4`), the time unit and the save step (`null` for the step itself). Undone with undo.",
+        summary: "System dynamics: change the open model's simulation settings: start, stop, the time step `dt` (with `dt_reciprocal` true, the step is 1/dt), the method (`euler` or `rk4`), the time unit, the save step (`null` for the step itself) and `stop_when`, a condition that ends the run early (`{\"variable\": \"u10\", \"above\": 1000}`, or `below`; `null` takes it away). Undone with undo.",
         kind: CommandKind::Action,
         schema: schema::<crate::sd_edit::SpecsSet>,
         example: || json!({ "stop": 20.0 }),

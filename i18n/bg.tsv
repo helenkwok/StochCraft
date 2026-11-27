@@ -1531,6 +1531,19 @@ connection	Flow	Поток
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десет машини трябва да работят, четири резервни чакат в готовност, а трима монтьори поправят повредените (Crane и Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Колко резервни машини и монтьори поддържат десет машини в работа?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервните машини в готовност не могат да се повредят: средно 3.47 машини са повредени и 9.29 работят. Четвърти монтьор помага почти колкото четири резервни машини повече.
+	Science and engineering	Наука и инженерство
+	Stop when	Спри, когато
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Изпълнението свършва на първата стъпка, в която условието е изпълнено, например u10 > 1000 (променлива, > или < и число), а резултатите казват кога прагът е преминат. Оставете празно, за да се изпълни до крайното време.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Напишете условието като променлива, > или < и число, например u10 > 1000.
+	Changed the stop condition	Условието за спиране е променено
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Спряно при t = {time}, когато {variable} премина {value} (премина при t = {crossing}, между последните две стъпки).
+	Stopped at t = {time}, when the stop condition held.	Спряно при t = {time}, когато условието за спиране беше изпълнено.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Спряно при t = {time}, последната стъпка, в която всеки запас и всеки поток беше крайно число: {variables} стана безкрайно или не-число при t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Изпълнения, завършили по-рано: {n} от {total}. Това е първото от тях.
+	Heat in a rod	Топлина в прът
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Прът, държан на 0 в двата края, отделя топлина пропорционално на квадрата на температурата си: 19 запаса по дължината му, по метода на правите (Soheili и Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Кога прът, нагряван отвътре, излиза извън контрол?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Методът на правите превръща уравнението на топлопроводността в запаси и потоци, а моделът може да избухне за крайно време: средата преминава 10 000 при t = 0.0821, така че прътът излиза извън контрол около 0.0822, в рамките на 0.3% от публикуваните 0.0824.
 	Scenario	Сценарий
 	Scenario: {name}	Сценарий: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Отварянето на {scenario} отхвърля незаписаните промени в {name}. Да се запишат ли първо?

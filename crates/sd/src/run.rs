@@ -30,6 +30,18 @@
 //! the rate and the method falls to first order there: put such jumps on the step boundaries,
 //! use Euler or lower the step (the halved-step check shows the dependence).
 //!
+//! **Ending early.** After each step's first pass (the values at the step itself, never the
+//! stages of Runge-Kutta in between), the run checks two things. If a stock or flow is not a
+//! finite number (infinite, or not a number), the step is dropped and the run ends at the step
+//! before, the last one where every stock and flow was finite; the results say which variables
+//! and when ([`Stopped`]), so they never hold such a value. (An auxiliary may still be undefined
+//! at a time, with a warning; it shows as a gap.) If that happens at the start, there is no step
+//! to show and the run is an error. Then, if the model has a stop condition and it holds, the run
+//! ends at that step, which is saved whether or not it falls on the saving interval, and the time
+//! the variable crossed the value is interpolated linearly between the step before and this one.
+//! For runs in replications each one ends on its own, and the results end at the last saved time
+//! every run reached.
+//!
 //! **Random functions** hold one value for an interval (the file's step unless the equation
 //! gives one, in whole steps of the run) and draw it from a stream keyed by the variable, the
 //! call and the draw's number under the replication's stream (`Rng::keyed`), so a draw depends
@@ -44,6 +56,7 @@ use stochcraft_stats::Summary;
 use stochcraft_stats::spread::quantile;
 
 use crate::expr::BinOp;
+use crate::model::StopWhen;
 use crate::program::{Ex, Func, Program, Role, SiteKind};
 use crate::units::time_unit;
 use crate::{ErrorKind, SdError};
@@ -135,6 +148,33 @@ pub struct DtCheck {
     pub notes: Vec<String>,
 }
 
+/// Why a run ended before its stop time.
+#[derive(Debug, Clone, PartialEq)]
+pub enum StopReason {
+    /// The model's stop condition held.
+    Condition,
+    /// These stocks and flows were not finite numbers (infinite or not a number) at the time
+    /// `failed_at`, the step after the last one kept.
+    NotFinite {
+        variables: Vec<String>,
+        failed_at: f64,
+    },
+}
+
+/// A run that ended before its stop time. For runs in replications, the one that ended first.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Stopped {
+    pub reason: StopReason,
+    /// The time the results end at: the step at which the stop condition held, or the last step
+    /// at which every stock and flow was a finite number.
+    pub time: f64,
+    /// For the stop condition: when the variable crossed the value, linearly interpolated
+    /// between the step before and the step it held at (the start, if it held at once).
+    pub crossing: Option<f64>,
+    /// How many runs ended early: 1 for a model run once, up to the replications otherwise.
+    pub runs: u64,
+}
+
 /// The results of a run.
 #[derive(Debug, Clone, PartialEq)]
 pub struct SdResults {
@@ -156,6 +196,10 @@ pub struct SdResults {
     pub steps: u64,
     pub warnings: Vec<String>,
     pub dt_check: Option<DtCheck>,
+    /// The model's stop condition, if it has one.
+    pub stop_when: Option<StopWhen>,
+    /// Why the run ended before its stop time, if it did.
+    pub stopped: Option<Stopped>,
 }
 
 impl SdResults {
@@ -209,6 +253,8 @@ struct Run {
     warnings: BTreeSet<String>,
     /// See [`Machine::draw_digest`].
     draw_digest: u64,
+    /// Why it ended before its stop time, if it did.
+    stopped: Option<Stopped>,
 }
 
 fn integer_power(x: f64, n: i64) -> f64 {
@@ -839,18 +885,88 @@ fn simulate(
     m.init_all()?;
     let mut times = Vec::new();
     let mut values: Vec<Vec<f64>> = vec![Vec::new(); p.vars.len()];
+    let mut keep = |times: &mut Vec<f64>, t: f64, row: &[f64]| {
+        times.push(t);
+        for (col, v) in values.iter_mut().zip(row.iter()) {
+            col.push(*v);
+        }
+    };
+    // The step before: its time, its values and whether they were saved.
+    let mut before: Option<(f64, Vec<f64>, bool)> = None;
+    // The warnings up to the step before, which a step that is not finite falls back to.
+    let mut kept_warnings = m.warnings.clone();
+    let mut stopped = None;
     for n in 0..=steps {
         m.n = n;
         let k1 = m.pass(0.0)?;
-        if n.is_multiple_of(save_every) || n == steps {
-            times.push(p.start + n as f64 * dt);
-            for (col, v) in values.iter_mut().zip(m.values.iter()) {
-                col.push(*v);
+        let t = p.start + n as f64 * dt;
+        let bad = not_finite(p, &m.values);
+        if !bad.is_empty() {
+            // The step is not kept: neither are the warnings it (and the stages that led to
+            // it) gave, which the reason below replaces.
+            m.warnings = kept_warnings;
+            let Some((last_t, last, saved)) = before else {
+                return Err(run_err(format!(
+                    "{} {} not a finite number at the start ({t}), so the run has no step to show: check the {} (a division by 0, a number too large, or the square root or logarithm of a number it cannot take)",
+                    names_list(&bad),
+                    if bad.len() == 1 { "is" } else { "are" },
+                    if bad.len() == 1 {
+                        "equation"
+                    } else {
+                        "equations"
+                    }
+                )));
+            };
+            if !saved {
+                keep(&mut times, last_t, &last);
             }
+            stopped = Some(Stopped {
+                reason: StopReason::NotFinite {
+                    variables: bad,
+                    failed_at: t,
+                },
+                time: last_t,
+                crossing: None,
+                runs: 1,
+            });
+            break;
+        }
+        let hit = p.stop_when.as_ref().and_then(|(i, w)| {
+            let v = m.values.get(*i).copied()?;
+            if !w.holds(v) {
+                return None;
+            }
+            // Where the straight line between the step before and this one meets the value.
+            let crossing = match before
+                .as_ref()
+                .and_then(|(bt, row, _)| row.get(*i).map(|bv| (*bt, *bv)))
+            {
+                Some((bt, bv)) if v != bv => {
+                    let at = bt + (t - bt) * (w.value - bv) / (v - bv);
+                    if at.is_finite() { at.clamp(bt, t) } else { t }
+                }
+                _ => t,
+            };
+            Some(crossing)
+        });
+        let save = n.is_multiple_of(save_every) || n == steps || hit.is_some();
+        if save {
+            keep(&mut times, t, &m.values);
+        }
+        if let Some(crossing) = hit {
+            stopped = Some(Stopped {
+                reason: StopReason::Condition,
+                time: t,
+                crossing: Some(crossing),
+                runs: 1,
+            });
+            break;
         }
         if n == steps {
             break;
         }
+        before = Some((t, m.values.clone(), save));
+        kept_warnings = m.warnings.clone();
         m.advance(&k1)?;
     }
     Ok(Run {
@@ -858,7 +974,31 @@ fn simulate(
         values,
         warnings: m.warnings,
         draw_digest: m.draw_digest,
+        stopped,
     })
+}
+
+/// The stocks and flows whose values are not finite numbers, in the model's order.
+fn not_finite(p: &Program, values: &[f64]) -> Vec<String> {
+    p.vars
+        .iter()
+        .zip(values)
+        .filter(|(info, v)| info.role != Role::Aux && !v.is_finite())
+        .map(|(info, _)| info.name.clone())
+        .collect()
+}
+
+/// `a`, `` `a` and `b` ``, or `` `a`, `b` and 3 more ``.
+fn names_list(names: &[String]) -> String {
+    let quoted: Vec<String> = names.iter().take(3).map(|n| format!("`{n}`")).collect();
+    match (names.len(), quoted.as_slice()) {
+        (0, _) => String::new(),
+        (1, _) => quoted.join(""),
+        (2, [a, b]) => format!("{a} and {b}"),
+        (3, [a, b, c]) => format!("{a}, {b} and {c}"),
+        (k, [a, b, ..]) => format!("{a}, {b} and {} more", k - 2),
+        _ => quoted.join(", "),
+    }
 }
 
 /// The replications' base for the streams: depends only on the seed and the replication.
@@ -866,8 +1006,48 @@ fn replication_base(seed: u64, r: u64) -> u64 {
     Rng::keyed(seed, &format!("replication/{r}")).next_u64()
 }
 
-/// The mean, median and 5th and 95th percentiles at each saved time across `runs`.
-fn aggregate(p: &Program, runs: &[Run], saved: usize) -> Vec<Series> {
+/// The saved times that every run has, and where each of them is in each run. Runs that went to
+/// the stop time share every saved time; one that ended early has fewer, and its last may be off
+/// the saving interval (the step it ended at), so the times are matched by value.
+fn shared_rows(runs: &[Run]) -> (Vec<f64>, Vec<Vec<usize>>) {
+    let Some(first) = runs.first() else {
+        return (Vec::new(), Vec::new());
+    };
+    if runs.iter().all(|r| r.times == first.times) {
+        let all: Vec<usize> = (0..first.times.len()).collect();
+        return (first.times.clone(), vec![all; runs.len()]);
+    }
+    let mut times = first.times.clone();
+    for r in runs.iter().skip(1) {
+        let mut j = 0;
+        times.retain(|t| {
+            while r.times.get(j).is_some_and(|x| x < t) {
+                j += 1;
+            }
+            r.times.get(j) == Some(t)
+        });
+    }
+    let rows = runs
+        .iter()
+        .map(|r| {
+            let mut j = 0;
+            times
+                .iter()
+                .map(|t| {
+                    while r.times.get(j).is_some_and(|x| x < t) {
+                        j += 1;
+                    }
+                    j
+                })
+                .collect()
+        })
+        .collect();
+    (times, rows)
+}
+
+/// The mean, median and 5th and 95th percentiles at each saved time across `runs`, the `k`th
+/// saved time being row `rows[r][k]` of run `r`.
+fn aggregate(p: &Program, runs: &[Run], rows: &[Vec<usize>], saved: usize) -> Vec<Series> {
     let many = runs.len() > 1;
     p.vars
         .iter()
@@ -889,7 +1069,11 @@ fn aggregate(p: &Program, runs: &[Run], saved: usize) -> Vec<Series> {
             for k in 0..saved {
                 let mut at: Vec<f64> = runs
                     .iter()
-                    .filter_map(|r| r.values.get(vi).and_then(|c| c.get(k)).copied())
+                    .zip(rows)
+                    .filter_map(|(r, row)| {
+                        let i = row.get(k).copied()?;
+                        r.values.get(vi).and_then(|c| c.get(i)).copied()
+                    })
                     .collect();
                 if many {
                     s.mean.push(Summary::of(&at).map_or(f64::NAN, |x| x.mean));
@@ -1077,6 +1261,29 @@ impl SdJob {
         let p = &self.program;
         let dt = self.plan.dt;
         let (mut times, series, mut warnings) = collect(p, &self.runs, self.warnings);
+        // The run that ended first, and how many did.
+        let early: Vec<&Stopped> = self
+            .runs
+            .iter()
+            .filter_map(|r| r.stopped.as_ref())
+            .collect();
+        let mut stopped = early
+            .iter()
+            .min_by(|a, b| a.time.total_cmp(&b.time))
+            .map(|s| Stopped {
+                runs: early.len() as u64,
+                ..(*s).clone()
+            });
+        if self.runs.len() > 1
+            && !early.is_empty()
+            && let Some(end) = times.last()
+        {
+            warnings.insert(format!(
+                "{} of {} runs ended before the stop time: the results end at {end}, the last saved time every run reached",
+                early.len(),
+                self.runs.len()
+            ));
+        }
 
         // The halved-step check, on the mean paths of the stocks.
         let mut dt_check = None;
@@ -1129,6 +1336,13 @@ impl SdJob {
         }
         if (factor - 1.0).abs() > 0.0 {
             times.iter_mut().for_each(|t| *t *= factor);
+            if let Some(s) = stopped.as_mut() {
+                s.time *= factor;
+                s.crossing = s.crossing.map(|c| c * factor);
+                if let StopReason::NotFinite { failed_at, .. } = &mut s.reason {
+                    *failed_at *= factor;
+                }
+            }
             if let Some(check) = dt_check.as_mut() {
                 check.stocks.iter_mut().for_each(|s| s.at_time *= factor);
                 check.dt *= factor;
@@ -1151,6 +1365,8 @@ impl SdJob {
             steps: self.plan.steps,
             warnings: warnings.into_iter().collect(),
             dt_check,
+            stop_when: p.stop_when().cloned(),
+            stopped,
         })
     }
 }
@@ -1277,9 +1493,8 @@ fn collect(
     runs: &[Run],
     mut warnings: BTreeSet<String>,
 ) -> (Vec<f64>, Vec<Series>, BTreeSet<String>) {
-    let saved = runs.first().map_or(0, |r| r.times.len());
-    let times = runs.first().map(|r| r.times.clone()).unwrap_or_default();
-    let series = aggregate(p, runs, saved);
+    let (times, rows) = shared_rows(runs);
+    let series = aggregate(p, runs, &rows, times.len());
     for r in runs {
         warnings.extend(r.warnings.iter().cloned());
     }

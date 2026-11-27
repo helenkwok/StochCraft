@@ -1531,6 +1531,19 @@ connection	Flow	Folyamat
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tíz gépnek kell üzemelnie, négy tartalékgép készenlétben vár, és három szerelő javítja a meghibásodottakat (Crane és Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hány tartalékgép és szerelő tart üzemben tíz gépet?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	A készenlétben álló tartalékgépek nem hibásodhatnak meg: átlagosan 3.47 gép hibás, és 9.29 üzemel. Egy negyedik szerelő nagyjából annyit ér, mint négy további tartalékgép.
+	Science and engineering	Tudomány és mérnöki munka
+	Stop when	Leállítás, ha
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	A futás az első olyan lépésnél ér véget, ahol a feltétel teljesül, például u10 > 1000 (egy változó, > vagy < és egy szám), és az eredmények megmondják, mikor lépte át a küszöböt. Hagyja üresen, hogy a záró időpontig fusson.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Írja a feltételt változóként, > vagy < jelként és számként, például u10 > 1000.
+	Changed the stop condition	A leállítási feltétel megváltozott
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Leállt t = {time} értéknél, amikor {variable} átlépte a(z) {value} értéket (átlépés t = {crossing} értéknél, az utolsó két lépés között).
+	Stopped at t = {time}, when the stop condition held.	Leállt t = {time} értéknél, amikor a leállítási feltétel teljesült.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Leállt t = {time} értéknél, az utolsó lépésnél, ahol minden készlet és minden folyamat véges szám volt: {variables} végtelenné vagy nem számmá vált t = {at} értéknél.
+	Runs that ended early: {n} of {total}. This is the first of them.	Korábban véget ért futások: {n} / {total}. Ez az első közülük.
+	Heat in a rod	Hő egy rúdban
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Egy mindkét végén 0-n tartott rúd a hőmérséklete négyzetével arányos hőt termel: 19 készlet a rúd mentén, a vonalak módszerével (Soheili és Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Mikor szabadul el egy belülről melegedő rúd?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	A vonalak módszere a hővezetési egyenletet készletekké és folyamatokká alakítja, és egy modell véges idő alatt felrobbanhat: a közép t = 0.0821-nél lépi át a 10 000-et, így a rúd nagyjából 0.0822-nél szabadul el, 0.3%-on belül a közölt 0.0824-hez.
 	Scenario	Forgatókönyv
 	Scenario: {name}	Forgatókönyv: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	A(z) {scenario} megnyitása elveti a(z) {name} mentetlen módosításait. Előbb menti őket?

@@ -1531,6 +1531,19 @@ connection	Flow	Verbindung
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Zehn Maschinen müssen laufen, vier Reservemaschinen stehen bereit, und drei Instandhalter reparieren die ausgefallenen (Crane und Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Wie viele Reservemaschinen und Instandhalter halten zehn Maschinen am Laufen?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Bereitstehende Reservemaschinen können nicht ausfallen: Im Mittel sind 3.47 Maschinen ausgefallen und 9.29 laufen. Ein vierter Instandhalter bringt etwa so viel wie vier Reservemaschinen mehr.
+	Science and engineering	Wissenschaft und Technik
+	Stop when	Anhalten, wenn
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Der Lauf endet beim ersten Schritt, in dem die Bedingung gilt, etwa u10 > 1000 (eine Variable, > oder < und eine Zahl), und die Ergebnisse sagen, wann sie überschritten wurde. Leer lassen, um bis zur Endzeit zu laufen.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Schreiben Sie die Bedingung als Variable, > oder < und eine Zahl, etwa u10 > 1000.
+	Changed the stop condition	Abbruchbedingung geändert
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Angehalten bei t = {time}, als {variable} {value} überschritt (überschritten bei t = {crossing}, zwischen den letzten beiden Schritten).
+	Stopped at t = {time}, when the stop condition held.	Angehalten bei t = {time}, als die Abbruchbedingung galt.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Angehalten bei t = {time}, dem letzten Schritt, in dem jeder Bestand und jeder Fluss eine endliche Zahl war: {variables} wurde bei t = {at} unendlich oder keine Zahl.
+	Runs that ended early: {n} of {total}. This is the first of them.	Vorzeitig beendete Läufe: {n} von {total}. Dies ist der erste davon.
+	Heat in a rod	Wärme in einem Stab
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Ein Stab, an beiden Enden auf 0 gehalten, erzeugt Wärme proportional zum Quadrat seiner Temperatur: 19 Bestände entlang des Stabs, nach der Linienmethode (Soheili und Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Wann gerät ein von innen erhitzter Stab außer Kontrolle?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Die Linienmethode macht aus einer Wärmeleitungsgleichung Bestände und Flüsse, und ein Modell kann in endlicher Zeit explodieren: Die Mitte überschreitet 10 000 bei t = 0.0821, also gerät der Stab bei etwa 0.0822 außer Kontrolle, innerhalb von 0.3% der veröffentlichten 0.0824.
 	Scenario	Szenario
 	Scenario: {name}	Szenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Beim Öffnen von {scenario} gehen die ungespeicherten Änderungen an {name} verloren. Zuerst speichern?

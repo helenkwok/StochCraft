@@ -1531,6 +1531,19 @@ connection	Flow	প্রবাহ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	দশটি মেশিন চালু থাকতেই হবে, চারটি অতিরিক্ত মেশিন প্রস্তুত থাকে এবং তিনজন মিস্ত্রি বিকল মেশিন সারান (Crane ও Iglehart, Winter Simulation Conference, 1973)।
 	How many spares and repairmen keep ten machines running?	দশটি মেশিন চালু রাখতে কতগুলো অতিরিক্ত মেশিন ও কতজন মিস্ত্রি লাগবে?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	প্রস্তুত থাকা অতিরিক্ত মেশিন বিকল হতে পারে না: গড়ে 3.47টি মেশিন বিকল থাকে এবং 9.29টি চলে। চতুর্থ একজন মিস্ত্রি প্রায় আরও চারটি অতিরিক্ত মেশিনের সমান কাজ করেন।
+	Science and engineering	বিজ্ঞান ও প্রকৌশল
+	Stop when	কখন থামবে
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	যে প্রথম ধাপে শর্তটি সত্য হয় সেখানে রান শেষ হয়, যেমন u10 > 1000 (একটি চলক, > বা <, এবং একটি সংখ্যা), এবং ফলাফল বলে কখন সীমা পেরোল। শেষ সময় পর্যন্ত চালাতে খালি রাখুন।
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	শর্তটি একটি চলক, > বা <, এবং একটি সংখ্যা হিসেবে লিখুন, যেমন u10 > 1000।
+	Changed the stop condition	থামার শর্ত বদলানো হয়েছে
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	t = {time}-এ থেমেছে যখন {variable} {value} পেরোল (t = {crossing}-এ পেরিয়েছে, শেষ দুই ধাপের মাঝে)।
+	Stopped at t = {time}, when the stop condition held.	t = {time}-এ থেমেছে, যখন থামার শর্ত সত্য হল।
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	t = {time}-এ থেমেছে, শেষ ধাপ যেখানে প্রতিটি মজুত ও প্রতিটি প্রবাহ একটি সসীম সংখ্যা ছিল: {variables} t = {at}-এ অসীম বা অ-সংখ্যা হয়ে গেছে।
+	Runs that ended early: {n} of {total}. This is the first of them.	আগে শেষ হওয়া রান: {total}-এর মধ্যে {n}। এটি তাদের প্রথমটি।
+	Heat in a rod	একটি দণ্ডে তাপ
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	দুই প্রান্তে 0-তে রাখা একটি দণ্ড তার তাপমাত্রার বর্গের অনুপাতে তাপ তৈরি করে: দণ্ড বরাবর 19টি মজুত, রেখা পদ্ধতিতে (Soheili ও Stockie, Applied Numerical Mathematics, 2008)।
+	When does a rod heated from within run away?	ভেতর থেকে গরম হওয়া দণ্ড কখন নিয়ন্ত্রণের বাইরে যায়?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	রেখা পদ্ধতি তাপ সমীকরণকে মজুত ও প্রবাহে বদলায়, এবং একটি মডেল সসীম সময়ে বিস্ফোরিত হতে পারে: মাঝখান t = 0.0821-এ 10,000 পেরোয়, তাই দণ্ড প্রায় 0.0822-এ নিয়ন্ত্রণের বাইরে যায়, প্রকাশিত 0.0824-এর 0.3%-এর মধ্যে।
 	Scenario	দৃশ্যকল্প
 	Scenario: {name}	দৃশ্যকল্প: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} খুললে {name}-এর অসংরক্ষিত পরিবর্তনগুলি হারিয়ে যাবে। আগে সংরক্ষণ করবেন?

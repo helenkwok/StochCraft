@@ -655,7 +655,11 @@ one, gets `Layout::auto`.
   places and other display attributes of a shape, aliases, styles, display settings of a variable,
   another vendor's extensions and groups.
 - **Extensions of StochCraft:** `stochcraft:save_step` in `sim_specs` (the interval results are
-  saved at, by default the step), and a random function's fourth argument, the interval between
+  saved at, by default the step), `<stochcraft:stop_when variable="u10" above="1000"/>` (or
+  `below=`) in `sim_specs` (a condition that ends the run at the first step where it holds; the
+  results' `stopped` gives the step, the crossing interpolated between the last two steps, and
+  the reason, `condition` or `not_finite`, the second when a stock or flow stops being a finite
+  number), and a random function's fourth argument, the interval between
   draws: `NORMAL(mean, std_dev, seed, interval)` (by default one draw a time step of the file).
 
 **Numerics.** Time is `start + n * DT` from an integer counter. Variables are worked out in

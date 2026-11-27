@@ -30,6 +30,10 @@
 //! and smooths are hidden stocks; a graphical function is clamped at its ends, with a warning.
 //! See [`run`](mod@run) for the rest.
 //!
+//! **Ending early.** A run stops before its stop time when the model's stop condition holds
+//! ([`StopWhen`]: a variable above or below a value), or when a stock or flow is no longer a
+//! finite number; the results then end at the last step that is, and say why ([`Stopped`]).
+//!
 //! **Replications.** A model with no random function runs once. One with `NORMAL` or `RANDOM`
 //! (`UNIFORM`) runs in replications, each drawing from streams keyed by variable name under the
 //! seed, and its results give the mean, the median and the 5% to 95% band at each saved time.
@@ -54,11 +58,13 @@ mod xml;
 
 pub use edit::{Users, find_variable, remove_variable, rename_variable, users_of};
 pub use layout::{AUX_SIZE, Connector, Layout, STOCK_SIZE, Shape, VALVE_SIZE, flow_ends};
-pub use model::{Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, VarKind, Variable, canonical};
+pub use model::{
+    Gf, GfKind, GfX, Method, SdModel, SimSpecs, Step, StopWhen, VarKind, Variable, canonical,
+};
 pub use program::{Program, compile};
 pub use run::{
     DEFAULT_REPLICATIONS, DT_CHECK_THRESHOLD, DtCheck, RunOptions, SdJob, SdResults, Series,
-    StockCheck, run,
+    StockCheck, StopReason, Stopped, run,
 };
 pub use units::{Units, time_unit};
 pub use xmile::{

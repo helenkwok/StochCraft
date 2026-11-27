@@ -51,12 +51,14 @@ pub enum Industry {
     ItOperations,
     /// Projects and their schedules.
     Projects,
+    /// Measurement, physics and engineering calculations: locating a sensor, heat in a rod.
+    ScienceEngineering,
     /// Not an industry: models for learning the tool itself.
     Reference,
 }
 
 impl Industry {
-    pub const ALL: [Industry; 9] = [
+    pub const ALL: [Industry; 10] = [
         Industry::Services,
         Industry::Manufacturing,
         Industry::Logistics,
@@ -65,6 +67,7 @@ impl Industry {
         Industry::ContactCentre,
         Industry::ItOperations,
         Industry::Projects,
+        Industry::ScienceEngineering,
         Industry::Reference,
     ];
 
@@ -78,6 +81,7 @@ impl Industry {
             Industry::ContactCentre => t("Contact centre"),
             Industry::ItOperations => t("IT operations"),
             Industry::Projects => t("Projects"),
+            Industry::ScienceEngineering => t("Science and engineering"),
             Industry::Reference => t("Reference"),
         }
     }
@@ -93,6 +97,7 @@ impl Industry {
             Industry::ContactCentre => "Contact centre",
             Industry::ItOperations => "IT operations",
             Industry::Projects => "Projects",
+            Industry::ScienceEngineering => "Science and engineering",
             Industry::Reference => "Reference",
         }
     }

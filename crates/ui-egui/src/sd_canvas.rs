@@ -1118,7 +1118,14 @@ impl App {
                 p.text,
                 (110.0 * view.zoom).max(40.0),
             );
-            painter.galley(Pos2::new(c.x - g.size().x / 2.0, name_at), g, p.text);
+            // On the diagram's own colour, so links passing under a name do not hide it.
+            let name_pos = Pos2::new(c.x - g.size().x / 2.0, name_at);
+            painter.rect_filled(
+                Rect::from_min_size(name_pos, g.size()).expand(1.0),
+                2.0,
+                p.canvas,
+            );
+            painter.galley(name_pos, g, p.text);
 
             // Only the part inside the diagram takes the pointer, and at least a finger's width.
             let hit = Rect::from_center_size(c, s.max(Vec2::splat(16.0))).intersect(rect);

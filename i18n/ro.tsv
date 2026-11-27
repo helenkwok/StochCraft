@@ -1531,6 +1531,19 @@ connection	Flow	Flux
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Zece mașini trebuie să funcționeze, patru mașini de rezervă așteaptă pregătite, iar trei mecanici le repară pe cele care se defectează (Crane și Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Câte mașini de rezervă și câți mecanici țin în funcțiune zece mașini?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Mașinile de rezervă care așteaptă nu se pot defecta: în medie 3.47 mașini sunt defecte și 9.29 funcționează. Un al patrulea mecanic aduce cam cât încă patru mașini de rezervă.
+	Science and engineering	Știință și inginerie
+	Stop when	Oprește când
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Rularea se încheie la primul pas în care condiția este adevărată, de exemplu u10 > 1000 (o variabilă, > sau < și un număr), iar rezultatele spun când a fost depășit pragul. Lăsați gol pentru a rula până la timpul final.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Scrieți condiția ca o variabilă, > sau < și un număr, de exemplu u10 > 1000.
+	Changed the stop condition	Condiția de oprire a fost schimbată
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Oprită la t = {time} când {variable} a depășit {value} (pragul a fost depășit la t = {crossing}, între ultimii doi pași).
+	Stopped at t = {time}, when the stop condition held.	Oprită la t = {time}, când condiția de oprire a fost adevărată.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Oprită la t = {time}, ultimul pas în care fiecare stoc și fiecare flux era un număr finit: {variables} a devenit infinit sau nenumeric la t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Rulări încheiate mai devreme: {n} din {total}. Aceasta este prima dintre ele.
+	Heat in a rod	Căldura într-o bară
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	O bară ținută la 0 la ambele capete produce căldură proporțional cu pătratul temperaturii sale: 19 stocuri de-a lungul ei, prin metoda liniilor (Soheili și Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Când scapă de sub control o bară încălzită din interior?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Metoda liniilor transformă o ecuație a căldurii în stocuri și fluxuri, iar un model poate exploda într-un timp finit: mijlocul depășește 10.000 la t = 0.0821, deci bara scapă de sub control pe la 0.0822, la mai puțin de 0.3% de valoarea publicată de 0.0824.
 	Scenario	Scenariu
 	Scenario: {name}	Scenariu: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Deschiderea {scenario} renunță la modificările nesalvate din {name}. Le salvați mai întâi?

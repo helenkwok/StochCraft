@@ -202,12 +202,17 @@ pub fn rename_variable(model: &mut SdModel, old: &str, new: &str) -> Result<(), 
         }
         model.layout.rename(&oc, &nc);
     }
+    if let Some(w) = &mut model.specs.stop_when
+        && canonical(&w.variable) == oc
+    {
+        w.variable = new.to_owned();
+    }
     Ok(())
 }
 
-/// Removes the variable `name`. It is refused while another variable's equation names it, and
-/// while a stock lists it as a flow, unless `force`, which takes it out of the stocks' lists
-/// (never out of an equation). The refusal names who uses it.
+/// Removes the variable `name`. It is refused while another variable's equation names it, while
+/// the stop condition names it, and while a stock lists it as a flow, unless `force`, which takes
+/// it out of the stocks' lists (never out of an equation). The refusal names who uses it.
 pub fn remove_variable(model: &mut SdModel, name: &str, force: bool) -> Result<(), SdError> {
     let Some(idx) = find_variable(model, name) else {
         return Err(model_err(format!("no variable `{name}`")));
@@ -223,6 +228,16 @@ pub fn remove_variable(model: &mut SdModel, name: &str, force: bool) -> Result<(
         return Err(model_err(format!(
             "`{name}` is used in the equation of {}: change them first",
             list(&users.equations)
+        )));
+    }
+    if model
+        .specs
+        .stop_when
+        .as_ref()
+        .is_some_and(|w| canonical(&w.variable) == canonical(name))
+    {
+        return Err(model_err(format!(
+            "`{name}` is the variable of the stop condition: change or clear the condition first"
         )));
     }
     if !users.stocks.is_empty() && !force {

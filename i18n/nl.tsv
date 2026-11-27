@@ -1531,6 +1531,19 @@ connection	Flow	Stroom
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tien machines moeten draaien, vier reservemachines staan klaar en drie monteurs repareren de machines die uitvallen (Crane en Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hoeveel reservemachines en monteurs houden tien machines draaiende?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemachines die klaarstaan, kunnen niet uitvallen: gemiddeld zijn 3.47 machines kapot en draaien er 9.29. Een vierde monteur levert ongeveer evenveel op als vier reservemachines extra.
+	Science and engineering	Wetenschap en techniek
+	Stop when	Stoppen wanneer
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	De run eindigt bij de eerste stap waarin de voorwaarde geldt, zoals u10 > 1000 (een variabele, > of <, en een getal), en de resultaten zeggen wanneer die werd overschreden. Laat leeg om tot de eindtijd te lopen.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Schrijf de voorwaarde als een variabele, > of <, en een getal, zoals u10 > 1000.
+	Changed the stop condition	Stopvoorwaarde gewijzigd
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Gestopt bij t = {time} toen {variable} {value} passeerde (gepasseerd bij t = {crossing}, tussen de laatste twee stappen).
+	Stopped at t = {time}, when the stop condition held.	Gestopt bij t = {time}, toen de stopvoorwaarde gold.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Gestopt bij t = {time}, de laatste stap waarin elke voorraad en elke stroom een eindig getal was: {variables} werd oneindig of geen getal bij t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Runs die eerder eindigden: {n} van {total}. Dit is de eerste daarvan.
+	Heat in a rod	Warmte in een staaf
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Een staaf die aan beide uiteinden op 0 wordt gehouden, maakt warmte evenredig met het kwadraat van zijn temperatuur: 19 voorraden langs de staaf, met de lijnenmethode (Soheili en Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Wanneer slaat een van binnenuit verwarmde staaf op hol?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	De lijnenmethode maakt van een warmtevergelijking voorraden en stromen, en een model kan in eindige tijd ontploffen: het midden passeert 10.000 bij t = 0.0821, dus de staaf slaat op hol rond 0.0822, binnen 0.3% van de gepubliceerde 0.0824.
 	Scenario	Scenario
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Als u {scenario} opent, gaan de niet-opgeslagen wijzigingen in {name} verloren. Eerst opslaan?

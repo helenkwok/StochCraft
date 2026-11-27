@@ -1531,6 +1531,19 @@ connection	Flow	ເສັ້ນທາງ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ເຄື່ອງຈັກສິບເຄື່ອງຕ້ອງເຮັດວຽກ, ເຄື່ອງຈັກສຳຮອງສີ່ເຄື່ອງລໍຖ້າພ້ອມ ແລະ ຊ່າງຈັກສາມຄົນສ້ອມແປງເຄື່ອງທີ່ເສຍ (Crane ແລະ Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	ຕ້ອງມີເຄື່ອງຈັກສຳຮອງ ແລະ ຊ່າງຈັກຈັກເທົ່າໃດ ເພື່ອໃຫ້ເຄື່ອງຈັກສິບເຄື່ອງເຮັດວຽກຕໍ່ໄປໄດ້?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	ເຄື່ອງຈັກສຳຮອງທີ່ລໍຖ້າຢູ່ບໍ່ສາມາດເສຍໄດ້: ໂດຍສະເລ່ຍເຄື່ອງຈັກເສຍ 3.47 ເຄື່ອງ ແລະ ເຮັດວຽກ 9.29 ເຄື່ອງ. ຊ່າງຈັກຄົນທີສີ່ຊ່ວຍໄດ້ປະມານເທົ່າກັບເຄື່ອງຈັກສຳຮອງອີກສີ່ເຄື່ອງ.
+	Science and engineering	ວິທະຍາສາດ ແລະ ວິສະວະກຳ
+	Stop when	ຢຸດເມື່ອ
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	ການແລ່ນຈະຈົບຢູ່ຂັ້ນທຳອິດທີ່ເງື່ອນໄຂເປັນຈິງ ເຊັ່ນ u10 > 1000 (ຕົວແປ, > ຫຼື < ແລະ ຕົວເລກ) ແລະ ຜົນລັບຈະບອກວ່າຂ້າມຄ່າເມື່ອໃດ. ປະໄວ້ຫວ່າງເພື່ອແລ່ນຈົນຮອດເວລາສິ້ນສຸດ.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	ຂຽນເງື່ອນໄຂເປັນຕົວແປ, > ຫຼື < ແລະ ຕົວເລກ ເຊັ່ນ u10 > 1000.
+	Changed the stop condition	ປ່ຽນເງື່ອນໄຂການຢຸດແລ້ວ
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	ຢຸດທີ່ t = {time} ເມື່ອ {variable} ຜ່ານ {value} (ຂ້າມທີ່ t = {crossing} ລະຫວ່າງສອງຂັ້ນສຸດທ້າຍ).
+	Stopped at t = {time}, when the stop condition held.	ຢຸດທີ່ t = {time} ເມື່ອເງື່ອນໄຂການຢຸດເປັນຈິງ.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	ຢຸດທີ່ t = {time} ເຊິ່ງເປັນຂັ້ນສຸດທ້າຍທີ່ທຸກສະຕັອກ ແລະ ທຸກການໄຫຼຍັງເປັນຈຳນວນຈຳກັດ: {variables} ກາຍເປັນອະນັນ ຫຼື ບໍ່ແມ່ນຕົວເລກທີ່ t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	ການແລ່ນທີ່ຈົບກ່ອນກຳນົດ: {n} ຈາກ {total}. ນີ້ແມ່ນຄັ້ງທຳອິດໃນນັ້ນ.
+	Heat in a rod	ຄວາມຮ້ອນໃນທ່ອນເຫຼັກ
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	ທ່ອນເຫຼັກທີ່ປາຍທັງສອງຖືກຮັກສາໄວ້ທີ່ 0 ສ້າງຄວາມຮ້ອນຕາມກຳລັງສອງຂອງອຸນຫະພູມຂອງມັນ: 19 ສະຕັອກຕາມທ່ອນ ດ້ວຍວິທີເສັ້ນ (method of lines) (Soheili ແລະ Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	ທ່ອນເຫຼັກທີ່ຖືກເຮັດໃຫ້ຮ້ອນຈາກພາຍໃນຈະຄວບຄຸມບໍ່ໄດ້ເມື່ອໃດ?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	ວິທີເສັ້ນປ່ຽນສົມຜົນຄວາມຮ້ອນເປັນສະຕັອກ ແລະ ການໄຫຼ ແລະ ແບບຈຳລອງອາດລະເບີດໃນເວລາຈຳກັດ: ຈຸດກາງຜ່ານ 10,000 ທີ່ t = 0.0821 ທ່ອນເຫຼັກຈຶ່ງຄວບຄຸມບໍ່ໄດ້ປະມານ 0.0822 ຕ່າງຈາກຄ່າທີ່ຕີພິມ 0.0824 ບໍ່ເກີນ 0.3%.
 	Scenario	ສະຖານະການ
 	Scenario: {name}	ສະຖານະການ: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	ການເປີດ {scenario} ຈະຍົກເລີກການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ບັນທຶກໃນ {name}. ບັນທຶກກ່ອນບໍ?

@@ -261,6 +261,66 @@ fn an_edit_that_does_not_compile_is_refused_and_changes_nothing() {
 }
 
 #[test]
+fn a_stop_condition_is_set_run_reported_and_taken_away() {
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": model_path("logistic.xmile") }),
+    );
+    ok(
+        &mut e,
+        "sd.specs.set",
+        json!({ "stop_when": { "variable": "population", "above": 500.0 } }),
+    );
+    let got = ok(&mut e, "sd.get", json!({}));
+    assert_eq!(
+        got["stop_when"],
+        json!({ "variable": "Population", "above": 500.0 })
+    );
+    let r = ok(&mut e, "sd.run", json!({}));
+    let s = &r["stopped"];
+    assert_eq!(s["reason"], "condition");
+    // The closed form 1000 / (1 + 99 e^(-t/2)) passes 500 at 2 ln 99 = 9.19 years.
+    let crossing = s["crossing"].as_f64().unwrap_or(f64::NAN);
+    assert!((crossing - 9.190_24).abs() < 0.01, "{crossing}");
+    assert!(
+        s["message"]
+            .as_str()
+            .is_some_and(|m| m.contains("Population rose above 500")),
+        "{s}"
+    );
+    let times = floats(&r["times"]);
+    assert_eq!(times.last().copied(), s["time"].as_f64());
+    // Refusals leave the model as it was.
+    for (params, code) in [
+        (
+            json!({ "stop_when": { "variable": "nobody", "above": 1.0 } }),
+            ErrorCode::InvalidModel,
+        ),
+        (
+            json!({ "stop_when": { "variable": "Population", "above": 1.0, "below": 2.0 } }),
+            ErrorCode::InvalidParams,
+        ),
+        (
+            json!({ "stop_when": { "variable": "Population" } }),
+            ErrorCode::InvalidParams,
+        ),
+    ] {
+        assert_eq!(
+            fail(&mut e, "sd.specs.set", params.clone()).code,
+            code,
+            "{params}"
+        );
+    }
+    ok(&mut e, "sd.specs.set", json!({ "stop_when": null }));
+    assert_eq!(ok(&mut e, "sd.get", json!({}))["stop_when"], Value::Null);
+    let r = ok(&mut e, "sd.run", json!({}));
+    assert_eq!(r["stopped"], Value::Null);
+    assert_eq!(floats(&r["times"]).last().copied(), Some(20.0));
+}
+
+#[test]
 fn three_edits_are_undone_exactly_redone_and_make_the_model_dirty() {
     let mut e = Engine::new();
     ok(

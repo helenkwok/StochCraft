@@ -1531,6 +1531,19 @@ connection	Flow	Flöde
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tio maskiner måste gå, fyra reservmaskiner står redo och tre reparatörer lagar dem som havererar (Crane och Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hur många reservmaskiner och reparatörer håller tio maskiner i gång?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservmaskiner som står redo kan inte haverera: i genomsnitt är 3.47 maskiner trasiga och 9.29 går. En fjärde reparatör gör ungefär lika mycket som fyra reservmaskiner till.
+	Science and engineering	Vetenskap och teknik
+	Stop when	Stoppa när
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Körningen slutar vid det första steget där villkoret gäller, till exempel u10 > 1000 (en variabel, > eller < och ett tal), och resultaten säger när det passerades. Lämna tomt för att köra till sluttiden.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Skriv villkoret som en variabel, > eller < och ett tal, till exempel u10 > 1000.
+	Changed the stop condition	Stoppvillkoret har ändrats
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Stoppade vid t = {time} när {variable} passerade {value} (passerades vid t = {crossing}, mellan de två sista stegen).
+	Stopped at t = {time}, when the stop condition held.	Stoppade vid t = {time}, när stoppvillkoret gällde.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Stoppade vid t = {time}, det sista steget där varje lager och varje flöde var ett ändligt tal: {variables} blev oändligt eller inte ett tal vid t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Körningar som slutade tidigt: {n} av {total}. Detta är den första av dem.
+	Heat in a rod	Värme i en stav
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	En stav som hålls vid 0 i båda ändar alstrar värme i proportion till kvadraten på sin temperatur: 19 lager längs staven, med linjemetoden (Soheili och Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	När skenar en stav som värms inifrån?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Linjemetoden gör en värmeledningsekvation till lager och flöden, och en modell kan explodera på ändlig tid: mitten passerar 10 000 vid t = 0.0821, så staven skenar vid ungefär 0.0822, inom 0.3% av de publicerade 0.0824.
 	Scenario	Scenario
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Om {scenario} öppnas förloras de osparade ändringarna i {name}. Spara dem först?

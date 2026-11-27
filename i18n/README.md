@@ -1079,6 +1079,17 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The rows for a system dynamics model's stop condition (the Stop when field, its hint and
+  refusal, the status line, and the sentences that say where and why a run ended early) and for
+  the heat-in-a-rod example (its title, the line about it, its question and what it teaches)
+  were machine-drafted from the plain meaning of the English, with each catalog's own words for
+  stock, flow and run. "The method of lines" is the language's name for the numerical method
+  where there is one, else a literal phrase; "blow up" and "run away" are plain phrases for a
+  value growing without bound. The condition `u10 > 1000`, the placeholders, the authors' names
+  and the journal's title are kept as they are, and decimals keep the point. The row for the
+  "Science and engineering" field is the same as the one the sensor-location example adds. Not
+  checked against any other source and not reviewed by native speakers; the least certain are
+  lo, th, ta, te, bn, ka, kk, hi and sq.
 - The rows for time in system by percentile on Departures (the three percentile results and the
   share done within the target time, the inspector's checkbox, its hint, target time, working
   time and censoring note, and the two validation messages) were machine-drafted from the plain

@@ -9,7 +9,7 @@
 use stochcraft_random::math::{exp, powf};
 use stochcraft_sd::{
     ErrorKind, Gf, GfKind, GfX, Layout, Method, RunOptions, SdJob, SdModel, SdResults, SimSpecs,
-    Step, VarKind, Variable, compile, read_xmile, run, write_xmile,
+    Step, StopReason, StopWhen, VarKind, Variable, compile, read_xmile, run, write_xmile,
 };
 
 fn specs(stop: f64, dt: f64, method: Method) -> SimSpecs {
@@ -20,6 +20,7 @@ fn specs(stop: f64, dt: f64, method: Method) -> SimSpecs {
         method,
         time_units: String::new(),
         save_step: None,
+        stop_when: None,
     }
 }
 
@@ -1049,14 +1050,238 @@ fn a_rate_that_is_not_a_number_is_not_limited_into_a_transfer() {
         "Euler",
         "1",
         "1",
-        "<stock name=\"A\"><eqn>10</eqn><outflow>f</outflow><non_negative/></stock><stock name=\"B\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>SQRT(-1)</eqn></flow>",
+        "<stock name=\"A\"><eqn>10</eqn><outflow>f</outflow><non_negative/></stock><stock name=\"B\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>IF TIME >= 1 THEN SQRT(-1) ELSE 0</eqn></flow>",
     );
+    let text = text.replace("<stop>1</stop>", "<stop>3</stop>");
     let r = once(&from_file(&text));
-    // Not "A = 0, B = 10": the stocks it touches are not numbers, and the run says so.
-    assert!(last(&r, "A").is_nan(), "{}", last(&r, "A"));
-    assert!(last(&r, "B").is_nan(), "{}", last(&r, "B"));
+    // Not "A = 0, B = 10" from time 2: limited, the rate would be the 10 A holds, a real
+    // transfer. It stays not a number, so the run ends at 0, the last step that is finite.
+    assert_eq!(r.times, vec![0.0]);
+    assert_eq!(last(&r, "A"), 10.0);
+    assert_eq!(last(&r, "B"), 0.0);
+    let s = r.stopped.unwrap();
+    assert_eq!(s.time, 0.0);
+    assert_eq!(
+        s.reason,
+        StopReason::NotFinite {
+            variables: vec!["f".to_owned()],
+            failed_at: 1.0
+        }
+    );
+    // Not a number at the start: there is no step to show.
+    let at_start = xmile_file(
+        "Euler",
+        "1",
+        "1",
+        "<stock name=\"A\"><eqn>10</eqn><outflow>f</outflow></stock><flow name=\"f\"><eqn>SQRT(-1)</eqn></flow>",
+    );
+    let e = run(
+        &compile(&from_file(&at_start)).unwrap(),
+        &RunOptions::default(),
+    )
+    .unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Run);
     assert!(
-        r.warnings.iter().any(|w| w.contains("not a finite number")),
+        e.message.contains("`f`") && e.message.contains("at the start"),
+        "{e}"
+    );
+}
+
+/// u' = u² from u0 is 1 / (1/u0 − t), which is infinite at 1/u0.
+fn blow_up(dt: f64, stop_when: Option<StopWhen>) -> SdModel {
+    let mut m = model(
+        0.1,
+        dt,
+        Method::Rk4,
+        vec![
+            Variable::stock("u", "20", &["growth"], &[]),
+            Variable::flow("growth", "u * u"),
+        ],
+    );
+    m.specs.stop_when = stop_when;
+    m
+}
+
+#[test]
+fn a_run_stops_when_its_condition_holds_and_says_when_it_crossed() {
+    let dt = 2.5e-5;
+    for threshold in [1e3, 1e4] {
+        let w = StopWhen {
+            variable: "U".to_owned(),
+            above: true,
+            value: threshold,
+        };
+        let r = once(&blow_up(dt, Some(w)));
+        let s = r.stopped.clone().unwrap();
+        assert_eq!(s.reason, StopReason::Condition);
+        assert_eq!(s.runs, 1);
+        // The exact crossing of u = U is 1/u0 − 1/U. RK4 at this step is far closer than the
+        // step itself (the script gives an error under 1e-8); the interpolation adds well under
+        // one step.
+        let exact = 1.0 / 20.0 - 1.0 / threshold;
+        let crossing = s.crossing.unwrap();
+        assert!(
+            (crossing - exact).abs() < 1e-7,
+            "{crossing} against {exact}"
+        );
+        // It stops at the first step past it, which is the last saved time, and the value there
+        // is past the threshold while the step before is not.
+        assert!(s.time >= crossing && s.time - crossing < dt * (1.0 + 1e-9));
+        assert_eq!(r.times.last().copied(), Some(s.time));
+        let u = mean(&r, "u");
+        assert!(u.last().copied().unwrap() > threshold);
+        // So crossing + 1/U is the blow-up time 1/u0, near 0.05.
+        assert!((crossing + 1.0 / threshold - 0.05).abs() < 1e-7);
+    }
+    // The variable named by any case or spacing; below a value; held at the start.
+    let w = StopWhen {
+        variable: "u".to_owned(),
+        above: false,
+        value: 30.0,
+    };
+    let r = once(&blow_up(dt, Some(w)));
+    let s = r.stopped.unwrap();
+    assert_eq!((s.time, s.crossing), (0.0, Some(0.0)));
+    assert_eq!(r.times, vec![0.0]);
+}
+
+#[test]
+fn a_stop_condition_on_no_variable_is_refused() {
+    let w = StopWhen {
+        variable: "v".to_owned(),
+        above: true,
+        value: 1.0,
+    };
+    let e = compile(&blow_up(1e-3, Some(w))).unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Model);
+    assert!(e.message.contains("`v`"), "{e}");
+}
+
+#[test]
+fn a_flow_that_overflows_stops_the_run_at_the_last_finite_step() {
+    // No condition: u' = u² runs past 1/u0 = 0.05 at a step of 1e-3, where the values grow
+    // without bound until they overflow. The results end at the last step where u and its
+    // flow were both finite numbers, and none of them is infinite or not a number.
+    let dt = 1e-3;
+    let r = once(&blow_up(dt, None));
+    let s = r.stopped.clone().unwrap();
+    let StopReason::NotFinite {
+        variables,
+        failed_at,
+    } = &s.reason
+    else {
+        panic!("{s:?}")
+    };
+    assert!(variables.contains(&"growth".to_owned()), "{variables:?}");
+    assert!((failed_at - s.time - dt).abs() < 1e-12);
+    assert!(s.time > 0.05 && s.time < 0.1, "{}", s.time);
+    assert_eq!(r.times.last().copied(), Some(s.time));
+    for v in ["u", "growth"] {
+        assert!(mean(&r, v).iter().all(|x| x.is_finite()), "{v}");
+    }
+    assert!(
+        !r.warnings.iter().any(|w| w.contains("not a finite number")),
+        "{:?}",
+        r.warnings
+    );
+    // In another time unit the times are converted too.
+    let mut m = blow_up(dt, None);
+    m.specs.time_units = "Hours".to_owned();
+    let r = go(
+        &m,
+        &RunOptions {
+            time_unit: Some("Minutes".to_owned()),
+            ..RunOptions::default()
+        },
+    );
+    let t = r.stopped.unwrap().time;
+    assert!((t - 60.0 * s.time).abs() < 1e-9, "{t}");
+}
+
+#[test]
+fn a_stop_condition_is_kept_through_a_write_and_a_read() {
+    let w = StopWhen {
+        variable: "u".to_owned(),
+        above: true,
+        value: 1000.0,
+    };
+    let m = blow_up(2.5e-5, Some(w.clone()));
+    let text = write_xmile(&m);
+    assert!(
+        text.contains("<stochcraft:stop_when variable=\"u\" above=\"1000\"/>"),
+        "{text}"
+    );
+    let back = read_xmile(&text).unwrap();
+    assert_eq!(back.model.specs.stop_when, Some(w));
+    assert!(back.notes.is_empty(), "{:?}", back.notes);
+    let below = text.replace("above=", "below=");
+    let b = read_xmile(&below).unwrap().model.specs.stop_when.unwrap();
+    assert!(!b.above);
+    // Both, neither, or a value that is not a number: the file is refused.
+    for bad in [
+        text.replace("above=\"1000\"", "above=\"1\" below=\"2\""),
+        text.replace(" above=\"1000\"", ""),
+        text.replace("above=\"1000\"", "above=\"many\""),
+    ] {
+        assert_eq!(read_xmile(&bad).unwrap_err().kind, ErrorKind::Xml, "{bad}");
+    }
+}
+
+#[test]
+fn a_stop_condition_follows_a_rename_and_holds_back_a_removal() {
+    let w = StopWhen {
+        variable: "growth".to_owned(),
+        above: true,
+        value: 1000.0,
+    };
+    let mut m = blow_up(2.5e-5, Some(w));
+    stochcraft_sd::rename_variable(&mut m, "growth", "Heat flow").unwrap();
+    assert_eq!(m.specs.stop_when.as_ref().unwrap().variable, "Heat flow");
+    // No equation names the flow, and `force` would take it out of the stock's inflows: only
+    // the stop condition holds the removal back.
+    let e = stochcraft_sd::remove_variable(&mut m, "heat_flow", true).unwrap_err();
+    assert!(e.message.contains("stop condition"), "{e}");
+}
+
+#[test]
+fn runs_in_replications_that_end_early_are_shown_to_the_last_time_all_reached() {
+    // A random growth rate: each run crosses 100 at its own time. The results end at the last
+    // saved time every run reached, and the earliest stop is reported, with how many ended.
+    let mut m = model(
+        10.0,
+        0.01,
+        Method::Euler,
+        vec![
+            Variable::stock("x", "1", &["g"], &[]),
+            Variable::flow("g", "r * x"),
+            Variable::aux("r", "UNIFORM(0.5, 1.5, 0, 100)"),
+        ],
+    );
+    m.specs.save_step = Some(0.1);
+    m.specs.stop_when = Some(StopWhen {
+        variable: "x".to_owned(),
+        above: true,
+        value: 100.0,
+    });
+    let r = go(
+        &m,
+        &RunOptions {
+            replications: Some(20),
+            seed: 3,
+            ..RunOptions::default()
+        },
+    );
+    let s = r.stopped.clone().unwrap();
+    assert_eq!(s.runs, 20);
+    let end = r.times.last().copied().unwrap();
+    assert!(end <= s.time + 1e-12, "{end} after {}", s.time);
+    // Every row is a time on the saving interval that each run had.
+    for t in &r.times {
+        assert!(((t / 0.1).round() * 0.1 - t).abs() < 1e-9, "{t}");
+    }
+    assert_eq!(mean(&r, "x").len(), r.times.len());
+    assert!(
+        r.warnings.iter().any(|w| w.contains("20 of 20 runs ended")),
         "{:?}",
         r.warnings
     );
@@ -1135,11 +1360,13 @@ fn the_halved_step_check_compares_by_time_and_an_exact_case_passes() {
 
 #[test]
 fn the_halved_step_check_is_inconclusive_when_a_value_is_not_a_number() {
+    // The rate is not a number from time 1, so the run at the step ends at 0 and the one at half
+    // of it at 0.5: they share no time after the start to compare.
     let text = xmile_file(
         "Euler",
         "2",
         "1",
-        "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>SQRT(-1)</eqn></flow>",
+        "<stock name=\"s\"><eqn>0</eqn><inflow>f</inflow></stock><flow name=\"f\"><eqn>IF TIME >= 1 THEN SQRT(-1) ELSE 1</eqn></flow>",
     );
     let c = check_of(&text);
     assert!(c.inconclusive);
@@ -1267,4 +1494,152 @@ fn a_step_whose_time_moves_with_the_clock_stays_on_at_every_stage() {
         let r = once(&from_file(&text));
         assert_eq!(mean(&r, "s"), vec![0.0, 6.0, 12.0], "{method}");
     }
+}
+
+fn heat_rod() -> SdModel {
+    let f = read_xmile(include_str!("../../../tests/models/heat-rod.xmile")).unwrap();
+    assert!(f.notes.is_empty(), "{:?}", f.notes);
+    f.model
+}
+
+/// The heat rod with its source set to `source` (1, as the file has it, or 0).
+fn heat_rod_with(source: &str) -> SdModel {
+    let mut m = heat_rod();
+    let v = m.vars.iter_mut().find(|v| v.name == "source").unwrap();
+    v.eqn = Some(source.to_owned());
+    m
+}
+
+#[test]
+fn the_heat_rod_without_its_source_cools_as_its_sine_mode() {
+    // u_t = u_xx on (0, 1), held at 0 at the ends, by the method of lines: 19 stocks at
+    // x_i = i h, h = 0.05. The sine 20 sin(pi x_i) is an eigenvector of the second difference,
+    // with eigenvalue -lambda1, lambda1 = (4 / h^2) sin^2(pi h / 2), so each stock is
+    // 20 sin(pi x_i) e^(-lambda1 t) exactly; RK4 at a step of 2.5e-5 is within about 1e-14 of it.
+    let p = compile(&heat_rod_with("0")).unwrap();
+    assert!(p.warnings.is_empty(), "{:?}", p.warnings);
+    let r = run(&p, &RunOptions::default()).unwrap();
+    assert_eq!(r.stopped, None);
+    let h = 0.05;
+    let pi = std::f64::consts::PI;
+    let s = stochcraft_random::math::sin(pi * h / 2.0);
+    let lambda1 = 4.0 / (h * h) * s * s;
+    for at in [0.02, 0.1] {
+        let k = r
+            .times
+            .iter()
+            .position(|t| (t - at).abs() < 1e-9)
+            .unwrap_or_else(|| panic!("no saved time {at}"));
+        for i in 1..=19 {
+            let x = i as f64 * h;
+            let exact = 20.0 * stochcraft_random::math::sin(pi * x) * exp(-lambda1 * at);
+            let got = mean(&r, &format!("u{i}"))[k];
+            assert!(
+                (got - exact).abs() < 1e-9,
+                "u{i} at {at}: {got} against {exact}"
+            );
+        }
+        // The rod itself (the PDE) decays at pi^2, a little faster than the 19 points do: the
+        // midpoint is 20 e^(-pi^2 t), and the difference is the grid's O(h^2) error, a relative
+        // e^((pi^2 - lambda1) t) - 1, 0.04% at 0.02 and 0.2% at 0.1.
+        let pde = 20.0 * exp(-pi * pi * at);
+        let u10 = mean(&r, "u10")[k];
+        let grid = exp((pi * pi - lambda1) * at) - 1.0;
+        assert!(
+            ((u10 - pde) / pde - grid).abs() < 1e-9,
+            "{u10} against {pde}"
+        );
+        assert!(grid > 0.0 && grid < 2.1e-3, "{grid}");
+    }
+}
+
+#[test]
+fn the_heated_rod_runs_away_near_the_published_blow_up_time() {
+    // With the source, u_t = u_xx + u^2 from 20 sin(pi x) blows up in finite time; Soheili and
+    // Stockie (Applied Numerical Mathematics 58(3), 2008, p. 12) give t* = 0.08243786. The run
+    // stops when the midpoint u10 passes 10,000; near blow-up u' is close to u^2, whose solution
+    // reaches infinity 1/U after it passes U, so the crossing time plus 1/U estimates t*. On 19
+    // points the grid's error is about 0.25% (early): within 0.3%.
+    let p = compile(&heat_rod()).unwrap();
+    assert!(p.warnings.is_empty(), "{:?}", p.warnings);
+    let r = run(&p, &RunOptions::default()).unwrap();
+    let s = r.stopped.clone().unwrap();
+    assert_eq!(s.reason, StopReason::Condition);
+    let threshold = p.stop_when().unwrap().value;
+    assert_eq!(threshold, 1e4);
+    let crossing = s.crossing.unwrap();
+    let estimate = crossing + 1.0 / threshold;
+    let published = 0.082_437_86;
+    let off = (estimate - published) / published;
+    assert!(off.abs() < 3e-3, "{estimate}: {off}");
+    // The run ends at the step past the crossing, with every value finite.
+    assert!(s.time >= crossing && s.time - crossing < 2.5e-5 * 1.001);
+    assert_eq!(r.times.last().copied(), Some(s.time));
+    assert!(mean(&r, "u10").last().copied().unwrap() > threshold);
+    for v in &r.series {
+        assert!(v.mean.iter().all(|x| x.is_finite()), "{}", v.name);
+    }
+    // The midpoint is the hottest point throughout (the rod is symmetric about it).
+    let u10 = mean(&r, "u10");
+    for i in [1, 5, 9, 11, 19] {
+        let u = mean(&r, &format!("u{i}"));
+        assert!(u.iter().zip(&u10).all(|(a, b)| a <= b), "u{i}");
+    }
+}
+
+#[test]
+fn one_stock_squared_crosses_where_its_exact_solution_does() {
+    // The anchor of the rod's estimate: u' = u^2 from 20 is 1 / (0.05 - t), which passes U at
+    // 0.05 - 1/U, so the crossing plus 1/U is the blow-up time 0.05.
+    let w = StopWhen {
+        variable: "u".to_owned(),
+        above: true,
+        value: 1e4,
+    };
+    let r = once(&blow_up(2.5e-5, Some(w)));
+    let crossing = r.stopped.unwrap().crossing.unwrap();
+    assert!((crossing - (0.05 - 1e-4)).abs() < 1e-7, "{crossing}");
+}
+
+#[test]
+fn the_heat_rods_diagram_is_the_rod() {
+    // The file's own diagram: the stocks in a row in order, as along the rod, each fed by its
+    // flow from a cloud above it, nothing overlapping, and a link for each use in an equation.
+    let m = heat_rod();
+    let l = &m.layout;
+    assert!(l.is_complete(&m));
+    assert_eq!(l.first_overlap(&m), None);
+    let shape = |n: &str| l.shapes.get(n).unwrap_or_else(|| panic!("no shape {n}"));
+    for i in 1..=19 {
+        let (u, f) = (shape(&format!("u{i}")), shape(&format!("f{i}")));
+        assert!((f.x - u.x).abs() < 1e-9 && f.y < u.y, "f{i} above u{i}");
+        if i > 1 {
+            let before = shape(&format!("u{}", i - 1));
+            assert!(before.x < u.x && (before.y - u.y).abs() < 1e-9, "u{i}");
+        }
+    }
+    // 19 own, 18 + 18 neighbours, and h and source into every flow.
+    assert_eq!(l.connectors.len(), 19 + 36 + 38);
+    let (first, last) = (shape("u1").x, shape("u19").x);
+    assert!(last - first < 1400.0, "{}", last - first);
+    // h and source side by side above the middle of the rod, so their links fan out evenly; they
+    // are drawn straight (each leaves at the angle that points at its flow's valve).
+    let middle = (first + last) / 2.0;
+    for a in ["h", "source"] {
+        let s = shape(a);
+        assert!((s.x - middle).abs() <= 40.0 && s.y < shape("f1").y, "{a}");
+        for i in 1..=19 {
+            let f = shape(&format!("f{i}"));
+            let c = l
+                .connectors
+                .iter()
+                .find(|c| c.from == a && c.to == format!("f{i}"))
+                .unwrap_or_else(|| panic!("no link {a} -> f{i}"));
+            let want = (-(f.y - s.y)).atan2(f.x - s.x).to_degrees();
+            assert!((c.angle.unwrap() - want).abs() < 0.01, "{a} -> f{i}");
+        }
+    }
+    // Written and read again, the diagram is the same.
+    let back = read_xmile(&write_xmile(&m)).unwrap();
+    assert_eq!(&back.model.layout, l);
 }

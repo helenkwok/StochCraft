@@ -598,6 +598,23 @@ pub const EXAMPLES: &[Example] = &[
         },
     },
     Example {
+        title: "Heat in a rod",
+        about: "A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).",
+        file: "heat-rod.xmile",
+        bytes: include_bytes!("../../../tests/models/heat-rod.xmile"),
+        card: start::Card {
+            question: "When does a rod heated from within run away?",
+            industry: start::Industry::ScienceEngineering,
+            topics: &[],
+            teaches: "The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.",
+            minutes: 3,
+            proof: Some(start::Proof::Published),
+            // Stocks and flows, not a process: no blocks to show.
+            flow: &[],
+            featured: false,
+        },
+    },
+    Example {
         title: "One machine's availability",
         about: "One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).",
         file: "machine-availability.bpmn",

@@ -1531,6 +1531,19 @@ connection	Flow	ნაკადი
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ათი მანქანა უნდა მუშაობდეს, ოთხი სათადარიგო მზადყოფნაში ელოდება, ხოლო სამი ზეინკალი აკეთებს გაფუჭებულებს (Crane და Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	რამდენი სათადარიგო მანქანა და ზეინკალი ინარჩუნებს ათ მანქანას მუშა მდგომარეობაში?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	მზადყოფნაში მყოფი სათადარიგო მანქანები ვერ გაფუჭდება: საშუალოდ 3.47 მანქანაა გაფუჭებული და 9.29 მუშაობს. მეოთხე ზეინკალი დაახლოებით იმდენს აკეთებს, რამდენსაც კიდევ ოთხი სათადარიგო მანქანა.
+	Science and engineering	მეცნიერება და ინჟინერია
+	Stop when	შეჩერება, როცა
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	გაშვება მთავრდება პირველ ბიჯზე, სადაც პირობა სრულდება, მაგალითად u10 > 1000 (ცვლადი, > ან < და რიცხვი), და შედეგები ამბობს, როდის გადაიკვეთა ზღვარი. დატოვეთ ცარიელი, რომ გაშვება დასრულების დრომდე გაგრძელდეს.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	დაწერეთ პირობა როგორც ცვლადი, > ან < და რიცხვი, მაგალითად u10 > 1000.
+	Changed the stop condition	შეჩერების პირობა შეიცვალა
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	შეჩერდა t = {time}-ზე, როცა {variable}-მა გადაკვეთა {value} (გადაკვეთა t = {crossing}-ზე, ბოლო ორ ბიჯს შორის).
+	Stopped at t = {time}, when the stop condition held.	შეჩერდა t = {time}-ზე, როცა შეჩერების პირობა შესრულდა.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	შეჩერდა t = {time}-ზე, ბოლო ბიჯზე, სადაც ყველა მარაგი და ყველა ნაკადი სასრული რიცხვი იყო: {variables} გახდა უსასრულო ან არარიცხვი t = {at}-ზე.
+	Runs that ended early: {n} of {total}. This is the first of them.	ადრე დასრულებული გაშვებები: {n} {total}-დან. ეს მათგან პირველია.
+	Heat in a rod	სითბო ღეროში
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	ორივე ბოლოში 0-ზე შენარჩუნებული ღერო გამოყოფს სითბოს თავისი ტემპერატურის კვადრატის პროპორციულად: 19 მარაგი ღეროს გასწვრივ, ხაზების მეთოდით (Soheili და Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	როდის გამოდის კონტროლიდან შიგნიდან გაცხელებული ღერო?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	ხაზების მეთოდი სითბოს განტოლებას მარაგებად და ნაკადებად აქცევს, და მოდელი შეიძლება სასრულ დროში აფეთქდეს: შუა წერტილი t = 0.0821-ზე გადაკვეთს 10 000-ს, ამიტომ ღერო კონტროლიდან გამოდის დაახლოებით 0.0822-ზე, გამოქვეყნებული 0.0824-ის 0.3%-ის ფარგლებში.
 	Scenario	სცენარი
 	Scenario: {name}	სცენარი: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}-ის გახსნა {name}-ში შეუნახავ ცვლილებებს გააუქმებს. ჯერ შევინახო?

@@ -1531,6 +1531,19 @@ connection	Flow	흐름
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	기계 10대가 돌아가야 하고, 예비 기계 4대가 대기하며, 정비공 3명이 고장 난 기계를 수리함 (Crane과 Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	예비 기계와 정비공이 몇이면 기계 10대를 계속 돌릴 수 있을까?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	대기 중인 예비 기계는 고장 나지 않음: 평균 3.47대가 고장 나 있고 9.29대가 돌아감. 정비공 한 명을 더 두면 예비 기계 4대를 더 두는 것과 거의 같은 효과가 있음.
+	Science and engineering	과학 및 공학
+	Stop when	중지 조건
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	조건이 성립하는 첫 단계에서 실행이 끝납니다. 예: u10 > 1000(변수, > 또는 <, 숫자). 결과에는 경계를 넘은 시점이 나옵니다. 비워 두면 종료 시간까지 실행합니다.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	조건은 변수, > 또는 <, 숫자로 쓰십시오. 예: u10 > 1000.
+	Changed the stop condition	중지 조건을 변경함
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	t = {time}에서 중지됨: {variable}이(가) {value}을(를) 넘었습니다(넘은 시점 t = {crossing}, 마지막 두 단계 사이).
+	Stopped at t = {time}, when the stop condition held.	t = {time}에서 중지됨: 중지 조건이 성립했습니다.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	t = {time}에서 중지됨. 모든 재고와 흐름이 유한한 수였던 마지막 단계입니다. {variables}이(가) t = {at}에서 무한대 또는 숫자가 아닌 값이 되었습니다.
+	Runs that ended early: {n} of {total}. This is the first of them.	일찍 끝난 실행: {total}회 중 {n}회. 이것이 그 첫 번째입니다.
+	Heat in a rod	막대 속의 열
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	양 끝을 0으로 유지한 막대가 온도의 제곱에 비례하는 열을 냅니다. 막대를 따라 19개의 재고를 두고 선 방법(method of lines)을 씁니다(Soheili와 Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	안에서 가열되는 막대는 언제 폭주할까?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	선 방법은 열 방정식을 재고와 흐름으로 바꾸며, 모델은 유한한 시간 안에 폭발할 수 있습니다. 가운데가 t = 0.0821에서 10,000을 넘으므로 막대는 약 0.0822에서 폭주하며, 이는 발표된 0.0824와 0.3% 이내입니다.
 	Scenario	시나리오
 	Scenario: {name}	시나리오: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}을(를) 열면 {name}의 저장하지 않은 변경 사항이 사라집니다. 먼저 저장할까요?

@@ -1531,6 +1531,19 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset strojeva mora raditi, četiri pričuvna čekaju u pripravnosti, a tri mehaničara popravljaju one koji se pokvare (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koliko pričuvnih strojeva i mehaničara drži deset strojeva u radu?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Pričuvni strojevi u pripravnosti ne mogu se pokvariti: u prosjeku je 3.47 strojeva pokvareno, a 9.29 radi. Četvrti mehaničar postiže otprilike koliko i četiri pričuvna stroja više.
+	Science and engineering	Znanost i inženjerstvo
+	Stop when	Zaustavi kada
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Izvođenje završava u prvom koraku u kojem uvjet vrijedi, na primjer u10 > 1000 (varijabla, > ili < i broj), a rezultati kažu kada je granica prijeđena. Ostavite prazno za izvođenje do završnog vremena.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Napišite uvjet kao varijablu, > ili < i broj, na primjer u10 > 1000.
+	Changed the stop condition	Uvjet zaustavljanja promijenjen
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Zaustavljeno pri t = {time} kada je {variable} prešla {value} (prijelaz pri t = {crossing}, između posljednja dva koraka).
+	Stopped at t = {time}, when the stop condition held.	Zaustavljeno pri t = {time}, kada je vrijedio uvjet zaustavljanja.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Zaustavljeno pri t = {time}, posljednjem koraku u kojem je svaka zaliha i svaki tok bio konačan broj: {variables} postala je beskonačna ili nije broj pri t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Izvođenja koja su završila ranije: {n} od {total}. Ovo je prvo od njih.
+	Heat in a rod	Toplina u šipki
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Šipka držana na 0 na oba kraja stvara toplinu razmjerno kvadratu svoje temperature: 19 zaliha duž šipke, metodom pravaca (Soheili i Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Kada šipka zagrijavana iznutra izmiče kontroli?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Metoda pravaca pretvara jednadžbu topline u zalihe i tokove, a model može eksplodirati u konačnom vremenu: sredina prelazi 10.000 pri t = 0.0821, pa šipka izmiče kontroli oko 0.0822, unutar 0.3% od objavljenih 0.0824.
 	Scenario	Scenarij
 	Scenario: {name}	Scenarij: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvaranjem scenarija {scenario} odbacuju se nespremljene promjene u {name}. Najprije ih spremiti?

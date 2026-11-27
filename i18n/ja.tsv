@@ -1531,6 +1531,19 @@ connection	Flow	フロー
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	10 台の機械が稼働していなければならず、予備機 4 台が待機し、整備士 3 人が故障した機械を修理する（Crane と Iglehart、Winter Simulation Conference、1973）。
 	How many spares and repairmen keep ten machines running?	10 台の機械を動かし続けるには、予備機と整備士がいくつ必要か？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待機中の予備機は故障しない。平均 3.47 台が故障中で、9.29 台が稼働する。整備士を 1 人増やすと、予備機を 4 台増やすのとほぼ同じ効果がある。
+	Science and engineering	科学と工学
+	Stop when	停止条件
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	条件が成り立つ最初のステップで実行が終わります。例: u10 > 1000（変数、> または <、数値）。結果には、しきい値を越えた時刻が示されます。空欄にすると終了時刻まで実行します。
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	条件は、変数、> または <、数値の順に書いてください。例: u10 > 1000。
+	Changed the stop condition	停止条件を変更しました
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	t = {time} で停止しました。{variable} が {value} を越えたためです（越えたのは t = {crossing}、最後の 2 ステップの間）。
+	Stopped at t = {time}, when the stop condition held.	t = {time} で停止しました。停止条件が成り立ったためです。
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	t = {time} で停止しました。すべてのストックとフローが有限の数だった最後のステップです。{variables} が t = {at} で無限大または非数になりました。
+	Runs that ended early: {n} of {total}. This is the first of them.	早く終わった実行: {total} 回中 {n} 回。これはその最初のものです。
+	Heat in a rod	棒の中の熱
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	両端を 0 に保った棒が、温度の 2 乗に比例して熱を出す。棒に沿った 19 個のストックで、線の方法（method of lines）を使う（Soheili と Stockie、Applied Numerical Mathematics、2008）。
+	When does a rod heated from within run away?	内部から熱せられる棒は、いつ暴走するか？
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	線の方法で熱方程式をストックとフローに変え、モデルが有限時間で爆発することもある。中央は t = 0.0821 で 10,000 を越えるので、棒は約 0.0822 で暴走する。公表値 0.0824 との差は 0.3% 以内。
 	Scenario	シナリオ
 	Scenario: {name}	シナリオ: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} を開くと、{name} の保存していない変更は破棄されます。先に保存しますか？
