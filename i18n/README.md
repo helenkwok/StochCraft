@@ -1076,6 +1076,10 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The rows for where a run's random numbers came from (a file of random bytes, a seed taken from
+  a source) and for comparing runs by it were machine-drafted from the plain meaning of the
+  English, reusing each catalog's existing words for seed, run, random numbers and baseline; not
+  checked against any other source, and not reviewed by native speakers.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -226,7 +226,18 @@ fn how_compared(baseline: &Value, now: &Value, comparison: &Value) -> Vec<String
     let n = |v: &Value| v["replications"].as_u64().unwrap_or(0);
     let seed = |v: &Value| v["seed"].to_string();
     let mut lines = Vec::new();
-    if comparison["paired"] == true {
+    // Whether either run read its random numbers from a file of random bytes (`results.compare`
+    // pairs runs by where their numbers came from, not by seed alone).
+    let file = |v: &Value| v["random"]["mode"] == "byte_file";
+    if comparison["paired"] == true && file(b) {
+        lines.push(t(
+            "Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.",
+        ).to_owned());
+    } else if comparison["paired"] != true && (file(a) || file(b)) {
+        lines.push(t(
+            "The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.",
+        ).to_owned());
+    } else if comparison["paired"] == true {
         lines.push(tnf(
             n(b),
             "Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.",

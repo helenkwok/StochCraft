@@ -30,12 +30,27 @@ pub(crate) struct Task {
     /// The interval to record results over time at, when the run records them.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub record: Option<f64>,
+    /// A run on a file of random bytes: the part of the file its replications read, from the
+    /// first replication's segment to the last one's that the run may have, with each
+    /// replication's segment length. Left out for pseudo-random numbers.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub random: Option<TaskBytes>,
+}
+
+/// The bytes of a run on a file of random bytes, as its workers get them.
+#[derive(Debug, Serialize, Deserialize)]
+pub(crate) struct TaskBytes {
+    /// Each replication's segment length, in bytes.
+    pub segment_bytes: u64,
+    /// The bytes, from the first replication's segment on, as lowercase hexadecimal.
+    pub hex: String,
 }
 
 /// One worker's side of a run: the model compiled, ready to run any of its replications.
 pub struct Worker {
     compiled: Compiled,
     experiment: Experiment,
+    random: Option<crate::random::ByteFeed>,
 }
 
 impl Worker {
@@ -43,6 +58,19 @@ impl Worker {
     pub fn new(task: &str) -> Result<Self, CommandError> {
         let task: Task = serde_json::from_str(task)
             .map_err(|e| CommandError::new(ErrorCode::InvalidParams, format!("task: {e}")))?;
+        let random = match &task.random {
+            Some(b) => {
+                let data = crate::random::from_hex(&b.hex).ok_or_else(|| {
+                    CommandError::new(ErrorCode::InvalidParams, "task: `random.hex` is not hex")
+                })?;
+                Some(crate::random::ByteFeed::new(
+                    data.into(),
+                    0,
+                    b.segment_bytes,
+                ))
+            }
+            None => None,
+        };
         let model: stochcraft_model::Model = task.model.into();
         let compiled = compile(&model)
             .map_err(|ds| CommandError {
@@ -54,13 +82,18 @@ impl Worker {
         Ok(Self {
             compiled,
             experiment: Experiment::new(task.replications, task.seed),
+            random,
         })
     }
 
     /// Runs replication `index` (counted from 0) and answers with its report, or why it
     /// stopped, for [`crate::Engine::deliver`].
     pub fn run(&self, index: u64) -> String {
-        let answer = match self.compiled.run(self.experiment.stream(index)) {
+        let rng = match &self.random {
+            Some(feed) => feed.stream(index),
+            None => self.experiment.stream(index),
+        };
+        let answer = match self.compiled.run(rng) {
             Ok(report) => Answer {
                 index,
                 report: Some(Encoded::of(&report)),
@@ -117,6 +150,9 @@ pub(crate) struct Encoded {
     /// its quantities (which both sides know from the model), all as bits.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     recording: Option<EncodedRecording>,
+    /// The bytes read from a file of random bytes; left out when none.
+    #[serde(default, skip_serializing_if = "is_zero")]
+    random_bytes: u64,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -182,6 +218,7 @@ impl Encoded {
             measured_from: r.measured_from.to_bits(),
             measured_to: r.measured_to.to_bits(),
             after_warmup: r.after_warmup,
+            random_bytes: r.random_bytes,
             recording: r.recording.as_ref().map(|rec| EncodedRecording {
                 interval: rec.interval.to_bits(),
                 times: rec.times.iter().map(|t| t.to_bits()).collect(),
@@ -419,17 +456,27 @@ impl Encoded {
             after_warmup: self.after_warmup,
             elements,
             recording,
+            random_bytes: self.random_bytes,
         })
     }
 }
 
-/// The task for a run of `compiled`'s model.
-pub(crate) fn task(compiled: &Compiled, experiment: &Experiment) -> String {
+/// The task for a run of `plan`.
+pub(crate) fn task(plan: &crate::run::Plan) -> String {
+    let (compiled, experiment) = (&plan.compiled, &plan.experiment);
     let task = Task {
         model: compiled.model().into(),
         seed: experiment.seed,
         replications: experiment.replications,
         record: compiled.recorded_every(),
+        random: plan.random.as_ref().map(|feed| TaskBytes {
+            segment_bytes: feed.segment(),
+            hex: crate::random::to_hex(feed.window(plan.max_replications())),
+        }),
     };
     serde_json::to_string(&task).unwrap_or_default()
+}
+
+fn is_zero(n: &u64) -> bool {
+    *n == 0
 }

@@ -1501,3 +1501,7 @@ connection	Flow	흐름
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	기계 10대가 돌아가야 하고, 예비 기계 4대가 대기하며, 정비공 3명이 고장 난 기계를 수리함 (Crane과 Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	예비 기계와 정비공이 몇이면 기계 10대를 계속 돌릴 수 있을까?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	대기 중인 예비 기계는 고장 나지 않음: 평균 3.47대가 고장 나 있고 9.29대가 돌아감. 정비공 한 명을 더 두면 예비 기계 4대를 더 두는 것과 거의 같은 효과가 있음.
+	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	둘 다 같은 파일의 같은 위치에서 같은 실행에 대한 난수를 읽었으므로 각 실행은 짝이 되는 실행과 같은 난수를 받습니다. 차이는 우연한 추출이 아니라 변경에서 나옵니다.
+	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	기준선과 이 실행은 같은 실행에 대해 난수를 같은 곳(난수 시드 또는 난수 파일)에서 가져오지 않았으므로 독립 실행으로 비교되며 구간이 더 넓습니다.
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	파일 {file}의 난수 (SHA-256 {sha}…), 실행마다 바이트 {offset}부터 {bytes}바이트
+	Seed {seed} taken from {source}	{source}에서 가져온 난수 시드 {seed}

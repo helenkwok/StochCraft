@@ -1501,3 +1501,7 @@ connection	Flow	フロー
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	10 台の機械が稼働していなければならず、予備機 4 台が待機し、整備士 3 人が故障した機械を修理する（Crane と Iglehart、Winter Simulation Conference、1973）。
 	How many spares and repairmen keep ten machines running?	10 台の機械を動かし続けるには、予備機と整備士がいくつ必要か？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待機中の予備機は故障しない。平均 3.47 台が故障中で、9.29 台が稼働する。整備士を 1 人増やすと、予備機を 4 台増やすのとほぼ同じ効果がある。
+	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	どちらも同じファイルの同じ位置から、同じ実行について乱数を読み込んだため、各実行は対になる実行と同じ乱数を受け取ります。差は偶然の抽出ではなく、変更から生じています。
+	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ベースラインとこの実行は、同じ実行について乱数を同じ場所 (乱数シード、または乱数のファイル) から取っていないため、独立した実行として比較され、信頼区間は広くなります。
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ファイル {file} の乱数 (SHA-256 {sha}…)、各実行につきバイト {offset} から {bytes} バイト
+	Seed {seed} taken from {source}	{source} から取った乱数シード {seed}

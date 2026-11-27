@@ -13,6 +13,7 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 - [Set up the experiment](#set-up-the-experiment)
 - [Run it](#run-it)
 - [Read the results](#read-the-results)
+- [Random numbers from a file](#random-numbers-from-a-file)
 - [Watch a run](#watch-a-run)
 - [Other views of the model](#other-views-of-the-model)
 - [Ask what-if questions: the Analysis view](#ask-what-if-questions-the-analysis-view)
@@ -528,6 +529,64 @@ agree on one result and differ on another. The observed data are part of the
 experiment, so changing them marks the results out of date; run again to check against the new
 ones. They are saved with the experiment in the file, and the command line prints the same
 section.
+
+## Random numbers from a file
+
+By default every run draws its random numbers from xoshiro256**, a pseudo-random generator, seeded
+from the experiment's seed. A run can instead read them from a file of random bytes, for example
+bytes recorded from a quantum or other physical random number source. This is a setting of the
+run (`random` in the `run` and `run.start` commands, for scripts and agents); choosing a source in
+the window comes later.
+
+**What it does and does not give you.** Bytes from a physical source are unpredictable, and
+the file, with its SHA-256 in the run record, says exactly which numbers the run used. They do
+not make the answers more accurate. A good pseudo-random generator already passes the
+statistical tests that matter for simulation, and the quality of a run's random numbers matters
+far less than the number of replications and the model itself (L'Ecuyer, "Software for uniform
+random number generation: distinguishing the good and the bad", Proceedings of the 2001 Winter
+Simulation Conference, pp. 95–105). The bytes in the file are taken as they are: StochCraft does
+not test them, so a file of poor bytes gives poor random numbers.
+
+**How the file is read.**
+- Each run (replication) *i* reads its own segment of the file: *L* bytes from byte
+  `offset + i × L`. The segments do not overlap, so a run gives the same results on one thread or
+  many, in the browser's slices or on its workers.
+- Each draw takes the next eight bytes as a little-endian number *x* and uses
+  (2·⌊*x* / 2¹²⌋ + 1)·2⁻⁵³, which lies strictly between 0 and 1, as is 1 minus it. Every part of
+  the model (each block's times, routing, properties, breakdowns, setups) draws from the run's one
+  cursor, in the order its events happen.
+- *L* is `segment_bytes`. Left out, a short pilot chooses it: the first ten runs drawn the same
+  way from pseudo-random numbers, the most bytes one of them read × 1.5, rounded up to 4 KiB.
+  `random.pilot` gives that estimate on its own. It is an estimate: the file's numbers lead to
+  other events, so a run can read more.
+- A file too short for every run (for a run that adds runs until its results are precise
+  enough, its maximum) is refused before anything runs, with the bytes it would need.
+- A run whose segment runs out stops the whole run with `random_data_exhausted`, naming the run
+  and estimating the bytes it needs. No result is kept from it, and no byte is ever read twice:
+  give a longer segment or a larger file.
+
+```json
+{"replications": 20, "random": {"mode": "byte_file", "file": "qrng-2026-11-27.bin", "segment_bytes": 65536}}
+```
+
+The run record's `random` names the file, its SHA-256 and size, the offset, *L* and the bytes the
+runs read. Given back as `random`, it repeats the run exactly; a file whose SHA-256 differs from
+the one given is refused. The results show the file under the run's settings line.
+
+**Comparing runs.** Two runs meet the same random numbers run by run only if they read the same
+file (the same SHA-256) from the same offset with the same *L* and the same number of runs, or
+both use the same seed. Only then does Compare with a baseline pair them; in every other case it
+compares them as independent runs, with wider intervals.
+
+**A seed from a source.** `{"mode": "seed_source", "source": …, "time": …, "pulse": …}` with the
+run's `seed` runs the usual pseudo-random streams from that seed, and records where the seed came
+from (for example a randomness beacon's pulse). The run repeats from its seed without calling the
+source again.
+
+**Not yet.** A file serves process models only. System dynamics, agent-based and Monte Carlo
+models, and sweeps, sensitivity, designed experiments, sizing, evaluation and optimisation, refuse
+one: they draw from streams keyed by the seed and each draw's purpose, which do not fit one cursor
+per run.
 
 ## Watch a run
 

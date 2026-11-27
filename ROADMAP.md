@@ -36,7 +36,7 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 
 | Crate | Layer | State |
 |---|---|---|
-| `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist`; fits to three-point estimates (`estimate`) |
+| `random` | L0 | xoshiro256** streams, or streams over a file of random bytes; BPSim's distributions; `Dist`; fits to three-point estimates (`estimate`) |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary`; percentiles, empirical distributions with DKW bands, Wilson intervals (`spread`); paired and Welch differences between two runs (`difference`) |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate`; runs that can be cancelled within a replication and stop when time stops moving (`run_watched`) |
 | `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, conveyors, the Transport block and mobile pools, `Path` (geometry with exact lengths), `Site` (conveyor tracks, places, junctions and scenery), Monte Carlo models and agent-based models as described in their files, experiment, validation; BPSim's XPath expressions (`expr`); the capacity table (`capacity`); line balancing (`balance`: M7.1's core, the three heuristics, measures and theoretical minimum) |
@@ -421,6 +421,25 @@ Done.
   `clippy.toml` forbids `f64::ln` and the like, so results do not depend on the platform's maths
   library (docs/architecture.md).
 - wasm64 joins when its toolchain is checked (README of the wasm64 plan).
+- **Random numbers from a file, part A: the engine.** **Done:** `run` and `run.start` take
+  `random`. `byte_file` reads a file of random bytes (a path, or bytes given to the engine in the
+  browser) in place of xoshiro256**: replication i reads its own segment of L bytes from an
+  offset, eight bytes per draw (little-endian, mapped to (2·(x >> 12) + 1)·2^-53, strictly inside
+  (0, 1)), through one cursor that every stream of the replication shares, so threads, slices
+  and web workers give the same results. L is given, or taken from a pilot (`random.pilot`: the
+  most bytes a pilot replication reads × 1.5, rounded up to 4 KiB). A file too short for every
+  replication (a sequential run's maximum included) is refused before the run; a segment that
+  runs out stops the run with `random_data_exhausted`, and no byte is read twice. The record
+  gives the file's SHA-256 (a replay on another file is refused), offset, L and bytes read;
+  `results.compare` pairs two runs only when they read the same bytes (or use the same seed).
+  `seed_source` records where a seed came from. Pseudo-random runs are bit for bit as before
+  (the golden digests now cover breakdowns, setups, health checks, patience, balking, transfers,
+  times by property, conveyors and diverts). System dynamics, agents, Monte Carlo, sweeps,
+  sensitivity, designs, sizing, evaluation and optimisation refuse a file. User guide: "Random
+  numbers from a file".
+  - Next: part B, the sources (a quantum random number service with the user's own key, a public
+    randomness beacon for seeds, user-added services), key storage, choosing the source in the
+    experiment settings and a quota estimate; part C, a guide page and examples.
 
 **M1 size:** about six PRs (M1.1 … M1.6). M1.1–M1.3 can land without the engine; M1.4–M1.5
 depend on them. **M1 is complete.**

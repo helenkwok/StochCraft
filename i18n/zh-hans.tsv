@@ -1501,3 +1501,7 @@ connection	Flow	顺序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台机器必须运转，四台备用机待命，三名维修工修理出故障的机器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台备用机和多少名维修工，才能让十台机器保持运转？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的备用机不会故障：平均 3.47 台机器在故障中，9.29 台在运转。增加第四名维修工的效果与再增加四台备用机相当。
+	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	两者都从同一个文件的同一位置读取随机数，用于相同的运行，因此每次运行与其配对的运行得到相同的随机数：差异来自更改，而不是随机抽取。
+	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	基线与此次运行在相同的运行中没有从同一来源（随机种子或随机数文件）获取随机数，因此按独立运行进行比较，区间更宽。
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	来自文件 {file} 的随机数 (SHA-256 {sha}…)，每次运行从字节 {offset} 起取 {bytes} 字节
+	Seed {seed} taken from {source}	取自 {source} 的随机种子 {seed}

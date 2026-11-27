@@ -2,7 +2,8 @@
 //! the difference b − a with a 95% confidence interval (A. M. Law, *Simulation Modeling and
 //! Analysis*, 5th ed., section 10.2).
 //!
-//! Two runs with the same seed and the same number of replications share their random numbers
+//! Two runs with the same seed and the same number of replications, or that read the same file of
+//! random bytes from the same offset in segments of the same length, share their random numbers
 //! replication by replication (common random numbers), so their replications are paired and the
 //! difference is judged by the paired-t interval (section 10.2.1). Otherwise the runs are
 //! independent and Welch's two-sample t interval is used (section 10.2.2).
@@ -39,6 +40,8 @@ fn invalid(message: impl Into<String>) -> CommandError {
 struct RunResults<'a> {
     seed: u64,
     replications: u64,
+    /// Where its random numbers came from ([`crate::random::identity`]).
+    random: Value,
     values: &'a serde_json::Map<String, Value>,
     /// The elements in the order the results list them.
     order: Vec<&'a str>,
@@ -71,6 +74,7 @@ impl<'a> RunResults<'a> {
         }
         Ok(Self {
             seed: field("seed")?,
+            random: crate::random::identity(v),
             replications: field("replications")?,
             values,
             order,
@@ -99,7 +103,10 @@ fn mean(xs: &[Option<f64>]) -> (Option<f64>, u64) {
 /// Compares `a` with `b` (results as `run` returns them).
 pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, CommandError> {
     let (ra, rb) = (RunResults::read(a, "a")?, RunResults::read(b, "b")?);
-    let paired = ra.seed == rb.seed && ra.replications == rb.replications;
+    // Paired only when replication i of each met the same random numbers: the same seed, or the
+    // same file at the same place in the same segments, and the same replications.
+    let paired = ra.random == rb.random && ra.replications == rb.replications;
+    let from_file = ra.random["mode"] == "byte_file" || rb.random["mode"] == "byte_file";
     let wanted: Vec<(String, String)> = match only {
         Some(list) => {
             if list.is_empty() {
@@ -170,14 +177,23 @@ pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, C
             notes.push(format!("the runs differ in `{k}` ({x} and {y})"));
         }
     }
-    let method = if paired {
-        "the runs have the same seed and replications, so replication i of each meets the same random numbers (common random numbers) and they are compared in pairs: difference is the mean over the replications where both have a value (pairs) of b minus a, with half_width its 95% paired-t half-width (pairs − 1 degrees of freedom); significant: that interval excludes 0 (null with fewer than two pairs)"
-    } else {
-        "the runs differ in seed or replications, so they are independent: difference is b's mean minus a's, with half_width its 95% Welch two-sample t half-width (Welch–Satterthwaite degrees of freedom, rounded down); significant: that interval excludes 0 (null when either run has fewer than two values). Running both with the same seed and replications gives a paired comparison, usually much tighter"
+    let method = match (paired, from_file) {
+        (true, false) => {
+            "the runs have the same seed and replications, so replication i of each meets the same random numbers (common random numbers) and they are compared in pairs: difference is the mean over the replications where both have a value (pairs) of b minus a, with half_width its 95% paired-t half-width (pairs − 1 degrees of freedom); significant: that interval excludes 0 (null with fewer than two pairs)"
+        }
+        (true, true) => {
+            "the runs read the same random-data file (the same SHA-256) from the same offset in segments of the same length, with the same replications, so replication i of each meets the same random numbers (common random numbers) and they are compared in pairs: difference is the mean over the replications where both have a value (pairs) of b minus a, with half_width its 95% paired-t half-width (pairs − 1 degrees of freedom); significant: that interval excludes 0 (null with fewer than two pairs)"
+        }
+        (false, false) => {
+            "the runs differ in seed or replications, so they are independent: difference is b's mean minus a's, with half_width its 95% Welch two-sample t half-width (Welch–Satterthwaite degrees of freedom, rounded down); significant: that interval excludes 0 (null when either run has fewer than two values). Running both with the same seed and replications gives a paired comparison, usually much tighter"
+        }
+        (false, true) => {
+            "the runs did not take their random numbers from the same place (a seed, or another random-data file, offset or segment length) or differ in replications, so they are independent: difference is b's mean minus a's, with half_width its 95% Welch two-sample t half-width (Welch–Satterthwaite degrees of freedom, rounded down); significant: that interval excludes 0 (null when either run has fewer than two values). Runs read from the same file, offset and segment length with the same replications are compared in pairs"
+        }
     };
     Ok(json!({
-        "a": { "seed": ra.seed, "replications": ra.replications },
-        "b": { "seed": rb.seed, "replications": rb.replications },
+        "a": { "seed": ra.seed, "replications": ra.replications, "random": ra.random },
+        "b": { "seed": rb.seed, "replications": rb.replications, "random": rb.random },
         "paired": paired,
         "comparisons": comparisons,
         "notes": notes,

@@ -174,6 +174,50 @@ pub fn record_line(ui: &mut egui::Ui, results: &Value) {
             ],
         ),
     ));
+    if let Some(line) = random_line(r) {
+        ui.label(theme::weak(ui, line));
+    }
+}
+
+/// Where a run's random numbers came from, when not from the experiment's seed alone: a file of
+/// random bytes (named, with the start of its SHA-256, the bytes each run reads and where they
+/// start), or a seed drawn from a source. `None` for pseudo-random numbers from the seed, which
+/// the record line already gives.
+pub fn random_line(record: &Value) -> Option<String> {
+    let r = &record["random"];
+    match r["mode"].as_str()? {
+        "byte_file" => {
+            let file = r["file"].as_str().unwrap_or("");
+            let name = file.rsplit(['/', '\\']).next().unwrap_or(file);
+            let sha: String = r["sha256"]
+                .as_str()
+                .unwrap_or("")
+                .chars()
+                .take(12)
+                .collect();
+            let num = |v: &Value| {
+                v.as_u64()
+                    .map_or_else(|| "–".to_owned(), |n| grouped(n as f64))
+            };
+            Some(tf(
+                "Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}",
+                &[
+                    ("file", name),
+                    ("sha", &sha),
+                    ("bytes", &num(&r["segment_bytes"])),
+                    ("offset", &num(&r["offset"])),
+                ],
+            ))
+        }
+        "seed_source" => Some(tf(
+            "Seed {seed} taken from {source}",
+            &[
+                ("seed", &record["seed"].to_string()),
+                ("source", r["source"].as_str().unwrap_or("")),
+            ],
+        )),
+        _ => None,
+    }
 }
 
 /// "n = k of N" for result `m` where only k of the N replications of `results` had a value;
