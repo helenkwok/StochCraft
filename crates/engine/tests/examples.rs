@@ -30,7 +30,7 @@
 //! - the M/M/1 queue near full load (a scenario of `mm1.bpmn`), against the exact mean
 //!   and spread of a run of 10,000 minutes started empty, beside the twenty values Barton
 //!   (Simulation Workshop 2023) published; and a workstation with triangular processing (a
-//!   scenario of `spread.bpmn`, after Wagner, same workshop), against Pollaczek–Khinchine.
+//!   scenario of `mm1.bpmn`, after Wagner, same workshop), against Pollaczek–Khinchine.
 //!
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
@@ -1421,14 +1421,11 @@ fn one_run_near_full_load_is_noisy_as_exact_mm1_theory_says() {
 /// Little's law Lq = λ Wq = 2.1806 jobs.
 #[test]
 fn the_workstation_with_triangular_processing_matches_pollaczek_khinchine() {
-    let m = model_of("spread.bpmn", Some("workstation-mg1"));
-    let gap = interarrival(&m, "workstation_in");
+    let m = model_of("mm1.bpmn", Some("workstation"));
+    let gap = interarrival(&m, "arrive");
     assert!((gap - 6.0).abs() < 1e-9, "{gap}");
     let lambda = 1.0 / gap;
-    let service = match m
-        .element(&ElementId::unchecked("workstation"))
-        .map(|e| &e.kind)
-    {
+    let service = match m.element(&ElementId::unchecked("serve")).map(|e| &e.kind) {
         Some(ElementKind::Server { service, .. }) => service.clone(),
         _ => panic!("the workstation is not a server"),
     };
@@ -1449,12 +1446,12 @@ fn the_workstation_with_triangular_processing_matches_pollaczek_khinchine() {
 
     // Each run is 168 hours measured after a warm-up (about three times the queue's relaxation time).
     let mut e = open_scenario(
-        "spread.bpmn",
-        Some("workstation-mg1"),
+        "mm1.bpmn",
+        Some("workstation"),
         json!({ "replications": 200, "seed": 2026 }),
     );
     let r = ok(&mut e, "run", json!({}));
-    covers(&r, "workstation", "utilisation", rho);
-    covers(&r, "workstation", "mean_wait", wait);
-    covers(&r, "workstation", "mean_queue_length", lambda * wait);
+    covers(&r, "serve", "utilisation", rho);
+    covers(&r, "serve", "mean_wait", wait);
+    covers(&r, "serve", "mean_queue_length", lambda * wait);
 }

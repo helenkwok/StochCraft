@@ -25,7 +25,7 @@ fn bpmn_written_by_another_tool() {
     let l = load("mm1.bpmn", None);
     assert_eq!(l.opened.format, Format::Bpmn);
     assert_eq!(l.opened.scenario.as_deref(), Some("base"));
-    assert_eq!(l.opened.scenarios.len(), 3);
+    assert_eq!(l.opened.scenarios.len(), 4);
     // Warnings at most (its set-up time of 0 is no setup).
     assert!(
         l.notes.iter().all(|n| n.severity < Severity::Error),
