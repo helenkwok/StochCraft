@@ -71,6 +71,8 @@ const MEASURES: &[Measure] = &[
 /// One bar: the block's name, mean, half-width and replications.
 struct Bar {
     name: String,
+    /// The block has a way for those turned away (the engine's `turns_away`).
+    turns_away: bool,
     mean: f64,
     half_width: f64,
     n: u64,
@@ -87,6 +89,7 @@ fn bars(results: &Value, m: &Measure) -> Vec<Bar> {
             let mean = v["mean"].as_f64()?;
             let id = e["id"].as_str().unwrap_or("");
             Some(Bar {
+                turns_away: e["turns_away"].as_bool() == Some(true),
                 name: e["name"]
                     .as_str()
                     .filter(|n| !n.is_empty())
@@ -643,10 +646,19 @@ fn chart(ui: &mut egui::Ui, m: &Measure, bars: &[Bar], unit: &str, width: f32) {
     } else {
         String::new()
     };
-    let title = if suffix.is_empty() {
-        t(m.title).to_owned()
+    // Losses that all go on by a way for those turned away are not lost.
+    let name = if m.metric == "loss_probability"
+        && !bars.is_empty()
+        && bars.iter().all(|b| b.turns_away)
+    {
+        t("Share turned away")
     } else {
-        format!("{} ({})", t(m.title), suffix.trim())
+        t(m.title)
+    };
+    let title = if suffix.is_empty() {
+        name.to_owned()
+    } else {
+        format!("{} ({})", name, suffix.trim())
     };
     ui.label(theme::strong(title).size(13.0));
     ui.add_space(4.0);

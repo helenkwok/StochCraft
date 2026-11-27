@@ -2751,6 +2751,15 @@ pub fn results(
                 .collect();
             let mut v =
                 json!({ "id": e.id.as_str(), "name": e.name, "kind": e.kind, "metrics": metrics });
+            // A task with a way for those turned away: what it loses goes on in the model, so it
+            // is turned away rather than lost. Left out otherwise, so other results are as before.
+            if model
+                .connections
+                .iter()
+                .any(|c| c.turned_away && c.from == e.id)
+            {
+                v["turns_away"] = json!(true);
+            }
             // A conveyor's histogram of its items' times on it, merged over the replications:
             // `start`, `width` (0 when all are equal) and `counts`; left out for any other
             // element and where no item left.

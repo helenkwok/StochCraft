@@ -56,6 +56,22 @@ pub(crate) fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
     (label(name, kind), stochcraft_engine::precision::unit(name))
 }
 
+/// The label and unit of metric `name` on element `e` of the results, as [`metric`] gives them
+/// for its kind, except on a task with a way for those turned away (the engine's `turns_away`):
+/// there those it cannot take go on in the model, so its losses read as turned away, not lost.
+pub(crate) fn metric_of<'a>(name: &'a str, e: &Value) -> (&'a str, Unit) {
+    let kind = e["kind"].as_str().unwrap_or("");
+    let turned = e["turns_away"].as_bool() == Some(true);
+    match name {
+        "loss_probability" if turned => (
+            t("Share turned away"),
+            stochcraft_engine::precision::unit(name),
+        ),
+        "lost" if turned => (t("Turned away"), stochcraft_engine::precision::unit(name)),
+        _ => metric(name, kind),
+    }
+}
+
 /// The label of metric `name` on an element of kind `kind`.
 fn label<'a>(name: &'a str, kind: &str) -> &'a str {
     match name {
@@ -238,7 +254,8 @@ fn named<'a>(results: &Value, watched: impl Iterator<Item = &'a Value>) -> Strin
                 .and_then(|e| e["name"].as_str())
                 .filter(|n| !n.is_empty())
                 .unwrap_or(id);
-            format!("{} ({block})", metric(key, kind).0)
+            let label = e.map_or_else(|| metric(key, kind).0, |e| metric_of(key, e).0);
+            format!("{label} ({block})")
         })
         .collect::<Vec<_>>()
         .join(", ")
@@ -359,9 +376,8 @@ fn precision(results: &Value) -> (Option<(&Value, &'static str, f64)>, usize, us
     let mut widest: Option<(&Value, &'static str, f64)> = None;
     let (mut wide, mut settled, mut judged) = (0, 0, 0);
     for e in results["elements"].as_array().into_iter().flatten() {
-        let kind = e["kind"].as_str().unwrap_or("");
         for key in key_of(e) {
-            let Some(s) = score(&e["metrics"][key], &metric(key, kind).1) else {
+            let Some(s) = score(&e["metrics"][key], &metric_of(key, e).1) else {
                 continue;
             };
             judged += 1;
@@ -460,8 +476,7 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
         } else if let Some((e, key, score)) = widest.filter(|(_, _, s)| *s > WIDE) {
             let id = e["id"].as_str().unwrap_or("");
             let block = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
-            let kind = e["kind"].as_str().unwrap_or("");
-            let (label, unit_kind) = metric(key, kind);
+            let (label, unit_kind) = metric_of(key, e);
             let (scale, unit) = scale_and_unit(&unit_kind, time);
             let (mean, hw) = mean_and_half_width(&e["metrics"][key], scale);
             // A share in points as the table shows it; anything else also as a share of its mean.
@@ -648,7 +663,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 if m.is_null() || hidden(e, key) {
                     continue;
                 }
-                let (label, kind) = metric(key, e["kind"].as_str().unwrap_or(""));
+                let (label, kind) = metric_of(key, e);
                 let (scale, unit) = scale_and_unit(&kind, unit);
                 let (mean, hw) = mean_and_half_width(m, scale);
                 row(
@@ -815,7 +830,7 @@ fn key_measures(
                         key_row(ui, p, None, [t("Metric"), t("Mean"), t("± 95% CI"), ""]);
                         for (i, key) in keys.iter().enumerate() {
                             let m = &e["metrics"][*key];
-                            let (label, unit_kind) = metric(key, kind);
+                            let (label, unit_kind) = metric_of(key, e);
                             let (scale, unit) = scale_and_unit(&unit_kind, time);
                             let (mean, hw) = mean_and_half_width(m, scale);
                             let mean = match unit {
@@ -1286,7 +1301,7 @@ fn finding(results: &Value, group: &Value) -> Option<String> {
         .iter()
         .find(|e| e["id"] == id)?;
     let name = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
-    let (label, _) = metric(key, e["kind"].as_str().unwrap_or(""));
+    let (label, _) = metric_of(key, e);
     if members.len() == 1 {
         return Some(tf(
             "{result} ({element}) split into two outcomes: see the table below.",
@@ -1410,6 +1425,20 @@ fn group(s: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::number;
+
+    /// A task's losses read as turned away where it has a way for those (the engine's
+    /// `turns_away`), and as lost where they leave the model.
+    #[test]
+    fn losses_that_go_on_by_a_way_read_as_turned_away() {
+        let way = serde_json::json!({ "kind": "server", "turns_away": true });
+        let none = serde_json::json!({ "kind": "server" });
+        let label = |name: &str, e: &serde_json::Value| super::metric_of(name, e).0.to_owned();
+        assert_eq!(label("loss_probability", &way), "Share turned away");
+        assert_eq!(label("lost", &way), "Turned away");
+        assert_eq!(label("loss_probability", &none), "Share of arrivals lost");
+        assert_eq!(label("lost", &none), "Lost (waiting room full)");
+        assert_eq!(label("utilisation", &way), "Utilisation");
+    }
 
     #[test]
     fn numbers_read_well() {

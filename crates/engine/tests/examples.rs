@@ -1396,6 +1396,18 @@ fn delayed_discharge_matches_erlang_b() {
     let r = ok(&mut e, "run", json!({}));
     let behaviour = behaviour_warnings(&r);
     assert!(behaviour.is_empty(), "{behaviour:?}");
+    // Those the D2A tasks cannot take wait in hospital: turned away, not lost.
+    for (id, turns_away) in [
+        ("d2a_inpatient", true),
+        ("d2a_home", true),
+        ("hospital_nursing_home", false),
+    ] {
+        let e = r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == id))
+            .unwrap_or_else(|| panic!("no {id}"));
+        assert_eq!(e["turns_away"].as_bool() == Some(true), turns_away, "{id}");
+    }
     covers(&r, "hospital_nursing_home", "mean_contents", nursing_home);
     covers(&r, "hospital_care_at_home", "mean_contents", care_at_home);
     let rate = 114.0;
