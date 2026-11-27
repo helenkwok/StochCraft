@@ -1531,6 +1531,10 @@ connection	Flow	Luồng
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Mười máy phải chạy, bốn máy dự phòng chờ sẵn và ba thợ máy sửa những máy bị hỏng (Crane và Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Cần bao nhiêu máy dự phòng và thợ máy để mười máy luôn chạy?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máy dự phòng đang chờ không thể hỏng: trung bình 3.47 máy bị hỏng và 9.29 máy chạy. Thêm một thợ máy thứ tư được việc gần bằng thêm bốn máy dự phòng.
+	A job shop short of workers	Một xưởng thiếu công nhân
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Hai máy và một công nhân: mỗi việc cần đồng thời máy của nó và người công nhân (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	Ràng buộc là công nhân hay là máy?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Một việc giữ cả máy của nó lẫn người công nhân, nên người công nhân duy nhất là ràng buộc: các việc chờ như trong hàng đợi một người phục vụ, 3 lần thời gian phục vụ khi bận 75% và 9 lần khi 90%.
 	Scenario	Kịch bản
 	Scenario: {name}	Kịch bản: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Mở {scenario} sẽ bỏ các thay đổi chưa lưu của {name}. Lưu trước?

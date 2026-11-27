@@ -1531,6 +1531,10 @@ connection	Flow	ნაკადი
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ათი მანქანა უნდა მუშაობდეს, ოთხი სათადარიგო მზადყოფნაში ელოდება, ხოლო სამი ზეინკალი აკეთებს გაფუჭებულებს (Crane და Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	რამდენი სათადარიგო მანქანა და ზეინკალი ინარჩუნებს ათ მანქანას მუშა მდგომარეობაში?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	მზადყოფნაში მყოფი სათადარიგო მანქანები ვერ გაფუჭდება: საშუალოდ 3.47 მანქანაა გაფუჭებული და 9.29 მუშაობს. მეოთხე ზეინკალი დაახლოებით იმდენს აკეთებს, რამდენსაც კიდევ ოთხი სათადარიგო მანქანა.
+	A job shop short of workers	სახელოსნო, სადაც მუშები აკლია
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	ორი დანადგარი და ერთი მუშა: ყოველ სამუშაოს ერთდროულად სჭირდება თავისი დანადგარი და მუშა (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	შემზღუდველი მუშაა თუ დანადგარები?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	სამუშაო ერთად იკავებს თავის დანადგარს და მუშას, ამიტომ ერთადერთი მუშაა შემზღუდველი: სამუშაოები ელოდება, როგორც ერთმომსახურიან რიგში, 3 მომსახურების დრო 75%-იანი დატვირთვისას და 9 — 90%-იანისას.
 	Scenario	სცენარი
 	Scenario: {name}	სცენარი: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}-ის გახსნა {name}-ში შეუნახავ ცვლილებებს გააუქმებს. ჯერ შევინახო?

@@ -1079,6 +1079,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The rows for the job shop example (its title, the line about it, its question and what it
+  teaches) were machine-drafted from the plain meaning of the English, with each catalog's own
+  words for machine, worker, job, constraint and a single-server queue where it had them. The
+  authors' names and the conference's name stay in English and Latin script, and the numbers and
+  percentages keep the language's usual form. Not checked against any other source and not
+  reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq, and
+  "constraint" (the bottleneck) in most of them.
 - The rows for time in system by percentile on Departures (the three percentile results and the
   share done within the target time, the inspector's checkbox, its hint, target time, working
   time and censoring note, and the two validation messages) were machine-drafted from the plain

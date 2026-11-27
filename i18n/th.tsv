@@ -1531,6 +1531,10 @@ connection	Flow	โฟลว์
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	เครื่องจักรสิบเครื่องต้องทำงาน เครื่องจักรสำรองสี่เครื่องรอพร้อมใช้ และช่างซ่อมสามคนซ่อมเครื่องที่ขัดข้อง (Crane และ Iglehart, Winter Simulation Conference, 1973)
 	How many spares and repairmen keep ten machines running?	ต้องมีเครื่องจักรสำรองและช่างซ่อมเท่าใด จึงจะให้เครื่องจักรสิบเครื่องทำงานต่อไปได้?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	เครื่องจักรสำรองที่รออยู่ขัดข้องไม่ได้: โดยเฉลี่ยเครื่องจักรเสีย 3.47 เครื่องและทำงาน 9.29 เครื่อง ช่างซ่อมคนที่สี่ช่วยได้พอ ๆ กับเครื่องจักรสำรองอีกสี่เครื่อง
+	A job shop short of workers	โรงงานที่ขาดคนงาน
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	เครื่องจักรสองเครื่องและคนงานหนึ่งคน: งานแต่ละงานต้องใช้เครื่องจักรของตนและคนงานพร้อมกัน (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973)
+	Is the worker or the machines the constraint?	ข้อจำกัดคือคนงานหรือเครื่องจักร?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	งานหนึ่งยึดเครื่องจักรของตนและคนงานไว้พร้อมกัน คนงานคนเดียวจึงเป็นข้อจำกัด: งานรอเหมือนในแถวคอยที่มีผู้ให้บริการคนเดียว 3 เท่าของเวลาบริการเมื่อยุ่ง 75% และ 9 เท่าเมื่อ 90%
 	Scenario	สถานการณ์
 	Scenario: {name}	สถานการณ์: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	การเปิด {scenario} จะทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกใน {name} บันทึกก่อนหรือไม่

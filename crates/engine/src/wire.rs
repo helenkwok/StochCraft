@@ -17,8 +17,8 @@ use stochcraft_model::{
     ElementKind, Estimate, Experiment, Family, HealthCheck, LengthUnit, Mobility, Model, Need,
     Observation, Observed, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
     ProcessingBy, ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit,
-    ResourcePool, Routing, Scrap, Sequential, SequentialMeasure, Setup, Severity, Stop, ThreePoint,
-    TimeInSystem, TimeUnit, Timed, Transfer, Upper,
+    Requirement, ResourcePool, Routing, Scrap, Sequential, SequentialMeasure, Setup, Severity,
+    Stop, ThreePoint, TimeInSystem, TimeUnit, Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -312,11 +312,12 @@ pub enum KindSpec {
         health_check: Option<HealthCheckSpec>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
-    /// entity takes what the first of `needs` that can be met now asks for, holds it for its
-    /// service, then gives it back. At the end of each instant, once everything that happens at
-    /// it has happened, the free units go to the waiting entities across all tasks by their
-    /// task's `priority` (higher first), then by arrival, each taking the first of its `needs`
-    /// that the free units can meet.
+    /// entity takes what the first of `needs` that can be met now asks for, together with what
+    /// each of `also_needs` asks for (all at once, or nothing yet), holds it for its service,
+    /// then gives it all back. At the end of each instant, once everything that happens at it
+    /// has happened, the free units go to the waiting entities across all tasks by their task's
+    /// `priority` (higher first), then by arrival, each taking the first of its alternatives
+    /// that the free units can meet, for every requirement together.
     SharedTask {
         /// Time to serve one entity.
         #[serde(default = "exponential_1")]
@@ -329,8 +330,13 @@ pub enum KindSpec {
         /// `service`; left out when none.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         processing_by_resource: Option<ProcessingByResourceSpec>,
-        /// The alternatives, tried in order (BPSim `orResource`).
+        /// The alternatives, tried in order (BPSim `orResource`). With `also_needs`, the first
+        /// requirement, whose pool sets the time by `processing_by_resource`.
         needs: Vec<NeedSpec>,
+        /// Further requirements, each a list of alternatives in order, all met together with
+        /// `needs` (a machine and a worker at once); left out when there are none.
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        also_needs: Vec<Vec<NeedSpec>>,
         /// Who gets freed units first, higher first; left out, 0.
         #[serde(default, skip_serializing_if = "is_zero")]
         priority: f64,
@@ -529,6 +535,29 @@ impl From<&Need> for NeedSpec {
             },
         }
     }
+}
+
+/// A shared task's requirements on the wire: the first one's alternatives as `needs`, the
+/// others as `also_needs` (none, a task with no needs).
+pub fn needs_spec(needs: &[Requirement]) -> (Vec<NeedSpec>, Vec<Vec<NeedSpec>>) {
+    let spec = |r: &Requirement| r.alternatives.iter().map(Into::into).collect::<Vec<_>>();
+    match needs.split_first() {
+        Some((first, rest)) => (spec(first), rest.iter().map(spec).collect()),
+        None => (Vec::new(), Vec::new()),
+    }
+}
+
+/// A shared task's requirements from the wire: `needs` first, then each of `also_needs`. With
+/// neither there are none; with only `also_needs`, the first requirement has no alternatives
+/// (which the model's checks report).
+pub fn requirements(needs: Vec<NeedSpec>, also_needs: Vec<Vec<NeedSpec>>) -> Vec<Requirement> {
+    if needs.is_empty() && also_needs.is_empty() {
+        return Vec::new();
+    }
+    std::iter::once(needs)
+        .chain(also_needs)
+        .map(|r| Requirement::new(r.into_iter().map(Into::into).collect()))
+        .collect()
 }
 
 impl From<NeedSpec> for Need {
@@ -1240,13 +1269,17 @@ impl From<&ElementKind> for KindSpec {
                 processing_by_resource,
                 needs,
                 priority,
-            } => KindSpec::SharedTask {
-                service: service.into(),
-                processing_by: processing_by.as_ref().map(Into::into),
-                processing_by_resource: processing_by_resource.as_ref().map(Into::into),
-                needs: needs.iter().map(Into::into).collect(),
-                priority: *priority,
-            },
+            } => {
+                let (needs, also_needs) = needs_spec(needs);
+                KindSpec::SharedTask {
+                    service: service.into(),
+                    processing_by: processing_by.as_ref().map(Into::into),
+                    processing_by_resource: processing_by_resource.as_ref().map(Into::into),
+                    needs,
+                    also_needs,
+                    priority: *priority,
+                }
+            }
             ElementKind::Delay {
                 duration,
                 processing_by,
@@ -1362,12 +1395,13 @@ impl From<KindSpec> for ElementKind {
                 processing_by: by,
                 processing_by_resource: by_resource,
                 needs,
+                also_needs,
                 priority,
             } => ElementKind::SharedTask {
                 service: service.into(),
                 processing_by: processing_by(by),
                 processing_by_resource: processing_by_resource(by_resource),
-                needs: needs.into_iter().map(Into::into).collect(),
+                needs: requirements(needs, also_needs),
                 priority,
             },
             KindSpec::Delay {

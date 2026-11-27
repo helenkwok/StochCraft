@@ -1531,6 +1531,10 @@ connection	Flow	Srautas
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dešimt mašinų turi veikti, keturios atsarginės laukia parengtos, o trys mechanikai taiso sugedusias (Crane ir Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kiek atsarginių mašinų ir mechanikų reikia, kad veiktų dešimt mašinų?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Parengtos atsarginės mašinos negali sugesti: vidutiniškai 3.47 mašinos sugedusios, o 9.29 veikia. Ketvirtas mechanikas duoda maždaug tiek pat, kiek keturios papildomos atsarginės mašinos.
+	A job shop short of workers	Dirbtuvės, kuriose trūksta darbininkų
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dvi staklės ir vienas darbininkas: kiekvienam darbui vienu metu reikia savo staklių ir darbininko (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	Ar riboja darbininkas, ar staklės?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Darbas kartu užima savo stakles ir darbininką, todėl vienintelis darbininkas yra ribojimas: darbai laukia kaip eilėje su vienu aptarnautoju, 3 aptarnavimo laikai esant 75 % užimtumui ir 9 esant 90 %.
 	Scenario	Scenarijus
 	Scenario: {name}	Scenarijus: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Atidarius {scenario}, neįrašyti {name} pakeitimai bus atmesti. Pirmiau juos įrašyti?

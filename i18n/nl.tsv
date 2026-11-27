@@ -1531,6 +1531,10 @@ connection	Flow	Stroom
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tien machines moeten draaien, vier reservemachines staan klaar en drie monteurs repareren de machines die uitvallen (Crane en Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hoeveel reservemachines en monteurs houden tien machines draaiende?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemachines die klaarstaan, kunnen niet uitvallen: gemiddeld zijn 3.47 machines kapot en draaien er 9.29. Een vierde monteur levert ongeveer evenveel op als vier reservemachines extra.
+	A job shop short of workers	Een werkplaats met te weinig werknemers
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Twee machines en één werknemer: elke opdracht heeft tegelijk zijn machine en de werknemer nodig (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	Is de werknemer of zijn de machines de beperking?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Een opdracht houdt zijn machine en de werknemer samen vast, dus de ene werknemer is de beperking: opdrachten wachten als in een wachtrij met één bediende, 3 bedieningstijden bij 75% bezetting en 9 bij 90%.
 	Scenario	Scenario
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Als u {scenario} opent, gaan de niet-opgeslagen wijzigingen in {name} verloren. Eerst opslaan?

@@ -1531,6 +1531,10 @@ connection	Flow	Поток
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десять станков должны работать, четыре резервных стоят наготове, а трое слесарей чинят те, что выходят из строя (Crane и Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Сколько резервных станков и слесарей нужно, чтобы десять станков продолжали работать?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервные станки, стоящие наготове, не могут выйти из строя: в среднем 3.47 станка неисправны и 9.29 работают. Четвёртый слесарь даёт примерно столько же, сколько ещё четыре резервных станка.
+	A job shop short of workers	Цех, где не хватает рабочих
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Два станка и один рабочий: каждой работе нужны одновременно её станок и рабочий (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	Что ограничивает — рабочий или станки?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Работа занимает свой станок и рабочего вместе, поэтому ограничение — единственный рабочий: работы ждут как в очереди с одним обслуживающим, 3 времени обслуживания при загрузке 75% и 9 при 90%.
 	Scenario	Сценарий
 	Scenario: {name}	Сценарий: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	При открытии {scenario} несохранённые изменения в {name} будут потеряны. Сначала сохранить их?

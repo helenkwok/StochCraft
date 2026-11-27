@@ -1531,6 +1531,10 @@ connection	Flow	Fluxo
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dez máquinas precisam funcionar, quatro reservas aguardam prontas e três mecânicos consertam as que quebram (Crane e Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Quantas máquinas reservas e quantos mecânicos mantêm dez máquinas funcionando?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máquinas reservas em espera não podem quebrar: em média 3.47 máquinas estão quebradas e 9.29 funcionam. Um quarto mecânico rende quase o mesmo que mais quatro máquinas reservas.
+	A job shop short of workers	Uma oficina com falta de trabalhadores
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Duas máquinas e um trabalhador: cada trabalho precisa ao mesmo tempo de sua máquina e do trabalhador (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	A restrição é o trabalhador ou as máquinas?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Um trabalho retém sua máquina e o trabalhador juntos, então o único trabalhador é a restrição: os trabalhos esperam como numa fila de um só servidor, 3 tempos de serviço com 75% de ocupação e 9 com 90%.
 	Scenario	Cenário
 	Scenario: {name}	Cenário: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Abrir {scenario} descarta as alterações não salvas em {name}. Salvá-las primeiro?

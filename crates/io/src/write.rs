@@ -970,6 +970,19 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             resource_of.insert(e.id.as_str(), rid);
         }
     }
+    // A shared task that needs several pools at once has one resource role (a performer) for
+    // each requirement, with an id its own BPSim selection refers to.
+    let mut roles_of: BTreeMap<&str, Vec<String>> = BTreeMap::new();
+    for e in &model.elements {
+        if let ElementKind::SharedTask { needs, .. } = &e.kind
+            && needs.len() > 1
+        {
+            let ids = (1..=needs.len())
+                .map(|k| ids.fresh(&format!("{}_need{k}", e.id)))
+                .collect();
+            roles_of.insert(e.id.as_str(), ids);
+        }
+    }
 
     let mut process = b("process")
         .with_attr("id", &process_id)
@@ -995,15 +1008,29 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             node.push(b("performer").with_child(b("resourceRef").with_text(rid)));
         }
         // A shared task's pools named outright, as performers, for other BPMN tools; what it
-        // needs is its selection.
+        // needs is its selection. With several requirements, each is a performer of its own
+        // (naming the pool of its first alternative, when that is one pool), whose selection
+        // is its own.
         if let ElementKind::SharedTask { needs, .. } = &e.kind {
-            let mut named: Vec<&str> = Vec::new();
-            for n in needs {
-                if let Need::Resource { id, .. } = n
-                    && !named.contains(&id.as_str())
-                {
-                    named.push(id.as_str());
-                    node.push(b("performer").with_child(b("resourceRef").with_text(id.as_str())));
+            if let Some(roles) = roles_of.get(e.id.as_str()) {
+                for (rid, r) in roles.iter().zip(needs) {
+                    let mut role = b("performer").with_attr("id", rid);
+                    if let Some(Need::Resource { id, .. }) = r.alternatives.first() {
+                        role.push(b("resourceRef").with_text(id.as_str()));
+                    }
+                    node.push(role);
+                }
+            } else {
+                let mut named: Vec<&str> = Vec::new();
+                for n in needs.iter().flat_map(|r| &r.alternatives) {
+                    if let Need::Resource { id, .. } = n
+                        && !named.contains(&id.as_str())
+                    {
+                        named.push(id.as_str());
+                        node.push(
+                            b("performer").with_child(b("resourceRef").with_text(id.as_str())),
+                        );
+                    }
                 }
             }
         }
@@ -1083,6 +1110,8 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         .with_child(sp);
     for e in &model.elements {
         let mut ep = s("ElementParameters").with_attr("elementRef", e.id.as_str());
+        // The selections of a shared task's resource roles, after its own parameters.
+        let mut role_params = Vec::new();
         match &e.kind {
             ElementKind::Source {
                 interarrival,
@@ -1130,8 +1159,27 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 ep.push(
                     s("TimeParameters").with_child(param("ProcessingTime", dist_element(service))),
                 );
-                let selection = condition_element(&crate::selection::format(needs));
-                ep.push(s("ResourceParameters").with_child(param("Selection", selection)));
+                match roles_of.get(e.id.as_str()) {
+                    Some(roles) => {
+                        for (rid, r) in roles.iter().zip(needs) {
+                            let selection =
+                                condition_element(&crate::selection::format(&r.alternatives));
+                            role_params.push(
+                                s("ElementParameters")
+                                    .with_attr("elementRef", rid)
+                                    .with_child(
+                                        s("ResourceParameters")
+                                            .with_child(param("Selection", selection)),
+                                    ),
+                            );
+                        }
+                    }
+                    None => {
+                        let alternatives = needs.first().map_or(&[][..], |r| &r.alternatives[..]);
+                        let selection = condition_element(&crate::selection::format(alternatives));
+                        ep.push(s("ResourceParameters").with_child(param("Selection", selection)));
+                    }
+                }
                 if *priority != 0.0 {
                     ep.push(
                         s("PriorityParameters")
@@ -1282,10 +1330,12 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         if let Some(p) = site.places.get(&e.id) {
             ep.push(crate::layout::place_element(p));
         }
-        if ep.elements().next().is_none() {
-            continue;
+        if ep.elements().next().is_some() {
+            scenario.push(ep);
         }
-        scenario.push(ep);
+        for x in role_params {
+            scenario.push(x);
+        }
     }
     for c in &model.connections {
         let junction = site.junctions.get(&c.id);

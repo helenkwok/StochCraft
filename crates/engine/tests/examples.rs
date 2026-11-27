@@ -27,14 +27,16 @@
 //!   beside Poisson arrivals at the same rate (M/M/1).
 //! - Able and Baker, two servers that differ in speed behind one queue (a service time by
 //!   resource), against the exact long-run answer of their discrete-time Markov chain.
+//! - a job shop short of workers (Maggard et al., WSC 1973), where each job needs its machine
+//!   and the one worker at once, against M/M/1 in the worker.
 //! - one machine's availability (Hristova, Denev and Tsankov, 2024) against the alternating
 //!   renewal share MTBF / (MTBF + MTTR) of time up and the failures an hour.
 //!
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
 //! added by hand, as in `mm1.bpmn`. The starting contents of the prison and of Penny Fab were
-//! added by hand too, and the repairmen-with-spares file was written by hand in the same form. The
-//! zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`.
+//! added by hand too, and the repairmen-with-spares and job shop files were written by hand in the
+//! same form. The zeta queue was assembled from the output of `tools/zeta-gaps/generate.py`.
 //!
 //! Each check allows √2 times the 95% half-width, since several checks read the same runs (as in
 //! `crates/blocks/tests/queueing_cases.rs`).
@@ -1312,6 +1314,85 @@ fn able_and_baker_match_their_markov_chain() {
         served("able"),
         served("baker")
     );
+}
+
+/// A job shop short of workers, from M. Maggard, W. Lesso, G. Hogg and D. Phillips, *Using an
+/// Extended Version of GERT to Simulate Priority and Assignment Rules in a Labor Limited
+/// Jobshop*, Proceedings of the 1973 Winter Simulation Conference, pp. 274–288: two machines
+/// and one worker, and each job needs its machine and the worker at the same time. Jobs arrive
+/// at rate λ = 1 and go to either machine with chance 1/2; a job takes an exponential time of
+/// mean s with its machine and the worker. Served first come first served, the worker is the
+/// only constraint (a job's machine is never busy when the worker is free), so the shop is
+/// M/M/1 in the worker at ρ = λs: the worker is busy ρ, and every job waits Wq = ρs / (1 − ρ),
+/// which is 3 service times at ρ = 0.75 and 9 at ρ = 0.9 (the two loads the authors used).
+/// Each machine is busy only while the worker serves on it, ρ/2 of the time, so the two machines'
+/// utilisations add up to the worker's exactly, run by run.
+#[test]
+fn the_job_shop_short_of_workers_matches_m_m_1() {
+    for (scenario, s) in [(None, 0.75), (Some("busier"), 0.9)] {
+        let m = model_of("job-shop.bpmn", scenario);
+        let lambda = 1.0 / interarrival(&m, "jobs");
+        assert!((lambda - 1.0).abs() < 1e-12, "{scenario:?}: {lambda}");
+        for (task, machine) in [("job1", "machine1"), ("job2", "machine2")] {
+            match m.element(&ElementId::unchecked(task)).map(|e| &e.kind) {
+                Some(ElementKind::SharedTask { service, needs, .. }) => {
+                    let mean = service.mean().unwrap_or(f64::NAN);
+                    assert!((mean - s).abs() < 1e-12, "{scenario:?} {task}: {mean}");
+                    let pools: Vec<String> = needs
+                        .iter()
+                        .flat_map(|r| &r.alternatives)
+                        .map(|n| match n {
+                            stochcraft_model::Need::Resource { id, quantity: 1 } => id.to_string(),
+                            other => panic!("{task}: {other:?}"),
+                        })
+                        .collect();
+                    assert_eq!(pools, [machine, "worker"], "{scenario:?} {task}");
+                    assert!(needs.iter().all(|r| r.alternatives.len() == 1));
+                }
+                other => panic!("{task} is not a shared task: {other:?}"),
+            }
+        }
+        let rho = lambda * s;
+        let wq = rho * s / (1.0 - rho);
+        let normalised = wq / s;
+        let paper = if scenario.is_none() { 3.0 } else { 9.0 };
+        assert!((normalised - paper).abs() < 1e-9, "{normalised}");
+
+        let duration = if scenario.is_none() {
+            20_000.0
+        } else {
+            40_000.0
+        };
+        let mut e = open_scenario(
+            "job-shop.bpmn",
+            scenario,
+            json!({ "replications": 20, "warmup": 1_000.0, "duration": duration }),
+        );
+        let checked = ok(&mut e, "model.validate", json!({}));
+        assert_eq!(checked["diagnostics"], json!([]), "{scenario:?}: {checked}");
+        let r = ok(&mut e, "run", json!({}));
+        let behaviour = behaviour_warnings(&r);
+        assert!(behaviour.is_empty(), "{scenario:?}: {behaviour:?}");
+        covers(&r, "worker", "utilisation", rho);
+        covers(&r, "job1", "mean_wait", wq);
+        covers(&r, "job2", "mean_wait", wq);
+        // The machines are busy exactly while the worker is: their utilisations add up to its.
+        let busy = |id: &str| result(&r, id, "utilisation").0;
+        let (m1, m2, w) = (busy("machine1"), busy("machine2"), busy("worker"));
+        assert!(
+            (m1 + m2 - w).abs() < 1e-9,
+            "{scenario:?}: {m1} + {m2} against {w}"
+        );
+        // The ρ = 0.9 scenario checks only the three above, so that with fewer checks on one run
+        // a miss by chance stays rare.
+        if scenario.is_some() {
+            continue;
+        }
+        covers(&r, "machine1", "utilisation", rho / 2.0);
+        covers(&r, "machine2", "utilisation", rho / 2.0);
+        covers(&r, "job1", "mean_queue_length", lambda / 2.0 * wq);
+        covers(&r, "worker", "mean_contents", rho);
+    }
 }
 
 /// One barista at ρ = 0.8: each customer's time in the shop (FIFO M/M/1) is exponential with

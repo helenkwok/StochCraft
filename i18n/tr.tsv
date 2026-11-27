@@ -1531,6 +1531,10 @@ connection	Flow	Akış
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	On makine çalışmak zorunda, dört yedek makine hazırda bekliyor ve üç tamirci arızalananları onarıyor (Crane ve Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	On makineyi kaç yedek makine ve kaç tamirci çalışır durumda tutar?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Hazırda bekleyen yedek makineler arızalanamaz: ortalama 3.47 makine arızalı, 9.29 makine çalışıyor. Dördüncü bir tamirci, dört yedek makine daha eklemek kadar fayda sağlar.
+	A job shop short of workers	İşçisi yetmeyen bir atölye
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	İki makine ve bir işçi: her iş aynı anda kendi makinesine ve işçiye ihtiyaç duyar (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	Kısıt işçi mi, makineler mi?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Bir iş makinesini ve işçiyi birlikte tutar, bu yüzden tek işçi kısıttır: işler tek sunuculu bir kuyruktaki gibi bekler, %75 dolulukta 3 hizmet süresi, %90'da 9.
 	Scenario	Senaryo
 	Scenario: {name}	Senaryo: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} açılırsa {name} içindeki kaydedilmemiş değişiklikler atılır. Önce kaydedilsin mi?

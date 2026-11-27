@@ -1531,6 +1531,10 @@ connection	Flow	Flyt
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Ti maskiner må gå, fire reservemaskiner står klare, og tre mekanikere reparerer dem som svikter (Crane og Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hvor mange reservemaskiner og mekanikere holder ti maskiner i gang?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemaskiner som står klare, kan ikke svikte: i snitt er 3.47 maskiner i stykker og 9.29 går. En fjerde mekaniker gjør omtrent like mye som fire reservemaskiner til.
+	A job shop short of workers	Et verksted med for få arbeidere
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	To maskiner og én arbeider: hver jobb trenger maskinen sin og arbeideren samtidig (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	Er det arbeideren eller maskinene som begrenser?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	En jobb holder maskinen sin og arbeideren samtidig, så den ene arbeideren er begrensningen: jobbene venter som i en kø med én betjening, 3 betjeningstider ved 75 % belegg og 9 ved 90 %.
 	Scenario	Scenario
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Å åpne {scenario} forkaster de ulagrede endringene i {name}. Lagre dem først?

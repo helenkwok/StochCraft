@@ -1531,6 +1531,10 @@ connection	Flow	প্রবাহ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	দশটি মেশিন চালু থাকতেই হবে, চারটি অতিরিক্ত মেশিন প্রস্তুত থাকে এবং তিনজন মিস্ত্রি বিকল মেশিন সারান (Crane ও Iglehart, Winter Simulation Conference, 1973)।
 	How many spares and repairmen keep ten machines running?	দশটি মেশিন চালু রাখতে কতগুলো অতিরিক্ত মেশিন ও কতজন মিস্ত্রি লাগবে?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	প্রস্তুত থাকা অতিরিক্ত মেশিন বিকল হতে পারে না: গড়ে 3.47টি মেশিন বিকল থাকে এবং 9.29টি চলে। চতুর্থ একজন মিস্ত্রি প্রায় আরও চারটি অতিরিক্ত মেশিনের সমান কাজ করেন।
+	A job shop short of workers	কর্মীর ঘাটতিতে একটি জব শপ
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	দুটি মেশিন ও একজন কর্মী: প্রতিটি কাজের একই সময়ে নিজের মেশিন ও কর্মীকে দরকার (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973)।
+	Is the worker or the machines the constraint?	সীমাবদ্ধতা কি কর্মী, না মেশিনগুলো?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	একটি কাজ তার মেশিন ও কর্মীকে একসঙ্গে ধরে রাখে, তাই একমাত্র কর্মীই সীমাবদ্ধতা: কাজগুলো এক-সেবাদাতার সারির মতো অপেক্ষা করে, 75% ব্যস্ততায় 3টি সেবা-সময় আর 90%-এ 9টি।
 	Scenario	দৃশ্যকল্প
 	Scenario: {name}	দৃশ্যকল্প: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} খুললে {name}-এর অসংরক্ষিত পরিবর্তনগুলি হারিয়ে যাবে। আগে সংরক্ষণ করবেন?

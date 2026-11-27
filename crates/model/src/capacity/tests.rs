@@ -6,7 +6,8 @@
 
 use super::*;
 use crate::{
-    BalkJoin, Balking, Breakdown, Experiment, OnShiftEnd, Patience, QueueLimit, ResourcePool, Setup,
+    BalkJoin, Balking, Breakdown, Experiment, Need, OnShiftEnd, Patience, QueueLimit, Requirement,
+    ResourcePool, Setup,
 };
 
 fn id(s: &str) -> ElementId {
@@ -586,10 +587,10 @@ fn a_pool_carries_its_tasks_load() {
                 service: Dist::exponential_rate(1.0 / mean),
                 processing_by: None,
                 processing_by_resource: None,
-                needs: vec![Need::Resource {
+                needs: vec![Requirement::new(vec![Need::Resource {
                     id: id("staff"),
                     quantity,
-                }],
+                }])],
                 priority: 0.0,
             },
         )
@@ -856,10 +857,10 @@ fn shared_task(i: &str, mean: f64) -> Element {
             service: Dist::exponential_rate(1.0 / mean),
             processing_by: None,
             processing_by_resource: None,
-            needs: vec![Need::Resource {
+            needs: vec![Requirement::new(vec![Need::Resource {
                 id: id("staff"),
                 quantity: 1,
-            }],
+            }])],
             priority: 0.0,
         },
     )
@@ -1426,4 +1427,126 @@ fn a_transport_below_100_percent_is_not_known_before_a_run() {
     }
     assert_eq!(p.status, Status::Unknown);
     assert_eq!(row(&c, "carry").status, Status::Unknown);
+}
+
+/// A job shop's job needs a machine and the worker at once: no formula for the task (it holds
+/// units of two pools), but each pool carries its load: the worker the whole of it, the two
+/// machines half each.
+#[test]
+fn a_task_holding_several_pools_gets_no_formula_but_loads_each_pool() {
+    let need = |pool: &str| {
+        Requirement::new(vec![Need::Resource {
+            id: id(pool),
+            quantity: 1,
+        }])
+    };
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(1.0)),
+            el(
+                "job",
+                ElementKind::SharedTask {
+                    service: Dist::exponential_rate(1.0 / 0.75),
+                    processing_by: None,
+                    processing_by_resource: None,
+                    needs: vec![need("machines"), need("worker")],
+                    priority: 0.0,
+                },
+            ),
+            sink("out"),
+        ],
+        vec![link("in", "job"), link("job", "out")],
+    );
+    m.resources = vec![
+        ResourcePool::new(id("machines"), "Machines", 2, Vec::new()),
+        ResourcePool::new(id("worker"), "Worker", 1, Vec::new()),
+    ];
+    let c = m.capacity(DEFAULT_TARGET);
+    let job = row(&c, "job");
+    assert_eq!(reason(job), &Why::SeveralPools);
+    assert_eq!(job.utilisation, Value::Unknown(Why::SeveralPools));
+    assert_eq!(job.units, None);
+    let load = |pool: &str| row(&c, pool).utilisation.exact_value();
+    assert!(
+        load("worker").is_some_and(|u| near(u, 0.75)),
+        "{:?}",
+        load("worker")
+    );
+    assert!(
+        load("machines").is_some_and(|u| near(u, 0.375)),
+        "{:?}",
+        load("machines")
+    );
+    // The task is as congested as its busiest pool: the worker, at 75%, is below the target.
+    assert_eq!(job.status, Status::Fine);
+    assert_eq!(Why::SeveralPools.code(), "several_pools");
+}
+
+/// A pool serves whole jobs only: with 3 units in each of two pools and a job needing 2 of each,
+/// one job at a time, not 1.5. Offered 1.2 jobs an hour with a mean of 1 hour, the task passes on
+/// at most 1, and what follows it gets at most that.
+#[test]
+fn a_pool_serves_whole_jobs_only() {
+    let need = |pool: &str| {
+        Requirement::new(vec![Need::Resource {
+            id: id(pool),
+            quantity: 2,
+        }])
+    };
+    let mut m = model(
+        vec![
+            source("in", Dist::exponential_rate(1.2)),
+            el(
+                "job",
+                ElementKind::SharedTask {
+                    service: Dist::exponential_rate(1.0),
+                    processing_by: None,
+                    processing_by_resource: None,
+                    needs: vec![need("a"), need("b")],
+                    priority: 0.0,
+                },
+            ),
+            server("next", 1, Dist::exponential_rate(10.0)),
+            sink("out"),
+        ],
+        vec![link("in", "job"), link("job", "next"), link("next", "out")],
+    );
+    m.resources = vec![
+        ResourcePool::new(id("a"), "A", 3, Vec::new()),
+        ResourcePool::new(id("b"), "B", 3, Vec::new()),
+    ];
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(
+        row(&c, "next").arrival_rate,
+        Value::Known {
+            value: 1.0,
+            bound: Bound::AtMost
+        }
+    );
+    // Each pool's load is over the 2 units whole jobs can use: 1.2 × 1 × 2 / 2 = 1.2, so it is
+    // unstable, though its units are busy 2.4 / 3 = 0.8 of the time in the results' sense.
+    for pool in ["a", "b"] {
+        let p = row(&c, pool);
+        assert!(p.load.exact_value().is_some_and(|l| near(l, 1.2)), "{p:?}");
+        assert!(
+            p.utilisation.exact_value().is_some_and(|u| near(u, 0.8)),
+            "{p:?}"
+        );
+        assert_eq!(p.status, Status::Unstable, "{p:?}");
+    }
+    assert_eq!(row(&c, "job").status, Status::Unstable);
+    // One job of one unit each: unchanged, 3 at a time.
+    if let ElementKind::SharedTask { needs, .. } = &mut m.elements[1].kind {
+        for r in needs.iter_mut() {
+            if let Some(Need::Resource { quantity, .. }) = r.alternatives.first_mut() {
+                *quantity = 1;
+            }
+        }
+    }
+    let c = m.capacity(DEFAULT_TARGET);
+    assert_eq!(row(&c, "next").arrival_rate, Value::exact(1.2));
+    let p = row(&c, "a");
+    assert!(p.load.exact_value().is_some_and(|l| near(l, 0.4)), "{p:?}");
+    assert_eq!(p.load, p.utilisation);
+    assert_eq!(p.status, Status::Fine);
 }

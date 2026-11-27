@@ -1531,6 +1531,10 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset strojeva mora raditi, četiri pričuvna čekaju u pripravnosti, a tri mehaničara popravljaju one koji se pokvare (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koliko pričuvnih strojeva i mehaničara drži deset strojeva u radu?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Pričuvni strojevi u pripravnosti ne mogu se pokvariti: u prosjeku je 3.47 strojeva pokvareno, a 9.29 radi. Četvrti mehaničar postiže otprilike koliko i četiri pričuvna stroja više.
+	A job shop short of workers	Radionica kojoj nedostaje radnika
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dva stroja i jedan radnik: svaki posao istodobno treba svoj stroj i radnika (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	Je li ograničenje radnik ili strojevi?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Posao drži svoj stroj i radnika zajedno, pa je jedini radnik ograničenje: poslovi čekaju kao u redu s jednim poslužiteljem, 3 vremena posluživanja pri zauzetosti od 75 % i 9 pri 90 %.
 	Scenario	Scenarij
 	Scenario: {name}	Scenarij: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvaranjem scenarija {scenario} odbacuju se nespremljene promjene u {name}. Najprije ih spremiti?

@@ -53,7 +53,7 @@ pub use stochcraft_model::{
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
-    Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
+    Property, PropertyType, PropertyValue, Requirement, ResourcePool, Severity, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::Summary;
@@ -2014,12 +2014,26 @@ impl Builder {
     }
 
     /// A task whose units come from the shared pools: each entity takes what the first of
-    /// `needs` that can be met asks for, ahead of entities of tasks with a lower `priority`.
+    /// `needs` that can be met asks for (one requirement, with its alternatives), ahead of
+    /// entities of tasks with a lower `priority`.
     pub fn shared_task(
         &mut self,
         name: &str,
         service: Dist,
         needs: Vec<Need>,
+        priority: f64,
+    ) -> BlockId {
+        self.shared_task_all(name, service, vec![Requirement::new(needs)], priority)
+    }
+
+    /// A task that needs every one of `requirements` met together for each entity (a machine
+    /// and a worker), each by the first of its alternatives that can be met: the units are
+    /// taken all at once, and given back together.
+    pub fn shared_task_all(
+        &mut self,
+        name: &str,
+        service: Dist,
+        requirements: Vec<Requirement>,
         priority: f64,
     ) -> BlockId {
         self.add(
@@ -2028,7 +2042,7 @@ impl Builder {
                 processing_by: None,
                 processing_by_resource: None,
                 service,
-                needs,
+                needs: requirements,
                 priority,
             },
         )

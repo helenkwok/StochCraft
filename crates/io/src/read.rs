@@ -11,8 +11,9 @@ use stochcraft_model::{
     Connection, ConveyorShape, DateTime, Demand, DemandPer, Dist, Element as ModelElement,
     ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck, Mobility, Model, Need,
     OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy,
-    ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing,
-    Scrap, Setup, Stop, ThreePoint, TimeInSystem, TimeUnit, Timed, Transfer, Upper,
+    ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit, Requirement,
+    ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeInSystem, TimeUnit, Timed, Transfer,
+    Upper,
 };
 
 use stochcraft_model::dmn::DecisionUse;
@@ -45,8 +46,17 @@ struct Node {
     id: String,
     name: String,
     kind: NodeKind,
-    /// Resources named as the task's performers.
-    performers: Vec<String>,
+    /// The task's resource roles, in file order.
+    performers: Vec<Role>,
+}
+
+/// A resource role of a task (a BPMN `performer`, `humanPerformer` or `potentialOwner`; an XPDL
+/// `Performer`): its id, which its own BPSim parameters (its `selection`) refer to, and the
+/// resource it names.
+#[derive(Debug, Clone)]
+struct Role {
+    id: Option<String>,
+    resource: Option<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -228,7 +238,10 @@ fn read_bpmn_container(container: &Element, inner: bool, p: &mut Process, notes:
                     || r.is(BPMN, "humanPerformer")
                     || r.is(BPMN, "potentialOwner")
             })
-            .filter_map(|r| r.child(&ns, "resourceRef").map(Element::text))
+            .map(|r| Role {
+                id: r.attr("id"),
+                resource: r.child(&ns, "resourceRef").map(Element::text),
+            })
             .collect();
         p.nodes.push(Node {
             id,
@@ -383,7 +396,10 @@ fn read_xpdl_set(
             .child(&ns, "Performers")
             .map(|ps| {
                 ps.children_named(&ns, "Performer")
-                    .map(Element::text)
+                    .map(|r| Role {
+                        id: None,
+                        resource: Some(r.text()),
+                    })
                     .collect()
             })
             .unwrap_or_default();
@@ -526,8 +542,14 @@ fn properties(
 pub(crate) struct Resources {
     /// Tasks with a resource of their own, one unit at a time (servers): task → resource.
     pub of_task: BTreeMap<String, String>,
-    /// Tasks that share pools, or need roles, several units or alternatives: task → needs.
-    pub shared: BTreeMap<String, Vec<Need>>,
+    /// Tasks that share pools, or need roles, several units, alternatives or several pools at
+    /// once: task → needs.
+    pub shared: BTreeMap<String, Vec<Requirement>>,
+    /// Each task's resource roles' ids, in file order (`None` for a role without one).
+    pub role_ids: BTreeMap<String, Vec<Option<String>>>,
+    /// The resource roles of each task that have a selection of their own, which gave the
+    /// task's requirements (one for each role).
+    pub selected_roles: BTreeMap<String, Vec<String>>,
     /// The tasks that can use each resource.
     pub users: BTreeMap<String, Vec<String>>,
     /// Each resource's roles (BPSim `role`), in file order.
@@ -563,33 +585,81 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
         roles.insert(r.clone(), list);
     }
     let mut users: BTreeMap<String, Vec<String>> = BTreeMap::new();
-    let mut needs_of: Vec<(String, Vec<Need>)> = Vec::new();
-    for n in p.nodes.iter().filter(|n| n.kind == NodeKind::Task) {
-        let selection = val(&n.id, "ResourceParameters/Selection", notes);
-        let needs = match selection {
-            Some(Value::Expression(e)) => match crate::selection::parse(&e) {
-                Ok(needs) => needs,
-                Err(why) => {
-                    notes.push(Note::error(
-                        Some(&n.id),
-                        format!("resource selection `{e}`: {why}"),
-                    ));
-                    continue;
-                }
-            },
-            Some(Value::Text(r)) => vec![Need::Resource {
-                id: ElementId::unchecked(&r),
-                quantity: 1,
-            }],
-            _ => match n.performers.first() {
-                Some(r) => vec![Need::Resource {
-                    id: ElementId::unchecked(r),
-                    quantity: 1,
-                }],
-                None => continue,
-            },
+    let mut needs_of: Vec<(String, Vec<Requirement>)> = Vec::new();
+    let mut role_ids: BTreeMap<String, Vec<Option<String>>> = BTreeMap::new();
+    let mut selected_roles: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    let one = |r: &str| {
+        Requirement::new(vec![Need::Resource {
+            id: ElementId::unchecked(r),
+            quantity: 1,
+        }])
+    };
+    'tasks: for n in p.nodes.iter().filter(|n| n.kind == NodeKind::Task) {
+        role_ids.insert(
+            n.id.clone(),
+            n.performers.iter().map(|r| r.id.clone()).collect(),
+        );
+        let v = val(&n.id, "ResourceParameters/Selection", notes);
+        let Ok(own) = selection_needs(v, &n.id, notes) else {
+            continue;
         };
-        for need in &needs {
+        // BPSim applies `selection` to a task's resource roles: each role with one of its own
+        // is one requirement, and the task needs them all together.
+        let mut by_role = Vec::new();
+        for r in &n.performers {
+            let v =
+                r.id.as_deref()
+                    .and_then(|id| val(id, "ResourceParameters/Selection", notes));
+            match selection_needs(v, r.id.as_deref().unwrap_or(&n.id), notes) {
+                Ok(x) => by_role.push(x),
+                Err(()) => continue 'tasks,
+            }
+        }
+        let needs: Vec<Requirement> = if by_role.iter().any(Option::is_some) {
+            if own.is_some() {
+                notes.push(Note::warning(
+                    Some(&n.id),
+                    "the task's own resource selection is ignored: its performers have selections of their own, each one requirement, all met together",
+                ));
+            }
+            selected_roles.insert(
+                n.id.clone(),
+                n.performers
+                    .iter()
+                    .zip(&by_role)
+                    .filter(|(_, x)| x.is_some())
+                    .filter_map(|(r, _)| r.id.clone())
+                    .collect(),
+            );
+            let mut out = Vec::new();
+            for (r, x) in n.performers.iter().zip(by_role) {
+                match (x, &r.resource) {
+                    (Some(alternatives), _) => out.push(Requirement::new(alternatives)),
+                    (None, Some(res)) => out.push(one(res.as_str())),
+                    (None, None) => notes.push(Note::warning(
+                        Some(&n.id),
+                        "a performer that names no resource and has no selection of its own is ignored",
+                    )),
+                }
+            }
+            out
+        } else if let Some(alternatives) = own {
+            // The task's own selection: one requirement (the performers only name its pools).
+            vec![Requirement::new(alternatives)]
+        } else {
+            // No selection: each performer needs one unit of its resource, all together.
+            let out: Vec<Requirement> = n
+                .performers
+                .iter()
+                .filter_map(|r| r.resource.as_deref())
+                .map(one)
+                .collect();
+            if out.is_empty() {
+                continue;
+            }
+            out
+        };
+        for need in needs.iter().flat_map(|r| &r.alternatives) {
             let pools: Vec<&String> = match need {
                 Need::Resource { id, .. } => p
                     .resources
@@ -627,7 +697,11 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
             || scenario.is_some_and(|s| s.param(task, "PriorityParameters/Priority").is_some())
     };
     for (task, needs) in needs_of {
-        let own = match needs.as_slice() {
+        let only = match needs.as_slice() {
+            [r] => r.alternatives.as_slice(),
+            _ => &[],
+        };
+        let own = match only {
             [Need::Resource { id, quantity: 1 }]
                 if users.get(id.as_str()).is_none_or(|u| u.len() <= 1)
                     && (!timed(id.as_str()) || is_marked_own(scenario, id.as_str()))
@@ -649,8 +723,36 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
     Resources {
         of_task,
         shared,
+        role_ids,
+        selected_roles,
         users,
         roles,
+    }
+}
+
+/// The alternatives a BPSim `selection` value gives (an expression, or a resource's id), at
+/// element `at`: `Ok(None)` without one, `Err` (noted) when the expression cannot be read.
+fn selection_needs(
+    v: Option<Value>,
+    at: &str,
+    notes: &mut Vec<Note>,
+) -> Result<Option<Vec<Need>>, ()> {
+    match v {
+        Some(Value::Expression(e)) => match crate::selection::parse(&e) {
+            Ok(needs) => Ok(Some(needs)),
+            Err(why) => {
+                notes.push(Note::error(
+                    Some(at),
+                    format!("resource selection `{e}`: {why}"),
+                ));
+                Err(())
+            }
+        },
+        Some(Value::Text(r)) => Ok(Some(vec![Need::Resource {
+            id: ElementId::unchecked(&r),
+            quantity: 1,
+        }])),
+        _ => Ok(None),
     }
 }
 
@@ -961,6 +1063,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         shared,
         users,
         roles,
+        ..
     } = assign_resources(&p, scenario, notes);
     // The pools the shared tasks draw on, and those no task uses that are marked as pools or
     // have a role, in the order the file declares them. Other unused resources are left out: a

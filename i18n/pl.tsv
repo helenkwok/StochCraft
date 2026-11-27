@@ -1531,6 +1531,10 @@ connection	Flow	Przepływ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dziesięć maszyn musi pracować, cztery zapasowe czekają w gotowości, a trzech mechaników naprawia te, które ulegną awarii (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Ile maszyn zapasowych i mechaników utrzyma w ruchu dziesięć maszyn?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Maszyny zapasowe w gotowości nie mogą ulec awarii: średnio 3.47 maszyny są zepsute, a 9.29 pracuje. Czwarty mechanik daje mniej więcej tyle, co cztery dodatkowe maszyny zapasowe.
+	A job shop short of workers	Warsztat, w którym brakuje pracowników
+	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dwie maszyny i jeden pracownik: każde zlecenie potrzebuje jednocześnie swojej maszyny i pracownika (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
+	Is the worker or the machines the constraint?	Ograniczeniem jest pracownik czy maszyny?
+	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Zlecenie zajmuje swoją maszynę i pracownika naraz, więc ograniczeniem jest jedyny pracownik: zlecenia czekają jak w kolejce z jednym stanowiskiem obsługi, 3 czasy obsługi przy obciążeniu 75% i 9 przy 90%.
 	Scenario	Scenariusz
 	Scenario: {name}	Scenariusz: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otwarcie scenariusza {scenario} odrzuci niezapisane zmiany w {name}. Najpierw je zapisać?

@@ -265,15 +265,20 @@ pub enum ElementKind {
         health_check: Option<HealthCheck>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
-    /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
-    /// for its service (and while blocked after it), then gives it back. Entities wait here in
-    /// one queue per task. At the end of each instant, once every event at it has happened
-    /// (units given back, entities arrived), the free units go to the waiting entities across all
-    /// tasks in order of their task's `priority` (higher first), then of arrival, each taking the
-    /// first of its `needs` the free units can meet: units that come free together go to the
-    /// first alternative, whichever job ended first. An entity that cannot be served now does
-    /// not hold back one behind it that can. BPSim's `selection` with
-    /// `getResource`, `getResourceByRoles` and `orResource`, and `priority`.
+    /// needs every one of `needs` met together (a machine and a worker, say), each by one of its
+    /// alternatives, and takes all those units at once, only when every requirement can be met
+    /// right now (never some of them first, so tasks cannot deadlock); it holds them for its
+    /// service (and while blocked after it), then gives them all back together. Entities wait
+    /// here in one queue per task. At the end of each instant, once every event at it has
+    /// happened (units given back, entities arrived), the free units go to the waiting entities
+    /// across all tasks in order of their task's `priority` (higher first), then of arrival.
+    /// Each takes the first way of meeting its requirements that the free units allow: the
+    /// first alternative of the first requirement that leaves the later ones a way, and so on,
+    /// so units that come free together go to the first alternative, whichever job ended first.
+    /// An entity that cannot be served now does not hold back one behind it that can: one that
+    /// needs only a machine is served while one needing a machine and the busy worker waits.
+    /// BPSim's `selection` with `getResource`, `getResourceByRoles` and `orResource`, one for
+    /// each BPMN resource role of the task, and `priority`.
     SharedTask {
         service: Dist,
         /// Processing times for entities with particular values of a property, `service`
@@ -283,8 +288,10 @@ pub enum ElementKind {
         /// `service` (a StochCraft vendor extension, `stochcraft:processingTimeByResource`);
         /// `None`: the pool does not change the time. See [`ProcessingByResource`].
         processing_by_resource: Option<ProcessingByResource>,
-        /// The alternatives, tried in order (BPSim `orResource`); at least one.
-        needs: Vec<Need>,
+        /// What each entity needs, all together: at least one requirement, each with its
+        /// alternatives (see [`Requirement`]). The pool that meets the first requirement sets
+        /// the time by `processing_by_resource`.
+        needs: Vec<Requirement>,
         /// Who gets freed units first, higher first (BPSim `priority`; default 0).
         priority: f64,
     },
@@ -1034,6 +1041,41 @@ impl Need {
         match self {
             Need::Resource { quantity, .. } | Need::Roles { quantity, .. } => *quantity,
         }
+    }
+
+    /// Whether `pool` could meet it: it is the pool named, or has every role asked for.
+    pub fn met_by(&self, pool: &ResourcePool) -> bool {
+        match self {
+            Need::Resource { id, .. } => *id == pool.id,
+            Need::Roles { roles, .. } => pool.has_roles(roles),
+        }
+    }
+}
+
+/// One thing a [`ElementKind::SharedTask`] needs for each entity, such as a machine: met by the
+/// first of its alternatives the free units can meet (BPSim `orResource`). A task's requirements
+/// are all met together, at once (a machine and a worker). In a BPMN file each is one resource
+/// role of the task (a `performer`) with its own BPSim `selection`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Requirement {
+    /// Tried in order; at least one.
+    pub alternatives: Vec<Need>,
+}
+
+impl Requirement {
+    pub fn new(alternatives: Vec<Need>) -> Self {
+        Self { alternatives }
+    }
+
+    /// Whether `pool` could meet any of its alternatives.
+    pub fn may_use(&self, pool: &ResourcePool) -> bool {
+        self.alternatives.iter().any(|n| n.met_by(pool))
+    }
+}
+
+impl From<Vec<Need>> for Requirement {
+    fn from(alternatives: Vec<Need>) -> Self {
+        Self::new(alternatives)
     }
 }
 
@@ -1915,7 +1957,8 @@ pub enum Problem {
     DuplicateTimeByPool {
         id: ElementId,
     },
-    /// A service time by pool for a pool the task does not need.
+    /// A service time by pool for a pool that cannot meet the task's first requirement (the one
+    /// whose pool sets the time).
     TimeForPoolNotNeeded {
         id: ElementId,
     },
@@ -3448,49 +3491,80 @@ impl Model {
                     Problem::BadPriority { value: *priority },
                 ));
             }
-            if needs.is_empty() {
+            if needs.is_empty() || needs.iter().any(|r| r.alternatives.is_empty()) {
                 out.push(Diagnostic::error(Some(&e.id), Problem::NoNeeds));
                 continue;
             }
-            let mut found = Vec::new();
-            for need in needs {
-                match need {
-                    Need::Resource { id, .. } => {
-                        used.insert(id);
+            // Each requirement is checked on its own, as a task with that one requirement.
+            let mut all_met = true;
+            for requirement in needs {
+                let mut found = Vec::new();
+                for need in &requirement.alternatives {
+                    match need {
+                        Need::Resource { id, .. } => {
+                            used.insert(id);
+                        }
+                        Need::Roles { roles, .. } => used.extend(
+                            self.resources
+                                .iter()
+                                .filter(|r| r.has_roles(roles))
+                                .map(|r| &r.id),
+                        ),
                     }
-                    Need::Roles { roles, .. } => used.extend(
-                        self.resources
-                            .iter()
-                            .filter(|r| r.has_roles(roles))
-                            .map(|r| &r.id),
-                    ),
+                    let problem = match (need, self.units_for(need)) {
+                        (Need::Resource { id, .. }, None) => {
+                            Some(Problem::UnknownResource { id: id.clone() })
+                        }
+                        (Need::Roles { roles, .. }, None) => Some(Problem::NoPoolWithRoles {
+                            roles: roles.clone(),
+                        }),
+                        (_, Some(available))
+                            if need.quantity() == 0 || need.quantity() > available =>
+                        {
+                            Some(Problem::NeedNeverMet {
+                                needed: need.quantity(),
+                                available,
+                            })
+                        }
+                        _ => None,
+                    };
+                    found.push(problem);
                 }
-                let problem = match (need, self.units_for(need)) {
-                    (Need::Resource { id, .. }, None) => {
-                        Some(Problem::UnknownResource { id: id.clone() })
-                    }
-                    (Need::Roles { roles, .. }, None) => Some(Problem::NoPoolWithRoles {
-                        roles: roles.clone(),
-                    }),
-                    (_, Some(available)) if need.quantity() == 0 || need.quantity() > available => {
-                        Some(Problem::NeedNeverMet {
-                            needed: need.quantity(),
-                            available,
-                        })
-                    }
-                    _ => None,
-                };
-                found.push(problem);
+                // An alternative that can never be met is an error when it is the only kind
+                // there is, else a warning (the others still serve).
+                let all_fail = found.iter().all(Option::is_some);
+                all_met &= found.iter().all(Option::is_none);
+                for problem in found.into_iter().flatten() {
+                    out.push(if all_fail {
+                        Diagnostic::error(Some(&e.id), problem)
+                    } else {
+                        Diagnostic::warning(Some(&e.id), problem)
+                    });
+                }
             }
-            // An alternative that can never be met is an error when it is the only kind there
-            // is, else a warning (the others still serve).
-            let all_fail = found.iter().all(Option::is_some);
-            for problem in found.into_iter().flatten() {
-                out.push(if all_fail {
-                    Diagnostic::error(Some(&e.id), problem)
-                } else {
-                    Diagnostic::warning(Some(&e.id), problem)
-                });
+            // Requirements that can each be met only by one pool, and together ask more of it
+            // than it ever has, are never met together: the entities would wait for ever.
+            if all_met && needs.len() > 1 {
+                let mut asked: BTreeMap<&ElementId, u32> = BTreeMap::new();
+                for r in needs {
+                    if let [Need::Resource { id, quantity }] = r.alternatives.as_slice() {
+                        let n = asked.entry(id).or_default();
+                        *n = n.saturating_add(*quantity);
+                    }
+                }
+                for (id, needed) in asked {
+                    let available = self
+                        .resources
+                        .iter()
+                        .find(|r| &r.id == id)
+                        .map_or(0, ResourcePool::most_units);
+                    if needed > available {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::NeedNeverMet { needed, available },
+                        ));
+                    }
+                }
             }
             // Service times by pool: each names a pool the model has and the task can draw on,
             // once. An entry the task could never use is an error, not a silent fallback.
@@ -3514,10 +3588,8 @@ impl Model {
                         ));
                         continue;
                     };
-                    let needed = needs.iter().any(|n| match n {
-                        Need::Resource { id, .. } => *id == pool.id,
-                        Need::Roles { roles, .. } => pool.has_roles(roles),
-                    });
+                    // Only the pool meeting the first requirement sets the time.
+                    let needed = needs.first().is_some_and(|r| r.may_use(pool));
                     if !needed {
                         out.push(Diagnostic::error(
                             Some(&e.id),
