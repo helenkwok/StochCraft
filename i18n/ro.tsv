@@ -1570,8 +1570,40 @@ connection	Flow	Flux
 	Encoding	Codificare
 	Add	Adaugă
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	În browser, cheile sunt păstrate necriptate în stocarea locală a acestui site: orice rulează pe această pagină și oricine folosește acest profil de browser le poate citi. Folosește o cheie pe care o poți revoca sau aplicația desktop, care păstrează cheile în lanțul de chei al sistemului.
+	Scenario	Scenariu
+	Scenario: {name}	Scenariu: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Deschiderea {scenario} renunță la modificările nesalvate din {name}. Le salvați mai întâi?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenariu de comparat|{n} scenarii de comparat|{n} de scenarii de comparat
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	A fost salvat ca fișier nou, care conține doar scenariul deschis, așa că trecerea la {scenario} nu s-a făcut.
+	Median time in system	Mediana timpului în sistem
+	Time in system, 90th percentile	Timp în sistem, percentila 90
+	Time in system, 95th percentile	Timp în sistem, percentila 95
+	Share done within the target time	Proporția terminată în timpul țintă
+	Percentiles of time in system	Percentilele timpului în sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Arată mediana, percentilele 90 și 95 ale timpului pe care fiecare entitate l-a petrecut de la creare până la aceste ieșiri și, cu un timp țintă, proporția terminată în el.
+	Target time ({unit})	Timp țintă ({unit})
+	The target time is a time above 0	Timpul țintă este un timp mai mare decât 0
+	Count only working time on	Numără doar timpul de lucru după
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitățile încă în interior când se încheie rularea sunt lăsate în afară, așa că opriți rularea când toate sunt gata.
+	Set the target time in system of {block} to a time above 0.	Setați timpul țintă în sistem al blocului {block} la un timp mai mare decât 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Timpul în sistem al blocului {block} numără timpul de lucru după un calendar care nu există. Alegeți un calendar existent.
 	One machine's availability	Disponibilitatea unei mașini
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	O mașină care se defectează în medie la fiecare 90 de ore și necesită 4.5 ore pentru reparație (Hristova, Denev și Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Cât de des stă o mașină și cât de multă muncă costă asta?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Funcționează 90 de ore, stă 4.5: mașina lucrează 95.2% din timp, iar o defecțiune apare la fiecare 94.5 ore. Reducerea la jumătate a timpului de reparație urcă valoarea la 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stă {down} din timp (disponibilitate {up}); nimic nu o așteaptă.
+	Choose a warm-up	Alegeți o perioadă de încălzire
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Graficul Welch: media rulărilor la fiecare moment înregistrat, netezită cu o medie mobilă. Setați perioada de încălzire acolo unde curba se nivelează; tăietura MSER-5 este doar un punct de plecare.
+	Number inside	Număr în interior
+	Busy units	Unități ocupate
+	Leaving per interval	Ieșiri pe interval
+	Entering per interval	Intrări pe interval
+	The run recorded too few times to plot.	Rularea a înregistrat prea puține momente pentru un grafic.
+	Points each side	Puncte de fiecare parte
+	1 to {max}	De la 1 la {max}
+	Welch's plot of {measure} at {block}	Graficul Welch pentru {measure} la {block}
+	MSER-5 suggests {value}.	MSER-5 sugerează {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 nu sugerează nimic aici: seria poate încă se stabilizează la jumătatea rulării.
+	The warm-up now is {value}.	Perioada de încălzire este acum {value}.
+	Later times, which fewer runs reached, are left out.	Momentele ulterioare, atinse de mai puține rulări, sunt omise.
+	New warm-up	Perioadă de încălzire nouă

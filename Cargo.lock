@@ -4035,6 +4035,7 @@ dependencies = [
  "stochcraft-qrng",
  "stochcraft-random",
  "stochcraft-render",
+ "stochcraft-stats",
  "web-time",
 ]
 

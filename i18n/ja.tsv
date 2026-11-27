@@ -1570,8 +1570,40 @@ connection	Flow	フロー
 	Encoding	エンコード
 	Add	追加
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	ブラウザーでは、キーはこのサイトのローカルストレージに暗号化されずに保存されます。このページで動くものや、このブラウザープロファイルを使う人は誰でも読み取れます。取り消せるキーを使うか、キーをシステムのキーチェーンに保存するデスクトップアプリを使ってください。
+	Scenario	シナリオ
+	Scenario: {name}	シナリオ: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} を開くと、{name} の保存していない変更は破棄されます。先に保存しますか？
+@plural	{n} scenario to compare|{n} scenarios to compare	比較できるシナリオ {n} 件
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	開いているシナリオだけを含む新しいファイルとして保存したため、{scenario} への切り替えは行いませんでした。
+	Median time in system	システム内の滞在時間の中央値
+	Time in system, 90th percentile	システム内の滞在時間（90 パーセンタイル）
+	Time in system, 95th percentile	システム内の滞在時間（95 パーセンタイル）
+	Share done within the target time	目標時間内に完了した割合
+	Percentiles of time in system	システム内の滞在時間のパーセンタイル
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	各エンティティが生成されてからこの退出に至るまでの時間の中央値、90 パーセンタイル、95 パーセンタイルを表示し、目標時間を指定するとその時間内に完了した割合も表示します。
+	Target time ({unit})	目標時間（{unit}）
+	The target time is a time above 0	目標時間は 0 より大きい時間です
+	Count only working time on	稼働時間のみを数えるカレンダー
+	Entities still inside when the run ends are left out, so stop the run once all are done.	実行の終了時に内部に残っているエンティティは含まれないため、すべてが完了してから実行を止めてください。
+	Set the target time in system of {block} to a time above 0.	{block} のシステム内の目標時間を 0 より大きい時間に設定してください。
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} のシステム内の滞在時間が、存在しないカレンダーで稼働時間を数えています。存在するカレンダーを選んでください。
 	One machine's availability	機械 1 台の稼働率
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	平均 90 時間ごとに故障し、修理に 4.5 時間かかる機械 1 台（Hristova、Denev、Tsankov、Environment. Technology. Resources、2024）。
 	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	稼働 90 時間、停止 4.5 時間：機械は時間の 95.2% で稼働し、94.5 時間ごとに故障が起きる。修理時間を半分にすると 97.6% に上がる。
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} は時間の {down} で停止している（稼働率 {up}）。待っているものはない。
+	Choose a warm-up	ウォームアップを選ぶ
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	ウェルチのプロット: 記録した各時点での実行の平均を移動平均で平滑化したもの。曲線が平らになる所にウォームアップを設定してください。MSER-5 の切れ目は出発点にすぎません。
+	Number inside	内部の数
+	Busy units	稼働中のユニット
+	Leaving per interval	区間ごとの退出数
+	Entering per interval	区間ごとの到着数
+	The run recorded too few times to plot.	実行が記録した時点が少なすぎてプロットできません。
+	Points each side	片側の点数
+	1 to {max}	1 から {max}
+	Welch's plot of {measure} at {block}	{block} の {measure} のウェルチのプロット
+	MSER-5 suggests {value}.	MSER-5 の提案は {value} です。
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 はここでは何も提案しません: 系列は実行の半ばでもまだ安定していない可能性があります。
+	The warm-up now is {value}.	現在のウォームアップは {value} です。
+	Later times, which fewer runs reached, are left out.	より少ない実行しか到達しなかった後の時点は除いています。
+	New warm-up	新しいウォームアップ

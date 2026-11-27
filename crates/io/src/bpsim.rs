@@ -263,6 +263,12 @@ pub const SCRAP: &str = "stochcraft:scrap";
 /// optional `calendar` whose active time is the time available (needed for `shift`), for takt.
 pub const DEMAND: &str = "stochcraft:demand";
 
+/// Time in system by percentile: a `stochcraft:timeInSystem` element on an end event's
+/// `ElementParameters`, with an optional `stochcraft:within` holding a BPSim value (the target
+/// time, for the share done within it) and an optional attribute `calendar` whose active time
+/// alone counts (working time).
+pub const TIME_IN_SYSTEM: &str = "stochcraft:timeInSystem";
+
 /// A terminating experiment's stop on a target count: `stochcraft:stopCount` on an element's
 /// `ElementParameters`, the run ending once that many entities have left the element.
 pub const STOP_COUNT: &str = "stochcraft:stopCount";
@@ -403,6 +409,31 @@ pub fn scenario_list(data: &Element) -> Vec<(String, Option<String>)> {
     data.children_named(&NSS, "Scenario")
         .filter(|s| s.attr("result").is_none())
         .filter_map(|s| Some((s.attr("id")?, s.attr("name"))))
+        .collect()
+}
+
+/// An input scenario as a file lists it.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ScenarioInfo {
+    pub id: String,
+    pub name: Option<String>,
+    pub description: Option<String>,
+    /// The scenario it inherits its values from (BPSim `inherits`), if any.
+    pub inherits: Option<String>,
+}
+
+/// The input scenarios of [`scenario_list`] with their descriptions and what each inherits from.
+pub fn scenario_details(data: &Element) -> Vec<ScenarioInfo> {
+    data.children_named(&NSS, "Scenario")
+        .filter(|s| s.attr("result").is_none())
+        .filter_map(|s| {
+            Some(ScenarioInfo {
+                id: s.attr("id")?,
+                name: s.attr("name"),
+                description: s.attr("description"),
+                inherits: s.attr("inherits"),
+            })
+        })
         .collect()
 }
 

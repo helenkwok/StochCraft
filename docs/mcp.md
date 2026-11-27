@@ -87,6 +87,7 @@ driving the app is the channel's token (below).
 | `inspect_model` | — | `model.get` (elements, connections, pools, calendars, experiment) and `history` (what undo and redo would do, unsaved changes). |
 | `check_model` | — | `model.validate`: every problem, errors first, with the element, a stable code and a message in English that starts with its severity, names the block by its name and says what to do. The same text comes as `parts` (each a template `key` and the `args` that fill it) and, for a problem with one field, `field`: the window builds its translated message from those, and a client may do the same. The code never changes with the wording. |
 | `open` | `path`, `scenario?` | `file.open`: a `.bpmn` or `.xpdl` file with BPSim data, a system dynamics model in XMILE (`.xmile`, `.stmx`), or an agent-based model with the charts and link lists beside it. |
+| `scenarios` | — | `file.scenarios`: the opened file's input scenarios, each with its `id`, `name`, `description`, the scenario it `inherits` from and whether it is the `open` one. `execute` with `file.reopen` (`scenario`, `discard_changes?`) opens another of them from the file as it was opened or last saved; it refuses while there are unsaved changes unless `discard_changes` is `true`. An agent-based model keeps the charts and lists of links it was opened with (the texts `agents.open` was given, or the files read from beside it) and reads them from there; a model opened from texts reads nothing from disk. |
 | `save` | `path?`, `as_new?`, `allow_loss?` | `file.save`: into the model's own file (keeping what StochCraft does not understand), or to `path`. A save that would leave out content of the opened file that StochCraft does not keep is refused, naming it, unless `allow_loss` is `true`. |
 | `run` | `replications?`, `seed?` | `run`: each element's metrics as means with 95% confidence intervals, the warm-up MSER-5 suggests (`warmup_suggestion`), the warnings about the results, and the run record. The values over the run (`series`) are left out, since they multiply the reply's size; `execute` with `run` gives them. An experiment with sequential replications (`experiment.set` with `sequential`) adds replications until its key measures are precise enough, and `sequential` in the results says how many ran and why it stopped. |
 | `undo`, `redo` | — | `undo`, `redo`. |
@@ -228,6 +229,18 @@ The server treats its input as hostile:
 as `a` and `b`). Runs with the same seed and replications share their random numbers, so it
 compares them replication by replication (a paired-t interval); otherwise it uses Welch's
 two-sample t interval and says so.
+
+Results made by another tool need no model. `data.analyse` takes per-replication results as CSV
+text (`csv`: a wide table with a column per measure, or a long one with `measure` and `value`
+columns, each with optional `scenario` and `replication` columns) and gives each scenario's
+means with their 95% intervals, how sure they are and two outcomes where the runs split, and each
+scenario against the `baseline`, judged as the check against observed data judges a difference
+(with an optional `tolerance` per measure). Pairing by replication id is used only when `paired`
+is declared: whether the scenarios shared their random numbers cannot be seen from the numbers.
+`data.warmup` takes a time series per replication and suggests a warm-up by MSER-5. In both, a
+column role (`scenario`, `replication`, `measure`, `value`, `time`) left out is guessed from the
+headers, a string names the column, and `false` says there is none, so a column headed like the
+role is read as a measure (or left out, without numbers) instead.
 
 Each metric in `run`'s results carries `n`, the replications that had a value for it, which can
 be fewer than `replications` (a server no entity reached, or replications that stopped inside

@@ -339,6 +339,14 @@ pub const TEMPLATES: &[(&str, &str)] = &[
         "The demand of {block} names a calendar that does not exist. Choose a calendar that exists.",
     ),
     (
+        "time_in_system_within_not_positive",
+        "Set the target time in system of {block} to a time above 0.",
+    ),
+    (
+        "time_in_system_calendar_unknown",
+        "The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.",
+    ),
+    (
         "bad_probability",
         "The probability {value} on the flow {flow} is not from 0 to 1. Enter a probability from 0 to 1.",
     ),
@@ -1081,6 +1089,12 @@ impl Diagnostic {
             Problem::DemandNotPositive => part("demand_not_positive", vec![b()]),
             Problem::ShiftWithoutCalendar => part("shift_without_calendar", vec![b()]),
             Problem::DemandCalendarUnknown { .. } => part("demand_calendar_unknown", vec![b()]),
+            Problem::TimeInSystemWithinNotPositive => {
+                part("time_in_system_within_not_positive", vec![b()])
+            }
+            Problem::TimeInSystemCalendarUnknown { .. } => {
+                part("time_in_system_calendar_unknown", vec![b()])
+            }
             Problem::BadProbability { value } => part(
                 "bad_probability",
                 vec![("flow", flow_of(None)), ("value", num(*value))],

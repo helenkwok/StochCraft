@@ -1570,8 +1570,40 @@ connection	Flow	順序流
 	Encoding	編碼
 	Add	新增
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	在瀏覽器中，金鑰未經加密儲存在此網站的本機儲存空間中：此頁面上執行的任何內容，以及使用此瀏覽器設定檔的任何人，都能讀取它們。請使用可以撤銷的金鑰，或使用桌面應用程式，它會把金鑰儲存在系統鑰匙圈中。
+	Scenario	情境
+	Scenario: {name}	情境：{name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	開啟 {scenario} 會捨棄 {name} 中未儲存的變更。要先儲存嗎？
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} 個可比較的情境
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	已儲存為只含目前開啟情境的新檔案，因此沒有切換到 {scenario}。
+	Median time in system	系統內時間中位數
+	Time in system, 90th percentile	系統內時間，第 90 百分位數
+	Time in system, 95th percentile	系統內時間，第 95 百分位數
+	Share done within the target time	在目標時間內完成的比例
+	Percentiles of time in system	系統內時間的百分位數
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	顯示每個實體從建立到抵達這些出口所用時間的中位數、第 90 與第 95 百分位數；設定目標時間後，也顯示在該時間內完成的比例。
+	Target time ({unit})	目標時間（{unit}）
+	The target time is a time above 0	目標時間必須是大於 0 的時間
+	Count only working time on	只計工作時間的行事曆
+	Entities still inside when the run ends are left out, so stop the run once all are done.	執行結束時仍在內部的實體不計入，因此請在全部完成後再停止執行。
+	Set the target time in system of {block} to a time above 0.	請將 {block} 的系統內目標時間設為大於 0 的時間。
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} 的系統內時間依不存在的行事曆計算工作時間。請選擇存在的行事曆。
 	One machine's availability	單台機器的可用率
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	一台機器平均每 90 小時故障一次，修理需要 4.5 小時（Hristova、Denev 和 Tsankov，Environment. Technology. Resources，2024）。
 	How often is one machine down, and how much work does that cost?	一台機器多久停機一次，這會損失多少工作？
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	運轉 90 小時，停機 4.5 小時：機器 95.2% 的時間在工作，每 94.5 小時發生一次故障。修理時間減半，可用率升至 97.6%。
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} 有 {down} 的時間處於停機狀態（可用率 {up}），沒有任何東西在等待它。
+	Choose a warm-up	選擇暖機期
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	韋爾奇圖：每個記錄時刻各次執行的平均值，經移動平均平滑。請在曲線趨平處設定暖機期；MSER-5 的截斷點只是起點。
+	Number inside	內部數量
+	Busy units	忙碌單位
+	Leaving per interval	每個間隔的離開數
+	Entering per interval	每個間隔的進入數
+	The run recorded too few times to plot.	執行記錄的時刻太少，無法繪圖。
+	Points each side	每側點數
+	1 to {max}	1 到 {max}
+	Welch's plot of {measure} at {block}	{block} 的 {measure} 韋爾奇圖
+	MSER-5 suggests {value}.	MSER-5 建議 {value}。
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 在此沒有建議：序列在執行過半時可能仍在趨於穩定。
+	The warm-up now is {value}.	目前暖機期為 {value}。
+	Later times, which fewer runs reached, are left out.	較少執行到達的後續時刻已略去。
+	New warm-up	新暖機期

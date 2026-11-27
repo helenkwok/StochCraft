@@ -1570,8 +1570,40 @@ connection	Flow	Flusso
 	Encoding	Codifica
 	Add	Aggiungi
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Nel browser le chiavi sono conservate nell'archivio locale di questo sito, non cifrate: qualsiasi cosa venga eseguita su questa pagina, e chiunque usi questo profilo del browser, può leggerle. Usa una chiave che puoi revocare, oppure l'app desktop, che conserva le chiavi nel portachiavi del sistema.
+	Scenario	Scenario
+	Scenario: {name}	Scenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Aprire {scenario} scarta le modifiche non salvate di {name}. Salvarle prima?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenario da confrontare|{n} scenari da confrontare
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	È stato salvato come nuovo file che contiene solo lo scenario aperto, quindi il passaggio a {scenario} non è stato fatto.
+	Median time in system	Mediana del tempo nel sistema
+	Time in system, 90th percentile	Tempo nel sistema, 90° percentile
+	Time in system, 95th percentile	Tempo nel sistema, 95° percentile
+	Share done within the target time	Quota completata entro il tempo obiettivo
+	Percentiles of time in system	Percentili del tempo nel sistema
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Mostra la mediana, il 90° e il 95° percentile del tempo impiegato da ogni entità dalla sua creazione fino a queste uscite e, con un tempo obiettivo, la quota completata entro di esso.
+	Target time ({unit})	Tempo obiettivo ({unit})
+	The target time is a time above 0	Il tempo obiettivo è un tempo maggiore di 0
+	Count only working time on	Conta solo il tempo di lavoro secondo
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Le entità ancora all'interno quando l'esecuzione termina sono escluse, quindi ferma l'esecuzione quando tutte sono finite.
+	Set the target time in system of {block} to a time above 0.	Imposta il tempo obiettivo nel sistema di {block} a un tempo maggiore di 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Il tempo nel sistema di {block} conta il tempo di lavoro secondo un calendario che non esiste. Scegli un calendario esistente.
 	One machine's availability	Disponibilità di una macchina
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Una macchina che si guasta in media ogni 90 ore e richiede 4.5 ore per essere riparata (Hristova, Denev e Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Quanto spesso una macchina è ferma e quanto lavoro costa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	In funzione 90 ore, ferma 4.5: la macchina lavora il 95.2% del tempo e un guasto avviene ogni 94.5 ore. Dimezzando il tempo di riparazione si sale al 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} è fermo il {down} del tempo (disponibilità {up}); nulla lo aspetta.
+	Choose a warm-up	Scegli un riscaldamento
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Grafico di Welch: la media delle esecuzioni in ogni istante registrato, smussata con una media mobile. Imposta il riscaldamento dove la curva si stabilizza; il taglio di MSER-5 è solo un punto di partenza.
+	Number inside	Numero all'interno
+	Busy units	Unità occupate
+	Leaving per interval	Uscite per intervallo
+	Entering per interval	Entrate per intervallo
+	The run recorded too few times to plot.	L'esecuzione ha registrato troppo pochi istanti per un grafico.
+	Points each side	Punti per lato
+	1 to {max}	Da 1 a {max}
+	Welch's plot of {measure} at {block}	Grafico di Welch di {measure} in {block}
+	MSER-5 suggests {value}.	MSER-5 suggerisce {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 non suggerisce nulla qui: la serie forse si sta ancora assestando a metà esecuzione.
+	The warm-up now is {value}.	Il riscaldamento ora è di {value}.
+	Later times, which fewer runs reached, are left out.	Gli istanti successivi, raggiunti da meno esecuzioni, sono omessi.
+	New warm-up	Nuovo riscaldamento

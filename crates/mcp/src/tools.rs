@@ -133,6 +133,13 @@ pub fn tool_definitions() -> Vec<Value> {
             false,
         ),
         tool(
+            "scenarios",
+            "List the scenarios",
+            "The opened file's input scenarios (file.scenarios): each with its id, name,              description and the scenario it inherits from, and which one is open. `execute`              with `file.reopen` opens another of them.",
+            obj(json!({}), &[]),
+            true,
+        ),
+        tool(
             "save",
             "Save the model",
             "Save the model (file.save): into the file it came from, keeping everything StochCraft \
@@ -153,7 +160,10 @@ pub fn tool_definitions() -> Vec<Value> {
             "Run the experiment",
             "Run the model's experiment now (run) and return the results: for each element and \
              metric (entered, left, mean queue length, mean wait, utilisation, mean time in \
-             system, …) the mean across replications with its 95% confidence interval \
+             system, …; a sink with time_in_system also gives time_in_system_p50, _p90 and \
+             _p95 and, with a target, within_target_share, over the entities that reached it: \
+             those still inside at the end are left out, so the run should stop once all are \
+             done) the mean across replications with its 95% confidence interval \
              (half_width), where the replications split into two outcomes the two groups \
              (split: cut, and each group's n and mean; the mean then describes no actual run), \
              the warm-up MSER-5 suggests (warmup_suggestion), warnings about the results \
@@ -327,6 +337,7 @@ fn dispatch(b: &mut dyn Backend, name: &str, a: &Map<String, Value>) -> Result<V
         })),
         "check_model" => b.execute("model.validate", json!({})),
         "open" => b.execute("file.open", pick(a, &["path", "scenario"])),
+        "scenarios" => b.execute("file.scenarios", json!({})),
         "save" => b.execute("file.save", pick(a, &["path", "as_new", "allow_loss"])),
         "run" => {
             // Without the results over time, which multiply the reply's size for a chart an

@@ -1570,8 +1570,40 @@ connection	Flow	ప్రవాహం
 	Encoding	ఎన్‌కోడింగ్
 	Add	జోడించు
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	బ్రౌజర్‌లో కీలు ఈ సైట్ యొక్క స్థానిక నిల్వలో ఎన్‌క్రిప్ట్ చేయకుండా ఉంచబడతాయి: ఈ పేజీలో నడిచే ఏదైనా, మరియు ఈ బ్రౌజర్ ప్రొఫైల్‌ను ఉపయోగించే ఎవరైనా వాటిని చదవగలరు. మీరు రద్దు చేయగల కీని ఉపయోగించండి, లేదా కీలను సిస్టమ్ కీచైన్‌లో ఉంచే డెస్క్‌టాప్ యాప్‌ను ఉపయోగించండి.
+	Scenario	దృశ్యం
+	Scenario: {name}	దృశ్యం: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ను తెరిస్తే {name} లో సేవ్ చేయని మార్పులు పోతాయి. ముందుగా సేవ్ చేయాలా?
+@plural	{n} scenario to compare|{n} scenarios to compare	పోల్చడానికి {n} దృశ్యం|పోల్చడానికి {n} దృశ్యాలు
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	తెరిచి ఉన్న దృశ్యం మాత్రమే ఉన్న కొత్త ఫైల్‌గా ఇది సేవ్ చేయబడింది, కాబట్టి {scenario} కు మారలేదు.
+	Median time in system	వ్యవస్థలో గడిపిన సమయం మధ్యగతం
+	Time in system, 90th percentile	వ్యవస్థలో గడిపిన సమయం, 90వ శతాంశం
+	Time in system, 95th percentile	వ్యవస్థలో గడిపిన సమయం, 95వ శతాంశం
+	Share done within the target time	లక్ష్య సమయంలో పూర్తయిన వాటా
+	Percentiles of time in system	వ్యవస్థలో గడిపిన సమయం శతాంశాలు
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	ప్రతి అంశం సృష్టించబడినప్పటి నుంచి ఈ నిష్క్రమణలకు చేరే వరకు తీసుకున్న సమయం యొక్క మధ్యగతం, 90వ మరియు 95వ శతాంశాలను చూపుతుంది; లక్ష్య సమయం ఇస్తే దానిలో పూర్తయిన వాటాను కూడా చూపుతుంది.
+	Target time ({unit})	లక్ష్య సమయం ({unit})
+	The target time is a time above 0	లక్ష్య సమయం 0 కంటే ఎక్కువ సమయం కావాలి
+	Count only working time on	పని సమయాన్ని మాత్రమే లెక్కించే క్యాలెండర్
+	Entities still inside when the run ends are left out, so stop the run once all are done.	అమలు ముగిసేటప్పుడు ఇంకా లోపల ఉన్నవి లెక్కించబడవు, కాబట్టి అన్నీ పూర్తయిన తర్వాత అమలును ఆపండి.
+	Set the target time in system of {block} to a time above 0.	{block} యొక్క వ్యవస్థలో లక్ష్య సమయాన్ని 0 కంటే ఎక్కువ సమయానికి సెట్ చేయండి.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} యొక్క వ్యవస్థలో గడిపిన సమయం లేని క్యాలెండర్ ప్రకారం పని సమయాన్ని లెక్కిస్తోంది. ఉన్న క్యాలెండర్‌ను ఎంచుకోండి.
 	One machine's availability	ఒక యంత్రం అందుబాటు
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	సగటున ప్రతి 90 గంటలకు చెడిపోయి, మరమ్మతుకు 4.5 గంటలు పట్టే ఒక యంత్రం (Hristova, Denev మరియు Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	ఒక యంత్రం ఎంత తరచుగా ఆగిపోతుంది, దానివల్ల ఎంత పని పోతుంది?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 గంటలు పని, 4.5 గంటలు ఆగుదల: యంత్రం 95.2% సమయం పనిచేస్తుంది, ప్రతి 94.5 గంటలకు ఒక చెడిపోవడం జరుగుతుంది. మరమ్మతు సమయాన్ని సగం చేస్తే అది 97.6% అవుతుంది.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} సమయం ఆగిపోతుంది (అందుబాటు {up}); దాని కోసం ఏదీ వేచి ఉండదు.
+	Choose a warm-up	ప్రారంభ సర్దుబాటు సమయాన్ని ఎంచుకోండి
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	వెల్చ్ గ్రాఫ్: నమోదైన ప్రతి సమయంలో అమలుల సగటు, కదిలే సగటుతో సున్నితం చేసింది. వక్రరేఖ సమమయ్యే చోట ప్రారంభ సర్దుబాటు సమయాన్ని సెట్ చేయండి; MSER-5 కోత కేవలం ఒక ప్రారంభ బిందువు.
+	Number inside	లోపల ఉన్న సంఖ్య
+	Busy units	పనిలో ఉన్న యూనిట్లు
+	Leaving per interval	ప్రతి వ్యవధికి వెళ్లేవి
+	Entering per interval	ప్రతి వ్యవధికి వచ్చేవి
+	The run recorded too few times to plot.	గ్రాఫ్ కోసం అమలు చాలా తక్కువ సమయాలను నమోదు చేసింది.
+	Points each side	ప్రతి వైపు బిందువులు
+	1 to {max}	1 నుండి {max} వరకు
+	Welch's plot of {measure} at {block}	{block} వద్ద {measure} వెల్చ్ గ్రాఫ్
+	MSER-5 suggests {value}.	MSER-5 సూచన {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 ఇక్కడ ఏమీ సూచించదు: అమలు మధ్యలోనూ శ్రేణి ఇంకా స్థిరపడుతుండవచ్చు.
+	The warm-up now is {value}.	ఇప్పుడు ప్రారంభ సర్దుబాటు సమయం {value}.
+	Later times, which fewer runs reached, are left out.	తక్కువ అమలులు చేరిన తర్వాతి సమయాలు వదిలివేయబడ్డాయి.
+	New warm-up	కొత్త ప్రారంభ సర్దుబాటు సమయం

@@ -1570,8 +1570,40 @@ connection	Flow	Alur
 	Encoding	Pengodean
 	Add	Tambah
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Di peramban, kunci disimpan tanpa enkripsi di penyimpanan lokal situs ini: apa pun yang berjalan di halaman ini, dan siapa pun yang memakai profil peramban ini, dapat membacanya. Gunakan kunci yang dapat Anda cabut, atau aplikasi desktop, yang menyimpan kunci di rantai kunci sistem.
+	Scenario	Skenario
+	Scenario: {name}	Skenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Membuka {scenario} membuang perubahan {name} yang belum disimpan. Simpan dulu?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} skenario untuk dibandingkan
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Model disimpan sebagai file baru yang hanya berisi skenario yang terbuka, jadi peralihan ke {scenario} tidak dilakukan.
+	Median time in system	Median waktu dalam sistem
+	Time in system, 90th percentile	Waktu dalam sistem, persentil ke-90
+	Time in system, 95th percentile	Waktu dalam sistem, persentil ke-95
+	Share done within the target time	Bagian yang selesai dalam waktu target
+	Percentiles of time in system	Persentil waktu dalam sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Menampilkan median, persentil ke-90 dan ke-95 dari waktu yang diperlukan setiap entitas sejak dibuat hingga mencapai keluaran ini, dan dengan waktu target, bagian yang selesai di dalamnya.
+	Target time ({unit})	Waktu target ({unit})
+	The target time is a time above 0	Waktu target harus berupa waktu di atas 0
+	Count only working time on	Hitung hanya waktu kerja menurut
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitas yang masih di dalam saat eksekusi berakhir tidak dihitung, jadi hentikan eksekusi setelah semuanya selesai.
+	Set the target time in system of {block} to a time above 0.	Atur waktu target dalam sistem untuk {block} ke waktu di atas 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Waktu dalam sistem untuk {block} menghitung waktu kerja menurut kalender yang tidak ada. Pilih kalender yang ada.
 	One machine's availability	Ketersediaan satu mesin
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Satu mesin yang rata-rata rusak setiap 90 jam dan butuh 4.5 jam untuk diperbaiki (Hristova, Denev, dan Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Seberapa sering satu mesin berhenti, dan berapa banyak pekerjaan yang hilang karenanya?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Hidup 90 jam, mati 4.5 jam: mesin bekerja 95.2% dari waktu dan kerusakan terjadi setiap 94.5 jam. Memangkas waktu perbaikan setengahnya menaikkan angka itu menjadi 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} berhenti {down} dari waktu (ketersediaan {up}); tidak ada yang menunggunya.
+	Choose a warm-up	Pilih pemanasan
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Plot Welch: rata-rata eksekusi pada setiap waktu yang dicatat, dihaluskan dengan rata-rata bergerak. Tetapkan pemanasan di tempat kurva mendatar; potongan MSER-5 hanya titik awal.
+	Number inside	Jumlah di dalam
+	Busy units	Unit sibuk
+	Leaving per interval	Keluar per interval
+	Entering per interval	Masuk per interval
+	The run recorded too few times to plot.	Eksekusi mencatat terlalu sedikit waktu untuk diplot.
+	Points each side	Titik di tiap sisi
+	1 to {max}	1 sampai {max}
+	Welch's plot of {measure} at {block}	Plot Welch {measure} di {block}
+	MSER-5 suggests {value}.	MSER-5 menyarankan {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 tidak menyarankan apa pun di sini: deret mungkin masih menstabil di pertengahan eksekusi.
+	The warm-up now is {value}.	Pemanasan sekarang {value}.
+	Later times, which fewer runs reached, are left out.	Waktu yang lebih akhir, yang dicapai lebih sedikit eksekusi, dihilangkan.
+	New warm-up	Pemanasan baru

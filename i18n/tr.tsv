@@ -1570,8 +1570,40 @@ connection	Flow	Akış
 	Encoding	Kodlama
 	Add	Ekle
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Tarayıcıda anahtarlar bu sitenin yerel depolama alanında şifrelenmeden saklanır: bu sayfada çalışan her şey ve bu tarayıcı profilini kullanan herkes onları okuyabilir. İptal edebileceğiniz bir anahtar kullanın ya da anahtarları sistemin anahtarlığında saklayan masaüstü uygulamasını kullanın.
+	Scenario	Senaryo
+	Scenario: {name}	Senaryo: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} açılırsa {name} içindeki kaydedilmemiş değişiklikler atılır. Önce kaydedilsin mi?
+@plural	{n} scenario to compare|{n} scenarios to compare	Karşılaştırılacak {n} senaryo|Karşılaştırılacak {n} senaryo
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Yalnızca açık senaryoyu içeren yeni bir dosya olarak kaydedildi, bu yüzden {scenario} senaryosuna geçilmedi.
+	Median time in system	Sistemdeki sürenin medyanı
+	Time in system, 90th percentile	Sistemdeki süre, 90. yüzdelik
+	Time in system, 95th percentile	Sistemdeki süre, 95. yüzdelik
+	Share done within the target time	Hedef süre içinde biten pay
+	Percentiles of time in system	Sistemdeki sürenin yüzdelikleri
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Her varlığın oluşturulmasından bu çıkışlara ulaşmasına kadar geçen sürenin medyanını, 90. ve 95. yüzdeliğini, bir hedef süre verilirse bu süre içinde bitenlerin payını gösterir.
+	Target time ({unit})	Hedef süre ({unit})
+	The target time is a time above 0	Hedef süre 0'dan büyük bir süredir
+	Count only working time on	Yalnızca çalışma süresini say, takvim
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Çalıştırma bittiğinde hâlâ içeride olan varlıklar dahil edilmez, bu yüzden çalıştırmayı hepsi bittiğinde durdurun.
+	Set the target time in system of {block} to a time above 0.	{block} bloğunun sistemdeki hedef süresini 0'dan büyük bir süreye ayarlayın.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} bloğunun sistemdeki süresi, var olmayan bir takvime göre çalışma süresini sayıyor. Var olan bir takvim seçin.
 	One machine's availability	Bir makinenin kullanılabilirliği
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Ortalama her 90 saatte bir arızalanan ve onarımı 4.5 saat süren bir makine (Hristova, Denev ve Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Bir makine ne sıklıkta duruyor ve bu ne kadar işe mal oluyor?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 saat çalışır, 4.5 saat durur: makine zamanın %95.2'sinde çalışır ve her 94.5 saatte bir arıza olur. Onarım süresini yarıya indirmek bunu %97.6'ya çıkarır.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} zamanın {down} kadarında duruyor (kullanılabilirlik {up}); onu bekleyen bir şey yok.
+	Choose a warm-up	Isınma seçin
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welch grafiği: kaydedilen her anda çalıştırmaların ortalaması, hareketli ortalamayla düzleştirilmiş. Isınmayı eğrinin dengelendiği yere ayarlayın; MSER-5 kesimi yalnızca bir başlangıç noktasıdır.
+	Number inside	İçerideki sayı
+	Busy units	Meşgul birimler
+	Leaving per interval	Aralık başına çıkışlar
+	Entering per interval	Aralık başına girişler
+	The run recorded too few times to plot.	Çalıştırma grafik için çok az an kaydetti.
+	Points each side	Her yandaki nokta
+	1 to {max}	1 ile {max} arası
+	Welch's plot of {measure} at {block}	{block} için {measure} Welch grafiği
+	MSER-5 suggests {value}.	MSER-5 önerisi: {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 burada bir şey önermiyor: seri çalıştırmanın yarısında hâlâ oturuyor olabilir.
+	The warm-up now is {value}.	Isınma şimdi {value}.
+	Later times, which fewer runs reached, are left out.	Daha az çalıştırmanın ulaştığı sonraki anlar dışarıda bırakıldı.
+	New warm-up	Yeni ısınma

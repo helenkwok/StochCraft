@@ -88,6 +88,24 @@ fn the_capacity_table_shows_the_formula_before_any_run() {
 }
 
 #[test]
+fn the_simulated_mean_wait_sits_under_its_header() {
+    let mut h = capacity();
+    // A frame more, so the grid's columns have their measured widths.
+    h.run_steps(2);
+    let header = h.get_by_label("Simulated mean wait").rect();
+    // The last "–" in the row is the simulated mean wait's (no run yet).
+    let dash = h
+        .query_all_by_label("–")
+        .map(|n| n.rect())
+        .max_by(|a, b| a.right().total_cmp(&b.right()))
+        .expect("a dash in the simulated columns");
+    assert!(
+        dash.right() <= header.right() + 1.0 && dash.left() >= header.left() - 1.0,
+        "the dash at {dash:?} is not under its header at {header:?}"
+    );
+}
+
+#[test]
 fn a_target_outside_zero_to_a_hundred_shows_its_error() {
     let mut h = capacity();
     h.get_by_label("Units for 85%");

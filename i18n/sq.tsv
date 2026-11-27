@@ -1570,8 +1570,40 @@ connection	Flow	Rrjedhë
 	Encoding	Kodimi
 	Add	Shto
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Në shfletues, çelësat ruhen pa enkriptim në ruajtjen lokale të këtij sajti: mund t'i lexojë çdo gjë që punon në këtë faqe dhe kushdo që përdor këtë profil shfletuesi. Përdor një çelës që mund ta revokosh, ose aplikacionin për desktop, që i ruan çelësat në zinxhirin e çelësave të sistemit.
+	Scenario	Skenar
+	Scenario: {name}	Skenari: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Hapja e {scenario} hedh poshtë ndryshimet e paruajtura në {name}. T’i ruaj së pari?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} skenar për krahasim|{n} skenarë për krahasim
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	U ruajt si skedar i ri që mban vetëm skenarin e hapur, ndaj kalimi te {scenario} nuk u bë.
+	Median time in system	Mediana e kohës në sistem
+	Time in system, 90th percentile	Koha në sistem, përqindëshi i 90-të
+	Time in system, 95th percentile	Koha në sistem, përqindëshi i 95-të
+	Share done within the target time	Pjesa e përfunduar brenda kohës së synuar
+	Percentiles of time in system	Përqindëshat e kohës në sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Tregon medianën, përqindëshin e 90-të dhe të 95-të të kohës që i duhej çdo entiteti nga krijimi deri te këto dalje dhe, me një kohë të synuar, pjesën e përfunduar brenda saj.
+	Target time ({unit})	Koha e synuar ({unit})
+	The target time is a time above 0	Koha e synuar është një kohë mbi 0
+	Count only working time on	Numëro vetëm kohën e punës sipas
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitetet që janë ende brenda kur mbaron ekzekutimi lihen jashtë, prandaj ndaleni ekzekutimin kur të kenë përfunduar të gjitha.
+	Set the target time in system of {block} to a time above 0.	Vendosni kohën e synuar në sistem të bllokut {block} në një kohë mbi 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Koha në sistem e bllokut {block} numëron kohën e punës sipas një kalendari që nuk ekziston. Zgjidhni një kalendar që ekziston.
 	One machine's availability	Disponueshmëria e një makine
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Një makinë që prishet mesatarisht çdo 90 orë dhe riparohet për 4.5 orë (Hristova, Denev dhe Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Sa shpesh ndalet një makinë dhe sa punë kushton kjo?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Punon 90 orë, ndalet 4.5: makina punon 95.2% të kohës dhe një prishje ndodh çdo 94.5 orë. Përgjysmimi i kohës së riparimit e ngre në 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} është i ndalur {down} të kohës (disponueshmëria {up}); asgjë nuk e pret.
+	Choose a warm-up	Zgjidhni ngrohjen
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Grafiku i Welch-it: mesatarja e ekzekutimeve në çdo kohë të regjistruar, e zbutur me një mesatare lëvizëse. Caktoni ngrohjen aty ku kurba niveluhet; prerja e MSER-5 është vetëm një pikënisje.
+	Number inside	Numri brenda
+	Busy units	Njësi të zëna
+	Leaving per interval	Daljet për interval
+	Entering per interval	Hyrjet për interval
+	The run recorded too few times to plot.	Ekzekutimi regjistroi shumë pak kohë për një grafik.
+	Points each side	Pika nga secila anë
+	1 to {max}	Nga 1 deri në {max}
+	Welch's plot of {measure} at {block}	Grafiku i Welch-it për {measure} në {block}
+	MSER-5 suggests {value}.	MSER-5 sugjeron {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 nuk sugjeron asgjë këtu: seria mund të jetë ende duke u stabilizuar në mes të ekzekutimit.
+	The warm-up now is {value}.	Ngrohja tani është {value}.
+	Later times, which fewer runs reached, are left out.	Kohët e mëvonshme, që i arritën më pak ekzekutime, janë lënë jashtë.
+	New warm-up	Ngrohje e re

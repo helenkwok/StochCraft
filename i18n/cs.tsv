@@ -1570,8 +1570,40 @@ connection	Flow	Tok
 	Encoding	Kódování
 	Add	Přidat
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	V prohlížeči se klíče ukládají nešifrované do místního úložiště tohoto webu: přečíst je může cokoli, co na této stránce běží, i každý, kdo používá tento profil prohlížeče. Použijte klíč, který můžete odvolat, nebo desktopovou aplikaci, která klíče ukládá do klíčenky systému.
+	Scenario	Scénář
+	Scenario: {name}	Scénář: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otevřením scénáře {scenario} se zahodí neuložené změny v {name}. Uložit je nejprve?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scénář k porovnání|{n} scénáře k porovnání|{n} scénářů k porovnání
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Byl uložen jako nový soubor, který obsahuje jen otevřený scénář, takže k přepnutí na {scenario} nedošlo.
+	Median time in system	Medián doby v systému
+	Time in system, 90th percentile	Doba v systému, 90. percentil
+	Time in system, 95th percentile	Doba v systému, 95. percentil
+	Share done within the target time	Podíl hotových v cílové době
+	Percentiles of time in system	Percentily doby v systému
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Zobrazí medián, 90. a 95. percentil doby, kterou každá entita strávila od svého vzniku do těchto výstupů, a s cílovou dobou podíl hotových v ní.
+	Target time ({unit})	Cílová doba ({unit})
+	The target time is a time above 0	Cílová doba je doba větší než 0
+	Count only working time on	Počítat jen pracovní dobu podle
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entity, které jsou na konci běhu stále uvnitř, nejsou zahrnuty, proto běh zastavte, až budou všechny hotové.
+	Set the target time in system of {block} to a time above 0.	Nastavte cílovou dobu v systému bloku {block} na dobu větší než 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Doba v systému bloku {block} počítá pracovní dobu podle kalendáře, který neexistuje. Vyberte existující kalendář.
 	One machine's availability	Dostupnost jednoho stroje
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jeden stroj, který se v průměru porouchá každých 90 hodin a oprava trvá 4.5 hodiny (Hristova, Denev a Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Jak často stojí jeden stroj a kolik práce to stojí?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	V provozu 90 hodin, mimo provoz 4.5: stroj pracuje 95.2 % času a porucha nastává každých 94.5 hodiny. Poloviční doba opravy to zvýší na 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stojí {down} času (dostupnost {up}); nic na něj nečeká.
+	Choose a warm-up	Zvolit zahřívání
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welchův graf: průměr běhů v každém zaznamenaném čase, vyhlazený klouzavým průměrem. Nastavte zahřívání tam, kde se křivka vyrovná; řez MSER-5 je jen výchozí bod.
+	Number inside	Počet uvnitř
+	Busy units	Obsazené jednotky
+	Leaving per interval	Odchody za interval
+	Entering per interval	Příchody za interval
+	The run recorded too few times to plot.	Běh zaznamenal příliš málo časů pro graf.
+	Points each side	Bodů na každé straně
+	1 to {max}	1 až {max}
+	Welch's plot of {measure} at {block}	Welchův graf: {measure} v {block}
+	MSER-5 suggests {value}.	MSER-5 navrhuje {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 zde nic nenavrhuje: řada se možná v polovině běhu stále ustaluje.
+	The warm-up now is {value}.	Zahřívání je nyní {value}.
+	Later times, which fewer runs reached, are left out.	Pozdější časy, kterých dosáhlo méně běhů, jsou vynechány.
+	New warm-up	Nové zahřívání

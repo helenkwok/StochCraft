@@ -1570,8 +1570,40 @@ connection	Flow	Flux
 	Encoding	Codificació
 	Add	Afegeix
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Al navegador, les claus es desen sense xifrar a l'emmagatzematge local d'aquest lloc: qualsevol cosa que s'executi en aquesta pàgina, i qualsevol persona que faci servir aquest perfil del navegador, les pot llegir. Fes servir una clau que puguis revocar, o l'aplicació d'escriptori, que desa les claus al clauer del sistema.
+	Scenario	Escenari
+	Scenario: {name}	Escenari: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Obrir {scenario} descarta els canvis no desats de {name}. Voleu desar-los primer?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} escenari per comparar|{n} escenaris per comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	S’ha desat com a fitxer nou, que només conté l’escenari obert, de manera que no s’ha canviat a {scenario}.
+	Median time in system	Mediana del temps al sistema
+	Time in system, 90th percentile	Temps al sistema, percentil 90
+	Time in system, 95th percentile	Temps al sistema, percentil 95
+	Share done within the target time	Proporció acabada dins el temps objectiu
+	Percentiles of time in system	Percentils del temps al sistema
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Mostra la mediana i els percentils 90 i 95 del temps que cada entitat ha trigat des de la seva creació fins a aquestes sortides i, amb un temps objectiu, la proporció acabada dins d'aquest temps.
+	Target time ({unit})	Temps objectiu ({unit})
+	The target time is a time above 0	El temps objectiu és un temps més gran que 0
+	Count only working time on	Compta només el temps de treball de
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Les entitats encara a dins quan acaba l'execució no es tenen en compte; atureu l'execució quan totes hagin acabat.
+	Set the target time in system of {block} to a time above 0.	Definiu el temps objectiu al sistema del bloc {block} com un temps més gran que 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	El temps al sistema del bloc {block} compta el temps de treball d'un calendari que no existeix. Trieu un calendari que existeixi.
 	One machine's availability	Disponibilitat d'una màquina
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Una màquina que falla de mitjana cada 90 hores i triga 4.5 hores a reparar-se (Hristova, Denev i Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Amb quina freqüència està aturada una màquina i quanta feina costa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	En marxa 90 hores, aturada 4.5: la màquina treballa el 95.2% del temps i hi ha una avaria cada 94.5 hores. Si es redueix a la meitat el temps de reparació, passa al 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} està aturat el {down} del temps (disponibilitat {up}); res no l'espera.
+	Choose a warm-up	Trieu un escalfament
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Gràfic de Welch: la mitjana de les execucions a cada instant registrat, suavitzada amb una mitjana mòbil. Definiu l'escalfament on la corba s'anivella; el tall de MSER-5 només és un punt de partida.
+	Number inside	Nombre a dins
+	Busy units	Unitats ocupades
+	Leaving per interval	Sortides per interval
+	Entering per interval	Entrades per interval
+	The run recorded too few times to plot.	L'execució ha registrat massa pocs instants per fer-ne un gràfic.
+	Points each side	Punts a cada costat
+	1 to {max}	De 1 a {max}
+	Welch's plot of {measure} at {block}	Gràfic de Welch de {measure} a {block}
+	MSER-5 suggests {value}.	MSER-5 suggereix {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 no suggereix res aquí: la sèrie potser encara s'està estabilitzant a la meitat de l'execució.
+	The warm-up now is {value}.	L'escalfament ara és de {value}.
+	Later times, which fewer runs reached, are left out.	S'ometen els instants posteriors, als quals van arribar menys execucions.
+	New warm-up	Escalfament nou

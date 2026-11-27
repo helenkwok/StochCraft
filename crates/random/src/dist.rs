@@ -1,8 +1,22 @@
 //! The distributions of BPSim 2.0 (section 6.3.5 of the specification), plus a constant.
 //!
-//! Every sampler is exact and never panics: parameters that [`Dist::check`] rejects give a safe
-//! value (the lower bound, or 0) instead. Where the specification leaves a parameter's meaning
-//! open, the choice made here is stated on the variant.
+//! Every sampler draws its distribution exactly, up to floating-point rounding and these limits:
+//!
+//! - A Poisson count with a mean of 10^15 or more is a rounded normal draw, an approximation
+//!   whose relative error in shape is of order 1/√mean.
+//! - A count above 2^53 (about 9 × 10^15, so a binomial with that many expected successes) cannot
+//!   be held to the unit in an `f64`; such a draw is rounded to a value an `f64` can hold.
+//! - Uniforms carry 53 bits, so a draw that transforms uniforms directly (inversion, Box–Muller,
+//!   the gamma's step for a shape below 1) never reaches the outermost 2^-53 (about 1.1 × 10^-16) of
+//!   probability: an exponential stops at 53 ln 2 ≈ 36.7 means, and a normal (also inside the
+//!   log-normal and the gamma) at about 8.57 standard deviations.
+//! - The acceptance tests of the transformed rejection samplers (Poisson and binomial from 10)
+//!   compute the probabilities from ln Γ (Lanczos, about 15 significant digits) and Stirling's
+//!   series, so the counts follow those probabilities to that precision.
+//!
+//! No sampler panics: parameters that [`Dist::check`] rejects give a safe value (the lower bound,
+//! or 0) instead. Where the specification leaves a parameter's meaning open, the choice made here
+//! is stated on the variant.
 
 use crate::Rng;
 use crate::math::{cos, erf, erfc, exp, ln, powf, sin};

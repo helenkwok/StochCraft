@@ -1570,8 +1570,40 @@ connection	Flow	Fluxo
 	Encoding	Codificação
 	Add	Adicionar
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	No navegador, as chaves ficam no armazenamento local deste site, sem criptografia: qualquer coisa que rode nesta página, e qualquer pessoa que use este perfil do navegador, pode lê-las. Use uma chave que você possa revogar, ou o app de desktop, que guarda as chaves no chaveiro do sistema.
+	Scenario	Cenário
+	Scenario: {name}	Cenário: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Abrir {scenario} descarta as alterações não salvas em {name}. Salvá-las primeiro?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} cenário para comparar|{n} cenários para comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Foi salvo como um arquivo novo que contém só o cenário aberto, então a troca para {scenario} não foi feita.
+	Median time in system	Mediana do tempo no sistema
+	Time in system, 90th percentile	Tempo no sistema, percentil 90
+	Time in system, 95th percentile	Tempo no sistema, percentil 95
+	Share done within the target time	Fração concluída dentro do tempo-alvo
+	Percentiles of time in system	Percentis do tempo no sistema
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Mostra a mediana e os percentis 90 e 95 do tempo que cada entidade levou desde a criação até estas saídas e, com um tempo-alvo, a fração concluída dentro dele.
+	Target time ({unit})	Tempo-alvo ({unit})
+	The target time is a time above 0	O tempo-alvo é um tempo maior que 0
+	Count only working time on	Contar só o tempo de trabalho de
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entidades ainda no sistema quando a execução termina ficam de fora, então pare a execução quando todas tiverem terminado.
+	Set the target time in system of {block} to a time above 0.	Defina o tempo-alvo no sistema de {block} como um tempo maior que 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	O tempo no sistema de {block} conta o tempo de trabalho de um calendário que não existe. Escolha um calendário que exista.
 	One machine's availability	Disponibilidade de uma máquina
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Uma máquina que quebra em média a cada 90 horas e leva 4.5 horas para ser consertada (Hristova, Denev e Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Com que frequência uma máquina fica parada e quanto trabalho isso custa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Funciona 90 horas, fica parada 4.5: a máquina trabalha 95.2% do tempo e uma quebra acontece a cada 94.5 horas. Reduzir o tempo de conserto pela metade eleva isso a 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} fica parado {down} do tempo (disponibilidade {up}); nada espera por ela.
+	Choose a warm-up	Escolher um aquecimento
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Gráfico de Welch: a média das execuções em cada instante registrado, suavizada por uma média móvel. Defina o aquecimento onde a curva se nivela; o corte do MSER-5 é apenas um ponto de partida.
+	Number inside	Número no sistema
+	Busy units	Unidades ocupadas
+	Leaving per interval	Saídas por intervalo
+	Entering per interval	Entradas por intervalo
+	The run recorded too few times to plot.	A execução registrou instantes de menos para um gráfico.
+	Points each side	Pontos de cada lado
+	1 to {max}	De 1 a {max}
+	Welch's plot of {measure} at {block}	Gráfico de Welch de {measure} em {block}
+	MSER-5 suggests {value}.	O MSER-5 sugere {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	O MSER-5 não sugere nada aqui: a série talvez ainda esteja se estabilizando na metade da execução.
+	The warm-up now is {value}.	O aquecimento agora é de {value}.
+	Later times, which fewer runs reached, are left out.	Os instantes posteriores, alcançados por menos execuções, foram omitidos.
+	New warm-up	Novo aquecimento

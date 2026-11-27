@@ -135,6 +135,8 @@ pub struct Opened {
     pub scenario: Option<String>,
     /// Every input scenario in the file: (id, name).
     pub scenarios: Vec<(String, Option<String>)>,
+    /// The same scenarios with their descriptions and what each inherits from.
+    details: Vec<bpsim::ScenarioInfo>,
     bytes: Vec<u8>,
     model_at_load: stochcraft_model::Model,
     /// The file's ids that are not the model's: elements StochCraft keeps but does not model,
@@ -162,9 +164,9 @@ pub fn read_scenario(bytes: &[u8], id: Option<&str>) -> Result<Loaded, ReadError
     let mut notes = Vec::new();
     let (format, scenario, model) =
         read::read_model(&doc.root, id, &mut notes).map_err(ReadError::NotAModel)?;
-    let scenarios = bpsim::find_data(&doc.root)
-        .map(bpsim::scenario_list)
-        .unwrap_or_default();
+    let data = bpsim::find_data(&doc.root);
+    let scenarios = data.map(bpsim::scenario_list).unwrap_or_default();
+    let details = data.map(bpsim::scenario_details).unwrap_or_default();
     // Most severe first; a note raised once per user of a shared element is shown once.
     let mut seen = std::collections::BTreeSet::new();
     notes.retain(|n| seen.insert((n.severity, n.at.clone(), n.message.clone())));
@@ -174,6 +176,7 @@ pub fn read_scenario(bytes: &[u8], id: Option<&str>) -> Result<Loaded, ReadError
         format,
         scenario: scenario.map(|s| s.settings.id),
         scenarios,
+        details,
         bytes: bytes.to_vec(),
         model_at_load: model.clone(),
         other_ids,
@@ -205,7 +208,27 @@ impl std::fmt::Display for SaveError {
 
 impl std::error::Error for SaveError {}
 
+/// The input scenarios of a model file, in the file's order, with their descriptions and what
+/// each inherits from: none for a file without BPSim data or one that is not XML.
+pub fn scenarios(bytes: &[u8]) -> Vec<bpsim::ScenarioInfo> {
+    xml::parse(bytes)
+        .ok()
+        .and_then(|doc| bpsim::find_data(&doc.root).map(bpsim::scenario_details))
+        .unwrap_or_default()
+}
+
 impl Opened {
+    /// The file's input scenarios, as [`scenarios`] lists them.
+    pub fn scenario_details(&self) -> &[bpsim::ScenarioInfo] {
+        &self.details
+    }
+
+    /// The file's bytes as they were read (or last written), from which another of its
+    /// scenarios can be read with [`read_scenario`].
+    pub fn bytes(&self) -> &[u8] {
+        &self.bytes
+    }
+
     /// Whether the file uses `id` for something other than the model's elements, connections and
     /// pools (which saving keeps), so a new element, connection or pool may not take it.
     pub fn id_in_use(&self, id: &str) -> bool {

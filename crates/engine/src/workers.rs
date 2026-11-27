@@ -199,6 +199,10 @@ struct EncodedElement {
     /// Blocks with starting contents: the entities placed inside as the run started.
     #[serde(default)]
     started: Option<u64>,
+    /// Sinks that report time in system: its median, 90th and 95th percentiles and the share
+    /// within the target.
+    #[serde(default)]
+    time_in_system: [Option<u64>; 4],
 }
 
 fn bits(x: Option<f64>) -> Option<u64> {
@@ -293,6 +297,12 @@ impl Encoded {
                         .as_ref()
                         .map(|h| (h.start.to_bits(), h.width.to_bits(), h.counts.clone())),
                     started: e.started,
+                    time_in_system: [
+                        bits(e.time_in_system_p50),
+                        bits(e.time_in_system_p90),
+                        bits(e.time_in_system_p95),
+                        bits(e.within_target_share),
+                    ],
                 })
                 .collect(),
         }
@@ -348,6 +358,7 @@ impl Encoded {
                 let [bsh] = e.balking;
                 let [inside_at_start, inside_at_end] = e.inside;
                 let [time_inside, on_shift] = e.checks;
+                let [p50, p90, p95, within] = e.time_in_system;
                 Some(ElementReport {
                     id: t.id.clone(),
                     name: t.name.clone(),
@@ -361,6 +372,10 @@ impl Encoded {
                     work_in_progress: e.work_in_progress,
                     mean_work_in_progress: float(mw),
                     mean_time_in_system: float(s),
+                    time_in_system_p50: float(p50),
+                    time_in_system_p90: float(p90),
+                    time_in_system_p95: float(p95),
+                    within_target_share: float(within),
                     mean_blocked_time: float(b),
                     mean_time_on: float(on),
                     time_on_histogram: e.time_on_histogram.map(|(start, width, counts)| {

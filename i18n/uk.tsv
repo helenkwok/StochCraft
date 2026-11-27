@@ -1570,8 +1570,40 @@ connection	Flow	Потік
 	Encoding	Кодування
 	Add	Додати
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	У браузері ключі зберігаються в локальному сховищі цього сайту без шифрування: прочитати їх може все, що працює на цій сторінці, і будь-хто, хто користується цим профілем браузера. Використовуйте ключ, який можна відкликати, або настільний застосунок, який зберігає ключі в в’язці ключів системи.
+	Scenario	Сценарій
+	Scenario: {name}	Сценарій: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Відкриття {scenario} скасує незбережені зміни в {name}. Спершу зберегти їх?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарій для порівняння|{n} сценарії для порівняння|{n} сценаріїв для порівняння
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Збережено як новий файл, що містить лише відкритий сценарій, тому перехід до {scenario} не виконано.
+	Median time in system	Медіана часу в системі
+	Time in system, 90th percentile	Час у системі, 90-й процентиль
+	Time in system, 95th percentile	Час у системі, 95-й процентиль
+	Share done within the target time	Частка завершених у межах цільового часу
+	Percentiles of time in system	Процентилі часу в системі
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Показує медіану, 90-й і 95-й процентилі часу, який кожен об'єкт провів від створення до цих виходів, а з цільовим часом — частку завершених у його межах.
+	Target time ({unit})	Цільовий час ({unit})
+	The target time is a time above 0	Цільовий час має бути більшим за 0
+	Count only working time on	Рахувати лише робочий час за
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Об'єкти, що ще всередині, коли запуск закінчується, не враховуються, тож зупиняйте запуск, коли всі завершені.
+	Set the target time in system of {block} to a time above 0.	Задайте для блока {block} цільовий час у системі, більший за 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Час у системі блока {block} рахує робочий час за неіснуючим календарем. Виберіть наявний календар.
 	One machine's availability	Готовність одного верстата
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Один верстат, який у середньому ламається кожні 90 годин, а ремонт триває 4.5 години (Hristova, Denev і Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Як часто простоює один верстат і скільки роботи це коштує?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Працює 90 годин, простоює 4.5: верстат працює 95.2% часу, а поломка трапляється кожні 94.5 години. Якщо ремонт удвічі коротший, показник зростає до 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} простоює {down} часу (готовність {up}); ніщо його не чекає.
+	Choose a warm-up	Вибрати розігрів
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Графік Велча: середнє за запусками в кожен записаний момент, згладжене ковзним середнім. Задайте розігрів там, де крива вирівнюється; відсікання MSER-5 — лише відправна точка.
+	Number inside	Кількість усередині
+	Busy units	Зайняті одиниці
+	Leaving per interval	Виходи за інтервал
+	Entering per interval	Входи за інтервал
+	The run recorded too few times to plot.	Запуск записав замало моментів для графіка.
+	Points each side	Точок з кожного боку
+	1 to {max}	Від 1 до {max}
+	Welch's plot of {measure} at {block}	Графік Велча: {measure} у {block}
+	MSER-5 suggests {value}.	MSER-5 пропонує {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 тут нічого не пропонує: ряд, можливо, ще встановлюється до середини запуску.
+	The warm-up now is {value}.	Зараз розігрів — {value}.
+	Later times, which fewer runs reached, are left out.	Пізніші моменти, до яких дійшло менше запусків, пропущено.
+	New warm-up	Новий розігрів

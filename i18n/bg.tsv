@@ -1570,8 +1570,40 @@ connection	Flow	Поток
 	Encoding	Кодиране
 	Add	Добавяне
 	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	В браузъра ключовете се съхраняват некриптирани в локалното хранилище на този сайт: могат да ги прочетат всичко, което работи на тази страница, и всеки, който ползва този профил на браузъра. Използвайте ключ, който можете да отмените, или настолното приложение, което пази ключовете в ключодържателя на системата.
+	Scenario	Сценарий
+	Scenario: {name}	Сценарий: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Отварянето на {scenario} отхвърля незаписаните промени в {name}. Да се запишат ли първо?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарий за сравнение|{n} сценария за сравнение
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Записан е като нов файл, който съдържа само отворения сценарий, затова превключването към {scenario} не беше направено.
+	Median time in system	Медиана на времето в системата
+	Time in system, 90th percentile	Време в системата, 90-и персентил
+	Time in system, 95th percentile	Време в системата, 95-и персентил
+	Share done within the target time	Дял, завършени в целевото време
+	Percentiles of time in system	Персентили на времето в системата
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Показва медианата, 90-ия и 95-ия персентил на времето, което всеки обект е прекарал от създаването си до тези изходи, а с целево време — дела, завършени в него.
+	Target time ({unit})	Целево време ({unit})
+	The target time is a time above 0	Целевото време е време над 0
+	Count only working time on	Брой само работното време по
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Обектите, които са още вътре при края на изпълнението, не се включват, затова спирайте изпълнението, когато всички са готови.
+	Set the target time in system of {block} to a time above 0.	Задайте целевото време в системата на блок {block} на време над 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Времето в системата на блок {block} брои работно време по календар, който не съществува. Изберете съществуващ календар.
 	One machine's availability	Наличност на една машина
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Една машина, която се поврежда средно на всеки 90 часа и се ремонтира за 4.5 часа (Hristova, Denev и Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Колко често е спряна една машина и колко работа струва това?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Работи 90 часа, спряна 4.5: машината работи 95.2% от времето и повреда настъпва на всеки 94.5 часа. Ако ремонтът е два пъти по-кратък, това става 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} не работи {down} от времето (налична {up}); нищо не чака за нея.
+	Choose a warm-up	Избор на загряване
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Графика на Уелч: средното от изпълненията във всеки записан момент, изгладено с плъзгаща средна. Задайте загряването там, където кривата се изравнява; прекъсването на MSER-5 е само отправна точка.
+	Number inside	Брой вътре
+	Busy units	Заети единици
+	Leaving per interval	Излизащи за интервал
+	Entering per interval	Влизащи за интервал
+	The run recorded too few times to plot.	Изпълнението е записало твърде малко моменти за графика.
+	Points each side	Точки от всяка страна
+	1 to {max}	1 до {max}
+	Welch's plot of {measure} at {block}	Графика на Уелч: {measure} при {block}
+	MSER-5 suggests {value}.	MSER-5 предлага {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 не предлага нищо тук: редът може още да се установява в средата на изпълнението.
+	The warm-up now is {value}.	Загряването сега е {value}.
+	Later times, which fewer runs reached, are left out.	По-късните моменти, достигнати от по-малко изпълнения, са изпуснати.
+	New warm-up	Ново загряване
