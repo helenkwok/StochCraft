@@ -293,7 +293,9 @@
   stochcraft:estimate, on the ElementParameters of an element with a time distribution (a start
   event's interTriggerTimer, a task's processingTime): the three-point estimate the distribution
   was fitted from, kept as its pedigree. The distribution itself is the standard BPSim one in the
-  parameters; this records where it came from. Exactly one of max and p95.
+  parameters; this records where it came from. Exactly one of max and p95. With q (strictly
+  between 0 and 1), p95 is the value with a share q at or below it rather than the 95th
+  percentile.
 
     <bpsim:VendorExtension name="stochcraft:estimate" xmlns:stochcraft="…">
       <stochcraft:estimate family="pert" min="10" mode="20" max="60" source="Delphi, round 2"/>
@@ -637,6 +639,7 @@
       <xs:attribute name="mode" type="xs:double" use="required"/>
       <xs:attribute name="max" type="xs:double"/>
       <xs:attribute name="p95" type="xs:double"/>
+      <xs:attribute name="q" type="xs:double"/>
       <xs:attribute name="source" type="xs:string"/>
     </xs:complexType>
   </xs:element>
