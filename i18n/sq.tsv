@@ -1535,6 +1535,11 @@ connection	Flow	Rrjedhë
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dy makineri dhe një punëtor: çdo punë ka nevojë njëkohësisht për makinerinë e saj dhe për punëtorin (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Kufizimi është punëtori apo makineritë?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Një punë mban bashkë makinerinë e saj dhe punëtorin, ndaj punëtori i vetëm është kufizimi: punët presin si në një radhë me një shërbyes, 3 kohë shërbimi në 75% ngarkesë dhe 9 në 90%.
+	Scenario	Skenar
+	Scenario: {name}	Skenari: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Hapja e {scenario} hedh poshtë ndryshimet e paruajtura në {name}. T’i ruaj së pari?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} skenar për krahasim|{n} skenarë për krahasim
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	U ruajt si skedar i ri që mban vetëm skenarin e hapur, ndaj kalimi te {scenario} nuk u bë.
 	Median time in system	Mediana e kohës në sistem
 	Time in system, 90th percentile	Koha në sistem, përqindëshi i 90-të
 	Time in system, 95th percentile	Koha në sistem, përqindëshi i 95-të
@@ -1552,3 +1557,18 @@ connection	Flow	Rrjedhë
 	How often is one machine down, and how much work does that cost?	Sa shpesh ndalet një makinë dhe sa punë kushton kjo?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Punon 90 orë, ndalet 4.5: makina punon 95.2% të kohës dhe një prishje ndodh çdo 94.5 orë. Përgjysmimi i kohës së riparimit e ngre në 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} është i ndalur {down} të kohës (disponueshmëria {up}); asgjë nuk e pret.
+	Choose a warm-up	Zgjidhni ngrohjen
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Grafiku i Welch-it: mesatarja e ekzekutimeve në çdo kohë të regjistruar, e zbutur me një mesatare lëvizëse. Caktoni ngrohjen aty ku kurba niveluhet; prerja e MSER-5 është vetëm një pikënisje.
+	Number inside	Numri brenda
+	Busy units	Njësi të zëna
+	Leaving per interval	Daljet për interval
+	Entering per interval	Hyrjet për interval
+	The run recorded too few times to plot.	Ekzekutimi regjistroi shumë pak kohë për një grafik.
+	Points each side	Pika nga secila anë
+	1 to {max}	Nga 1 deri në {max}
+	Welch's plot of {measure} at {block}	Grafiku i Welch-it për {measure} në {block}
+	MSER-5 suggests {value}.	MSER-5 sugjeron {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 nuk sugjeron asgjë këtu: seria mund të jetë ende duke u stabilizuar në mes të ekzekutimit.
+	The warm-up now is {value}.	Ngrohja tani është {value}.
+	Later times, which fewer runs reached, are left out.	Kohët e mëvonshme, që i arritën më pak ekzekutime, janë lënë jashtë.
+	New warm-up	Ngrohje e re

@@ -1535,6 +1535,11 @@ connection	Flow	Flux
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dues màquines i un treballador: cada feina necessita alhora la seva màquina i el treballador (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	La restricció és el treballador o les màquines?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Una feina reté la seva màquina i el treballador alhora, de manera que l'únic treballador és la restricció: les feines esperen com en una cua d'un sol servidor, 3 temps de servei amb un 75% d'ocupació i 9 amb un 90%.
+	Scenario	Escenari
+	Scenario: {name}	Escenari: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Obrir {scenario} descarta els canvis no desats de {name}. Voleu desar-los primer?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} escenari per comparar|{n} escenaris per comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	S’ha desat com a fitxer nou, que només conté l’escenari obert, de manera que no s’ha canviat a {scenario}.
 	Median time in system	Mediana del temps al sistema
 	Time in system, 90th percentile	Temps al sistema, percentil 90
 	Time in system, 95th percentile	Temps al sistema, percentil 95
@@ -1552,3 +1557,18 @@ connection	Flow	Flux
 	How often is one machine down, and how much work does that cost?	Amb quina freqüència està aturada una màquina i quanta feina costa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	En marxa 90 hores, aturada 4.5: la màquina treballa el 95.2% del temps i hi ha una avaria cada 94.5 hores. Si es redueix a la meitat el temps de reparació, passa al 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} està aturat el {down} del temps (disponibilitat {up}); res no l'espera.
+	Choose a warm-up	Trieu un escalfament
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Gràfic de Welch: la mitjana de les execucions a cada instant registrat, suavitzada amb una mitjana mòbil. Definiu l'escalfament on la corba s'anivella; el tall de MSER-5 només és un punt de partida.
+	Number inside	Nombre a dins
+	Busy units	Unitats ocupades
+	Leaving per interval	Sortides per interval
+	Entering per interval	Entrades per interval
+	The run recorded too few times to plot.	L'execució ha registrat massa pocs instants per fer-ne un gràfic.
+	Points each side	Punts a cada costat
+	1 to {max}	De 1 a {max}
+	Welch's plot of {measure} at {block}	Gràfic de Welch de {measure} a {block}
+	MSER-5 suggests {value}.	MSER-5 suggereix {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 no suggereix res aquí: la sèrie potser encara s'està estabilitzant a la meitat de l'execució.
+	The warm-up now is {value}.	L'escalfament ara és de {value}.
+	Later times, which fewer runs reached, are left out.	S'ometen els instants posteriors, als quals van arribar menys execucions.
+	New warm-up	Escalfament nou

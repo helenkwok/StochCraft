@@ -204,6 +204,82 @@ fn stochcraft_io_text_of_a_process_model() -> String {
     std::fs::read_to_string(models().join("mm1.bpmn")).unwrap()
 }
 
+/// A file in the working directory, removed when the test ends, however it ends.
+struct InWorkingDir(std::path::PathBuf);
+
+impl Drop for InWorkingDir {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_file(&self.0);
+    }
+}
+
+/// Opened from texts, another of the file's scenarios opens from the same texts: nothing beside
+/// it on disk is needed, and a file of the same name in the working directory is not read.
+#[test]
+fn a_model_opened_from_texts_reopens_another_scenario_from_them() {
+    // A chart reference no other test uses, so the decoy below is this test's alone.
+    let href = "reopen-from-texts-person.scxml";
+    let bpmn = std::fs::read_to_string(models().join("sir-agents.bpmn"))
+        .unwrap()
+        .replace("sir-person.scxml", href);
+    let chart = std::fs::read_to_string(models().join("sir-person.scxml")).unwrap();
+    // A second scenario: the first, a month long.
+    let close = "</bpsim:Scenario>";
+    let start = bpmn.find("<bpsim:Scenario ").unwrap();
+    let end = bpmn.find(close).unwrap() + close.len();
+    let month = bpmn[start..end]
+        .replace(
+            "id=\"base\" name=\"SIR among 100 people\"",
+            "id=\"month\" name=\"A month\"",
+        )
+        .replace(
+            "<bpsim:FloatingParameter value=\"60\"/>",
+            "<bpsim:FloatingParameter value=\"30\"/>",
+        );
+    assert!(month.contains("id=\"month\"") && month.contains("value=\"30\""));
+    let text = format!("{}{month}{}", &bpmn[..end], &bpmn[end..]);
+    let states = json!(["start", "susceptible", "infected", "recovered"]);
+
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "agents.open",
+        json!({ "text": text, "files": { href: chart }, "name": "sir.bpmn" }),
+    );
+    assert_eq!(e.path(), None);
+    let listed = ok(&mut e, "file.scenarios", json!({}));
+    assert_eq!(listed["open"], "base");
+    assert_eq!(listed["scenarios"].as_array().map(Vec::len), Some(2));
+
+    // Nothing of that name is on disk.
+    let decoy = std::env::current_dir().unwrap().join(href);
+    assert!(!decoy.exists(), "{}", decoy.display());
+    let opened = ok(&mut e, "file.reopen", json!({ "scenario": "month" }));
+    assert_eq!(opened["scenario"], "month");
+    assert_eq!(opened["path"], "sir.bpmn");
+    // Still a model with no file, which `file.save` asks a path for.
+    assert_eq!(e.path(), None);
+    let got = ok(&mut e, "agents.get", json!({}));
+    assert_eq!(got["end"], 30.0);
+    assert_eq!(got["types"][0]["states"], states);
+    assert_eq!(got["problem"], Value::Null);
+
+    // A file of the same name in the working directory, with other states, is not read.
+    std::fs::write(
+        &decoy,
+        "<scxml xmlns=\"http://www.w3.org/2005/07/scxml\" version=\"1.0\" initial=\"decoy\"><state id=\"decoy\"/></scxml>",
+    )
+    .unwrap();
+    let _decoy = InWorkingDir(decoy);
+    let opened = ok(&mut e, "file.reopen", json!({ "scenario": "base" }));
+    assert_eq!(opened["scenario"], "base");
+    assert_eq!(e.path(), None);
+    let got = ok(&mut e, "agents.get", json!({}));
+    assert_eq!(got["end"], 60.0);
+    assert_eq!(got["types"][0]["states"], states);
+    assert_eq!(got["problem"], Value::Null);
+}
+
 #[test]
 fn a_chart_that_cannot_be_read_or_a_reference_outside_the_folder_is_refused() {
     let bpmn = std::fs::read_to_string(models().join("sir-agents.bpmn")).unwrap();

@@ -1535,6 +1535,11 @@ connection	Flow	フロー
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	機械2台と作業者1人：各ジョブは自分の機械と作業者を同時に必要とする (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973)。
 	Is the worker or the machines the constraint?	制約は作業者か、それとも機械か？
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	ジョブは機械と作業者を同時に押さえるので、制約は1人の作業者：ジョブは単一窓口の待ち行列と同じように待ち、稼働率75%でサービス時間の3倍、90%で9倍。
+	Scenario	シナリオ
+	Scenario: {name}	シナリオ: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} を開くと、{name} の保存していない変更は破棄されます。先に保存しますか？
+@plural	{n} scenario to compare|{n} scenarios to compare	比較できるシナリオ {n} 件
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	開いているシナリオだけを含む新しいファイルとして保存したため、{scenario} への切り替えは行いませんでした。
 	Median time in system	システム内の滞在時間の中央値
 	Time in system, 90th percentile	システム内の滞在時間（90 パーセンタイル）
 	Time in system, 95th percentile	システム内の滞在時間（95 パーセンタイル）
@@ -1552,3 +1557,18 @@ connection	Flow	フロー
 	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	稼働 90 時間、停止 4.5 時間：機械は時間の 95.2% で稼働し、94.5 時間ごとに故障が起きる。修理時間を半分にすると 97.6% に上がる。
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} は時間の {down} で停止している（稼働率 {up}）。待っているものはない。
+	Choose a warm-up	ウォームアップを選ぶ
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	ウェルチのプロット: 記録した各時点での実行の平均を移動平均で平滑化したもの。曲線が平らになる所にウォームアップを設定してください。MSER-5 の切れ目は出発点にすぎません。
+	Number inside	内部の数
+	Busy units	稼働中のユニット
+	Leaving per interval	区間ごとの退出数
+	Entering per interval	区間ごとの到着数
+	The run recorded too few times to plot.	実行が記録した時点が少なすぎてプロットできません。
+	Points each side	片側の点数
+	1 to {max}	1 から {max}
+	Welch's plot of {measure} at {block}	{block} の {measure} のウェルチのプロット
+	MSER-5 suggests {value}.	MSER-5 の提案は {value} です。
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 はここでは何も提案しません: 系列は実行の半ばでもまだ安定していない可能性があります。
+	The warm-up now is {value}.	現在のウォームアップは {value} です。
+	Later times, which fewer runs reached, are left out.	より少ない実行しか到達しなかった後の時点は除いています。
+	New warm-up	新しいウォームアップ

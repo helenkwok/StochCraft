@@ -1535,6 +1535,11 @@ connection	Flow	Luồng
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Hai máy và một công nhân: mỗi việc cần đồng thời máy của nó và người công nhân (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Ràng buộc là công nhân hay là máy?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Một việc giữ cả máy của nó lẫn người công nhân, nên người công nhân duy nhất là ràng buộc: các việc chờ như trong hàng đợi một người phục vụ, 3 lần thời gian phục vụ khi bận 75% và 9 lần khi 90%.
+	Scenario	Kịch bản
+	Scenario: {name}	Kịch bản: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Mở {scenario} sẽ bỏ các thay đổi chưa lưu của {name}. Lưu trước?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} kịch bản để so sánh
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Đã lưu thành tệp mới chỉ chứa kịch bản đang mở, nên chưa chuyển sang {scenario}.
 	Median time in system	Trung vị thời gian trong hệ thống
 	Time in system, 90th percentile	Thời gian trong hệ thống, phân vị thứ 90
 	Time in system, 95th percentile	Thời gian trong hệ thống, phân vị thứ 95
@@ -1552,3 +1557,18 @@ connection	Flow	Luồng
 	How often is one machine down, and how much work does that cost?	Một máy dừng thường xuyên đến mức nào, và việc đó làm mất bao nhiêu công việc?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Chạy 90 giờ, dừng 4.5 giờ: máy làm việc 95.2% thời gian và cứ 94.5 giờ lại có một lần hỏng. Rút ngắn thời gian sửa một nửa thì tỷ lệ này tăng lên 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} dừng {down} thời gian (độ sẵn sàng {up}); không có gì chờ nó.
+	Choose a warm-up	Chọn giai đoạn khởi động
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Biểu đồ Welch: giá trị trung bình của các lần chạy tại mỗi thời điểm được ghi, làm mượt bằng trung bình trượt. Đặt giai đoạn khởi động nơi đường cong ổn định; điểm cắt của MSER-5 chỉ là điểm xuất phát.
+	Number inside	Số bên trong
+	Busy units	Đơn vị đang bận
+	Leaving per interval	Số rời đi mỗi khoảng
+	Entering per interval	Số đi vào mỗi khoảng
+	The run recorded too few times to plot.	Lần chạy ghi quá ít thời điểm để vẽ biểu đồ.
+	Points each side	Số điểm mỗi bên
+	1 to {max}	Từ 1 đến {max}
+	Welch's plot of {measure} at {block}	Biểu đồ Welch của {measure} tại {block}
+	MSER-5 suggests {value}.	MSER-5 đề xuất {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 không đề xuất gì ở đây: chuỗi có thể vẫn đang ổn định ở giữa lần chạy.
+	The warm-up now is {value}.	Giai đoạn khởi động hiện là {value}.
+	Later times, which fewer runs reached, are left out.	Các thời điểm sau, mà ít lần chạy đạt tới hơn, được bỏ qua.
+	New warm-up	Giai đoạn khởi động mới

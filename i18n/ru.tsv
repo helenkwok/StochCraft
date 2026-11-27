@@ -1535,6 +1535,11 @@ connection	Flow	Поток
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Два станка и один рабочий: каждой работе нужны одновременно её станок и рабочий (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Что ограничивает — рабочий или станки?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Работа занимает свой станок и рабочего вместе, поэтому ограничение — единственный рабочий: работы ждут как в очереди с одним обслуживающим, 3 времени обслуживания при загрузке 75% и 9 при 90%.
+	Scenario	Сценарий
+	Scenario: {name}	Сценарий: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	При открытии {scenario} несохранённые изменения в {name} будут потеряны. Сначала сохранить их?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарий для сравнения|{n} сценария для сравнения|{n} сценариев для сравнения
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Сохранено как новый файл, в котором есть только открытый сценарий, поэтому переход к {scenario} не выполнен.
 	Median time in system	Медиана времени в системе
 	Time in system, 90th percentile	Время в системе, 90-й процентиль
 	Time in system, 95th percentile	Время в системе, 95-й процентиль
@@ -1552,3 +1557,18 @@ connection	Flow	Поток
 	How often is one machine down, and how much work does that cost?	Как часто простаивает один станок и сколько работы это стоит?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Работает 90 часов, простаивает 4.5: станок работает 95.2% времени, а поломка случается каждые 94.5 часа. Если ремонт вдвое короче, показатель растёт до 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} простаивает {down} времени (готовность {up}); ничто его не ждёт.
+	Choose a warm-up	Выбрать разогрев
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	График Уэлча: среднее по запускам в каждый записанный момент, сглаженное скользящим средним. Задайте разогрев там, где кривая выравнивается; отсечение MSER-5 — лишь отправная точка.
+	Number inside	Число внутри
+	Busy units	Занятые единицы
+	Leaving per interval	Выходы за интервал
+	Entering per interval	Входы за интервал
+	The run recorded too few times to plot.	Запуск записал слишком мало моментов для графика.
+	Points each side	Точек с каждой стороны
+	1 to {max}	От 1 до {max}
+	Welch's plot of {measure} at {block}	График Уэлча: {measure} в {block}
+	MSER-5 suggests {value}.	MSER-5 предлагает {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 здесь ничего не предлагает: ряд, возможно, ещё устанавливается к середине запуска.
+	The warm-up now is {value}.	Сейчас разогрев — {value}.
+	Later times, which fewer runs reached, are left out.	Более поздние моменты, до которых дошло меньше запусков, опущены.
+	New warm-up	Новый разогрев

@@ -1535,6 +1535,11 @@ connection	Flow	প্রবাহ
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	দুটি মেশিন ও একজন কর্মী: প্রতিটি কাজের একই সময়ে নিজের মেশিন ও কর্মীকে দরকার (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973)।
 	Is the worker or the machines the constraint?	সীমাবদ্ধতা কি কর্মী, না মেশিনগুলো?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	একটি কাজ তার মেশিন ও কর্মীকে একসঙ্গে ধরে রাখে, তাই একমাত্র কর্মীই সীমাবদ্ধতা: কাজগুলো এক-সেবাদাতার সারির মতো অপেক্ষা করে, 75% ব্যস্ততায় 3টি সেবা-সময় আর 90%-এ 9টি।
+	Scenario	দৃশ্যকল্প
+	Scenario: {name}	দৃশ্যকল্প: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} খুললে {name}-এর অসংরক্ষিত পরিবর্তনগুলি হারিয়ে যাবে। আগে সংরক্ষণ করবেন?
+@plural	{n} scenario to compare|{n} scenarios to compare	তুলনার জন্য {n}টি দৃশ্যকল্প|তুলনার জন্য {n}টি দৃশ্যকল্প
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	এটি একটি নতুন ফাইল হিসেবে সংরক্ষিত হয়েছে, যাতে কেবল খোলা দৃশ্যকল্পটি আছে, তাই {scenario}-এ যাওয়া হয়নি।
 	Median time in system	সিস্টেমে সময়ের মধ্যমা
 	Time in system, 90th percentile	সিস্টেমে সময়, ৯০তম শতাংশক
 	Time in system, 95th percentile	সিস্টেমে সময়, ৯৫তম শতাংশক
@@ -1552,3 +1557,18 @@ connection	Flow	প্রবাহ
 	How often is one machine down, and how much work does that cost?	একটি যন্ত্র কত ঘন ঘন বিকল থাকে, এবং তাতে কত কাজ নষ্ট হয়?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	৯০ ঘণ্টা চালু, ৪.৫ ঘণ্টা বন্ধ: যন্ত্রটি ৯৫.২% সময় কাজ করে এবং প্রতি ৯৪.৫ ঘণ্টায় একবার বিকল হয়। মেরামতের সময় অর্ধেক করলে তা ৯৭.৬% হয়।
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} সময় বন্ধ থাকে (প্রাপ্যতা {up}); এর জন্য কিছুই অপেক্ষা করে না।
+	Choose a warm-up	প্রাথমিক প্রস্তুতিকাল বেছে নিন
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	ওয়েলচের লেখচিত্র: প্রতিটি নথিভুক্ত সময়ে পুনরাবৃত্তিগুলোর গড়, চলমান গড় দিয়ে মসৃণ করা। বক্ররেখা যেখানে সমান হয় সেখানে প্রাথমিক প্রস্তুতিকাল নির্ধারণ করুন; MSER-5-এর কাটা শুধু একটি সূচনা বিন্দু।
+	Number inside	ভেতরে সংখ্যা
+	Busy units	ব্যস্ত একক
+	Leaving per interval	প্রতি ব্যবধানে বের হওয়া
+	Entering per interval	প্রতি ব্যবধানে প্রবেশ
+	The run recorded too few times to plot.	লেখচিত্রের জন্য পুনরাবৃত্তিতে খুব কম সময় নথিভুক্ত হয়েছে।
+	Points each side	প্রতি পাশে বিন্দু
+	1 to {max}	1 থেকে {max}
+	Welch's plot of {measure} at {block}	{block}-এ {measure}-এর ওয়েলচ লেখচিত্র
+	MSER-5 suggests {value}.	MSER-5 প্রস্তাব করে {value}।
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 এখানে কিছু প্রস্তাব করে না: পুনরাবৃত্তির মাঝামাঝিতেও ধারাটি হয়তো স্থির হচ্ছে।
+	The warm-up now is {value}.	এখন প্রাথমিক প্রস্তুতিকাল {value}।
+	Later times, which fewer runs reached, are left out.	পরের যে সময়গুলোতে কম পুনরাবৃত্তি পৌঁছেছে, সেগুলো বাদ দেওয়া হয়েছে।
+	New warm-up	নতুন প্রাথমিক প্রস্তুতিকাল

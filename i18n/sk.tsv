@@ -1535,6 +1535,11 @@ connection	Flow	Tok
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dva stroje a jeden pracovník: každá zákazka potrebuje súčasne svoj stroj a pracovníka (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Obmedzuje prevádzku pracovník, alebo stroje?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Zákazka drží svoj stroj a pracovníka naraz, takže obmedzením je jediný pracovník: zákazky čakajú ako v rade s jednou obsluhou, 3 doby obsluhy pri vyťažení 75 % a 9 pri 90 %.
+	Scenario	Scenár
+	Scenario: {name}	Scenár: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvorením scenára {scenario} sa zahodia neuložené zmeny v {name}. Najprv ich uložiť?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenár na porovnanie|{n} scenáre na porovnanie|{n} scenárov na porovnanie
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Uložil sa ako nový súbor, ktorý obsahuje len otvorený scenár, takže prepnutie na {scenario} sa neurobilo.
 	Median time in system	Medián času v systéme
 	Time in system, 90th percentile	Čas v systéme, 90. percentil
 	Time in system, 95th percentile	Čas v systéme, 95. percentil
@@ -1552,3 +1557,18 @@ connection	Flow	Tok
 	How often is one machine down, and how much work does that cost?	Ako často stojí jeden stroj a koľko práce to stojí?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	V prevádzke 90 hodín, mimo prevádzky 4.5: stroj pracuje 95.2 % času a porucha nastane každých 94.5 hodiny. Polovičná doba opravy to zvýši na 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stojí {down} času (dostupnosť {up}); nič naň nečaká.
+	Choose a warm-up	Zvoliť zahrievanie
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welchov graf: priemer behov v každom zaznamenanom čase, vyhladený kĺzavým priemerom. Nastavte zahrievanie tam, kde sa krivka vyrovná; rez MSER-5 je len východiskový bod.
+	Number inside	Počet vnútri
+	Busy units	Obsadené jednotky
+	Leaving per interval	Odchody za interval
+	Entering per interval	Príchody za interval
+	The run recorded too few times to plot.	Beh zaznamenal príliš málo časov na graf.
+	Points each side	Bodov na každej strane
+	1 to {max}	1 až {max}
+	Welch's plot of {measure} at {block}	Welchov graf: {measure} v {block}
+	MSER-5 suggests {value}.	MSER-5 navrhuje {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 tu nič nenavrhuje: rad sa možno v polovici behu stále ustaľuje.
+	The warm-up now is {value}.	Zahrievanie je teraz {value}.
+	Later times, which fewer runs reached, are left out.	Neskoršie časy, ktoré dosiahlo menej behov, sú vynechané.
+	New warm-up	Nové zahrievanie

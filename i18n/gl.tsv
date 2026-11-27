@@ -1535,6 +1535,11 @@ connection	Flow	Fluxo
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dúas máquinas e un traballador: cada traballo precisa á vez a súa máquina e o traballador (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	A restrición é o traballador ou as máquinas?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Un traballo retén a súa máquina e o traballador á vez, así que o único traballador é a restrición: os traballos esperan como nunha cola dun só servidor, 3 tempos de servizo cun 75% de ocupación e 9 cun 90%.
+	Scenario	Escenario
+	Scenario: {name}	Escenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Abrir {scenario} descarta os cambios sen gardar de {name}. Gardalos primeiro?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} escenario para comparar|{n} escenarios para comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Gardouse como un ficheiro novo que só contén o escenario aberto, así que non se cambiou a {scenario}.
 	Median time in system	Mediana do tempo no sistema
 	Time in system, 90th percentile	Tempo no sistema, percentil 90
 	Time in system, 95th percentile	Tempo no sistema, percentil 95
@@ -1552,3 +1557,18 @@ connection	Flow	Fluxo
 	How often is one machine down, and how much work does that cost?	Con que frecuencia está parada unha máquina e canto traballo custa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	En marcha 90 horas, parada 4.5: a máquina traballa o 95.2 % do tempo e unha avaría ocorre cada 94.5 horas. Se o tempo de reparación se reduce á metade, sobe ao 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} está parado o {down} do tempo (dispoñibilidade {up}); nada espera por ela.
+	Choose a warm-up	Escoller un quecemento
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Gráfico de Welch: a media das execucións en cada instante rexistrado, suavizada cunha media móbil. Defina o quecemento onde a curva se nivela; o corte de MSER-5 é só un punto de partida.
+	Number inside	Número dentro
+	Busy units	Unidades ocupadas
+	Leaving per interval	Saídas por intervalo
+	Entering per interval	Entradas por intervalo
+	The run recorded too few times to plot.	A execución rexistrou demasiado poucos instantes para un gráfico.
+	Points each side	Puntos a cada lado
+	1 to {max}	De 1 a {max}
+	Welch's plot of {measure} at {block}	Gráfico de Welch de {measure} en {block}
+	MSER-5 suggests {value}.	MSER-5 suxire {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 non suxire nada aquí: a serie quizais aínda se estea a estabilizar á metade da execución.
+	The warm-up now is {value}.	O quecemento agora é de {value}.
+	Later times, which fewer runs reached, are left out.	Omítense os instantes posteriores, aos que chegaron menos execucións.
+	New warm-up	Novo quecemento
