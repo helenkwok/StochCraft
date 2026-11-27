@@ -1513,3 +1513,8 @@ connection	Flow	Akış
 	Entities still inside when the run ends are left out, so stop the run once all are done.	Çalıştırma bittiğinde hâlâ içeride olan varlıklar dahil edilmez, bu yüzden çalıştırmayı hepsi bittiğinde durdurun.
 	Set the target time in system of {block} to a time above 0.	{block} bloğunun sistemdeki hedef süresini 0'dan büyük bir süreye ayarlayın.
 	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} bloğunun sistemdeki süresi, var olmayan bir takvime göre çalışma süresini sayıyor. Var olan bir takvim seçin.
+	One machine's availability	Bir makinenin kullanılabilirliği
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Ortalama her 90 saatte bir arızalanan ve onarımı 4.5 saat süren bir makine (Hristova, Denev ve Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Bir makine ne sıklıkta duruyor ve bu ne kadar işe mal oluyor?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 saat çalışır, 4.5 saat durur: makine zamanın %95.2'sinde çalışır ve her 94.5 saatte bir arıza olur. Onarım süresini yarıya indirmek bunu %97.6'ya çıkarır.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} zamanın {down} kadarında duruyor (kullanılabilirlik {up}); onu bekleyen bir şey yok.

@@ -1513,3 +1513,8 @@ connection	Flow	ప్రవాహం
 	Entities still inside when the run ends are left out, so stop the run once all are done.	అమలు ముగిసేటప్పుడు ఇంకా లోపల ఉన్నవి లెక్కించబడవు, కాబట్టి అన్నీ పూర్తయిన తర్వాత అమలును ఆపండి.
 	Set the target time in system of {block} to a time above 0.	{block} యొక్క వ్యవస్థలో లక్ష్య సమయాన్ని 0 కంటే ఎక్కువ సమయానికి సెట్ చేయండి.
 	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} యొక్క వ్యవస్థలో గడిపిన సమయం లేని క్యాలెండర్ ప్రకారం పని సమయాన్ని లెక్కిస్తోంది. ఉన్న క్యాలెండర్‌ను ఎంచుకోండి.
+	One machine's availability	ఒక యంత్రం అందుబాటు
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	సగటున ప్రతి 90 గంటలకు చెడిపోయి, మరమ్మతుకు 4.5 గంటలు పట్టే ఒక యంత్రం (Hristova, Denev మరియు Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	ఒక యంత్రం ఎంత తరచుగా ఆగిపోతుంది, దానివల్ల ఎంత పని పోతుంది?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 గంటలు పని, 4.5 గంటలు ఆగుదల: యంత్రం 95.2% సమయం పనిచేస్తుంది, ప్రతి 94.5 గంటలకు ఒక చెడిపోవడం జరుగుతుంది. మరమ్మతు సమయాన్ని సగం చేస్తే అది 97.6% అవుతుంది.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} సమయం ఆగిపోతుంది (అందుబాటు {up}); దాని కోసం ఏదీ వేచి ఉండదు.

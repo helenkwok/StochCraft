@@ -1513,3 +1513,8 @@ connection	Flow	顺序流
 	Entities still inside when the run ends are left out, so stop the run once all are done.	运行结束时仍在内部的实体不计入，因此请在全部完成后再停止运行。
 	Set the target time in system of {block} to a time above 0.	请将 {block} 的系统内目标时间设为大于 0 的时间。
 	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} 的系统内时间按不存在的日历计算工作时间。请选择存在的日历。
+	One machine's availability	单台机器的可用率
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	一台机器平均每 90 小时故障一次，修理需要 4.5 小时（Hristova、Denev 和 Tsankov，Environment. Technology. Resources，2024）。
+	How often is one machine down, and how much work does that cost?	一台机器多久停机一次，这会损失多少工作？
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	运行 90 小时，停机 4.5 小时：机器 95.2% 的时间在工作，每 94.5 小时发生一次故障。修理时间减半，可用率升至 97.6%。
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} 有 {down} 的时间处于停机状态（可用率 {up}），没有任何东西在等待它。

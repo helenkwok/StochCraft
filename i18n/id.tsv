@@ -1513,3 +1513,8 @@ connection	Flow	Alur
 	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitas yang masih di dalam saat eksekusi berakhir tidak dihitung, jadi hentikan eksekusi setelah semuanya selesai.
 	Set the target time in system of {block} to a time above 0.	Atur waktu target dalam sistem untuk {block} ke waktu di atas 0.
 	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Waktu dalam sistem untuk {block} menghitung waktu kerja menurut kalender yang tidak ada. Pilih kalender yang ada.
+	One machine's availability	Ketersediaan satu mesin
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Satu mesin yang rata-rata rusak setiap 90 jam dan butuh 4.5 jam untuk diperbaiki (Hristova, Denev, dan Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Seberapa sering satu mesin berhenti, dan berapa banyak pekerjaan yang hilang karenanya?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Hidup 90 jam, mati 4.5 jam: mesin bekerja 95.2% dari waktu dan kerusakan terjadi setiap 94.5 jam. Memangkas waktu perbaikan setengahnya menaikkan angka itu menjadi 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} berhenti {down} dari waktu (ketersediaan {up}); tidak ada yang menunggunya.
