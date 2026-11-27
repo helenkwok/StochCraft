@@ -1505,3 +1505,38 @@ connection	Flow	Voog
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Võrdlusalus ja see käivitamine ei võtnud oma juhuslikke arve samade käivitamiste jaoks samast kohast (juhuarvuseemest või juhuslike arvude failist), seega võrreldakse neid sõltumatute käivitamistena ja vahemikud on laiemad.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Juhuslikud arvud failist {file} (SHA-256 {sha}…), {bytes} baiti iga käivitamise kohta alates baidist {offset}
 	Seed {seed} taken from {source}	Juhuarvuseeme {seed}, võetud allikast {source}
+	quantum	kvant
+	public beacon, for seeds only	avalik majakas, ainult seemnetele
+	not quantum (atmospheric noise)	mitte kvant (atmosfäärimüra)
+	added by you	sinu lisatud
+	Draw a seed first.	Tõmba kõigepealt juhuarvuseeme.
+	Give the file of random bytes.	Anna juhuslike baitide fail.
+	Random numbers	Juhuslikud arvud
+	Generator	Generaator
+	Seed from a source	Juhuarvuseeme allikast
+	File of random bytes	Juhuslike baitide fail
+	Live from a source	Otse allikast
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, algväärtustatud katse juhuarvuseemnest: korratav ja see, mida simulatsioon tavaliselt kasutab.
+	Draw a seed	Tõmba juhuarvuseeme
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU tasuta tase (100 päringut kuus) katab seemned, mitte otsekäivitusi: otsekäivitus vajab tasulist taset. Iga käivitamine ootab oma baite ja iga bait salvestatakse faili, nii et käivitamist saab sellest korrata.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Füüsilise allika arvud on ettearvamatud ja ütlevad, kust nad pärinevad; need ei muuda vastuseid täpsemaks.
+	Hide the sources	Peida allikad
+	Sources and keys…	Allikad ja võtmed…
+	No key	Võtit pole
+	From byte	Baidist alates
+	Bytes per run	Baite käivitamise kohta
+	from a pilot	pilootkäivitusest
+	Estimate	Hinnang
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} baiti {runs} käivitamise jaoks: {requests} päringut, vähemalt {seconds} s
+	More than a month of the free tier allows.	Rohkem, kui tasuta tase kuus lubab.
+	Key kept	Võti salvestatud
+	Forget key	Unusta võti
+	Key	Võti
+	Save key	Salvesta võti
+	Add a source	Lisa allikas
+	Address, with {n} for the count	Aadress, kus {n} on arv
+	Key header	Võtme päis
+	JSON path	JSON-tee
+	Encoding	Kodeering
+	Add	Lisa
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Brauseris hoitakse võtmeid selle saidi kohalikus salvestuses krüpteerimata: neid saab lugeda kõik, mis sellel lehel töötab, ja igaüks, kes seda brauseriprofiili kasutab. Kasuta võtit, mida saad tühistada, või töölauarakendust, mis hoiab võtmeid süsteemi võtmehoidjas.

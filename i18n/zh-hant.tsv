@@ -1505,3 +1505,38 @@ connection	Flow	順序流
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	基準與此次執行在相同的執行中沒有從同一來源（隨機種子或隨機數檔案）取得隨機數，因此以獨立執行進行比較，區間較寬。
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	來自檔案 {file} 的隨機數 (SHA-256 {sha}…)，每次執行從位元組 {offset} 起取 {bytes} 位元組
 	Seed {seed} taken from {source}	取自 {source} 的隨機種子 {seed}
+	quantum	量子
+	public beacon, for seeds only	公開信標，僅用於種子
+	not quantum (atmospheric noise)	非量子（大氣雜訊）
+	added by you	由你新增
+	Draw a seed first.	請先抽取種子。
+	Give the file of random bytes.	請指定隨機位元組檔案。
+	Random numbers	隨機數
+	Generator	產生器
+	Seed from a source	來自來源的種子
+	File of random bytes	隨機位元組檔案
+	Live from a source	從來源即時取得
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**，以實驗的種子初始化：可重複，也是模擬通常使用的方式。
+	Draw a seed	抽取種子
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU 的免費額度（每月 100 次請求）可用於種子，不能用於即時執行：即時執行需要其付費額度。每次執行都要等待它的位元組，每個位元組都會記錄在檔案中，因此執行可以據此重複。
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	來自物理來源的數字不可預測，並說明了它們的出處；它們不會讓答案更準確。
+	Hide the sources	隱藏來源
+	Sources and keys…	來源和金鑰…
+	No key	無金鑰
+	From byte	起始位元組
+	Bytes per run	每次執行的位元組數
+	from a pilot	來自試執行
+	Estimate	估計
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} 次執行需要 {bytes} 位元組：{requests} 次請求，至少 {seconds} 秒
+	More than a month of the free tier allows.	超過免費額度一個月的上限。
+	Key kept	金鑰已保留
+	Forget key	忘記金鑰
+	Key	金鑰
+	Save key	儲存金鑰
+	Add a source	新增來源
+	Address, with {n} for the count	位址，其中 {n} 代表數量
+	Key header	金鑰標頭
+	JSON path	JSON 路徑
+	Encoding	編碼
+	Add	新增
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	在瀏覽器中，金鑰未經加密儲存在此網站的本機儲存空間中：此頁面上執行的任何內容，以及使用此瀏覽器設定檔的任何人，都能讀取它們。請使用可以撤銷的金鑰，或使用桌面應用程式，它會把金鑰儲存在系統鑰匙圈中。

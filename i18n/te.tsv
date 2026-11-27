@@ -1505,3 +1505,38 @@ connection	Flow	ప్రవాహం
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ప్రాతిపదిక మరియు ఈ అమలు అవే అమలుల కోసం తమ యాదృచ్ఛిక సంఖ్యలను ఒకే చోట నుండి (ఒక యాదృచ్ఛిక బీజం, లేదా యాదృచ్ఛిక సంఖ్యల ఫైల్) తీసుకోలేదు, కాబట్టి వాటిని స్వతంత్ర అమలులుగా పోలుస్తారు మరియు అంతరాలు విశాలంగా ఉంటాయి.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ఫైల్ {file} నుండి యాదృచ్ఛిక సంఖ్యలు (SHA-256 {sha}…), ప్రతి అమలుకు బైట్ {offset} నుండి {bytes} బైట్లు
 	Seed {seed} taken from {source}	{source} నుండి తీసుకున్న యాదృచ్ఛిక బీజం {seed}
+	quantum	క్వాంటం
+	public beacon, for seeds only	పబ్లిక్ బీకన్, బీజాలకు మాత్రమే
+	not quantum (atmospheric noise)	క్వాంటం కాదు (వాతావరణ శబ్దం)
+	added by you	మీరు జోడించినది
+	Draw a seed first.	ముందుగా ఒక బీజాన్ని తీయండి.
+	Give the file of random bytes.	యాదృచ్ఛిక బైట్ల ఫైల్‌ను ఇవ్వండి.
+	Random numbers	యాదృచ్ఛిక సంఖ్యలు
+	Generator	జనరేటర్
+	Seed from a source	మూలం నుండి బీజం
+	File of random bytes	యాదృచ్ఛిక బైట్ల ఫైల్
+	Live from a source	మూలం నుండి ప్రత్యక్షంగా
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, ప్రయోగం యొక్క బీజం నుండి ప్రారంభం: పునరావృతం చేయదగినది, మరియు అనుకరణ సాధారణంగా ఉపయోగించేది.
+	Draw a seed	బీజాన్ని తీయి
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU ఉచిత స్థాయి (నెలకు 100 అభ్యర్థనలు) బీజాలకు వర్తిస్తుంది, ప్రత్యక్ష అమలులకు కాదు: ప్రత్యక్ష అమలుకు చెల్లింపు స్థాయి కావాలి. ప్రతి అమలు తన బైట్ల కోసం వేచి ఉంటుంది, ప్రతి బైట్ ఫైల్‌లో నమోదవుతుంది, కాబట్టి అమలును దాని నుండి మళ్లీ చేయవచ్చు.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	భౌతిక మూలం నుండి వచ్చిన సంఖ్యలు ఊహించలేనివి, అవి ఎక్కడి నుండి వచ్చాయో చెబుతాయి; అవి సమాధానాలను మరింత ఖచ్చితంగా చేయవు.
+	Hide the sources	మూలాలను దాచు
+	Sources and keys…	మూలాలు మరియు కీలు…
+	No key	కీ లేదు
+	From byte	బైట్ నుండి
+	Bytes per run	ఒక అమలుకు బైట్లు
+	from a pilot	పైలట్ అమలు నుండి
+	Estimate	అంచనా
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} అమలులకు {bytes} బైట్లు: {requests} అభ్యర్థనలు, కనీసం {seconds} సెకన్లు
+	More than a month of the free tier allows.	ఉచిత స్థాయి ఒక నెలలో అనుమతించే దానికంటే ఎక్కువ.
+	Key kept	కీ ఉంచబడింది
+	Forget key	కీని మర్చిపో
+	Key	కీ
+	Save key	కీని సేవ్ చేయి
+	Add a source	ఒక మూలాన్ని జోడించు
+	Address, with {n} for the count	చిరునామా, {n} అంటే లెక్క
+	Key header	కీ హెడర్
+	JSON path	JSON మార్గం
+	Encoding	ఎన్‌కోడింగ్
+	Add	జోడించు
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	బ్రౌజర్‌లో కీలు ఈ సైట్ యొక్క స్థానిక నిల్వలో ఎన్‌క్రిప్ట్ చేయకుండా ఉంచబడతాయి: ఈ పేజీలో నడిచే ఏదైనా, మరియు ఈ బ్రౌజర్ ప్రొఫైల్‌ను ఉపయోగించే ఎవరైనా వాటిని చదవగలరు. మీరు రద్దు చేయగల కీని ఉపయోగించండి, లేదా కీలను సిస్టమ్ కీచైన్‌లో ఉంచే డెస్క్‌టాప్ యాప్‌ను ఉపయోగించండి.

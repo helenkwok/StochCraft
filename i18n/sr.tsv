@@ -1505,3 +1505,38 @@ connection	Flow	Ток
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Референца и ово покретање нису узели своје случајне бројеве са истог места (семе или датотека са случајним бројевима) за иста покретања, па се упоређују као независна покретања и интервали су шири.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Случајни бројеви из датотеке {file} (SHA-256 {sha}…), {bytes} бајтова за свако покретање од бајта {offset}
 	Seed {seed} taken from {source}	Семе {seed} преузето из {source}
+	quantum	квантно
+	public beacon, for seeds only	јавни фар, само за семена
+	not quantum (atmospheric noise)	неквантно (атмосферски шум)
+	added by you	додали сте
+	Draw a seed first.	Прво извуците семе.
+	Give the file of random bytes.	Наведите фајл насумичних бајтова.
+	Random numbers	Насумични бројеви
+	Generator	Генератор
+	Seed from a source	Семе из извора
+	File of random bytes	Фајл насумичних бајтова
+	Live from a source	Уживо из извора
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, покренут из семена експеримента: поновљив, и оно што симулација обично користи.
+	Draw a seed	Извуци семе
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-ов бесплатни ниво (100 захтева месечно) покрива семена, не покретања уживо: покретање уживо тражи плаћени ниво. Свако покретање чека своје бајтове, а сваки бајт се бележи у фајл, па се покретање може поновити из њега.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Бројеви из физичког извора су непредвидиви и говоре одакле долазе; не чине одговоре тачнијима.
+	Hide the sources	Сакриј изворе
+	Sources and keys…	Извори и кључеви…
+	No key	Нема кључа
+	From byte	Од бајта
+	Bytes per run	Бајтова по покретању
+	from a pilot	из пробног покретања
+	Estimate	Процена
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} бајтова за {runs} покретања: {requests} захтева, најмање {seconds} s
+	More than a month of the free tier allows.	Више него што бесплатни ниво дозвољава за месец дана.
+	Key kept	Кључ сачуван
+	Forget key	Заборави кључ
+	Key	Кључ
+	Save key	Сачувај кључ
+	Add a source	Додај извор
+	Address, with {n} for the count	Адреса, где је {n} број
+	Key header	Заглавље кључа
+	JSON path	JSON путања
+	Encoding	Кодирање
+	Add	Додај
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	У прегледачу се кључеви чувају нешифровани у локалној меморији овог сајта: може их прочитати све што ради на овој страници и свако ко користи овај профил прегледача. Користите кључ који можете опозвати или десктоп апликацију, која кључеве чува у системском привеску кључева.

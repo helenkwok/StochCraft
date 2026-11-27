@@ -1505,3 +1505,38 @@ connection	Flow	Flöde
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referensen och den här körningen tog inte sina slumptal från samma ställe (ett slumpfrö eller en fil med slumptal) för samma körningar, så de jämförs som oberoende körningar och intervallen blir bredare.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Slumptal från filen {file} (SHA-256 {sha}…), {bytes} byte för varje körning från byte {offset}
 	Seed {seed} taken from {source}	Slumpfrö {seed} hämtat från {source}
+	quantum	kvant
+	public beacon, for seeds only	offentligt beacon, endast för slumpfrön
+	not quantum (atmospheric noise)	inte kvant (atmosfäriskt brus)
+	added by you	tillagd av dig
+	Draw a seed first.	Dra först ett slumpfrö.
+	Give the file of random bytes.	Ange filen med slumpmässiga byte.
+	Random numbers	Slumptal
+	Generator	Generator
+	Seed from a source	Slumpfrö från en källa
+	File of random bytes	Fil med slumpmässiga byte
+	Live from a source	Direkt från en källa
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, startad från experimentets slumpfrö: repeterbar, och det simulering vanligtvis använder.
+	Draw a seed	Dra ett slumpfrö
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU:s gratisnivå (100 förfrågningar i månaden) täcker slumpfrön, inte direktkörningar: en direktkörning kräver den betalda nivån. Varje körning väntar på sina byte, och varje byte sparas i filen, så att körningen kan upprepas från den.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Tal från en fysisk källa är oförutsägbara och anger var de kom ifrån; de gör inte svaren mer exakta.
+	Hide the sources	Dölj källorna
+	Sources and keys…	Källor och nycklar…
+	No key	Ingen nyckel
+	From byte	Från byte
+	Bytes per run	Byte per körning
+	from a pilot	från en pilotkörning
+	Estimate	Uppskattning
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} byte för {runs} körningar: {requests} förfrågningar, minst {seconds} s
+	More than a month of the free tier allows.	Mer än gratisnivån tillåter på en månad.
+	Key kept	Nyckel sparad
+	Forget key	Glöm nyckeln
+	Key	Nyckel
+	Save key	Spara nyckeln
+	Add a source	Lägg till en källa
+	Address, with {n} for the count	Adress, med {n} för antalet
+	Key header	Nyckelhuvud
+	JSON path	JSON-sökväg
+	Encoding	Kodning
+	Add	Lägg till
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	I webbläsaren sparas nycklar okrypterade i den här webbplatsens lokala lagring: allt som körs på den här sidan, och alla som använder den här webbläsarprofilen, kan läsa dem. Använd en nyckel som du kan återkalla, eller skrivbordsappen, som sparar nycklar i systemets nyckelring.

@@ -1505,3 +1505,38 @@ connection	Flow	Поток
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Базовый вариант и этот запуск взяли свои случайные числа для тех же запусков не из одного места (начальное значение генератора или файл случайных чисел), поэтому они сравниваются как независимые запуски и интервалы шире.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Случайные числа из файла {file} (SHA-256 {sha}…), {bytes} байт на каждый запуск начиная с байта {offset}
 	Seed {seed} taken from {source}	Начальное значение генератора {seed}, взятое из {source}
+	quantum	квантовый
+	public beacon, for seeds only	публичный маяк, только для начальных значений
+	not quantum (atmospheric noise)	не квантовый (атмосферный шум)
+	added by you	добавлено вами
+	Draw a seed first.	Сначала получите начальное значение.
+	Give the file of random bytes.	Укажите файл со случайными байтами.
+	Random numbers	Случайные числа
+	Generator	Генератор
+	Seed from a source	Начальное значение из источника
+	File of random bytes	Файл со случайными байтами
+	Live from a source	Вживую из источника
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, запущенный от начального значения эксперимента: воспроизводимый, и то, что обычно использует моделирование.
+	Draw a seed	Получить начальное значение
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Бесплатный уровень ANU (100 запросов в месяц) покрывает начальные значения, но не запуски вживую: для запуска вживую нужен платный уровень. Каждый запуск ждёт свои байты, и каждый байт записывается в файл, так что запуск можно повторить по нему.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Числа из физического источника непредсказуемы и сообщают, откуда они взяты; они не делают ответы точнее.
+	Hide the sources	Скрыть источники
+	Sources and keys…	Источники и ключи…
+	No key	Нет ключа
+	From byte	С байта
+	Bytes per run	Байтов на запуск
+	from a pilot	из пробного запуска
+	Estimate	Оценка
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} байт на {runs} запусков: {requests} запросов, не менее {seconds} с
+	More than a month of the free tier allows.	Больше, чем позволяет бесплатный уровень за месяц.
+	Key kept	Ключ сохранён
+	Forget key	Забыть ключ
+	Key	Ключ
+	Save key	Сохранить ключ
+	Add a source	Добавить источник
+	Address, with {n} for the count	Адрес, где {n} — количество
+	Key header	Заголовок ключа
+	JSON path	Путь JSON
+	Encoding	Кодировка
+	Add	Добавить
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	В браузере ключи хранятся в локальном хранилище этого сайта без шифрования: прочитать их может всё, что работает на этой странице, и любой, кто пользуется этим профилем браузера. Используйте ключ, который можно отозвать, или настольное приложение, которое хранит ключи в связке ключей системы.

@@ -1505,3 +1505,38 @@ connection	Flow	Ροή
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Η βάση αναφοράς και αυτή η εκτέλεση δεν πήραν τους τυχαίους αριθμούς τους από το ίδιο σημείο (έναν σπόρο ή ένα αρχείο τυχαίων αριθμών) για τις ίδιες εκτελέσεις, οπότε συγκρίνονται ως ανεξάρτητες εκτελέσεις και τα διαστήματα είναι ευρύτερα.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Τυχαίοι αριθμοί από το αρχείο {file} (SHA-256 {sha}…), {bytes} byte για κάθε εκτέλεση από το byte {offset}
 	Seed {seed} taken from {source}	Σπόρος {seed} από {source}
+	quantum	κβαντικό
+	public beacon, for seeds only	δημόσιο beacon, μόνο για σπόρους
+	not quantum (atmospheric noise)	μη κβαντικό (ατμοσφαιρικός θόρυβος)
+	added by you	προστέθηκε από εσάς
+	Draw a seed first.	Πρώτα τραβήξτε έναν σπόρο.
+	Give the file of random bytes.	Δώστε το αρχείο με τα τυχαία byte.
+	Random numbers	Τυχαίοι αριθμοί
+	Generator	Γεννήτρια
+	Seed from a source	Σπόρος από πηγή
+	File of random bytes	Αρχείο τυχαίων byte
+	Live from a source	Ζωντανά από πηγή
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, με αρχικό σπόρο αυτόν του πειράματος: επαναλήψιμη, και αυτό που συνήθως χρησιμοποιεί η προσομοίωση.
+	Draw a seed	Τράβηγμα σπόρου
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Το δωρεάν επίπεδο του ANU (100 αιτήματα τον μήνα) καλύπτει σπόρους, όχι ζωντανές εκτελέσεις: μια ζωντανή εκτέλεση χρειάζεται το επί πληρωμή επίπεδο. Κάθε εκτέλεση περιμένει τα byte της και κάθε byte καταγράφεται στο αρχείο, ώστε η εκτέλεση να επαναλαμβάνεται από αυτό.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Οι αριθμοί από φυσική πηγή είναι απρόβλεπτοι και δηλώνουν από πού προήλθαν· δεν κάνουν τις απαντήσεις πιο ακριβείς.
+	Hide the sources	Απόκρυψη των πηγών
+	Sources and keys…	Πηγές και κλειδιά…
+	No key	Χωρίς κλειδί
+	From byte	Από το byte
+	Bytes per run	Byte ανά εκτέλεση
+	from a pilot	από δοκιμαστική εκτέλεση
+	Estimate	Εκτίμηση
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} byte για {runs} εκτελέσεις: {requests} αιτήματα, τουλάχιστον {seconds} s
+	More than a month of the free tier allows.	Περισσότερο από όσο επιτρέπει το δωρεάν επίπεδο σε έναν μήνα.
+	Key kept	Το κλειδί διατηρείται
+	Forget key	Λήθη κλειδιού
+	Key	Κλειδί
+	Save key	Αποθήκευση κλειδιού
+	Add a source	Προσθήκη πηγής
+	Address, with {n} for the count	Διεύθυνση, όπου {n} είναι το πλήθος
+	Key header	Κεφαλίδα κλειδιού
+	JSON path	Διαδρομή JSON
+	Encoding	Κωδικοποίηση
+	Add	Προσθήκη
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Στο πρόγραμμα περιήγησης, τα κλειδιά αποθηκεύονται χωρίς κρυπτογράφηση στον τοπικό χώρο αποθήκευσης αυτού του ιστότοπου: μπορεί να τα διαβάσει οτιδήποτε εκτελείται σε αυτή τη σελίδα και οποιοσδήποτε χρησιμοποιεί αυτό το προφίλ του προγράμματος περιήγησης. Χρησιμοποιήστε ένα κλειδί που μπορείτε να ανακαλέσετε ή την εφαρμογή επιφάνειας εργασίας, που φυλάσσει τα κλειδιά στην κλειδοθήκη του συστήματος.

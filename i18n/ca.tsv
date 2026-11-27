@@ -1505,3 +1505,38 @@ connection	Flow	Flux
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	La referència i aquesta execució no van prendre els seus nombres aleatoris del mateix lloc (una llavor o un fitxer de nombres aleatoris) per a les mateixes execucions, de manera que es comparen com a execucions independents i els intervals són més amplis.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Nombres aleatoris del fitxer {file} (SHA-256 {sha}…), {bytes} bytes per a cada execució a partir del byte {offset}
 	Seed {seed} taken from {source}	Llavor {seed} presa de {source}
+	quantum	quàntic
+	public beacon, for seeds only	far públic, només per a llavors
+	not quantum (atmospheric noise)	no quàntic (soroll atmosfèric)
+	added by you	afegida per tu
+	Draw a seed first.	Primer obtén una llavor.
+	Give the file of random bytes.	Indica el fitxer de bytes aleatoris.
+	Random numbers	Nombres aleatoris
+	Generator	Generador
+	Seed from a source	Llavor d'una font
+	File of random bytes	Fitxer de bytes aleatoris
+	Live from a source	En directe des d'una font
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, inicialitzat amb la llavor de l'experiment: repetible, i el que la simulació fa servir normalment.
+	Draw a seed	Obtén una llavor
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	El nivell gratuït d'ANU (100 sol·licituds al mes) cobreix llavors, no execucions en directe: una execució en directe necessita el seu nivell de pagament. Cada execució espera els seus bytes, i cada byte es desa al fitxer, de manera que l'execució es repeteix a partir d'ell.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Els nombres d'una font física són impredictibles i diuen d'on vénen; no fan que les respostes siguin més precises.
+	Hide the sources	Amaga les fonts
+	Sources and keys…	Fonts i claus…
+	No key	Sense clau
+	From byte	Des del byte
+	Bytes per run	Bytes per execució
+	from a pilot	d'una execució pilot
+	Estimate	Estimació
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bytes per a {runs} execucions: {requests} sol·licituds, almenys {seconds} s
+	More than a month of the free tier allows.	Més del que permet el nivell gratuït en un mes.
+	Key kept	Clau desada
+	Forget key	Oblida la clau
+	Key	Clau
+	Save key	Desa la clau
+	Add a source	Afegeix una font
+	Address, with {n} for the count	Adreça, amb {n} per al recompte
+	Key header	Capçalera de la clau
+	JSON path	Camí JSON
+	Encoding	Codificació
+	Add	Afegeix
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Al navegador, les claus es desen sense xifrar a l'emmagatzematge local d'aquest lloc: qualsevol cosa que s'executi en aquesta pàgina, i qualsevol persona que faci servir aquest perfil del navegador, les pot llegir. Fes servir una clau que puguis revocar, o l'aplicació d'escriptori, que desa les claus al clauer del sistema.

@@ -1505,3 +1505,38 @@ connection	Flow	ஓட்டம்
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ஒப்பீட்டு அடிப்படையும் இந்த இயக்கமும் அதே மீள் இயக்கங்களுக்கு தங்கள் சீரற்ற எண்களை ஒரே இடத்திலிருந்து (ஒரு சீரற்ற விதை, அல்லது சீரற்ற எண்கள் கொண்ட கோப்பு) எடுக்கவில்லை, எனவே அவை சார்பற்ற மீள் இயக்கங்களாக ஒப்பிடப்படுகின்றன, இடைவெளிகள் அகலமாக உள்ளன.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	கோப்பு {file} இலிருந்து சீரற்ற எண்கள் (SHA-256 {sha}…), ஒவ்வொரு மீள் இயக்கத்திற்கும் பைட் {offset} முதல் {bytes} பைட்டுகள்
 	Seed {seed} taken from {source}	{source} இலிருந்து எடுத்த சீரற்ற விதை {seed}
+	quantum	குவாண்டம்
+	public beacon, for seeds only	பொது பீக்கன், விதைகளுக்கு மட்டும்
+	not quantum (atmospheric noise)	குவாண்டம் அல்ல (வளிமண்டல இரைச்சல்)
+	added by you	நீங்கள் சேர்த்தது
+	Draw a seed first.	முதலில் ஒரு விதையை எடுக்கவும்.
+	Give the file of random bytes.	சீரற்ற பைட்டுகளின் கோப்பைக் கொடுக்கவும்.
+	Random numbers	சீரற்ற எண்கள்
+	Generator	உருவாக்கி
+	Seed from a source	மூலத்திலிருந்து விதை
+	File of random bytes	சீரற்ற பைட்டுகளின் கோப்பு
+	Live from a source	மூலத்திலிருந்து நேரடியாக
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, சோதனையின் விதையிலிருந்து தொடங்கப்பட்டது: திரும்பச் செய்யக்கூடியது, உருவகப்படுத்துதல் வழக்கமாகப் பயன்படுத்துவது.
+	Draw a seed	விதையை எடு
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-வின் இலவச நிலை (மாதத்திற்கு 100 கோரிக்கைகள்) விதைகளுக்கானது, நேரடி இயக்கங்களுக்கு அல்ல: நேரடி இயக்கத்திற்கு அதன் கட்டண நிலை தேவை. ஒவ்வொரு இயக்கமும் அதன் பைட்டுகளுக்காகக் காத்திருக்கும், ஒவ்வொரு பைட்டும் கோப்பில் பதிவாகும், எனவே இயக்கத்தை அதிலிருந்து மீண்டும் செய்யலாம்.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	இயற்பியல் மூலத்தின் எண்கள் முன்கணிக்க முடியாதவை, அவை எங்கிருந்து வந்தன என்பதைச் சொல்கின்றன; அவை பதில்களை மேலும் துல்லியமாக்குவதில்லை.
+	Hide the sources	மூலங்களை மறை
+	Sources and keys…	மூலங்களும் திறவுகோல்களும்…
+	No key	திறவுகோல் இல்லை
+	From byte	பைட்டிலிருந்து
+	Bytes per run	ஒரு இயக்கத்திற்கான பைட்டுகள்
+	from a pilot	முன்னோட்ட இயக்கத்திலிருந்து
+	Estimate	மதிப்பீடு
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} இயக்கங்களுக்கு {bytes} பைட்டுகள்: {requests} கோரிக்கைகள், குறைந்தது {seconds} விநாடி
+	More than a month of the free tier allows.	இலவச நிலை ஒரு மாதத்தில் அனுமதிப்பதை விட அதிகம்.
+	Key kept	திறவுகோல் வைக்கப்பட்டது
+	Forget key	திறவுகோலை மற
+	Key	திறவுகோல்
+	Save key	திறவுகோலைச் சேமி
+	Add a source	ஒரு மூலத்தைச் சேர்
+	Address, with {n} for the count	முகவரி, {n} என்பது எண்ணிக்கை
+	Key header	திறவுகோல் தலைப்பு
+	JSON path	JSON பாதை
+	Encoding	குறியாக்கம்
+	Add	சேர்
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	உலாவியில், திறவுகோல்கள் இந்தத் தளத்தின் உள்ளூர் சேமிப்பகத்தில் மறைகுறியாக்கம் இல்லாமல் வைக்கப்படுகின்றன: இந்தப் பக்கத்தில் இயங்கும் எதுவும், இந்த உலாவி சுயவிவரத்தைப் பயன்படுத்தும் எவரும் அவற்றைப் படிக்கலாம். நீங்கள் ரத்துசெய்யக்கூடிய திறவுகோலைப் பயன்படுத்துங்கள், அல்லது திறவுகோல்களைக் கணினியின் கீசெயினில் வைக்கும் டெஸ்க்டாப் செயலியைப் பயன்படுத்துங்கள்.

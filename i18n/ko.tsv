@@ -1505,3 +1505,38 @@ connection	Flow	흐름
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	기준선과 이 실행은 같은 실행에 대해 난수를 같은 곳(난수 시드 또는 난수 파일)에서 가져오지 않았으므로 독립 실행으로 비교되며 구간이 더 넓습니다.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	파일 {file}의 난수 (SHA-256 {sha}…), 실행마다 바이트 {offset}부터 {bytes}바이트
 	Seed {seed} taken from {source}	{source}에서 가져온 난수 시드 {seed}
+	quantum	양자
+	public beacon, for seeds only	공개 비콘, 시드 전용
+	not quantum (atmospheric noise)	양자 아님 (대기 잡음)
+	added by you	직접 추가함
+	Draw a seed first.	먼저 시드를 뽑으세요.
+	Give the file of random bytes.	난수 바이트 파일을 지정하세요.
+	Random numbers	난수
+	Generator	생성기
+	Seed from a source	소스에서 시드
+	File of random bytes	난수 바이트 파일
+	Live from a source	소스에서 실시간
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, 실험의 시드로 시작: 반복 가능하며 시뮬레이션이 보통 사용하는 방식입니다.
+	Draw a seed	시드 뽑기
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU의 무료 등급(월 100회 요청)은 시드용이며 실시간 실행에는 쓸 수 없습니다. 실시간 실행에는 유료 등급이 필요합니다. 각 실행은 자신의 바이트를 기다리고, 모든 바이트는 파일에 기록되므로 실행을 그 파일로 되풀이할 수 있습니다.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	물리적 소스에서 얻은 숫자는 예측할 수 없고 출처를 알려 주지만, 답을 더 정확하게 만들지는 않습니다.
+	Hide the sources	소스 숨기기
+	Sources and keys…	소스와 키…
+	No key	키 없음
+	From byte	시작 바이트
+	Bytes per run	실행당 바이트
+	from a pilot	파일럿 실행에서
+	Estimate	추정
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs}회 실행에 {bytes}바이트: 요청 {requests}건, 최소 {seconds}초
+	More than a month of the free tier allows.	무료 등급이 한 달에 허용하는 양을 넘습니다.
+	Key kept	키 보관됨
+	Forget key	키 잊기
+	Key	키
+	Save key	키 저장
+	Add a source	소스 추가
+	Address, with {n} for the count	주소 ({n}은 개수)
+	Key header	키 헤더
+	JSON path	JSON 경로
+	Encoding	인코딩
+	Add	추가
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	브라우저에서는 키가 이 사이트의 로컬 저장소에 암호화되지 않은 채 보관됩니다. 이 페이지에서 실행되는 모든 것과 이 브라우저 프로필을 쓰는 모든 사람이 읽을 수 있습니다. 취소할 수 있는 키를 쓰거나, 키를 시스템 키체인에 보관하는 데스크톱 앱을 쓰세요.

@@ -1505,3 +1505,38 @@ connection	Flow	Tok
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referenca in ta zagon nista vzela svojih naključnih števil z istega mesta (seme ali datoteka z naključnimi števili) za iste zagone, zato se primerjata kot neodvisna zagona in intervali so širši.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Naključna števila iz datoteke {file} (SHA-256 {sha}…), {bytes} bajtov za vsak zagon od bajta {offset}
 	Seed {seed} taken from {source}	Seme {seed}, vzeto iz {source}
+	quantum	kvantno
+	public beacon, for seeds only	javni svetilnik, samo za semena
+	not quantum (atmospheric noise)	nekvantno (atmosferski šum)
+	added by you	dodali ste
+	Draw a seed first.	Najprej izžrebajte seme.
+	Give the file of random bytes.	Podajte datoteko naključnih bajtov.
+	Random numbers	Naključna števila
+	Generator	Generator
+	Seed from a source	Seme iz vira
+	File of random bytes	Datoteka naključnih bajtov
+	Live from a source	V živo iz vira
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, zagnan iz semena poskusa: ponovljiv in to, kar simulacija običajno uporablja.
+	Draw a seed	Izžrebaj seme
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Brezplačna raven ANU (100 zahtev na mesec) pokriva semena, ne zagonov v živo: zagon v živo potrebuje plačljivo raven. Vsak zagon čaka na svoje bajte in vsak bajt se zapiše v datoteko, zato se zagon lahko ponovi iz nje.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Števila iz fizičnega vira so nenapovedljiva in povedo, od kod prihajajo; odgovorov ne naredijo natančnejših.
+	Hide the sources	Skrij vire
+	Sources and keys…	Viri in ključi…
+	No key	Brez ključa
+	From byte	Od bajta
+	Bytes per run	Bajtov na zagon
+	from a pilot	iz pilotnega zagona
+	Estimate	Ocena
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bajtov za {runs} zagonov: {requests} zahtev, vsaj {seconds} s
+	More than a month of the free tier allows.	Več, kot dovoljuje brezplačna raven na mesec.
+	Key kept	Ključ shranjen
+	Forget key	Pozabi ključ
+	Key	Ključ
+	Save key	Shrani ključ
+	Add a source	Dodaj vir
+	Address, with {n} for the count	Naslov, kjer je {n} število
+	Key header	Glava ključa
+	JSON path	Pot JSON
+	Encoding	Kodiranje
+	Add	Dodaj
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	V brskalniku se ključi hranijo nešifrirani v lokalni shrambi tega spletnega mesta: preberejo jih lahko vse, kar teče na tej strani, in vsak, ki uporablja ta profil brskalnika. Uporabite ključ, ki ga lahko prekličete, ali namizno aplikacijo, ki ključe hrani v obesku za ključe sistema.

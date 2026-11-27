@@ -1081,6 +1081,19 @@ fields (`“Service time”`) are named in the messages by their own rows.
   English, reusing each catalog's existing words for seed, run, random numbers and baseline; not
   checked against any other source, and not reviewed by native speakers. The least certain are
   lo, th, ta, te, bn, ka, kk, hi and sq, and "from byte {offset}" in ka, kk, hu and tr.
+- The rows for choosing where a run's random numbers come from (the generator, a seed from a
+  source, a file of random bytes, live from a source, with their hints and the estimate for a
+  live run) and for the source manager and its keys (Sources and keys…, adding a source with its
+  address, key header, JSON path and encoding, the saved-key and forget-key rows, and the note on
+  keys kept in the browser) were machine-drafted from the plain meaning of the English, reusing
+  each catalog's existing words for seed, run, random numbers, source, file, byte and estimate,
+  and the everyday word for an API key (not the keyboard key); not checked against any other
+  source, and not reviewed by native speakers. ANU, xoshiro256**, JSON and SHA-256 stay as they
+  are. A public randomness beacon has no settled word in most languages, so "beacon" is a loan
+  word or a plain word for a signal light. The least certain are lo, th, ta, te, bn, ka, kk, hi
+  and sq, the word for beacon and for a free or paid tier everywhere, the keychain in the last
+  note, ja 乱数源 and ko 소스 (they differ from the catalogs' "Source" rows, 出典 and 출처, which
+  read as a citation), and the long sentence about the free tier everywhere.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

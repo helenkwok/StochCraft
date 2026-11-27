@@ -1505,3 +1505,38 @@ connection	Flow	フロー
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ベースラインとこの実行は、同じ実行について乱数を同じ場所 (乱数シード、または乱数のファイル) から取っていないため、独立した実行として比較され、信頼区間は広くなります。
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ファイル {file} の乱数 (SHA-256 {sha}…)、各実行につきバイト {offset} から {bytes} バイト
 	Seed {seed} taken from {source}	{source} から取った乱数シード {seed}
+	quantum	量子
+	public beacon, for seeds only	公開ビーコン、シード専用
+	not quantum (atmospheric noise)	量子ではない (大気ノイズ)
+	added by you	ユーザーが追加
+	Draw a seed first.	先にシードを取得してください。
+	Give the file of random bytes.	乱数バイトのファイルを指定してください。
+	Random numbers	乱数
+	Generator	ジェネレーター
+	Seed from a source	乱数源からのシード
+	File of random bytes	乱数バイトのファイル
+	Live from a source	乱数源からライブで取得
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**、実験のシードから初期化: 再現でき、シミュレーションで通常使われます。
+	Draw a seed	シードを取得
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU の無料枠 (月 100 リクエスト) はシード用で、ライブ実行には使えません。ライブ実行には有料枠が必要です。各実行はそのバイトを待ち、すべてのバイトがファイルに記録されるため、実行はそこから再現できます。
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	物理的な乱数源の数値は予測不能で、その出所を示しますが、答えがより正確になるわけではありません。
+	Hide the sources	乱数源を隠す
+	Sources and keys…	乱数源とキー…
+	No key	キーなし
+	From byte	開始バイト
+	Bytes per run	実行あたりのバイト数
+	from a pilot	パイロット実行から
+	Estimate	見積もり
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} 回の実行に {bytes} バイト: リクエスト {requests} 件、最短 {seconds} 秒
+	More than a month of the free tier allows.	無料枠が 1 か月に許す量を超えています。
+	Key kept	キーを保持しました
+	Forget key	キーを忘れる
+	Key	キー
+	Save key	キーを保存
+	Add a source	乱数源を追加
+	Address, with {n} for the count	アドレス ({n} は件数)
+	Key header	キーのヘッダー
+	JSON path	JSON パス
+	Encoding	エンコード
+	Add	追加
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	ブラウザーでは、キーはこのサイトのローカルストレージに暗号化されずに保存されます。このページで動くものや、このブラウザープロファイルを使う人は誰でも読み取れます。取り消せるキーを使うか、キーをシステムのキーチェーンに保存するデスクトップアプリを使ってください。

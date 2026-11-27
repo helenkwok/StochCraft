@@ -1505,3 +1505,38 @@ connection	Flow	প্রবাহ
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ভিত্তিরেখা এবং এই রান একই পুনরাবৃত্তির জন্য একই জায়গা থেকে (একটি যদৃচ্ছ বীজ, বা যদৃচ্ছ সংখ্যার একটি ফাইল) তাদের যদৃচ্ছ সংখ্যা নেয়নি, তাই এগুলোকে স্বাধীন পুনরাবৃত্তি হিসেবে তুলনা করা হয় এবং ব্যবধান প্রশস্ততর হয়।
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	{file} ফাইল থেকে যদৃচ্ছ সংখ্যা (SHA-256 {sha}…), প্রতিটি পুনরাবৃত্তির জন্য বাইট {offset} থেকে {bytes} বাইট
 	Seed {seed} taken from {source}	যদৃচ্ছ বীজ {seed}, {source} থেকে নেওয়া
+	quantum	কোয়ান্টাম
+	public beacon, for seeds only	পাবলিক বিকন, শুধু বীজের জন্য
+	not quantum (atmospheric noise)	কোয়ান্টাম নয় (বায়ুমণ্ডলীয় গোলমাল)
+	added by you	আপনার যোগ করা
+	Draw a seed first.	আগে একটি বীজ নিন।
+	Give the file of random bytes.	যদৃচ্ছ বাইটের ফাইল দিন।
+	Random numbers	যদৃচ্ছ সংখ্যা
+	Generator	জেনারেটর
+	Seed from a source	উৎস থেকে বীজ
+	File of random bytes	যদৃচ্ছ বাইটের ফাইল
+	Live from a source	উৎস থেকে সরাসরি
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, পরীক্ষার বীজ থেকে শুরু: পুনরাবৃত্তিযোগ্য, এবং সিমুলেশন সাধারণত যা ব্যবহার করে।
+	Draw a seed	বীজ নিন
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-এর বিনামূল্যের স্তর (মাসে 100টি অনুরোধ) বীজের জন্য, সরাসরি পুনরাবৃত্তির জন্য নয়: সরাসরি পুনরাবৃত্তির জন্য এর পেইড স্তর লাগে। প্রতিটি পুনরাবৃত্তি তার বাইটের জন্য অপেক্ষা করে, এবং প্রতিটি বাইট ফাইলে রেকর্ড হয়, তাই পুনরাবৃত্তি সেখান থেকেই আবার চালানো যায়।
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	ভৌত উৎসের সংখ্যা অনুমান-অযোগ্য এবং জানায় তারা কোথা থেকে এসেছে; তারা উত্তরকে আরও নির্ভুল করে না।
+	Hide the sources	উৎস লুকান
+	Sources and keys…	উৎস ও কী…
+	No key	কী নেই
+	From byte	বাইট থেকে
+	Bytes per run	প্রতি পুনরাবৃত্তিতে বাইট
+	from a pilot	পাইলট থেকে
+	Estimate	অনুমান
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs}টি পুনরাবৃত্তির জন্য {bytes} বাইট: {requests}টি অনুরোধ, কমপক্ষে {seconds} সেকেন্ড
+	More than a month of the free tier allows.	বিনামূল্যের স্তর এক মাসে যতটা দেয়, তার চেয়ে বেশি।
+	Key kept	কী রাখা হয়েছে
+	Forget key	কী ভুলুন
+	Key	কী
+	Save key	কী সংরক্ষণ
+	Add a source	একটি উৎস যোগ করুন
+	Address, with {n} for the count	ঠিকানা, যেখানে {n} গণনার জন্য
+	Key header	কী হেডার
+	JSON path	JSON পাথ
+	Encoding	এনকোডিং
+	Add	যোগ করুন
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	ব্রাউজারে কী এই সাইটের লোকাল স্টোরেজে এনক্রিপ্ট ছাড়া রাখা হয়: এই পাতায় যা কিছু চলে এবং এই ব্রাউজার প্রোফাইল যে-ই ব্যবহার করে, সে-ই তা পড়তে পারে। এমন কী ব্যবহার করুন যা আপনি বাতিল করতে পারেন, অথবা ডেস্কটপ অ্যাপ, যা কী সিস্টেমের কীচেইনে রাখে।

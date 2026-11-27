@@ -1505,3 +1505,38 @@ connection	Flow	Flux
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referința și această rulare nu și-au luat numerele aleatoare din același loc (o sămânță sau un fișier de numere aleatoare) pentru aceleași rulări, deci sunt comparate ca rulări independente și intervalele sunt mai largi.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Numere aleatoare din fișierul {file} (SHA-256 {sha}…), {bytes} octeți pentru fiecare rulare, începând de la octetul {offset}
 	Seed {seed} taken from {source}	Sămânța {seed} luată din {source}
+	quantum	cuantic
+	public beacon, for seeds only	far public, doar pentru semințe
+	not quantum (atmospheric noise)	necuantic (zgomot atmosferic)
+	added by you	adăugată de tine
+	Draw a seed first.	Mai întâi extrage o sămânță.
+	Give the file of random bytes.	Indică fișierul de octeți aleatori.
+	Random numbers	Numere aleatoare
+	Generator	Generator
+	Seed from a source	Sămânță dintr-o sursă
+	File of random bytes	Fișier de octeți aleatori
+	Live from a source	În direct dintr-o sursă
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, inițializat cu sămânța experimentului: repetabil și ceea ce folosește de obicei simularea.
+	Draw a seed	Extrage o sămânță
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Nivelul gratuit ANU (100 de cereri pe lună) acoperă semințele, nu rulările în direct: o rulare în direct are nevoie de nivelul plătit. Fiecare rulare așteaptă octeții săi, iar fiecare octet este înregistrat în fișier, astfel încât rularea se repetă pornind de la el.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Numerele dintr-o sursă fizică sunt imprevizibile și spun de unde provin; nu fac răspunsurile mai exacte.
+	Hide the sources	Ascunde sursele
+	Sources and keys…	Surse și chei…
+	No key	Fără cheie
+	From byte	De la octetul
+	Bytes per run	Octeți per rulare
+	from a pilot	dintr-o rulare pilot
+	Estimate	Estimare
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} octeți pentru {runs} rulări: {requests} cereri, cel puțin {seconds} s
+	More than a month of the free tier allows.	Mai mult decât permite nivelul gratuit într-o lună.
+	Key kept	Cheie păstrată
+	Forget key	Uită cheia
+	Key	Cheie
+	Save key	Salvează cheia
+	Add a source	Adaugă o sursă
+	Address, with {n} for the count	Adresă, cu {n} pentru număr
+	Key header	Antetul cheii
+	JSON path	Calea JSON
+	Encoding	Codificare
+	Add	Adaugă
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	În browser, cheile sunt păstrate necriptate în stocarea locală a acestui site: orice rulează pe această pagină și oricine folosește acest profil de browser le poate citi. Folosește o cheie pe care o poți revoca sau aplicația desktop, care păstrează cheile în lanțul de chei al sistemului.

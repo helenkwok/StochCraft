@@ -1505,3 +1505,38 @@ connection	Flow	Fluxo
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	A referencia e esta execución non tomaron os seus números aleatorios do mesmo lugar (unha semente ou un ficheiro de números aleatorios) para as mesmas execucións, así que se comparan como execucións independentes e os intervalos son máis anchos.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Números aleatorios do ficheiro {file} (SHA-256 {sha}…), {bytes} bytes para cada execución desde o byte {offset}
 	Seed {seed} taken from {source}	Semente {seed} tomada de {source}
+	quantum	cuántico
+	public beacon, for seeds only	baliza pública, só para sementes
+	not quantum (atmospheric noise)	non cuántico (ruído atmosférico)
+	added by you	engadida por ti
+	Draw a seed first.	Primeiro obtén unha semente.
+	Give the file of random bytes.	Indica o ficheiro de bytes aleatorios.
+	Random numbers	Números aleatorios
+	Generator	Xerador
+	Seed from a source	Semente dunha fonte
+	File of random bytes	Ficheiro de bytes aleatorios
+	Live from a source	En directo desde unha fonte
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, inicializado coa semente do experimento: repetible, e o que a simulación adoita usar.
+	Draw a seed	Obter unha semente
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	O nivel gratuíto de ANU (100 solicitudes ao mes) cobre sementes, non execucións en directo: unha execución en directo necesita o seu nivel de pago. Cada execución agarda polos seus bytes, e cada byte queda rexistrado no ficheiro, de modo que a execución se repite a partir del.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Os números dunha fonte física son impredicibles e din de onde proceden; non fan que as respostas sexan máis precisas.
+	Hide the sources	Agochar as fontes
+	Sources and keys…	Fontes e claves…
+	No key	Sen clave
+	From byte	Desde o byte
+	Bytes per run	Bytes por execución
+	from a pilot	dunha execución piloto
+	Estimate	Estimación
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bytes para {runs} execucións: {requests} solicitudes, polo menos {seconds} s
+	More than a month of the free tier allows.	Máis do que permite o nivel gratuíto nun mes.
+	Key kept	Clave gardada
+	Forget key	Esquecer a clave
+	Key	Clave
+	Save key	Gardar a clave
+	Add a source	Engadir unha fonte
+	Address, with {n} for the count	Enderezo, con {n} para a cantidade
+	Key header	Cabeceira da clave
+	JSON path	Ruta JSON
+	Encoding	Codificación
+	Add	Engadir
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	No navegador, as claves gárdanse sen cifrar no almacenamento local deste sitio: calquera cousa que se execute nesta páxina, e calquera persoa que use este perfil do navegador, pode lelas. Usa unha clave que poidas revogar, ou a aplicación de escritorio, que garda as claves no chaveiro do sistema.

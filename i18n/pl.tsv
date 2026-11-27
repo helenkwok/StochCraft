@@ -1505,3 +1505,38 @@ connection	Flow	Przepływ
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Punkt odniesienia i to uruchomienie nie wzięły swoich liczb losowych z tego samego miejsca (ziarna lub pliku z liczbami losowymi) dla tych samych uruchomień, więc są porównywane jako niezależne uruchomienia, a przedziały są szersze.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Liczby losowe z pliku {file} (SHA-256 {sha}…), {bytes} bajtów na każde uruchomienie od bajtu {offset}
 	Seed {seed} taken from {source}	Ziarno {seed} pobrane z {source}
+	quantum	kwantowe
+	public beacon, for seeds only	publiczny beacon, tylko dla ziaren
+	not quantum (atmospheric noise)	niekwantowe (szum atmosferyczny)
+	added by you	dodane przez użytkownika
+	Draw a seed first.	Najpierw wylosuj ziarno.
+	Give the file of random bytes.	Podaj plik losowych bajtów.
+	Random numbers	Liczby losowe
+	Generator	Generator
+	Seed from a source	Ziarno ze źródła
+	File of random bytes	Plik losowych bajtów
+	Live from a source	Na żywo ze źródła
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, zainicjowany ziarnem eksperymentu: powtarzalny i to, czego zwykle używa symulacja.
+	Draw a seed	Wylosuj ziarno
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Darmowy poziom ANU (100 żądań miesięcznie) obejmuje ziarna, ale nie uruchomienia na żywo: uruchomienie na żywo wymaga poziomu płatnego. Każde uruchomienie czeka na swoje bajty, a każdy bajt jest zapisywany w pliku, więc uruchomienie można z niego powtórzyć.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Liczby z fizycznego źródła są nieprzewidywalne i podają, skąd pochodzą; nie sprawiają, że odpowiedzi są dokładniejsze.
+	Hide the sources	Ukryj źródła
+	Sources and keys…	Źródła i klucze…
+	No key	Brak klucza
+	From byte	Od bajtu
+	Bytes per run	Bajtów na uruchomienie
+	from a pilot	z uruchomienia próbnego
+	Estimate	Szacunek
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bajtów na {runs} uruchomień: {requests} żądań, co najmniej {seconds} s
+	More than a month of the free tier allows.	Więcej, niż pozwala darmowy poziom w ciągu miesiąca.
+	Key kept	Klucz zapamiętany
+	Forget key	Zapomnij klucz
+	Key	Klucz
+	Save key	Zapisz klucz
+	Add a source	Dodaj źródło
+	Address, with {n} for the count	Adres, z {n} jako liczbą
+	Key header	Nagłówek klucza
+	JSON path	Ścieżka JSON
+	Encoding	Kodowanie
+	Add	Dodaj
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	W przeglądarce klucze są przechowywane niezaszyfrowane w pamięci lokalnej tej witryny: może je odczytać wszystko, co działa na tej stronie, oraz każdy, kto korzysta z tego profilu przeglądarki. Użyj klucza, który możesz unieważnić, albo aplikacji na komputer, która przechowuje klucze w pęku kluczy systemu.

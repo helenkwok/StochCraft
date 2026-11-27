@@ -1505,3 +1505,38 @@ connection	Flow	Ағын
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Базалық нұсқа мен бұл іске қосу кездейсоқ сандарын сол іске қосулар үшін бір жерден (кездейсоқ тұқымнан немесе кездейсоқ сандар файлынан) алмады, сондықтан олар тәуелсіз іске қосулар ретінде салыстырылады және аралықтар кеңірек.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	{file} файлындағы кездейсоқ сандар (SHA-256 {sha}…), әр іске қосуға {offset}-байттан бастап {bytes} байт
 	Seed {seed} taken from {source}	{source} көзінен алынған {seed} кездейсоқ тұқымы
+	quantum	кванттық
+	public beacon, for seeds only	жария маяк, тек тұқымдар үшін
+	not quantum (atmospheric noise)	кванттық емес (атмосфералық шу)
+	added by you	өзіңіз қосқан
+	Draw a seed first.	Алдымен тұқым алыңыз.
+	Give the file of random bytes.	Кездейсоқ байттар файлын көрсетіңіз.
+	Random numbers	Кездейсоқ сандар
+	Generator	Генератор
+	Seed from a source	Дереккөзден тұқым
+	File of random bytes	Кездейсоқ байттар файлы
+	Live from a source	Дереккөзден тікелей
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, эксперимент тұқымынан іске қосылған: қайталанатын және модельдеу әдетте қолданатын нұсқа.
+	Draw a seed	Тұқым алу
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-дың тегін деңгейі (айына 100 сұрау) тұқымдарды қамтиды, тікелей іске қосуларды қамтымайды: тікелей іске қосуға ақылы деңгей керек. Әр іске қосу өз байттарын күтеді, ал әр байт файлға жазылады, сондықтан іске қосуды содан қайталауға болады.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Физикалық дереккөзден алынған сандар болжанбайды және олардың қайдан келгенін айтады; олар жауаптарды дәлірек етпейді.
+	Hide the sources	Дереккөздерді жасыру
+	Sources and keys…	Дереккөздер мен кілттер…
+	No key	Кілт жоқ
+	From byte	Байттан бастап
+	Bytes per run	Әр іске қосуға байт
+	from a pilot	пилоттық іске қосудан
+	Estimate	Бағалау
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} байт {runs} іске қосуға: {requests} сұрау, кемінде {seconds} с
+	More than a month of the free tier allows.	Тегін деңгей бір айда рұқсат ететіннен көп.
+	Key kept	Кілт сақталды
+	Forget key	Кілтті ұмыту
+	Key	Кілт
+	Save key	Кілтті сақтау
+	Add a source	Дереккөз қосу
+	Address, with {n} for the count	Мекенжай, мұнда {n} — саны
+	Key header	Кілт тақырыбы
+	JSON path	JSON жолы
+	Encoding	Кодтау
+	Add	Қосу
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Браузерде кілттер осы сайттың жергілікті сақтау орнында шифрланбай сақталады: оларды осы бетте жұмыс істейтін кез келген нәрсе және осы браузер профилін қолданатын кез келген адам оқи алады. Қайтарып алуға болатын кілтті немесе кілттерді жүйенің кілттер байламында сақтайтын жұмыс үстелі қолданбасын пайдаланыңыз.

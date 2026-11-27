@@ -1505,3 +1505,38 @@ connection	Flow	Stroom
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	De referentie en deze uitvoering namen hun willekeurige getallen niet van dezelfde plek (een startwaarde of een bestand met willekeurige getallen) voor dezelfde uitvoeringen, dus ze worden vergeleken als onafhankelijke uitvoeringen en de intervallen zijn breder.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Willekeurige getallen uit het bestand {file} (SHA-256 {sha}…), {bytes} bytes voor elke uitvoering vanaf byte {offset}
 	Seed {seed} taken from {source}	Startwaarde {seed}, overgenomen uit {source}
+	quantum	kwantum
+	public beacon, for seeds only	openbare beacon, alleen voor startwaarden
+	not quantum (atmospheric noise)	niet kwantum (atmosferische ruis)
+	added by you	zelf toegevoegd
+	Draw a seed first.	Trek eerst een startwaarde.
+	Give the file of random bytes.	Geef het bestand met willekeurige bytes op.
+	Random numbers	Willekeurige getallen
+	Generator	Generator
+	Seed from a source	Startwaarde uit een bron
+	File of random bytes	Bestand met willekeurige bytes
+	Live from a source	Live uit een bron
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, gestart vanaf de startwaarde van het experiment: herhaalbaar, en wat simulatie normaal gebruikt.
+	Draw a seed	Startwaarde trekken
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	De gratis variant van ANU (100 verzoeken per maand) dekt startwaarden, geen live uitvoeringen: een live uitvoering heeft de betaalde variant nodig. Elke uitvoering wacht op zijn bytes en elke byte wordt in het bestand vastgelegd, zodat de uitvoering daaruit opnieuw kan worden gedaan.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Getallen uit een fysieke bron zijn onvoorspelbaar en vermelden waar ze vandaan komen; ze maken de antwoorden niet nauwkeuriger.
+	Hide the sources	Bronnen verbergen
+	Sources and keys…	Bronnen en sleutels…
+	No key	Geen sleutel
+	From byte	Vanaf byte
+	Bytes per run	Bytes per uitvoering
+	from a pilot	uit een proefuitvoering
+	Estimate	Schatting
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bytes voor {runs} uitvoeringen: {requests} verzoeken, minstens {seconds} s
+	More than a month of the free tier allows.	Meer dan de gratis variant per maand toestaat.
+	Key kept	Sleutel bewaard
+	Forget key	Sleutel vergeten
+	Key	Sleutel
+	Save key	Sleutel opslaan
+	Add a source	Een bron toevoegen
+	Address, with {n} for the count	Adres, met {n} voor het aantal
+	Key header	Sleutelheader
+	JSON path	JSON-pad
+	Encoding	Codering
+	Add	Toevoegen
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	In de browser worden sleutels onversleuteld bewaard in de lokale opslag van deze site: alles wat op deze pagina draait, en iedereen die dit browserprofiel gebruikt, kan ze lezen. Gebruik een sleutel die je kunt intrekken, of de desktop-app, die sleutels in de sleutelhanger van het systeem bewaart.

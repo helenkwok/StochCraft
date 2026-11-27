@@ -1505,3 +1505,38 @@ connection	Flow	Verbindung
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Die Referenz und dieser Lauf haben ihre Zufallszahlen für dieselben Läufe nicht von derselben Stelle genommen (ein Startwert oder eine Datei mit Zufallszahlen), daher werden sie als unabhängige Läufe verglichen und die Intervalle sind breiter.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Zufallszahlen aus der Datei {file} (SHA-256 {sha}…), {bytes} Bytes für jeden Lauf ab Byte {offset}
 	Seed {seed} taken from {source}	Startwert {seed}, übernommen aus {source}
+	quantum	Quanten
+	public beacon, for seeds only	öffentlicher Beacon, nur für Startwerte
+	not quantum (atmospheric noise)	nicht quantenbasiert (atmosphärisches Rauschen)
+	added by you	von Ihnen hinzugefügt
+	Draw a seed first.	Ziehen Sie zuerst einen Startwert.
+	Give the file of random bytes.	Geben Sie die Datei mit den Zufallsbytes an.
+	Random numbers	Zufallszahlen
+	Generator	Generator
+	Seed from a source	Startwert aus einer Quelle
+	File of random bytes	Datei mit Zufallsbytes
+	Live from a source	Live aus einer Quelle
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, vom Startwert des Experiments aus gestartet: wiederholbar und das, was die Simulation normalerweise verwendet.
+	Draw a seed	Startwert ziehen
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Das kostenlose Kontingent von ANU (100 Anfragen im Monat) deckt Startwerte ab, nicht Live-Läufe: Ein Live-Lauf braucht das kostenpflichtige Kontingent. Jeder Lauf wartet auf seine Bytes, und jedes Byte wird in der Datei festgehalten, sodass sich der Lauf daraus wiederholen lässt.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Zahlen aus einer physikalischen Quelle sind unvorhersagbar und sagen, woher sie stammen; sie machen die Antworten nicht genauer.
+	Hide the sources	Quellen ausblenden
+	Sources and keys…	Quellen und Schlüssel…
+	No key	Kein Schlüssel
+	From byte	Ab Byte
+	Bytes per run	Bytes pro Lauf
+	from a pilot	aus einem Pilotlauf
+	Estimate	Schätzung
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} Bytes für {runs} Läufe: {requests} Anfragen, mindestens {seconds} s
+	More than a month of the free tier allows.	Mehr, als das kostenlose Kontingent im Monat erlaubt.
+	Key kept	Schlüssel gespeichert
+	Forget key	Schlüssel vergessen
+	Key	Schlüssel
+	Save key	Schlüssel speichern
+	Add a source	Quelle hinzufügen
+	Address, with {n} for the count	Adresse, mit {n} für die Anzahl
+	Key header	Schlüssel-Header
+	JSON path	JSON-Pfad
+	Encoding	Kodierung
+	Add	Hinzufügen
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Im Browser werden Schlüssel unverschlüsselt im lokalen Speicher dieser Website abgelegt: Alles, was auf dieser Seite läuft, und jeder, der dieses Browserprofil nutzt, kann sie lesen. Verwenden Sie einen Schlüssel, den Sie widerrufen können, oder die Desktop-App, die Schlüssel in der Schlüsselverwaltung des Systems aufbewahrt.

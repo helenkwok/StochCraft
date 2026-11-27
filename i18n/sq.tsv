@@ -1505,3 +1505,38 @@ connection	Flow	Rrjedhë
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referenca dhe ky ekzekutim nuk i morën numrat e tyre të rastësishëm nga i njëjti vend (një farë ose një skedar numrash të rastësishëm) për të njëjtat ekzekutime, kështu që krahasohen si ekzekutime të pavarura dhe intervalet janë më të gjera.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Numra të rastësishëm nga skedari {file} (SHA-256 {sha}…), {bytes} bajte për çdo ekzekutim nga bajti {offset}
 	Seed {seed} taken from {source}	Fara {seed} e marrë nga {source}
+	quantum	kuantik
+	public beacon, for seeds only	far publik, vetëm për fara
+	not quantum (atmospheric noise)	jo kuantik (zhurmë atmosferike)
+	added by you	shtuar nga ti
+	Draw a seed first.	Së pari nxirr një farë.
+	Give the file of random bytes.	Jep skedarin e bajteve të rastësishme.
+	Random numbers	Numra të rastësishëm
+	Generator	Gjeneratori
+	Seed from a source	Fara nga një burim
+	File of random bytes	Skedar bajtesh të rastësishme
+	Live from a source	Drejtpërdrejt nga një burim
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, nisur nga fara e eksperimentit: i përsëritshëm dhe ai që simulimi zakonisht përdor.
+	Draw a seed	Nxirr një farë
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Niveli falas i ANU (100 kërkesa në muaj) mbulon farat, jo ekzekutimet drejtpërdrejt: një ekzekutim drejtpërdrejt kërkon nivelin me pagesë. Çdo ekzekutim pret bajtet e tij dhe çdo bajt regjistrohet në skedar, kështu ekzekutimi përsëritet nga ai.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Numrat nga një burim fizik janë të paparashikueshëm dhe tregojnë nga vijnë; ata nuk i bëjnë përgjigjet më të sakta.
+	Hide the sources	Fshih burimet
+	Sources and keys…	Burimet dhe çelësat…
+	No key	Pa çelës
+	From byte	Nga bajti
+	Bytes per run	Bajte për ekzekutim
+	from a pilot	nga një provë pilot
+	Estimate	Vlerësim
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} bajte për {runs} ekzekutime: {requests} kërkesa, të paktën {seconds} s
+	More than a month of the free tier allows.	Më shumë se sa lejon niveli falas në një muaj.
+	Key kept	Çelësi u ruajt
+	Forget key	Harro çelësin
+	Key	Çelës
+	Save key	Ruaj çelësin
+	Add a source	Shto një burim
+	Address, with {n} for the count	Adresa, ku {n} është numri
+	Key header	Kreu i çelësit
+	JSON path	Rruga JSON
+	Encoding	Kodimi
+	Add	Shto
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Në shfletues, çelësat ruhen pa enkriptim në ruajtjen lokale të këtij sajti: mund t'i lexojë çdo gjë që punon në këtë faqe dhe kushdo që përdor këtë profil shfletuesi. Përdor një çelës që mund ta revokosh, ose aplikacionin për desktop, që i ruan çelësat në zinxhirin e çelësave të sistemit.

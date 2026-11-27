@@ -1505,3 +1505,38 @@ connection	Flow	Alur
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Acuan dan eksekusi ini tidak mengambil bilangan acaknya dari tempat yang sama (benih acak atau berkas bilangan acak) untuk eksekusi yang sama, sehingga keduanya dibandingkan sebagai eksekusi independen dan intervalnya lebih lebar.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Bilangan acak dari berkas {file} (SHA-256 {sha}…), {bytes} byte untuk setiap eksekusi mulai dari byte {offset}
 	Seed {seed} taken from {source}	Benih acak {seed} diambil dari {source}
+	quantum	kuantum
+	public beacon, for seeds only	suar publik, hanya untuk benih
+	not quantum (atmospheric noise)	bukan kuantum (derau atmosfer)
+	added by you	ditambahkan oleh Anda
+	Draw a seed first.	Tarik benih dulu.
+	Give the file of random bytes.	Berikan berkas byte acak.
+	Random numbers	Bilangan acak
+	Generator	Generator
+	Seed from a source	Benih dari sumber
+	File of random bytes	Berkas byte acak
+	Live from a source	Langsung dari sumber
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, dimulai dari benih eksperimen: dapat diulang, dan yang biasanya dipakai simulasi.
+	Draw a seed	Tarik benih
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Tingkat gratis ANU (100 permintaan per bulan) mencakup benih, bukan eksekusi langsung: eksekusi langsung membutuhkan tingkat berbayar. Setiap eksekusi menunggu byte-nya, dan setiap byte dicatat di berkas, sehingga eksekusi dapat diulang darinya.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Angka dari sumber fisik tidak dapat diprediksi dan menyebutkan asalnya; angka itu tidak membuat jawaban lebih akurat.
+	Hide the sources	Sembunyikan sumber
+	Sources and keys…	Sumber dan kunci…
+	No key	Tanpa kunci
+	From byte	Dari byte
+	Bytes per run	Byte per eksekusi
+	from a pilot	dari uji coba
+	Estimate	Perkiraan
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{bytes} byte untuk {runs} eksekusi: {requests} permintaan, minimal {seconds} s
+	More than a month of the free tier allows.	Lebih dari yang diizinkan tingkat gratis dalam sebulan.
+	Key kept	Kunci disimpan
+	Forget key	Lupakan kunci
+	Key	Kunci
+	Save key	Simpan kunci
+	Add a source	Tambah sumber
+	Address, with {n} for the count	Alamat, dengan {n} untuk jumlah
+	Key header	Header kunci
+	JSON path	Jalur JSON
+	Encoding	Pengodean
+	Add	Tambah
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Di peramban, kunci disimpan tanpa enkripsi di penyimpanan lokal situs ini: apa pun yang berjalan di halaman ini, dan siapa pun yang memakai profil peramban ini, dapat membacanya. Gunakan kunci yang dapat Anda cabut, atau aplikasi desktop, yang menyimpan kunci di rantai kunci sistem.

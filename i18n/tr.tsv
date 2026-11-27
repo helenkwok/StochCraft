@@ -1505,3 +1505,38 @@ connection	Flow	Akış
 	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referans ve bu çalıştırma, aynı çalıştırmalar için rastgele sayılarını aynı yerden (bir tohum ya da rastgele sayı dosyası) almadı; bu yüzden bağımsız çalıştırmalar olarak karşılaştırılırlar ve aralıklar daha geniştir.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	{file} dosyasından rastgele sayılar (SHA-256 {sha}…), her çalıştırma için {offset}. bayttan başlayarak {bytes} bayt
 	Seed {seed} taken from {source}	{source} kaynağından alınan {seed} rastgelelik tohumu
+	quantum	kuantum
+	public beacon, for seeds only	herkese açık işaret, yalnızca tohumlar için
+	not quantum (atmospheric noise)	kuantum değil (atmosferik gürültü)
+	added by you	sizin eklediğiniz
+	Draw a seed first.	Önce bir rastgelelik tohumu çekin.
+	Give the file of random bytes.	Rastgele baytların dosyasını belirtin.
+	Random numbers	Rastgele sayılar
+	Generator	Üreteç
+	Seed from a source	Bir kaynaktan rastgelelik tohumu
+	File of random bytes	Rastgele bayt dosyası
+	Live from a source	Bir kaynaktan canlı
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, deneyin rastgelelik tohumundan başlatılır: tekrarlanabilir ve simülasyonun normalde kullandığı budur.
+	Draw a seed	Rastgelelik tohumu çek
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU'nun ücretsiz katmanı (ayda 100 istek) tohumları kapsar, canlı çalıştırmaları değil: canlı çalıştırma ücretli katmanı gerektirir. Her çalıştırma baytlarını bekler ve her bayt dosyaya kaydedilir, böylece çalıştırma ondan yinelenebilir.
+	Numbers from a physical source are unpredictable and say where they came from; they do not make the answers more accurate.	Fiziksel bir kaynaktan gelen sayılar öngörülemezdir ve nereden geldiklerini söyler; yanıtları daha doğru yapmazlar.
+	Hide the sources	Kaynakları gizle
+	Sources and keys…	Kaynaklar ve anahtarlar…
+	No key	Anahtar yok
+	From byte	Bayttan başlayarak
+	Bytes per run	Çalıştırma başına bayt
+	from a pilot	pilot çalıştırmadan
+	Estimate	Tahmin
+	{bytes} bytes for {runs} runs: {requests} requests, at least {seconds} s	{runs} çalıştırma için {bytes} bayt: {requests} istek, en az {seconds} s
+	More than a month of the free tier allows.	Ücretsiz katmanın bir ayda izin verdiğinden fazla.
+	Key kept	Anahtar saklandı
+	Forget key	Anahtarı unut
+	Key	Anahtar
+	Save key	Anahtarı kaydet
+	Add a source	Kaynak ekle
+	Address, with {n} for the count	Adres, {n} sayı yerine geçer
+	Key header	Anahtar başlığı
+	JSON path	JSON yolu
+	Encoding	Kodlama
+	Add	Ekle
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Tarayıcıda anahtarlar bu sitenin yerel depolama alanında şifrelenmeden saklanır: bu sayfada çalışan her şey ve bu tarayıcı profilini kullanan herkes onları okuyabilir. İptal edebileceğiniz bir anahtar kullanın ya da anahtarları sistemin anahtarlığında saklayan masaüstü uygulamasını kullanın.
