@@ -1539,3 +1539,4 @@ connection	Flow	Flyt
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Hvert ± i resultatene er et intervall på dette nivået. Et høyere nivå gir bredere intervaller og krever flere kjøringer for samme presisjon.
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	En vurdering er reell når forskjellens intervall utelukker null. De {k} radene vurderes samlet: alle intervallene deres holder samtidig med minst {level}% konfidens (Bonferroni).
 	Judge the rows together (Bonferroni)	Vurder radene samlet (Bonferroni)
+	{q}% quantile {value}	{q}%-kvantil {value}

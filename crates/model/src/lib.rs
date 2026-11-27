@@ -37,7 +37,7 @@ pub use site::{Junction, JunctionKind, Place, Point, Scenery, Site, Track};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-pub use stochcraft_random::{Dist, Family, FitError, ThreePoint, Upper};
+pub use stochcraft_random::{DEFAULT_Q, Dist, Family, FitError, ThreePoint, Upper};
 
 /// The id of a model element or connection. Ids follow the XML `NCName` rule that BPMN and XPDL
 /// ids obey: a letter or `_` first, then letters, digits, `.`, `-` or `_`.
@@ -6156,6 +6156,7 @@ mod tests {
             mode: 1.0,
             upper: 2.0,
             upper_is: Upper::Max,
+            q: 0.95,
         };
         let mut m = mm1();
         let estimate = Estimate {

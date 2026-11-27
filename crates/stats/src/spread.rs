@@ -7,6 +7,12 @@
 //! - [`Ecdf`]: the empirical cumulative distribution and its Dvoretzky–Kiefer–Wolfowitz band,
 //!   with Massart's (1990) tight constant: with probability at least the confidence asked for,
 //!   the true distribution lies within ε = √(ln(2/α) / 2n) of the empirical one everywhere.
+//! - [`order_statistic_interval`] and [`Ecdf::quantile_interval`]: a confidence interval for a
+//!   quantile between two order statistics, [X(r), X(s)], chosen from the binomial distribution
+//!   so that it covers the quantile with at least the confidence asked for whatever the
+//!   distribution (W. J. Conover, *Practical Nonparametric Statistics*, 3rd ed., Wiley, 1999,
+//!   section 3.2; A. M. Law, *Simulation Modeling and Analysis*, 5th ed., section 9.4.2, which
+//!   gives the normal approximation to the same rule).
 //! - [`Proportion`]: a probability estimated from successes in independent trials, with
 //!   Wilson's (1927) score interval, which keeps close to its nominal coverage for small
 //!   samples and probabilities near 0 or 1, where the textbook normal interval does not.
@@ -127,6 +133,15 @@ impl Ecdf {
         q.is_finite().then_some(q)
     }
 
+    /// A `confidence` interval for the value below which a fraction `p` lies, between two order
+    /// statistics ([`order_statistic_interval`]): its ends, the upper infinite when it falls
+    /// among the censored values. `None` when there are too few values.
+    pub fn quantile_interval(&self, p: f64, confidence: f64) -> Option<(f64, f64)> {
+        let (r, s, _) = order_statistic_interval(self.sorted.len() as u64, p, confidence)?;
+        let at = |k: u64| self.sorted.get(usize::try_from(k - 1).ok()?).copied();
+        Some((at(r)?, at(s)?))
+    }
+
     /// The half-width ε of the Dvoretzky–Kiefer–Wolfowitz band at `confidence`: the true
     /// distribution lies within ±ε of this one at every x, with probability at least
     /// `confidence` (Massart, 1990).
@@ -148,6 +163,48 @@ impl Ecdf {
         }
         out
     }
+}
+
+/// The order statistics, 1-based, whose interval [X(r), X(s)] covers the `p` quantile with
+/// probability at least `confidence`, and that probability: with B the number of n values
+/// below the quantile (binomial with n and p), r is the largest with P(B < r) ≤ α/2 and s the
+/// smallest with P(B ≥ s) ≤ α/2, α = 1 − `confidence`, so P(X(r) ≤ x_p ≤ X(s)) ≥ P(r ≤ B < s)
+/// ≥ 1 − α. `None` when there are too few values for either end (r below 1 or s above n), a `p`
+/// not strictly between 0 and 1, or a `confidence` not strictly between 0 and 1.
+pub fn order_statistic_interval(n: u64, p: f64, confidence: f64) -> Option<(u64, u64, f64)> {
+    if n == 0 || !(p > 0.0 && p < 1.0) || !(confidence > 0.0 && confidence < 1.0) {
+        return None;
+    }
+    let tail = 0.5 * (1.0 - confidence);
+    let nf = n as f64;
+    let (lp, lq) = (ln(p), libm::log1p(-p));
+    // P(B = k), from logarithms so that large n neither overflows nor underflows to nothing.
+    let pmf = |k: u64| {
+        let k = k as f64;
+        libm::exp(
+            libm::lgamma(nf + 1.0) - libm::lgamma(k + 1.0) - libm::lgamma(nf - k + 1.0)
+                + k * lp
+                + (nf - k) * lq,
+        )
+    };
+    let mut cdf = Vec::with_capacity(usize::try_from(n).ok()? + 1);
+    let mut sum = 0.0;
+    for k in 0..=n {
+        sum += pmf(k);
+        // cdf[k] = P(B ≤ k).
+        cdf.push(sum);
+    }
+    let below = |k: u64| -> f64 {
+        // P(B < k) = P(B ≤ k − 1).
+        k.checked_sub(1)
+            .and_then(|j| cdf.get(usize::try_from(j).ok()?).copied())
+            .unwrap_or(0.0)
+    };
+    // The largest r in 1..=n with P(B < r) ≤ tail.
+    let r = (1..=n).rev().find(|&r| below(r) <= tail)?;
+    // The smallest s in 1..=n with P(B ≥ s) = 1 − P(B < s) ≤ tail.
+    let s = (1..=n).find(|&s| 1.0 - below(s) <= tail)?;
+    (r < s).then(|| (r, s, below(s) - below(r)))
 }
 
 /// ε = √(ln(2/α) / 2n) with α = 1 − `confidence`, for `n` values.
@@ -222,6 +279,29 @@ mod tests {
         assert_eq!(quantile(&[], 0.5), None);
         assert_eq!(quantile(&xs, 1.5), None);
         assert_eq!(quantile(&[7.0], 0.3), Some(7.0));
+    }
+
+    #[test]
+    fn order_statistic_intervals() {
+        // Law, 5th ed., Example 9.22 (p. 510): 100 replications, the 0.95 quantile at 90%:
+        // [X(91), X(99)]; it covers with probability 0.9347 here.
+        let got = order_statistic_interval(100, 0.95, 0.90);
+        assert!(got.is_some_and(|(r, s, c)| r == 91 && s == 99 && (c - 0.934_730_5).abs() < 1e-6));
+        // The median of 100 at 95%: [X(40), X(61)], coverage 0.9648.
+        let got = order_statistic_interval(100, 0.5, 0.95);
+        assert!(got.is_some_and(|(r, s, c)| r == 40 && s == 61 && (c - 0.964_8).abs() < 1e-4));
+        // Coverage is never below the level asked for.
+        for n in [10u64, 20, 37, 100, 1000] {
+            for p in [0.1, 0.5, 0.9] {
+                if let Some((r, s, c)) = order_statistic_interval(n, p, 0.95) {
+                    assert!(c >= 0.95 - 1e-12 && r >= 1 && s <= n && r < s, "{n} {p}");
+                }
+            }
+        }
+        // Too few values for the 0.95 quantile at 95%: no interval.
+        assert_eq!(order_statistic_interval(10, 0.95, 0.95), None);
+        let e = Ecdf::new(&(1..=100).map(f64::from).collect::<Vec<_>>());
+        assert_eq!(e.quantile_interval(0.95, 0.90), Some((91.0, 99.0)));
     }
 
     #[test]

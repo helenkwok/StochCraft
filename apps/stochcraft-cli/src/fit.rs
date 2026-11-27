@@ -187,22 +187,48 @@ fn table(source: &str, col: &Column, r: &Value) -> String {
     }
     let _ = writeln!(
         out,
-        "Ranked by Anderson–Darling A² (smaller fits better); D is the Kolmogorov–Smirnov distance,\nthe largest gap between the data's and the fit's distribution functions.\n"
+        "Ranked by Anderson–Darling A² (smaller fits better); D is the Kolmogorov–Smirnov distance,\nthe largest gap between the data's and the fit's distribution functions. \"At 5%\" is each\ntest's verdict: rejected, or kept (kept* for a family judged by a conservative test).\n"
     );
-    let mut rows =
-        vec![["rank", "family", "A²", "D", "mean", "std dev", "parameters"].map(String::from)];
+    // A test's verdict at 5% in a word.
+    let at5 = |t: &Value| {
+        match t["verdict"].as_str() {
+            Some("rejected") => "rejected",
+            Some("not_rejected") => "kept",
+            Some("not_rejected_conservative") => "kept*",
+            _ => "-",
+        }
+        .to_owned()
+    };
+    let mut rows = vec![
+        [
+            "rank",
+            "family",
+            "A²",
+            "D",
+            "at 5% (A², D)",
+            "mean",
+            "std dev",
+            "parameters",
+        ]
+        .map(String::from),
+    ];
     for (i, c) in r["candidates"].as_array().into_iter().flatten().enumerate() {
         rows.push([
             (i + 1).to_string(),
             c["family"].as_str().unwrap_or("").to_owned(),
             n(&c["anderson_darling"]),
             n(&c["kolmogorov_smirnov"]),
+            format!(
+                "{}, {}",
+                at5(&c["tests"]["anderson_darling"]),
+                at5(&c["tests"]["kolmogorov_smirnov"])
+            ),
             n(&c["mean"]),
             n(&c["std_dev"]),
             describe(&c["distribution"]),
         ]);
     }
-    let widths: Vec<usize> = (0..7)
+    let widths: Vec<usize> = (0..8)
         .map(|c| rows.iter().map(|r| r[c].chars().count()).max().unwrap_or(0))
         .collect();
     for row in &rows {
@@ -212,7 +238,7 @@ fn table(source: &str, col: &Column, r: &Value) -> String {
             .map(|(c, cell)| {
                 let pad = " ".repeat(widths[c] - cell.chars().count());
                 // Text left, numbers right.
-                if c == 1 || c == 6 {
+                if c == 1 || c == 4 || c == 7 {
                     format!("{cell}{pad}")
                 } else {
                     format!("{pad}{cell}")
@@ -235,6 +261,9 @@ fn table(source: &str, col: &Column, r: &Value) -> String {
         .collect();
     if !skipped.is_empty() {
         let _ = writeln!(out, "\nNot fitted: {}", skipped.join("; "));
+    }
+    if let Some(note) = r["tests_note"].as_str() {
+        let _ = writeln!(out, "\nAt 5%: {note}.");
     }
     let _ = writeln!(
         out,

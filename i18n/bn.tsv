@@ -1539,3 +1539,4 @@ connection	Flow	প্রবাহ
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	ফলাফলের প্রতিটি ± এই স্তরের একটি ব্যবধান। উচ্চতর স্তর প্রশস্ত ব্যবধান দেয় এবং একই নির্ভুলতার জন্য আরও রান লাগে।
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	পার্থক্যের ব্যবধান শূন্যকে বাদ দিলে রায়টি বাস্তব। {k}টি সারি একসাথে বিচার করা হয়: তাদের সব ব্যবধান একসাথে অন্তত {level}% আস্থায় সত্য (বনফেরোনি)।
 	Judge the rows together (Bonferroni)	সারিগুলো একসাথে বিচার করুন (বনফেরোনি)
+	{q}% quantile {value}	{q}% কোয়ান্টাইল {value}

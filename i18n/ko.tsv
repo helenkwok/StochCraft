@@ -1539,3 +1539,4 @@ connection	Flow	흐름
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	결과의 모든 ±는 이 수준의 구간입니다. 수준이 높을수록 구간이 넓어지고 같은 정밀도에 더 많은 실행이 필요합니다.
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	차이의 구간이 0을 포함하지 않으면 판정이 실제입니다. {k}개 행을 함께 판정합니다: 모든 구간이 동시에 최소 {level}% 신뢰도로 성립합니다 (본페로니).
 	Judge the rows together (Bonferroni)	행을 함께 판정 (본페로니)
+	{q}% quantile {value}	{q}% 분위수 {value}

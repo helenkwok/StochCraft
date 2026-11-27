@@ -1539,3 +1539,4 @@ connection	Flow	Tok
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Svako ± u rezultatima je interval na ovom nivou. Viši nivo daje šire intervale i traži više pokretanja za istu preciznost.
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Presuda je stvarna kada interval razlike ne obuhvata nulu. {k} redova se procjenjuje zajedno: svi njihovi intervali vrijede istovremeno uz pouzdanost od najmanje {level}% (Bonferroni).
 	Judge the rows together (Bonferroni)	Procijeni redove zajedno (Bonferroni)
+	{q}% quantile {value}	{q}% kvantil {value}

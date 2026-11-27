@@ -840,6 +840,9 @@ pub(crate) fn estimate_element(e: &Estimate) -> Element {
         .with_attr("min", &num(t.min))
         .with_attr("mode", &num(t.mode))
         .with_attr(t.upper_is.name(), &num(t.upper));
+    if t.upper_is == stochcraft_model::Upper::P95 && t.q != stochcraft_model::DEFAULT_Q {
+        body = body.with_attr("q", &num(t.q));
+    }
     if !e.source.is_empty() {
         body = body.with_attr("source", &e.source);
     }

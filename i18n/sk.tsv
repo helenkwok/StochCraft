@@ -1539,3 +1539,4 @@ connection	Flow	Tok
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Každé ± vo výsledkoch je interval na tejto hladine. Vyššia hladina dáva širšie intervaly a pre rovnakú presnosť potrebuje viac behov.
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Verdikt je skutočný, keď interval rozdielu nezahŕňa nulu. {k} riadkov sa posudzuje spoločne: všetky ich intervaly platia súčasne so spoľahlivosťou aspoň {level}% (Bonferroni).
 	Judge the rows together (Bonferroni)	Posudzovať riadky spoločne (Bonferroni)
+	{q}% quantile {value}	{q}% kvantil {value}

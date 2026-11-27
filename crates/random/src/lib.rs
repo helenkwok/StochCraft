@@ -134,7 +134,7 @@ mod dist;
 pub use dist::{Dist, DistError, Requirement, ln_binomial_pmf, ln_gamma, ln_poisson_pmf};
 pub mod estimate;
 pub mod fit;
-pub use estimate::{Family, FitError, ThreePoint, Upper};
+pub use estimate::{DEFAULT_Q, Family, FitError, ThreePoint, Upper};
 
 /// Machine-checked properties (Kani, `cargo kani -p stochcraft-random`; see docs/developers.md).
 #[cfg(kani)]

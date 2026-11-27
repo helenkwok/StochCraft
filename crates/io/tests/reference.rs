@@ -604,6 +604,7 @@ fn edits() -> Vec<Edit> {
                     mode: 2.5,
                     upper: 6.0,
                     upper_is: Upper::Max,
+                    q: 0.95,
                 };
                 let fitted = three_point.fit().unwrap_or(Dist::Constant(0.0));
                 if let Some(i) = first(m, |k| {

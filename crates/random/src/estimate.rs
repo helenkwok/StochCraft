@@ -16,6 +16,11 @@
 //! - **Weibull** likewise: shape k > 1 and scale λ from the mode λ((k − 1)/k)^(1/k) and the 95th
 //!   percentile λ(−ln 0.05)^(1/k).
 //!
+//! The upper point may be any quantile x_q instead of the 95th percentile, with q given (A. M.
+//! Law, *Simulation Modeling and Analysis*, 5th ed., McGraw-Hill, 2015, section 6.11): the same
+//! equations with q in place of 0.95 and Φ⁻¹(q) in place of 1.645, and −ln(1 − q) in place of
+//! −ln 0.05.
+//!
 //! The log-normal and Weibull have no maximum, so they take a 95th percentile. With a minimum of
 //! 0 they are BPSim's own `LogNormalDistribution` and `WeibullDistribution`; otherwise, since
 //! BPSim's have no shift, they too are written as a `UserDistribution` of quantiles (every 1% to
@@ -92,7 +97,13 @@ pub struct ThreePoint {
     /// The maximum or the 95th percentile, as `upper_is` says.
     pub upper: f64,
     pub upper_is: Upper,
+    /// For a percentile: the share of values at or below `upper` (0.95 for the 95th
+    /// percentile). Ignored for a maximum.
+    pub q: f64,
 }
+
+/// The share below the upper point of an estimate unless it says otherwise.
+pub const DEFAULT_Q: f64 = 0.95;
 
 /// Why an estimate cannot be fitted.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -132,9 +143,13 @@ impl ThreePoint {
             mode,
             upper,
             upper_is,
+            q,
         } = *self;
-        if ![min, mode, upper].iter().all(|v| v.is_finite()) {
+        if ![min, mode, upper, q].iter().all(|v| v.is_finite()) {
             return Err(FitError::NotFinite);
+        }
+        if upper_is == Upper::P95 && !(q > 0.0 && q < 1.0) {
+            return Err(FitError::NotInOrder);
         }
         match family {
             Family::Triangular | Family::Pert => {
@@ -147,7 +162,7 @@ impl ThreePoint {
                 }
                 let max = match upper_is {
                     Upper::Max => upper,
-                    Upper::P95 => solve_max(family, min, mode, upper),
+                    Upper::P95 => solve_max(family, min, mode, upper, q),
                 };
                 Ok(match family {
                     Family::Triangular => Dist::Triangular { min, mode, max },
@@ -164,9 +179,9 @@ impl ThreePoint {
                 if !(min < mode && mode < upper) {
                     return Err(FitError::NotInOrder);
                 }
-                let (m, q) = (mode - min, upper - min);
+                let (m, q_value) = (mode - min, upper - min);
                 if family == Family::LogNormal {
-                    let sigma = lognormal_sigma(m, q);
+                    let sigma = lognormal_sigma(m, q_value, z_of(q));
                     let mu = ln(m) + sigma * sigma;
                     if min == 0.0 {
                         let mean = exp(mu + sigma * sigma / 2.0);
@@ -187,7 +202,7 @@ impl ThreePoint {
                         false,
                     ))
                 } else {
-                    let (k, lambda) = weibull_params(m, q);
+                    let (k, lambda) = weibull_params(m, q_value, q);
                     if min == 0.0 {
                         return Ok(Dist::Weibull {
                             shape: k,
@@ -207,23 +222,32 @@ fn pert_shapes(min: f64, mode: f64, max: f64) -> (f64, f64) {
     (1.0 + 4.0 * (mode - min) / r, 1.0 + 4.0 * (max - mode) / r)
 }
 
+/// Φ⁻¹(q): the constant at the default 0.95, so a default estimate is fitted exactly as before.
+fn z_of(q: f64) -> f64 {
+    if q == DEFAULT_Q {
+        Z95
+    } else {
+        normal_quantile(q)
+    }
+}
+
 /// The maximum whose triangular or PERT distribution (with `min` and `mode`) has `p95` as its
-/// 95th percentile. The percentile grows with the maximum, so bisection finds it.
-fn solve_max(family: Family, min: f64, mode: f64, p95: f64) -> f64 {
+/// `q` quantile. The quantile grows with the maximum, so bisection finds it.
+fn solve_max(family: Family, min: f64, mode: f64, p95: f64, q: f64) -> f64 {
     let q95 = |max: f64| match family {
         Family::Triangular => {
-            // At 95% the quantile is on the upper side unless the mode is nearly the maximum.
+            // The quantile is on the upper side when q is at least the share below the mode.
             let (a, b, c) = (min, max, mode);
             let fc = (c - a) / (b - a);
-            if 0.95 >= fc {
-                b - ((1.0 - 0.95) * (b - a) * (b - c)).sqrt()
+            if q >= fc {
+                b - ((1.0 - q) * (b - a) * (b - c)).sqrt()
             } else {
-                a + (0.95 * (b - a) * (c - a)).sqrt()
+                a + (q * (b - a) * (c - a)).sqrt()
             }
         }
         _ => {
             let (a, b) = pert_shapes(min, mode, max);
-            min + (max - min) * beta_quantile(0.95, a, b)
+            min + (max - min) * beta_quantile(q, a, b)
         }
     };
     let mut lo = p95;
@@ -242,19 +266,21 @@ fn solve_max(family: Family, min: f64, mode: f64, p95: f64) -> f64 {
     0.5 * (lo + hi)
 }
 
-/// σ of the log-normal with mode `m` and 95th percentile `q`: the positive root of
-/// σ² + z₉₅σ − ln(q/m) = 0.
-fn lognormal_sigma(m: f64, q: f64) -> f64 {
-    let d = ln(q / m);
-    (-Z95 + (Z95 * Z95 + 4.0 * d).sqrt()) / 2.0
+/// σ of the log-normal with mode `m` and quantile `x` where Φ⁻¹ is `z` (1.645 for the 95th
+/// percentile): the positive root of σ² + zσ − ln(x/m) = 0.
+fn lognormal_sigma(m: f64, x: f64, z: f64) -> f64 {
+    let d = ln(x / m);
+    (-z + (z * z + 4.0 * d).sqrt()) / 2.0
 }
 
-/// Weibull shape and scale with mode `m` and 95th percentile `q` (q > m > 0): the ratio q/m is
-/// (−ln 0.05)^(1/k) / ((k − 1)/k)^(1/k), which falls from infinity at k = 1 towards 1 as k
-/// grows, so bisection on k finds it.
-fn weibull_params(m: f64, q: f64) -> (f64, f64) {
-    let target = ln(q / m);
-    let c = ln(-ln(0.05));
+/// Weibull shape and scale with mode `m` and `q` quantile `x` (x > m > 0): the ratio x/m is
+/// (−ln(1 − q))^(1/k) / ((k − 1)/k)^(1/k), which falls from infinity at k = 1 as k grows, so
+/// bisection on k finds it.
+fn weibull_params(m: f64, x: f64, q: f64) -> (f64, f64) {
+    let target = ln(x / m);
+    // 0.05 itself at the default, so a default estimate is fitted exactly as before.
+    let tail = if q == DEFAULT_Q { 0.05 } else { 1.0 - q };
+    let c = ln(-ln(tail));
     let ratio = |k: f64| (c - ln((k - 1.0) / k)) / k;
     let (mut lo, mut hi) = (1.0 + 1e-12, 1_000.0);
     for _ in 0..200 {
@@ -439,7 +465,51 @@ mod tests {
             mode,
             upper,
             upper_is,
+            q: DEFAULT_Q,
         }
+    }
+
+    /// Law, 5th ed., Examples 6.24 and 6.25 (pp. 378–380): a location of 1, a most likely value
+    /// of 4 and a 0.9 quantile of 10 give a log-normal with σ = 0.588 and μ = 1.444, and a
+    /// Weibull with shape 1.627 and scale 5.390. And any quantile solved for is met.
+    #[test]
+    fn any_quantile_can_be_the_upper_point() {
+        let sigma = lognormal_sigma(3.0, 9.0, z_of(0.9));
+        assert!((sigma - 0.588).abs() < 5e-4, "{sigma}");
+        assert!((ln(3.0) + sigma * sigma - 1.444).abs() < 5e-4);
+        let (k, lambda) = weibull_params(3.0, 9.0, 0.9);
+        assert!(
+            (k - 1.627).abs() < 5e-4 && (lambda - 5.390).abs() < 5e-4,
+            "{k} {lambda}"
+        );
+        let mut t = est(Family::Triangular, 0.0, 1.0, 2.0, Upper::P95);
+        t.q = 0.9;
+        let Ok(Dist::Triangular { max, .. }) = t.fit() else {
+            unreachable!()
+        };
+        // The 0.9 quantile of the triangular (0, 1, b) is b − √(0.1 b (b − 1)).
+        assert!(
+            (max - (0.1 * max * (max - 1.0)).sqrt() - 2.0).abs() < 1e-9,
+            "{max}"
+        );
+        for (family, q) in [
+            (Family::Pert, 0.8),
+            (Family::LogNormal, 0.9),
+            (Family::Weibull, 0.75),
+        ] {
+            let mut t = est(family, 0.0, 2.0, 5.0, Upper::P95);
+            t.q = q;
+            let d = t.fit();
+            let got = d.as_ref().map(|d| sampled_quantile(d, q));
+            assert!(
+                got.is_ok_and(|v| close(v, 5.0, 1e-2)),
+                "{family:?} {q}: {got:?}"
+            );
+        }
+        // A q outside (0, 1) is refused.
+        let mut bad = est(Family::Triangular, 0.0, 1.0, 2.0, Upper::P95);
+        bad.q = 1.0;
+        assert_eq!(bad.fit(), Err(FitError::NotInOrder));
     }
 
     /// The p-quantile of draws from `d`.

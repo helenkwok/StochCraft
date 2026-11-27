@@ -1539,3 +1539,4 @@ connection	Flow	Fluxo
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Cada ± nos resultados é um intervalo neste nível. Um nível mais alto dá intervalos mais largos e exige mais execuções para a mesma precisão.
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Um veredito é real quando o intervalo da diferença deixa o zero de fora. As {k} linhas são julgadas em conjunto: todos os seus intervalos valem ao mesmo tempo com pelo menos {level}% de confiança (Bonferroni).
 	Judge the rows together (Bonferroni)	Julgar as linhas em conjunto (Bonferroni)
+	{q}% quantile {value}	quantil de {q}% {value}

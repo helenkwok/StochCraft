@@ -1539,3 +1539,4 @@ connection	Flow	Stroom
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Elke ± in de resultaten is een interval op dit niveau. Een hoger niveau geeft bredere intervallen en vraagt meer runs voor dezelfde precisie.
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Een oordeel is echt wanneer het interval van het verschil nul uitsluit. De {k} rijen worden samen beoordeeld: al hun intervallen gelden tegelijk met minstens {level}% betrouwbaarheid (Bonferroni).
 	Judge the rows together (Bonferroni)	Rijen samen beoordelen (Bonferroni)
+	{q}% quantile {value}	{q}%-kwantiel {value}

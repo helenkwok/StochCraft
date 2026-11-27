@@ -1539,3 +1539,4 @@ connection	Flow	प्रवाह
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	परिणामों में हर ± इस स्तर का एक अंतराल है। ऊँचा स्तर चौड़े अंतराल देता है और उसी सटीकता के लिए अधिक रन चाहिए।
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	निर्णय वास्तविक है जब अंतर का अंतराल शून्य को बाहर रखता है। {k} पंक्तियों को एक साथ आँका जाता है: उनके सभी अंतराल एक साथ कम से कम {level}% विश्वास से सही हैं (बोनफ़ेरोनी)।
 	Judge the rows together (Bonferroni)	पंक्तियों को एक साथ आँकें (बोनफ़ेरोनी)
+	{q}% quantile {value}	{q}% क्वांटाइल {value}

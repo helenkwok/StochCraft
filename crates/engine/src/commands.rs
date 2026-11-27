@@ -765,9 +765,15 @@ pub struct EstimateSet {
     /// The largest value possible (triangular and PERT); give this or `p95`.
     #[serde(default)]
     pub max: Option<f64>,
-    /// The value exceeded one time in twenty.
+    /// The value exceeded one time in twenty, or, with `q`, the value with a share `q` at or
+    /// below it.
     #[serde(default)]
     pub p95: Option<f64>,
+    /// The share of values at or below `p95`'s value, strictly between 0 and 1 (A. M. Law,
+    /// *Simulation Modeling and Analysis*, 5th ed., section 6.11, takes any quantile); 0.95,
+    /// the 95th percentile, unless given.
+    #[serde(default)]
+    pub q: Option<f64>,
     /// Who gave the estimate or where it comes from.
     #[serde(default)]
     pub source: String,
@@ -1422,6 +1428,7 @@ fn estimate_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         mode: p.mode,
         max: p.max,
         p95: p.p95,
+        q: p.q,
         source: p.source,
     }
     .to_estimate()
@@ -3134,7 +3141,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "estimate.set",
-        summary: "Fit an element's time distribution to a three-point estimate (minimum, most likely, maximum or 95th percentile) and keep the estimate as its pedigree. Returns the distribution.",
+        summary: "Fit an element's time distribution to a three-point estimate (minimum, most likely, maximum or 95th percentile, or any quantile with `q`) and keep the estimate as its pedigree. Returns the distribution.",
         kind: CommandKind::Edit,
         schema: schema::<EstimateSet>,
         example: || json!({ "id": "desk", "family": "pert", "min": 0.5, "mode": 1.2, "max": 4.0, "source": "front-desk staff, March" }),

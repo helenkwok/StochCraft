@@ -1,4 +1,5 @@
-//! The distribution of one result across the replications of the last run: percentiles, the
+//! The distribution of one result across the replications of the last run: percentiles, each
+//! with a confidence interval between two order statistics, the
 //! empirical cumulative distribution with its Dvoretzky–Kiefer–Wolfowitz band, the probability
 //! of meeting a target with Wilson's interval, and the values as an empirical BPSim user
 //! distribution for another model (`results.distribution`).
@@ -127,6 +128,19 @@ pub fn describe(results: &Value, p: &Params) -> Result<Value, CommandError> {
         .iter()
         .map(|q| (format!("{q}"), json!(ecdf.quantile(q / 100.0))))
         .collect();
+    // Each percentile's interval between order statistics, at the confidence asked for; null
+    // with too few replications for it, and an upper end of null among censored values.
+    let intervals: serde_json::Map<String, Value> = percentiles
+        .iter()
+        .map(|q| {
+            let i = ecdf
+                .quantile_interval(q / 100.0, confidence)
+                .map_or(Value::Null, |(lo, hi)| {
+                    json!([lo, hi.is_finite().then_some(hi)])
+                });
+            (format!("{q}"), i)
+        })
+        .collect();
     let summary = Summary::of(finite);
     let mut v = json!({
         "metric": p.metric,
@@ -139,10 +153,11 @@ pub fn describe(results: &Value, p: &Params) -> Result<Value, CommandError> {
         "min": finite.first(),
         "max": finite.last(),
         "percentiles": pct,
+        "percentile_intervals": intervals,
         "confidence": confidence,
         "ecdf": ecdf.steps(),
         "band": band,
-        "method": "percentiles: Hyndman and Fan's definition 7; band: Dvoretzky–Kiefer–Wolfowitz with Massart's constant, ε = √(ln(2/α) / 2n); target probability: Wilson's score interval",
+        "method": "percentiles: Hyndman and Fan's definition 7; their intervals: between the order statistics X(r) and X(s) that cover the percentile with at least the confidence asked for, from the binomial distribution (Conover, Practical Nonparametric Statistics, 3rd ed., section 3.2), null with too few replications; band: Dvoretzky–Kiefer–Wolfowitz with Massart's constant, ε = √(ln(2/α) / 2n); target probability: Wilson's score interval",
     });
     let target = |name: &str, x: f64, meets: &dyn Fn(f64) -> bool| {
         let met = present.iter().filter(|v| meets(**v)).count() as u64;

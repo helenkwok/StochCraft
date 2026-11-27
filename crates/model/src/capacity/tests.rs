@@ -211,6 +211,7 @@ fn a_pert_service_is_mg1() {
         mode: 20.0,
         upper: 60.0,
         upper_is: crate::Upper::Max,
+        q: 0.95,
     }
     .fit();
     let Ok(pert) = fitted else {

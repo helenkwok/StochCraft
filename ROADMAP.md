@@ -1798,6 +1798,50 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     Most tools do the same by default; some count it busy, or let the modeller choose. Until
     2026-11 StochCraft counted it busy, which put a failing machine's utilisation above its
     processing share (on the weld and paint test model, paint: 73.2% against 65.2%).
+- **Inputs from data and expert estimates, judged** (A. M. Law, *Simulation Modeling and
+  Analysis*, 5th ed., chapter 6). **Done:**
+  - `estimate.fit` gives each fit a verdict at 5% from the Anderson–Darling and
+    Kolmogorov–Smirnov tests (`tests`), with the critical points for all parameters known
+    computed from the tests' limiting distributions, and Stephens's points for a normal or
+    log-normal (judged with the standard deviation of divisor n − 1, as his case assumes), an
+    exponential and a Weibull fitted from the same data (`stats::gof`). A gamma, Erlang, uniform
+    or triangular fit is judged against the all-known points, a conservative test, and says so.
+    The answer says that many data reject almost any fit. Checked on the book's drive-up bank
+    (Table 6.7, Examples 6.18 and 6.19) and by drawing samples from each family with a case:
+    a true model is rejected about one time in twenty.
+  - A three-point estimate's upper point may be any quantile (`q`, 0.95 by default), as in Law,
+    section 6.11 (checked against Examples 6.24 and 6.25).
+  - `results.distribution` gives each percentile a confidence interval between two order
+    statistics, chosen from the binomial distribution so that it covers with at least the level
+    asked for (Law, Example 9.22: [X(91), X(99)] for the 0.95 quantile of 100 runs at 90%).
+  - Not yet: the chi-square test, fits for discrete data, and P-P and Q-Q plots.
+- **Variance reduction for process runs** (planned; Law, chapter 11). Common random numbers are
+  done (streams by element id, above). Monte Carlo models already have antithetic sampling and
+  control variates. For process runs:
+  - **Antithetic runs** (section 11.3): replications in pairs, the second drawing 1 − u wherever
+    the first drew u, and the interval on the pair means. Needs from the engine: every sampler
+    drawing by inversion from one uniform per draw (so that 1 − u gives the opposite draw and
+    the pair stays in step; the inverse-transform samplers planned with the random-number
+    changes), a stream that reflects its uniforms for the odd member of a pair, and results
+    whose interval is on the pairs, as Monte Carlo's is.
+  - **Control variates** (section 11.4): a result adjusted by inputs whose means are known, such
+    as the mean service time drawn and the number of arrivals in a run, Y − b(X − E[X]) with b
+    estimated from the runs. Needs: each replication's tally of every random input drawn
+    (count and mean, by element and purpose), the inputs' exact means from their
+    distributions, and the interval with the degrees of freedom the estimated b costs.
+  - **Indirect estimation** (section 11.5): a mean time in system as the mean wait plus the known
+    mean service time, and the numbers waiting and in the system from the arrival rate by
+    Little's law, which are often less variable than the direct averages. Needs: each server's
+    exact mean service time and the exact arrival rate where the model fixes them, and both
+    estimates side by side in the results, so that the indirect one is shown only where its
+    assumptions (first come, first served, no losses) hold.
+  - **Conditioning** (section 11.6): a random quantity replaced by its expectation given what the
+    run saw, such as an arriving customer's wait by the number ahead times the mean service time.
+    Needs: the state each arrival meets recorded (the number waiting and the units busy), the
+    service distributions' means, and a rule for which results it applies to, as it holds only
+    for some queue disciplines.
+  - Each is to be checked on M/M/1 and M/M/2 against their exact means, with the variance ratio
+    against plain runs in the test (Law, Table 11.3 for common random numbers).
 - **Regenerative intervals** (planned). Some models return, again and again, to a state from
   which they start afresh: empty, with every server idle. The cycles between those returns are
   independent and identically distributed. So one long run gives a confidence interval for a

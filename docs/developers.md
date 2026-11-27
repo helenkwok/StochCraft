@@ -341,6 +341,16 @@ stochcraft-cli fit service-times.csv --column minutes
 and families that need values above 0 are left out, with the reason, when a value is 0 or less.
 The best fit's distribution is printed as `block.set` takes it.
 
+The column **at 5% (A², D)** gives each test's verdict at the 5% level: **rejected**, **kept**,
+or **kept\*** for a gamma, Erlang, uniform or triangular fit, whose parameters come from the same
+data but which has no critical points of its own, so it is judged against those for parameters
+known in advance, a conservative test (A. M. Law, *Simulation Modeling and Analysis*, 5th ed.,
+section 6.6.2). A normal, log-normal, exponential or Weibull fit is judged against Stephens's
+points for its case; the normal and log-normal with the standard deviation of divisor n − 1, as
+his case assumes (the fit itself is the maximum-likelihood one, divisor n). With many values the
+tests reject almost any fit, since no real data come exactly from a distribution: a rejection
+then says the fit is not exact, not that it is not useful.
+
 ### Monte Carlo models
 
 A Monte Carlo model is a calculation rather than a process: inputs are distributions (a cost, a

@@ -1582,6 +1582,7 @@ fn estimates_of(
                             mode,
                             upper,
                             upper_is,
+                            q: number("q").unwrap_or(stochcraft_model::DEFAULT_Q),
                         },
                         source: body.and_then(|b| b.attr("source")).unwrap_or_default(),
                     },

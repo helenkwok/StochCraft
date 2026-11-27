@@ -207,6 +207,7 @@ fn a_pert_schedule_on_a_single_path() {
             mode: *m,
             upper: *b,
             upper_is: Upper::Max,
+            q: 0.95,
         }
         .fit()
         .unwrap_or_else(|e| unreachable!("{e}"));

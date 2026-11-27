@@ -1539,3 +1539,4 @@ connection	Flow	Поток
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Всяко ± в резултатите е интервал на това ниво. По-високо ниво дава по-широки интервали и изисква повече пускания за същата точност.
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Изводът е реален, когато интервалът на разликата не включва нула. {k} реда се оценяват заедно: всичките им интервали са верни едновременно с поне {level}% доверителност (Бонферони).
 	Judge the rows together (Bonferroni)	Оценявай редовете заедно (Бонферони)
+	{q}% quantile {value}	{q}% квантил {value}

@@ -18,6 +18,7 @@ fn estimate(family: Family, min: f64, mode: f64, upper: f64, upper_is: Upper) ->
             mode,
             upper,
             upper_is,
+            q: 0.95,
         },
         source: "Delphi, 3 experts, round 2 — médiane".into(),
     }
@@ -385,4 +386,21 @@ fn one_save_into_a_file_without_bpsim_data_adds_one_scenario() {
     assert_eq!(back.model.experiment.duration, 120.0);
     assert_eq!(back.model.starting, edited.starting);
     assert_eq!(back.model.elements, edited.elements);
+}
+
+/// An estimate's upper point may be any quantile: `q` is written beside `p95` when it is not
+/// 0.95, read back, and left out at 0.95.
+#[test]
+fn an_estimate_s_quantile_is_written_and_read() {
+    let mut m = model();
+    let mut e = estimate(Family::LogNormal, 1.0, 4.0, 10.0, Upper::P95);
+    e.three_point.q = 0.9;
+    m.estimates.insert(ElementId::unchecked("ship"), e);
+    let bytes = write_new(&m);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains("p95=\"10\" q=\"0.9\""), "{text}");
+    let back = read(&bytes).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model.estimates, m.estimates);
+    let text = String::from_utf8_lossy(&write_new(&model())).into_owned();
+    assert!(!text.contains(" q=\""), "{text}");
 }

@@ -59,6 +59,9 @@ pub(crate) struct EstimateForm {
     /// The upper value, a maximum or (when `p95`) the 95th percentile.
     upper: f64,
     p95: bool,
+    /// The share at or below a percentile other than the 95th, kept from the estimate (the form
+    /// has no field for it; the command line and agents set it).
+    q: Option<f64>,
     source: String,
 }
 
@@ -578,7 +581,13 @@ impl App {
             let num = |k: &str| est[k].as_f64().map(grouped);
             let upper = match (num("max"), num("p95")) {
                 (Some(m), _) => tf("maximum {value}", &[("value", &m)]),
-                (None, Some(p)) => tf("95th percentile {value}", &[("value", &p)]),
+                (None, Some(p)) => match est["q"].as_f64() {
+                    Some(q) => tf(
+                        "{q}% quantile {value}",
+                        &[("q", &grouped(q * 100.0)), ("value", &p)],
+                    ),
+                    None => tf("95th percentile {value}", &[("value", &p)]),
+                },
                 _ => String::new(),
             };
             ui.label(tf(
@@ -613,6 +622,7 @@ impl App {
                 .or_else(|| est["p95"].as_f64())
                 .unwrap_or(3.0),
             p95: est["max"].is_null() && est["p95"].is_number(),
+            q: est["q"].as_f64(),
             source: est["source"].as_str().unwrap_or("").to_owned(),
         };
         // The form stays closed until asked for, so the inspector stays short.
@@ -750,6 +760,9 @@ impl App {
                 "source": form.source.trim(),
             });
             params[if form.p95 { "p95" } else { "max" }] = json!(form.upper);
+            if let Some(q) = form.q.filter(|_| form.p95) {
+                params["q"] = json!(q);
+            }
             if self.execute("estimate.set", params).is_some() {
                 self.info(tf("Fitted the time of {id}", &[("id", &id)]));
                 return;

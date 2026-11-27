@@ -13,6 +13,9 @@
 //!   meeting a target with Wilson's interval.
 //! - [`difference`]: the difference between two systems' results with a 95% confidence interval:
 //!   paired-t for runs with common random numbers, Welch's two-sample t otherwise.
+//! - [`gof`]: whether a distribution fitted to data is rejected by the Kolmogorov–Smirnov or
+//!   Anderson–Darling test at 5%, with critical points computed or, for estimated parameters,
+//!   Stephens's.
 //! - [`warmup`]: where the start-up of a series ends (MSER-5), for choosing a warm-up.
 //! - [`split`]: whether the replications split into two outcomes (some runs near one value, the
 //!   rest near another), so that their mean describes no actual run.
@@ -24,6 +27,7 @@
 
 pub mod critical;
 pub mod difference;
+pub mod gof;
 pub mod observed;
 pub mod precision;
 pub mod split;

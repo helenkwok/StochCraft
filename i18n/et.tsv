@@ -1539,3 +1539,4 @@ connection	Flow	Voog
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Iga ± tulemustes on sellel nivool usaldusvahemik. Kõrgem nivoo annab laiemad vahemikud ja vajab sama täpsuse jaoks rohkem käivitusi.
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Otsus on tõeline, kui erinevuse vahemik ei sisalda nulli. {k} rida hinnatakse koos: kõik nende vahemikud kehtivad korraga vähemalt {level}% usaldusnivool (Bonferroni).
 	Judge the rows together (Bonferroni)	Hinda ridu koos (Bonferroni)
+	{q}% quantile {value}	{q}% kvantiil {value}

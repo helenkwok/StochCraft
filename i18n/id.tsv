@@ -1539,3 +1539,4 @@ connection	Flow	Alur
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Setiap ± dalam hasil adalah interval pada tingkat ini. Tingkat yang lebih tinggi memberi interval lebih lebar dan perlu lebih banyak jalankan untuk presisi yang sama.
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Putusan nyata bila interval selisih tidak mencakup nol. {k} baris dinilai bersama: semua intervalnya berlaku sekaligus dengan kepercayaan sedikitnya {level}% (Bonferroni).
 	Judge the rows together (Bonferroni)	Nilai baris secara bersama (Bonferroni)
+	{q}% quantile {value}	kuantil {q}% {value}

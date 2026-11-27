@@ -4644,3 +4644,166 @@ fn compare_holds_several_comparisons_together_by_bonferroni() {
         ErrorCode::InvalidParams
     );
 }
+
+/// Law, 5th ed., Table 6.7 (p. 326): 219 interarrival times at a drive-up bank.
+fn drive_up_bank() -> Vec<f64> {
+    let rows = [
+        "0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.02 0.02 0.03 0.03 0.03 0.04 0.04 0.04 0.04 0.04 0.04 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.06 0.06 0.06",
+        "0.06 0.07 0.07 0.07 0.07 0.07 0.07 0.07 0.07 0.07 0.07 0.08 0.08 0.08 0.08 0.09 0.09 0.10 0.10 0.10 0.10 0.10 0.10 0.10 0.10 0.10 0.11 0.11 0.11 0.11 0.11 0.12",
+        "0.12 0.12 0.12 0.13 0.13 0.14 0.14 0.14 0.14 0.15 0.15 0.15 0.15 0.15 0.15 0.17 0.18 0.19 0.19 0.19 0.20 0.21 0.21 0.21 0.21 0.21 0.22 0.22 0.22 0.23 0.23 0.23",
+        "0.23 0.23 0.24 0.25 0.25 0.25 0.25 0.25 0.26 0.26 0.26 0.26 0.26 0.27 0.28 0.28 0.29 0.29 0.30 0.31 0.31 0.32 0.35 0.35 0.35 0.36 0.36 0.36 0.37 0.37 0.38 0.38",
+        "0.38 0.38 0.38 0.39 0.40 0.40 0.41 0.41 0.43 0.43 0.43 0.44 0.45 0.45 0.46 0.47 0.47 0.47 0.48 0.49 0.49 0.49 0.49 0.50 0.50 0.50 0.51 0.51 0.51 0.52 0.52 0.53",
+        "0.53 0.53 0.54 0.54 0.55 0.55 0.56 0.57 0.57 0.60 0.61 0.61 0.63 0.63 0.64 0.65 0.65 0.65 0.69 0.69 0.70 0.72 0.72 0.72 0.74 0.75 0.76 0.77 0.79 0.84 0.86 0.87",
+        "0.88 0.88 0.90 0.93 0.93 0.95 0.97 1.03 1.05 1.05 1.06 1.09 1.10 1.11 1.12 1.17 1.18 1.24 1.24 1.28 1.33 1.38 1.44 1.51 1.72 1.83 1.96",
+    ];
+    rows.iter()
+        .flat_map(|r| r.split(' '))
+        .filter_map(|v| v.parse().ok())
+        .collect()
+}
+
+/// Each fit has a verdict at 5% from both tests. Law, 5th ed., Examples 6.18 and 6.19
+/// (pp. 355–357): the exponential fitted to the drive-up bank's 219 interarrival times has
+/// D = 0.047 and A² = 0.558 (with the book's rounded mean 0.399; 0.0473 and 0.5579 with the
+/// exact one), modified 0.70 and 0.56, under Stephens's 1.094 and 1.321: not rejected. A normal
+/// fitted to the same skewed data is rejected; a gamma, with no case of its own, is judged
+/// against the all-known points (2.492 and 1.358), a conservative test.
+#[test]
+fn every_fit_has_a_verdict_at_five_percent() {
+    let mut e = Engine::new();
+    let data = drive_up_bank();
+    assert_eq!(data.len(), 219);
+    let r = ok(
+        &mut e,
+        "estimate.fit",
+        json!({ "data": data, "families": ["exponential", "normal", "gamma"] }),
+    );
+    assert!(
+        r["tests_note"]
+            .as_str()
+            .is_some_and(|n| n.contains("reject almost any"))
+    );
+    let of = |family: &str| {
+        r["candidates"]
+            .as_array()
+            .and_then(|c| c.iter().find(|c| c["family"] == family))
+            .cloned()
+            .unwrap_or(Value::Null)
+    };
+    let expo = &of("exponential")["tests"];
+    assert_eq!(expo["case"], "exponential", "{expo}");
+    let ad = &expo["anderson_darling"];
+    let ks = &expo["kolmogorov_smirnov"];
+    let f = |v: &Value| v.as_f64().unwrap_or(f64::NAN);
+    assert!((f(&ad["statistic"]) - 0.558).abs() < 1e-3, "{ad}");
+    assert!((f(&ad["modified"]) - 0.5594).abs() < 1e-3, "{ad}");
+    assert_eq!(
+        (f(&ad["critical"]), &ad["verdict"]),
+        (1.321, &json!("not_rejected"))
+    );
+    assert!((f(&ks["statistic"]) - 0.0473).abs() < 1e-3, "{ks}");
+    assert!((f(&ks["modified"]) - 0.699).abs() < 2e-3, "{ks}");
+    assert_eq!(
+        (f(&ks["critical"]), &ks["verdict"]),
+        (1.094, &json!("not_rejected"))
+    );
+
+    let normal = &of("normal")["tests"];
+    assert_eq!(normal["case"], "normal");
+    assert_eq!(
+        normal["anderson_darling"]["verdict"], "rejected",
+        "{normal}"
+    );
+    assert_eq!(
+        normal["kolmogorov_smirnov"]["verdict"], "rejected",
+        "{normal}"
+    );
+
+    let gamma = &of("gamma")["tests"];
+    assert_eq!(gamma["case"], "all_parameters_known");
+    assert!(
+        (f(&gamma["anderson_darling"]["critical"]) - 2.492).abs() < 5e-4,
+        "{gamma}"
+    );
+    assert!(
+        (f(&gamma["kolmogorov_smirnov"]["critical"]) - 1.358).abs() < 5e-4,
+        "{gamma}"
+    );
+    assert!(
+        ["rejected", "not_rejected_conservative"]
+            .contains(&gamma["anderson_darling"]["verdict"].as_str().unwrap_or("")),
+        "{gamma}"
+    );
+}
+
+/// The verdicts reject a true model about as often as they should: data drawn from the family
+/// fitted, 400 samples of 50, rejected by each test in about 5% of samples (Stephens's points
+/// for estimated parameters are asymptotic, so a few points either way).
+#[test]
+fn a_true_model_is_rejected_about_one_time_in_twenty() {
+    let mut e = Engine::new();
+    let mut rng = Rng::new(2027);
+    for (family, truth) in [
+        ("exponential", Dist::Exponential { mean: 2.0 }),
+        (
+            "normal",
+            Dist::Normal {
+                mean: 10.0,
+                std_dev: 2.0,
+            },
+        ),
+        (
+            "weibull",
+            Dist::Weibull {
+                shape: 1.7,
+                scale: 3.0,
+            },
+        ),
+    ] {
+        let (mut ad, mut ks) = (0u32, 0u32);
+        let samples = 400u32;
+        for _ in 0..samples {
+            let data: Vec<f64> = (0..50).map(|_| truth.sample(&mut rng)).collect();
+            let r = ok(
+                &mut e,
+                "estimate.fit",
+                json!({ "data": data, "families": [family] }),
+            );
+            let t = &r["candidates"][0]["tests"];
+            ad += u32::from(t["anderson_darling"]["verdict"] == "rejected");
+            ks += u32::from(t["kolmogorov_smirnov"]["verdict"] == "rejected");
+        }
+        for (test, k) in [("A-D", ad), ("K-S", ks)] {
+            let share = f64::from(k) / f64::from(samples);
+            // 5% of 400 is 20, with a standard deviation of 4.4; the Weibull's K-S point is the
+            // infinite-sample one, so it rejects somewhat less.
+            assert!((0.015..=0.09).contains(&share), "{family} {test}: {share}");
+        }
+    }
+}
+
+/// Each percentile has an interval between two order statistics: with 40 runs the median's
+/// 95% interval is [X(14), X(27)] (from the binomial with n = 40 and p = 1/2), and the 95th
+/// percentile has none, as 40 runs are too few to bound it from above at 95%.
+#[test]
+fn percentiles_have_intervals_between_order_statistics() {
+    let mut e = short_mm1();
+    ok(&mut e, "run", json!({ "replications": 40 }));
+    let r = ok(
+        &mut e,
+        "results.distribution",
+        json!({ "element": "server", "metric": "mean_wait", "percentiles": [50, 95] }),
+    );
+    let i = &r["percentile_intervals"]["50"];
+    let (lo, hi) = (
+        i[0].as_f64().unwrap_or(f64::NAN),
+        i[1].as_f64().unwrap_or(f64::NAN),
+    );
+    let median = r["percentiles"]["50"].as_f64().unwrap_or(f64::NAN);
+    assert!(lo <= median && median <= hi, "{r}");
+    assert_eq!(
+        stochcraft_stats::spread::order_statistic_interval(40, 0.5, 0.95).map(|(r, s, _)| (r, s)),
+        Some((14, 27))
+    );
+    assert_eq!(r["percentile_intervals"]["95"], Value::Null, "{r}");
+}

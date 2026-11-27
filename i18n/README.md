@@ -1106,6 +1106,10 @@ fields (`“Service time”`) are named in the messages by their own rows.
   settled-measures row keeps its wording with the level added in parentheses. Not checked against
   any other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn,
   ka, kk, hi and sq.
+- The row for a three-point estimate's upper point at another quantile ("{q}% quantile
+  {value}") was machine-drafted with each language's usual word for a quantile (from Wikipedia's
+  interlanguage links for "Quantile" where there was one), and `{q}` and `{value}` kept. Not
+  reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka and kk.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

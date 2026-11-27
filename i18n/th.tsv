@@ -1539,3 +1539,4 @@ connection	Flow	โฟลว์
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	ทุก ± ในผลลัพธ์เป็นช่วงที่ระดับนี้ ระดับที่สูงขึ้นให้ช่วงกว้างขึ้นและต้องรันมากขึ้นเพื่อความแม่นยำเท่าเดิม
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	คำตัดสินเป็นจริงเมื่อช่วงของผลต่างไม่ครอบคลุมศูนย์ {k} แถวถูกตัดสินพร้อมกัน: ทุกช่วงของแถวเหล่านั้นเป็นจริงพร้อมกันด้วยความเชื่อมั่นอย่างน้อย {level}% (Bonferroni)
 	Judge the rows together (Bonferroni)	ตัดสินทุกแถวพร้อมกัน (Bonferroni)
+	{q}% quantile {value}	ควอนไทล์ {q}% {value}

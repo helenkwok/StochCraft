@@ -1539,3 +1539,4 @@ connection	Flow	順序流
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	結果中的每個 ± 都是此水準下的區間。水準越高，區間越寬，達到同樣精度需要更多次執行。
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	當差值的區間不含零時，判斷才是真實的。這 {k} 列一併判斷：它們的所有區間同時成立的信賴度至少為 {level}%（Bonferroni）。
 	Judge the rows together (Bonferroni)	將各列一併判斷（Bonferroni）
+	{q}% quantile {value}	{q}% 分位數 {value}

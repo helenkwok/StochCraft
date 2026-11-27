@@ -1539,3 +1539,4 @@ connection	Flow	フロー
 	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	結果の ± はすべてこの水準の区間です。水準を上げると区間は広くなり、同じ精度により多くの実行が必要です。
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	差の区間がゼロを含まないとき、判定は本物です。{k} 行はまとめて判定されます: すべての区間が同時に少なくとも {level}% の信頼度で成り立ちます (ボンフェローニ)。
 	Judge the rows together (Bonferroni)	行をまとめて判定 (ボンフェローニ)
+	{q}% quantile {value}	{q}% 分位点 {value}

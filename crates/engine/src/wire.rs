@@ -1494,9 +1494,14 @@ pub struct EstimateDoc {
     pub mode: f64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub max: Option<f64>,
-    /// The value exceeded one time in twenty.
+    /// The value exceeded one time in twenty, or, with `q`, the value with a share `q` at or
+    /// below it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub p95: Option<f64>,
+    /// The share of values at or below `p95`'s value, strictly between 0 and 1: 0.95 (the 95th
+    /// percentile) unless given; left out when 0.95.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub q: Option<f64>,
     /// Who gave it or where it comes from.
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub source: String,
@@ -1511,6 +1516,14 @@ impl EstimateDoc {
             (Some(_), Some(_)) => return Err("give `max` or `p95`, not both"),
             (None, None) => return Err("give `max` or `p95`"),
         };
+        if let Some(q) = self.q {
+            if self.p95.is_none() {
+                return Err("`q` goes with `p95`, not with `max`");
+            }
+            if !(q > 0.0 && q < 1.0) {
+                return Err("`q` must be between 0 and 1");
+            }
+        }
         Ok(Estimate {
             three_point: ThreePoint {
                 family: self.family.into(),
@@ -1518,6 +1531,7 @@ impl EstimateDoc {
                 mode: self.mode,
                 upper,
                 upper_is,
+                q: self.q.unwrap_or(stochcraft_random::DEFAULT_Q),
             },
             source: self.source.clone(),
         })
@@ -1537,6 +1551,7 @@ impl From<&Estimate> for EstimateDoc {
             mode: t.mode,
             max,
             p95,
+            q: (t.upper_is == Upper::P95 && t.q != stochcraft_random::DEFAULT_Q).then_some(t.q),
             source: e.source.clone(),
         }
     }
