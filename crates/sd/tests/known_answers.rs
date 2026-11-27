@@ -1230,14 +1230,16 @@ fn a_stop_condition_is_kept_through_a_write_and_a_read() {
 #[test]
 fn a_stop_condition_follows_a_rename_and_holds_back_a_removal() {
     let w = StopWhen {
-        variable: "u".to_owned(),
+        variable: "growth".to_owned(),
         above: true,
         value: 1000.0,
     };
     let mut m = blow_up(2.5e-5, Some(w));
-    stochcraft_sd::rename_variable(&mut m, "u", "Heat").unwrap();
-    assert_eq!(m.specs.stop_when.as_ref().unwrap().variable, "Heat");
-    let e = stochcraft_sd::remove_variable(&mut m, "heat", true).unwrap_err();
+    stochcraft_sd::rename_variable(&mut m, "growth", "Heat flow").unwrap();
+    assert_eq!(m.specs.stop_when.as_ref().unwrap().variable, "Heat flow");
+    // No equation names the flow, and `force` would take it out of the stock's inflows: only
+    // the stop condition holds the removal back.
+    let e = stochcraft_sd::remove_variable(&mut m, "heat_flow", true).unwrap_err();
     assert!(e.message.contains("stop condition"), "{e}");
 }
 

@@ -852,11 +852,11 @@ fn the_stop_condition_is_edited_on_the_model_tab_and_explained_in_the_results() 
     // refused under the field and leaves the model as it was.
     click(&mut h, Role::Tab, "Model");
     type_into(&mut h, Role::TextInput, "Stop when", "u10 > 1000");
+    assert_eq!(h.state().status(), "Changed the stop condition");
     assert_eq!(
         stop_when(&mut h),
         json!({ "variable": "u10", "above": 1000.0 })
     );
-    assert_eq!(h.state().status(), "Changed the stop condition");
     type_into(&mut h, Role::TextInput, "Stop when", "u10 >= 5");
     h.get_by_label_contains("Write the condition as a variable, > or <, and a number");
     assert_eq!(
@@ -875,6 +875,7 @@ fn the_stop_condition_is_edited_on_the_model_tab_and_explained_in_the_results() 
     settle(&mut h);
     h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
     h.key_press(egui::Key::Backspace);
+    settle(&mut h);
     h.key_press(egui::Key::Enter);
     settle(&mut h);
     assert_eq!(stop_when(&mut h), Value::Null);
