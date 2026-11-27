@@ -1515,3 +1515,8 @@ connection	Flow	Fluxo
 	Root mean square	Media cadrática
 	A step towards an answer: the results list it folded away under the answers.	Un paso cara a unha resposta: os resultados móstrano pregado baixo as respostas.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Para unha magnitude ao cadrado, como un erro ao cadrado: os resultados dan a raíz cadrada da súa media, na unidade da propia magnitude.
+	One machine's availability	Dispoñibilidade dunha máquina
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Unha máquina que se avaría de media cada 90 horas e tarda 4.5 horas en repararse (Hristova, Denev e Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Con que frecuencia está parada unha máquina e canto traballo custa?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	En marcha 90 horas, parada 4.5: a máquina traballa o 95.2 % do tempo e unha avaría ocorre cada 94.5 horas. Se o tempo de reparación se reduce á metade, sobe ao 97.6 %.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} está parado o {down} do tempo (dispoñibilidade {up}); nada espera por ela.

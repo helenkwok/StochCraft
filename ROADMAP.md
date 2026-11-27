@@ -5006,6 +5006,28 @@ are.
     and 10 m at level 1 (11.13 against 12.34). The paper's text says the level-5 error is under
     1.82 times the level-1 error; to first order it is 1.765 times at every σ_d, but its own
     10 m row gives 1.93.
+- **An example on reliability:** checked the same way.
+  - **One machine's availability** (`machine-availability.bpmn`, "Manufacturing"): Hristova,
+    Denev and Tsankov, *Environment. Technology. Resources*, 2024, vol. II, pp. 120–126 (the
+    reliability example). One machine is up 90 hours on average between failures
+    and takes 4.5 hours on average to repair (both exponential); it always has a 30-hour job to
+    work, and a failure interrupts the job, which carries on after the repair (`Interruptible`).
+    Failures come in elapsed time, so the machine is an alternating renewal process: up the share
+    90 / 94.5 = 0.95238 of the time, failing once every 94.5 hours (0.010582 an hour), working
+    (utilisation) 0.95238 of the time and finishing 0.95238 / 30 = 0.031746 jobs an hour.
+    `crates/engine/tests/examples.rs` checks the run on its availability, the time down, its
+    utilisation, the jobs finished and the failures an hour. A second scenario halves the repair
+    time (availability 0.97561, 0.032520 jobs an hour). The model is a loop of the machine and a
+    "Next job" task that takes no time, started
+    with one job, so the machine is never idle.
+    - Not checked: the paper's share of time with planned maintenance, 92.5 hours per 450 hours
+      of work (450 / 565 = 0.79646), because the breakdown keeps failing through time off shift,
+      so no timetable gives that share exactly; and the chance that a 30-hour job starts on a
+      working machine and runs without a failure, 0.95238 · e^(−30/90) = 0.68241, which no
+      result reports. Both are worked numbers in the user guide. The paper prints 0.68469 for the
+      second, from a failure rate rounded to 0.011, and its "one failure allowed" 0.944 is an
+      approximation; neither is used. Its Fig. 10 shows about 0.98 for the Toshiba effect size
+      of its network study, where its text computes 0.79.
 - **Planned examples:** each joins only once its answer is checked against its source with the
   page, as above.
   - **A particle detector's readout** (a new "Science" industry): collisions at a collider

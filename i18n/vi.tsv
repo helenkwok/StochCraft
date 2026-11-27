@@ -1515,3 +1515,8 @@ connection	Flow	Luồng
 	Root mean square	Căn quân phương
 	A step towards an answer: the results list it folded away under the answers.	Một bước dẫn tới câu trả lời: kết quả hiển thị nó thu gọn bên dưới các câu trả lời.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Cho một đại lượng bình phương, như sai số bình phương: kết quả cho căn bậc hai của giá trị trung bình, theo đơn vị của chính đại lượng đó.
+	One machine's availability	Độ sẵn sàng của một máy
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Một máy trung bình cứ 90 giờ lại hỏng và cần 4.5 giờ để sửa (Hristova, Denev và Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Một máy dừng thường xuyên đến mức nào, và việc đó làm mất bao nhiêu công việc?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Chạy 90 giờ, dừng 4.5 giờ: máy làm việc 95.2% thời gian và cứ 94.5 giờ lại có một lần hỏng. Rút ngắn thời gian sửa một nửa thì tỷ lệ này tăng lên 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} dừng {down} thời gian (độ sẵn sàng {up}); không có gì chờ nó.

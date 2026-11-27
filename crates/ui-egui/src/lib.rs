@@ -601,6 +601,22 @@ pub const EXAMPLES: &[Example] = &[
             featured: false,
         },
     },
+    Example {
+        title: "One machine's availability",
+        about: "One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).",
+        file: "machine-availability.bpmn",
+        bytes: include_bytes!("../../../tests/models/machine-availability.bpmn"),
+        card: start::Card {
+            question: "How often is one machine down, and how much work does that cost?",
+            industry: start::Industry::Manufacturing,
+            topics: &[start::Topic::Breakdown],
+            teaches: "Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.",
+            minutes: 2,
+            proof: Some(start::Proof::Probability),
+            flow: &[start::Glyph::Resource, start::Glyph::Task],
+            featured: false,
+        },
+    },
 ];
 
 /// A built-in example model.

@@ -1515,3 +1515,8 @@ connection	Flow	Stroom
 	Root mean square	Kwadratisch gemiddelde
 	A step towards an answer: the results list it folded away under the answers.	Een stap op weg naar een antwoord: de resultaten tonen hem ingeklapt onder de antwoorden.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Voor een gekwadrateerde grootheid, zoals een gekwadrateerde fout: de resultaten geven de wortel van het gemiddelde, in de eenheid van de grootheid zelf.
+	One machine's availability	Beschikbaarheid van één machine
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Eén machine die gemiddeld elke 90 uur uitvalt en 4.5 uur nodig heeft om gerepareerd te worden (Hristova, Denev en Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Hoe vaak staat één machine stil, en hoeveel werk kost dat?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 uur in bedrijf, 4.5 uur stil: de machine werkt 95.2% van de tijd en elke 94.5 uur treedt een storing op. Een gehalveerde reparatietijd tilt dat naar 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} staat {down} van de tijd stil (beschikbaarheid {up}); er wacht niets op.

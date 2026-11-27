@@ -1515,3 +1515,8 @@ connection	Flow	Folyamat
 	Root mean square	Négyzetes közép
 	A step towards an answer: the results list it folded away under the answers.	Egy lépés a válasz felé: az eredmények a válaszok alatt összecsukva mutatják.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Négyzetes mennyiséghez, például egy hiba négyzetéhez: az eredmények az átlaga négyzetgyökét adják meg, a mennyiség saját mértékegységében.
+	One machine's availability	Egy gép rendelkezésre állása
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Egy gép, amely átlagosan 90 óránként meghibásodik, és a javítása 4.5 órát vesz igénybe (Hristova, Denev és Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Milyen gyakran áll egy gép, és mennyi munkába kerül ez?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 órát működik, 4.5 órát áll: a gép az idő 95.2%-ában dolgozik, és 94.5 óránként következik be egy hiba. Fele akkora javítási idővel ez 97.6%-ra nő.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} az idő {down}-ában áll (rendelkezésre állás {up}); semmi sem vár rá.
