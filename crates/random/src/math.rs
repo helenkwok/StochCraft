@@ -31,6 +31,18 @@ pub fn cos(x: f64) -> f64 {
     libm::cos(x)
 }
 
+/// The tangent of `x` (radians).
+#[inline]
+pub fn tan(x: f64) -> f64 {
+    libm::tan(x)
+}
+
+/// The angle of the point `(x, y)` from the `+x` axis, in radians, from −π to π.
+#[inline]
+pub fn atan2(y: f64, x: f64) -> f64 {
+    libm::atan2(y, x)
+}
+
 /// The error function.
 #[inline]
 pub fn erf(x: f64) -> f64 {

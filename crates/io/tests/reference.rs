@@ -854,10 +854,7 @@ fn showcase() -> Model {
             min: 1.0,
             max: 1000.0,
         },
-        Dist::Beta {
-            shape: 2.0,
-            scale: 5.0,
-        },
+        Dist::beta(2.0, 5.0),
         Dist::Weibull {
             shape: 1.5,
             scale: 2.0,
@@ -1111,6 +1108,41 @@ fn everything_stochcraft_writes_is_schema_valid() {
         return missing("xmllint is not installed (libxml2-utils)");
     }
     validate(&write_new(&showcase()), "showcase", &xsd);
+    // Betas on a range (StochCraft's, in BPSim's ParameterValue substitution group) as a time
+    // between arrivals, a service, a repair time inside a vendor extension and a property's
+    // random value, beside BPSim's own beta on [0, 1].
+    {
+        let ranged = || Dist::Beta {
+            shape: 3.0,
+            scale: 5.0,
+            min: 1.0,
+            max: 4.0,
+        };
+        let mut m = Builder::new();
+        let src = m.source("arrivals", ranged(), Some(100));
+        let desk = m.server("desk", 1, ranged());
+        m.breakdown(
+            desk,
+            stochcraft_blocks::Breakdown {
+                time_to_failure: Dist::beta(2.0, 2.0),
+                repair: ranged(),
+                interruptible: true,
+                hands_on_while_down: true,
+            },
+        );
+        m.property(
+            src,
+            "score",
+            Some(PropertyType::Double),
+            PropertyValue::Random(ranged()),
+        );
+        let out = m.sink("out");
+        m.connect(src, desk);
+        m.connect(desk, out);
+        let bytes = write_new(&m.build(Experiment::default()));
+        assert!(String::from_utf8_lossy(&bytes).contains("<stochcraft:BetaDistribution"));
+        validate(&bytes, "betas on a range", &xsd);
+    }
     // A physical layout (tracks, places, scenery): the sorter example as committed and as
     // StochCraft writes it afresh.
     let sorter =

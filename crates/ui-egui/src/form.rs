@@ -266,7 +266,9 @@ pub fn choice_label(tag: &str) -> String {
 /// a shape.
 fn is_time(dist: &str, field: &str) -> bool {
     match dist {
-        "poisson" | "binomial" | "beta" => false,
+        "poisson" | "binomial" => false,
+        // A beta's shapes are numbers; its range is in time.
+        "beta" => matches!(field, "min" | "max"),
         "gamma" | "weibull" => field == "scale",
         _ => matches!(field, "value" | "mean" | "min" | "max" | "mode" | "std_dev"),
     }
@@ -510,6 +512,8 @@ fn row<R>(
     help: Option<&str>,
     editor: impl FnOnce(&mut egui::Ui) -> Option<R>,
 ) -> Option<R> {
+    let help = help.map(plain);
+    let help = help.as_deref();
     let mark = take_mark();
     let explained = EXPLAIN.with(|e| e.borrow_mut().take());
     let open_id = explained
@@ -1170,7 +1174,7 @@ fn tagged(
                     if let Some(tag) = tag_of(v) {
                         let r = ui.selectable_label(tag == now, choice_label(&tag));
                         let r = match v["description"].as_str() {
-                            Some(d) => r.on_hover_text(d),
+                            Some(d) => r.on_hover_text(plain(d)),
                             None => r,
                         };
                         if r.clicked() && tag != now {
@@ -1189,9 +1193,10 @@ fn tagged(
         out = Some(default_variant(v, &tag, current));
     }
 
-    // The chosen kind's fields, indented under it, in the schema's required order.
+    // The chosen kind's fields, indented under it, in the schema's required order, then the
+    // optional ones (whose order the schema does not keep) with a minimum before a maximum.
     if let Some(v) = variants.iter().find(|v| tag_of(v).as_deref() == Some(&now)) {
-        let fields: Vec<&str> = v["required"]
+        let mut fields: Vec<&str> = v["required"]
             .as_array()
             .into_iter()
             .flatten()
@@ -1209,6 +1214,21 @@ fn tagged(
                 }
                 acc
             });
+        let required = v["required"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter(|f| f.as_str() != Some("type"))
+            .count();
+        let from = required.min(fields.len());
+        if let Some(optional) = fields.get_mut(from..) {
+            optional.sort_by_key(|f| match *f {
+                "min" => 0,
+                "mode" => 1,
+                "max" => 2,
+                _ => 3,
+            });
+        }
         ui.indent(key, |ui| {
             for f in fields {
                 let k = format!("{key}/{f}");
@@ -1232,7 +1252,7 @@ fn tagged(
                     &k,
                     &label_for(f),
                     fnode["description"].as_str(),
-                    &current[f],
+                    &field_or_default(current, &now, f, &fnode),
                     is_time(&now, f),
                     false,
                 );
@@ -1249,6 +1269,28 @@ fn tagged(
 
 fn label_for(f: &str) -> String {
     label(f)
+}
+
+/// A schema description as a tooltip shows it: the descriptions are the engine's doc comments,
+/// whose code marks (`trials`) are for the documentation, not the window.
+fn plain(doc: &str) -> String {
+    doc.replace('`', "")
+}
+
+/// Field `f` of a value of kind `kind`, or the value it stands for when it is left out: the
+/// schema's default, or a beta's range [0, 1] (written only when it is another).
+fn field_or_default(current: &Value, kind: &str, f: &str, node: &Value) -> Value {
+    if !current[f].is_null() {
+        return current[f].clone();
+    }
+    if !node["default"].is_null() {
+        return node["default"].clone();
+    }
+    match (kind, f) {
+        ("beta", "min") => json!(0.0),
+        ("beta", "max") => json!(1.0),
+        _ => Value::Null,
+    }
 }
 
 /// A new value of kind `tag`, keeping what carries over from `current` (a mean stays a mean).
@@ -1846,6 +1888,37 @@ fn keyed(
 #[cfg(test)]
 mod limit_tests {
     use super::*;
+
+    /// Every description in `v` (a schema), with the kind it describes where it is a variant.
+    fn descriptions<'a>(v: &'a Value, out: &mut Vec<(Option<&'a str>, &'a str)>) {
+        match v {
+            Value::Object(m) => {
+                if let Some(d) = m.get("description").and_then(Value::as_str) {
+                    out.push((v["properties"]["type"]["const"].as_str(), d));
+                }
+                m.values().for_each(|x| descriptions(x, out));
+            }
+            Value::Array(a) => a.iter().for_each(|x| descriptions(x, out)),
+            _ => {}
+        }
+    }
+
+    /// The distributions' descriptions are doc comments with code marks; tooltips show them
+    /// without (the binomial's "count of successes in `trials`", the Erlang's and others).
+    #[test]
+    fn tooltips_show_descriptions_without_code_marks() {
+        let schema = crate::editor::params_schema("block.set");
+        let mut all = Vec::new();
+        descriptions(&schema, &mut all);
+        let binomial = all.iter().find(|(kind, _)| *kind == Some("binomial"));
+        assert_eq!(
+            binomial.map(|(_, d)| plain(d)).as_deref(),
+            Some("Binomial count of successes in trials.")
+        );
+        let marked = all.iter().filter(|(_, d)| d.contains('`')).count();
+        assert!(marked > 1, "the schema has code marks to take out");
+        assert!(all.iter().all(|(_, d)| !plain(d).contains('`')));
+    }
 
     #[test]
     fn a_truncated_normals_mean_may_be_negative() {

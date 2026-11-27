@@ -85,10 +85,7 @@ pub fn showcase() -> Model {
             min: 1.0,
             max: 1000.0,
         },
-        Dist::Beta {
-            shape: 2.0,
-            scale: 5.0,
-        },
+        Dist::beta(2.0, 5.0),
         Dist::Weibull {
             shape: 1.5,
             scale: 2.0,
@@ -1318,6 +1315,99 @@ fn scrap_and_rework_are_written_saved_and_removed() {
     let text = String::from_utf8_lossy(&removed);
     assert!(!text.contains("stochcraft:scrap"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// Beta(3, 5) on [1, 4].
+fn ranged_beta() -> Dist {
+    Dist::Beta {
+        shape: 3.0,
+        scale: 5.0,
+        min: 1.0,
+        max: 4.0,
+    }
+}
+
+/// A beta on a range is StochCraft's `stochcraft:BetaDistribution` wherever a BPSim value goes
+/// (a time between arrivals, a service, a delay, a repair time inside a vendor extension, a
+/// property's random value), and BPSim's own on [0, 1] is written as before; both read back,
+/// and a saved edit turns one into the other in place.
+#[test]
+fn a_beta_on_a_range_is_written_read_back_and_saved() {
+    let mut m = Builder::new();
+    let src = m.source("arrivals", ranged_beta(), Some(100));
+    let desk = m.server("desk", 2, ranged_beta());
+    m.breakdown(
+        desk,
+        stochcraft_blocks::Breakdown {
+            time_to_failure: Dist::Exponential { mean: 120.0 },
+            repair: ranged_beta(),
+            interruptible: true,
+            hands_on_while_down: true,
+        },
+    );
+    m.property(
+        src,
+        "score",
+        Some(PropertyType::Double),
+        PropertyValue::Random(Dist::Beta {
+            shape: 2.0,
+            scale: 2.0,
+            min: -1.0,
+            max: 2.0,
+        }),
+    );
+    let wait = m.delay("wait", Dist::beta(2.0, 5.0));
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, wait);
+    m.connect(wait, out);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    let ranged = r#"shape="3" scale="5" min="1" max="4"/>"#;
+    assert_eq!(
+        text.matches(&format!("<stochcraft:BetaDistribution xmlns:stochcraft=\"https://helenkwok.github.io/StochCraft/bpsim/1\" {ranged}")).count(),
+        3,
+        "{text}"
+    );
+    assert!(
+        text.contains(r#"shape="2" scale="2" min="-1" max="2"/>"#),
+        "{text}"
+    );
+    assert!(
+        text.contains(r#"<bpsim:BetaDistribution shape="2" scale="5"/>"#),
+        "{text}"
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+
+    // The delay's beta on [0, 1] becomes one on [1, 4], and back.
+    let mut edited = loaded.model.clone();
+    let set_wait = |m: &mut Model, d: Dist| {
+        for e in &mut m.elements {
+            if let ElementKind::Delay { duration, .. } = &mut e.kind
+                && e.id.as_str() == "wait"
+            {
+                *duration = d.clone();
+            }
+        }
+    };
+    set_wait(&mut edited, ranged_beta());
+    let Ok(saved) = loaded.opened.save(&edited) else {
+        unreachable!()
+    };
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    set_wait(&mut edited, Dist::beta(2.0, 5.0));
+    let Ok(back) = again.opened.save(&edited) else {
+        unreachable!()
+    };
+    assert_eq!(read(&back).map(|l| l.model).ok(), Some(edited));
 }
 
 /// A customer demand per shift of a calendar is StochCraft's vendor extension: written, read
