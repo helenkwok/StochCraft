@@ -142,15 +142,37 @@ impl ByteFeed {
         Rng::from_bytes(Arc::clone(&self.data), start, self.segment)
     }
 
-    /// The bytes the first `replications` replications read, from the first one's segment on.
-    pub fn window(&self, replications: u64) -> &[u8] {
-        let len = self.data.len();
-        let from = usize::try_from(self.offset).unwrap_or(len).min(len);
-        let span = replications.saturating_mul(self.segment);
-        let to = usize::try_from(self.offset.saturating_add(span))
-            .unwrap_or(len)
-            .min(len);
-        self.data.get(from..to).unwrap_or_default()
+    /// The bytes the first `replications` replications read, from the first one's segment on;
+    /// `None` when they would run past the end of the data, or their length cannot be counted.
+    pub fn window(&self, replications: u64) -> Option<&[u8]> {
+        let from = usize::try_from(self.offset).ok()?;
+        let span = usize::try_from(replications.checked_mul(self.segment)?).ok()?;
+        self.data.get(from..from.checked_add(span)?)
+    }
+}
+
+/// The largest file of random bytes a run reads: 1 GiB on the desktop and the command line,
+/// 256 MiB in the browser, where the page holds the whole file in memory beside the app. A larger
+/// file is refused before it is read.
+pub const MAX_FILE_BYTES: u64 = if cfg!(target_arch = "wasm32") {
+    256 << 20
+} else {
+    1 << 30
+};
+
+/// The most bytes of a file a run on web workers sends with its task: 8 MiB. Every worker gets
+/// the task (the bytes of every replication the run may have, as hexadecimal, so twice as long)
+/// and decodes it, so each holds about three times the window, and a run has up to 16 workers:
+/// 8 MiB comes to about 400 MiB in all. A run whose replications need more is refused before
+/// it starts; it can run in slices instead, which keep one copy of the file.
+pub const MAX_TASK_WINDOW_BYTES: u64 = 8 << 20;
+
+/// The error for `bytes` of random data where at most `limit` are taken, with both in `details`.
+pub(crate) fn too_large(what: &str, bytes: u64, limit: u64, advice: &str) -> CommandError {
+    CommandError {
+        code: ErrorCode::InvalidParams,
+        message: format!("{what} has {bytes} bytes, more than the {limit} allowed: {advice}"),
+        details: Some(json!({ "bytes": bytes, "limit_bytes": limit })),
     }
 }
 
@@ -205,9 +227,19 @@ fn invalid(message: impl Into<String>) -> CommandError {
 }
 
 /// Reads the file a `byte_file` run names: bytes loaded under that name, else (not in the
-/// browser) the file at that path.
-fn read_file(loaded: &BTreeMap<String, Arc<[u8]>>, name: &str) -> Result<Arc<[u8]>, CommandError> {
+/// browser) the file at that path. A file of more than `limit` bytes is refused, one on disk
+/// before any of it is read.
+pub(crate) fn read_file(
+    loaded: &BTreeMap<String, Arc<[u8]>>,
+    name: &str,
+    limit: u64,
+) -> Result<Arc<[u8]>, CommandError> {
+    let advice = "give a smaller file, or the part of it the run reads";
     if let Some(d) = loaded.get(name) {
+        let have = u64::try_from(d.len()).unwrap_or(u64::MAX);
+        if have > limit {
+            return Err(too_large(&format!("`{name}`"), have, limit, advice));
+        }
         return Ok(Arc::clone(d));
     }
     if cfg!(target_arch = "wasm32") {
@@ -215,9 +247,18 @@ fn read_file(loaded: &BTreeMap<String, Arc<[u8]>>, name: &str) -> Result<Arc<[u8
             "no random-data file named `{name}` has been loaded"
         )));
     }
-    std::fs::read(name)
-        .map(Arc::from)
-        .map_err(|e| CommandError::new(ErrorCode::Io, format!("{name}: {e}")))
+    let io = |e: std::io::Error| CommandError::new(ErrorCode::Io, format!("{name}: {e}"));
+    let size = std::fs::metadata(name).map_err(io)?.len();
+    if size > limit {
+        return Err(too_large(&format!("`{name}`"), size, limit, advice));
+    }
+    let data = std::fs::read(name).map_err(io)?;
+    // The file grew between the two looks.
+    let have = u64::try_from(data.len()).unwrap_or(u64::MAX);
+    if have > limit {
+        return Err(too_large(&format!("`{name}`"), have, limit, advice));
+    }
+    Ok(Arc::from(data))
 }
 
 /// The most bytes in a replication for a segment, from a pilot's most: × 1.5, rounded up to
@@ -313,7 +354,7 @@ pub(crate) fn prepare(
             let Some(name) = spec.file.filter(|f| !f.trim().is_empty()) else {
                 return Err(invalid("`byte_file` needs the `file` of random bytes"));
             };
-            let data = read_file(loaded, &name)?;
+            let data = read_file(loaded, &name, MAX_FILE_BYTES)?;
             let sha = sha256_hex(&data);
             if let Some(given) = &spec.sha256 {
                 let given = given.trim();
@@ -419,20 +460,110 @@ pub(crate) fn screen(command: &str, params: &mut Value) -> Result<(), CommandErr
     ))
 }
 
-/// What a run's results say about where their random numbers came from, for pairing: two runs
-/// meet the same random numbers replication by replication when this and their replications are
-/// the same. Results without a record's `random` are pseudo-random from their `seed`.
-pub(crate) fn identity(results: &Value) -> Value {
+/// Where a run's random numbers came from, as far as pairing two runs goes.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(crate) enum Identity {
+    /// The pseudo-random streams from this seed (also a seed drawn from a source): replication
+    /// i's stream depends only on the seed and i.
+    Seed(u64),
+    /// The file with this SHA-256 (64 lowercase hexadecimal digits), replication i reading the
+    /// `segment` bytes from `offset + i·segment`.
+    File {
+        sha256: String,
+        offset: u64,
+        segment: u64,
+    },
+}
+
+impl Identity {
+    /// As `results.compare` gives it.
+    pub fn json(&self) -> Value {
+        match self {
+            Identity::Seed(seed) => json!({ "mode": "prng", "seed": seed }),
+            Identity::File {
+                sha256,
+                offset,
+                segment,
+            } => json!({
+                "mode": "byte_file",
+                "sha256": sha256,
+                "offset": offset,
+                "segment_bytes": segment,
+            }),
+        }
+    }
+
+    /// The bytes of the file the first `replications` replications read, as `[from, to)`;
+    /// `None` for a seed. Counted in 128 bits, so it never overflows.
+    pub fn span(&self, replications: u64) -> Option<(u128, u128)> {
+        match self {
+            Identity::Seed(_) => None,
+            Identity::File {
+                offset, segment, ..
+            } => {
+                let from = u128::from(*offset);
+                Some((from, from + u128::from(*segment) * u128::from(replications)))
+            }
+        }
+    }
+}
+
+/// Where the random numbers of run results `results` (`which`, for messages) came from, for
+/// pairing. Results without a record's `random`, or with a pseudo-random one, are pseudo-random
+/// from their `seed`; a `byte_file` record must give the file's SHA-256, the offset and the
+/// segment length, and any other mode is refused.
+pub(crate) fn identity(results: &Value, which: &str) -> Result<Identity, CommandError> {
     let r = &results["record"]["random"];
-    if r["mode"] == "byte_file" {
-        json!({
-            "mode": "byte_file",
-            "sha256": r["sha256"],
-            "offset": r["offset"],
-            "segment_bytes": r["segment_bytes"],
-        })
-    } else {
-        json!({ "mode": "prng", "seed": results["seed"] })
+    let seed = || {
+        results["seed"]
+            .as_u64()
+            .map(Identity::Seed)
+            .ok_or_else(|| invalid(format!("`{which}` has no `seed`: give a run's results")))
+    };
+    let mode = match r {
+        Value::Null => return seed(),
+        Value::Object(o) => o.get("mode").cloned().unwrap_or(Value::Null),
+        _ => {
+            return Err(invalid(format!(
+                "`{which}`'s `record.random` is not an object"
+            )));
+        }
+    };
+    match mode.as_str() {
+        None | Some("prng" | "seed_source") => seed(),
+        Some("byte_file") => {
+            let bad = |what: &str| {
+                invalid(format!(
+                    "`{which}` read a file of random bytes, but its `record.random` has {what}"
+                ))
+            };
+            let sha = r["sha256"]
+                .as_str()
+                .ok_or_else(|| bad("no `sha256`"))?
+                .trim();
+            let sha = sha
+                .strip_prefix("sha256:")
+                .unwrap_or(sha)
+                .to_ascii_lowercase();
+            if sha.len() != 64 || !sha.bytes().all(|c| c.is_ascii_hexdigit()) {
+                return Err(bad("a `sha256` that is not 64 hexadecimal digits"));
+            }
+            let offset = r["offset"]
+                .as_u64()
+                .ok_or_else(|| bad("no whole-number `offset`"))?;
+            let segment = r["segment_bytes"]
+                .as_u64()
+                .filter(|l| *l >= 8)
+                .ok_or_else(|| bad("no `segment_bytes` of at least 8"))?;
+            Ok(Identity::File {
+                sha256: sha,
+                offset,
+                segment,
+            })
+        }
+        Some(other) => Err(invalid(format!(
+            "`{which}`'s random numbers came from `{other}`, which cannot be compared"
+        ))),
     }
 }
 
@@ -460,7 +591,81 @@ mod tests {
     #[test]
     fn a_window_covers_the_segments_of_the_replications_asked_for() {
         let feed = ByteFeed::new((0..100u8).collect::<Vec<u8>>().into(), 10, 16);
-        assert_eq!(feed.window(2), &(10..42u8).collect::<Vec<u8>>()[..]);
-        assert_eq!(feed.window(100).len(), 90);
+        assert_eq!(feed.window(2), Some(&(10..42u8).collect::<Vec<u8>>()[..]));
+        // Five segments reach byte 90; six would run past the end, and no count overflows.
+        assert_eq!(feed.window(5).map(<[u8]>::len), Some(80));
+        assert_eq!(feed.window(6), None);
+        assert_eq!(feed.window(u64::MAX), None);
+    }
+
+    #[test]
+    fn a_file_over_the_limit_is_refused_before_it_is_read() {
+        let mut loaded = BTreeMap::new();
+        loaded.insert("data".to_owned(), Arc::<[u8]>::from(vec![0u8; 100]));
+        assert!(read_file(&loaded, "data", 100).is_ok());
+        let err = read_file(&loaded, "data", 99).err();
+        let details = err.as_ref().and_then(|e| e.details.clone());
+        assert_eq!(err.map(|e| e.code), Some(ErrorCode::InvalidParams));
+        assert_eq!(details, Some(json!({ "bytes": 100, "limit_bytes": 99 })));
+        if !cfg!(target_arch = "wasm32") {
+            let path =
+                std::env::temp_dir().join(format!("stochcraft-limit-{}.bin", std::process::id()));
+            let written = std::fs::write(&path, [7u8; 64]).is_ok();
+            let name = path.to_string_lossy().into_owned();
+            let refused = read_file(&BTreeMap::new(), &name, 63).err();
+            let read = read_file(&BTreeMap::new(), &name, 64).ok();
+            let _ = std::fs::remove_file(&path);
+            assert!(written);
+            assert_eq!(
+                refused.and_then(|e| e.details),
+                Some(json!({ "bytes": 64, "limit_bytes": 63 }))
+            );
+            assert_eq!(read.map(|d| d.len()), Some(64));
+            assert_eq!(MAX_FILE_BYTES, 1 << 30);
+        }
+    }
+
+    #[test]
+    fn a_random_identity_is_checked_and_normalised() {
+        let sha = "AB".repeat(32);
+        let file = |random: Value| json!({ "seed": 5, "record": { "random": random } });
+        assert_eq!(
+            identity(&json!({ "seed": 5 }), "a").ok(),
+            Some(Identity::Seed(5))
+        );
+        assert_eq!(
+            identity(&file(json!({ "mode": "seed_source", "source": "x" })), "a").ok(),
+            Some(Identity::Seed(5))
+        );
+        let good = file(
+            json!({ "mode": "byte_file", "sha256": format!("sha256:{sha}"),
+                                 "offset": 0, "segment_bytes": 4096 }),
+        );
+        assert_eq!(
+            identity(&good, "a").ok(),
+            Some(Identity::File {
+                sha256: "ab".repeat(32),
+                offset: 0,
+                segment: 4096
+            })
+        );
+        // Records that cannot say which bytes were read are refused, not taken as equal.
+        for bad in [
+            json!({ "mode": "byte_file" }),
+            json!({ "mode": "byte_file", "sha256": null, "offset": 0, "segment_bytes": 4096 }),
+            json!({ "mode": "byte_file", "sha256": "abc", "offset": 0, "segment_bytes": 4096 }),
+            json!({ "mode": "byte_file", "sha256": sha, "offset": -1, "segment_bytes": 4096 }),
+            json!({ "mode": "byte_file", "sha256": sha, "offset": 0, "segment_bytes": 4 }),
+            json!({ "mode": "byte_file", "sha256": sha, "offset": 0 }),
+            json!({ "mode": "dice" }),
+            json!("prng"),
+        ] {
+            assert_eq!(
+                identity(&file(bad.clone()), "a").err().map(|e| e.code),
+                Some(ErrorCode::InvalidParams),
+                "{bad}"
+            );
+        }
+        assert!(identity(&json!({}), "a").is_err());
     }
 }

@@ -723,8 +723,9 @@ unit	yr	ປີ
 	Could be chance	ອາດເປັນຄວາມບັງເອີນ
 	No change	ບໍ່ມີການປ່ຽນແປງ
 	Too few runs to tell	ຈຳນວນຮອບໜ້ອຍເກີນໄປທີ່ຈະບອກໄດ້
+	Not judged	ບໍ່ໄດ້ຕັດສິນ
 	{value} points	{value} ຈຸດ
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	ເສັ້ນຖານໃຊ້ເມັດສຸ່ມ {seed_a} ແລະ {n_a} ຮອບ, ການປະມວນຜົນນີ້ໃຊ້ເມັດສຸ່ມ {seed_b} ແລະ {n_b} ຮອບ, ຈຶ່ງປຽບທຽບເປັນຮອບທີ່ເປັນອິດສະຫຼະຕໍ່ກັນ ແລະ ຊ່ວງກວ້າງຂຶ້ນ. ເມັດສຸ່ມ ແລະ ຈຳນວນຮອບດຽວກັນຈະໃຫ້ການປຽບທຽບແບບຈັບຄູ່.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	ເສັ້ນຖານໃຊ້ເມັດສຸ່ມ {seed_a} ແລະ ຮອບນີ້ໃຊ້ເມັດສຸ່ມ {seed_b}, ຈຶ່ງປຽບທຽບເປັນຮອບທີ່ເປັນອິດສະຫຼະຕໍ່ກັນ ແລະ ຊ່ວງກວ້າງຂຶ້ນ. ເມັດສຸ່ມດຽວກັນຈະໃຫ້ການປຽບທຽບແບບຈັບຄູ່.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	ເສັ້ນຖານວັດເວລາເປັນ {a} ສ່ວນການປະມວນຜົນນີ້ວັດເປັນ {b}, ຈຶ່ງບໍ່ປຽບທຽບເວລາ.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) ຫຼຸດລົງຈາກ {before} ເປັນ {after}, ຕ່າງກັນ {change}: ຫຼາຍກວ່າທີ່ຄວາມບັງເອີນຈະອະທິບາຍໄດ້.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) ເພີ່ມຂຶ້ນຈາກ {before} ເປັນ {after}, ຕ່າງກັນ {change}: ຫຼາຍກວ່າທີ່ຄວາມບັງເອີນຈະອະທິບາຍໄດ້.
@@ -733,6 +734,7 @@ unit	yr	ປີ
 	Baseline and now, key measures	ເສັ້ນຖານ ແລະ ປັດຈຸບັນ, ຕົວຊີ້ວັດຫຼັກ
 	Difference (paired, 95%)	ຜົນຕ່າງ (ຈັບຄູ່, 95%)
 	Difference (95%)	ຜົນຕ່າງ (95%)
+	Difference of means	ຜົນຕ່າງຂອງຄ່າສະເລ່ຍ
 	Measure	ຕົວຊີ້ວັດ
 	Baseline	ເສັ້ນຖານ
 	Now	ປັດຈຸບັນ
@@ -962,7 +964,7 @@ unit	yr	ປີ
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} ບັນຫາ: {blocks}
 @plural	Use {n} run|Use {n} runs	ໃຊ້ການຈຳລອງຊ້ຳ {n} ຮອບ
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	ໃຊ້ການຈຳລອງຊ້ຳ {n} ຮອບ (ປະມານ ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ທັງສອງໃຊ້ເມັດສຸ່ມ {seed} ແລະ {n} ຮອບດຽວກັນ, ແຕ່ລະຮອບຈຶ່ງໄດ້ຕົວເລກສຸ່ມຊຸດດຽວກັນກັບຄູ່ຂອງມັນ: ຄວາມແຕກຕ່າງມາຈາກການປ່ຽນແປງ ບໍ່ແມ່ນຈາກການສຸ່ມໂດຍບັງເອີນ.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	ທັງສອງໃຊ້ເມັດສຸ່ມ {seed}, ແຕ່ລະຮອບຈຶ່ງໄດ້ຕົວເລກສຸ່ມຊຸດດຽວກັນກັບຄູ່ຂອງມັນ ແລະ ປຽບທຽບຮອບແບບຈັບຄູ່: ຄວາມແຕກຕ່າງຈາກການສຸ່ມລະຫວ່າງກັນສ່ວນໃຫຍ່ຖືກຕັດກັນໄປ ແລະ ຊ່ວງກໍພິຈາລະນາສ່ວນທີ່ເຫຼືອ.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ຕົວຊີ້ວັດຫຼັກອື່ນອີກ {n} ອັນປ່ຽນໄປບໍ່ເກີນທີ່ຄວາມບັງເອີນຈະເຮັດໄດ້.
 @plural	and {n} more change|and {n} more changes	ແລະ ການປ່ຽນແປງອື່ນອີກ {n} ລາຍການ
 	Conveyor	ສາຍພານລຳລຽງ
@@ -1531,8 +1533,10 @@ connection	Flow	ເສັ້ນທາງ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ເຄື່ອງຈັກສິບເຄື່ອງຕ້ອງເຮັດວຽກ, ເຄື່ອງຈັກສຳຮອງສີ່ເຄື່ອງລໍຖ້າພ້ອມ ແລະ ຊ່າງຈັກສາມຄົນສ້ອມແປງເຄື່ອງທີ່ເສຍ (Crane ແລະ Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	ຕ້ອງມີເຄື່ອງຈັກສຳຮອງ ແລະ ຊ່າງຈັກຈັກເທົ່າໃດ ເພື່ອໃຫ້ເຄື່ອງຈັກສິບເຄື່ອງເຮັດວຽກຕໍ່ໄປໄດ້?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	ເຄື່ອງຈັກສຳຮອງທີ່ລໍຖ້າຢູ່ບໍ່ສາມາດເສຍໄດ້: ໂດຍສະເລ່ຍເຄື່ອງຈັກເສຍ 3.47 ເຄື່ອງ ແລະ ເຮັດວຽກ 9.29 ເຄື່ອງ. ຊ່າງຈັກຄົນທີສີ່ຊ່ວຍໄດ້ປະມານເທົ່າກັບເຄື່ອງຈັກສຳຮອງອີກສີ່ເຄື່ອງ.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ທັງສອງອ່ານຕົວເລກສຸ່ມຈາກໄຟລ໌ດຽວກັນໃນຕຳແໜ່ງດຽວກັນ ສຳລັບຮອບດຽວກັນ, ແຕ່ລະຮອບຈຶ່ງໄດ້ຕົວເລກສຸ່ມຊຸດດຽວກັນກັບຄູ່ຂອງມັນ: ຄວາມແຕກຕ່າງມາຈາກການປ່ຽນແປງ ບໍ່ແມ່ນຈາກການສຸ່ມໂດຍບັງເອີນ.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ເສັ້ນຖານ ແລະ ການປະມວນຜົນນີ້ບໍ່ໄດ້ເອົາຕົວເລກສຸ່ມຈາກບ່ອນດຽວກັນ (ເມັດສຸ່ມ ຫຼື ໄຟລ໌ຕົວເລກສຸ່ມ) ສຳລັບຮອບດຽວກັນ, ຈຶ່ງປຽບທຽບເປັນຮອບທີ່ເປັນອິດສະຫຼະຕໍ່ກັນ ແລະ ຊ່ວງກວ້າງຂຶ້ນ.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	ທັງສອງອ່ານຕົວເລກສຸ່ມຈາກໄຟລ໌ດຽວກັນໃນຕຳແໜ່ງດຽວກັນ, ແຕ່ລະຮອບຈຶ່ງເລີ່ມຈາກຕົວເລກຊຸດດຽວກັນກັບຄູ່ຂອງມັນ ແລະ ປຽບທຽບຮອບແບບຈັບຄູ່. ການສຸ່ມແຕ່ລະຄັ້ງຈະເອົາຕົວເລກຖັດໄປໃນໄຟລ໌, ການປ່ຽນແປງຈຶ່ງອາດເຮັດໃຫ້ເຫດການໃດອ່ານຕົວເລກໃດເລື່ອນໄປ ແລະ ຄວາມແຕກຕ່າງຈາກການສຸ່ມອາດຖືກຕັດກັນໄດ້ໜ້ອຍລົງ; ຊ່ວງກໍພິຈາລະນາເລື່ອງນີ້ນຳ.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	ເສັ້ນຖານ ແລະ ຮອບນີ້ເອົາຕົວເລກສຸ່ມຈາກບ່ອນທີ່ແຕກຕ່າງກັນ (ເມັດສຸ່ມ, ໄຟລ໌ອື່ນ, ຫຼື ສ່ວນຂອງໄຟລ໌ດຽວກັນທີ່ບໍ່ຊ້ອນກັນ), ຈຶ່ງຖືວ່າເປັນຮອບທີ່ເປັນອິດສະຫຼະຕໍ່ກັນ ແລະ ຊ່ວງກວ້າງຂຶ້ນ.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	ເສັ້ນຖານ ແລະ ຮອບນີ້ອ່ານສ່ວນທີ່ຊ້ອນກັນຂອງໄຟລ໌ຕົວເລກສຸ່ມດຽວກັນ ແຕ່ບໍ່ແມ່ນຮອບຕໍ່ຮອບ, ຈຶ່ງບໍ່ເປັນອິດສະຫຼະ ແລະ ບໍ່ໄດ້ຈັບຄູ່ ແລະ ບໍ່ມີຊ່ວງໃດໃຊ້ໄດ້: ປຽບທຽບສະເພາະຄ່າສະເລ່ຍເທົ່ານັ້ນ. ໃຫ້ອ່ານທັງສອງຈາກຕຳແໜ່ງດຽວກັນໃນໄຟລ໌, ຫຼື ຈາກສ່ວນທີ່ບໍ່ຊ້ອນກັນ.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	ເສັ້ນຖານມີ {n_a} ຮອບ ແລະ ຮອບນີ້ມີ {n_b} ຮອບ, ຈຶ່ງປຽບທຽບ {n} ຮອບທຳອິດຂອງແຕ່ລະອັນແບບຈັບຄູ່; ເສັ້ນຖານ ແລະ ປັດຈຸບັນແມ່ນຄ່າສະເລ່ຍຂອງຮອບເຫຼົ່ານັ້ນ.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ຕົວເລກສຸ່ມຈາກໄຟລ໌ {file} (SHA-256 {sha}…), {bytes} ໄບຕ໌ ສຳລັບແຕ່ລະຮອບ ເລີ່ມຈາກໄບຕ໌ {offset}
 	Seed {seed} taken from {source}	ເມັດສຸ່ມ {seed} ທີ່ເອົາມາຈາກ {source}
 	quantum	ຄວອນຕັມ

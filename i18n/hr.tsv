@@ -723,8 +723,9 @@ unit	yr	god.
 	Could be chance	Može biti slučaj
 	No change	Bez promjene
 	Too few runs to tell	Premalo pokretanja za procjenu
+	Not judged	Nije ocijenjeno
 	{value} points	{value} p. b.
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referenca je koristila sjeme {seed_a} i broj pokretanja {n_a}, ovo pokretanje sjeme {seed_b} i broj pokretanja {n_b}, pa se uspoređuju kao neovisna pokretanja i intervali su širi. Isto sjeme i isti broj pokretanja daju usporedbu u parovima.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Referenca je koristila sjeme {seed_a}, a ovo pokretanje sjeme {seed_b}, pa se uspoređuju kao neovisna pokretanja i intervali su širi. Isto sjeme daje usporedbu u parovima.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referenca je mjerila vrijeme u {a}, a ovo pokretanje u {b}, pa se vremena ne uspoređuju.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) pao je s {before} na {after}, za {change}: više nego što bi objasnio slučaj.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) porastao je s {before} na {after}, za {change}: više nego što bi objasnio slučaj.
@@ -733,6 +734,7 @@ unit	yr	god.
 	Baseline and now, key measures	Referenca i sada, ključne metrike
 	Difference (paired, 95%)	Razlika (u parovima, 95 %)
 	Difference (95%)	Razlika (95 %)
+	Difference of means	Razlika srednjih vrijednosti
 	Measure	Metrika
 	Baseline	Referenca
 	Now	Sada
@@ -962,7 +964,7 @@ unit	yr	god.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problema: {blocks}|{n} problema: {blocks}
 @plural	Use {n} run|Use {n} runs	Koristi {n} pokretanje|Koristi {n} pokretanja|Koristi {n} pokretanja
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Koristi {n} pokretanje (oko ± 5%)|Koristi {n} pokretanja (oko ± 5%)|Koristi {n} pokretanja (oko ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba su koristila sjeme {seed} i isto {n} pokretanje, pa svako pokretanje dobiva iste slučajne brojeve kao njegov par: razlike dolaze od promjene, a ne od slučajnih izvlačenja.|Oba su koristila sjeme {seed} i ista {n} pokretanja, pa svako pokretanje dobiva iste slučajne brojeve kao njegov par: razlike dolaze od promjene, a ne od slučajnih izvlačenja.|Oba su koristila sjeme {seed} i istih {n} pokretanja, pa svako pokretanje dobiva iste slučajne brojeve kao njegov par: razlike dolaze od promjene, a ne od slučajnih izvlačenja.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Oba su koristila sjeme {seed}, pa svako pokretanje dobiva iste slučajne brojeve kao njegov par i pokretanja se uspoređuju u parovima: velik dio slučajne razlike među njima se poništava, a interval uzima u obzir ono što ostane.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Još {n} ključna metrika nije se pomaknula više nego što bi mogao slučaj.|Još {n} ključne metrike nisu se pomaknule više nego što bi mogao slučaj.|Još {n} ključnih metrika nije se pomaknulo više nego što bi mogao slučaj.
 @plural	and {n} more change|and {n} more changes	i još {n} promjena|i još {n} promjene|i još {n} promjena
 	Conveyor	Transporter
@@ -1531,8 +1533,10 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset strojeva mora raditi, četiri pričuvna čekaju u pripravnosti, a tri mehaničara popravljaju one koji se pokvare (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koliko pričuvnih strojeva i mehaničara drži deset strojeva u radu?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Pričuvni strojevi u pripravnosti ne mogu se pokvariti: u prosjeku je 3.47 strojeva pokvareno, a 9.29 radi. Četvrti mehaničar postiže otprilike koliko i četiri pričuvna stroja više.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba su svoje slučajne brojeve čitala iz iste datoteke s istog mjesta, za ista pokretanja, pa svako pokretanje dobiva iste slučajne brojeve kao njegov par: razlike dolaze od promjene, a ne od slučajnih izvlačenja.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referenca i ovo pokretanje nisu uzeli svoje slučajne brojeve s istog mjesta (sjeme ili datoteka sa slučajnim brojevima) za ista pokretanja, pa se uspoređuju kao neovisna pokretanja i intervali su širi.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Oba su svoje slučajne brojeve čitala iz iste datoteke s istog mjesta, pa svako pokretanje počinje od istih brojeva kao njegov par i pokretanja se uspoređuju u parovima. Svako izvlačenje uzima sljedeće brojeve u datoteci, pa promjena može pomaknuti koji događaj čita koji broj i manje slučajne razlike se može poništiti; interval to uzima u obzir.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Referenca i ovo pokretanje uzeli su svoje slučajne brojeve s različitih mjesta (sjeme, druga datoteka ili dijelovi jedne datoteke koji se ne preklapaju), pa se uzimaju kao neovisna pokretanja i intervali su širi.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Referenca i ovo pokretanje čitali su preklapajuće dijelove iste datoteke sa slučajnim brojevima, ali ne pokretanje za pokretanje, pa nisu ni neovisni ni u parovima i nijedan interval ne vrijedi: uspoređuju se samo srednje vrijednosti. Čitajte oboje s istog mjesta u datoteci ili iz dijelova koji se ne preklapaju.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referenca ima {n_a} pokretanja, a ovo pokretanje {n_b}, pa se prvih {n} svakog uspoređuje u parovima; referenca i sada su njihove srednje vrijednosti preko tih pokretanja.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Slučajni brojevi iz datoteke {file} (SHA-256 {sha}…), {bytes} bajtova za svako pokretanje od bajta {offset}
 	Seed {seed} taken from {source}	Sjeme {seed} preuzeto iz {source}
 	quantum	kvantno

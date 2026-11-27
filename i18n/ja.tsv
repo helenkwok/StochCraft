@@ -723,8 +723,9 @@ unit	yr	年
 	Could be chance	偶然の可能性
 	No change	変化なし
 	Too few runs to tell	判断するには実行回数が不足
+	Not judged	判定なし
 	{value} points	{value} ポイント
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	ベースラインは乱数シード {seed_a} で {n_a} 回、この実行は乱数シード {seed_b} で {n_b} 回の実行だったため、独立した実行として比較され、信頼区間は広くなります。乱数シードと実行回数を揃えると、対応のある比較になります。
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	ベースラインは乱数シード {seed_a}、この実行は乱数シード {seed_b} だったため、独立した実行として比較され、信頼区間は広くなります。同じ乱数シードを使うと、対応のある比較になります。
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	ベースラインは時間を {a} で、この実行は {b} で測定したため、時間は比較しません。
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) は {before} から {after} へ {change} 低下しました。偶然では説明できない大きさです。
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) は {before} から {after} へ {change} 上昇しました。偶然では説明できない大きさです。
@@ -733,6 +734,7 @@ unit	yr	年
 	Baseline and now, key measures	ベースラインと現在の主な指標
 	Difference (paired, 95%)	差 (対応あり、95%)
 	Difference (95%)	差 (95%)
+	Difference of means	平均の差
 	Measure	指標
 	Baseline	ベースライン
 	Now	現在
@@ -962,7 +964,7 @@ unit	yr	年
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	問題 {n} 件: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} 回実行する
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} 回実行する (約 ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	どちらも乱数シード {seed} と同じ {n} 回の実行を使ったため、各実行は対になる実行と同じ乱数を受け取ります。差は偶然の抽出ではなく、変更から生じています。
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	どちらも乱数シード {seed} を使ったため、各実行は対になる実行と同じ乱数を受け取り、実行は対応のある比較になります。両者の偶然による差の多くは打ち消し合い、残りは信頼区間に織り込まれます。
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ほかの主な指標 {n} 個は、偶然の範囲を超えて動いていません。
 @plural	and {n} more change|and {n} more changes	ほか {n} 件の変更
 	Conveyor	コンベヤ
@@ -1531,8 +1533,10 @@ connection	Flow	フロー
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	10 台の機械が稼働していなければならず、予備機 4 台が待機し、整備士 3 人が故障した機械を修理する（Crane と Iglehart、Winter Simulation Conference、1973）。
 	How many spares and repairmen keep ten machines running?	10 台の機械を動かし続けるには、予備機と整備士がいくつ必要か？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待機中の予備機は故障しない。平均 3.47 台が故障中で、9.29 台が稼働する。整備士を 1 人増やすと、予備機を 4 台増やすのとほぼ同じ効果がある。
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	どちらも同じファイルの同じ位置から、同じ実行について乱数を読み込んだため、各実行は対になる実行と同じ乱数を受け取ります。差は偶然の抽出ではなく、変更から生じています。
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ベースラインとこの実行は、同じ実行について乱数を同じ場所 (乱数シード、または乱数のファイル) から取っていないため、独立した実行として比較され、信頼区間は広くなります。
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	どちらも同じファイルの同じ位置から乱数を読み込んだため、各実行は対になる実行と同じ乱数から始まり、実行は対応のある比較になります。抽出のたびにファイルの次の乱数を取るため、変更によってどの事象がどの乱数を読むかがずれることがあり、偶然による差が打ち消されにくくなる場合があります。信頼区間はそれを織り込んでいます。
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	ベースラインとこの実行は、乱数を別々の場所（乱数シード、別のファイル、または同じファイルの重ならない部分）から取ったため、独立した実行として扱われ、信頼区間は広くなります。
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	ベースラインとこの実行は、乱数ファイルの重なり合う部分を読み込んでいますが、実行ごとには対応していません。そのため独立でも対応ありでもなく、成り立つ信頼区間がないので、平均値だけを比較します。両方をファイルの同じ位置から、または重ならない部分から読み込んでください。
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	ベースラインは {n_a} 回、この実行は {n_b} 回なので、それぞれの先頭 {n} 回を対応のある比較にします。ベースラインと現在は、その実行についての平均値です。
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ファイル {file} の乱数 (SHA-256 {sha}…)、各実行につきバイト {offset} から {bytes} バイト
 	Seed {seed} taken from {source}	{source} から取った乱数シード {seed}
 	quantum	量子

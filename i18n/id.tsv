@@ -723,8 +723,9 @@ unit	yr	thn
 	Could be chance	Bisa jadi kebetulan
 	No change	Tidak berubah
 	Too few runs to tell	Terlalu sedikit eksekusi untuk menilai
+	Not judged	Tidak dinilai
 	{value} points	{value} poin persentase
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Acuan memakai benih acak {seed_a} dan {n_a} eksekusi, eksekusi ini benih acak {seed_b} dan {n_b} eksekusi, sehingga keduanya dibandingkan sebagai eksekusi independen dan intervalnya lebih lebar. Benih acak dan jumlah eksekusi yang sama menghasilkan perbandingan berpasangan.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Acuan memakai benih acak {seed_a} dan eksekusi ini benih acak {seed_b}, sehingga keduanya dibandingkan sebagai eksekusi independen dan intervalnya lebih lebar. Benih acak yang sama menghasilkan perbandingan berpasangan.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Acuan mengukur waktu dalam {a} dan eksekusi ini dalam {b}, sehingga waktu tidak dibandingkan.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) turun dari {before} ke {after}, sebesar {change}: lebih dari yang bisa dijelaskan oleh kebetulan.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) naik dari {before} ke {after}, sebesar {change}: lebih dari yang bisa dijelaskan oleh kebetulan.
@@ -733,6 +734,7 @@ unit	yr	thn
 	Baseline and now, key measures	Acuan dan sekarang, metrik utama
 	Difference (paired, 95%)	Selisih (berpasangan, 95%)
 	Difference (95%)	Selisih (95%)
+	Difference of means	Selisih rata-rata
 	Measure	Metrik
 	Baseline	Acuan
 	Now	Sekarang
@@ -962,7 +964,7 @@ unit	yr	thn
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} masalah: {blocks}
 @plural	Use {n} run|Use {n} runs	Gunakan {n} eksekusi
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Gunakan {n} eksekusi (sekitar ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Keduanya memakai benih acak {seed} dan {n} eksekusi yang sama, sehingga setiap eksekusi mendapat bilangan acak yang sama dengan pasangannya: perbedaan berasal dari perubahan, bukan dari undian kebetulan.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Keduanya memakai benih acak {seed}, sehingga setiap eksekusi mendapat bilangan acak yang sama dengan pasangannya dan eksekusi dibandingkan secara berpasangan: sebagian besar selisih kebetulan di antara keduanya saling meniadakan, dan intervalnya memperhitungkan sisanya.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} metrik utama lain bergerak tidak lebih dari yang bisa dilakukan kebetulan.
 @plural	and {n} more change|and {n} more changes	dan {n} perubahan lainnya
 	Conveyor	Konveyor
@@ -1531,8 +1533,10 @@ connection	Flow	Alur
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Sepuluh mesin harus berjalan, empat mesin cadangan siap menunggu, dan tiga mekanik memperbaiki mesin yang rusak (Crane dan Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Berapa mesin cadangan dan mekanik agar sepuluh mesin tetap berjalan?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Mesin cadangan yang menunggu tidak bisa rusak: rata-rata 3.47 mesin rusak dan 9.29 berjalan. Mekanik keempat memberi hasil kira-kira sama dengan empat mesin cadangan tambahan.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Keduanya membaca bilangan acaknya dari berkas yang sama di tempat yang sama, untuk eksekusi yang sama, sehingga setiap eksekusi mendapat bilangan acak yang sama dengan pasangannya: perbedaan berasal dari perubahan, bukan dari undian kebetulan.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Acuan dan eksekusi ini tidak mengambil bilangan acaknya dari tempat yang sama (benih acak atau berkas bilangan acak) untuk eksekusi yang sama, sehingga keduanya dibandingkan sebagai eksekusi independen dan intervalnya lebih lebar.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Keduanya membaca bilangan acaknya dari berkas yang sama di tempat yang sama, sehingga setiap eksekusi mulai dari bilangan yang sama dengan pasangannya dan eksekusi dibandingkan secara berpasangan. Setiap pengundian mengambil bilangan berikutnya di berkas, jadi suatu perubahan dapat menggeser peristiwa mana yang membaca bilangan mana dan lebih sedikit selisih kebetulan yang saling meniadakan; intervalnya memperhitungkan hal itu.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Acuan dan eksekusi ini mengambil bilangan acaknya dari tempat yang berbeda (benih acak, berkas lain, atau bagian satu berkas yang tidak tumpang tindih), sehingga keduanya dianggap eksekusi independen dan intervalnya lebih lebar.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Acuan dan eksekusi ini membaca bagian yang tumpang tindih dari berkas bilangan acak yang sama, tetapi tidak eksekusi demi eksekusi, sehingga keduanya tidak independen dan tidak berpasangan dan tidak ada interval yang berlaku: hanya rata-rata yang dibandingkan. Bacalah keduanya dari tempat yang sama di berkas, atau dari bagian yang tidak tumpang tindih.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Acuan memiliki {n_a} eksekusi dan eksekusi ini {n_b}, sehingga {n} eksekusi pertama dari masing-masing dibandingkan secara berpasangan; acuan dan sekarang adalah rata-rata keduanya atas eksekusi tersebut.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Bilangan acak dari berkas {file} (SHA-256 {sha}…), {bytes} byte untuk setiap eksekusi mulai dari byte {offset}
 	Seed {seed} taken from {source}	Benih acak {seed} diambil dari {source}
 	quantum	kuantum

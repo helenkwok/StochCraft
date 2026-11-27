@@ -723,8 +723,9 @@ unit	yr	a
 	Could be chance	Pot ser atzar
 	No change	Cap canvi
 	Too few runs to tell	Massa poques execucions per saber-ho
+	Not judged	No jutjat
 	{value} points	{value} punts
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	La referència va usar la llavor {seed_a} i {n_a} execucions, i aquesta execució la llavor {seed_b} i {n_b} execucions, de manera que es comparen com a execucions independents i els intervals són més amplis. La mateixa llavor i el mateix nombre d'execucions donen una comparació aparellada.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	La referència va usar la llavor {seed_a} i aquesta execució la llavor {seed_b}, de manera que es comparen com a execucions independents i els intervals són més amplis. La mateixa llavor dona una comparació aparellada.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	La referència va mesurar el temps en {a} i aquesta execució en {b}, de manera que els temps no es comparen.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) va baixar de {before} a {after}, en {change}: més del que explicaria l'atzar.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) va pujar de {before} a {after}, en {change}: més del que explicaria l'atzar.
@@ -733,6 +734,7 @@ unit	yr	a
 	Baseline and now, key measures	Referència i ara, mètriques clau
 	Difference (paired, 95%)	Diferència (aparellada, 95%)
 	Difference (95%)	Diferència (95%)
+	Difference of means	Diferència de mitjanes
 	Measure	Mètrica
 	Baseline	Referència
 	Now	Ara
@@ -962,7 +964,7 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemes: {blocks}
 @plural	Use {n} run|Use {n} runs	Usa {n} execució|Usa {n} execucions
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usa {n} execució (aprox. ± 5%)|Usa {n} execucions (aprox. ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Totes dues van usar la llavor {seed} i la mateixa {n} execució, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella: les diferències vénen del canvi, no de tirades a l'atzar.|Totes dues van usar la llavor {seed} i les mateixes {n} execucions, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella: les diferències vénen del canvi, no de tirades a l'atzar.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Totes dues van usar la llavor {seed}, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella i les execucions es comparen per parelles: gran part de la diferència deguda a l'atzar entre elles s'anul·la, i l'interval té en compte el que en queda.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} altra mètrica clau no s'ha mogut més del que podria l'atzar.|{n} altres mètriques clau no s'han mogut més del que podria l'atzar.
 @plural	and {n} more change|and {n} more changes	i {n} canvi més|i {n} canvis més
 	Conveyor	Cinta transportadora
@@ -1531,8 +1533,10 @@ connection	Flow	Flux
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deu màquines han de funcionar, quatre de recanvi esperen a punt i tres mecànics reparen les que s'avarien (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Quantes màquines de recanvi i quants mecànics mantenen en marxa deu màquines?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Les màquines de recanvi en espera no es poden avariar: de mitjana hi ha 3.47 màquines avariades i 9.29 en marxa. Un quart mecànic fa gairebé tant com quatre màquines de recanvi més.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Totes dues van llegir els seus nombres aleatoris del mateix fitxer, al mateix lloc, per a les mateixes execucions, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella: les diferències vénen del canvi, no de tirades a l'atzar.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	La referència i aquesta execució no van prendre els seus nombres aleatoris del mateix lloc (una llavor o un fitxer de nombres aleatoris) per a les mateixes execucions, de manera que es comparen com a execucions independents i els intervals són més amplis.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Totes dues van llegir els seus nombres aleatoris del mateix fitxer, al mateix lloc, de manera que cada execució comença amb els mateixos nombres que la seva parella i les execucions es comparen per parelles. Cada tirada pren els nombres següents del fitxer, de manera que un canvi pot desplaçar quin esdeveniment llegeix quin nombre i pot anul·lar-se menys diferència deguda a l'atzar; l'interval ho té en compte.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	La referència i aquesta execució van prendre els seus nombres aleatoris de llocs diferents (una llavor, un altre fitxer o parts d'un mateix fitxer que no se superposen), de manera que es consideren execucions independents i els intervals són més amplis.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	La referència i aquesta execució van llegir parts superposades del mateix fitxer de nombres aleatoris, però no execució per execució, de manera que no són ni independents ni aparellades i cap interval no és vàlid: només es comparen les mitjanes. Llegiu-les totes dues del mateix lloc del fitxer, o de parts que no se superposin.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	La referència té {n_a} execucions i aquesta execució {n_b}, de manera que les primeres {n} de cadascuna es comparen per parelles; la referència i ara són les seves mitjanes sobre aquestes execucions.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Nombres aleatoris del fitxer {file} (SHA-256 {sha}…), {bytes} bytes per a cada execució a partir del byte {offset}
 	Seed {seed} taken from {source}	Llavor {seed} presa de {source}
 	quantum	quàntic

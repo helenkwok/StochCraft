@@ -723,8 +723,9 @@ unit	yr	év
 	Could be chance	Lehet véletlen
 	No change	Nincs változás
 	Too few runs to tell	Túl kevés futás a döntéshez
+	Not judged	Nem értékelt
 	{value} points	{value} százalékpont
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	A viszonyítási alap a(z) {seed_a} véletlenszám-magot és {n_a} futást használt, ez a futás a(z) {seed_b} véletlenszám-magot és {n_b} futást, ezért független futásokként hasonlítjuk össze őket, és az intervallumok szélesebbek. Ugyanaz a véletlenszám-mag és futásszám páros összehasonlítást ad.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	A viszonyítási alap a(z) {seed_a} véletlenszám-magot használta, ez a futás pedig a(z) {seed_b} véletlenszám-magot, ezért független futásokként hasonlítjuk össze őket, és az intervallumok szélesebbek. Ugyanaz a véletlenszám-mag páros összehasonlítást ad.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	A viszonyítási alap az időt {a} egységben mérte, ez a futás {b} egységben, ezért az időket nem hasonlítjuk össze.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} értékről {after} értékre csökkent, {change} értékkel: többel, mint amit a véletlen megmagyarázna.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} értékről {after} értékre nőtt, {change} értékkel: többel, mint amit a véletlen megmagyarázna.
@@ -733,6 +734,7 @@ unit	yr	év
 	Baseline and now, key measures	Viszonyítási alap és most, fő mérőszámok
 	Difference (paired, 95%)	Különbség (páros, 95%)
 	Difference (95%)	Különbség (95%)
+	Difference of means	Átlagok különbsége
 	Measure	Mérőszám
 	Baseline	Viszonyítási alap
 	Now	Most
@@ -962,7 +964,7 @@ unit	yr	év
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probléma: {blocks}|{n} probléma: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} futás használata|{n} futás használata
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} futás használata (kb. ± 5%)|{n} futás használata (kb. ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Mindkettő a(z) {seed} véletlenszám-magot és ugyanazt a(z) {n} futást használta, így minden futás ugyanazokat a véletlen számokat kapja, mint a párja: a különbségek a változtatásból erednek, nem véletlen húzásokból.|Mindkettő a(z) {seed} véletlenszám-magot és ugyanazt a(z) {n} futást használta, így minden futás ugyanazokat a véletlen számokat kapja, mint a párja: a különbségek a változtatásból erednek, nem véletlen húzásokból.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Mindkettő a(z) {seed} véletlenszám-magot használta, így minden futás ugyanazokat a véletlen számokat kapja, mint a párja, és a futásokat páronként hasonlítjuk össze: a köztük lévő véletlen különbség nagy része kiesik, a maradékot pedig az intervallum figyelembe veszi.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	További {n} fő mérőszám nem változott többel, mint amennyit a véletlen okozhat.|További {n} fő mérőszám nem változott többel, mint amennyit a véletlen okozhat.
 @plural	and {n} more change|and {n} more changes	és még {n} módosítás|és még {n} módosítás
 	Conveyor	Szállítószalag
@@ -1531,8 +1533,10 @@ connection	Flow	Folyamat
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tíz gépnek kell üzemelnie, négy tartalékgép készenlétben vár, és három szerelő javítja a meghibásodottakat (Crane és Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hány tartalékgép és szerelő tart üzemben tíz gépet?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	A készenlétben álló tartalékgépek nem hibásodhatnak meg: átlagosan 3.47 gép hibás, és 9.29 üzemel. Egy negyedik szerelő nagyjából annyit ér, mint négy további tartalékgép.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Mindkettő ugyanabból a fájlból, ugyanarról a helyről olvasta a véletlen számait, ugyanazokhoz a futásokhoz, így minden futás ugyanazokat a véletlen számokat kapja, mint a párja: a különbségek a változtatásból erednek, nem véletlen húzásokból.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	A viszonyítási alap és ez a futás nem ugyanarról a helyről vette a véletlen számait (véletlenszám-magból vagy véletlen számokat tartalmazó fájlból) ugyanazokhoz a futásokhoz, ezért független futásokként hasonlítjuk össze őket, és az intervallumok szélesebbek.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Mindkettő ugyanabból a fájlból, ugyanarról a helyről olvasta a véletlen számait, így minden futás ugyanazokból a számokból indul, mint a párja, és a futásokat páronként hasonlítjuk össze. Minden húzás a fájl következő számait veszi, így egy változtatás eltolhatja, hogy melyik esemény melyik számot olvassa, és a véletlen különbségből kevesebb eshet ki; az intervallum ezt figyelembe veszi.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	A viszonyítási alap és ez a futás a véletlen számait különböző helyekről vette (véletlenszám-magból, másik fájlból, vagy egy fájl egymást át nem fedő részeiből), ezért független futásokként kezeljük őket, és az intervallumok szélesebbek.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	A viszonyítási alap és ez a futás ugyanannak a véletlenszám-fájlnak egymással átfedő részeit olvasta, de nem futásról futásra, ezért nem függetlenek és nem is párosak, és egyetlen intervallum sem érvényes: csak az átlagokat hasonlítjuk össze. Olvassa mindkettőt a fájl ugyanazon helyéről, vagy olyan részekből, amelyek nem fedik át egymást.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	A viszonyítási alapnak {n_a} futása van, ennek a futásnak {n_b}, ezért mindkettő első {n} futását páronként hasonlítjuk össze; a viszonyítási alap és a mostani ezeknek a futásoknak az átlagai.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Véletlen számok a(z) {file} fájlból (SHA-256 {sha}…), futásonként {bytes} bájt a(z) {offset}. bájttól
 	Seed {seed} taken from {source}	A(z) {seed} véletlenszám-mag innen: {source}
 	quantum	kvantum

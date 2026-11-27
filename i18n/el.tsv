@@ -723,8 +723,9 @@ unit	yr	έτ
 	Could be chance	Ίσως τύχη
 	No change	Καμία αλλαγή
 	Too few runs to tell	Πολύ λίγες εκτελέσεις για κρίση
+	Not judged	Χωρίς κρίση
 	{value} points	{value} ποσοστιαίες μονάδες
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Η βάση αναφοράς χρησιμοποίησε τον σπόρο {seed_a} και {n_a} εκτελέσεις, αυτή η εκτέλεση τον σπόρο {seed_b} και {n_b} εκτελέσεις, οπότε συγκρίνονται ως ανεξάρτητες εκτελέσεις και τα διαστήματα είναι ευρύτερα. Ο ίδιος σπόρος και ο ίδιος αριθμός εκτελέσεων δίνουν σύγκριση κατά ζεύγη.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Η βάση αναφοράς χρησιμοποίησε τον σπόρο {seed_a} και αυτή η εκτέλεση τον σπόρο {seed_b}, οπότε συγκρίνονται ως ανεξάρτητες εκτελέσεις και τα διαστήματα είναι ευρύτερα. Ο ίδιος σπόρος δίνει σύγκριση κατά ζεύγη.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Η βάση αναφοράς μέτρησε τον χρόνο σε {a} και αυτή η εκτέλεση σε {b}, οπότε οι χρόνοι δεν συγκρίνονται.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}): μειώθηκε από {before} σε {after}, κατά {change}: περισσότερο απ' όσο θα εξηγούσε η τύχη.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}): αυξήθηκε από {before} σε {after}, κατά {change}: περισσότερο απ' όσο θα εξηγούσε η τύχη.
@@ -733,6 +734,7 @@ unit	yr	έτ
 	Baseline and now, key measures	Βάση αναφοράς και τώρα, κύριες μετρικές
 	Difference (paired, 95%)	Διαφορά (κατά ζεύγη, 95%)
 	Difference (95%)	Διαφορά (95%)
+	Difference of means	Διαφορά μέσων όρων
 	Measure	Μετρική
 	Baseline	Βάση αναφοράς
 	Now	Τώρα
@@ -962,7 +964,7 @@ unit	yr	έτ
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} πρόβλημα: {blocks}|{n} προβλήματα: {blocks}
 @plural	Use {n} run|Use {n} runs	Χρήση {n} εκτέλεσης|Χρήση {n} εκτελέσεων
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Χρήση {n} εκτέλεσης (περίπου ± 5%)|Χρήση {n} εκτελέσεων (περίπου ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Και οι δύο χρησιμοποίησαν τον σπόρο {seed} και την ίδια {n} εκτέλεση, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της: οι διαφορές οφείλονται στην αλλαγή, όχι σε τυχαίες κληρώσεις.|Και οι δύο χρησιμοποίησαν τον σπόρο {seed} και τις ίδιες {n} εκτελέσεις, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της: οι διαφορές οφείλονται στην αλλαγή, όχι σε τυχαίες κληρώσεις.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Και οι δύο χρησιμοποίησαν τον σπόρο {seed}, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της και οι εκτελέσεις συγκρίνονται κατά ζεύγη: μεγάλο μέρος της τυχαίας διαφοράς μεταξύ τους αναιρείται και το διάστημα λαμβάνει υπόψη ό,τι απομένει.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} ακόμη κύρια μετρική δεν μετακινήθηκε περισσότερο απ' όσο θα μπορούσε η τύχη.|{n} ακόμη κύριες μετρικές δεν μετακινήθηκαν περισσότερο απ' όσο θα μπορούσε η τύχη.
 @plural	and {n} more change|and {n} more changes	και {n} ακόμη αλλαγή|και {n} ακόμη αλλαγές
 	Conveyor	Μεταφορέας
@@ -1531,8 +1533,10 @@ connection	Flow	Ροή
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Δέκα μηχανές πρέπει να λειτουργούν, τέσσερις εφεδρικές περιμένουν σε ετοιμότητα και τρεις τεχνίτες επισκευάζουν όσες χαλάνε (Crane και Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Πόσες εφεδρικές μηχανές και πόσοι τεχνίτες κρατούν σε λειτουργία δέκα μηχανές;
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Οι εφεδρικές μηχανές σε αναμονή δεν παθαίνουν βλάβη: κατά μέσο όρο 3.47 μηχανές είναι χαλασμένες και 9.29 λειτουργούν. Ένας τέταρτος τεχνίτης προσφέρει περίπου όσο τέσσερις εφεδρικές μηχανές επιπλέον.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Και οι δύο διάβασαν τους τυχαίους αριθμούς τους από το ίδιο αρχείο στο ίδιο σημείο, για τις ίδιες εκτελέσεις, οπότε κάθε εκτέλεση παίρνει τους ίδιους τυχαίους αριθμούς με το ζεύγος της: οι διαφορές οφείλονται στην αλλαγή, όχι σε τυχαίες κληρώσεις.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Η βάση αναφοράς και αυτή η εκτέλεση δεν πήραν τους τυχαίους αριθμούς τους από το ίδιο σημείο (έναν σπόρο ή ένα αρχείο τυχαίων αριθμών) για τις ίδιες εκτελέσεις, οπότε συγκρίνονται ως ανεξάρτητες εκτελέσεις και τα διαστήματα είναι ευρύτερα.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Και οι δύο διάβασαν τους τυχαίους αριθμούς τους από το ίδιο αρχείο στο ίδιο σημείο, οπότε κάθε εκτέλεση ξεκινά από τους ίδιους αριθμούς με το ζεύγος της και οι εκτελέσεις συγκρίνονται κατά ζεύγη. Κάθε κλήρωση παίρνει τους επόμενους αριθμούς του αρχείου, οπότε μια αλλαγή μπορεί να μετακινήσει ποιο γεγονός διαβάζει ποιον αριθμό και να αναιρείται λιγότερο από την τυχαία διαφορά· το διάστημα το λαμβάνει υπόψη.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Η βάση αναφοράς και αυτή η εκτέλεση πήραν τους τυχαίους αριθμούς τους από διαφορετικά σημεία (έναν σπόρο, άλλο αρχείο ή τμήματα ενός αρχείου που δεν επικαλύπτονται), οπότε θεωρούνται ανεξάρτητες εκτελέσεις και τα διαστήματα είναι ευρύτερα.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Η βάση αναφοράς και αυτή η εκτέλεση διάβασαν επικαλυπτόμενα τμήματα του ίδιου αρχείου τυχαίων αριθμών, αλλά όχι εκτέλεση προς εκτέλεση, οπότε δεν είναι ούτε ανεξάρτητες ούτε κατά ζεύγη και κανένα διάστημα δεν ισχύει: συγκρίνονται μόνο οι μέσοι όροι. Διαβάστε και τις δύο από το ίδιο σημείο του αρχείου ή από τμήματα που δεν επικαλύπτονται.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Η βάση αναφοράς έχει {n_a} εκτελέσεις και αυτή η εκτέλεση {n_b}, οπότε οι πρώτες {n} από την καθεμία συγκρίνονται κατά ζεύγη· η βάση αναφοράς και τώρα είναι οι μέσοι όροι τους σε αυτές τις εκτελέσεις.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Τυχαίοι αριθμοί από το αρχείο {file} (SHA-256 {sha}…), {bytes} byte για κάθε εκτέλεση από το byte {offset}
 	Seed {seed} taken from {source}	Σπόρος {seed} από {source}
 	quantum	κβαντικό

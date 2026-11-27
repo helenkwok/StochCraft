@@ -723,8 +723,9 @@ unit	yr	år
 	Could be chance	Kan være tilfældighed
 	No change	Ingen ændring
 	Too few runs to tell	For få kørsler til at afgøre
+	Not judged	Ikke bedømt
 	{value} points	{value} procentpoint
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referencen brugte tilfældighedsfrø {seed_a} og {n_a} kørsler, denne kørsel tilfældighedsfrø {seed_b} og {n_b} kørsler, så de sammenlignes som uafhængige kørsler, og intervallerne er bredere. Samme tilfældighedsfrø og antal kørsler giver en parret sammenligning.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Referencen brugte tilfældighedsfrø {seed_a} og denne kørsel tilfældighedsfrø {seed_b}, så de sammenlignes som uafhængige kørsler, og intervallerne er bredere. Samme tilfældighedsfrø giver en parret sammenligning.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referencen målte tid i {a} og denne kørsel i {b}, så tider sammenlignes ikke.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) faldt fra {before} til {after}, med {change}: mere end tilfældighed ville forklare.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) steg fra {before} til {after}, med {change}: mere end tilfældighed ville forklare.
@@ -733,6 +734,7 @@ unit	yr	år
 	Baseline and now, key measures	Reference og nu, vigtigste målepunkter
 	Difference (paired, 95%)	Forskel (parret, 95 %)
 	Difference (95%)	Forskel (95 %)
+	Difference of means	Forskel i gennemsnit
 	Measure	Målepunkt
 	Baseline	Reference
 	Now	Nu
@@ -962,7 +964,7 @@ unit	yr	år
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemer: {blocks}
 @plural	Use {n} run|Use {n} runs	Brug {n} kørsel|Brug {n} kørsler
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Brug {n} kørsel (ca. ± 5%)|Brug {n} kørsler (ca. ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Begge brugte tilfældighedsfrø {seed} og den samme {n} kørsel, så hver kørsel får de samme tilfældige tal som sin partner: forskellene kommer fra ændringen, ikke fra tilfældige træk.|Begge brugte tilfældighedsfrø {seed} og de samme {n} kørsler, så hver kørsel får de samme tilfældige tal som sin partner: forskellene kommer fra ændringen, ikke fra tilfældige træk.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Begge brugte tilfældighedsfrø {seed}, så hver kørsel får de samme tilfældige tal som sin partner, og kørslerne sammenlignes parvis: meget af den tilfældige forskel mellem dem udlignes, og intervallet tager højde for det, der er tilbage.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} andet vigtigt målepunkt flyttede sig ikke mere, end tilfældighed kunne.|{n} andre vigtige målepunkter flyttede sig ikke mere, end tilfældighed kunne.
 @plural	and {n} more change|and {n} more changes	og {n} ændring mere|og {n} ændringer mere
 	Conveyor	Transportbånd
@@ -1531,8 +1533,10 @@ connection	Flow	Flow
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Ti maskiner skal køre, fire reservemaskiner står klar, og tre mekanikere reparerer dem, der bryder ned (Crane og Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hvor mange reservemaskiner og mekanikere holder ti maskiner kørende?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemaskiner, der står klar, kan ikke bryde ned: i gennemsnit er 3.47 maskiner i stykker, og 9.29 kører. En fjerde mekaniker gør omtrent lige så meget som fire reservemaskiner mere.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Begge læste deres tilfældige tal fra den samme fil det samme sted, til de samme kørsler, så hver kørsel får de samme tilfældige tal som sin partner: forskellene kommer fra ændringen, ikke fra tilfældige træk.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referencen og denne kørsel hentede ikke deres tilfældige tal fra det samme sted (et tilfældighedsfrø eller en fil med tilfældige tal) til de samme kørsler, så de sammenlignes som uafhængige kørsler, og intervallerne er bredere.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Begge læste deres tilfældige tal fra den samme fil det samme sted, så hver kørsel starter fra de samme tal som sin partner, og kørslerne sammenlignes parvis. Hvert træk tager de næste tal i filen, så en ændring kan flytte, hvilken hændelse der læser hvilket tal, og mindre af den tilfældige forskel udlignes måske; intervallet tager højde for det.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Referencen og denne kørsel hentede deres tilfældige tal fra forskellige steder (et tilfældighedsfrø, en anden fil eller dele af én fil, der ikke overlapper), så de behandles som uafhængige kørsler, og intervallerne er bredere.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Referencen og denne kørsel læste overlappende dele af den samme fil med tilfældige tal, men ikke kørsel for kørsel, så de er hverken uafhængige eller parrede, og intet interval holder: kun gennemsnittene sammenlignes. Læs begge fra det samme sted i filen eller fra dele, der ikke overlapper.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referencen har {n_a} kørsler og denne kørsel {n_b}, så de første {n} af hver sammenlignes parvis; referencen og nu er deres gennemsnit over de kørsler.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Tilfældige tal fra filen {file} (SHA-256 {sha}…), {bytes} bytes for hver kørsel fra byte {offset}
 	Seed {seed} taken from {source}	Tilfældighedsfrø {seed} hentet fra {source}
 	quantum	kvante

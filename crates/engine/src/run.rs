@@ -369,7 +369,7 @@ impl Job {
                     reports: vec![None; usize::try_from(first).unwrap_or(0)],
                     received: 0,
                     template: plan.compiled.live(rng).report(),
-                    task: workers::task(&plan),
+                    task: workers::task(&plan)?,
                     stages: Vec::new(),
                 }
             }
@@ -505,11 +505,14 @@ impl Job {
         }
     }
 
-    /// Takes a worker's answer for one replication. The first failure ends the run with it; an
-    /// answer arriving after the run has finished is ignored. Once every replication the run has
-    /// set out to have has answered, it looks at the results: a sequential run that goes on
-    /// sets out to have more (`run.status` gives the new `total`), and the caller hands those
-    /// out too.
+    /// Takes a worker's answer for one replication. An answer for a replication the run does not
+    /// have is refused, and one for a replication that has already answered is ignored (a
+    /// worker's answer can come twice), before anything else is looked at. Then the first
+    /// failure ends the run with it; an answer with no index and an error (a worker that
+    /// stopped) ends it too, and an answer arriving after the run has finished is ignored. Once
+    /// every replication the run has set out to have has answered, it looks at the results: a
+    /// sequential run that goes on sets out to have more (`run.status` gives the new `total`),
+    /// and the caller hands those out too.
     pub fn deliver(&mut self, answer: &str) -> Result<(), CommandError> {
         let State::Workers {
             reports,
@@ -523,21 +526,29 @@ impl Job {
         };
         let bad = |why: &str| CommandError::new(ErrorCode::InvalidParams, format!("answer: {why}"));
         let answer: Answer = serde_json::from_str(answer).map_err(|e| bad(&e.to_string()))?;
+        let Some(index) = answer.index else {
+            // Not a replication's answer: a worker stopped.
+            let e = answer.error().ok_or_else(|| bad("no index"))?;
+            self.state = State::Finished(Err(e));
+            return Ok(());
+        };
+        let slot = usize::try_from(index)
+            .ok()
+            .and_then(|i| reports.get_mut(i))
+            .ok_or_else(|| bad("no such replication"))?;
+        if slot.is_some() {
+            return Ok(());
+        }
         if let Some(e) = answer.error() {
             self.state = State::Finished(Err(e));
             return Ok(());
         }
-        let slot = usize::try_from(answer.index)
-            .ok()
-            .and_then(|i| reports.get_mut(i))
-            .ok_or_else(|| bad("no such replication"))?;
         let report = answer
             .report
             .and_then(|r| r.decode(template))
             .ok_or_else(|| bad("not a report of this model"))?;
-        if slot.replace(report).is_none() {
-            *received += 1;
-        }
+        *slot = Some(report);
+        *received += 1;
         if *received == reports.len() as u64 {
             let r: Vec<Report> = std::mem::take(reports).into_iter().flatten().collect();
             match self.plan.look(&r, stages) {

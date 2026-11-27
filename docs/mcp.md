@@ -226,9 +226,25 @@ The server treats its input as hostile:
 ```
 
 `results.compare` compares the last run with the one before it (or any two runs' results given
-as `a` and `b`). Runs with the same seed and replications share their random numbers, so it
-compares them replication by replication (a paired-t interval); otherwise it uses Welch's
-two-sample t interval and says so.
+as `a` and `b`), and says how in `class` (with the reason in `basis` and `method`):
+
+- `paired`: the runs share their random numbers replication by replication, so it compares them
+  in pairs (a paired-t interval). That is so for the same seed, and for the same random-data
+  file read from the same offset with the same segment length. Replication i's numbers do not
+  depend on how many replications a run has, so runs of 10 and 20 replications pair over the
+  first 10: `paired_replications` gives that number, and each comparison's `pairs` how many of
+  those had a value in both.
+- `independent`: other seeds, a seed against a file, two files, or parts of one file that do not
+  overlap. It uses Welch's two-sample t interval. Other seeds' streams and other files are taken
+  to be independent; that is assumed, not checked.
+- `dependent`: the runs read overlapping parts of one file, but not replication for replication
+  (another offset or segment length), so neither interval holds. Each comparison gives the two
+  means and b's minus a's, with `interval` `"none"` and no `half_width`, `df` or `significant`,
+  and `reason` says why.
+
+`paired` stays as before (true for the paired class). A record whose `random` names a file
+without a valid SHA-256, offset and segment length, or values that are not one per replication,
+is refused.
 
 Results made by another tool need no model. `data.analyse` takes per-replication results as CSV
 text (`csv`: a wide table with a column per measure, or a long one with `measure` and `value`

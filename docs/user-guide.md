@@ -517,17 +517,29 @@ To see what a change does, click **Keep as baseline** under the run record, chan
 - **Changed since the baseline:** what is different in the model, block by block, with both
   values, for example "Paint › Service time, Mean: 5.2 → 4.6". A change that was undone is not
   listed; moving blocks is not a change.
-- **How the runs were compared.** With the same seed and number of runs, run 1 of each meets the
-  same random numbers, and so on, and the runs are compared in pairs: the difference comes from
-  the change, not from chance draws. With another seed or number of runs (for example after
-  **Use N runs**), they are compared as independent runs, and the intervals are wider.
+- **How the runs were compared.** There are three ways, from where the two runs' random numbers
+  came from:
+  - **In pairs.** With the same seed, run 1 of each meets the same random numbers, and so on, so
+    the runs are compared in pairs: much of the chance difference between them cancels out, and
+    the interval allows for what is left. Run *i*'s numbers do not depend on how many runs there
+    are, so after **Use N runs** the first runs of each are still paired (20 runs against 10 pair
+    over the first 10), and the baseline and now are the means over those runs. Runs that read
+    the same file of random numbers from the same place with the same segment length are paired
+    too, but less of the chance difference may cancel: every draw takes the next numbers in the
+    file, so a change can shift which event reads which number.
+  - **As independent runs**, with wider intervals: another seed, a seed against a file, another
+    file (taken to be independent), or parts of one file that do not overlap.
+  - **Not judged**: runs that read overlapping parts of one file, but not run for run (another
+    offset or segment length), are neither independent nor paired, so no interval holds. Only
+    the means are shown, with the difference of means and the verdict **Not judged**.
 - **What the change did:** the largest real changes in sentences, for example "Mean wait (Paint)
   fell from 38 min to 17 min, by −21 ± 6 min: more than chance would explain".
 - **Baseline and now, key measures:** each block's key measures in both runs, the difference with
   its 95% interval (shares in percentage points), a mark of the change against a zero line, and a
   verdict: **Real: lower**, **Real: higher**, **Could be chance**, **No change** (every run gave
-  the same value), or **Too few runs to tell**. A verdict is real when the difference's interval
-  leaves out zero. Each row is judged on its own, so with many rows one may look real by chance.
+  the same value), **Too few runs to tell**, or **Not judged** (runs that shared some random
+  numbers but not run for run, as above: the column then gives the difference of means alone).
+  A verdict is real when the difference's interval leaves out zero. Each row is judged on its own, so with many rows one may look real by chance.
 
 **Keep this as the baseline** makes the new run the baseline; **Clear baseline** removes it.
 Opening another model or file clears it too.
@@ -624,9 +636,16 @@ runs read. Given back as `random`, it repeats the run exactly; a file whose SHA-
 the one given is refused. The results show the file under the run's settings line.
 
 **Comparing runs.** Two runs meet the same random numbers run by run only if they read the same
-file (the same SHA-256) from the same offset with the same *L* and the same number of runs, or
-both use the same seed. Only then does Compare with a baseline pair them; in every other case it
-compares them as independent runs, with wider intervals.
+file (the same SHA-256) from the same offset with the same *L*, or both use the same seed; then
+Compare with a baseline pairs them, over the first runs of each if their numbers of runs differ.
+Runs on another file, on a seed, or on parts of the same file that do not overlap are compared
+as independent runs, with wider intervals. Runs on overlapping parts of the same file that are
+not run for run (another offset or *L*) are neither: only their means are shown, with no
+interval, and the verdict is **Not judged**. Read both from the same place, or from parts that do not overlap.
+
+**Limits.** A file of more than 1 GiB (256 MiB in the browser) is refused before it is read. A
+run on the browser's web workers sends every worker the bytes of all the runs it may have, so one
+that needs more than 8 MiB of the file is refused before it starts; run it in slices instead.
 
 **A seed from a source.** `{"mode": "seed_source", "source": …, "time": …, "pulse": …}` with the
 run's `seed` runs the usual pseudo-random streams from that seed, and records where the seed came

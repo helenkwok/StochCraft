@@ -723,8 +723,9 @@ unit	yr	v
 	Could be chance	Mund të jetë rastësi
 	No change	Pa ndryshim
 	Too few runs to tell	Shumë pak ekzekutime për të gjykuar
+	Not judged	I pagjykuar
 	{value} points	{value} pikë përqindjeje
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referenca përdori farën {seed_a} dhe {n_a} ekzekutime, ky ekzekutim farën {seed_b} dhe {n_b} ekzekutime, kështu që krahasohen si ekzekutime të pavarura dhe intervalet janë më të gjera. E njëjta farë dhe i njëjti numër ekzekutimesh japin një krahasim në çifte.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Referenca përdori farën {seed_a} dhe ky ekzekutim farën {seed_b}, kështu që krahasohen si ekzekutime të pavarura dhe intervalet janë më të gjera. E njëjta farë jep një krahasim në çifte.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referenca e mati kohën në {a} dhe ky ekzekutim në {b}, kështu që kohët nuk krahasohen.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) ra nga {before} në {after}, me {change}: më shumë se sa do ta shpjegonte rastësia.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) u rrit nga {before} në {after}, me {change}: më shumë se sa do ta shpjegonte rastësia.
@@ -733,6 +734,7 @@ unit	yr	v
 	Baseline and now, key measures	Referenca dhe tani, treguesit kryesorë
 	Difference (paired, 95%)	Dallimi (në çifte, 95%)
 	Difference (95%)	Dallimi (95%)
+	Difference of means	Dallimi i mesatareve
 	Measure	Treguesi
 	Baseline	Referenca
 	Now	Tani
@@ -962,7 +964,7 @@ unit	yr	v
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} probleme: {blocks}
 @plural	Use {n} run|Use {n} runs	Përdor {n} ekzekutim|Përdor {n} ekzekutime
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Përdor {n} ekzekutim (rreth ± 5%)|Përdor {n} ekzekutime (rreth ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Të dy përdorën farën {seed} dhe të njëjtin {n} ekzekutim, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.|Të dy përdorën farën {seed} dhe të njëjtat {n} ekzekutime, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Të dy përdorën farën {seed}, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij dhe ekzekutimet krahasohen në çifte: pjesa më e madhe e dallimit të rastësishëm mes tyre anulohet, dhe intervali merr parasysh atë që mbetet.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} tregues tjetër kryesor nuk lëvizi më shumë se sa mund të bënte rastësia.|{n} tregues të tjerë kryesorë nuk lëvizën më shumë se sa mund të bënte rastësia.
 @plural	and {n} more change|and {n} more changes	dhe {n} ndryshim tjetër|dhe {n} ndryshime të tjera
 	Conveyor	Transportier
@@ -1531,8 +1533,10 @@ connection	Flow	Rrjedhë
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dhjetë makina duhet të punojnë, katër makina rezervë presin gati dhe tre mekanikë riparojnë ato që prishen (Crane dhe Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Sa makina rezervë dhe sa mekanikë i mbajnë në punë dhjetë makina?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Makinat rezervë që presin nuk mund të prishen: mesatarisht 3.47 makina janë të prishura dhe 9.29 punojnë. Një mekanik i katërt jep afërsisht sa katër makina rezervë më shumë.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Të dy i lexuan numrat e tyre të rastësishëm nga i njëjti skedar në të njëjtin vend, për të njëjtat ekzekutime, kështu që çdo ekzekutim merr të njëjtët numra të rastësishëm si çifti i tij: dallimet vijnë nga ndryshimi, jo nga tërheqjet e rastësishme.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referenca dhe ky ekzekutim nuk i morën numrat e tyre të rastësishëm nga i njëjti vend (një farë ose një skedar numrash të rastësishëm) për të njëjtat ekzekutime, kështu që krahasohen si ekzekutime të pavarura dhe intervalet janë më të gjera.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Të dy i lexuan numrat e tyre të rastësishëm nga i njëjti skedar në të njëjtin vend, kështu që çdo ekzekutim nis nga të njëjtët numra si çifti i tij dhe ekzekutimet krahasohen në çifte. Çdo tërheqje merr numrat e radhës në skedar, kështu që një ndryshim mund të zhvendosë cili ngjarje lexon cilin numër dhe më pak nga dallimi i rastësishëm mund të anulohet; intervali e merr parasysh këtë.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Referenca dhe ky ekzekutim i morën numrat e tyre të rastësishëm nga vende të ndryshme (një farë, një skedar tjetër, ose pjesë të një skedari që nuk mbivendosen), kështu që merren si ekzekutime të pavarura dhe intervalet janë më të gjera.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Referenca dhe ky ekzekutim lexuan pjesë që mbivendosen të të njëjtit skedar numrash të rastësishëm, por jo ekzekutim pas ekzekutimi, kështu që nuk janë as të pavarura, as në çifte dhe asnjë interval nuk vlen: krahasohen vetëm mesataret. Lexojini të dyja nga i njëjti vend në skedar, ose nga pjesë që nuk mbivendosen.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referenca ka {n_a} ekzekutime dhe ky ekzekutim {n_b}, kështu që {n} të parat e secilit krahasohen në çifte; referenca dhe tani janë mesataret e tyre mbi ato ekzekutime.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Numra të rastësishëm nga skedari {file} (SHA-256 {sha}…), {bytes} bajte për çdo ekzekutim nga bajti {offset}
 	Seed {seed} taken from {source}	Fara {seed} e marrë nga {source}
 	quantum	kuantik

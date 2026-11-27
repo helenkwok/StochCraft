@@ -723,8 +723,9 @@ unit	yr	సం.
 	Could be chance	యాదృచ్ఛికం కావచ్చు
 	No change	మార్పు లేదు
 	Too few runs to tell	చెప్పడానికి అమలులు చాలా తక్కువ
+	Not judged	తీర్పు లేదు
 	{value} points	{value} శాతం పాయింట్లు
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	ప్రాతిపదిక యాదృచ్ఛిక బీజం {seed_a} మరియు {n_a} అమలులను ఉపయోగించింది, ఈ అమలు యాదృచ్ఛిక బీజం {seed_b} మరియు {n_b} అమలులను, కాబట్టి వాటిని స్వతంత్ర అమలులుగా పోలుస్తారు మరియు అంతరాలు విశాలంగా ఉంటాయి. అదే యాదృచ్ఛిక బీజం మరియు అదే సంఖ్యలో అమలులు జత పోలికను ఇస్తాయి.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	ప్రాతిపదిక యాదృచ్ఛిక బీజం {seed_a} ఉపయోగించింది, ఈ అమలు యాదృచ్ఛిక బీజం {seed_b} ఉపయోగించింది, కాబట్టి వాటిని స్వతంత్ర అమలులుగా పోలుస్తారు మరియు అంతరాలు విశాలంగా ఉంటాయి. అదే యాదృచ్ఛిక బీజం జత పోలికను ఇస్తుంది.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	ప్రాతిపదిక సమయాన్ని {a}లో కొలిచింది, ఈ అమలు {b}లో, కాబట్టి సమయాలను పోల్చరు.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} నుండి {after}కి తగ్గింది, {change} మేర: యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} నుండి {after}కి పెరిగింది, {change} మేర: యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ.
@@ -733,6 +734,7 @@ unit	yr	సం.
 	Baseline and now, key measures	ప్రాతిపదిక మరియు ఇప్పుడు, ముఖ్య కొలమానాలు
 	Difference (paired, 95%)	తేడా (జత, 95%)
 	Difference (95%)	తేడా (95%)
+	Difference of means	సగటుల తేడా
 	Measure	కొలమానం
 	Baseline	ప్రాతిపదిక
 	Now	ఇప్పుడు
@@ -962,7 +964,7 @@ unit	yr	సం.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} సమస్య: {blocks}|{n} సమస్యలు: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} అమలును ఉపయోగించు|{n} అమలులను ఉపయోగించు
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} అమలును ఉపయోగించు (సుమారు ± 5%)|{n} అమలులను ఉపయోగించు (సుమారు ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	రెండూ యాదృచ్ఛిక బీజం {seed} మరియు అదే {n} అమలును ఉపయోగించాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి: తేడాలు యాదృచ్ఛిక ఎంపికల నుండి కాక మార్పు నుండి వస్తాయి.|రెండూ యాదృచ్ఛిక బీజం {seed} మరియు అవే {n} అమలులను ఉపయోగించాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి: తేడాలు యాదృచ్ఛిక ఎంపికల నుండి కాక మార్పు నుండి వస్తాయి.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	రెండూ యాదృచ్ఛిక బీజం {seed} ఉపయోగించాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి మరియు అమలులను జతలుగా పోలుస్తారు: వాటి మధ్య యాదృచ్ఛిక తేడాలో చాలా భాగం రద్దయిపోతుంది, మిగిలినదాన్ని అంతరం పరిగణనలోకి తీసుకుంటుంది.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	మరో {n} ముఖ్య కొలమానం యాదృచ్ఛికత చేయగలదానికంటే ఎక్కువ మారలేదు.|మరో {n} ముఖ్య కొలమానాలు యాదృచ్ఛికత చేయగలదానికంటే ఎక్కువ మారలేదు.
 @plural	and {n} more change|and {n} more changes	మరియు మరో {n} మార్పు|మరియు మరో {n} మార్పులు
 	Conveyor	కన్వేయర్
@@ -1531,8 +1533,10 @@ connection	Flow	ప్రవాహం
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	పది యంత్రాలు నడుస్తూ ఉండాలి, నాలుగు విడి యంత్రాలు సిద్ధంగా వేచి ఉంటాయి, ముగ్గురు మెకానిక్‌లు పాడైనవాటిని బాగుచేస్తారు (Crane మరియు Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	పది యంత్రాలను నడుపుతూ ఉంచడానికి ఎన్ని విడి యంత్రాలు, ఎంతమంది మెకానిక్‌లు కావాలి?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	సిద్ధంగా వేచి ఉన్న విడి యంత్రాలు పాడవవు: సగటున 3.47 యంత్రాలు పాడై ఉంటాయి, 9.29 నడుస్తాయి. నాలుగో మెకానిక్ మరో నాలుగు విడి యంత్రాలంత ఉపయోగపడతాడు.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	రెండూ తమ యాదృచ్ఛిక సంఖ్యలను ఒకే ఫైల్ నుండి, ఒకే చోట నుండి, అవే అమలుల కోసం చదివాయి, కాబట్టి ప్రతి అమలుకు దాని జతకు వచ్చిన అవే యాదృచ్ఛిక సంఖ్యలు వస్తాయి: తేడాలు యాదృచ్ఛిక ఎంపికల నుండి కాక మార్పు నుండి వస్తాయి.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ప్రాతిపదిక మరియు ఈ అమలు అవే అమలుల కోసం తమ యాదృచ్ఛిక సంఖ్యలను ఒకే చోట నుండి (ఒక యాదృచ్ఛిక బీజం, లేదా యాదృచ్ఛిక సంఖ్యల ఫైల్) తీసుకోలేదు, కాబట్టి వాటిని స్వతంత్ర అమలులుగా పోలుస్తారు మరియు అంతరాలు విశాలంగా ఉంటాయి.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	రెండూ తమ యాదృచ్ఛిక సంఖ్యలను ఒకే ఫైల్ నుండి, ఒకే చోట చదివాయి, కాబట్టి ప్రతి అమలు దాని జత ప్రారంభించిన అవే సంఖ్యలతో మొదలవుతుంది మరియు అమలులను జతలుగా పోలుస్తారు. ప్రతి ఎంపిక ఫైల్‌లోని తదుపరి సంఖ్యలను తీసుకుంటుంది, కాబట్టి ఏ సంఘటన ఏ సంఖ్యను చదువుతుందో మార్పు మార్చవచ్చు, యాదృచ్ఛిక తేడాలో తక్కువ భాగమే రద్దు కావచ్చు; అంతరం దీన్ని పరిగణనలోకి తీసుకుంటుంది.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	ప్రాతిపదిక మరియు ఈ అమలు తమ యాదృచ్ఛిక సంఖ్యలను వేర్వేరు చోట్ల నుండి (ఒక యాదృచ్ఛిక బీజం, మరో ఫైల్, లేదా ఒకే ఫైల్‌లోని ఒకదానిపై ఒకటి రాని భాగాలు) తీసుకున్నాయి, కాబట్టి వాటిని స్వతంత్ర అమలులుగా తీసుకుంటారు మరియు అంతరాలు విశాలంగా ఉంటాయి.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	ప్రాతిపదిక మరియు ఈ అమలు ఒకే యాదృచ్ఛిక సంఖ్యల ఫైల్‌లోని ఒకదానిపై ఒకటి వచ్చే భాగాలను చదివాయి, కానీ అమలు వారీగా కాదు, కాబట్టి అవి స్వతంత్రమూ కావు, జతా కావు, ఏ అంతరమూ చెల్లదు: సగటులను మాత్రమే పోలుస్తారు. రెండింటినీ ఫైల్‌లో ఒకే చోట నుండి, లేదా ఒకదానిపై ఒకటి రాని భాగాల నుండి చదవండి.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	ప్రాతిపదికలో {n_a} అమలులు, ఈ అమలులో {n_b} ఉన్నాయి, కాబట్టి ప్రతిదాని మొదటి {n}ను జతలుగా పోలుస్తారు; ప్రాతిపదిక మరియు ఇప్పుడు అనేవి ఆ అమలులపై వాటి సగటులు.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ఫైల్ {file} నుండి యాదృచ్ఛిక సంఖ్యలు (SHA-256 {sha}…), ప్రతి అమలుకు బైట్ {offset} నుండి {bytes} బైట్లు
 	Seed {seed} taken from {source}	{source} నుండి తీసుకున్న యాదృచ్ఛిక బీజం {seed}
 	quantum	క్వాంటం

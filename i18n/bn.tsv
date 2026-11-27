@@ -723,8 +723,9 @@ unit	yr	বছর
 	Could be chance	দৈবক্রম হতে পারে
 	No change	কোনো পরিবর্তন নেই
 	Too few runs to tell	বলার জন্য পুনরাবৃত্তি খুব কম
+	Not judged	বিচার করা হয়নি
 	{value} points	{value} শতাংশ বিন্দু
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	ভিত্তিরেখা যদৃচ্ছ বীজ {seed_a} এবং {n_a}টি পুনরাবৃত্তি ব্যবহার করেছে, এই রান যদৃচ্ছ বীজ {seed_b} এবং {n_b}টি পুনরাবৃত্তি, তাই এগুলোকে স্বাধীন পুনরাবৃত্তি হিসেবে তুলনা করা হয় এবং ব্যবধান প্রশস্ততর হয়। একই যদৃচ্ছ বীজ ও একই সংখ্যক পুনরাবৃত্তি জোড়াভিত্তিক তুলনা দেয়।
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	ভিত্তিরেখা যদৃচ্ছ বীজ {seed_a} ব্যবহার করেছে এবং এই রান যদৃচ্ছ বীজ {seed_b}, তাই এগুলোকে স্বাধীন পুনরাবৃত্তি হিসেবে তুলনা করা হয় এবং ব্যবধান প্রশস্ততর হয়। একই যদৃচ্ছ বীজ জোড়াভিত্তিক তুলনা দেয়।
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	ভিত্তিরেখা সময় মেপেছে {a}-এ এবং এই রান {b}-এ, তাই সময়ের তুলনা করা হয় না।
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} থেকে কমে {after} হয়েছে, {change} কমেছে: দৈবক্রম যা ব্যাখ্যা করতে পারে তার চেয়ে বেশি।
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} থেকে বেড়ে {after} হয়েছে, {change} বেড়েছে: দৈবক্রম যা ব্যাখ্যা করতে পারে তার চেয়ে বেশি।
@@ -733,6 +734,7 @@ unit	yr	বছর
 	Baseline and now, key measures	ভিত্তিরেখা ও এখন, প্রধান পরিমাপক
 	Difference (paired, 95%)	পার্থক্য (জোড়াভিত্তিক, ৯৫%)
 	Difference (95%)	পার্থক্য (৯৫%)
+	Difference of means	গড়ের পার্থক্য
 	Measure	পরিমাপক
 	Baseline	ভিত্তিরেখা
 	Now	এখন
@@ -962,7 +964,7 @@ unit	yr	বছর
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n}টি সমস্যা: {blocks}|{n}টি সমস্যা: {blocks}
 @plural	Use {n} run|Use {n} runs	{n}টি পুনরাবৃত্তি ব্যবহার করুন|{n}টি পুনরাবৃত্তি ব্যবহার করুন
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n}টি পুনরাবৃত্তি ব্যবহার করুন (প্রায় ± 5%)|{n}টি পুনরাবৃত্তি ব্যবহার করুন (প্রায় ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	দুটিই যদৃচ্ছ বীজ {seed} এবং একই {n}টি পুনরাবৃত্তি ব্যবহার করেছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায়: পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রমের টানা থেকে নয়।|দুটিই যদৃচ্ছ বীজ {seed} এবং একই {n}টি পুনরাবৃত্তি ব্যবহার করেছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায়: পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রমের টানা থেকে নয়।
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	দুটিই যদৃচ্ছ বীজ {seed} ব্যবহার করেছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায় এবং পুনরাবৃত্তিগুলো জোড়ায় জোড়ায় তুলনা করা হয়: তাদের মধ্যে দৈবক্রমের পার্থক্যের বড় অংশ কাটাকাটি হয়ে যায়, আর ব্যবধান বাকিটুকু বিবেচনা করে।
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	আরও {n}টি প্রধান পরিমাপক দৈবক্রমের সীমার চেয়ে বেশি নড়েনি।|আরও {n}টি প্রধান পরিমাপক দৈবক্রমের সীমার চেয়ে বেশি নড়েনি।
 @plural	and {n} more change|and {n} more changes	এবং আরও {n}টি পরিবর্তন|এবং আরও {n}টি পরিবর্তন
 	Conveyor	কনভেয়র
@@ -1531,8 +1533,10 @@ connection	Flow	প্রবাহ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	দশটি মেশিন চালু থাকতেই হবে, চারটি অতিরিক্ত মেশিন প্রস্তুত থাকে এবং তিনজন মিস্ত্রি বিকল মেশিন সারান (Crane ও Iglehart, Winter Simulation Conference, 1973)।
 	How many spares and repairmen keep ten machines running?	দশটি মেশিন চালু রাখতে কতগুলো অতিরিক্ত মেশিন ও কতজন মিস্ত্রি লাগবে?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	প্রস্তুত থাকা অতিরিক্ত মেশিন বিকল হতে পারে না: গড়ে 3.47টি মেশিন বিকল থাকে এবং 9.29টি চলে। চতুর্থ একজন মিস্ত্রি প্রায় আরও চারটি অতিরিক্ত মেশিনের সমান কাজ করেন।
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	দুটিই একই ফাইলের একই জায়গা থেকে, একই পুনরাবৃত্তির জন্য তাদের যদৃচ্ছ সংখ্যা পড়েছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই যদৃচ্ছ সংখ্যা পায়: পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রমের টানা থেকে নয়।
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	ভিত্তিরেখা এবং এই রান একই পুনরাবৃত্তির জন্য একই জায়গা থেকে (একটি যদৃচ্ছ বীজ, বা যদৃচ্ছ সংখ্যার একটি ফাইল) তাদের যদৃচ্ছ সংখ্যা নেয়নি, তাই এগুলোকে স্বাধীন পুনরাবৃত্তি হিসেবে তুলনা করা হয় এবং ব্যবধান প্রশস্ততর হয়।
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	দুটিই একই ফাইলের একই জায়গা থেকে তাদের যদৃচ্ছ সংখ্যা পড়েছে, তাই প্রতিটি পুনরাবৃত্তি তার জোড়ার মতো একই সংখ্যা থেকে শুরু করে এবং পুনরাবৃত্তিগুলো জোড়ায় জোড়ায় তুলনা করা হয়। প্রতিটি টানে ফাইলের পরবর্তী সংখ্যাগুলো নেওয়া হয়, তাই কোনো পরিবর্তন কোন ঘটনা কোন সংখ্যা পড়বে তা সরিয়ে দিতে পারে এবং দৈবক্রমের পার্থক্যের কম অংশ কাটাকাটি হতে পারে; ব্যবধান সেটি বিবেচনা করে।
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	ভিত্তিরেখা এবং এই রান তাদের যদৃচ্ছ সংখ্যা ভিন্ন জায়গা থেকে (একটি যদৃচ্ছ বীজ, অন্য ফাইল, বা একই ফাইলের ওভারল্যাপ করে না এমন অংশ) নিয়েছে, তাই এগুলোকে স্বাধীন পুনরাবৃত্তি ধরা হয় এবং ব্যবধান প্রশস্ততর হয়।
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	ভিত্তিরেখা এবং এই রান যদৃচ্ছ সংখ্যার একই ফাইলের পরস্পর-ওভারল্যাপ করা অংশ পড়েছে, কিন্তু পুনরাবৃত্তি ধরে ধরে নয়, তাই এগুলো স্বাধীনও নয়, জোড়াভিত্তিকও নয় এবং কোনো ব্যবধান খাটে না: শুধু গড়গুলো তুলনা করা হয়। দুটিই ফাইলের একই জায়গা থেকে, অথবা ওভারল্যাপ করে না এমন অংশ থেকে পড়ুন।
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	ভিত্তিরেখায় {n_a}টি এবং এই রানে {n_b}টি পুনরাবৃত্তি আছে, তাই প্রতিটির প্রথম {n}টি জোড়ায় জোড়ায় তুলনা করা হয়; ভিত্তিরেখা ও এখন হলো সেই পুনরাবৃত্তিগুলোর গড়।
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	{file} ফাইল থেকে যদৃচ্ছ সংখ্যা (SHA-256 {sha}…), প্রতিটি পুনরাবৃত্তির জন্য বাইট {offset} থেকে {bytes} বাইট
 	Seed {seed} taken from {source}	যদৃচ্ছ বীজ {seed}, {source} থেকে নেওয়া
 	quantum	কোয়ান্টাম

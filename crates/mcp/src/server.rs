@@ -34,7 +34,7 @@ calendar.add, experiment.set {time_unit, length_unit, warmup, duration, replicat
 each command's parameters and an example); `check_model`; `run` for the results, each a mean across \
 replications with its 95% confidence interval; to compare, change a parameter, `run` again and \
 `execute` results.compare (the last run against the one before: each difference with its 95% \
-interval, paired when both runs keep the seed and replications, so keep them; experiment.sweep and \
+interval, paired when both runs keep the seed, so keep it; experiment.sweep and \
 experiment.sensitivity do this over many values, and experiment.design over several factors at once, \
 a full factorial or a Latin hypercube; experiment.evaluate runs given values of the decisions for a \
 range of replications, for a search of your own; experiment.optimise finds the best decisions \

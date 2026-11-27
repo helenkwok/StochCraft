@@ -3121,6 +3121,11 @@ fn compare_pairs_runs_with_the_same_seed_and_not_others() {
     // Same seed and replications: paired, as in the sweep of issue #66.
     let r = ok(&mut e, "results.compare", json!({}));
     assert_eq!(r["paired"], true, "{r}");
+    assert_eq!(
+        (&r["class"], &r["basis"], &r["paired_replications"]),
+        (&json!("paired"), &json!("same_seed"), &json!(10)),
+        "{r}"
+    );
     let c = comparison(&r, "server", "mean_wait");
     assert!(
         (c["a"]["mean"].as_f64().unwrap_or(0.0) - 2.872).abs() < 0.001,
@@ -3168,6 +3173,12 @@ fn compare_pairs_runs_with_the_same_seed_and_not_others() {
     ok(&mut e, "run", json!({ "seed": 7 }));
     let r = ok(&mut e, "results.compare", json!({}));
     assert_eq!(r["paired"], false, "{r}");
+    assert_eq!(
+        (&r["class"], &r["basis"]),
+        (&json!("independent"), &json!("different_seeds")),
+        "{r}"
+    );
+    assert!(r.get("paired_replications").is_none(), "{r}");
     let c = comparison(&r, "server", "mean_wait");
     assert_eq!(c["interval"], "welch_t", "{c}");
     assert!(c.get("pairs").is_none(), "{c}");
@@ -3253,12 +3264,13 @@ fn compare_copes_with_missing_values_and_too_few_replications() {
         "{w}"
     );
     // Runs in different time units are noted.
-    let mut hours = run(1, json!([1.0]), json!([1.0]));
+    let four = || json!([1.0, 2.0, 3.0, 4.0]);
+    let mut hours = run(1, four(), four());
     hours["time_unit"] = json!("hour");
     let r = ok(
         &mut e,
         "results.compare",
-        json!({ "a": run(1, json!([1.0]), json!([1.0])), "b": hours }),
+        json!({ "a": run(1, four(), four()), "b": hours }),
     );
     assert!(
         r["notes"][0]

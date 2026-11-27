@@ -3610,7 +3610,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "results.compare",
-        summary: "Compare two runs' results, by default the last run with the one before it: per element and metric both means and the difference with its 95% interval, paired-t when the runs share their seed and replications (common random numbers), Welch's two-sample t otherwise.",
+        summary: "Compare two runs' results, by default the last run with the one before it: per element and metric both means and the difference with its 95% interval. How follows where the runs' random numbers came from (`class`): paired-t over the first min(n_a, n_b) replications when they share them replication by replication (the same seed, or the same random-data file, offset and segment length: common random numbers); Welch's two-sample t when they are independent (other seeds, other files, or parts of one file that do not overlap); and the means with no interval, and a `reason`, when they read overlapping parts of one file but not replication for replication (`dependent`).",
         kind: CommandKind::Query,
         schema: schema::<crate::compare::Params>,
         example: || {

@@ -95,13 +95,15 @@ impl Shared {
     }
 
     /// A worker failed to load or crashed: the run fails with what it said, rather than wait
-    /// for answers that will not come.
+    /// for answers that will not come. The answer has no index, so the engine takes it as the
+    /// run's failure, not as a replication's answer (which it would ignore once that
+    /// replication had answered).
     pub fn worker_failed(&mut self, message: &str) {
         let error = serde_json::json!({
             "code": "internal",
             "message": format!("a web worker stopped: {message}"),
         });
-        let answer = serde_json::json!({ "index": 0, "error": error });
+        let answer = serde_json::json!({ "error": error });
         self.answers.push(answer.to_string());
     }
 
@@ -245,7 +247,7 @@ mod tests {
         assert_eq!(answers.len(), 1);
         let answer: serde_json::Value =
             serde_json::from_str(&answers[0]).unwrap_or(serde_json::Value::Null);
-        assert_eq!(answer["index"], 0);
+        assert!(answer.get("index").is_none(), "{answer}");
         assert_eq!(answer["error"]["code"], "internal");
         assert_eq!(
             answer["error"]["message"],

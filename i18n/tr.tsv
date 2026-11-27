@@ -723,8 +723,9 @@ unit	yr	yıl
 	Could be chance	Şans olabilir
 	No change	Değişiklik yok
 	Too few runs to tell	Karar için çok az çalıştırma
+	Not judged	Değerlendirilmedi
 	{value} points	{value} yüzde puan
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referans {seed_a} rastgelelik tohumunu ve {n_a} çalıştırmayı, bu çalıştırma ise {seed_b} rastgelelik tohumunu ve {n_b} çalıştırmayı kullandı; bu yüzden bağımsız çalıştırmalar olarak karşılaştırılırlar ve aralıklar daha geniştir. Aynı tohum ve aynı çalıştırma sayısı eşleştirilmiş bir karşılaştırma sağlar.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Referans {seed_a} rastgelelik tohumunu, bu çalıştırma ise {seed_b} rastgelelik tohumunu kullandı; bu yüzden bağımsız çalıştırmalar olarak karşılaştırılırlar ve aralıklar daha geniştir. Aynı tohum eşleştirilmiş bir karşılaştırma sağlar.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referans süreyi {a} cinsinden, bu çalıştırma ise {b} cinsinden ölçtü; bu yüzden süreler karşılaştırılmaz.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} değerinden {after} değerine, {change} düştü: şansın açıklayacağından fazla.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} değerinden {after} değerine, {change} yükseldi: şansın açıklayacağından fazla.
@@ -733,6 +734,7 @@ unit	yr	yıl
 	Baseline and now, key measures	Referans ve şimdi, temel ölçütler
 	Difference (paired, 95%)	Fark (eşleştirilmiş, %95)
 	Difference (95%)	Fark (%95)
+	Difference of means	Ortalamaların farkı
 	Measure	Ölçüt
 	Baseline	Referans
 	Now	Şimdi
@@ -962,7 +964,7 @@ unit	yr	yıl
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} sorun: {blocks}|{n} sorun: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} çalıştırma kullan|{n} çalıştırma kullan
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} çalıştırma kullan (yaklaşık ± 5%)|{n} çalıştırma kullan (yaklaşık ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.|İkisi de {seed} rastgelelik tohumunu ve aynı {n} çalıştırmayı kullandı; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	İkisi de {seed} rastgelelik tohumunu kullandı; bu yüzden her çalıştırma eşiyle aynı rastgele sayıları alır ve çalıştırmalar eşleştirilerek karşılaştırılır: aralarındaki şansa bağlı farkın büyük kısmı birbirini götürür, aralık da geriye kalanı hesaba katar.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.|Diğer {n} temel ölçüt, şansın yapabileceğinden fazla değişmedi.
 @plural	and {n} more change|and {n} more changes	ve {n} değişiklik daha|ve {n} değişiklik daha
 	Conveyor	Konveyör
@@ -1531,8 +1533,10 @@ connection	Flow	Akış
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	On makine çalışmak zorunda, dört yedek makine hazırda bekliyor ve üç tamirci arızalananları onarıyor (Crane ve Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	On makineyi kaç yedek makine ve kaç tamirci çalışır durumda tutar?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Hazırda bekleyen yedek makineler arızalanamaz: ortalama 3.47 makine arızalı, 9.29 makine çalışıyor. Dördüncü bir tamirci, dört yedek makine daha eklemek kadar fayda sağlar.
-	Both read their random numbers from the same file at the same place, for the same runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	İkisi de rastgele sayılarını aynı dosyadan, aynı yerden, aynı çalıştırmalar için okudu; böylece her çalıştırma eşiyle aynı rastgele sayıları alır: farklar şans çekilişlerinden değil, değişiklikten gelir.
-	The baseline and this run did not take their random numbers from the same place (a seed, or a file of random numbers) for the same runs, so they are compared as independent runs and the intervals are wider.	Referans ve bu çalıştırma, aynı çalıştırmalar için rastgele sayılarını aynı yerden (bir tohum ya da rastgele sayı dosyası) almadı; bu yüzden bağımsız çalıştırmalar olarak karşılaştırılırlar ve aralıklar daha geniştir.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	İkisi de rastgele sayılarını aynı dosyadan, aynı yerden okudu; bu yüzden her çalıştırma eşiyle aynı sayılardan başlar ve çalıştırmalar eşleştirilerek karşılaştırılır. Her çekiliş dosyadaki sonraki sayıları alır; bu yüzden bir değişiklik hangi olayın hangi sayıyı okuduğunu kaydırabilir ve şansa bağlı farkın daha az kısmı birbirini götürebilir; aralık bunu hesaba katar.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Referans ve bu çalıştırma rastgele sayılarını farklı yerlerden (bir tohum, başka bir dosya ya da bir dosyanın üst üste binmeyen bölümleri) aldı; bu yüzden bağımsız çalıştırmalar sayılırlar ve aralıklar daha geniştir.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Referans ve bu çalıştırma, aynı rastgele sayı dosyasının üst üste binen bölümlerini okudu, ancak çalıştırma çalıştırma eşleşmiyor; bu yüzden ne bağımsızlar ne de eşleştirilmişler ve hiçbir aralık geçerli değildir: yalnızca ortalamalar karşılaştırılır. İkisini de dosyada aynı yerden ya da üst üste binmeyen bölümlerden okuyun.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referansta {n_a}, bu çalıştırmada {n_b} çalıştırma var; bu yüzden her birinin ilk {n} çalıştırması eşleştirilerek karşılaştırılır; referans ve şimdi, bu çalıştırmalar üzerindeki ortalamalarıdır.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	{file} dosyasından rastgele sayılar (SHA-256 {sha}…), her çalıştırma için {offset}. bayttan başlayarak {bytes} bayt
 	Seed {seed} taken from {source}	{source} kaynağından alınan {seed} rastgelelik tohumu
 	quantum	kuantum
