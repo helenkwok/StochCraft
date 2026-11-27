@@ -1545,6 +1545,11 @@ connection	Flow	Stroom
 	Root mean square	Kwadratisch gemiddelde
 	A step towards an answer: the results list it folded away under the answers.	Een stap op weg naar een antwoord: de resultaten tonen hem ingeklapt onder de antwoorden.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Voor een gekwadrateerde grootheid, zoals een gekwadrateerde fout: de resultaten geven de wortel van het gemiddelde, in de eenheid van de grootheid zelf.
+	Scenario	Scenario
+	Scenario: {name}	Scenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Als u {scenario} opent, gaan de niet-opgeslagen wijzigingen in {name} verloren. Eerst opslaan?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenario om te vergelijken|{n} scenario's om te vergelijken
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Het is opgeslagen als een nieuw bestand met alleen het geopende scenario, dus er is niet overgeschakeld naar {scenario}.
 	Median time in system	Mediaan van de tijd in het systeem
 	Time in system, 90th percentile	Tijd in het systeem, 90e percentiel
 	Time in system, 95th percentile	Tijd in het systeem, 95e percentiel
@@ -1562,3 +1567,18 @@ connection	Flow	Stroom
 	How often is one machine down, and how much work does that cost?	Hoe vaak staat één machine stil, en hoeveel werk kost dat?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 uur in bedrijf, 4.5 uur stil: de machine werkt 95.2% van de tijd en elke 94.5 uur treedt een storing op. Een gehalveerde reparatietijd tilt dat naar 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} staat {down} van de tijd stil (beschikbaarheid {up}); er wacht niets op.
+	Choose a warm-up	Opwarmperiode kiezen
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welch-grafiek: het gemiddelde van de uitvoeringen op elk vastgelegd tijdstip, afgevlakt met een voortschrijdend gemiddelde. Stel de opwarmperiode in waar de curve afvlakt; de snede van MSER-5 is slechts een startpunt.
+	Number inside	Aantal binnen
+	Busy units	Bezette eenheden
+	Leaving per interval	Vertrekken per interval
+	Entering per interval	Aankomsten per interval
+	The run recorded too few times to plot.	De uitvoering legde te weinig tijdstippen vast voor een grafiek.
+	Points each side	Punten aan elke kant
+	1 to {max}	1 tot {max}
+	Welch's plot of {measure} at {block}	Welch-grafiek van {measure} bij {block}
+	MSER-5 suggests {value}.	MSER-5 stelt {value} voor.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 stelt hier niets voor: de reeks stabiliseert halverwege de uitvoering misschien nog.
+	The warm-up now is {value}.	De opwarmperiode is nu {value}.
+	Later times, which fewer runs reached, are left out.	Latere tijdstippen, die minder uitvoeringen bereikten, zijn weggelaten.
+	New warm-up	Nieuwe opwarmperiode

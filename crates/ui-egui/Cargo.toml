@@ -16,6 +16,8 @@ workspace = true
 stochcraft-engine = { workspace = true }
 stochcraft-model.workspace = true
 stochcraft-random = { workspace = true }
+# Welch's moving average and MSER-5 for the warm-up plot.
+stochcraft-stats = { workspace = true }
 stochcraft-render = { workspace = true }
 # Sine, cosine and square roots in the 3D view's camera, as in the render crate.
 libm = "0.2"

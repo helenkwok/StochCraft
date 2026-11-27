@@ -1545,6 +1545,11 @@ connection	Flow	Flujo
 	Root mean square	Media cuadrática
 	A step towards an answer: the results list it folded away under the answers.	Un paso hacia una respuesta: los resultados lo muestran plegado bajo las respuestas.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Para una magnitud al cuadrado, como un error al cuadrado: los resultados dan la raíz cuadrada de su media, en la unidad de la propia magnitud.
+	Scenario	Escenario
+	Scenario: {name}	Escenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Abrir {scenario} descarta los cambios sin guardar de {name}. ¿Guardarlos primero?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} escenario para comparar|{n} escenarios para comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Se guardó como un archivo nuevo que contiene solo el escenario abierto, así que no se cambió a {scenario}.
 	Median time in system	Mediana del tiempo en el sistema
 	Time in system, 90th percentile	Tiempo en el sistema, percentil 90
 	Time in system, 95th percentile	Tiempo en el sistema, percentil 95
@@ -1562,3 +1567,18 @@ connection	Flow	Flujo
 	How often is one machine down, and how much work does that cost?	¿Con qué frecuencia está parada una máquina y cuánto trabajo cuesta?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	En marcha 90 horas, parada 4.5: la máquina trabaja el 95.2 % del tiempo y una avería ocurre cada 94.5 horas. Si el tiempo de reparación se reduce a la mitad, sube al 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} está parado el {down} del tiempo (disponibilidad {up}); nada espera por ella.
+	Choose a warm-up	Elegir un calentamiento
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Gráfico de Welch: la media de las ejecuciones en cada instante registrado, suavizada con una media móvil. Defina el calentamiento donde la curva se nivela; el corte de MSER-5 es solo un punto de partida.
+	Number inside	Número dentro
+	Busy units	Unidades ocupadas
+	Leaving per interval	Salidas por intervalo
+	Entering per interval	Entradas por intervalo
+	The run recorded too few times to plot.	La ejecución registró demasiados pocos instantes para un gráfico.
+	Points each side	Puntos a cada lado
+	1 to {max}	De 1 a {max}
+	Welch's plot of {measure} at {block}	Gráfico de Welch de {measure} en {block}
+	MSER-5 suggests {value}.	MSER-5 sugiere {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 no sugiere nada aquí: la serie quizá siga estabilizándose a mitad de la ejecución.
+	The warm-up now is {value}.	El calentamiento ahora es de {value}.
+	Later times, which fewer runs reached, are left out.	Se omiten los instantes posteriores, a los que llegaron menos ejecuciones.
+	New warm-up	Nuevo calentamiento

@@ -3595,6 +3595,7 @@ dependencies = [
  "stochcraft-model",
  "stochcraft-random",
  "stochcraft-render",
+ "stochcraft-stats",
  "web-time",
 ]
 

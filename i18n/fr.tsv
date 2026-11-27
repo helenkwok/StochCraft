@@ -1545,6 +1545,11 @@ connection	Flow	Flux
 	Root mean square	Moyenne quadratique
 	A step towards an answer: the results list it folded away under the answers.	Une étape vers une réponse : les résultats l'affichent repliée sous les réponses.
 	For a squared quantity, such as a squared error: the results give the square root of its mean, in the quantity's own unit.	Pour une grandeur au carré, comme une erreur au carré : les résultats donnent la racine carrée de sa moyenne, dans l'unité de la grandeur elle-même.
+	Scenario	Scénario
+	Scenario: {name}	Scénario : {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Ouvrir {scenario} abandonne les modifications non enregistrées de {name}. Les enregistrer d’abord ?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scénario à comparer|{n} scénarios à comparer
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Il a été enregistré dans un nouveau fichier qui ne contient que le scénario ouvert, donc le passage à {scenario} n’a pas été fait.
 	Median time in system	Médiane du temps dans le système
 	Time in system, 90th percentile	Temps dans le système, 90e centile
 	Time in system, 95th percentile	Temps dans le système, 95e centile
@@ -1562,3 +1567,18 @@ connection	Flow	Flux
 	How often is one machine down, and how much work does that cost?	À quelle fréquence une machine est-elle à l'arrêt, et combien de travail cela coûte-t-il ?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	En marche 90 heures, à l'arrêt 4.5 : la machine travaille 95.2 % du temps et une panne survient toutes les 94.5 heures. Une réparation deux fois plus courte porte ce taux à 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} est à l'arrêt {down} du temps (disponibilité {up}) ; rien n'attend devant elle.
+	Choose a warm-up	Choisir un préchauffage
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Graphique de Welch : la moyenne des exécutions à chaque instant enregistré, lissée par une moyenne mobile. Définissez le préchauffage là où la courbe se stabilise ; la coupure de MSER-5 n'est qu'un point de départ.
+	Number inside	Nombre présent
+	Busy units	Unités occupées
+	Leaving per interval	Sorties par intervalle
+	Entering per interval	Entrées par intervalle
+	The run recorded too few times to plot.	L'exécution a enregistré trop peu d'instants pour un graphique.
+	Points each side	Points de chaque côté
+	1 to {max}	De 1 à {max}
+	Welch's plot of {measure} at {block}	Graphique de Welch de {measure} à {block}
+	MSER-5 suggests {value}.	MSER-5 suggère {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 ne suggère rien ici : la série se stabilise peut-être encore à mi-parcours de l'exécution.
+	The warm-up now is {value}.	Le préchauffage est maintenant de {value}.
+	Later times, which fewer runs reached, are left out.	Les instants ultérieurs, atteints par moins d'exécutions, sont omis.
+	New warm-up	Nouveau préchauffage

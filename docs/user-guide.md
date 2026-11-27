@@ -18,6 +18,7 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 - [Ask what-if questions: the Analysis view](#ask-what-if-questions-the-analysis-view)
 - [Find the best numbers of servers, operators and buffers, rules and times](#find-the-best-numbers-of-servers-operators-and-buffers-rules-and-times)
 - [Drive the runs from an optimiser of your own](#drive-the-runs-from-an-optimiser-of-your-own)
+- [Analysing runs from another tool](#analysing-runs-from-another-tool)
 - [Monte Carlo models](#monte-carlo-models)
 - [System dynamics models](#system-dynamics-models)
 - [Agent-based models](#agent-based-models)
@@ -384,6 +385,23 @@ for example **Undo Rename Block**.
 
 With nothing selected, the **Experiment** section of the inspector sets how the model is run:
 
+- **Scenario:** shown when the file holds more than one BPSim scenario (several examples do:
+  the bank's sixth cashier, the beds' exponential stays and 28 beds, the machine repair crew's
+  one to three fitters, the repairmen's and spares' variants, rework of a quarter, the prison's
+  fewer reoffenders). Choose one to reopen the file in it, as opening the file would: its values
+  come from the file as it was opened or last saved, and a value the scenario changes from the
+  one it inherits from is in **bold** (see
+  [Changed values in bold, and their reset](#changed-values-in-bold-and-their-reset)). The same
+  choice is in the left rail's experiment summary, and the status bar names the open scenario.
+  A Monte Carlo model's file with several scenarios has the same choice, in the left rail with
+  the trials and on the Model tab under **Trials and sampling**.
+  With unsaved changes, the choice asks first, beside it: **Save** them into the file (they are
+  then in the scenario they were made in, and in any scenario that inherits from it), **Don't
+  Save**, or **Cancel** to stay. When the file can't take the changes and Save writes a new
+  file instead, that file holds only the open scenario, so the other one is not opened, and the
+  status bar says so. The results (and a baseline) of the scenario that was open go
+  with it; run again for the new one. Saving writes into the scenario that is open. The start page's cards say how
+  many scenarios an example has to compare.
 - **Runs:** how many independent runs. More runs give narrower confidence intervals but
   take longer.
 - **Seed:** the starting point of the random numbers. The same model and seed always give the same
@@ -470,6 +488,22 @@ The **Results** tab shows, from the top:
    target, for each run over the entities that reached them.
 7. **Spread across runs:** pick a result to see its percentiles and how often it met a
    target, for example "the wait is at most 5 minutes in 14 of 16 runs".
+8. **Choose a warm-up:** Welch's plot of a block's quantity over the run: its mean across runs
+   at each recorded time, smoothed by a moving average over **Points each side** (from 1 to a
+   quarter of the recorded times; near the start the window shrinks so it stays centred). Pick
+   the **Block** and the **Measure**: the number inside (the default), waiting or busy, or the
+   number leaving or entering in each interval (a count since time 0 never levels off; its
+   rate does). The plot marks MSER-5's cut on the same series with a dashed line, shades the
+   current warm-up and draws the new one, which starts at the current warm-up; click the plot, or
+   type a **New warm-up**, then **Set a … warm-up** to make it the experiment's and run again. Raise the points each side
+   until the curve is reasonably smooth, then set the warm-up where it levels off, erring
+   later rather than earlier.
+
+**The plot is the main tool for the warm-up; MSER-5's suggestion is a starting point.** MSER-5
+can cut far too little: Law (*Simulation Modeling and Analysis*, 5th ed., Examples 9.28 and
+9.29, pp. 521–522) reports it deleting 15 of 65,000 delays of an M/M/1 queue at load 0.9
+started empty, and 10 observations of a network model whose Welch's plot calls for 6,200. Look
+at the plot before accepting it.
 
 **How sure is a number?** "2.99 ± 0.09" means the mean is most likely between 2.90 and 3.08. If
 the ± is large compared with the difference you care about, add runs. Notes under the
@@ -777,6 +811,91 @@ print(result.X[0])
 Run them with the path to the command line: `python optuna_mm1.py path/to/stochcraft-cli`.
 What such a search finds is the best it found, not a proven best: neither method says how sure
 it is that nothing it did not try is better.
+
+## Analysing runs from another tool
+
+A model built elsewhere can still have StochCraft's output analysis, without being rebuilt: any
+simulation tool, spreadsheet or script that can write CSV writes one row per replication, and
+`stochcraft-cli analyse` reads it. Agents and programs use the same analysis as the engine command
+`data.analyse`, with the file's text as `csv`.
+
+**The file.** The first row is the header. A *wide* table has a column per measure, and
+optionally a `scenario` column and a `replication` column:
+
+```text
+scenario,replication,wait,served
+one desk,1,4.0,100
+one desk,2,6.0,102
+two desks,1,3.0,110
+two desks,2,4.0,111
+```
+
+A *long* table has a row per value, with the measure's name in a `measure` column and the number
+in a `value` column (and the same optional `scenario` and `replication` columns):
+
+```text
+scenario,replication,measure,value
+one desk,1,wait,4.0
+one desk,1,served,100
+two desks,1,wait,3.0
+two desks,1,served,110
+```
+
+Cells may be separated by commas, semicolons or tabs, and quoted; with semicolons a number may
+have a decimal comma (`4,0`). An empty cell is a replication with no value for that measure. Any
+other cell of a measure that is not a number is an error naming its line and column. Columns
+named otherwise are given with `--scenario`, `--replication`, `--measure` and `--value`. A column
+headed like a role that is not one (a `run` column that counts something, say) is kept from it with
+`--no-scenario` or `--no-replication`: it is then a measure if it holds numbers, and left out if not.
+
+```bash
+stochcraft-cli analyse runs.csv
+stochcraft-cli analyse runs.csv --baseline "one desk" --paired --tolerance wait=0.5
+stochcraft-cli analyse runs.csv --json
+```
+
+**What it says**, for each scenario and measure:
+
+- n, the mean with its 95% interval, the lowest and highest value. The mean and the half-width
+  are rounded together to what the interval supports, as the Results tab rounds them: the
+  half-width to one significant figure (two where it starts with a 1), the mean to the same
+  place.
+- How sure the mean is: settled when the half-width is within ±5% of the mean, otherwise wide,
+  with about how many runs would settle it (the interval narrows with the square root of the
+  number of runs). "No spread" means every run gave the same value, which is not proof that it
+  never varies. `data.analyse` takes another target per measure (`targets`), such as points for
+  a share or a half-width in the measure's own unit.
+- Two outcomes, where the runs fall into two clearly separate groups (some near one value, the
+  rest near another): their mean then describes no actual run.
+
+And for each other scenario against the baseline (the first, or the one given with
+`--baseline`): the difference with its 95% interval and a verdict, judged as the check against
+observed data judges a difference. *Differs* when the interval leaves out zero; *no difference
+detected* when it holds zero, which is not evidence that the two agree, since a wide interval
+holds zero whatever the truth. With a tolerance set in advance (`--tolerance wait=0.5`) the
+verdict is *agrees* when the whole interval lies within ± it, *differs* when it lies wholly
+outside, and *inconclusive* otherwise.
+
+**Why pairing must be declared.** When the scenarios were run with common random numbers
+(replication i of each met the same random numbers), comparing them replication by replication
+gives a much narrower interval than comparing them as independent samples. StochCraft cannot see
+from the numbers whether that was so, so it compares them as independent (Welch's interval) unless
+told otherwise with `--paired`. Pairs are matched by replication id, so pairing needs a
+replication column and the same ids in every scenario; declaring it for runs that did not share
+their random numbers makes the intervals too narrow.
+
+**Warm-up.** A time series per replication (a `time` column, a `replication` column and one or
+more measures, recorded at the same times in every replication) gives a suggested warm-up:
+
+```bash
+stochcraft-cli warmup series.csv --time time --replication replication
+```
+
+Each measure is averaged across the replications at each time, and MSER-5 on that average says
+how many of the first times to leave out; the answer is the first time kept. With fewer than 20
+times there is too little to judge, and when the start-up seems to last beyond the middle of the
+series, the series is too short to show where it ends. `data.warmup` also gives the averaged
+series, for a plot.
 
 ## Monte Carlo models
 
@@ -1166,8 +1285,9 @@ Shift) while it has the keyboard.
 - The layout (conveyor tracks, places, junctions, scenery) is read from the file and drawn in
   the Layout and 3D views, but can't be edited in the window yet. Of the examples, only the
   parcel sorter has a layout; the others show an empty plan and 3D view.
-- A file with several scenarios opens in its first scenario; the window has no scenario picker
-  yet.
+- A file with several scenarios opens in its first scenario; choose another under **Scenario**
+  in the Experiment section. The window shows one scenario at a time, and a baseline kept in one
+  goes when another is opened, so two scenarios are not yet compared side by side in the window.
 - The app (desktop and browser) opens a model from its file alone, so it does not read the
   `.dmn` files beside it: its blocks that use a decision table report the file as not read.
   `file.open` (the command line or the MCP server) reads them. The app does not write them

@@ -133,6 +133,13 @@ pub fn tool_definitions() -> Vec<Value> {
             false,
         ),
         tool(
+            "scenarios",
+            "List the scenarios",
+            "The opened file's input scenarios (file.scenarios): each with its id, name,              description and the scenario it inherits from, and which one is open. `execute`              with `file.reopen` opens another of them.",
+            obj(json!({}), &[]),
+            true,
+        ),
+        tool(
             "save",
             "Save the model",
             "Save the model (file.save): into the file it came from, keeping everything StochCraft \
@@ -330,6 +337,7 @@ fn dispatch(b: &mut dyn Backend, name: &str, a: &Map<String, Value>) -> Result<V
         })),
         "check_model" => b.execute("model.validate", json!({})),
         "open" => b.execute("file.open", pick(a, &["path", "scenario"])),
+        "scenarios" => b.execute("file.scenarios", json!({})),
         "save" => b.execute("file.save", pick(a, &["path", "as_new", "allow_loss"])),
         "run" => {
             // Without the results over time, which multiply the reply's size for a chart an

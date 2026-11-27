@@ -857,7 +857,8 @@ impl App {
         egui::ScrollArea::vertical()
             .id_salt("mc/outline")
             .auto_shrink([false, true])
-            .max_height(ui.available_height() - 110.0)
+            // Room below for the trials, and the scenario choice when the file has scenarios.
+            .max_height(ui.available_height() - 110.0 - self.sidebar_scenario_height())
             .show(ui, |ui| {
                 for (title, key) in [(t("Inputs"), "inputs"), (t("Outputs"), "outputs")] {
                     ui.add_space(12.0);
@@ -896,6 +897,8 @@ impl App {
                 "{n} trials · seed {seed}",
                 &[("seed", &x["seed"].to_string())],
             ));
+            // Laid out from the bottom: the scenario shows under the heading, above the trials.
+            self.scenario_choice(ui, "sidebar");
             ui.add_space(2.0);
             ui.label(theme::strong(t("Trials")).size(12.0).color(p.text_weak));
             ui.add_space(4.0);
@@ -1487,6 +1490,8 @@ impl App {
     /// The trials, seed and sampling, and a sequential stop.
     fn mc_settings(&mut self, ui: &mut egui::Ui, model: &Value) {
         section(ui, t("Trials and sampling"));
+        // Which of the file's scenarios is open, when it has more than one.
+        self.scenario_choice(ui, "model");
         let mc = &model["monte_carlo"];
         let x = &model["experiment"];
         let mut schema = params_schema("mc.set");
