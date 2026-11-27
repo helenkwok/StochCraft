@@ -1505,3 +1505,8 @@ connection	Flow	Voog
 	Scenario: {name}	Stsenaarium: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Stsenaariumi {scenario} avamine kaotab faili {name} salvestamata muudatused. Kas salvestada need enne?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} stsenaarium võrdlemiseks|{n} stsenaariumi võrdlemiseks
+	One machine's availability	Ühe masina käideldavus
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Masin, mis läheb keskmiselt iga 90 tunni järel rikki ja mille parandamine võtab 4.5 tundi (Hristova, Denev ja Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Kui tihti seisab üks masin ja kui palju tööd see maksab?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Töötab 90 tundi, seisab 4.5: masin töötab 95.2% ajast ja rike juhtub iga 94.5 tunni järel. Poole lühem remont tõstab selle 97.6%-ni.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} seisab {down} ajast (käideldavus {up}); keegi ei oota seda.

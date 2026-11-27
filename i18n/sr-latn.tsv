@@ -1505,3 +1505,8 @@ connection	Flow	Tok
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvaranjem scenarija {scenario} odbacuju se nesačuvane izmene u {name}. Prvo ih sačuvati?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} scenario za poređenje|{n} scenarija za poređenje|{n} scenarija za poređenje
+	One machine's availability	Raspoloživost jedne mašine
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jedna mašina koja se u proseku kvari na svakih 90 sati i popravlja se 4.5 sata (Hristova, Denev i Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Koliko često jedna mašina ne radi i koliko posla to košta?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Radi 90 sati, stoji 4.5: mašina radi 95.2% vremena, a kvar se javlja na svakih 94.5 sati. Duplo kraći popravak to podiže na 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} ne radi {down} vremena (raspoloživost {up}); ništa ne čeka na nju.

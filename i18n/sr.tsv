@@ -1505,3 +1505,8 @@ connection	Flow	Ток
 	Scenario: {name}	Сценарио: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Отварањем сценарија {scenario} одбацују се несачуване измене у {name}. Прво их сачувати?
 @plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарио за поређење|{n} сценарија за поређење|{n} сценарија за поређење
+	One machine's availability	Расположивост једне машине
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Једна машина која се у просеку квари на сваких 90 сати и поправља се 4.5 сата (Hristova, Denev и Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Колико често једна машина не ради и колико посла то кошта?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Ради 90 сати, стоји 4.5: машина ради 95.2% времена, а квар се јавља на сваких 94.5 сати. Дупло краћи поправак то подиже на 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} не ради {down} времена (расположивост {up}); ништа не чека на њу.
