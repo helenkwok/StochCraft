@@ -5001,7 +5001,14 @@ are.
     but that sum is (1 − p)/p; and Table 2's rows for 550 and 650 places are identical (and
     match Table 4's care-at-home 1 in 2 but for one digit), which the exact values bear out, as
     hardly anyone then waits for care at home. Not checked: the paper's delayed bed days for
-    patients waiting 7, 14 and 21 days or more, which need each patient's wait.
+    patients waiting 7, 14 and 21 days or more, which need each patient's wait. The example
+    brought two general features: a headline result (`stochcraft:headline` on the scenario, a
+    label and the block results it adds up, summed in each replication and summarised across
+    them; shown as the first finding, the first CSV row and the results' `headline`), here the
+    patients in hospital for either kind of care, checked against the Erlang B total; and
+    "Share turned away" in place of "Share of arrivals lost" at a task whose losses take a
+    `stochcraft:turnedAway` way. A headline is set in the file only for now: no command or form
+    edits it yet.
 - **Planned examples:** each joins only once its answer is checked against its source with the
   page, as above.
   - **A particle detector's readout** (a new "Science" industry): collisions at a collider

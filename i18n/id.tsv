@@ -1506,3 +1506,5 @@ connection	Flow	Alur
 	How many patients who are fit to leave are still in hospital, waiting for care?	Berapa banyak pasien yang siap pulang masih berada di rumah sakit, menunggu perawatan?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Tempat pemulangan dengan asesmen menolak pasien alih-alih membuat mereka mengantre: sekitar 202 menunggu di rumah sakit, dan hanya rata-rata lama tinggal yang berpengaruh. Sepuluh tempat tidur rawat inap tambahan mengurangi sekitar 10.
 	Share turned away	Proporsi yang ditolak
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

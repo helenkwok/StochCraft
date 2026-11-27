@@ -1506,3 +1506,5 @@ connection	Flow	Flux
 	How many patients who are fit to leave are still in hospital, waiting for care?	Quants pacients a punt per a l'alta encara són a l'hospital, esperant atenció?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Les places d'alta amb valoració rebutgen els pacients en lloc de posar-los a la cua: uns 202 esperen a l'hospital, i només compta l'estada mitjana. Deu llits d'ingrés més en treuen uns 10.
 	Share turned away	Proporció rebutjada
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

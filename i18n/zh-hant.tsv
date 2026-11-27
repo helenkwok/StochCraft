@@ -1506,3 +1506,5 @@ connection	Flow	順序流
 	How many patients who are fit to leave are still in hospital, waiting for care?	有多少可以出院的病患仍在醫院等待照顧？
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	出院評估名額會拒收病患而不是讓他們排隊：約 202 人在醫院等待，只有平均停留天數有影響。再加十張住院病床約減少 10 人。
 	Share turned away	拒絕比例
+	{label}: {value}	{label}：{value}
+	{label}: {value} ({terms})	{label}：{value}（{terms}）

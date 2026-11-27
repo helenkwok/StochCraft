@@ -1506,3 +1506,5 @@ connection	Flow	Przepływ
 	How many patients who are fit to leave are still in hospital, waiting for care?	Ilu pacjentów gotowych do wypisu wciąż jest w szpitalu, czekając na opiekę?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Miejsca wypisu z oceną potrzeb odsyłają pacjentów zamiast ustawiać ich w kolejce: około 202 czeka w szpitalu i liczy się tylko średni czas pobytu. Dziesięć łóżek stacjonarnych więcej zmniejsza tę liczbę o około 10.
 	Share turned away	Odsetek odrzuceń
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

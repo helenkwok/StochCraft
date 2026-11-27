@@ -1506,3 +1506,5 @@ connection	Flow	ნაკადი
 	How many patients who are fit to leave are still in hospital, waiting for care?	გასაწერად მზად მყოფი რამდენი პაციენტია ჯერ კიდევ საავადმყოფოში, მოვლის მოლოდინში?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	შეფასებით გაწერის ადგილები პაციენტებს რიგში კი არ აყენებენ, არამედ უარს ეუბნებიან: დაახლოებით 202 საავადმყოფოში ელოდება, და მნიშვნელობა მხოლოდ საშუალო დაყოვნებას აქვს. ათი დამატებითი საწოლი ამას დაახლოებით 10-ით ამცირებს.
 	Share turned away	უარყოფილთა წილი
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

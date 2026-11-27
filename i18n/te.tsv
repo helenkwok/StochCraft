@@ -1506,3 +1506,5 @@ connection	Flow	ప్రవాహం
 	How many patients who are fit to leave are still in hospital, waiting for care?	వెళ్లడానికి సిద్ధంగా ఉన్న ఎంత మంది రోగులు ఇంకా సంరక్షణ కోసం ఆసుపత్రిలో వేచి ఉన్నారు?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	డిశ్చార్జ్ తర్వాతి అంచనా చోట్లు రోగులను క్యూలో ఉంచకుండా తిప్పి పంపుతాయి: సుమారు 202 మంది ఆసుపత్రిలో వేచి ఉంటారు, సగటు బస సమయం మాత్రమే ముఖ్యం. మరో పది ఇన్‌పేషెంట్ పడకలు సుమారు 10 మందిని తగ్గిస్తాయి.
 	Share turned away	తిప్పి పంపినవాటి వాటా
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

@@ -1506,3 +1506,5 @@ connection	Flow	Akış
 	How many patients who are fit to leave are still in hospital, waiting for care?	Taburcu olmaya hazır kaç hasta hâlâ hastanede bakım bekliyor?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Değerlendirmeli taburculuk yerleri hastaları kuyruğa almak yerine geri çevirir: yaklaşık 202 hasta hastanede bekler ve yalnızca ortalama kalış süresi önemlidir. On yatak daha bu sayıyı yaklaşık 10 azaltır.
 	Share turned away	Geri çevrilenlerin oranı
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

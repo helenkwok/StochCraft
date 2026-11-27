@@ -981,6 +981,7 @@ fn showcase() -> Model {
         result_frequency: Some(1_800.0),
         sequential: None,
         observed: Vec::new(),
+        headline: None,
     })
 }
 

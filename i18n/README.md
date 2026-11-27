@@ -1085,6 +1085,9 @@ fields (`“Service time”`) are named in the messages by their own rows.
   name stay in English and Latin script. Not checked against any other source and not reviewed
   by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq, and
   "discharge to assess" in all of them.
+- The rows for a model's headline result ("{label}: {value}" and "{label}: {value} ({terms})")
+  keep the English punctuation, with a space before the colon in French and full-width
+  punctuation in Japanese and both Chinese catalogs. Not reviewed by native speakers.
 - The row for "Share turned away" (the share of arrivals a task with a way for those turned away
   sends down it, shown instead of "Share of arrivals lost" there) was machine-drafted from each
   catalog's own "Turned away" and its wording of the other shares ("Share balked"). Not checked

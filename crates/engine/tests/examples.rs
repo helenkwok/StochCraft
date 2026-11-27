@@ -1410,6 +1410,21 @@ fn delayed_discharge_matches_erlang_b() {
     }
     covers(&r, "hospital_nursing_home", "mean_contents", nursing_home);
     covers(&r, "hospital_care_at_home", "mean_contents", care_at_home);
+    // The headline, the card's question: both hospital waits together, added up in each
+    // replication, so its interval is that of the sum. Its mean is the sum of the two means.
+    let label = m.experiment.headline.as_ref().map(|h| h.label.as_str());
+    assert_eq!(label, Some("Patients fit to leave still in hospital"));
+    let h = &r["headline"];
+    let (mean, hw) = (
+        h["mean"].as_f64().unwrap_or(f64::NAN),
+        h["half_width"].as_f64().unwrap_or(f64::NAN),
+    );
+    let parts = result(&r, "hospital_nursing_home", "mean_contents").0
+        + result(&r, "hospital_care_at_home", "mean_contents").0;
+    assert!((mean - parts).abs() < 1e-9 * parts, "{h}");
+    let total = nursing_home + care_at_home;
+    eprintln!("headline: {mean} ± {hw}, exact {total}");
+    assert!((mean - total).abs() <= SQRT_2 * hw, "{h}, exact {total}");
     let rate = 114.0;
     for (id, share, places) in [("d2a_inpatient", 0.1852, 75u32), ("d2a_home", 0.8148, 500)] {
         let a = rate * share * server(&m, id).0;

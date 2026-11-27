@@ -1506,3 +1506,5 @@ connection	Flow	Tok
 	How many patients who are fit to leave are still in hospital, waiting for care?	Koliko je pacijenata spremnih za otpust još u bolnici i čeka njegu?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Mjesta za otpust s procjenom odbijaju pacijente umjesto da ih stave u red: oko 202 čeka u bolnici, i važan je samo prosječni boravak. Deset bolničkih kreveta više smanjuje broj za oko 10.
 	Share turned away	Udio odbijenih
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

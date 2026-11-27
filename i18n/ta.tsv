@@ -1506,3 +1506,5 @@ connection	Flow	ஓட்டம்
 	How many patients who are fit to leave are still in hospital, waiting for care?	வெளியேறத் தயாரான எத்தனை நோயாளிகள் இன்னும் பராமரிப்புக்காக மருத்துவமனையில் காத்திருக்கிறார்கள்?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	வெளியேற்றத்திற்குப் பிந்தைய மதிப்பீட்டு இடங்கள் நோயாளிகளை வரிசையில் வைக்காமல் திருப்பி அனுப்புகின்றன: சுமார் 202 பேர் மருத்துவமனையில் காத்திருக்கிறார்கள், சராசரி தங்கும் காலம் மட்டுமே முக்கியம். மேலும் பத்து உள்நோயாளி படுக்கைகள் சுமார் 10 குறைக்கின்றன.
 	Share turned away	திருப்பி அனுப்பப்பட்டவற்றின் விகிதம்
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

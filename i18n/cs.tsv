@@ -1506,3 +1506,5 @@ connection	Flow	Tok
 	How many patients who are fit to leave are still in hospital, waiting for care?	Kolik pacientů připravených k propuštění je stále v nemocnici a čeká na péči?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Místa pro propuštění s posouzením pacienty odmítají, místo aby je nechala čekat ve frontě: asi 202 jich čeká v nemocnici a záleží jen na průměrné délce pobytu. Deset lůžek navíc ubere asi 10.
 	Share turned away	Podíl odmítnutých
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

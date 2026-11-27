@@ -1506,3 +1506,5 @@ connection	Flow	Flusso
 	How many patients who are fit to leave are still in hospital, waiting for care?	Quanti pazienti pronti per la dimissione sono ancora in ospedale, in attesa di assistenza?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	I posti di dimissione con valutazione respingono i pazienti invece di metterli in coda: circa 202 attendono in ospedale, e conta solo la permanenza media. Dieci letti di degenza in più ne tolgono circa 10.
 	Share turned away	Quota respinta
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

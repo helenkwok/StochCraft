@@ -594,6 +594,12 @@
               </bpsim:Quantity>
             </bpsim:ResourceParameters>
           </bpsim:ElementParameters>
+          <bpsim:VendorExtension name="stochcraft:headline" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+            <stochcraft:headline name="Patients fit to leave still in hospital">
+              <stochcraft:term element="hospital_nursing_home" metric="mean_contents"/>
+              <stochcraft:term element="hospital_care_at_home" metric="mean_contents"/>
+            </stochcraft:headline>
+          </bpsim:VendorExtension>
         </bpsim:Scenario>
         <bpsim:Scenario id="home-350" name="D2A home 350 places" inherits="scenario">
           <bpsim:ElementParameters elementRef="d2a_places">

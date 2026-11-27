@@ -1506,3 +1506,5 @@ connection	Flow	Folyamat
 	How many patients who are fit to leave are still in hospital, waiting for care?	Hány elbocsátható beteg van még a kórházban, ellátásra várva?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Az elbocsátás utáni felmérés helyei sorba állítás helyett visszautasítják a betegeket: körülbelül 202 vár a kórházban, és csak az átlagos tartózkodási idő számít. Tíz további fekvőbeteg-ágy körülbelül 10-zel csökkenti ezt.
 	Share turned away	Elutasítottak aránya
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

@@ -1506,3 +1506,5 @@ connection	Flow	フロー
 	How many patients who are fit to leave are still in hospital, waiting for care?	退院可能なのに、ケアを待って病院に残っている患者は何人か？
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	退院後評価の枠は患者を待たせずに断る。病院で待つのは約202人で、効くのは平均滞在日数だけ。入院型の枠を10床増やすと約10人減る。
 	Share turned away	受入拒否率
+	{label}: {value}	{label}：{value}
+	{label}: {value} ({terms})	{label}：{value}（{terms}）

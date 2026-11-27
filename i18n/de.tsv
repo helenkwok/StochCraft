@@ -1506,3 +1506,5 @@ connection	Flow	Verbindung
 	How many patients who are fit to leave are still in hospital, waiting for care?	Wie viele entlassfähige Patienten sind noch im Krankenhaus und warten auf Pflege?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Plätze für die Entlassung mit Bedarfsprüfung weisen Patienten ab, statt sie warten zu lassen: Etwa 202 warten im Krankenhaus, und nur die mittlere Verweildauer zählt. Zehn stationäre Betten mehr senken das um etwa 10.
 	Share turned away	Anteil abgewiesen
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

@@ -1506,3 +1506,5 @@ connection	Flow	Flujo
 	How many patients who are fit to leave are still in hospital, waiting for care?	¿Cuántos pacientes listos para el alta siguen en el hospital, esperando atención?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Las plazas de alta con valoración rechazan a los pacientes en lugar de ponerlos en cola: unos 202 esperan en el hospital, y solo importa la estancia media. Diez camas de ingreso más restan unos 10.
 	Share turned away	Proporción rechazada
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

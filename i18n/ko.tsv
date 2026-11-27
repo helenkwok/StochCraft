@@ -1506,3 +1506,5 @@ connection	Flow	흐름
 	How many patients who are fit to leave are still in hospital, waiting for care?	퇴원할 수 있는데도 돌봄을 기다리며 병원에 남아 있는 환자는 몇 명인가?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	퇴원 후 평가 자리는 환자를 대기시키지 않고 돌려보냄. 약 202명이 병원에서 기다리며, 평균 체류 기간만 영향을 줌. 입원형 병상을 10개 늘리면 약 10명 줄어듦.
 	Share turned away	거절 비율
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

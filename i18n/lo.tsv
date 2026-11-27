@@ -1506,3 +1506,5 @@ connection	Flow	ເສັ້ນທາງ
 	How many patients who are fit to leave are still in hospital, waiting for care?	ມີຄົນເຈັບທີ່ພ້ອມອອກໂຮງໝໍຈັກຄົນທີ່ຍັງຢູ່ໂຮງໝໍເພື່ອລໍຖ້າການເບິ່ງແຍງ?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	ບ່ອນອອກໂຮງໝໍພ້ອມການປະເມີນປະຕິເສດຄົນເຈັບແທນທີ່ຈະໃຫ້ເຂົ້າແຖວຄອຍ: ປະມານ 202 ຄົນລໍຖ້າຢູ່ໂຮງໝໍ, ແລະ ມີພຽງໄລຍະພັກສະເລ່ຍທີ່ມີຜົນ. ຕຽງເພີ່ມອີກສິບຕຽງຫຼຸດລົງປະມານ 10.
 	Share turned away	ສັດສ່ວນທີ່ຖືກປະຕິເສດ
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

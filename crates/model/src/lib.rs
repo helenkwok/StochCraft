@@ -1583,6 +1583,28 @@ pub struct Experiment {
     /// Real measurements the results are checked against (black-box validation), at most one
     /// for each result. A StochCraft vendor extension on the scenario (`stochcraft:observed`).
     pub observed: Vec<Observation>,
+    /// The one result the model's question asks for, shown first among the results. A
+    /// StochCraft vendor extension on the scenario (`stochcraft:headline`). `None`: none.
+    pub headline: Option<Headline>,
+}
+
+/// The one result a model's question asks for: the sum of its `terms`, each an element's
+/// result (by its name in the results, such as `mean_contents`), added up in each replication
+/// and then summarised across them like any other result, so its interval is that of the sum.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Headline {
+    /// What it is, in the model's own words (such as "Patients fit to leave still in
+    /// hospital").
+    pub label: String,
+    pub terms: Vec<HeadlineTerm>,
+}
+
+/// One result a [`Headline`] adds up.
+#[derive(Debug, Clone, PartialEq)]
+pub struct HeadlineTerm {
+    /// A block of the model.
+    pub element: ElementId,
+    pub metric: String,
 }
 
 /// A measurement of the real system for one result of the model to be checked against: an
@@ -1716,6 +1738,7 @@ impl Default for Experiment {
             result_frequency: None,
             sequential: None,
             observed: Vec::new(),
+            headline: None,
         }
     }
 }

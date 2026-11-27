@@ -1506,3 +1506,5 @@ connection	Flow	Flyt
 	How many patients who are fit to leave are still in hospital, waiting for care?	Hvor mange pasienter som er klare for utskrivning, er fortsatt på sykehuset og venter på pleie?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Plasser for utskrivning med vurdering avviser pasienter i stedet for å sette dem i kø: rundt 202 venter på sykehuset, og bare gjennomsnittlig oppholdstid betyr noe. Ti senger til fjerner rundt 10.
 	Share turned away	Andel avvist
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

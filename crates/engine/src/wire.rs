@@ -2228,6 +2228,59 @@ pub struct ExperimentDoc {
     /// `observation.add`, `observation.set` and `observation.remove`.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub observed: Vec<ObservationSpec>,
+    /// The one result the model's question asks for, shown first: the sum of its terms in each
+    /// replication, summarised across them; left out when the model names none.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub headline: Option<HeadlineSpec>,
+}
+
+/// The one result a model's question asks for ([`stochcraft_model::Headline`]): what it is, in
+/// the model's own words, and the results it adds up.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct HeadlineSpec {
+    pub label: String,
+    pub terms: Vec<HeadlineTermSpec>,
+}
+
+/// One result a headline adds up: a block's result, by its name in the results.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct HeadlineTermSpec {
+    pub element: String,
+    pub metric: String,
+}
+
+impl From<&stochcraft_model::Headline> for HeadlineSpec {
+    fn from(h: &stochcraft_model::Headline) -> Self {
+        Self {
+            label: h.label.clone(),
+            terms: h
+                .terms
+                .iter()
+                .map(|t| HeadlineTermSpec {
+                    element: t.element.to_string(),
+                    metric: t.metric.clone(),
+                })
+                .collect(),
+        }
+    }
+}
+
+impl From<HeadlineSpec> for stochcraft_model::Headline {
+    fn from(h: HeadlineSpec) -> Self {
+        Self {
+            label: h.label,
+            terms: h
+                .terms
+                .into_iter()
+                .map(|t| stochcraft_model::HeadlineTerm {
+                    element: ElementId::unchecked(&t.element),
+                    metric: t.metric,
+                })
+                .collect(),
+        }
+    }
 }
 
 /// A real measurement for one result of the model to be checked against, in the result's own
@@ -2458,6 +2511,7 @@ impl From<&Experiment> for ExperimentDoc {
             result_frequency: x.result_frequency,
             sequential: x.sequential.as_ref().map(Into::into),
             observed: x.observed.iter().map(Into::into).collect(),
+            headline: x.headline.as_ref().map(Into::into),
         }
     }
 }
@@ -2477,6 +2531,7 @@ impl From<ExperimentDoc> for Experiment {
             result_frequency: x.result_frequency,
             sequential: x.sequential.map(Into::into),
             observed: x.observed.into_iter().map(Into::into).collect(),
+            headline: x.headline.map(Into::into),
         }
     }
 }
@@ -2844,6 +2899,10 @@ pub fn results(
     if let Some(observed) = observed {
         v["observed"] = observed;
     }
+    // Left out without a headline, so other results are as before.
+    if let Some(h) = headline(model, summary) {
+        v["headline"] = h;
+    }
     if let Some(stop) = &x.stop {
         let met = summary.stop_times.iter().flatten().count();
         let mut s = serde_json::to_value(StopSpec::from(stop)).unwrap_or(Value::Null);
@@ -2879,6 +2938,50 @@ pub fn results(
             .collect();
     }
     v
+}
+
+/// The model's headline result ([`stochcraft_model::Headline`]) as JSON: its `label`; the sum of
+/// its terms in each replication where every term has a value, summarised across those
+/// replications (`mean`, `half_width`, `std_dev`, `n`), so its interval is that of the sum; and
+/// each term (`element`, `name`, `metric`, `mean`, `half_width`). `None` without a headline, or
+/// where a term names a block or result the run does not have (never a partial sum).
+pub fn headline(model: &Model, summary: &ExperimentSummary) -> Option<Value> {
+    let h = model.experiment.headline.as_ref()?;
+    let mut sums: Vec<Option<f64>> = Vec::new();
+    let mut terms = Vec::new();
+    for (k, term) in h.terms.iter().enumerate() {
+        let e = summary.elements.iter().find(|e| e.id == term.element)?;
+        let metric = Metric::from_name(&term.metric)?;
+        let samples = e.samples(metric)?;
+        let s = e.metric(metric)?;
+        if k == 0 {
+            sums = samples.to_vec();
+        } else {
+            if samples.len() != sums.len() {
+                return None;
+            }
+            for (sum, x) in sums.iter_mut().zip(samples) {
+                *sum = sum.zip(*x).map(|(a, b)| a + b);
+            }
+        }
+        terms.push(json!({
+            "element": term.element.as_str(),
+            "name": e.name,
+            "metric": term.metric,
+            "mean": s.mean,
+            "half_width": s.half_width,
+        }));
+    }
+    let values: Vec<f64> = sums.into_iter().flatten().collect();
+    let s = stochcraft_stats::Summary::of(&values)?;
+    Some(json!({
+        "label": h.label,
+        "mean": s.mean,
+        "half_width": s.half_width,
+        "std_dev": s.std_dev,
+        "n": s.n,
+        "terms": terms,
+    }))
 }
 
 /// Results over time as JSON: the `interval` and the `times` recorded at (time 0, then every
@@ -3070,13 +3173,25 @@ pub fn label_prior_run(csv: &str, results: &Value) -> String {
 /// `property:<name>`), as the app's Export table (CSV) and `stochcraft-cli run --format csv` write
 /// them. Where a result's replications split into two outcomes, the last six columns give the
 /// cut, each group's count and mean, and which group of results that split the same runs it is in
-/// (empty otherwise).
+/// (empty otherwise). A model's headline result comes first, as a row of kind and metric
+/// `headline` with its label as the name and no element.
 pub fn results_csv(results: &Value) -> String {
     let text = |v: &Value| csv_field(&text_cell(v.as_str().unwrap_or("")));
     let mut out = String::from(
         "element,name,kind,metric,mean,half_width,std_dev,n,\
          split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean,split_group\n",
     );
+    let h = &results["headline"];
+    if h.is_object() {
+        out.push_str(&format!(
+            ",{},headline,headline,{},{},{},{},,,,,,\n",
+            text(&h["label"]),
+            h["mean"],
+            h["half_width"],
+            h["std_dev"],
+            h["n"],
+        ));
+    }
     for e in results["elements"].as_array().into_iter().flatten() {
         let mut rows: Vec<(String, &Value)> = results["metrics"]
             .as_array()
@@ -3450,6 +3565,41 @@ mod tests {
                 shifts: Vec::new(),
                 on_shift_end: OnShiftEndSpec::Finish,
             })
+        );
+    }
+
+    #[test]
+    fn results_csv_gives_the_headline_first() {
+        let r = json!({
+            "metrics": ["mean_contents"],
+            "headline": { "label": "Still in hospital, waiting", "mean": 198.5,
+                          "half_width": 4.5, "std_dev": 9.0, "n": 20, "terms": [] },
+            "elements": [{
+                "id": "a", "name": "A", "kind": "delay",
+                "metrics": { "mean_contents": { "mean": 196.0, "half_width": 4.4,
+                                                 "std_dev": 9.0, "n": 20 } },
+            }],
+        });
+        let csv = results_csv(&r);
+        let lines: Vec<&str> = csv.lines().collect();
+        assert_eq!(
+            lines.get(1).copied(),
+            Some(",\"Still in hospital, waiting\",headline,headline,198.5,4.5,9.0,20,,,,,,"),
+            "{csv}"
+        );
+        assert!(
+            lines
+                .get(2)
+                .is_some_and(|l| l.starts_with("a,A,delay,mean_contents,196.0")),
+            "{csv}"
+        );
+        // Without a headline, no such row.
+        let mut none = r.clone();
+        none["headline"] = Value::Null;
+        assert!(
+            !results_csv(&none).contains("headline"),
+            "{}",
+            results_csv(&none)
         );
     }
 

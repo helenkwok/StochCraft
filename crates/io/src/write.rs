@@ -340,7 +340,28 @@ pub(crate) fn scenario_extensions(x: &Experiment) -> Vec<Element> {
     if !x.observed.is_empty() {
         out.push(observed_element(&x.observed));
     }
+    if let Some(h) = &x.headline {
+        out.push(headline_element(h));
+    }
     out
+}
+
+/// The headline result as StochCraft's vendor extension ([`crate::bpsim::HEADLINE`]): its name
+/// and one `term` for each result it adds up.
+pub(crate) fn headline_element(h: &stochcraft_model::Headline) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:headline", Some(ns)).with_attr("name", &h.label);
+    for t in &h.terms {
+        body.push(
+            Element::new("stochcraft:term", Some(ns))
+                .with_attr("element", t.element.as_str())
+                .with_attr("metric", &t.metric),
+        );
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::HEADLINE)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
 }
 
 /// A StochCraft vendor extension holding one value.

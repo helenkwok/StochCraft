@@ -1506,3 +1506,5 @@ connection	Flow	Ροή
 	How many patients who are fit to leave are still in hospital, waiting for care?	Πόσοι ασθενείς έτοιμοι για εξιτήριο βρίσκονται ακόμη στο νοσοκομείο, περιμένοντας φροντίδα;
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Οι θέσεις εξιτηρίου με αξιολόγηση δεν βάζουν τους ασθενείς σε ουρά αλλά τους αποκλείουν: περίπου 202 περιμένουν στο νοσοκομείο, και μετράει μόνο η μέση διάρκεια παραμονής. Δέκα κλίνες ακόμη τους μειώνουν κατά περίπου 10.
 	Share turned away	Ποσοστό απόρριψης
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

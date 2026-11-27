@@ -23,13 +23,14 @@ use crate::write::{
     abandoned_element, availability_param, balked_element, balking_element, batching_element,
     bpmn_local, breakdown_element, calendar_element, changeover_element, condition_element,
     conveyor_element, decision_element, demand_element, dist_element, edge_ends, estimate_element,
-    health_check_element, interruptible_param, mobility_element, numeric, observed_element,
-    observed_off_element, on_shift_end_element, own_marker, patience_element, planned_element,
-    power_element, probability_element, processing_by_element, processing_by_resource_element,
-    property_element, quantity_element, quantity_param, queue_capacity_element, rework_element,
-    routing_element, scenario_extensions, scenario_parameters, scrap_element, sequential_element,
-    sequential_off_element, size, start_param, starting_element, stop_element, timer_param,
-    transfer_element, transport_element, turned_away_element, units_param, vendor_value_element,
+    headline_element, health_check_element, interruptible_param, mobility_element, numeric,
+    observed_element, observed_off_element, on_shift_end_element, own_marker, patience_element,
+    planned_element, power_element, probability_element, processing_by_element,
+    processing_by_resource_element, property_element, quantity_element, quantity_param,
+    queue_capacity_element, rework_element, routing_element, scenario_extensions,
+    scenario_parameters, scrap_element, sequential_element, sequential_off_element, size,
+    start_param, starting_element, stop_element, timer_param, transfer_element, transport_element,
+    turned_away_element, units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -3438,6 +3439,14 @@ impl Editor {
                 None
             };
             set_scenario_extension(s, crate::bpsim::OBSERVED, written, &prefix, &ns);
+        }
+        if b.headline != a.headline {
+            let written = a.headline.as_ref().map(|h| {
+                let mut e = headline_element(h);
+                self.text_attrs(&mut e);
+                e
+            });
+            set_scenario_extension(s, crate::bpsim::HEADLINE, written, &prefix, &ns);
         }
         if relabel {
             self.keep_inheriting(root, scenario, b.time_unit, &rescaled, default_duration);

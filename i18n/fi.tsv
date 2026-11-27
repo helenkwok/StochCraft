@@ -1506,3 +1506,5 @@ connection	Flow	Virta
 	How many patients who are fit to leave are still in hospital, waiting for care?	Kuinka moni kotiutettavissa oleva potilas on yhä sairaalassa odottamassa hoitoa?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Arvioivan kotiutuksen paikat käännyttävät potilaat pois eivätkä aseta heitä jonoon: noin 202 odottaa sairaalassa, ja vain keskimääräinen hoitoaika ratkaisee. Kymmenen vuodepaikkaa lisää vähentää noin 10.
 	Share turned away	Käännytettyjen osuus
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

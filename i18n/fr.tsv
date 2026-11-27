@@ -1506,3 +1506,5 @@ connection	Flow	Flux
 	How many patients who are fit to leave are still in hospital, waiting for care?	Combien de patients prêts à sortir sont encore à l'hôpital, en attente de soins ?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Les places de sortie avec évaluation refusent les patients au lieu de les faire attendre : environ 202 attendent à l'hôpital, et seule la durée moyenne de séjour compte. Dix lits d'hospitalisation de plus en retirent environ 10.
 	Share turned away	Part des refus
+	{label}: {value}	{label} : {value}
+	{label}: {value} ({terms})	{label} : {value} ({terms})

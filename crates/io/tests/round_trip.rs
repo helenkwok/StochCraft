@@ -217,6 +217,7 @@ pub fn showcase() -> Model {
         result_frequency: Some(1_800.0),
         sequential: None,
         observed: Vec::new(),
+        headline: None,
     });
     model.name = "Showcase & <friends>".into();
     model
@@ -2582,6 +2583,76 @@ fn observed_data_are_written_saved_and_removed() {
     };
     let text = String::from_utf8_lossy(&removed);
     assert!(!text.contains("stochcraft:observ"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// A headline result (`stochcraft:headline` on the scenario) is written in a new file, read back
+/// exactly, saved into an opened file when it changes, kept through an unrelated edit, and
+/// removed.
+#[test]
+fn a_headline_result_is_written_saved_and_removed() {
+    use stochcraft_model::{ElementId, Headline, HeadlineTerm};
+    let mut model = showcase();
+    assert!(!String::from_utf8_lossy(&write_new(&model)).contains("stochcraft:headline"));
+    let term = |element: &str, metric: &str| HeadlineTerm {
+        element: ElementId::unchecked(element),
+        metric: metric.to_owned(),
+    };
+    model.experiment.headline = Some(Headline {
+        label: "Parts waiting & in work".into(),
+        terms: vec![
+            term("cut", "mean_queue_length"),
+            term("cut", "mean_in_service"),
+        ],
+    });
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    for expected in [
+        r#"name="stochcraft:headline""#,
+        r#"<stochcraft:headline name="Parts waiting &amp; in work">"#,
+        r#"<stochcraft:term element="cut" metric="mean_queue_length"/>"#,
+        r#"<stochcraft:term element="cut" metric="mean_in_service"/>"#,
+    ] {
+        assert!(text.contains(expected), "{expected}: {text}");
+    }
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+
+    // An unrelated edit keeps it.
+    let mut edited = loaded.model.clone();
+    edited.experiment.replications += 1;
+    let Ok(saved) = loaded.opened.save(&edited) else {
+        unreachable!()
+    };
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    // Changed: one term fewer and a new label.
+    let Ok(opened) = read(&saved) else {
+        unreachable!()
+    };
+    if let Some(h) = &mut edited.experiment.headline {
+        h.label = "Parts waiting".into();
+        h.terms.truncate(1);
+    }
+    let Ok(changed) = opened.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&changed);
+    assert!(!text.contains("mean_in_service"), "{text}");
+    assert_eq!(read(&changed).map(|l| l.model).ok(), Some(edited.clone()));
+
+    // Removed: nothing is left in the file.
+    edited.experiment.headline = None;
+    let Ok(again) = read(&changed) else {
+        unreachable!()
+    };
+    let Ok(removed) = again.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("stochcraft:headline"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
 }
 

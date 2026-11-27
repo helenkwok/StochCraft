@@ -1506,3 +1506,5 @@ connection	Flow	Потік
 	How many patients who are fit to leave are still in hospital, waiting for care?	Скільки пацієнтів, готових до виписки, досі перебувають у лікарні в очікуванні догляду?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Місця для виписки з оцінкою не ставлять пацієнтів у чергу, а відмовляють їм: близько 202 чекають у лікарні, і важить лише середня тривалість перебування. Ще десять стаціонарних ліжок зменшують це число приблизно на 10.
 	Share turned away	Частка відхилених
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})

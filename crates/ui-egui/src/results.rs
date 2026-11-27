@@ -1117,6 +1117,58 @@ const LIMITS_BUSY: f64 = 0.85;
 /// held back by a later one, so it is only the busiest).
 const LIMITS_BLOCKED: f64 = 0.05;
 
+/// The model's headline result (the engine's `headline`) as a finding, with the block of its
+/// first term: its label, its mean with its 95% interval, and, where it adds up more than one
+/// result, each of them, as "Patients still in hospital: 198 ± 5 (Waiting for a nursing home
+/// 196 + Waiting for care at home 2.1)". `None` without one.
+fn headline(results: &Value, time: &str) -> Option<(String, String)> {
+    let h = &results["headline"];
+    let label = h["label"].as_str()?;
+    let mean = h["mean"].as_f64()?;
+    let terms = h["terms"].as_array()?;
+    let first = terms.first()?;
+    let unit_of =
+        |t: &Value| stochcraft_engine::precision::unit(t["metric"].as_str().unwrap_or(""));
+    let (scale, unit) = scale_and_unit(&unit_of(first), time);
+    let value = match h["half_width"].as_f64() {
+        Some(hw) if hw.is_finite() && hw > 0.0 => {
+            let (m, w) = rounded(mean * scale, hw * scale);
+            format!("{m} ± {w}")
+        }
+        _ => grouped(round_sig(mean * scale, 3)),
+    };
+    let value = match unit {
+        "" => value,
+        "%" => format!("{value}%"),
+        u => format!("{value} {u}"),
+    };
+    let block = first["element"].as_str().unwrap_or("").to_owned();
+    if terms.len() == 1 {
+        let text = tf("{label}: {value}", &[("label", label), ("value", &value)]);
+        return Some((text, block));
+    }
+    let parts: Vec<String> = terms
+        .iter()
+        .map(|t| {
+            let name = t["name"]
+                .as_str()
+                .filter(|n| !n.is_empty())
+                .or_else(|| t["element"].as_str())
+                .unwrap_or("");
+            format!("{name} {}", said(t, &unit_of(t), time).unwrap_or_default())
+        })
+        .collect();
+    let text = tf(
+        "{label}: {value} ({terms})",
+        &[
+            ("label", label),
+            ("value", &value),
+            ("terms", &parts.join(" + ")),
+        ],
+    );
+    Some((text, block))
+}
+
 /// The answers at the top of the results, before the trust line and the tables: what limits the
 /// flow (or the busiest block, where the evidence for a limit is not clear), where an entity's
 /// time goes, and what leaves against what arrives. Each comes with the block whose key measures
@@ -1128,6 +1180,10 @@ fn answers(results: &Value) -> Vec<(String, String)> {
         .map(Vec::as_slice)
         .unwrap_or(&[]);
     let mut out = Vec::new();
+    // The model's headline result, the answer to its question, comes first.
+    if let Some(h) = headline(results, time) {
+        out.push(h);
+    }
     // A mean the runs split on describes none of them: a sentence built on one is left out, and
     // the split's own finding says what happened instead.
     let split = |m: &Value| m["split"].is_object();
@@ -1425,6 +1481,43 @@ fn group(s: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::number;
+
+    /// A model's headline result is the first answer, with what it adds up.
+    #[test]
+    fn the_headline_result_comes_first() {
+        let results = serde_json::json!({
+            "record": { "time_unit": "d" },
+            "elements": [],
+            "headline": {
+                "label": "Patients still in hospital",
+                "mean": 198.04,
+                "half_width": 4.6,
+                "std_dev": 9.8,
+                "n": 20,
+                "terms": [
+                    { "element": "a", "name": "Waiting A", "metric": "mean_contents",
+                      "mean": 196.0, "half_width": 4.5 },
+                    { "element": "b", "name": "Waiting B", "metric": "mean_contents",
+                      "mean": 2.07, "half_width": 0.98 },
+                ],
+            },
+        });
+        let answers = super::answers(&results);
+        assert_eq!(
+            answers
+                .first()
+                .map(|(text, block)| (text.as_str(), block.as_str())),
+            Some((
+                "Patients still in hospital: 198 ± 5 (Waiting A 196 + Waiting B 2.1)",
+                "a"
+            )),
+            "{answers:?}"
+        );
+        // Without one, nothing is said of it.
+        let mut none = results.clone();
+        none["headline"] = serde_json::Value::Null;
+        assert!(super::answers(&none).is_empty());
+    }
 
     /// A task's losses read as turned away where it has a way for those (the engine's
     /// `turns_away`), and as lost where they leave the model.

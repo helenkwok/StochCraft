@@ -1506,3 +1506,5 @@ connection	Flow	Voog
 	How many patients who are fit to leave are still in hospital, waiting for care?	Mitu väljakirjutamiseks valmis patsienti on endiselt haiglas ja ootab hooldust?
 	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Hindamisega väljakirjutamise kohad lükkavad patsiendid tagasi, mitte ei pane neid järjekorda: umbes 202 ootab haiglas ja loeb ainult keskmine viibimisaeg. Kümme voodikohta rohkem vähendab seda umbes 10 võrra.
 	Share turned away	Tagasi lükatute osakaal
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})
