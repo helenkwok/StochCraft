@@ -159,7 +159,7 @@ pub fn from_hex(text: &str) -> Option<Vec<u8>> {
         _ => None,
     };
     let t = text.as_bytes();
-    if t.len() % 2 != 0 {
+    if !t.len().is_multiple_of(2) {
         return None;
     }
     t.chunks(2)
