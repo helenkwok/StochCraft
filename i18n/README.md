@@ -1079,6 +1079,10 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The row for the validation message of a uniform, truncated normal or beta whose minimum is not
+  below its maximum ("set “Minimum” below “Maximum”", a beta on a range) is each catalog's own
+  row for the triangular's message with its clause about the most likely value left out. Not
+  checked against any other source and not reviewed by native speakers.
 - The rows for the one-machine-availability example (its title, the line about it, its question
   and what it teaches) were machine-drafted from the plain meaning of the English, with each
   catalog's own words for machine, breakdown and repair from the earlier example cards;

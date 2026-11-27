@@ -1049,6 +1049,7 @@ unit	yr	р.
 	In “{field}” of {block}, set “{param}” to 1 or more.	У полі «{field}» блока {block} задайте для «{param}» число не менше за 1.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	У полі «{field}» блока {block} задайте для «{param}» число від 0 до 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	У полі «{field}» блока {block} задайте «Мінімум» менше за «Максимум», а «Найімовірніше значення», якщо воно є, між ними.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	У полі «{field}» блока {block} задайте «Мінімум» менше за «Максимум».
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	У полі «{field}» блока {block} додайте точки даних, імовірності яких у сумі більші за 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	У блока {block} ніколи не було б одиниці для роботи. Задайте принаймні 1 одиницю.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блок {block} створював би сутності без кінця, бо «Час між прибуттями» завжди дорівнює 0. Задайте час більший за 0 або вкажіть «Обмеження кількості прибуттів».

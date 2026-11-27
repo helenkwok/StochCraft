@@ -125,10 +125,7 @@ fn allowed() -> Vec<Dist> {
             shape: 0.4,
             scale: 2.0,
         },
-        Dist::Beta {
-            shape: 2.0,
-            scale: 5.0,
-        },
+        Dist::beta(2.0, 5.0),
         Dist::Erlang { mean: 4.0, k: 3 },
         Dist::Weibull {
             shape: 1.7,

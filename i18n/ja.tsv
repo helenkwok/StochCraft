@@ -1049,6 +1049,7 @@ unit	yr	年
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} の「{field}」で、「{param}」に 1 以上の数を設定してください。
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} の「{field}」で、「{param}」に 0 から 1 までの数を設定してください。
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} の「{field}」で、「最小値」を「最大値」より小さくし、「最頻値」がある場合はその間の値にしてください。
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} の「{field}」で、「最小値」を「最大値」より小さくしてください。
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} の「{field}」に、確率の合計が 0 より大きくなるデータ点を追加してください。
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} には作業に使えるユニットが 1 つもなくなります。ユニットを 1 つ以上にしてください。
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} は「到着間隔」が常に 0 のため、エンティティを際限なく作り続けます。0 より大きい時間を設定するか、「到着数の上限」を設定してください。

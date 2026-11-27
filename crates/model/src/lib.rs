@@ -2570,7 +2570,8 @@ fn never_negative(d: &Dist) -> bool {
         Dist::Constant(v) => *v >= 0.0,
         Dist::Uniform { min, .. }
         | Dist::Triangular { min, .. }
-        | Dist::TruncatedNormal { min, .. } => *min >= 0.0,
+        | Dist::TruncatedNormal { min, .. }
+        | Dist::Beta { min, .. } => *min >= 0.0,
         Dist::Normal { .. } => false,
         Dist::User { points, .. } => points.iter().all(|(_, v)| *v >= 0.0),
         Dist::Exponential { .. }
@@ -2578,7 +2579,6 @@ fn never_negative(d: &Dist) -> bool {
         | Dist::Erlang { .. }
         | Dist::LogNormal { .. }
         | Dist::Gamma { .. }
-        | Dist::Beta { .. }
         | Dist::Weibull { .. }
         | Dist::Binomial { .. } => true,
     }

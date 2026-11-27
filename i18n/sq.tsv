@@ -1049,6 +1049,7 @@ unit	yr	v
 	In “{field}” of {block}, set “{param}” to 1 or more.	Te „{field}” i bllokut {block}, caktoni „{param}” si 1 ose më shumë.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Te „{field}” i bllokut {block}, caktoni „{param}” si numër nga 0 deri në 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Te „{field}” i bllokut {block}, caktoni „Minimumi” nën „Maksimumi” dhe çdo vlerë „Më e mundshmja” mes tyre.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Te „{field}” i bllokut {block}, caktoni „Minimumi” nën „Maksimumi”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Te „{field}” i bllokut {block}, shtoni pika të dhënash me probabilitete që mblidhen në më shumë se 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Blloku {block} nuk do të kishte kurrë një njësi për të punuar. Jepini të paktën 1 njësi.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Blloku {block} do të krijonte entitete pa fund, sepse „Koha ndërmjet mbërritjeve” është gjithmonë 0. Jepini një kohë më të madhe se 0 ose caktoni një „Kufiri i mbërritjeve”.

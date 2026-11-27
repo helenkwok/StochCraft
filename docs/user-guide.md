@@ -200,7 +200,9 @@ Select a block to see its settings. The most used ones come first, under **Param
     the next conveyor, crosses in the transfer time, then rides on.
 
 **Times.** Each time is a distribution: pick its type (Constant, Exponential, Uniform, Triangular,
-Normal, Log-normal, Gamma, Erlang, Weibull and others) and fill in its values. If you only know a
+Normal, Log-normal, Gamma, Erlang, Weibull and others) and fill in its values. A Beta has two
+shapes and a range, **Minimum** and **Maximum** (0 and 1 unless you change them): Beta(3, 5) with
+Minimum 1 and Maximum 4 is a time between 1 and 4, 2.125 on average. If you only know a
 minimum, a most likely value and a maximum, use **Three-point estimate ▸ Estimate from three
 values…** and StochCraft fits the time for you.
 

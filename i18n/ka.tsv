@@ -1049,6 +1049,7 @@ unit	yr	წელი
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block}-ის ველში „{field}“ დააყენეთ „{param}“ 1-ზე ან მეტზე.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block}-ის ველში „{field}“ დააყენეთ „{param}“ 0-დან 1-მდე რიცხვზე.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block}-ის ველში „{field}“ დააყენეთ „მინიმუმი“ „მაქსიმუმზე“ ნაკლებად, ხოლო „ყველაზე სავარაუდო“ მნიშვნელობა (თუ არის) მათ შორის.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block}-ის ველში „{field}“ დააყენეთ „მინიმუმი“ „მაქსიმუმზე“ ნაკლებად.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block}-ის ველში „{field}“ დაამატეთ მონაცემთა წერტილები, რომელთა ალბათობების ჯამი 0-ზე მეტია.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block}-ს არასოდეს ექნება მუშა ერთეული. მიეცით სულ მცირე 1 ერთეული.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} ერთეულებს დაუსრულებლად შექმნიდა, რადგან მისი „შემოსვლებს შორის დრო“ ყოველთვის 0-ია. მიუთითეთ 0-ზე მეტი დრო ან დააყენეთ „შემოსვლის ლიმიტი“.

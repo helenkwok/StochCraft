@@ -1049,6 +1049,7 @@ unit	yr	a
 	In “{field}” of {block}, set “{param}” to 1 or more.	En «{field}» de {block}, estableza «{param}» en 1 ou máis.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	En «{field}» de {block}, estableza «{param}» nun número de 0 a 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	En «{field}» de {block}, estableza «Mínimo» por debaixo de «Máximo», e calquera valor de «Máis probable» entre os dous.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	En «{field}» de {block}, estableza «Mínimo» por debaixo de «Máximo».
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	En «{field}» de {block}, engada puntos de datos cuxas probabilidades sumen máis de 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} nunca tería unha unidade coa que traballar. Asígnelle polo menos 1 unidade.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} crearía entidades sen fin, porque o seu «Tempo entre chegadas» é sempre 0. Asígnelle un tempo maior que 0 ou defina un «Límite de chegadas».

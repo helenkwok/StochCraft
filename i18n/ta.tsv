@@ -1049,6 +1049,7 @@ unit	yr	ஆண்டு
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} இன் “{field}” இல் “{param}” ஐ 1 அல்லது அதற்கு மேல் அமைக்கவும்.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} இன் “{field}” இல் “{param}” ஐ 0 முதல் 1 வரையிலான எண்ணாக அமைக்கவும்.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} இன் “{field}” இல் “குறைந்தபட்சம்” ஐ “அதிகபட்சம்” ஐ விடக் குறைவாகவும், “அதிக வாய்ப்புள்ள மதிப்பு” இருந்தால் அவ்விரண்டுக்கும் இடையிலும் அமைக்கவும்.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} இன் “{field}” இல் “குறைந்தபட்சம்” ஐ “அதிகபட்சம்” ஐ விடக் குறைவாக அமைக்கவும்.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} இன் “{field}” இல் நிகழ்தகவுகளின் கூட்டுத்தொகை 0 ஐ விட அதிகமாக உள்ள தரவுப் புள்ளிகளைச் சேர்க்கவும்.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} இல் வேலை செய்ய ஒரு அலகு கூட இருக்காது. குறைந்தது 1 அலகு கொடுக்கவும்.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} இன் “வருகைகளுக்கு இடையிலான நேரம்” எப்போதும் 0 என்பதால் அது முடிவில்லாமல் உருப்படிகளை உருவாக்கும். 0 ஐ விட அதிகமான நேரத்தைக் கொடுக்கவும், அல்லது “வருகை வரம்பு” அமைக்கவும்.

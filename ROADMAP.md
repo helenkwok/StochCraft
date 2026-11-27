@@ -1140,6 +1140,16 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   delay) and keeps the triad and its source as the parameter's pedigree,
   `stochcraft:estimate` in files (declared in the vendor schema). A distribution changed
   afterwards no longer matches its estimate, which is a warning. `estimate.remove` forgets it.
+- **A beta on a range (built):** `Dist::Beta` has a `min` and a `max` besides its two shapes, 0
+  and 1 by default, so a stage time such as Beta(3, 5) on [1, 4] days is one distribution with
+  mean min + (max − min) α / (α + β). On [0, 1] it draws, and is written, exactly as BPSim's
+  beta always was. BPSim 2.0's `BetaDistribution` takes no other attributes, so a beta on
+  another range is written as `stochcraft:BetaDistribution` (`shape`, `scale`, `min`, `max`,
+  `timeUnit`), declared in the vendor schema in BPSim's `ParameterValue` substitution group: it
+  is valid wherever a BPSim value is, vendor extensions' values included, and a tool that does
+  not know it finds no value rather than a wrong one. Its range is a time and follows changes of
+  time unit; BPSim's beta on [0, 1] still refuses a `timeUnit` other than the base unit, as
+  before. The distribution editor shows the range as two more fields.
 - The CLI's results table states the stop and when it was met.
 - **Results that are easy to misread (#69):**
   - A metric only some replications have a value for shows "n = k of N" in the window (its

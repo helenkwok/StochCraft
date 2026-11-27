@@ -1049,6 +1049,7 @@ unit	yr	a
 	In “{field}” of {block}, set “{param}” to 1 or more.	În „{field}” al blocului {block}, setați „{param}” la 1 sau mai mult.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	În „{field}” al blocului {block}, setați „{param}” la un număr de la 0 la 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	În „{field}” al blocului {block}, setați „Minim” sub „Maxim” și orice valoare „Cel mai probabil” între ele.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	În „{field}” al blocului {block}, setați „Minim” sub „Maxim”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	În „{field}” al blocului {block}, adăugați puncte de date ale căror probabilități însumează mai mult de 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Blocul {block} nu ar avea niciodată o unitate cu care să lucreze. Dați-i cel puțin 1 unitate.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Blocul {block} ar crea entități fără sfârșit, deoarece „Timp între sosiri” este mereu 0. Dați-i un timp mai mare decât 0 sau setați o „Limită de sosiri”.

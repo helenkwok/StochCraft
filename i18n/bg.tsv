@@ -1049,6 +1049,7 @@ unit	yr	г.
 	In “{field}” of {block}, set “{param}” to 1 or more.	В „{field}“ на блок {block} задайте „{param}“ да е 1 или повече.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	В „{field}“ на блок {block} задайте „{param}“ да е число от 0 до 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	В „{field}“ на блок {block} задайте „Минимум“ под „Максимум“, а евентуалната „Най-вероятна стойност“ между тях.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	В „{field}“ на блок {block} задайте „Минимум“ под „Максимум“.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	В „{field}“ на блок {block} добавете точки от данни, чиито вероятности се събират до повече от 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Блокът {block} никога не би имал единица, с която да работи. Задайте поне 1 единица.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блокът {block} би създавал същности безкрай, защото „Време между пристиганията“ винаги е 0. Задайте време над 0 или задайте „Лимит на пристиганията“.

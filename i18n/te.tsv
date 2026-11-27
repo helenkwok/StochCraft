@@ -1049,6 +1049,7 @@ unit	yr	సం.
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} యొక్క “{field}” లో “{param}” ను 1 లేదా అంతకంటే ఎక్కువగా సెట్ చేయండి.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} యొక్క “{field}” లో “{param}” ను 0 నుండి 1 మధ్య సంఖ్యగా సెట్ చేయండి.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} యొక్క “{field}” లో “కనిష్ఠం” ను “గరిష్ఠం” కంటే తక్కువగా, “అత్యంత సంభావ్య విలువ” ఉంటే వాటి మధ్య సెట్ చేయండి.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} యొక్క “{field}” లో “కనిష్ఠం” ను “గరిష్ఠం” కంటే తక్కువగా సెట్ చేయండి.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} యొక్క “{field}” లో సంభావ్యతల మొత్తం 0 కంటే ఎక్కువ ఉండే డేటా బిందువులను జోడించండి.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} కు పని చేయడానికి ఒక్క యూనిట్ కూడా ఉండదు. కనీసం 1 యూనిట్ ఇవ్వండి.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} యొక్క “రాకల మధ్య సమయం” ఎల్లప్పుడూ 0 కాబట్టి అది అంతులేకుండా ఎంటిటీలను సృష్టిస్తుంది. 0 కంటే ఎక్కువ సమయం ఇవ్వండి, లేదా “రాకల పరిమితి” సెట్ చేయండి.

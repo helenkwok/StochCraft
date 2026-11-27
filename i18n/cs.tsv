@@ -1049,6 +1049,7 @@ unit	yr	r.
 	In “{field}” of {block}, set “{param}” to 1 or more.	V poli „{field}“ bloku {block} nastavte „{param}“ na 1 nebo více.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	V poli „{field}“ bloku {block} nastavte „{param}“ na číslo od 0 do 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	V poli „{field}“ bloku {block} nastavte „Minimum“ pod „Maximum“ a případnou hodnotu „Nejpravděpodobnější“ mezi ně.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	V poli „{field}“ bloku {block} nastavte „Minimum“ pod „Maximum“.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	V poli „{field}“ bloku {block} přidejte datové body, jejichž pravděpodobnosti dohromady dávají víc než 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} by nikdy neměl jednotku, se kterou by pracoval. Dejte mu alespoň 1 jednotku.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} by vytvářel entity donekonečna, protože jeho „Doba mezi příchody“ je vždy 0. Zadejte dobu větší než 0, nebo nastavte „Limit příchodů“.

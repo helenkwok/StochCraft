@@ -1049,6 +1049,7 @@ unit	yr	a
 	In “{field}” of {block}, set “{param}” to 1 or more.	Ploki {block} väljal „{field}” määra „{param}” väärtuseks 1 või rohkem.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Ploki {block} väljal „{field}” määra „{param}” arvuks vahemikus 0 kuni 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Ploki {block} väljal „{field}” määra „Miinimum” väiksemaks kui „Maksimum” ja võimalik „Kõige tõenäolisem” väärtus nende vahele.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Ploki {block} väljal „{field}” määra „Miinimum” väiksemaks kui „Maksimum”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Ploki {block} väljal „{field}” lisa andmepunktid, mille tõenäosuste summa on suurem kui 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Plokil {block} poleks kunagi ühikut, millega töötada. Anna sellele vähemalt 1 ühik.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Plokk {block} looks olemeid lõputult, sest selle „Saabumiste vaheline aeg” on alati 0. Anna aeg, mis on suurem kui 0, või määra „Saabumiste piirang”.

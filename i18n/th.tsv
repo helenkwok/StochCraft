@@ -1049,6 +1049,7 @@ unit	yr	ปี
 	In “{field}” of {block}, set “{param}” to 1 or more.	ใน “{field}” ของ {block} ให้กำหนด “{param}” เป็น 1 หรือมากกว่า
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	ใน “{field}” ของ {block} ให้กำหนด “{param}” เป็นตัวเลขตั้งแต่ 0 ถึง 1
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	ใน “{field}” ของ {block} ให้กำหนด “ค่าต่ำสุด” ให้น้อยกว่า “ค่าสูงสุด” และให้ค่า “ค่าที่เป็นไปได้มากที่สุด” (ถ้ามี) อยู่ระหว่างสองค่านั้น
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	ใน “{field}” ของ {block} ให้กำหนด “ค่าต่ำสุด” ให้น้อยกว่า “ค่าสูงสุด”
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	ใน “{field}” ของ {block} ให้เพิ่มจุดข้อมูลที่มีความน่าจะเป็นรวมกันมากกว่า 0
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} จะไม่มีหน่วยให้ทำงานด้วยเลย ให้กำหนดอย่างน้อย 1 หน่วย
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} จะสร้างเอนทิตีไม่หยุด เพราะ “เวลาระหว่างการมาถึง” เป็น 0 เสมอ ให้กำหนดเวลาที่มากกว่า 0 หรือกำหนด “จำนวนขาเข้าสูงสุด”

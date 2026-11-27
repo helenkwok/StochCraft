@@ -1049,6 +1049,7 @@ unit	yr	वर्ष
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block} के “{field}” में “{param}” को 1 या उससे अधिक पर सेट करें।
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block} के “{field}” में “{param}” को 0 से 1 के बीच की संख्या पर सेट करें।
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block} के “{field}” में “न्यूनतम” को “अधिकतम” से कम रखें, और “सर्वाधिक संभावित” मान (यदि हो) को दोनों के बीच रखें।
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block} के “{field}” में “न्यूनतम” को “अधिकतम” से कम रखें।
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block} के “{field}” में ऐसे डेटा बिंदु जोड़ें जिनकी प्रायिकताओं का योग 0 से अधिक हो।
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} के पास काम करने के लिए कभी कोई संसाधन इकाई नहीं होगी। उसे कम से कम 1 संसाधन इकाई दें।
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} अंतहीन इकाइयाँ बनाएगा, क्योंकि उसका “आगमन के बीच का समय” हमेशा 0 है। 0 से अधिक समय दें, या “आगमन सीमा” सेट करें।

@@ -1049,6 +1049,7 @@ unit	yr	년
 	In “{field}” of {block}, set “{param}” to 1 or more.	{block}의 “{field}”에서 “{param}” 값을 1 이상의 숫자로 설정하세요.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	{block}의 “{field}”에서 “{param}” 값을 0에서 1 사이의 숫자로 설정하세요.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	{block}의 “{field}”에서 “최솟값”을 “최댓값”보다 작게 설정하고, “최빈값”이 있으면 그 사이의 값으로 설정하세요.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	{block}의 “{field}”에서 “최솟값”을 “최댓값”보다 작게 설정하세요.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	{block}의 “{field}”에 확률의 합이 0보다 큰 데이터 점을 추가하세요.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block}에는 작업할 자원 단위가 하나도 없게 됩니다. 자원 단위를 1개 이상으로 설정하세요.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block}은(는) “도착 간격”이 항상 0이라서 엔터티를 끝없이 만들어 냅니다. 0보다 큰 시간을 지정하거나 “도착 수 제한”을 설정하세요.

@@ -1049,6 +1049,7 @@ unit	yr	năm
 	In “{field}” of {block}, set “{param}” to 1 or more.	Trong “{field}” của {block}, đặt “{param}” thành 1 hoặc lớn hơn.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Trong “{field}” của {block}, đặt “{param}” thành một số từ 0 đến 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Trong “{field}” của {block}, đặt “Giá trị nhỏ nhất” nhỏ hơn “Giá trị lớn nhất”, và giá trị “Có khả năng nhất” (nếu có) nằm giữa hai giá trị đó.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Trong “{field}” của {block}, đặt “Giá trị nhỏ nhất” nhỏ hơn “Giá trị lớn nhất”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Trong “{field}” của {block}, thêm các điểm dữ liệu có tổng xác suất lớn hơn 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	{block} sẽ không bao giờ có đơn vị nào để làm việc. Hãy cho nó ít nhất 1 đơn vị.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	{block} sẽ tạo thực thể không ngừng, vì “Thời gian giữa các lượt đến” luôn bằng 0. Hãy đặt một thời gian lớn hơn 0, hoặc đặt “Giới hạn lượt đến”.
