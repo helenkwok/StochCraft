@@ -1544,6 +1544,18 @@ connection	Flow	প্রবাহ
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	দুই প্রান্তে 0-তে রাখা একটি দণ্ড তার তাপমাত্রার বর্গের অনুপাতে তাপ তৈরি করে: দণ্ড বরাবর 19টি মজুত, রেখা পদ্ধতিতে (Soheili ও Stockie, Applied Numerical Mathematics, 2008)।
 	When does a rod heated from within run away?	ভেতর থেকে গরম হওয়া দণ্ড কখন নিয়ন্ত্রণের বাইরে যায়?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	রেখা পদ্ধতি তাপ সমীকরণকে মজুত ও প্রবাহে বদলায়, এবং একটি মডেল সসীম সময়ে বিস্ফোরিত হতে পারে: মাঝখান t = 0.0821-এ 10,000 পেরোয়, তাই দণ্ড প্রায় 0.0822-এ নিয়ন্ত্রণের বাইরে যায়, প্রকাশিত 0.0824-এর 0.3%-এর মধ্যে।
+	Median time in system	সিস্টেমে সময়ের মধ্যমা
+	Time in system, 90th percentile	সিস্টেমে সময়, ৯০তম শতাংশক
+	Time in system, 95th percentile	সিস্টেমে সময়, ৯৫তম শতাংশক
+	Share done within the target time	লক্ষ্য সময়ের মধ্যে শেষ হওয়ার অংশ
+	Percentiles of time in system	সিস্টেমে সময়ের শতাংশক
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	প্রতিটি সত্তা তৈরি হওয়া থেকে এই প্রস্থানগুলিতে পৌঁছাতে যে সময় নিয়েছে তার মধ্যমা, ৯০তম ও ৯৫তম শতাংশক দেখায়, আর লক্ষ্য সময় দিলে তার মধ্যে শেষ হওয়ার অংশ।
+	Target time ({unit})	লক্ষ্য সময় ({unit})
+	The target time is a time above 0	লক্ষ্য সময় 0-এর বেশি একটি সময় হতে হবে
+	Count only working time on	শুধু কাজের সময় গুনুন এতে
+	Entities still inside when the run ends are left out, so stop the run once all are done.	রান শেষ হলে যেগুলো এখনও ভেতরে, সেগুলো বাদ থাকে, তাই সবগুলো শেষ হলে রান থামান।
+	Set the target time in system of {block} to a time above 0.	{block}-এর সিস্টেমে লক্ষ্য সময় 0-এর বেশি একটি সময়ে সেট করুন।
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block}-এর সিস্টেমে সময় এমন একটি ক্যালেন্ডারে কাজের সময় গোনে যা নেই। এমন ক্যালেন্ডার বেছে নিন যা আছে।
 	One machine's availability	একটি যন্ত্রের প্রাপ্যতা
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	একটি যন্ত্র গড়ে প্রতি ৯০ ঘণ্টায় বিকল হয় এবং মেরামত হতে ৪.৫ ঘণ্টা লাগে (Hristova, Denev ও Tsankov, Environment. Technology. Resources, 2024)।
 	How often is one machine down, and how much work does that cost?	একটি যন্ত্র কত ঘন ঘন বিকল থাকে, এবং তাতে কত কাজ নষ্ট হয়?

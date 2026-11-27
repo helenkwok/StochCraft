@@ -1544,6 +1544,18 @@ connection	Flow	Rrjedhë
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Një shufër e mbajtur në 0 në të dy skajet prodhon nxehtësi në përpjesëtim me katrorin e temperaturës së saj: 19 stoqe përgjatë saj, me metodën e vijave (Soheili dhe Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Kur del jashtë kontrollit një shufër e ngrohur nga brenda?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Metoda e vijave e kthen një ekuacion të nxehtësisë në stoqe dhe rrjedha, dhe një model mund të shpërthejë në kohë të fundme: mesi kalon 10 000 në t = 0.0821, kështu që shufra del jashtë kontrollit rreth 0.0822, brenda 0.3% të vlerës së botuar 0.0824.
+	Median time in system	Mediana e kohës në sistem
+	Time in system, 90th percentile	Koha në sistem, përqindëshi i 90-të
+	Time in system, 95th percentile	Koha në sistem, përqindëshi i 95-të
+	Share done within the target time	Pjesa e përfunduar brenda kohës së synuar
+	Percentiles of time in system	Përqindëshat e kohës në sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Tregon medianën, përqindëshin e 90-të dhe të 95-të të kohës që i duhej çdo entiteti nga krijimi deri te këto dalje dhe, me një kohë të synuar, pjesën e përfunduar brenda saj.
+	Target time ({unit})	Koha e synuar ({unit})
+	The target time is a time above 0	Koha e synuar është një kohë mbi 0
+	Count only working time on	Numëro vetëm kohën e punës sipas
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitetet që janë ende brenda kur mbaron ekzekutimi lihen jashtë, prandaj ndaleni ekzekutimin kur të kenë përfunduar të gjitha.
+	Set the target time in system of {block} to a time above 0.	Vendosni kohën e synuar në sistem të bllokut {block} në një kohë mbi 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Koha në sistem e bllokut {block} numëron kohën e punës sipas një kalendari që nuk ekziston. Zgjidhni një kalendar që ekziston.
 	One machine's availability	Disponueshmëria e një makine
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Një makinë që prishet mesatarisht çdo 90 orë dhe riparohet për 4.5 orë (Hristova, Denev dhe Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Sa shpesh ndalet një makinë dhe sa punë kushton kjo?

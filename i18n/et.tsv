@@ -1544,6 +1544,18 @@ connection	Flow	Voog
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Mõlemast otsast väärtusel 0 hoitud varras toodab soojust võrdeliselt oma temperatuuri ruuduga: 19 varu piki varrast, joonte meetodil (Soheili ja Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Millal läheb seestpoolt kuumenev varras kontrolli alt välja?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Joonte meetod teeb soojusvõrrandist varud ja vood ning mudel võib lõpliku ajaga plahvatada: keskkoht ületab 10 000 ajal t = 0.0821, nii et varras läheb kontrolli alt välja umbes ajal 0.0822, 0.3% piires avaldatud väärtusest 0.0824.
+	Median time in system	Süsteemis oleku aja mediaan
+	Time in system, 90th percentile	Aeg süsteemis, 90. protsentiil
+	Time in system, 95th percentile	Aeg süsteemis, 95. protsentiil
+	Share done within the target time	Sihtaja jooksul valmis saanute osa
+	Percentiles of time in system	Süsteemis oleku aja protsentiilid
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Näitab iga olemi loomisest nende väljumisteni kulunud aja mediaani, 90. ja 95. protsentiili ning sihtaja korral selle jooksul valmis saanute osa.
+	Target time ({unit})	Sihtaeg ({unit})
+	The target time is a time above 0	Sihtaeg peab olema suurem kui 0
+	Count only working time on	Loe ainult tööaega kalendri järgi
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Olemid, mis on käivitamise lõppedes veel sees, jäetakse välja, seega peata käivitamine, kui kõik on valmis.
+	Set the target time in system of {block} to a time above 0.	Määra ploki {block} sihtaeg süsteemis suuremaks kui 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Ploki {block} aeg süsteemis loeb tööaega kalendri järgi, mida pole olemas. Vali olemasolev kalender.
 	One machine's availability	Ühe masina käideldavus
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Masin, mis läheb keskmiselt iga 90 tunni järel rikki ja mille parandamine võtab 4.5 tundi (Hristova, Denev ja Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Kui tihti seisab üks masin ja kui palju tööd see maksab?

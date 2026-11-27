@@ -20,7 +20,7 @@ use crate::wire::{
     EstimateDoc, EventDoc, FamilySpec, HealthCheckSpec, KindSpec, LengthUnitSpec, MobilityDoc,
     ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec, PowerSpec, ProcessingByResourceSpec,
     ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc, RoutingSpec,
-    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeInSystemSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry, JournalStart, StartKind, Undo};
 
@@ -128,7 +128,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "shifts",
             "on_shift_end",
         ],
-        Some("sink") => &["scrap", "demand"],
+        Some("sink") => &["scrap", "demand", "time_in_system"],
         Some("shared_task") => &[
             "service",
             "processing_by",
@@ -486,6 +486,12 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<DemandSpec>")]
     pub demand: Option<Option<DemandSpec>>,
+    /// Sinks: report the percentiles of each entity's time in system here, and with `within`
+    /// the share done within that time, counting only `calendar`'s active time if given;
+    /// `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<TimeInSystemSpec>")]
+    pub time_in_system: Option<Option<TimeInSystemSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -1429,6 +1435,7 @@ fn estimate_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Sink {
             scrap: None,
             demand: None,
+            time_in_system: None,
         },
         |el| el.kind.clone(),
     );
@@ -1685,6 +1692,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Sink {
             scrap: None,
             demand: None,
+            time_in_system: None,
         },
         |el| el.kind.clone(),
     );
@@ -1718,6 +1726,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("on_shift_end", p.on_shift_end.is_some()),
         ("scrap", p.scrap.is_some()),
         ("demand", p.demand.is_some()),
+        ("time_in_system", p.time_in_system.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -1770,7 +1779,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Delay { .. } => &["duration", "processing_by", "starting"],
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size", "starting"],
-        ElementKind::Sink { .. } => &["scrap", "demand"],
+        ElementKind::Sink { .. } => &["scrap", "demand", "time_in_system"],
         ElementKind::Conveyor { .. } => &[
             "length",
             "speed",
@@ -1959,9 +1968,16 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *size = n;
             }
         }
-        ElementKind::Sink { scrap, demand } => {
+        ElementKind::Sink {
+            scrap,
+            demand,
+            time_in_system,
+        } => {
             if let Some(d) = p.demand {
                 *demand = d.map(Into::into);
+            }
+            if let Some(x) = p.time_in_system {
+                *time_in_system = x.map(Into::into);
             }
             if let Some(s) = p.scrap {
                 *scrap = s.map(|s| stochcraft_model::Scrap {
@@ -2162,8 +2178,19 @@ fn calendar_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                     || queue_limit.calendars().any(|c| c.as_str() == p.id)
             }
             ElementKind::Sink {
-                demand: Some(d), ..
-            } => d.calendar.as_ref().is_some_and(|c| c.as_str() == p.id),
+                demand,
+                time_in_system,
+                ..
+            } => {
+                demand
+                    .as_ref()
+                    .and_then(|d| d.calendar.as_ref())
+                    .is_some_and(|c| c.as_str() == p.id)
+                    || time_in_system
+                        .as_ref()
+                        .and_then(|x| x.calendar.as_ref())
+                        .is_some_and(|c| c.as_str() == p.id)
+            }
             _ => false,
         })
         .map(|el| el.id.as_str())

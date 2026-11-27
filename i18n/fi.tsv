@@ -1544,6 +1544,18 @@ connection	Flow	Virta
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Molemmista päistään arvossa 0 pidetty sauva tuottaa lämpöä suhteessa lämpötilansa neliöön: 19 varantoa sauvan suuntaisesti, viivojen menetelmällä (Soheili ja Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Milloin sisältä lämpenevä sauva karkaa käsistä?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Viivojen menetelmä tekee lämpöyhtälöstä varantoja ja virtoja, ja malli voi räjähtää äärellisessä ajassa: keskikohta ohittaa arvon 10 000 hetkellä t = 0.0821, joten sauva karkaa noin hetkellä 0.0822, alle 0.3%:n päässä julkaistusta arvosta 0.0824.
+	Median time in system	Järjestelmässä vietetyn ajan mediaani
+	Time in system, 90th percentile	Aika järjestelmässä, 90. persentiili
+	Time in system, 95th percentile	Aika järjestelmässä, 95. persentiili
+	Share done within the target time	Tavoiteajassa valmistuneiden osuus
+	Percentiles of time in system	Järjestelmässä vietetyn ajan persentiilit
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Näyttää mediaanin sekä 90. ja 95. persentiilin ajasta, jonka kukin yksikkö käytti syntymästään näihin poistumiin, ja tavoiteajan kanssa sen ajan sisällä valmistuneiden osuuden.
+	Target time ({unit})	Tavoiteaika ({unit})
+	The target time is a time above 0	Tavoiteajan on oltava yli 0
+	Count only working time on	Laske vain työaika kalenterista
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Ajon päättyessä yhä sisällä olevat yksiköt jäävät pois, joten pysäytä ajo, kun kaikki ovat valmiita.
+	Set the target time in system of {block} to a time above 0.	Aseta lohkon {block} tavoiteaika järjestelmässä yli 0:n.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Lohkon {block} aika järjestelmässä laskee työaikaa kalenterista, jota ei ole olemassa. Valitse olemassa oleva kalenteri.
 	One machine's availability	Yhden koneen käytettävyys
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Kone, joka rikkoutuu keskimäärin 90 tunnin välein ja jonka korjaus kestää 4.5 tuntia (Hristova, Denev ja Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Kuinka usein yksi kone seisoo ja kuinka paljon työtä se maksaa?

@@ -1544,6 +1544,18 @@ connection	Flow	フロー
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	両端を 0 に保った棒が、温度の 2 乗に比例して熱を出す。棒に沿った 19 個のストックで、線の方法（method of lines）を使う（Soheili と Stockie、Applied Numerical Mathematics、2008）。
 	When does a rod heated from within run away?	内部から熱せられる棒は、いつ暴走するか？
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	線の方法で熱方程式をストックとフローに変え、モデルが有限時間で爆発することもある。中央は t = 0.0821 で 10,000 を越えるので、棒は約 0.0822 で暴走する。公表値 0.0824 との差は 0.3% 以内。
+	Median time in system	システム内の滞在時間の中央値
+	Time in system, 90th percentile	システム内の滞在時間（90 パーセンタイル）
+	Time in system, 95th percentile	システム内の滞在時間（95 パーセンタイル）
+	Share done within the target time	目標時間内に完了した割合
+	Percentiles of time in system	システム内の滞在時間のパーセンタイル
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	各エンティティが生成されてからこの退出に至るまでの時間の中央値、90 パーセンタイル、95 パーセンタイルを表示し、目標時間を指定するとその時間内に完了した割合も表示します。
+	Target time ({unit})	目標時間（{unit}）
+	The target time is a time above 0	目標時間は 0 より大きい時間です
+	Count only working time on	稼働時間のみを数えるカレンダー
+	Entities still inside when the run ends are left out, so stop the run once all are done.	実行の終了時に内部に残っているエンティティは含まれないため、すべてが完了してから実行を止めてください。
+	Set the target time in system of {block} to a time above 0.	{block} のシステム内の目標時間を 0 より大きい時間に設定してください。
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} のシステム内の滞在時間が、存在しないカレンダーで稼働時間を数えています。存在するカレンダーを選んでください。
 	One machine's availability	機械 1 台の稼働率
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	平均 90 時間ごとに故障し、修理に 4.5 時間かかる機械 1 台（Hristova、Denev、Tsankov、Environment. Technology. Resources、2024）。
 	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？

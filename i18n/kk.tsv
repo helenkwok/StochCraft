@@ -1544,6 +1544,18 @@ connection	Flow	Ағын
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Екі ұшы 0-де ұсталған өзек өз температурасының квадратына пропорционал жылу шығарады: өзек бойында 19 қор, сызықтар әдісімен (Soheili және Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Іштен қызатын өзек қашан бақылаудан шығады?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Сызықтар әдісі жылу теңдеуін қорлар мен ағындарға айналдырады, ал модель шекті уақытта жарылуы мүмкін: орта нүкте t = 0.0821 кезінде 10 000-нан асады, сондықтан өзек шамамен 0.0822 кезінде бақылаудан шығады, жарияланған 0.0824 мәнінен 0.3% шегінде.
+	Median time in system	Жүйедегі уақыттың медианасы
+	Time in system, 90th percentile	Жүйедегі уақыт, 90-шы процентиль
+	Time in system, 95th percentile	Жүйедегі уақыт, 95-ші процентиль
+	Share done within the target time	Мақсатты уақыт ішінде аяқталғандардың үлесі
+	Percentiles of time in system	Жүйедегі уақыттың процентильдері
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Әр нысанның жасалғаннан бастап осы шығуларға жеткенге дейінгі уақытының медианасын, 90-шы және 95-ші процентильдерін, ал мақсатты уақыт берілсе, сол уақыт ішінде аяқталғандардың үлесін көрсетеді.
+	Target time ({unit})	Мақсатты уақыт ({unit})
+	The target time is a time above 0	Мақсатты уақыт 0-ден үлкен уақыт болуы керек
+	Count only working time on	Тек жұмыс уақытын санау күнтізбесі
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Іске қосу аяқталғанда әлі ішінде қалған нысандар есепке алынбайды, сондықтан бәрі аяқталғанда іске қосуды тоқтатыңыз.
+	Set the target time in system of {block} to a time above 0.	{block} блогының жүйедегі мақсатты уақытын 0-ден үлкен уақытқа орнатыңыз.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} блогының жүйедегі уақыты жоқ күнтізбе бойынша жұмыс уақытын санайды. Бар күнтізбені таңдаңыз.
 	One machine's availability	Бір станоктың дайындығы
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Орта есеппен әр 90 сағат сайын бұзылатын және жөндеуге 4.5 сағат кететін бір станок (Hristova, Denev және Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Бір станок қаншалықты жиі тоқтап қалады және бұл қанша жұмысқа тұрады?

@@ -723,13 +723,24 @@ impl Compiled {
                     let duration = Times::new(duration, processing_by, &self.slots, &env.rng);
                     spawn_delay(&mut sim, env, duration)
                 }
-                ElementKind::Sink { scrap, .. } => {
+                ElementKind::Sink {
+                    scrap,
+                    time_in_system,
+                    ..
+                } => {
                     // Scrap counts against the server it names, else each entity's last one.
                     let scrap = scrap.map(|s| {
                         s.charged_to
                             .and_then(|c| elements.iter().position(|x| x.id == c))
                     });
-                    spawn_sink(&mut sim, env, scrap);
+                    // Times in system on the clock, or in the calendar's active time.
+                    let clock = time_in_system.map(|x| match x.calendar {
+                        Some(c) => Clock::Working(Active::new(
+                            calendars.periods.get(&c).map_or(&[][..], Vec::as_slice),
+                        )),
+                        None => Clock::Wall,
+                    });
+                    spawn_sink(&mut sim, env, scrap, clock);
                 }
                 ElementKind::ExclusiveGateway { .. } => {
                     let router = routers.get(i).cloned().flatten();
@@ -1400,6 +1411,10 @@ pub(crate) struct BlockStats {
     wait: Tally,
     /// Time from creation to reaching a sink.
     time_in_system: Tally,
+    /// Sinks that report time in system: each entity's time in system, one by one (in a
+    /// calendar's active time when it names one), for its percentiles and the share within a
+    /// target. Empty at other sinks.
+    times_in_system: Vec<f64>,
     /// Servers: entities that finished here and then reached a scrap sink charged to this
     /// server, or took a rework connection (ISO 22400-2's scrap and rework quantities).
     scrap: u64,
@@ -1681,6 +1696,7 @@ impl BlockStats {
             busy: TimeWeighted::new(t, 0.0),
             wait: Tally::new(),
             time_in_system: Tally::new(),
+            times_in_system: Vec::new(),
             scrap: 0,
             rework: 0,
             produced: 0,
@@ -1746,6 +1762,7 @@ impl BlockStats {
         self.busy.reset(t);
         self.wait = Tally::new();
         self.time_in_system = Tally::new();
+        self.times_in_system.clear();
         self.scrap = 0;
         self.rework = 0;
         self.produced = 0;
@@ -1962,6 +1979,28 @@ impl BlockStats {
         let wastes = patient == Some(PatienceUntil::Done)
             || checked.is_some_and(|(_, o)| o == OnTakeout::Retry)
             || shift_retries;
+        // Time in system by percentile, and the share within the target, at a sink that asks.
+        let times = match kind {
+            ElementKind::Sink {
+                time_in_system: Some(x),
+                ..
+            } => {
+                let mut sorted = self.times_in_system.clone();
+                sorted.sort_by(f64::total_cmp);
+                Some((sorted, x.within))
+            }
+            _ => None,
+        };
+        let percentile = |p: f64| {
+            times
+                .as_ref()
+                .and_then(|(sorted, _)| stochcraft_stats::spread::quantile(sorted, p))
+        };
+        let within_target_share = times.as_ref().and_then(|(sorted, within)| {
+            let w = (*within)?;
+            (!sorted.is_empty())
+                .then(|| sorted.iter().filter(|t| **t <= w).count() as f64 / sorted.len() as f64)
+        });
         ElementReport {
             id: element.id.clone(),
             name: element.name.clone(),
@@ -2022,6 +2061,10 @@ impl BlockStats {
             } else {
                 None
             },
+            time_in_system_p50: percentile(0.5),
+            time_in_system_p90: percentile(0.9),
+            time_in_system_p95: percentile(0.95),
+            within_target_share,
             mean_blocked_time: if blocks && holds {
                 self.blocked_time.mean()
             } else {
@@ -4898,6 +4941,10 @@ impl Pools {
                     work_in_progress: None,
                     mean_work_in_progress: None,
                     mean_time_in_system: None,
+                    time_in_system_p50: None,
+                    time_in_system_p90: None,
+                    time_in_system_p95: None,
+                    within_target_share: None,
                     mean_blocked_time: None,
                     mean_time_on: None,
                     time_on_histogram: None,
@@ -5513,9 +5560,60 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Rc<Times>) {
     });
 }
 
+/// How a sink measures the times in system it keeps one by one: on the clock, or counting only
+/// a calendar's active time (working time).
+enum Clock {
+    Wall,
+    Working(Active),
+}
+
+impl Clock {
+    /// The time from `from` to `to` on this clock.
+    fn between(&self, from: f64, to: f64) -> f64 {
+        match self {
+            Clock::Wall => to - from,
+            Clock::Working(a) => a.until(to) - a.until(from),
+        }
+    }
+}
+
+/// A calendar's active time from time 0: its periods in order, each with the active time
+/// before it (prefix sums), so the active time up to any time is one binary search away.
+struct Active {
+    /// Start, end and the active time before the start.
+    periods: Vec<(f64, f64, f64)>,
+}
+
+impl Active {
+    /// From a calendar's periods: in order, not overlapping (as [`Calendar::periods`] gives
+    /// them).
+    fn new(periods: &[(f64, f64)]) -> Self {
+        let mut before = 0.0;
+        let periods = periods
+            .iter()
+            .map(|&(s, e)| {
+                let p = (s, e, before);
+                before += e - s;
+                p
+            })
+            .collect();
+        Self { periods }
+    }
+
+    /// The active time from 0 to `t`.
+    fn until(&self, t: f64) -> f64 {
+        let started = self.periods.partition_point(|p| p.0 <= t);
+        match started.checked_sub(1).and_then(|i| self.periods.get(i)) {
+            Some(&(s, e, before)) => before + (t.min(e) - s),
+            None => 0.0,
+        }
+    }
+}
+
 /// A sink. With `scrap`, what reaches it is scrap, counted against the server given, or else
-/// against each entity's last server.
-fn spawn_sink(sim: &mut Sim, env: BlockEnv, scrap: Option<Option<usize>>) {
+/// against each entity's last server. With `clock`, each entity's time in system is kept, as
+/// that clock measures it, for its percentiles.
+fn spawn_sink(sim: &mut Sim, env: BlockEnv, scrap: Option<Option<usize>>, clock: Option<Clock>) {
     sim.spawn_tagged(tag(env.me), async move {
         loop {
             let entity = env.input.get().await;
@@ -5524,6 +5622,9 @@ fn spawn_sink(sim: &mut Sim, env: BlockEnv, scrap: Option<Option<usize>>) {
             env.with_stats(|s| {
                 s.left += 1;
                 s.time_in_system.add(now - entity.created);
+                if let Some(c) = &clock {
+                    s.times_in_system.push(c.between(entity.created, now));
+                }
             });
             if let Some(s) = scrap
                 .and_then(|charged| charged.or(entity.last_server))

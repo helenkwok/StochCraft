@@ -263,6 +263,12 @@ pub const SCRAP: &str = "stochcraft:scrap";
 /// optional `calendar` whose active time is the time available (needed for `shift`), for takt.
 pub const DEMAND: &str = "stochcraft:demand";
 
+/// Time in system by percentile: a `stochcraft:timeInSystem` element on an end event's
+/// `ElementParameters`, with an optional `stochcraft:within` holding a BPSim value (the target
+/// time, for the share done within it) and an optional attribute `calendar` whose active time
+/// alone counts (working time).
+pub const TIME_IN_SYSTEM: &str = "stochcraft:timeInSystem";
+
 /// A terminating experiment's stop on a target count: `stochcraft:stopCount` on an element's
 /// `ElementParameters`, the run ending once that many entities have left the element.
 pub const STOP_COUNT: &str = "stochcraft:stopCount";

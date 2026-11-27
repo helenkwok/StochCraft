@@ -153,7 +153,10 @@ pub fn tool_definitions() -> Vec<Value> {
             "Run the experiment",
             "Run the model's experiment now (run) and return the results: for each element and \
              metric (entered, left, mean queue length, mean wait, utilisation, mean time in \
-             system, …) the mean across replications with its 95% confidence interval \
+             system, …; a sink with time_in_system also gives time_in_system_p50, _p90 and \
+             _p95 and, with a target, within_target_share, over the entities that reached it: \
+             those still inside at the end are left out, so the run should stop once all are \
+             done) the mean across replications with its 95% confidence interval \
              (half_width), where the replications split into two outcomes the two groups \
              (split: cut, and each group's n and mean; the mean then describes no actual run), \
              the warm-up MSER-5 suggests (warmup_suggestion), warnings about the results \

@@ -1544,6 +1544,18 @@ connection	Flow	Folyamat
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Egy mindkét végén 0-n tartott rúd a hőmérséklete négyzetével arányos hőt termel: 19 készlet a rúd mentén, a vonalak módszerével (Soheili és Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Mikor szabadul el egy belülről melegedő rúd?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	A vonalak módszere a hővezetési egyenletet készletekké és folyamatokká alakítja, és egy modell véges idő alatt felrobbanhat: a közép t = 0.0821-nél lépi át a 10 000-et, így a rúd nagyjából 0.0822-nél szabadul el, 0.3%-on belül a közölt 0.0824-hez.
+	Median time in system	A rendszerben töltött idő mediánja
+	Time in system, 90th percentile	Rendszerben töltött idő, 90. percentilis
+	Time in system, 95th percentile	Rendszerben töltött idő, 95. percentilis
+	Share done within the target time	A célidőn belül elkészültek aránya
+	Percentiles of time in system	A rendszerben töltött idő percentilisei
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Megmutatja, mennyi idő telt el az egyes egyedek létrejöttétől az itteni kilépésig: a mediánt, a 90. és a 95. percentilist, célidővel pedig az azon belül elkészültek arányát.
+	Target time ({unit})	Célidő ({unit})
+	The target time is a time above 0	A célidő 0-nál nagyobb idő
+	Count only working time on	Csak a munkaidő számít e szerint
+	Entities still inside when the run ends are left out, so stop the run once all are done.	A futás végén még bent lévő egyedek kimaradnak, ezért akkor állítsa le a futást, amikor mind elkészült.
+	Set the target time in system of {block} to a time above 0.	Állítsa a(z) {block} blokk rendszerben töltött célidejét 0-nál nagyobb időre.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	A(z) {block} blokk rendszerben töltött ideje olyan naptár szerint számolja a munkaidőt, amely nem létezik. Válasszon létező naptárat.
 	One machine's availability	Egy gép rendelkezésre állása
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Egy gép, amely átlagosan 90 óránként meghibásodik, és a javítása 4.5 órát vesz igénybe (Hristova, Denev és Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Milyen gyakran áll egy gép, és mennyi munkába kerül ez?

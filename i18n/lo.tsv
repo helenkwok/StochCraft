@@ -1544,6 +1544,18 @@ connection	Flow	ເສັ້ນທາງ
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	ທ່ອນເຫຼັກທີ່ປາຍທັງສອງຖືກຮັກສາໄວ້ທີ່ 0 ສ້າງຄວາມຮ້ອນຕາມກຳລັງສອງຂອງອຸນຫະພູມຂອງມັນ: 19 ສະຕັອກຕາມທ່ອນ ດ້ວຍວິທີເສັ້ນ (method of lines) (Soheili ແລະ Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	ທ່ອນເຫຼັກທີ່ຖືກເຮັດໃຫ້ຮ້ອນຈາກພາຍໃນຈະຄວບຄຸມບໍ່ໄດ້ເມື່ອໃດ?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	ວິທີເສັ້ນປ່ຽນສົມຜົນຄວາມຮ້ອນເປັນສະຕັອກ ແລະ ການໄຫຼ ແລະ ແບບຈຳລອງອາດລະເບີດໃນເວລາຈຳກັດ: ຈຸດກາງຜ່ານ 10,000 ທີ່ t = 0.0821 ທ່ອນເຫຼັກຈຶ່ງຄວບຄຸມບໍ່ໄດ້ປະມານ 0.0822 ຕ່າງຈາກຄ່າທີ່ຕີພິມ 0.0824 ບໍ່ເກີນ 0.3%.
+	Median time in system	ຄ່າກາງຂອງເວລາໃນລະບົບ
+	Time in system, 90th percentile	ເວລາໃນລະບົບ, ເປີເຊັນໄທລ໌ທີ 90
+	Time in system, 95th percentile	ເວລາໃນລະບົບ, ເປີເຊັນໄທລ໌ທີ 95
+	Share done within the target time	ສ່ວນທີ່ສຳເລັດພາຍໃນເວລາເປົ້າໝາຍ
+	Percentiles of time in system	ເປີເຊັນໄທລ໌ຂອງເວລາໃນລະບົບ
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	ສະແດງຄ່າກາງ, ເປີເຊັນໄທລ໌ທີ 90 ແລະ 95 ຂອງເວລາທີ່ແຕ່ລະສິ່ງໃຊ້ນັບແຕ່ຖືກສ້າງຈົນຮອດທາງອອກເຫຼົ່ານີ້ ແລະ ເມື່ອມີເວລາເປົ້າໝາຍ ກໍສະແດງສ່ວນທີ່ສຳເລັດພາຍໃນເວລານັ້ນ.
+	Target time ({unit})	ເວລາເປົ້າໝາຍ ({unit})
+	The target time is a time above 0	ເວລາເປົ້າໝາຍຕ້ອງຫຼາຍກວ່າ 0
+	Count only working time on	ນັບສະເພາະເວລາເຮັດວຽກຕາມ
+	Entities still inside when the run ends are left out, so stop the run once all are done.	ສິ່ງທີ່ຍັງຢູ່ພາຍໃນເມື່ອການແລ່ນສິ້ນສຸດ ບໍ່ຖືກນັບ ສະນັ້ນຢຸດການແລ່ນເມື່ອທັງໝົດສຳເລັດແລ້ວ.
+	Set the target time in system of {block} to a time above 0.	ຕັ້ງເວລາເປົ້າໝາຍໃນລະບົບຂອງ {block} ເປັນເວລາທີ່ຫຼາຍກວ່າ 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	ເວລາໃນລະບົບຂອງ {block} ນັບເວລາເຮັດວຽກຕາມປະຕິທິນທີ່ບໍ່ມີຢູ່ ເລືອກປະຕິທິນທີ່ມີຢູ່
 	One machine's availability	ຄວາມພ້ອມໃຊ້ງານຂອງເຄື່ອງຈັກໜຶ່ງເຄື່ອງ
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	ເຄື່ອງຈັກໜຶ່ງເຄື່ອງທີ່ເສຍສະເລ່ຍທຸກ 90 ຊົ່ວໂມງ ແລະ ໃຊ້ເວລາ 4.5 ຊົ່ວໂມງໃນການສ້ອມ (Hristova, Denev ແລະ Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	ເຄື່ອງຈັກໜຶ່ງເຄື່ອງຢຸດເລື້ອຍປານໃດ ແລະ ເສຍງານຫຼາຍປານໃດ?

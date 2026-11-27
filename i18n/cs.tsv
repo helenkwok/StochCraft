@@ -1544,6 +1544,18 @@ connection	Flow	Tok
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Tyč držená na obou koncích na 0 vytváří teplo úměrně druhé mocnině své teploty: 19 zásob podél tyče, metodou přímek (Soheili a Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Kdy se tyč ohřívaná zevnitř vymkne kontrole?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Metoda přímek převádí rovnici vedení tepla na zásoby a toky a model může explodovat v konečném čase: střed překročí 10 000 v t = 0.0821, takže se tyč vymkne kontrole zhruba v 0.0822, do 0.3% od publikovaných 0.0824.
+	Median time in system	Medián doby v systému
+	Time in system, 90th percentile	Doba v systému, 90. percentil
+	Time in system, 95th percentile	Doba v systému, 95. percentil
+	Share done within the target time	Podíl hotových v cílové době
+	Percentiles of time in system	Percentily doby v systému
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Zobrazí medián, 90. a 95. percentil doby, kterou každá entita strávila od svého vzniku do těchto výstupů, a s cílovou dobou podíl hotových v ní.
+	Target time ({unit})	Cílová doba ({unit})
+	The target time is a time above 0	Cílová doba je doba větší než 0
+	Count only working time on	Počítat jen pracovní dobu podle
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entity, které jsou na konci běhu stále uvnitř, nejsou zahrnuty, proto běh zastavte, až budou všechny hotové.
+	Set the target time in system of {block} to a time above 0.	Nastavte cílovou dobu v systému bloku {block} na dobu větší než 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Doba v systému bloku {block} počítá pracovní dobu podle kalendáře, který neexistuje. Vyberte existující kalendář.
 	One machine's availability	Dostupnost jednoho stroje
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jeden stroj, který se v průměru porouchá každých 90 hodin a oprava trvá 4.5 hodiny (Hristova, Denev a Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Jak často stojí jeden stroj a kolik práce to stojí?

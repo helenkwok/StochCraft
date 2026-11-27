@@ -1544,6 +1544,18 @@ connection	Flow	Alur
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Sebuah batang yang ditahan pada 0 di kedua ujungnya menghasilkan panas sebanding dengan kuadrat suhunya: 19 stok di sepanjang batang, dengan metode garis (Soheili dan Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Kapan batang yang dipanaskan dari dalam menjadi tak terkendali?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Metode garis mengubah persamaan panas menjadi stok dan aliran, dan sebuah model bisa meledak dalam waktu terhingga: bagian tengah melewati 10.000 pada t = 0.0821, sehingga batang tak terkendali sekitar 0.0822, dalam 0.3% dari nilai terbitan 0.0824.
+	Median time in system	Median waktu dalam sistem
+	Time in system, 90th percentile	Waktu dalam sistem, persentil ke-90
+	Time in system, 95th percentile	Waktu dalam sistem, persentil ke-95
+	Share done within the target time	Bagian yang selesai dalam waktu target
+	Percentiles of time in system	Persentil waktu dalam sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Menampilkan median, persentil ke-90 dan ke-95 dari waktu yang diperlukan setiap entitas sejak dibuat hingga mencapai keluaran ini, dan dengan waktu target, bagian yang selesai di dalamnya.
+	Target time ({unit})	Waktu target ({unit})
+	The target time is a time above 0	Waktu target harus berupa waktu di atas 0
+	Count only working time on	Hitung hanya waktu kerja menurut
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitas yang masih di dalam saat eksekusi berakhir tidak dihitung, jadi hentikan eksekusi setelah semuanya selesai.
+	Set the target time in system of {block} to a time above 0.	Atur waktu target dalam sistem untuk {block} ke waktu di atas 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Waktu dalam sistem untuk {block} menghitung waktu kerja menurut kalender yang tidak ada. Pilih kalender yang ada.
 	One machine's availability	Ketersediaan satu mesin
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Satu mesin yang rata-rata rusak setiap 90 jam dan butuh 4.5 jam untuk diperbaiki (Hristova, Denev, dan Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Seberapa sering satu mesin berhenti, dan berapa banyak pekerjaan yang hilang karenanya?

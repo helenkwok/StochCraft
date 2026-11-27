@@ -1544,6 +1544,18 @@ connection	Flow	Flux
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	O bară ținută la 0 la ambele capete produce căldură proporțional cu pătratul temperaturii sale: 19 stocuri de-a lungul ei, prin metoda liniilor (Soheili și Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Când scapă de sub control o bară încălzită din interior?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Metoda liniilor transformă o ecuație a căldurii în stocuri și fluxuri, iar un model poate exploda într-un timp finit: mijlocul depășește 10.000 la t = 0.0821, deci bara scapă de sub control pe la 0.0822, la mai puțin de 0.3% de valoarea publicată de 0.0824.
+	Median time in system	Mediana timpului în sistem
+	Time in system, 90th percentile	Timp în sistem, percentila 90
+	Time in system, 95th percentile	Timp în sistem, percentila 95
+	Share done within the target time	Proporția terminată în timpul țintă
+	Percentiles of time in system	Percentilele timpului în sistem
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Arată mediana, percentilele 90 și 95 ale timpului pe care fiecare entitate l-a petrecut de la creare până la aceste ieșiri și, cu un timp țintă, proporția terminată în el.
+	Target time ({unit})	Timp țintă ({unit})
+	The target time is a time above 0	Timpul țintă este un timp mai mare decât 0
+	Count only working time on	Numără doar timpul de lucru după
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entitățile încă în interior când se încheie rularea sunt lăsate în afară, așa că opriți rularea când toate sunt gata.
+	Set the target time in system of {block} to a time above 0.	Setați timpul țintă în sistem al blocului {block} la un timp mai mare decât 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Timpul în sistem al blocului {block} numără timpul de lucru după un calendar care nu există. Alegeți un calendar existent.
 	One machine's availability	Disponibilitatea unei mașini
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	O mașină care se defectează în medie la fiecare 90 de ore și necesită 4.5 ore pentru reparație (Hristova, Denev și Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Cât de des stă o mașină și cât de multă muncă costă asta?

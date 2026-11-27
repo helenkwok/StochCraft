@@ -1544,6 +1544,18 @@ connection	Flow	Akış
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	İki ucu 0'da tutulan bir çubuk, sıcaklığının karesiyle orantılı ısı üretir: çubuk boyunca 19 stok, çizgiler yöntemiyle (Soheili ve Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	İçeriden ısınan bir çubuk ne zaman kontrolden çıkar?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Çizgiler yöntemi bir ısı denklemini stoklara ve akışlara dönüştürür ve bir model sonlu sürede patlayabilir: orta nokta t = 0.0821'de 10.000'i geçer, yani çubuk yaklaşık 0.0822'de kontrolden çıkar; bu, yayımlanmış 0.0824 değerinin %0.3'ü içindedir.
+	Median time in system	Sistemdeki sürenin medyanı
+	Time in system, 90th percentile	Sistemdeki süre, 90. yüzdelik
+	Time in system, 95th percentile	Sistemdeki süre, 95. yüzdelik
+	Share done within the target time	Hedef süre içinde biten pay
+	Percentiles of time in system	Sistemdeki sürenin yüzdelikleri
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Her varlığın oluşturulmasından bu çıkışlara ulaşmasına kadar geçen sürenin medyanını, 90. ve 95. yüzdeliğini, bir hedef süre verilirse bu süre içinde bitenlerin payını gösterir.
+	Target time ({unit})	Hedef süre ({unit})
+	The target time is a time above 0	Hedef süre 0'dan büyük bir süredir
+	Count only working time on	Yalnızca çalışma süresini say, takvim
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Çalıştırma bittiğinde hâlâ içeride olan varlıklar dahil edilmez, bu yüzden çalıştırmayı hepsi bittiğinde durdurun.
+	Set the target time in system of {block} to a time above 0.	{block} bloğunun sistemdeki hedef süresini 0'dan büyük bir süreye ayarlayın.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} bloğunun sistemdeki süresi, var olmayan bir takvime göre çalışma süresini sayıyor. Var olan bir takvim seçin.
 	One machine's availability	Bir makinenin kullanılabilirliği
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Ortalama her 90 saatte bir arızalanan ve onarımı 4.5 saat süren bir makine (Hristova, Denev ve Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Bir makine ne sıklıkta duruyor ve bu ne kadar işe mal oluyor?
