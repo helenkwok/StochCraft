@@ -1079,6 +1079,22 @@ fields (`“Service time”`) are named in the messages by their own rows.
   and not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
+- The rows for the delayed-discharge example (its title, the line about it, its question and
+  what it teaches) were machine-drafted from the plain meaning of the English, with each
+  catalog's own words for patients, beds, turned away and average stay from the hospital beds
+  card. "Discharge to assess" has no settled term in most languages, so it is rendered as a
+  discharge with an assessment (of the care needed); a nursing home is the language's plain word
+  for a care home, and care at home its word for home care. The authors' names and the workshop's
+  name stay in English and Latin script. Not checked against any other source and not reviewed
+  by native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq, and
+  "discharge to assess" in all of them.
+- The rows for a model's headline result ("{label}: {value}" and "{label}: {value} ({terms})")
+  keep the English punctuation, with a space before the colon in French and full-width
+  punctuation in Japanese and both Chinese catalogs. Not reviewed by native speakers.
+- The row for "Share turned away" (the share of arrivals a task with a way for those turned away
+  sends down it, shown instead of "Share of arrivals lost" there) was machine-drafted from each
+  catalog's own "Turned away" and its wording of the other shares ("Share balked"). Not checked
+  against any other source and not reviewed by native speakers.
 - The rows for time in system by percentile on Departures (the three percentile results and the
   share done within the target time, the inspector's checkbox, its hint, target time, working
   time and censoring note, and the two validation messages) were machine-drafted from the plain

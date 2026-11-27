@@ -1531,6 +1531,13 @@ connection	Flow	Srautas
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dešimt mašinų turi veikti, keturios atsarginės laukia parengtos, o trys mechanikai taiso sugedusias (Crane ir Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kiek atsarginių mašinų ir mechanikų reikia, kad veiktų dešimt mašinų?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Parengtos atsarginės mašinos negali sugesti: vidutiniškai 3.47 mašinos sugedusios, o 9.29 veikia. Ketvirtas mechanikas duoda maždaug tiek pat, kiek keturios papildomos atsarginės mašinos.
+	Delayed discharge	Uždelstas išrašymas
+	Patients fit to leave hospital need a nursing home or care at home; those who find no discharge-to-assess place wait in hospital (Boyle et al., OR Society Simulation Workshop, 2023).	Išrašyti pasiruošusiems pacientams reikia slaugos namų arba priežiūros namuose; tie, kurie neranda vietos išrašymui su vertinimu, laukia ligoninėje (Boyle et al., OR Society Simulation Workshop, 2023).
+	How many patients who are fit to leave are still in hospital, waiting for care?	Kiek išrašyti pasiruošusių pacientų vis dar yra ligoninėje ir laukia priežiūros?
+	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Išrašymo su vertinimu vietos pacientus atmeta, o ne stato į eilę: apie 202 laukia ligoninėje, ir svarbi tik vidutinė buvimo trukmė. Dešimt papildomų stacionaro lovų sumažina apie 10.
+	Share turned away	Atmestųjų dalis
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})
 	Scenario	Scenarijus
 	Scenario: {name}	Scenarijus: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Atidarius {scenario}, neįrašyti {name} pakeitimai bus atmesti. Pirmiau juos įrašyti?

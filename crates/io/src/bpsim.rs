@@ -211,6 +211,13 @@ pub const SEQUENTIAL: &str = "stochcraft:sequential";
 /// (`stochcraft:value="off"`) clears what an inherited scenario sets.
 pub const OBSERVED: &str = "stochcraft:observed";
 
+/// The one result the model's question asks for: a `stochcraft:headline` vendor extension on the
+/// scenario holding a `stochcraft:headline` element with a `name` (what it is, in the model's own
+/// words) and one `stochcraft:term` child for each result it adds up: `element` (a block id) and
+/// `metric` (its name in the results). The sum is taken in each replication and summarised
+/// across them. A scenario that inherits another inherits it, or replaces it with its own.
+pub const HEADLINE: &str = "stochcraft:headline";
+
 /// An agent-based model (decision D16): a `stochcraft:agents` vendor extension on the scenario,
 /// holding a `stochcraft:agents` element with its agent types (each naming its SCXML state
 /// chart), populations (with a network and a grid), the environment, statistics and the stepped
@@ -331,6 +338,8 @@ pub struct ScenarioSettings {
     pub sequential: Option<Sequential>,
     /// The observed data ([`OBSERVED`]); empty without any or where turned off.
     pub observed: Vec<Observation>,
+    /// The headline result ([`HEADLINE`]); `None` without one.
+    pub headline: Option<stochcraft_model::Headline>,
     /// Look-only scenery ([`SCENE`]), in id order; empty without any.
     pub scene: Vec<stochcraft_model::Scenery>,
 }
@@ -700,6 +709,43 @@ fn read_observed(ext: &Element, notes: &mut Vec<Note>) -> Vec<Observation> {
     out
 }
 
+/// The headline result a [`HEADLINE`] vendor extension sets; `None`, with a note, where it has no
+/// name or no complete term (each needs both `element` and `metric`).
+fn read_headline(ext: &Element, notes: &mut Vec<Note>) -> Option<stochcraft_model::Headline> {
+    let body = ext.elements().find(|e| e.is(STOCHCRAFT_NS, "headline"))?;
+    let label = body
+        .attr("name")
+        .map(|v| v.trim().to_owned())
+        .unwrap_or_default();
+    let mut terms = Vec::new();
+    for t in body.elements().filter(|e| e.is(STOCHCRAFT_NS, "term")) {
+        let named = |name: &str| t.attr(name).map(|v| v.trim().to_owned());
+        match (named("element"), named("metric")) {
+            (Some(element), Some(metric)) if !element.is_empty() && !metric.is_empty() => {
+                terms.push(stochcraft_model::HeadlineTerm {
+                    element: ElementId::unchecked(&element),
+                    metric,
+                });
+            }
+            _ => {
+                notes.push(Note::warning(
+                    None,
+                    "a headline term needs both `element` and `metric`; the headline is ignored",
+                ));
+                return None;
+            }
+        }
+    }
+    if label.is_empty() || terms.is_empty() {
+        notes.push(Note::warning(
+            None,
+            "a headline needs a `name` and at least one term; it is ignored",
+        ));
+        return None;
+    }
+    Some(stochcraft_model::Headline { label, terms })
+}
+
 /// StochCraft's scenario-level vendor extensions in `exts` (the length unit, layout scale and
 /// sequential replications): the scenario's own children, where BPSim has them, and those in its
 /// parameters, where older files of ours have them.
@@ -731,6 +777,7 @@ fn read_extensions(exts: &[&Element], s: &mut ScenarioSettings, notes: &mut Vec<
             }
             Some(SEQUENTIAL) => s.sequential = read_sequential(ext, notes),
             Some(OBSERVED) => s.observed = read_observed(ext, notes),
+            Some(HEADLINE) => s.headline = read_headline(ext, notes),
             Some(SCENE) => s.scene = crate::layout::read_scene(ext, notes),
             _ => {}
         }

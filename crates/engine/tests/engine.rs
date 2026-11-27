@@ -3522,6 +3522,15 @@ fn waiting_rooms_that_change_and_a_turned_away_way_are_set_run_and_removed() {
     assert!(m.contains("\"queue_per_working_server\":true"), "{m}");
     let r = ok(&mut e, "run", json!({"replications": 2}));
     assert!(metric(&r, "desk", "lost").is_some_and(|x| x > 0.0), "{r}");
+    // The results say its losses go on by a way of their own (turned away, not lost).
+    let flag = |id: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == id))
+            .map(|x| x["turns_away"].clone())
+    };
+    assert_eq!(flag("desk"), Some(json!(true)), "{r}");
+    assert_eq!(flag("elsewhere"), Some(Value::Null), "{r}");
     assert!(
         metric(&r, "elsewhere", "left").is_some_and(|x| x > 0.0),
         "{r}"

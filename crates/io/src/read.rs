@@ -2669,6 +2669,7 @@ fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment 
         result_frequency: s.result_frequency,
         sequential: s.sequential.clone(),
         observed: s.observed.clone(),
+        headline: s.headline.clone(),
     }
 }
 

@@ -338,6 +338,19 @@
       </stochcraft:observed>
     </bpsim:VendorExtension>
 
+  stochcraft:headline, on a Scenario (after its ElementParameters and Calendars): the one result
+  the model's question asks for, shown first among the results. name says what it is, in the
+  model's own words; each term names a result, by element (a block id) and metric (its name in
+  the results). The terms are added up in each replication and the sum summarised across them.
+  A scenario that inherits another inherits it, or replaces it with its own.
+
+    <bpsim:VendorExtension name="stochcraft:headline" xmlns:stochcraft="…">
+      <stochcraft:headline name="Patients fit to leave still in hospital">
+        <stochcraft:term element="hospital_nursing_home" metric="mean_contents"/>
+        <stochcraft:term element="hospital_care_at_home" metric="mean_contents"/>
+      </stochcraft:headline>
+    </bpsim:VendorExtension>
+
   stochcraft:monteCarlo, on a Scenario (after its ElementParameters and Calendars): the scenario
   is a Monte Carlo model, a calculation with no process, and the file needs none. Its inputs are
   the scenario's own properties (ScenarioParameters/PropertyParameters/Property, each a BPSim
@@ -754,6 +767,19 @@
           </xs:complexType>
         </xs:element>
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="headline">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="term" minOccurs="1" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="element" type="xs:string" use="required"/>
+            <xs:attribute name="metric" type="xs:string" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="sequential">

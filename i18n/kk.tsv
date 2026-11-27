@@ -1531,6 +1531,13 @@ connection	Flow	Ағын
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Он машина жұмыс істеуі керек, төрт қосалқы машина дайын тұрады, ал үш слесарь бұзылғандарын жөндейді (Crane және Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Он машинаның жұмысын қанша қосалқы машина мен слесарь қамтамасыз етеді?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Дайын тұрған қосалқы машиналар бұзыла алмайды: орташа есеппен 3.47 машина бұзық, 9.29 машина жұмыс істейді. Төртінші слесарь тағы төрт қосалқы машинамен шамамен бірдей пайда береді.
+	Delayed discharge	Кешіктірілген шығару
+	Patients fit to leave hospital need a nursing home or care at home; those who find no discharge-to-assess place wait in hospital (Boyle et al., OR Society Simulation Workshop, 2023).	Ауруханадан шығуға дайын науқастарға қарттар үйі немесе үйде күтім қажет; бағалаумен шығару орнын таппағандар ауруханада күтеді (Boyle et al., OR Society Simulation Workshop, 2023).
+	How many patients who are fit to leave are still in hospital, waiting for care?	Шығуға дайын қанша науқас әлі де ауруханада күтім күтіп отыр?
+	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Бағалаумен шығару орындары науқастарды кезекке қоймай, қабылдамайды: шамамен 202 науқас ауруханада күтеді және тек орташа жату ұзақтығы маңызды. Тағы он стационарлық төсек оны шамамен 10-ға азайтады.
+	Share turned away	Қабылданбағандар үлесі
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})
 	Scenario	Сценарий
 	Scenario: {name}	Сценарий: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ашылса, {name} ішіндегі сақталмаған өзгерістер жоғалады. Алдымен сақтау керек пе?

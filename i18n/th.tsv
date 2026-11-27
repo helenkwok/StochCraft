@@ -1531,6 +1531,13 @@ connection	Flow	โฟลว์
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	เครื่องจักรสิบเครื่องต้องทำงาน เครื่องจักรสำรองสี่เครื่องรอพร้อมใช้ และช่างซ่อมสามคนซ่อมเครื่องที่ขัดข้อง (Crane และ Iglehart, Winter Simulation Conference, 1973)
 	How many spares and repairmen keep ten machines running?	ต้องมีเครื่องจักรสำรองและช่างซ่อมเท่าใด จึงจะให้เครื่องจักรสิบเครื่องทำงานต่อไปได้?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	เครื่องจักรสำรองที่รออยู่ขัดข้องไม่ได้: โดยเฉลี่ยเครื่องจักรเสีย 3.47 เครื่องและทำงาน 9.29 เครื่อง ช่างซ่อมคนที่สี่ช่วยได้พอ ๆ กับเครื่องจักรสำรองอีกสี่เครื่อง
+	Delayed discharge	การจำหน่ายผู้ป่วยล่าช้า
+	Patients fit to leave hospital need a nursing home or care at home; those who find no discharge-to-assess place wait in hospital (Boyle et al., OR Society Simulation Workshop, 2023).	ผู้ป่วยที่พร้อมออกจากโรงพยาบาลต้องการสถานบริบาลหรือการดูแลที่บ้าน ผู้ที่ไม่ได้ที่สำหรับการจำหน่ายพร้อมการประเมินจะรออยู่ในโรงพยาบาล (Boyle et al., OR Society Simulation Workshop, 2023)
+	How many patients who are fit to leave are still in hospital, waiting for care?	มีผู้ป่วยที่พร้อมออกจากโรงพยาบาลกี่คนที่ยังรอการดูแลอยู่ในโรงพยาบาล?
+	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	ที่สำหรับการจำหน่ายพร้อมการประเมินปฏิเสธผู้ป่วยแทนที่จะให้เข้าคิว: ราว 202 คนรออยู่ในโรงพยาบาล และมีเพียงระยะเวลาพักเฉลี่ยที่มีผล เตียงผู้ป่วยในเพิ่มอีกสิบเตียงลดลงราว 10 คน
+	Share turned away	สัดส่วนที่ถูกปฏิเสธ
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})
 	Scenario	สถานการณ์
 	Scenario: {name}	สถานการณ์: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	การเปิด {scenario} จะทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกใน {name} บันทึกก่อนหรือไม่

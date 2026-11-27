@@ -598,6 +598,28 @@ pub const EXAMPLES: &[Example] = &[
         },
     },
     Example {
+        title: "Delayed discharge",
+        about: "Patients fit to leave hospital need a nursing home or care at home; those who find no discharge-to-assess place wait in hospital (Boyle et al., OR Society Simulation Workshop, 2023).",
+        file: "delayed-discharge.bpmn",
+        bytes: include_bytes!("../../../tests/models/delayed-discharge.bpmn"),
+        card: start::Card {
+            question: "How many patients who are fit to leave are still in hospital, waiting for care?",
+            industry: start::Industry::Healthcare,
+            topics: &[start::Topic::Staffing],
+            teaches: "Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.",
+            minutes: 3,
+            proof: Some(start::Proof::Theory),
+            flow: &[
+                start::Glyph::Arrivals,
+                start::Glyph::Decision,
+                start::Glyph::Resource,
+                start::Glyph::Task,
+                start::Glyph::Departures,
+            ],
+            featured: false,
+        },
+    },
+    Example {
         title: "One machine's availability",
         about: "One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).",
         file: "machine-availability.bpmn",

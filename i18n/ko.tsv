@@ -1531,6 +1531,13 @@ connection	Flow	흐름
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	기계 10대가 돌아가야 하고, 예비 기계 4대가 대기하며, 정비공 3명이 고장 난 기계를 수리함 (Crane과 Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	예비 기계와 정비공이 몇이면 기계 10대를 계속 돌릴 수 있을까?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	대기 중인 예비 기계는 고장 나지 않음: 평균 3.47대가 고장 나 있고 9.29대가 돌아감. 정비공 한 명을 더 두면 예비 기계 4대를 더 두는 것과 거의 같은 효과가 있음.
+	Delayed discharge	퇴원 지연
+	Patients fit to leave hospital need a nursing home or care at home; those who find no discharge-to-assess place wait in hospital (Boyle et al., OR Society Simulation Workshop, 2023).	퇴원할 수 있는 환자는 요양원이나 재가 돌봄이 필요함. 퇴원 후 평가 자리를 찾지 못한 환자는 병원에서 기다림 (Boyle et al., OR Society Simulation Workshop, 2023).
+	How many patients who are fit to leave are still in hospital, waiting for care?	퇴원할 수 있는데도 돌봄을 기다리며 병원에 남아 있는 환자는 몇 명인가?
+	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	퇴원 후 평가 자리는 환자를 대기시키지 않고 돌려보냄. 약 202명이 병원에서 기다리며, 평균 체류 기간만 영향을 줌. 입원형 병상을 10개 늘리면 약 10명 줄어듦.
+	Share turned away	거절 비율
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})
 	Scenario	시나리오
 	Scenario: {name}	시나리오: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}을(를) 열면 {name}의 저장하지 않은 변경 사항이 사라집니다. 먼저 저장할까요?

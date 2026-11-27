@@ -1531,6 +1531,13 @@ connection	Flow	ஓட்டம்
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	பத்து இயந்திரங்கள் இயங்க வேண்டும், நான்கு உதிரி இயந்திரங்கள் தயாராகக் காத்திருக்கின்றன, மூன்று மெக்கானிக்குகள் பழுதானவற்றைச் சரிசெய்கிறார்கள் (Crane மற்றும் Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	பத்து இயந்திரங்களை இயங்க வைக்க எத்தனை உதிரி இயந்திரங்களும் மெக்கானிக்குகளும் தேவை?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	தயாராகக் காத்திருக்கும் உதிரி இயந்திரங்கள் பழுதாக முடியாது: சராசரியாக 3.47 இயந்திரங்கள் பழுதாகவும் 9.29 இயங்கியும் இருக்கும். நான்காவது மெக்கானிக் இன்னும் நான்கு உதிரி இயந்திரங்கள் அளவுக்கு உதவுகிறார்.
+	Delayed discharge	தாமதமான வெளியேற்றம்
+	Patients fit to leave hospital need a nursing home or care at home; those who find no discharge-to-assess place wait in hospital (Boyle et al., OR Society Simulation Workshop, 2023).	மருத்துவமனையிலிருந்து வெளியேறத் தயாரான நோயாளிகளுக்கு முதியோர் பராமரிப்பு இல்லம் அல்லது வீட்டில் பராமரிப்பு தேவை; வெளியேற்றத்திற்குப் பிந்தைய மதிப்பீட்டுக்கான இடம் கிடைக்காதவர்கள் மருத்துவமனையில் காத்திருக்கிறார்கள் (Boyle et al., OR Society Simulation Workshop, 2023).
+	How many patients who are fit to leave are still in hospital, waiting for care?	வெளியேறத் தயாரான எத்தனை நோயாளிகள் இன்னும் பராமரிப்புக்காக மருத்துவமனையில் காத்திருக்கிறார்கள்?
+	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	வெளியேற்றத்திற்குப் பிந்தைய மதிப்பீட்டு இடங்கள் நோயாளிகளை வரிசையில் வைக்காமல் திருப்பி அனுப்புகின்றன: சுமார் 202 பேர் மருத்துவமனையில் காத்திருக்கிறார்கள், சராசரி தங்கும் காலம் மட்டுமே முக்கியம். மேலும் பத்து உள்நோயாளி படுக்கைகள் சுமார் 10 குறைக்கின்றன.
+	Share turned away	திருப்பி அனுப்பப்பட்டவற்றின் விகிதம்
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})
 	Scenario	சூழ்நிலை
 	Scenario: {name}	சூழ்நிலை: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ஐத் திறந்தால் {name} இல் சேமிக்கப்படாத மாற்றங்கள் நீக்கப்படும். முதலில் சேமிக்கவா?

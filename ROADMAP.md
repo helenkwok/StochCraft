@@ -5070,6 +5070,50 @@ are.
     It differs from the machine repair crew above because spares on cold standby do not fail.
     Once regenerative intervals (M2.9) are built, this example is their first check: the
     paper's own intervals come from cycles back to X = 0.
+- **Examples from the 2023 OR Society Simulation Workshop:** checked the same way.
+  - **Delayed discharge** (`delayed-discharge.bpmn`, "Healthcare"): L. M. Boyle, C. S. M. Currie,
+    C. Lamas Fernandez, L. Nguyen and C. Halpenny, *A Discrete Event Simulation Model of a
+    Hospital for Prediction of the Impact of Delayed Discharge*, Proceedings of the Operational
+    Research Society Simulation Workshop 2023 (SW23), pp. 240–249, doi 10.36819/SW23.029
+    (Table 1 on p. 244, Tables 2–5 on pp. 245–246). Patients fit to leave hospital arrive at 114
+    a day (Poisson); 18.52% need a nursing home and go to a discharge-to-assess (D2A) inpatient
+    bed (75), the rest need care at home and go to a D2A home place (500 in the baseline). Those
+    who find no place free wait in hospital, with no limit. On each day a nursing home accepts a
+    patient with chance 1/7 and care at home with chance 1/3. The paper runs "1 year of simulated
+    time with a warm-up period of 8 weeks", 5 times; the file reads that as 365 days in all, 56
+    of them warm-up (BPSim's duration includes the warm-up, so 309 days are measured). The exact
+    values below are for the steady state, so that reading does not change them. The model is two independent loss systems: a gateway splits the
+    patients, each D2A task has its places and no waiting room, and those turned away take a
+    `stochcraft:turnedAway` way to an unlimited "Waiting in hospital" task. The stay, in D2A or
+    in hospital, is 1 + 2(N − 1) days with N geometric on 1, 2, …, mean 2/p − 1 (13 days for a
+    nursing home, 5 for care at home): each refusal costs 2 days. The paper's text gives each
+    wait 1 day, which would put 74 patients in hospital rather than its 205; 2 days per refusal
+    is the reading that gives its tables. BPSim has no geometric distribution, so each stay is a
+    discrete user distribution on 1, 3, 5, …, cut where the rest of the tail is below 1e-9 and
+    that rest put on the last point; the check uses the mean as written (within 1e-7 of
+    2/p − 1). The mean number waiting in hospital is exact by Erlang B, which holds whatever the
+    stay's distribution: λ B(c, λT) T for each kind of care, 202.14 in the baseline (199.84 for
+    a nursing home, 2.31 for care at home). `crates/engine/tests/examples.rs` checks the run
+    against it, and the D2A tasks' shares turned away and utilisations. Fifteen scenarios, each
+    a `bpsim:Scenario` inheriting the baseline and checked on the hospital wait it changes (a
+    heavy test, after a 200-day warm-up), with their exact totals: D2A home places 350, 400, 450,
+    550 and 650 (317.1, 269.5, 226.6, 199.8, 199.8); a nursing home accepting 1 day in 5, 6, 8, 9
+    or 10 (118.0, 160.0, 244.3, 286.5, 328.7); care at home 1 in 2, 4 or 5 (199.8, 353.2,
+    537.3); 85 and 95 inpatient beds (192.2, 182.3). The paper's figures (Tables 2–5: 205; 320,
+    273, 230, 202, 202; 119, 162, 246, 288, 329; 202, 356, 539; 195, 185; the NHS data 208) are
+    all above the exact values, by 0.3 to 3.5; their 95% intervals over 5 runs hold the exact
+    value in 13 of the 16 cells. Two slips in the paper: it derives p from p Σ i(1 − p)^i = 1/p,
+    but that sum is (1 − p)/p; and Table 2's rows for 550 and 650 places are identical (and
+    match Table 4's care-at-home 1 in 2 but for one digit), which the exact values bear out, as
+    hardly anyone then waits for care at home. Not checked: the paper's delayed bed days for
+    patients waiting 7, 14 and 21 days or more, which need each patient's wait. The example
+    brought two general features: a headline result (`stochcraft:headline` on the scenario, a
+    label and the block results it adds up, summed in each replication and summarised across
+    them; shown as the first finding, the first CSV row and the results' `headline`), here the
+    patients in hospital for either kind of care, checked against the Erlang B total; and
+    "Share turned away" in place of "Share of arrivals lost" at a task whose losses take a
+    `stochcraft:turnedAway` way. A headline is set in the file only for now: no command or form
+    edits it yet.
 - **An example on reliability:** checked the same way.
   - **One machine's availability** (`machine-availability.bpmn`, "Manufacturing"): Hristova,
     Denev and Tsankov, *Environment. Technology. Resources*, 2024, vol. II, pp. 120–126 (the

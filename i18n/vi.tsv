@@ -1531,6 +1531,13 @@ connection	Flow	Luồng
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Mười máy phải chạy, bốn máy dự phòng chờ sẵn và ba thợ máy sửa những máy bị hỏng (Crane và Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Cần bao nhiêu máy dự phòng và thợ máy để mười máy luôn chạy?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máy dự phòng đang chờ không thể hỏng: trung bình 3.47 máy bị hỏng và 9.29 máy chạy. Thêm một thợ máy thứ tư được việc gần bằng thêm bốn máy dự phòng.
+	Delayed discharge	Xuất viện chậm
+	Patients fit to leave hospital need a nursing home or care at home; those who find no discharge-to-assess place wait in hospital (Boyle et al., OR Society Simulation Workshop, 2023).	Bệnh nhân đủ điều kiện xuất viện cần viện dưỡng lão hoặc chăm sóc tại nhà; những người không tìm được chỗ xuất viện kèm đánh giá phải chờ trong bệnh viện (Boyle et al., OR Society Simulation Workshop, 2023).
+	How many patients who are fit to leave are still in hospital, waiting for care?	Có bao nhiêu bệnh nhân đủ điều kiện xuất viện vẫn còn nằm trong bệnh viện chờ được chăm sóc?
+	Discharge-to-assess places turn patients away rather than queue them: about 202 wait in hospital, and only the average stay matters. Ten more inpatient beds take about 10 off.	Chỗ xuất viện kèm đánh giá từ chối bệnh nhân chứ không xếp họ vào hàng đợi: khoảng 202 người chờ trong bệnh viện, và chỉ thời gian lưu trú trung bình là quan trọng. Thêm mười giường nội trú giảm được khoảng 10 người.
+	Share turned away	Tỷ lệ bị từ chối
+	{label}: {value}	{label}: {value}
+	{label}: {value} ({terms})	{label}: {value} ({terms})
 	Scenario	Kịch bản
 	Scenario: {name}	Kịch bản: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Mở {scenario} sẽ bỏ các thay đổi chưa lưu của {name}. Lưu trước?
