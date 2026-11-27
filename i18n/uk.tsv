@@ -1501,3 +1501,7 @@ connection	Flow	Потік
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десять верстатів мають працювати, чотири резервні стоять напоготові, а троє слюсарів лагодять ті, що виходять з ладу (Crane і Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Скільки резервних верстатів і слюсарів потрібно, щоб десять верстатів працювали?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервні верстати напоготові не можуть вийти з ладу: у середньому 3.47 верстата несправні, а 9.29 працюють. Четвертий слюсар дає приблизно стільки ж, скільки ще чотири резервні верстати.
+	Scenario	Сценарій
+	Scenario: {name}	Сценарій: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Відкриття {scenario} скасує незбережені зміни в {name}. Спершу зберегти їх?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарій для порівняння|{n} сценарії для порівняння|{n} сценаріїв для порівняння

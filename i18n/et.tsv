@@ -1501,3 +1501,7 @@ connection	Flow	Voog
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Kümme masinat peavad töötama, neli varumasinat ootavad valmis ja kolm mehaanikut parandavad rikki läinud masinaid (Crane ja Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Mitu varumasinat ja mehaanikut hoiavad kümme masinat töös?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Ootel varumasinad ei saa rikki minna: keskmiselt on rikkis 3.47 masinat ja töötab 9.29. Neljas mehaanik annab umbes sama palju kui neli varumasinat juurde.
+	Scenario	Stsenaarium
+	Scenario: {name}	Stsenaarium: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Stsenaariumi {scenario} avamine kaotab faili {name} salvestamata muudatused. Kas salvestada need enne?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} stsenaarium võrdlemiseks|{n} stsenaariumi võrdlemiseks

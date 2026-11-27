@@ -1501,3 +1501,7 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset strojů musí běžet, čtyři záložní čekají v pohotovosti a tři opraváři opravují ty, které se porouchají (Crane a Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kolik záložních strojů a opravářů udrží deset strojů v chodu?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Záložní stroje v pohotovosti se nemohou porouchat: v průměru je porouchaných 3.47 strojů a běží 9.29. Čtvrtý opravář pomůže zhruba tolik jako čtyři záložní stroje navíc.
+	Scenario	Scénář
+	Scenario: {name}	Scénář: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otevřením scénáře {scenario} se zahodí neuložené změny v {name}. Uložit je nejprve?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scénář k porovnání|{n} scénáře k porovnání|{n} scénářů k porovnání

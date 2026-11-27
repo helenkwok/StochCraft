@@ -585,6 +585,12 @@ struct FileState {
     notes: Vec<Value>,
 }
 
+/// The input scenarios of the model file `bytes` (BPSim), in the file's order: what
+/// `file.scenarios` would list once it is opened. None for a file without BPSim data.
+pub fn file_scenarios(bytes: &[u8]) -> Vec<stochcraft_io::bpsim::ScenarioInfo> {
+    stochcraft_io::scenarios(bytes)
+}
+
 /// A model, its undo history, its journal, its file and its background run.
 pub struct Engine {
     model: Model,

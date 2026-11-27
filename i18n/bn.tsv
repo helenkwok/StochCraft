@@ -1501,3 +1501,7 @@ connection	Flow	প্রবাহ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	দশটি মেশিন চালু থাকতেই হবে, চারটি অতিরিক্ত মেশিন প্রস্তুত থাকে এবং তিনজন মিস্ত্রি বিকল মেশিন সারান (Crane ও Iglehart, Winter Simulation Conference, 1973)।
 	How many spares and repairmen keep ten machines running?	দশটি মেশিন চালু রাখতে কতগুলো অতিরিক্ত মেশিন ও কতজন মিস্ত্রি লাগবে?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	প্রস্তুত থাকা অতিরিক্ত মেশিন বিকল হতে পারে না: গড়ে 3.47টি মেশিন বিকল থাকে এবং 9.29টি চলে। চতুর্থ একজন মিস্ত্রি প্রায় আরও চারটি অতিরিক্ত মেশিনের সমান কাজ করেন।
+	Scenario	দৃশ্যকল্প
+	Scenario: {name}	দৃশ্যকল্প: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} খুললে {name}-এর অসংরক্ষিত পরিবর্তনগুলি হারিয়ে যাবে। আগে সংরক্ষণ করবেন?
+@plural	{n} scenario to compare|{n} scenarios to compare	তুলনার জন্য {n}টি দৃশ্যকল্প|তুলনার জন্য {n}টি দৃশ্যকল্প

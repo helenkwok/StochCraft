@@ -2538,50 +2538,66 @@ fn file_scenarios(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn file_reopen(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: FileReopen = parse(p)?;
-    let Some(f) = e.file.as_ref().filter(|_| e.sd.is_none()) else {
-        return Err(CommandError::new(
-            ErrorCode::InvalidParams,
-            "no file with scenarios is open: open one with file.open",
-        ));
-    };
-    let ids: Vec<&str> = f
-        .opened
-        .scenario_details()
-        .iter()
-        .map(|s| s.id.as_str())
-        .collect();
-    if !ids.contains(&p.scenario.as_str()) {
-        return Err(CommandError::new(
-            ErrorCode::InvalidParams,
-            if ids.is_empty() {
-                format!("the file has no scenario `{}`; it has none", p.scenario)
-            } else {
-                format!(
-                    "the file has no scenario `{}`; its scenarios are {}",
-                    p.scenario,
-                    ids.join(", ")
-                )
-            },
-        ));
-    }
-    if e.is_dirty() && !p.discard_changes {
-        return Err(CommandError::new(
-            ErrorCode::Conflict,
-            "the model has unsaved changes, which opening another scenario drops: save them first, or `\"discard_changes\": true` opens it anyway",
-        ));
-    }
-    let bytes = f.opened.bytes().to_vec();
-    let name = f.path.clone().unwrap_or_default();
     // An agent-based model's charts and lists of links, and a process model's decision tables,
     // are read from beside the file, as `file.open` reads them.
-    let dir = std::path::Path::new(&name)
-        .parent()
+    let dir = e
+        .path()
+        .and_then(|name| std::path::Path::new(name).parent())
         .map(std::path::Path::to_path_buf)
         .unwrap_or_default();
-    e.open_bytes_with(&name, &bytes, Some(&p.scenario), &mut |href: &str| {
+    e.reopen_scenario(&p.scenario, p.discard_changes, &mut |href: &str| {
         let path = crate::agents::beside(&dir, href)?;
         std::fs::read(path).map_err(|err| err.to_string())
     })
+}
+
+impl Engine {
+    /// Opens scenario `scenario` of the opened file, from the file as it was opened or last
+    /// saved, as `file.reopen` does, reading the files the model names with `resolve` (as
+    /// [`Engine::open_bytes_with`] does). Unsaved changes are refused ([`ErrorCode::Conflict`])
+    /// unless `discard_changes`, and a scenario the file does not have is
+    /// [`ErrorCode::InvalidParams`]; either way the model is left as it was.
+    pub fn reopen_scenario(
+        &mut self,
+        scenario: &str,
+        discard_changes: bool,
+        resolve: &mut dyn FnMut(&str) -> Result<Vec<u8>, String>,
+    ) -> Result<Value, CommandError> {
+        let Some(f) = self.file.as_ref().filter(|_| self.sd.is_none()) else {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                "no file with scenarios is open: open one with file.open",
+            ));
+        };
+        let ids: Vec<&str> = f
+            .opened
+            .scenario_details()
+            .iter()
+            .map(|s| s.id.as_str())
+            .collect();
+        if !ids.contains(&scenario) {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                if ids.is_empty() {
+                    format!("the file has no scenario `{scenario}`; it has none")
+                } else {
+                    format!(
+                        "the file has no scenario `{scenario}`; its scenarios are {}",
+                        ids.join(", ")
+                    )
+                },
+            ));
+        }
+        if self.is_dirty() && !discard_changes {
+            return Err(CommandError::new(
+                ErrorCode::Conflict,
+                "the model has unsaved changes, which opening another scenario drops: save them first, or `\"discard_changes\": true` opens it anyway",
+            ));
+        }
+        let bytes = f.opened.bytes().to_vec();
+        let name = f.path.clone().unwrap_or_default();
+        self.open_bytes_with(&name, &bytes, Some(scenario), resolve)
+    }
 }
 
 /// A file to write beside the model: its reference, where, its bytes, and what was there when the

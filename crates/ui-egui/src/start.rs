@@ -7,7 +7,7 @@
 //! A search box above the cards looks through every example, as example galleries usually do;
 //! the full list ("See all", or a search) is grouped under a heading per field.
 
-use crate::i18n::{t, td, tf};
+use crate::i18n::{t, td, tf, tn};
 use crate::theme;
 
 /// What an example asks, for the question filter.
@@ -155,6 +155,8 @@ pub struct Item<'a> {
     pub title: &'a str,
     pub about: &'a str,
     pub card: &'a Card,
+    /// How many scenarios its file holds: a card with more than one says so.
+    pub scenarios: usize,
 }
 
 /// The start page's choices.
@@ -410,7 +412,7 @@ fn grid(
     for row in list.chunks(per_row) {
         ui.horizontal_top(|ui| {
             for (i, c) in row {
-                if card(ui, p, c.card, width) {
+                if card(ui, p, c.card, c.scenarios, width) {
                     *action = Some(Action::Example(*i));
                 }
                 ui.add_space(gap);
@@ -420,8 +422,9 @@ fn grid(
     }
 }
 
-/// One example's card; true when clicked (or chosen from the keyboard).
-fn card(ui: &mut egui::Ui, p: &theme::Palette, c: &Card, width: f32) -> bool {
+/// One example's card, which says how many scenarios its file holds when it has more than one;
+/// true when clicked (or chosen from the keyboard).
+fn card(ui: &mut egui::Ui, p: &theme::Palette, c: &Card, scenarios: usize, width: f32) -> bool {
     let inner = egui::Frame::new()
         .stroke(egui::Stroke::new(1.0, p.border))
         .fill(p.raised)
@@ -503,6 +506,18 @@ fn card(ui: &mut egui::Ui, p: &theme::Palette, c: &Card, width: f32) -> bool {
                     ui.label(theme::strong(t("Teaches:")));
                     ui.label(t(c.teaches));
                 });
+                if scenarios > 1 {
+                    ui.add_space(4.0);
+                    ui.label(
+                        egui::RichText::new(tn(
+                            scenarios as u64,
+                            "{n} scenario to compare",
+                            "{n} scenarios to compare",
+                        ))
+                        .size(12.0)
+                        .color(p.text_weak),
+                    );
+                }
             })
         });
     let rect = inner.response.rect;
@@ -679,6 +694,7 @@ mod tests {
             title: "Title",
             about: "About",
             card,
+            scenarios: 0,
         }
     }
 
@@ -719,6 +735,7 @@ mod tests {
                 title: e.title,
                 about: e.about,
                 card: &e.card,
+                scenarios: 0,
             })
             .collect();
         let start = Start::default();

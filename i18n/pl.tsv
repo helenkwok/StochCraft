@@ -1501,3 +1501,7 @@ connection	Flow	Przepływ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dziesięć maszyn musi pracować, cztery zapasowe czekają w gotowości, a trzech mechaników naprawia te, które ulegną awarii (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Ile maszyn zapasowych i mechaników utrzyma w ruchu dziesięć maszyn?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Maszyny zapasowe w gotowości nie mogą ulec awarii: średnio 3.47 maszyny są zepsute, a 9.29 pracuje. Czwarty mechanik daje mniej więcej tyle, co cztery dodatkowe maszyny zapasowe.
+	Scenario	Scenariusz
+	Scenario: {name}	Scenariusz: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otwarcie scenariusza {scenario} odrzuci niezapisane zmiany w {name}. Najpierw je zapisać?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenariusz do porównania|{n} scenariusze do porównania|{n} scenariuszy do porównania

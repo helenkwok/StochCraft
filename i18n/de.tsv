@@ -1501,3 +1501,7 @@ connection	Flow	Verbindung
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Zehn Maschinen müssen laufen, vier Reservemaschinen stehen bereit, und drei Instandhalter reparieren die ausgefallenen (Crane und Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Wie viele Reservemaschinen und Instandhalter halten zehn Maschinen am Laufen?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Bereitstehende Reservemaschinen können nicht ausfallen: Im Mittel sind 3.47 Maschinen ausgefallen und 9.29 laufen. Ein vierter Instandhalter bringt etwa so viel wie vier Reservemaschinen mehr.
+	Scenario	Szenario
+	Scenario: {name}	Szenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Beim Öffnen von {scenario} gehen die ungespeicherten Änderungen an {name} verloren. Zuerst speichern?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} Szenario zum Vergleichen|{n} Szenarien zum Vergleichen

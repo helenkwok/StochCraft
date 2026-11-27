@@ -1501,3 +1501,7 @@ connection	Flow	Flux
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deu màquines han de funcionar, quatre de recanvi esperen a punt i tres mecànics reparen les que s'avarien (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Quantes màquines de recanvi i quants mecànics mantenen en marxa deu màquines?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Les màquines de recanvi en espera no es poden avariar: de mitjana hi ha 3.47 màquines avariades i 9.29 en marxa. Un quart mecànic fa gairebé tant com quatre màquines de recanvi més.
+	Scenario	Escenari
+	Scenario: {name}	Escenari: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Obrir {scenario} descarta els canvis no desats de {name}. Voleu desar-los primer?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} escenari per comparar|{n} escenaris per comparar

@@ -1501,3 +1501,7 @@ connection	Flow	Srautas
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dešimt mašinų turi veikti, keturios atsarginės laukia parengtos, o trys mechanikai taiso sugedusias (Crane ir Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kiek atsarginių mašinų ir mechanikų reikia, kad veiktų dešimt mašinų?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Parengtos atsarginės mašinos negali sugesti: vidutiniškai 3.47 mašinos sugedusios, o 9.29 veikia. Ketvirtas mechanikas duoda maždaug tiek pat, kiek keturios papildomos atsarginės mašinos.
+	Scenario	Scenarijus
+	Scenario: {name}	Scenarijus: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Atidarius {scenario}, neįrašyti {name} pakeitimai bus atmesti. Pirmiau juos įrašyti?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenarijus palyginti|{n} scenarijai palyginti|{n} scenarijų palyginti

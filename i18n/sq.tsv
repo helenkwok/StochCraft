@@ -1501,3 +1501,7 @@ connection	Flow	Rrjedhë
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dhjetë makina duhet të punojnë, katër makina rezervë presin gati dhe tre mekanikë riparojnë ato që prishen (Crane dhe Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Sa makina rezervë dhe sa mekanikë i mbajnë në punë dhjetë makina?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Makinat rezervë që presin nuk mund të prishen: mesatarisht 3.47 makina janë të prishura dhe 9.29 punojnë. Një mekanik i katërt jep afërsisht sa katër makina rezervë më shumë.
+	Scenario	Skenar
+	Scenario: {name}	Skenari: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Hapja e {scenario} hedh poshtë ndryshimet e paruajtura në {name}. T’i ruaj së pari?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} skenar për krahasim|{n} skenarë për krahasim

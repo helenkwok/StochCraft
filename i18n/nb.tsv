@@ -1501,3 +1501,7 @@ connection	Flow	Flyt
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Ti maskiner må gå, fire reservemaskiner står klare, og tre mekanikere reparerer dem som svikter (Crane og Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hvor mange reservemaskiner og mekanikere holder ti maskiner i gang?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemaskiner som står klare, kan ikke svikte: i snitt er 3.47 maskiner i stykker og 9.29 går. En fjerde mekaniker gjør omtrent like mye som fire reservemaskiner til.
+	Scenario	Scenario
+	Scenario: {name}	Scenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Å åpne {scenario} forkaster de ulagrede endringene i {name}. Lagre dem først?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenario å sammenligne|{n} scenarioer å sammenligne

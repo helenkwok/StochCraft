@@ -1501,3 +1501,7 @@ connection	Flow	Virta
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Kymmenen koneen on oltava käynnissä, neljä varakonetta odottaa valmiina ja kolme asentajaa korjaa vikaantuneet (Crane ja Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Montako varakonetta ja asentajaa pitää kymmenen konetta käynnissä?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Valmiina odottavat varakoneet eivät voi vikaantua: keskimäärin 3.47 konetta on rikki ja 9.29 käy. Neljäs asentaja auttaa suunnilleen yhtä paljon kuin neljä varakonetta lisää.
+	Scenario	Skenaario
+	Scenario: {name}	Skenaario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Skenaarion {scenario} avaaminen hylkää kohteen {name} tallentamattomat muutokset. Tallennetaanko ne ensin?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} vertailtava skenaario|{n} vertailtavaa skenaariota

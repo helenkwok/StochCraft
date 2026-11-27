@@ -453,6 +453,13 @@ impl App {
                 ui.label(theme::weak(ui, &self.status));
             }
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                // Laid out from the right: the scenario shows after the file's path.
+                if let Some(scenario) = self.open_scenario_label() {
+                    ui.label(theme::weak(
+                        ui,
+                        tf("Scenario: {name}", &[("name", &scenario)]),
+                    ));
+                }
                 if let Some(path) = self.engine.path() {
                     ui.label(theme::weak(ui, path));
                 }

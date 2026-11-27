@@ -647,6 +647,8 @@ impl App {
         }
 
         section(ui, t("Experiment"));
+        // Which of the file's scenarios is open, when it has more than one.
+        self.scenario_choice(ui, "model");
         let mut schema = params_schema("experiment.set");
         // The limits the model checks the experiment against, so its fields refuse the rest.
         schema["properties"]["replications"]["minimum"] = json!(1);

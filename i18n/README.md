@@ -1077,6 +1077,13 @@ fields (`“Service time”`) are named in the messages by their own rows.
   sq, and the last sentence of what it teaches (a fourth repairman against four more spares) in
   most of them.
 
+- The rows for choosing a file's scenario (the **Scenario** choice, the status bar's
+  "Scenario: {name}", the question before unsaved changes are dropped, and the start page's
+  count of scenarios to compare) were machine-drafted from the plain meaning of the English,
+  with each catalog's own word for a scenario (as in "Changed from the inherited scenario") and
+  for unsaved changes. Not checked against any other source and not reviewed by native speakers;
+  the least certain are lo, th, ta, te, bn, ka and kk.
+
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
 Right-to-left languages are not offered until the layout is mirrored.

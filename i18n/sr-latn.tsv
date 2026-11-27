@@ -1501,3 +1501,7 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset mašina mora da radi, četiri rezervne čekaju u pripravnosti, a tri mehaničara popravljaju one koje se pokvare (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koliko rezervnih mašina i mehaničara drži deset mašina u radu?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Rezervne mašine u pripravnosti ne mogu da se pokvare: u proseku je 3.47 mašina pokvareno, a 9.29 radi. Četvrti mehaničar postiže otprilike koliko i četiri rezervne mašine više.
+	Scenario	Scenario
+	Scenario: {name}	Scenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvaranjem scenarija {scenario} odbacuju se nesačuvane izmene u {name}. Prvo ih sačuvati?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenario za poređenje|{n} scenarija za poređenje|{n} scenarija za poređenje

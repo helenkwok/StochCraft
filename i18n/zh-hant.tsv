@@ -1501,3 +1501,7 @@ connection	Flow	順序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台機器必須運轉，四台備用機待命，三名維修技師修理故障的機器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台備用機和多少名維修技師，才能讓十台機器保持運轉？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的備用機不會故障：平均 3.47 台機器在故障中，9.29 台在運轉。增加第四名維修技師的效果與再增加四台備用機相當。
+	Scenario	情境
+	Scenario: {name}	情境：{name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	開啟 {scenario} 會捨棄 {name} 中未儲存的變更。要先儲存嗎？
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} 個可比較的情境

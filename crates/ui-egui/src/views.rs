@@ -527,10 +527,10 @@ impl App {
             self.show_capacity = false;
             self.show_3d = false;
         }
-        let model = self.engine.model();
+        // A copy, as the scenario choice below may reopen the model.
+        let x = self.engine.model().experiment.clone();
+        let unit = time_unit(&self.engine);
         ui.with_layout(egui::Layout::bottom_up(egui::Align::Min), |ui| {
-            let x = &model.experiment;
-            let unit = time_unit(&self.engine);
             ui.label(theme::weak(
                 ui,
                 tf(
@@ -558,6 +558,8 @@ impl App {
                 "{n} runs · seed {seed}",
                 &[("seed", &x.seed.to_string())],
             ));
+            // Laid out from the bottom: the scenario shows under the heading, above the runs.
+            self.scenario_choice(ui, "sidebar");
             ui.add_space(2.0);
             ui.label(theme::strong(t("Experiment")).size(12.0).color(p.text_weak));
             ui.add_space(4.0);
@@ -569,10 +571,12 @@ impl App {
     pub(crate) fn start_page(&mut self, ui: &mut egui::Ui) {
         let cards: Vec<start::Item> = EXAMPLES
             .iter()
-            .map(|e| start::Item {
+            .zip(crate::example_scenarios())
+            .map(|(e, &scenarios)| start::Item {
                 title: e.title,
                 about: e.about,
                 card: &e.card,
+                scenarios,
             })
             .collect();
         let recent: Vec<String> = self

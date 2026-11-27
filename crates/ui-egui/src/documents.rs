@@ -102,6 +102,7 @@ impl App {
     pub fn save_failed(&mut self, message: impl Into<String>) {
         self.report_error(message);
         self.after_save = None;
+        self.scenario_next = None;
         self.as_new = false;
         self.pick_for = None;
     }
@@ -135,34 +136,38 @@ impl App {
     /// does. A scenario that inherits from another shows, in bold, the values it changes.
     pub fn open_scenario(&mut self, name: &str, bytes: &[u8], scenario: Option<&str>) {
         match self.engine.open_bytes(name, bytes, scenario) {
-            Ok(opened) => {
-                self.forget_view();
-                // Warnings and errors from reading the file and checking the model; information
-                // notes are left for the model view.
-                let count = |k: &str| {
-                    opened[k]
-                        .as_array()
-                        .into_iter()
-                        .flatten()
-                        .filter(|n| n["severity"] != "info")
-                        .count()
-                };
-                let n = count("notes") + count("diagnostics");
-                let file = file_name(name);
-                let message = if n > 0 {
-                    tnf(
-                        n as u64,
-                        "Opened {file} ({n} warning)",
-                        "Opened {file} ({n} warnings)",
-                        &[("file", file)],
-                    )
-                } else {
-                    tf("Opened {file}", &[("file", file)])
-                };
-                self.info(message);
-            }
+            Ok(opened) => self.opened(name, &opened),
             Err(e) => self.report_error(e.message),
         }
+    }
+
+    /// The file `name` was opened (`opened`: what the engine said of it): the view of the last
+    /// model goes, and the status bar says so, with the number of warnings.
+    pub(crate) fn opened(&mut self, name: &str, opened: &Value) {
+        self.forget_view();
+        // Warnings and errors from reading the file and checking the model; information
+        // notes are left for the model view.
+        let count = |k: &str| {
+            opened[k]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .filter(|n| n["severity"] != "info")
+                .count()
+        };
+        let n = count("notes") + count("diagnostics");
+        let file = file_name(name);
+        let message = if n > 0 {
+            tnf(
+                n as u64,
+                "Opened {file} ({n} warning)",
+                "Opened {file} ({n} warnings)",
+                &[("file", file)],
+            )
+        } else {
+            tf("Opened {file}", &[("file", file)])
+        };
+        self.info(message);
     }
 
     /// What the window shows of a model that has been replaced: results, selection, the
@@ -549,6 +554,7 @@ impl App {
     /// to follow the save (quit, new, open) is dropped rather than run after a later save.
     pub fn save_cancelled(&mut self) {
         self.after_save = None;
+        self.scenario_next = None;
         self.as_new = false;
         self.pick_for = None;
     }
@@ -719,6 +725,11 @@ impl App {
             Replace::Dropped => {
                 if let Some((name, bytes)) = self.dropped.take() {
                     self.open_file(&name, &bytes);
+                }
+            }
+            Replace::Scenario => {
+                if let Some(id) = self.scenario_next.take() {
+                    self.open_other_scenario(&id);
                 }
             }
             Replace::Quit => {
