@@ -200,3 +200,113 @@ fn the_start_page_says_which_examples_have_scenarios() {
     );
     assert!(h.query_by_label("1 scenario to compare").is_none());
 }
+
+/// The sidebar's question before unsaved changes are dropped takes its own room, under the
+/// sidebar's Scenario choice and above the experiment summary, overlapping neither, in a window
+/// `width` wide and in `language` (a locale code).
+fn the_sidebar_question_has_room(width: f32, language: Option<&str>) {
+    use stochcraft_ui_egui::i18n::{t, tf, tnf};
+    let mut app = App::new(Platform::DESKTOP);
+    app.set_number_region("en");
+    app.set_language(language);
+    let mut h = Harness::builder()
+        .with_size(egui::vec2(width, 800.0))
+        .build_ui_state(|ui, app: &mut App| app.ui(ui), app);
+    h.run();
+    let e = EXAMPLES
+        .iter()
+        .find(|e| e.file == "bank.bpmn")
+        .expect("the bank example");
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    h.state_mut()
+        .execute("experiment.set", json!({ "replications": 3 }));
+    settle(&mut h);
+    let scenario = t("Scenario");
+    // The sidebar's choice is the one further left.
+    let sidebar = |h: &Harness<'static, App>| {
+        h.get_all_by_role_and_label(Role::ComboBox, scenario)
+            .map(|n| n.rect())
+            .min_by(|a, b| a.left().total_cmp(&b.left()))
+            .expect("the sidebar's Scenario choice")
+    };
+    let at = sidebar(&h).center();
+    h.get_all_by_role_and_label(Role::ComboBox, scenario)
+        .find(|n| n.rect().center() == at)
+        .expect("the sidebar's Scenario choice")
+        .click();
+    settle(&mut h);
+    h.get_by_role_and_label(Role::Button, "Six cashiers")
+        .click();
+    settle(&mut h);
+
+    let question = tf(
+        "Opening {scenario} drops the unsaved changes to {name}. Save them first?",
+        &[("scenario", "Six cashiers"), ("name", "bank.bpmn")],
+    );
+    let summary = tnf(
+        3,
+        "{n} run · seed {seed}",
+        "{n} runs · seed {seed}",
+        &[("seed", "1")],
+    );
+    let rect = |h: &Harness<'static, App>, role: Role, label: &str| {
+        h.get_by_role_and_label(role, label).rect()
+    };
+    let choice = sidebar(&h);
+    // A button of the sidebar's question (the toolbar may have one of the same name).
+    let button = |h: &Harness<'static, App>, label: &str| {
+        h.get_all_by_role_and_label(Role::Button, label)
+            .map(|n| n.rect())
+            .find(|r| r.left() < choice.right())
+            .unwrap_or_else(|| panic!("no {label} in the sidebar"))
+    };
+    let summary = rect(&h, Role::Label, &summary);
+    let mut drawn = vec![(question.clone(), rect(&h, Role::Label, &question))];
+    for b in [t("Save"), t("Don't Save"), t("Cancel")] {
+        drawn.push((b.to_owned(), button(&h, b)));
+    }
+    for (i, (name, r)) in drawn.iter().enumerate() {
+        assert!(
+            !r.intersects(summary),
+            "{name} {r:?} over the summary {summary:?}"
+        );
+        assert!(
+            r.bottom() <= summary.top() + 0.5,
+            "{name} {r:?} below the summary {summary:?}"
+        );
+        assert!(
+            r.top() >= choice.bottom() - 0.5,
+            "{name} {r:?} above the choice {choice:?}"
+        );
+        for (other, o) in &drawn[i + 1..] {
+            assert!(!r.intersects(*o), "{name} {r:?} over {other} {o:?}");
+        }
+    }
+    // It still answers: Cancel keeps the scenario and the changes.
+    let cancel = button(&h, t("Cancel")).center();
+    h.get_all_by_role_and_label(Role::Button, t("Cancel"))
+        .find(|n| n.rect().center() == cancel)
+        .expect("the sidebar's Cancel")
+        .click();
+    settle(&mut h);
+    assert!(h.query_by_label(&question).is_none());
+    assert_eq!(open(&h), "scenario");
+    assert_eq!(h.state().engine().model().experiment.replications, 3);
+}
+
+#[test]
+fn the_sidebar_question_has_room_in_english() {
+    the_sidebar_question_has_room(1200.0, Some("en"));
+}
+
+#[test]
+fn the_sidebar_question_has_room_in_a_narrow_window() {
+    the_sidebar_question_has_room(760.0, Some("en"));
+}
+
+#[test]
+fn the_sidebar_question_has_room_in_finnish_and_german() {
+    the_sidebar_question_has_room(900.0, Some("fi"));
+    the_sidebar_question_has_room(900.0, Some("de"));
+}

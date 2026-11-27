@@ -28,6 +28,14 @@ pub(crate) struct Ask {
     pub for_doc: u64,
 }
 
+/// An answer to the question before unsaved changes are dropped.
+#[derive(Debug, Clone, Copy)]
+enum Answer {
+    Save,
+    Discard,
+    Cancel,
+}
+
 /// The scenarios of `listing` (`file.scenarios`), and the id of the open one.
 fn scenarios_of(listing: &Value) -> (Vec<Scenario>, Option<String>) {
     let list = listing["scenarios"]
@@ -143,8 +151,8 @@ impl App {
     }
 
     /// The question about unsaved changes before another scenario opens, under the choice it
-    /// was asked from: save first, drop them, or keep the scenario that is open. In the sidebar,
-    /// which is laid out from the bottom, its buttons are drawn first so they show under it.
+    /// was asked from, in the warning colour: save first, drop them, or keep the scenario that is
+    /// open.
     fn scenario_question(&mut self, ui: &mut egui::Ui, place: &'static str, list: &[Scenario]) {
         let Some(ask) = self.scenario_ask.clone() else {
             return;
@@ -165,45 +173,54 @@ impl App {
             "Opening {scenario} drops the unsaved changes to {name}. Save them first?",
             &[("scenario", label), ("name", &self.document_name())],
         );
-        let p = theme::palette(ui.ctx());
+        let warning = theme::palette(ui.ctx()).warning;
+        let question = egui::Label::new(egui::RichText::new(question).color(warning)).wrap();
         if place == "model" {
-            egui::Frame::new()
-                .stroke(egui::Stroke::new(1.0, p.warning))
-                .corner_radius(6)
-                .inner_margin(egui::Margin::symmetric(10, 8))
-                .show(ui, |ui| {
-                    ui.add(egui::Label::new(question).wrap());
-                    self.scenario_answers(ui, &ask.id);
-                });
+            ui.add(question);
+            ui.horizontal_wrapped(|ui| {
+                for answer in [Answer::Save, Answer::Discard, Answer::Cancel] {
+                    self.scenario_answer(ui, answer, &ask.id);
+                }
+            });
         } else {
-            self.scenario_answers(ui, &ask.id);
-            ui.add(egui::Label::new(egui::RichText::new(question).color(p.warning)).wrap());
+            // From the bottom up, one button a row so none can wrap over the summary below:
+            // the question, then Save, Don't Save and Cancel under it.
+            for answer in [Answer::Cancel, Answer::Discard, Answer::Save] {
+                self.scenario_answer(ui, answer, &ask.id);
+            }
+            ui.add(question);
         }
     }
 
-    /// The question's answers: save (or download) and then open scenario `id`, open it without
-    /// saving, or cancel.
-    fn scenario_answers(&mut self, ui: &mut egui::Ui, id: &str) {
-        ui.horizontal_wrapped(|ui| {
-            let save = if self.platform.file_system {
-                t("Save")
-            } else {
-                t("Download")
-            };
-            if ui.add(theme::primary(ui, save)).clicked() {
-                self.scenario_ask = None;
-                self.scenario_next = Some(id.to_owned());
-                self.after_save = Some(Replace::Scenario);
-                self.save();
+    /// One of the question's answers: save (or download) and then open scenario `id`, open it
+    /// without saving, or cancel.
+    fn scenario_answer(&mut self, ui: &mut egui::Ui, answer: Answer, id: &str) {
+        match answer {
+            Answer::Save => {
+                let save = if self.platform.file_system {
+                    t("Save")
+                } else {
+                    t("Download")
+                };
+                if ui.add(theme::primary(ui, save)).clicked() {
+                    self.scenario_ask = None;
+                    self.scenario_next = Some(id.to_owned());
+                    self.after_save = Some(Replace::Scenario);
+                    self.save();
+                }
             }
-            if ui.add(theme::secondary(ui, t("Don't Save"))).clicked() {
-                self.scenario_ask = None;
-                self.open_other_scenario(id);
+            Answer::Discard => {
+                if ui.add(theme::secondary(ui, t("Don't Save"))).clicked() {
+                    self.scenario_ask = None;
+                    self.open_other_scenario(id);
+                }
             }
-            if ui.add(theme::secondary(ui, t("Cancel"))).clicked() {
-                self.scenario_ask = None;
+            Answer::Cancel => {
+                if ui.add(theme::secondary(ui, t("Cancel"))).clicked() {
+                    self.scenario_ask = None;
+                }
             }
-        });
+        }
     }
 
     /// Reopens the file in scenario `id`, dropping any unsaved changes (they were asked about):
