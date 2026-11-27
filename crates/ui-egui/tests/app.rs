@@ -460,10 +460,12 @@ fn help_opens_beside_the_work_and_follows_the_model() {
     h.get_by_label("5 of 5 done");
 
     // Search narrows the glossary to the matching terms.
-    let search = h.get_by_role(egui::accesskit::Role::TextInput);
+    // By its name: the results below have number fields too.
+    let field = "Search help and terms";
+    let search = h.get_by_role_and_label(egui::accesskit::Role::TextInput, field);
     search.click();
     settle(&mut h);
-    h.get_by_role(egui::accesskit::Role::TextInput)
+    h.get_by_role_and_label(egui::accesskit::Role::TextInput, field)
         .type_text("random");
     settle(&mut h);
     h.get_by_label_contains("The starting point of the random numbers");
