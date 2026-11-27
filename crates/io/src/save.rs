@@ -31,6 +31,14 @@ use crate::write::{
     scenario_parameters, scrap_element, sequential_element, sequential_off_element, size,
     start_param, starting_element, stop_element, timer_param, transfer_element, transport_element,
     turned_away_element, units_param, vendor_value_element,
+    health_check_element, interruptible_param, mobility_element, numeric, observed_element,
+    observed_off_element, on_shift_end_element, own_marker, patience_element, planned_element,
+    power_element, probability_element, processing_by_element, processing_by_resource_element,
+    property_element, quantity_element, quantity_param, queue_capacity_element, rework_element,
+    routing_element, scenario_extensions, scenario_parameters, scrap_element, sequential_element,
+    sequential_off_element, size, start_param, starting_element, stop_element,
+    time_in_system_element, timer_param, transfer_element, transport_element, turned_away_element,
+    units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -161,7 +169,7 @@ fn near_dist(a: &Dist, b: &Dist) -> bool {
 }
 
 /// StochCraft's vendor extensions that hold time distributions.
-const VENDOR_TIMES: [&str; 9] = [
+const VENDOR_TIMES: [&str; 10] = [
     crate::bpsim::BREAKDOWN,
     crate::bpsim::TRANSFER_TIME,
     crate::bpsim::CHANGEOVER,
@@ -171,6 +179,7 @@ const VENDOR_TIMES: [&str; 9] = [
     crate::bpsim::PATIENCE,
     crate::bpsim::HEALTH_CHECK,
     crate::bpsim::TRANSPORT,
+    crate::bpsim::TIME_IN_SYSTEM,
 ];
 
 /// Calls `f` on each distribution vendor extension `name` holds for an element, in order.
@@ -195,6 +204,22 @@ fn vendor_dists(kind: &mut ElementKind, name: &str, f: &mut dyn FnMut(&mut Dist)
         if let ElementKind::Transport { load, unload, .. } = kind {
             f(load);
             f(unload);
+        }
+        return;
+    }
+    // A sink's target time in system: a number, handled as a constant.
+    if name == crate::bpsim::TIME_IN_SYSTEM {
+        if let ElementKind::Sink {
+            time_in_system: Some(x),
+            ..
+        } = kind
+            && let Some(w) = x.within.as_mut()
+        {
+            let mut d = Dist::Constant(*w);
+            f(&mut d);
+            if let Dist::Constant(v) = d {
+                *w = v;
+            }
         }
         return;
     }
@@ -2615,6 +2640,27 @@ impl Editor {
                     new_demand.map(|d| {
                         // The calendar it names as the file's encoding needs.
                         let mut v = demand_element(d);
+                        self.text_attrs(&mut v);
+                        v
+                    }),
+                ));
+            }
+            // Time in system by percentile at a sink.
+            let old_times = match was {
+                Some(ElementKind::Sink { time_in_system, .. }) => time_in_system.as_ref(),
+                _ => None,
+            };
+            let new_times = match &e.kind {
+                ElementKind::Sink { time_in_system, .. } => time_in_system.as_ref(),
+                _ => None,
+            };
+            if old_times != new_times {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::TIME_IN_SYSTEM,
+                    new_times.map(|x| {
+                        // The calendar it names as the file's encoding needs.
+                        let mut v = time_in_system_element(x);
                         self.text_attrs(&mut v);
                         v
                     }),

@@ -1389,6 +1389,37 @@ fn a_demand_is_set_on_departures_in_the_inspector() {
     assert!(element(&h, "leave").get("demand").is_none());
 }
 
+/// Time in system by percentile is set on departures in the inspector: on, a target time in the
+/// model's unit, the target cleared, and off.
+#[test]
+fn time_in_system_is_set_on_departures_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Customer leaves");
+    click(&mut h, Role::CheckBox, "Percentiles of time in system");
+    assert_eq!(element(&h, "leave")["time_in_system"], json!({}));
+    type_into(&mut h, "Target time (min)", "30");
+    assert_eq!(
+        element(&h, "leave")["time_in_system"],
+        json!({"within": 30.0})
+    );
+    // Cleared, the target goes.
+    h.get_by_role_and_label(Role::TextInput, "Target time (min)")
+        .click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.key_press(egui::Key::Backspace);
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
+    assert_eq!(element(&h, "leave")["time_in_system"], json!({}));
+    // The calendar picker's label sits above it, in full, not cut short beside it.
+    let working = "Count only working time on";
+    let label = h.get_by_role_and_label(Role::Label, working).rect();
+    let picker = h.get_by_role_and_label(Role::ComboBox, working).rect();
+    assert!(label.bottom() <= picker.top() + 1.0, "{label:?} {picker:?}");
+    click(&mut h, Role::CheckBox, "Percentiles of time in system");
+    assert!(element(&h, "leave").get("time_in_system").is_none());
+}
+
 /// Any block's way out, not only a decision's, can be marked rework.
 #[test]
 fn a_way_out_of_a_task_is_marked_rework() {

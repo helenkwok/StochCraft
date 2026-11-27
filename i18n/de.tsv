@@ -1538,6 +1538,18 @@ connection	Flow	Verbindung
 	Share turned away	Anteil abgewiesen
 	{label}: {value}	{label}: {value}
 	{label}: {value} ({terms})	{label}: {value} ({terms})
+	Median time in system	Median der Verweilzeit im System
+	Time in system, 90th percentile	Verweilzeit im System, 90. Perzentil
+	Time in system, 95th percentile	Verweilzeit im System, 95. Perzentil
+	Share done within the target time	Anteil fertig innerhalb der Zielzeit
+	Percentiles of time in system	Perzentile der Verweilzeit im System
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Zeigt den Median, das 90. und das 95. Perzentil der Zeit, die jede Einheit von ihrer Entstehung bis zu diesen Abgängen brauchte, und mit einer Zielzeit den Anteil, der innerhalb davon fertig wurde.
+	Target time ({unit})	Zielzeit ({unit})
+	The target time is a time above 0	Die Zielzeit ist eine Zeit über 0
+	Count only working time on	Nur Arbeitszeit zählen nach
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Einheiten, die am Ende des Laufs noch im System sind, gehen nicht ein; beenden Sie den Lauf daher erst, wenn alle fertig sind.
+	Set the target time in system of {block} to a time above 0.	Setzen Sie die Zielzeit im System von Block {block} auf eine Zeit über 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Die Verweilzeit im System von Block {block} zählt Arbeitszeit nach einem Kalender, der nicht existiert. Wählen Sie einen vorhandenen Kalender.
 	One machine's availability	Verfügbarkeit einer Maschine
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Eine Maschine, die im Mittel alle 90 Stunden ausfällt und 4.5 Stunden bis zur Reparatur braucht (Hristova, Denev und Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Wie oft steht eine Maschine still, und wie viel Arbeit kostet das?

@@ -1538,6 +1538,18 @@ connection	Flow	Ток
 	Share turned away	Удео одбијених
 	{label}: {value}	{label}: {value}
 	{label}: {value} ({terms})	{label}: {value} ({terms})
+	Median time in system	Медијана времена у систему
+	Time in system, 90th percentile	Време у систему, 90. перцентил
+	Time in system, 95th percentile	Време у систему, 95. перцентил
+	Share done within the target time	Удео завршених у циљном времену
+	Percentiles of time in system	Перцентили времена у систему
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Приказује медијану, 90. и 95. перцентил времена које је сваки ентитет провео од настанка до ових излаза, а уз циљно време и удео завршених у њему.
+	Target time ({unit})	Циљно време ({unit})
+	The target time is a time above 0	Циљно време је време веће од 0
+	Count only working time on	Бројати само радно време по
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Ентитети који су још унутра кад се покретање заврши нису укључени, па зауставите покретање кад су сви готови.
+	Set the target time in system of {block} to a time above 0.	Поставите циљно време у систему блока {block} на време веће од 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Време у систему блока {block} броји радно време по календару који не постоји. Изаберите календар који постоји.
 	One machine's availability	Расположивост једне машине
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Једна машина која се у просеку квари на сваких 90 сати и поправља се 4.5 сата (Hristova, Denev и Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Колико често једна машина не ради и колико посла то кошта?

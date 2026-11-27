@@ -1538,6 +1538,18 @@ connection	Flow	Tok
 	Share turned away	Podíl odmítnutých
 	{label}: {value}	{label}: {value}
 	{label}: {value} ({terms})	{label}: {value} ({terms})
+	Median time in system	Medián doby v systému
+	Time in system, 90th percentile	Doba v systému, 90. percentil
+	Time in system, 95th percentile	Doba v systému, 95. percentil
+	Share done within the target time	Podíl hotových v cílové době
+	Percentiles of time in system	Percentily doby v systému
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Zobrazí medián, 90. a 95. percentil doby, kterou každá entita strávila od svého vzniku do těchto výstupů, a s cílovou dobou podíl hotových v ní.
+	Target time ({unit})	Cílová doba ({unit})
+	The target time is a time above 0	Cílová doba je doba větší než 0
+	Count only working time on	Počítat jen pracovní dobu podle
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entity, které jsou na konci běhu stále uvnitř, nejsou zahrnuty, proto běh zastavte, až budou všechny hotové.
+	Set the target time in system of {block} to a time above 0.	Nastavte cílovou dobu v systému bloku {block} na dobu větší než 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Doba v systému bloku {block} počítá pracovní dobu podle kalendáře, který neexistuje. Vyberte existující kalendář.
 	One machine's availability	Dostupnost jednoho stroje
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jeden stroj, který se v průměru porouchá každých 90 hodin a oprava trvá 4.5 hodiny (Hristova, Denev a Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Jak často stojí jeden stroj a kolik práce to stojí?

@@ -70,6 +70,7 @@ fn bpmn_written_by_another_tool() {
         &ElementKind::Sink {
             scrap: None,
             demand: None,
+            time_in_system: None,
         }
     );
     let x = &m.experiment;
