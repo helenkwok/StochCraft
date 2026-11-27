@@ -160,7 +160,7 @@ impl ByteHandle {
             return u64::from_le_bytes(b);
         }
         let mut s = c.spare.lock().unwrap_or_else(|e| e.into_inner());
-        step(&mut *s)
+        step(&mut s)
     }
 
     /// Bytes asked for so far: eight per draw, including any the segment could not give.
