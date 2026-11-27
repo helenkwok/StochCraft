@@ -1359,6 +1359,7 @@ fn everything_stochcraft_writes_is_schema_valid() {
                         value: 3.2,
                         half_width: Some(0.4),
                         tolerance: Some(0.5),
+                        sets: Some(12),
                     },
                 ),
                 observation(
@@ -1367,6 +1368,7 @@ fn everything_stochcraft_writes_is_schema_valid() {
                         value: 2.0,
                         half_width: None,
                         tolerance: None,
+                        sets: None,
                     },
                 ),
                 observation("utilisation", stochcraft_model::Observed::AtMost(0.85)),

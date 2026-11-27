@@ -1540,3 +1540,4 @@ connection	Flow	Akış
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Farkın aralığı sıfırı dışarıda bıraktığında karar gerçektir. {k} satır birlikte değerlendirilir: tüm aralıkları aynı anda en az {level}% güvenle geçerlidir (Bonferroni).
 	Judge the rows together (Bonferroni)	Satırları birlikte değerlendir (Bonferroni)
 	{q}% quantile {value}	{q}% nicelik {value}
+	From how many data sets (0 if not known)	Kaç veri kümesinden (bilinmiyorsa 0)

@@ -1540,3 +1540,4 @@ connection	Flow	Srautas
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Išvada tikra, kai skirtumo intervalas neapima nulio. {k} eilutės vertinamos kartu: visi jų intervalai galioja vienu metu su ne mažesniu kaip {level}% pasikliovimu (Bonferroni).
 	Judge the rows together (Bonferroni)	Vertinti eilutes kartu (Bonferroni)
 	{q}% quantile {value}	{q}% kvantilis {value}
+	From how many data sets (0 if not known)	Iš kelių duomenų rinkinių (0, jei nežinoma)

@@ -1540,3 +1540,4 @@ connection	Flow	Virta
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Tulos on todellinen, kun erotuksen väli ei sisällä nollaa. {k} riviä arvioidaan yhdessä: kaikki niiden välit pätevät yhtä aikaa vähintään {level}%:n luottamustasolla (Bonferroni).
 	Judge the rows together (Bonferroni)	Arvioi rivit yhdessä (Bonferroni)
 	{q}% quantile {value}	{q}%:n kvantiili {value}
+	From how many data sets (0 if not known)	Kuinka monesta aineistosta (0, jos ei tiedetä)

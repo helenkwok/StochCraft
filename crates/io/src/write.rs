@@ -492,10 +492,14 @@ pub(crate) fn observed_element(list: &[Observation]) -> Element {
                 value,
                 half_width,
                 tolerance,
+                sets,
             } => {
                 let mut e = e.with_attr("value", &num(value));
                 if let Some(h) = half_width {
                     e = e.with_attr("halfWidth", &num(h));
+                }
+                if let Some(m) = sets {
+                    e = e.with_attr("n", &m.to_string());
                 }
                 if let Some(t) = tolerance {
                     e = e.with_attr("tolerance", &num(t));

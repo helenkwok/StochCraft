@@ -601,6 +601,20 @@ fn read_observed_target(o: &Element) -> Result<Observed, String> {
     let at_least = observation_number(o, "atLeast")?;
     let half_width = observation_number(o, "halfWidth")?;
     let tolerance = observation_number(o, "tolerance")?;
+    let sets = match o.attr("n") {
+        None => None,
+        Some(raw) => match raw.trim().parse::<u32>() {
+            Ok(m) if m >= 2 => Some(m),
+            _ => {
+                return Err(format!(
+                    "has an `n` `{raw}` that is not a whole number of 2 or more"
+                ));
+            }
+        },
+    };
+    if sets.is_some() && half_width.is_none() {
+        return Err("has an `n` without a `halfWidth`".to_owned());
+    }
     if half_width.is_some_and(|h| h < 0.0) {
         return Err("has a `halfWidth` below 0".to_owned());
     }
@@ -612,6 +626,7 @@ fn read_observed_target(o: &Element) -> Result<Observed, String> {
             value,
             half_width,
             tolerance,
+            sets,
         }),
         (None, Some(_) | None, Some(_) | None) if tolerance.is_some() => {
             Err("has a `tolerance` without a `value`".to_owned())

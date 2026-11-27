@@ -2298,6 +2298,12 @@ pub enum ObservationSpec {
         /// and otherwise detects no difference, which is not agreement.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         tolerance: Option<f64>,
+        /// How many independent data sets of the real system the value and its half-width come
+        /// from, 2 or more, where known. The difference's interval is then Welch's (A. M. Law,
+        /// *Simulation Modeling and Analysis*, 5th ed., section 5.6.2) rather than the root of
+        /// the sum of the squared half-widths. Needs `half_width`.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        sets: Option<u32>,
     },
     /// The result should be at most `bound`.
     AtMost {
@@ -2341,12 +2347,14 @@ impl From<&Observation> for ObservationSpec {
                 value,
                 half_width,
                 tolerance,
+                sets,
             } => ObservationSpec::Value {
                 element,
                 metric,
                 value,
                 half_width,
                 tolerance,
+                sets,
             },
             Observed::AtMost(bound) => ObservationSpec::AtMost {
                 element,
@@ -2371,6 +2379,7 @@ impl From<ObservationSpec> for Observation {
                 value,
                 half_width,
                 tolerance,
+                sets,
             } => Observation {
                 element: ElementId::unchecked(&element),
                 metric,
@@ -2378,6 +2387,7 @@ impl From<ObservationSpec> for Observation {
                     value,
                     half_width,
                     tolerance,
+                    sets,
                 },
             },
             ObservationSpec::AtMost {

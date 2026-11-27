@@ -1110,6 +1110,10 @@ fields (`“Service time”`) are named in the messages by their own rows.
   {value}") was machine-drafted with each language's usual word for a quantile (from Wikipedia's
   interlanguage links for "Quantile" where there was one), and `{q}` and `{value}` kept. Not
   reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka and kk.
+- The row for the observed-data field "From how many data sets (0 if not known)" was
+  machine-drafted from the plain meaning of the English, with each language's everyday word for
+  a data set. Not reviewed by native speakers; the least certain are lo, th, ta, te, bn, ka
+  and kk.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

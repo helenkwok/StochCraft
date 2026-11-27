@@ -400,8 +400,9 @@ With nothing selected, the **Experiment** section of the inspector sets how the 
 - **Observed data:** real measurements to check the results against, from the system the model
   stands for. Choose a result under **Add an observed value** (a block or a pool, and a result
   such as **Mean wait** or **Utilisation**), then say what you know of it: an **Observed value**,
-  with the half-width of its own 95% interval if its data give one (**Its 95% half-width**) and
-  a **Tolerance** (the difference you accept as agreement, in the same unit; 0 for none), or
+  with the half-width of its own 95% interval if its data give one (**Its 95% half-width**), the
+  number of independent data sets that value and half-width come from if you know it (**From how
+  many data sets**; 0 if not known), and a **Tolerance** (the difference you accept as agreement, in the same unit; 0 for none), or
   **At most** or **At least** a bound the result must meet, such as "the mean wait is under
   2 min". Times are in the model's time unit and a share such as utilisation is a percentage.
   **Remove** takes one out. The results then say whether the run agrees: see
@@ -504,11 +505,25 @@ the very top for each that differs or fails. Each line gives the result, what it
 against, the simulated mean with its 95% half-width, and a verdict in words:
 
 - **An observed value** is checked by the 95% interval of the difference (simulated mean minus
-  observed value), shown with the line. With a half-width of its own for the observed value, the
-  difference's half-width is the square root of the sum of the two half-widths squared (the usual
-  large-sample approximation for two independent estimates); without one, the observed value is
-  taken as exact and the difference's half-width is the simulated mean's. There are three
-  outcomes:
+  observed value), shown with the line. How that interval is made depends on what you know of the
+  observed value:
+  - **With its half-width and how many data sets it comes from:** Welch's interval, the method
+    for comparing a model with its system in A. M. Law, *Simulation Modeling and Analysis*,
+    5th ed., section 5.6.2. Each side's spread is worked out from its half-width and count (the
+    observed value's from its 95% half-width and its number of data sets, the simulated mean's
+    from its half-width and the number of runs), and the interval uses Student's t with the
+    Welch–Satterthwaite degrees of freedom, so a value from few data sets gets the wider interval
+    it should. This is the better check: give the count whenever you know it.
+  - **With its half-width only:** the difference's half-width is the square root of the sum of
+    the two half-widths squared, the large-sample approximation for two independent estimates.
+    With few data sets behind the observed value, it is narrower than it should be.
+  - **Without a half-width:** the observed value is taken as exact and the difference's
+    half-width is the simulated mean's.
+
+  The results say which was used (`method` in the engine's answer). The runs are never paired
+  with the real system's data: they share no random numbers.
+
+  There are three outcomes:
   - **Differs:** the interval excludes 0 (with a tolerance: it lies wholly outside it). The model
     and the real system are not the same on this result.
   - **No difference detected:** the interval holds 0, and no tolerance is set. This is **not**

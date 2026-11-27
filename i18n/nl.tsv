@@ -1540,3 +1540,4 @@ connection	Flow	Stroom
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Een oordeel is echt wanneer het interval van het verschil nul uitsluit. De {k} rijen worden samen beoordeeld: al hun intervallen gelden tegelijk met minstens {level}% betrouwbaarheid (Bonferroni).
 	Judge the rows together (Bonferroni)	Rijen samen beoordelen (Bonferroni)
 	{q}% quantile {value}	{q}%-kwantiel {value}
+	From how many data sets (0 if not known)	Uit hoeveel gegevensreeksen (0 als onbekend)

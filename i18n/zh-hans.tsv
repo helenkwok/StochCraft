@@ -1540,3 +1540,4 @@ connection	Flow	顺序流
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	当差值的区间不含零时，判断才是真实的。这 {k} 行一并判断：它们的所有区间同时成立的置信度至少为 {level}%（Bonferroni）。
 	Judge the rows together (Bonferroni)	将各行一并判断（Bonferroni）
 	{q}% quantile {value}	{q}% 分位数 {value}
+	From how many data sets (0 if not known)	来自多少组数据（未知则填 0）

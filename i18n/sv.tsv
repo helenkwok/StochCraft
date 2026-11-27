@@ -1540,3 +1540,4 @@ connection	Flow	Flöde
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Ett utlåtande är verkligt när skillnadens intervall utesluter noll. De {k} raderna bedöms tillsammans: alla deras intervall gäller samtidigt med minst {level}% konfidens (Bonferroni).
 	Judge the rows together (Bonferroni)	Bedöm raderna tillsammans (Bonferroni)
 	{q}% quantile {value}	{q}%-kvantil {value}
+	From how many data sets (0 if not known)	Från hur många datamängder (0 om okänt)

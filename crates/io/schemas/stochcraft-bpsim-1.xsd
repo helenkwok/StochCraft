@@ -314,8 +314,9 @@
   stochcraft:observed, on a Scenario (after its Calendars): real measurements the results are
   checked against. Each observation names a result, by element (a block or pool id) and metric
   (its name in the results), and gives either value (the observed value, with the optional
-  halfWidth of its own 95% interval, and an optional tolerance above 0, the difference that still
-  counts as agreeing) or a bound, atMost or atLeast, in the metric's own unit (a
+  halfWidth of its own 95% interval, the optional n, how many independent data sets that value
+  and halfWidth come from (2 or more; the difference's interval is then Welch's), and an optional
+  tolerance above 0, the difference that still counts as agreeing) or a bound, atMost or atLeast, in the metric's own unit (a
   share as a fraction). An observed value differs from the simulated mean when the 95% interval of
   their difference excludes 0 (with a tolerance: lies wholly outside it), and agrees only when
   that interval lies wholly inside the tolerance; a bound is decided by the simulated 95%
@@ -705,6 +706,7 @@
             <xs:attribute name="metric" type="xs:string" use="required"/>
             <xs:attribute name="value" type="xs:double"/>
             <xs:attribute name="halfWidth" type="xs:double"/>
+            <xs:attribute name="n" type="xs:positiveInteger"/>
             <xs:attribute name="tolerance" type="xs:double"/>
             <xs:attribute name="atMost" type="xs:double"/>
             <xs:attribute name="atLeast" type="xs:double"/>

@@ -2554,6 +2554,7 @@ fn observed() -> Vec<stochcraft_model::Observation> {
                 value: 3.2,
                 half_width: Some(0.4),
                 tolerance: None,
+                sets: Some(12),
             },
         ),
         of(
@@ -2562,6 +2563,7 @@ fn observed() -> Vec<stochcraft_model::Observation> {
                 value: 2.0,
                 half_width: None,
                 tolerance: None,
+                sets: None,
             },
         ),
         of("utilisation", Observed::AtMost(0.85)),
@@ -2581,7 +2583,7 @@ fn observed_data_are_written_saved_and_removed() {
     let text = String::from_utf8_lossy(&bytes);
     for expected in [
         r#"name="stochcraft:observed""#,
-        r#"<stochcraft:observation element="cut" metric="mean_wait" value="3.2" halfWidth="0.4"/>"#,
+        r#"<stochcraft:observation element="cut" metric="mean_wait" value="3.2" halfWidth="0.4" n="12"/>"#,
         r#"<stochcraft:observation element="cut" metric="mean_queue_length" value="2"/>"#,
         r#"<stochcraft:observation element="cut" metric="utilisation" atMost="0.85"/>"#,
         r#"<stochcraft:observation element="cut" metric="left" atLeast="400"/>"#,
@@ -2600,6 +2602,7 @@ fn observed_data_are_written_saved_and_removed() {
         value: 3.25,
         half_width: None,
         tolerance: None,
+        sets: None,
     };
     edited
         .experiment
@@ -2743,6 +2746,7 @@ fn an_observed_values_tolerance_round_trips_and_a_bad_one_is_noted() {
             value: 3.2,
             half_width: Some(0.4),
             tolerance: Some(0.5),
+            sets: None,
         },
     }];
     let bytes = write_new(&model);

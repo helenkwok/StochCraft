@@ -1893,6 +1893,7 @@ fn observed_data_are_inherited_and_cleared() {
             value: 3.0,
             half_width: Some(0.5),
             tolerance: None,
+            sets: None,
         },
     }];
     let (saved, n) = edit_and_save("mm1.bpmn", Some("base"), |m| {

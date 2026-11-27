@@ -1540,3 +1540,4 @@ connection	Flow	Поток
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Вывод реален, когда интервал разности не содержит нуля. {k} строк оцениваются совместно: все их интервалы выполняются одновременно с доверительной вероятностью не ниже {level}% (Бонферрони).
 	Judge the rows together (Bonferroni)	Оценивать строки совместно (Бонферрони)
 	{q}% quantile {value}	{q}%-квантиль {value}
+	From how many data sets (0 if not known)	Из скольких наборов данных (0, если неизвестно)

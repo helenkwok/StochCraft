@@ -1540,3 +1540,4 @@ connection	Flow	Alur
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Putusan nyata bila interval selisih tidak mencakup nol. {k} baris dinilai bersama: semua intervalnya berlaku sekaligus dengan kepercayaan sedikitnya {level}% (Bonferroni).
 	Judge the rows together (Bonferroni)	Nilai baris secara bersama (Bonferroni)
 	{q}% quantile {value}	kuantil {q}% {value}
+	From how many data sets (0 if not known)	Dari berapa set data (0 jika tidak diketahui)

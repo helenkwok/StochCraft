@@ -1540,3 +1540,4 @@ connection	Flow	フロー
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	差の区間がゼロを含まないとき、判定は本物です。{k} 行はまとめて判定されます: すべての区間が同時に少なくとも {level}% の信頼度で成り立ちます (ボンフェローニ)。
 	Judge the rows together (Bonferroni)	行をまとめて判定 (ボンフェローニ)
 	{q}% quantile {value}	{q}% 分位点 {value}
+	From how many data sets (0 if not known)	データセットの数 (不明なら 0)

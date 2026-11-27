@@ -1540,3 +1540,4 @@ connection	Flow	Tok
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Presuda je stvarna kada interval razlike ne obuhvata nulu. {k} redova se procenjuje zajedno: svi njihovi intervali važe istovremeno uz pouzdanost od najmanje {level}% (Bonferoni).
 	Judge the rows together (Bonferroni)	Procenjuj redove zajedno (Bonferoni)
 	{q}% quantile {value}	{q}% kvantil {value}
+	From how many data sets (0 if not known)	Iz koliko skupova podataka (0 ako nije poznato)

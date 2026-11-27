@@ -1540,3 +1540,4 @@ connection	Flow	ஓட்டம்
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	வேறுபாட்டின் இடைவெளி பூஜ்ஜியத்தை விலக்கும்போது தீர்ப்பு உண்மையானது. {k} வரிசைகள் ஒன்றாக மதிப்பிடப்படுகின்றன: அவற்றின் எல்லா இடைவெளிகளும் ஒரே நேரத்தில் குறைந்தது {level}% நம்பிக்கையுடன் பொருந்தும் (போன்ஃபெரோனி).
 	Judge the rows together (Bonferroni)	வரிசைகளை ஒன்றாக மதிப்பிடு (போன்ஃபெரோனி)
 	{q}% quantile {value}	{q}% பகுவெண் {value}
+	From how many data sets (0 if not known)	எத்தனை தரவுத் தொகுப்புகளிலிருந்து (தெரியாவிட்டால் 0)

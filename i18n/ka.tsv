@@ -1540,3 +1540,4 @@ connection	Flow	ნაკადი
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	ვერდიქტი რეალურია, როცა სხვაობის ინტერვალი ნულს არ მოიცავს. {k} მწკრივი ერთად ფასდება: მათი ყველა ინტერვალი ერთდროულად სრულდება არანაკლებ {level}% სანდოობით (ბონფერონი).
 	Judge the rows together (Bonferroni)	მწკრივების ერთად შეფასება (ბონფერონი)
 	{q}% quantile {value}	{q}% კვანტილი {value}
+	From how many data sets (0 if not known)	რამდენი მონაცემთა ნაკრებიდან (0, თუ უცნობია)

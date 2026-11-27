@@ -1540,3 +1540,4 @@ connection	Flow	Fluxo
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Un veredicto é real cando o intervalo da diferenza deixa fóra o cero. As {k} filas xúlganse en conxunto: todos os seus intervalos cúmprense á vez cunha confianza de polo menos o {level}% (Bonferroni).
 	Judge the rows together (Bonferroni)	Xulgar as filas en conxunto (Bonferroni)
 	{q}% quantile {value}	cuantil do {q}% {value}
+	From how many data sets (0 if not known)	De cantos conxuntos de datos (0 se non se sabe)

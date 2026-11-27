@@ -454,3 +454,58 @@ fn observed_data_round_trip_through_the_model_document() {
         doc["experiment"]["observed"]
     );
 }
+
+/// An observed value from a known number of data sets is checked by Welch's interval: each side's
+/// variance of the mean from its half-width and count, the Welch–Satterthwaite degrees of freedom
+/// rounded down, and the t value at the run's level. Without the count, the root of the sum of
+/// the squared half-widths, as before. Each check says which it used.
+#[test]
+fn a_count_of_data_sets_makes_it_welch() {
+    let mut e = mm1();
+    ok(
+        &mut e,
+        "observation.add",
+        json!({ "check": "value", "element": "serve", "metric": "mean_wait",
+                "value": 1.0, "half_width": 0.3, "sets": 8 }),
+    );
+    ok(
+        &mut e,
+        "observation.add",
+        json!({ "check": "value", "element": "serve", "metric": "utilisation",
+                "value": 0.5, "half_width": 0.02 }),
+    );
+    let r = ok(&mut e, "run", json!({}));
+    let of = |metric: &str| {
+        r["observed"]
+            .as_array()
+            .and_then(|a| a.iter().find(|c| c["metric"] == metric))
+            .cloned()
+            .expect("the check")
+    };
+    let wait = of("mean_wait");
+    assert_eq!(wait["method"], "welch", "{wait}");
+    assert_eq!(wait["observed"]["sets"], 8);
+    let (hs, n) = (num(&wait["simulated"]["half_width"]), 16u64);
+    let want = stochcraft_stats::observed::welch_half_width(hs, n, 0.95, 0.3, 8);
+    let (hw, df) = want.expect("a Welch interval");
+    assert!(
+        (num(&wait["difference_half_width"]) - hw).abs() < 1e-12,
+        "{wait}"
+    );
+    assert_eq!(wait["df"], df);
+    let util = of("utilisation");
+    assert_eq!(util["method"], "combined_half_widths", "{util}");
+    assert!(util.get("df").is_none());
+    assert!(util["observed"].get("sets").is_none());
+    // A count needs a half-width, and is at least 2.
+    for bad in [
+        json!({ "check": "value", "element": "serve", "metric": "left", "value": 5.0, "sets": 8 }),
+        json!({ "check": "value", "element": "serve", "metric": "left", "value": 5.0,
+                "half_width": 1.0, "sets": 1 }),
+    ] {
+        assert_eq!(
+            fails(&mut e, "observation.add", bad),
+            ErrorCode::InvalidParams
+        );
+    }
+}

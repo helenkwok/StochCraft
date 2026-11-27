@@ -19,6 +19,12 @@
 //!     +t or below -t) is `Differs`, anything else `Inconclusive`. This is the two one-sided
 //!     tests rule (Schuirmann 1987) with the 95% interval, which is conservative against the 90%
 //!     interval of the exact test.
+//! - [`judge_welch`]: where the observed value comes from a known number m of independent data
+//!   sets (its half-width is then their 95% Student-t half-width), the difference's interval is
+//!   Welch's (Law, section 5.6.2, by section 10.2.2): each side's variance of the mean recovered
+//!   from its half-width and count, (h/t)², the Welch–Satterthwaite degrees of freedom rounded
+//!   down, and the t value at the run's confidence level. Without the count, [`judge`]'s rule.
+//!   A real system and the model's runs share no random numbers, so they are never paired.
 //! - A bound is decided by the whole simulated interval, never by the mean alone: it passes when
 //!   every value in the interval meets it, fails when every value violates it, and is
 //!   inconclusive when the interval straddles it (more replications would narrow the interval).
@@ -154,6 +160,70 @@ pub fn judge(check: Check, mean: f64, half_width: f64, n: u64) -> Verdict {
             ))
         }
     }
+}
+
+/// The half-width of the interval of (simulated mean − observed value) by Welch's method, and its
+/// degrees of freedom: the simulated half-width `hs` over `n` replications at confidence `level`,
+/// and the observed `ho`, a 95% half-width from `sets` independent data sets. Each side's
+/// variance of the mean is (h/t)² with its own t (t_{n−1} at `level`, t_{sets−1} at 95%), and the
+/// interval is at `level`. `None` with fewer than 2 on either side, or a half-width that is not
+/// finite or below 0.
+pub fn welch_half_width(hs: f64, n: u64, level: f64, ho: f64, sets: u64) -> Option<(f64, u64)> {
+    if n < 2 || sets < 2 || !(hs.is_finite() && hs >= 0.0 && ho.is_finite() && ho >= 0.0) {
+        return None;
+    }
+    let ts = crate::critical::t_two_sided(level, n - 1)?;
+    let to = crate::critical::t_two_sided(crate::critical::DEFAULT_LEVEL, sets - 1)?;
+    let (us, uo) = ((hs / ts) * (hs / ts), (ho / to) * (ho / to));
+    let se2 = us + uo;
+    let df = if se2 > 0.0 {
+        let f = se2 * se2 / (us * us / (n - 1) as f64 + uo * uo / (sets - 1) as f64);
+        (f.floor() as u64).max(1)
+    } else {
+        n + sets - 2
+    };
+    let t = crate::critical::t_two_sided(level, df)?;
+    Some((t * se2.sqrt(), df))
+}
+
+/// [`judge`] for an observed value from `sets` independent data sets, its half-width their 95%
+/// interval: the difference's interval by Welch's method ([`welch_half_width`]), with the
+/// simulated half-width at confidence `level`. With no usable count or no observed half-width,
+/// or for a bound, exactly [`judge`]. Also gives the Welch degrees of freedom where they were
+/// used.
+pub fn judge_welch(
+    check: Check,
+    mean: f64,
+    half_width: f64,
+    n: u64,
+    level: f64,
+    sets: Option<u64>,
+) -> (Verdict, Option<u64>) {
+    let plain = judge(check, mean, half_width, n);
+    let Check::Value {
+        value,
+        half_width: Some(ho),
+        tolerance,
+    } = check
+    else {
+        return (plain, None);
+    };
+    if !(mean.is_finite() && value.is_finite()) {
+        return (plain, None);
+    }
+    let Some((combined, df)) = sets.and_then(|m| welch_half_width(half_width, n, level, ho, m))
+    else {
+        return (plain, None);
+    };
+    let d = mean - value;
+    (
+        Verdict {
+            outcome: value_outcome(d, combined, tolerance),
+            difference: Some(d),
+            half_width: Some(combined),
+        },
+        Some(df),
+    )
 }
 
 /// The outcome for an observed value: the difference `d` with the half-width `combined` of its
@@ -414,6 +484,45 @@ mod tests {
         assert_eq!(
             judge(at_least, 380.0, 20.0, 10).outcome,
             Outcome::Inconclusive
+        );
+    }
+
+    /// Law, 5th ed., Example 5.42 (p. 275): 8 test missiles, mean miss distance 159.95 with
+    /// S² = 355.75, against 15 simulated, 183.50 with S² = 545.71. Welch's 95% interval for
+    /// the difference is 23.55 ± 18.97 (the book's is for system minus model, −23.55), with
+    /// f̂ = 17.34: it excludes 0, so the model differs.
+    #[test]
+    fn welch_reproduces_the_missile_example() {
+        let t = |df: u64| crate::critical::t_two_sided(0.95, df).unwrap_or(f64::NAN);
+        let ho = t(7) * (355.75_f64 / 8.0).sqrt();
+        let hs = t(14) * (545.71_f64 / 15.0).sqrt();
+        let check = Check::Value {
+            value: 159.95,
+            half_width: Some(ho),
+            tolerance: None,
+        };
+        let (v, df) = judge_welch(check, 183.50, hs, 15, 0.95, Some(8));
+        assert_eq!(df, Some(17));
+        assert_eq!(v.outcome, Outcome::Differs);
+        assert!(v.difference.is_some_and(|d| (d - 23.55).abs() < 1e-9));
+        assert!(
+            v.half_width.is_some_and(|h| (h - 18.97).abs() < 5e-3),
+            "{v:?}"
+        );
+        // Without the count: the hypot rule, exactly as `judge` gives it.
+        let (plain, none) = judge_welch(check, 183.50, hs, 15, 0.95, None);
+        assert_eq!((plain, none), (judge(check, 183.50, hs, 15), None));
+        // A count of 1, no observed half-width, or a bound: `judge` too.
+        assert_eq!(judge_welch(check, 183.50, hs, 15, 0.95, Some(1)).1, None);
+        let bare = Check::Value {
+            value: 159.95,
+            half_width: None,
+            tolerance: None,
+        };
+        assert_eq!(judge_welch(bare, 183.50, hs, 15, 0.95, Some(8)).1, None);
+        assert_eq!(
+            judge_welch(Check::AtMost(200.0), 183.50, hs, 15, 0.95, Some(8)),
+            (judge(Check::AtMost(200.0), 183.50, hs, 15), None)
         );
     }
 

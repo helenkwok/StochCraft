@@ -1540,3 +1540,4 @@ connection	Flow	Folyamat
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Az ítélet valós, ha a különbség intervalluma kizárja a nullát. A(z) {k} sort együtt ítéljük meg: minden intervallumuk egyszerre teljesül legalább {level}%-os megbízhatósággal (Bonferroni).
 	Judge the rows together (Bonferroni)	A sorok együttes megítélése (Bonferroni)
 	{q}% quantile {value}	{q}%-os kvantilis {value}
+	From how many data sets (0 if not known)	Hány adatsorból (0, ha nem ismert)

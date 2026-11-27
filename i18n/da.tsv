@@ -1540,3 +1540,4 @@ connection	Flow	Flow
 	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	En vurdering er reel, når forskellens interval udelukker nul. De {k} rækker bedømmes samlet: alle deres intervaller holder på én gang med mindst {level}% konfidens (Bonferroni).
 	Judge the rows together (Bonferroni)	Bedøm rækkerne samlet (Bonferroni)
 	{q}% quantile {value}	{q}%-fraktil {value}
+	From how many data sets (0 if not known)	Fra hvor mange datasæt (0 hvis ukendt)

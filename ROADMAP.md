@@ -1738,6 +1738,19 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
       commands, the model problem), `ui-egui/tests/observed.rs` and `i18n/`.
     - Not here: more than one observation for the same result (say a value and a bound), and a
       way to enter observed data in the command line except through the file.
+    - **Done:** **Welch's interval from a count of data sets.** An observed value may say how
+      many independent data sets its value and 95% half-width come from (`sets`, the `n`
+      attribute in the file, **From how many data sets** in the window). The difference's
+      interval is then Welch's (Law, section 5.6.2): each side's variance of the mean from its
+      half-width and count, the Welch–Satterthwaite degrees of freedom rounded down, and the t
+      value at the run's confidence level (`stats::observed::judge_welch`; Law's Example 5.42,
+      23.55 ± 18.97, as a test). Without the count, the root of the sum of squares as before;
+      each check says which (`method`, with `df` for Welch).
+    - Possibly later: **paired-t against the system's own data sets**, for trace-driven runs only
+      (the model driven by the same recorded inputs as each data set, Law, section 5.6.1), where
+      model and system are correlated set by set. It would need the per-set values in the file and
+      trace-driven input, which does not exist; otherwise a real system and the model's runs
+      share no random numbers and are never paired.
   - Not yet: **checks that compare scenarios or fail a script.** A comparison of two scenarios
     with common random numbers ("the third packer cuts the wait"), and `stochcraft-cli check`
     exiting non-zero when a check is not met, so a model can be tested in CI, with a short

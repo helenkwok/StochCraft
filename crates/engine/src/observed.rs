@@ -19,13 +19,18 @@
 //! interval holds 0: not agreement), `inconclusive` (no interval yet, a bound the interval
 //! straddles, or a difference interval neither inside nor outside the tolerance) or `no_result`
 //! (the run reports no such result: the block is gone, or does not report that metric).
+//! An observed value from a known number of independent data sets (`sets`) is checked by
+//! Welch's interval (Law, *Simulation Modeling and Analysis*, 5th ed., section 5.6.2;
+//! [`stochcraft_stats::observed::judge_welch`]), with the simulated side at the run's confidence
+//! level; without it, by the root of the sum of the squared half-widths. Each check says which:
+//! `method` is `welch` (with its `df`) or `combined_half_widths`.
 //! An observed value may carry a `tolerance`: with it the check is `agrees` when the whole
 //! interval of the difference is inside it, `differs` when wholly outside, else `inconclusive`.
 
 use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::{ElementId, Model, Observation, Observed};
-use stochcraft_stats::observed::{Check, judge};
+use stochcraft_stats::observed::{Check, judge_welch};
 
 use crate::wire::ObservationSpec;
 use crate::{CommandError, ErrorCode};
@@ -37,6 +42,7 @@ fn check_of(o: &Observation) -> Check {
             value,
             half_width,
             tolerance,
+            ..
         } => Check::Value {
             value,
             half_width,
@@ -57,7 +63,7 @@ fn kind_name(o: &Observation) -> &'static str {
 }
 
 /// The check of one observation against the run's results.
-fn one(model: &Model, summary: &ExperimentSummary, o: &Observation) -> Value {
+fn one(model: &Model, summary: &ExperimentSummary, o: &Observation, level: f64) -> Value {
     let found = summary.elements.iter().find(|e| e.id == o.element);
     let simulated = Metric::from_name(&o.metric)
         .and_then(|m| found.and_then(|e| e.metric(m)))
@@ -79,9 +85,13 @@ fn one(model: &Model, summary: &ExperimentSummary, o: &Observation) -> Value {
             value,
             half_width,
             tolerance,
+            sets,
         } => {
             v["observed"] =
                 json!({ "value": value, "half_width": half_width, "tolerance": tolerance });
+            if let Some(m) = sets {
+                v["observed"]["sets"] = json!(m);
+            }
         }
         Observed::AtMost(bound) | Observed::AtLeast(bound) => v["bound"] = json!(bound),
     }
@@ -89,11 +99,23 @@ fn one(model: &Model, summary: &ExperimentSummary, o: &Observation) -> Value {
         v["verdict"] = json!("no_result");
         return v;
     };
-    let verdict = judge(check_of(o), s.mean, s.half_width, s.n);
+    let sets = match o.target {
+        Observed::Value { sets, .. } => sets.map(u64::from),
+        _ => None,
+    };
+    let (verdict, df) = judge_welch(check_of(o), s.mean, s.half_width, s.n, level, sets);
     v["verdict"] = json!(verdict.outcome.name());
     if matches!(o.target, Observed::Value { .. }) {
         v["difference"] = json!(verdict.difference);
         v["difference_half_width"] = json!(verdict.half_width);
+        v["method"] = json!(if df.is_some() {
+            "welch"
+        } else {
+            "combined_half_widths"
+        });
+        if let Some(df) = df {
+            v["df"] = json!(df);
+        }
     }
     v
 }
@@ -105,7 +127,8 @@ pub fn check(model: &Model, summary: &ExperimentSummary) -> Option<Value> {
     if list.is_empty() {
         return None;
     }
-    let checks: Vec<Value> = list.iter().map(|o| one(model, summary, o)).collect();
+    let level = model.experiment.confidence;
+    let checks: Vec<Value> = list.iter().map(|o| one(model, summary, o, level)).collect();
     // Those that differ or fail first, then those not decided or with no difference detected
     // (and results the run lacks), then those that agree or pass; each group as kept.
     let rank = |c: &Value| match c["verdict"].as_str() {
@@ -148,9 +171,21 @@ pub fn from_spec(model: &Model, spec: ObservationSpec) -> Result<Observation, Co
             value,
             half_width,
             tolerance,
+            sets,
             ..
         } => {
             number("value", *value)?;
+            if let Some(m) = sets {
+                if *m < 2 {
+                    return Err(bad(format!("`sets` must be 2 or more, not {m}")));
+                }
+                if half_width.is_none() {
+                    return Err(bad(
+                        "`sets` needs `half_width`: the count says how many data sets it comes from"
+                            .to_owned(),
+                    ));
+                }
+            }
             if let Some(t) = tolerance
                 && !(t.is_finite() && *t > 0.0)
             {

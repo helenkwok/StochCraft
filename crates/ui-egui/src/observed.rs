@@ -66,6 +66,7 @@ fn spec(
     value: f64,
     half_width: f64,
     tolerance: f64,
+    sets: f64,
 ) -> Value {
     let mut s = json!({ "check": kind.key(), "element": element, "metric": metric });
     match kind {
@@ -76,6 +77,12 @@ fn spec(
             }
             if tolerance > 0.0 {
                 s["tolerance"] = json!(tolerance);
+            }
+            // How many data sets the value comes from: a whole number of 2 or more, and only
+            // with a half-width it describes.
+            let m = sets.round();
+            if half_width > 0.0 && m >= 2.0 {
+                s["sets"] = json!(m.min(f64::from(u32::MAX)) as u32);
             }
         }
         Kind::AtMost | Kind::AtLeast => s["bound"] = json!(value),
@@ -346,7 +353,7 @@ impl App {
         if let Some((element, metric)) = picked.as_deref().and_then(|k| k.split_once('/')) {
             self.execute(
                 "observation.add",
-                spec(element, metric, Kind::Value, 0.0, 0.0, 0.0),
+                spec(element, metric, Kind::Value, 0.0, 0.0, 0.0, 0.0),
             );
         }
     }
@@ -381,7 +388,8 @@ impl App {
         let mut value = o[key].as_f64().unwrap_or(0.0) * scale;
         let mut half_width = o["half_width"].as_f64().unwrap_or(0.0) * scale;
         let mut tolerance = o["tolerance"].as_f64().unwrap_or(0.0) * scale;
-        let before = (value, half_width, tolerance);
+        let mut sets = o["sets"].as_f64().unwrap_or(0.0);
+        let before = (value, half_width, tolerance, sets);
         let mut chosen = kind;
         let mut remove = false;
         ui.horizontal_wrapped(|ui| {
@@ -427,6 +435,17 @@ impl App {
                 );
             }
             if kind == Kind::Value {
+                ui.label(t("From how many data sets (0 if not known)"));
+                number(
+                    ui,
+                    &self.numbers,
+                    &format!("x/observed/{i}/sets"),
+                    t("From how many data sets (0 if not known)"),
+                    &mut sets,
+                    50.0,
+                );
+            }
+            if kind == Kind::Value {
                 ui.label(t("Tolerance (0 for none)"));
                 number(
                     ui,
@@ -446,7 +465,7 @@ impl App {
             );
             return true;
         }
-        if chosen != kind || (value, half_width, tolerance) != before {
+        if chosen != kind || (value, half_width, tolerance, sets) != before {
             // Kept within what the engine takes: a half-width of 0 or more.
             let params = spec(
                 &element,
@@ -455,6 +474,7 @@ impl App {
                 value / scale,
                 half_width.max(0.0) / scale,
                 tolerance.max(0.0) / scale,
+                sets,
             );
             self.execute("observation.set", params);
             return true;
@@ -546,19 +566,31 @@ mod tests {
     #[test]
     fn the_parameters_are_the_engines() {
         assert_eq!(
-            spec("desk", "mean_wait", Kind::Value, 3.2, 0.0, 0.0),
+            spec("desk", "mean_wait", Kind::Value, 3.2, 0.0, 0.0, 0.0),
             json!({ "check": "value", "element": "desk", "metric": "mean_wait", "value": 3.2 })
         );
+        // The number of data sets goes with a half-width, as a whole number of 2 or more.
         assert_eq!(
-            spec("desk", "mean_wait", Kind::Value, 3.2, 0.4, 0.5)["half_width"],
+            spec("desk", "mean_wait", Kind::Value, 3.2, 0.4, 0.0, 12.0)["sets"],
+            12
+        );
+        for (hw, sets) in [(0.0, 12.0), (0.4, 1.0), (0.4, 0.0)] {
+            assert!(
+                spec("desk", "mean_wait", Kind::Value, 3.2, hw, 0.0, sets)
+                    .get("sets")
+                    .is_none()
+            );
+        }
+        assert_eq!(
+            spec("desk", "mean_wait", Kind::Value, 3.2, 0.4, 0.5, 0.0)["half_width"],
             0.4
         );
         assert_eq!(
-            spec("desk", "mean_wait", Kind::Value, 3.2, 0.0, 0.5)["tolerance"],
+            spec("desk", "mean_wait", Kind::Value, 3.2, 0.0, 0.5, 0.0)["tolerance"],
             0.5
         );
         assert_eq!(
-            spec("desk", "utilisation", Kind::AtMost, 0.85, 0.4, 0.5),
+            spec("desk", "utilisation", Kind::AtMost, 0.85, 0.4, 0.5, 0.0),
             json!({ "check": "at_most", "element": "desk", "metric": "utilisation", "bound": 0.85 })
         );
         assert_eq!(unit("utilisation"), Unit::Share);

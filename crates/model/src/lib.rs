@@ -1609,10 +1609,15 @@ pub enum Observed {
     /// differs from it when the 95% interval of the difference excludes 0 (with a tolerance:
     /// lies wholly outside it), agrees when the whole interval is inside the tolerance, and
     /// otherwise no difference is detected or the check is inconclusive.
+    ///
+    /// `sets`, where given, is how many independent data sets of the real system the value and
+    /// its half-width come from (at least 2): the difference's interval is then Welch's, from
+    /// each side's spread and count, rather than the root of the sum of the squared half-widths.
     Value {
         value: f64,
         half_width: Option<f64>,
         tolerance: Option<f64>,
+        sets: Option<u32>,
     },
     /// The result should be at most this; decided by the simulated 95% interval, not by the mean
     /// alone.
@@ -6090,6 +6095,7 @@ mod tests {
                 value: 0.8,
                 half_width: Some(0.05),
                 tolerance: None,
+                sets: None,
             },
         }];
         assert!(
