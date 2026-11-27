@@ -82,6 +82,16 @@ pub fn default_width(unit: LengthUnit) -> f64 {
     }
 }
 
+/// The radius a drawn corner of a path bends with, along its middle, unless the user gives
+/// another: 1 m ([`default_bend`] in a model's unit). With the default 0.6 m belt, its inside
+/// edge turns at 0.7 m.
+pub const DEFAULT_BEND_M: f64 = 1.0;
+
+/// The default bend, 1 m, in `unit`.
+pub fn default_bend(unit: LengthUnit) -> f64 {
+    DEFAULT_BEND_M / metres(unit)
+}
+
 /// `x` (in `unit`) to the nearest 0.1 mm.
 pub fn to_step(x: f64, unit: LengthUnit) -> f64 {
     let k = steps_per_unit(unit);

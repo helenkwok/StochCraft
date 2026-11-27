@@ -1049,6 +1049,7 @@ unit	yr	р.
 	In “{field}” of {block}, set “{param}” to 1 or more.	У полі «{field}» блока {block} задайте для «{param}» число не менше за 1.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	У полі «{field}» блока {block} задайте для «{param}» число від 0 до 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	У полі «{field}» блока {block} задайте «Мінімум» менше за «Максимум», а «Найімовірніше значення», якщо воно є, між ними.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	У полі «{field}» блока {block} задайте «Мінімум» менше за «Максимум».
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	У полі «{field}» блока {block} додайте точки даних, імовірності яких у сумі більші за 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	У блока {block} ніколи не було б одиниці для роботи. Задайте принаймні 1 одиницю.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Блок {block} створював би сутності без кінця, бо «Час між прибуттями» завжди дорівнює 0. Задайте час більший за 0 або вкажіть «Обмеження кількості прибуттів».
@@ -1491,6 +1492,35 @@ connection	Flow	Потік
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Блок {block} розміщено на відстані {s} уздовж конвеєра {conveyor}, шлях якого має довжину {length}. Розмістіть його між 0 і {length} уздовж шляху.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Сутності на конвеєрі {conveyor} доходять до {before} раніше, ніж до {block}, але {block} розміщено ближче до початку ({s} уздовж нього, {before} на {before_s}). Розмістіть {block} далі шляхом, ніж {before}, або поміняйте їх місцями в потоках.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Стик на потоці {flow} проходиться за {time}. Задайте час передачі 0 або більше.
+	A path needs at least two points.	Траса повинна мати щонайменше дві точки.
+	Finish	Готово
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Малюється траса {name}: клацайте, щоб додати точки, подвійне клацання або Enter — завершити, Backspace — прибрати останню точку, Esc — скасувати.
+	Draw path	Намалювати трасу
+	Select a conveyor to draw its path	Виберіть конвеєр, щоб намалювати його трасу
+	Remove path	Видалити трасу
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Клацніть, щоб додати точку · Подвійне клацання або Enter — завершити · Esc — скасувати
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Клацніть стрічку, щоб вибрати її · Перетягуйте її точки або стрічку · Подвійне клацання додає точку · Перетягніть підлогу для зсуву · Прокрутіть для масштабу
+	Point {n} of {name}, x {x} m, y {y} m	Точка {n} з {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Клацніть тут конвеєр, щоб намалювати його трасу.
+	Path	Траса
+	Not drawn in the layout yet.	Ще не намальовано на плануванні.
+	Draw in the Layout view	Намалювати у вигляді «Планування»
+	Add a straight path	Додати пряму трасу
+	Drawn length: {length} {unit}	Намальована довжина: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ця траса піднімається або має спіраль: її точки тут не редагуються.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ця траса робить повне коло або більше в одній дузі: її точки тут не редагуються.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ця траса різко повертає на початку або в кінці: її точки тут не редагуються.
+	Point {n}	Точка {n}
+	x of point {n}	x точки {n}
+	y of point {n}	y точки {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Радіус повороту в точці {n}
+	bend	поворот
+	tightened to {radius} to fit	звужено до {radius}, щоб умістилося
+	Remove point {n}	Видалити точку {n}
+	Add a point at the end	Додати точку в кінці
+	Change Path	Зміна траси
 	Search examples	Пошук у прикладах
 	Clear search	Очистити пошук
 	Logistics and warehousing	Логістика і склад

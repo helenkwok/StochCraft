@@ -1049,6 +1049,7 @@ unit	yr	a
 	In “{field}” of {block}, set “{param}” to 1 or more.	Ploki {block} väljal „{field}” määra „{param}” väärtuseks 1 või rohkem.
 	In “{field}” of {block}, set “{param}” to a number from 0 to 1.	Ploki {block} väljal „{field}” määra „{param}” arvuks vahemikus 0 kuni 1.
 	In “{field}” of {block}, set “Minimum” below “Maximum”, and any “Most likely” value between them.	Ploki {block} väljal „{field}” määra „Miinimum” väiksemaks kui „Maksimum” ja võimalik „Kõige tõenäolisem” väärtus nende vahele.
+	In “{field}” of {block}, set “Minimum” below “Maximum”.	Ploki {block} väljal „{field}” määra „Miinimum” väiksemaks kui „Maksimum”.
 	In “{field}” of {block}, add data points whose probabilities add up to more than 0.	Ploki {block} väljal „{field}” lisa andmepunktid, mille tõenäosuste summa on suurem kui 0.
 	{block} would never have a unit to work with. Give it at least 1 unit.	Plokil {block} poleks kunagi ühikut, millega töötada. Anna sellele vähemalt 1 ühik.
 	{block} would make entities without end, because its “Time between arrivals” is always 0. Give it a time above 0, or set an “Arrival limit”.	Plokk {block} looks olemeid lõputult, sest selle „Saabumiste vaheline aeg” on alati 0. Anna aeg, mis on suurem kui 0, või määra „Saabumiste piirang”.
@@ -1491,6 +1492,35 @@ connection	Flow	Voog
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Plokk {block} on paigutatud {s} kaugusele piki konveierit {conveyor}, mille tee on {length} pikk. Paiguta see 0 ja {length} vahele piki teed.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Olemid konveieril {conveyor} jõuavad plokini {before} enne kui plokini {block}, kuid {block} on paigutatud alguse lähedale ({s} piki seda, {before} kohas {before_s}). Paiguta {block} teel kaugemale kui {before} või vaheta need vooludes ära.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Ristumiskoht voos {flow} võtab ületamiseks {time}. Tee selle ülekandeaeg 0 või suurem.
+	A path needs at least two points.	Teekonnal peab olema vähemalt kaks punkti.
+	Finish	Lõpeta
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Joonistatakse {name} teekonda: klõpsake punktide lisamiseks, topeltklõps või Enter lõpetab, Backspace võtab viimase punkti tagasi, Esc tühistab.
+	Draw path	Joonista teekond
+	Select a conveyor to draw its path	Valige konveier, et joonistada selle teekond
+	Remove path	Eemalda teekond
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klõpsake punkti lisamiseks · Topeltklõps või Enter lõpetab · Esc tühistab
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Klõpsake linti selle valimiseks · Lohistage selle punkte või linti · Topeltklõps lisab punkti · Lohistage põrandat nihutamiseks · Kerige suumimiseks
+	Point {n} of {name}, x {x} m, y {y} m	{name} punkt {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klõpsake siin konveieril, et joonistada selle teekond.
+	Path	Teekond
+	Not drawn in the layout yet.	Paigutuses veel joonistamata.
+	Draw in the Layout view	Joonista vaates Paigutus
+	Add a straight path	Lisa sirge teekond
+	Drawn length: {length} {unit}	Joonistatud pikkus: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	See teekond tõuseb või sellel on spiraal: selle punkte ei saa siin muuta.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	See teekond pöörab ühes kaares terve ringi või rohkem: selle punkte ei saa siin muuta.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	See teekond pöörab järsult oma alguses või lõpus: selle punkte ei saa siin muuta.
+	Point {n}	Punkt {n}
+	x of point {n}	punkti {n} x
+	y of point {n}	punkti {n} y
+	x	x
+	y	y
+	Bend radius at point {n}	Kurvi raadius punktis {n}
+	bend	kurv
+	tightened to {radius} to fit	kitsendatud {radius}-ni, et mahuks
+	Remove point {n}	Eemalda punkt {n}
+	Add a point at the end	Lisa punkt lõppu
+	Change Path	Muuda teekonda
 	Search examples	Otsi näidetest
 	Clear search	Tühjenda otsing
 	Logistics and warehousing	Logistika ja laondus
