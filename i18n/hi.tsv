@@ -1508,3 +1508,8 @@ connection	Flow	प्रवाह
 	Share turned away	लौटाई गईं का अनुपात
 	{label}: {value}	{label}: {value}
 	{label}: {value} ({terms})	{label}: {value} ({terms})
+	One machine's availability	एक मशीन की उपलब्धता
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	एक मशीन जो औसतन हर 90 घंटे में खराब होती है और जिसकी मरम्मत में 4.5 घंटे लगते हैं (Hristova, Denev और Tsankov, Environment. Technology. Resources, 2024)।
+	How often is one machine down, and how much work does that cost?	एक मशीन कितनी बार बंद रहती है, और इससे कितना काम घटता है?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 घंटे चालू, 4.5 घंटे बंद: मशीन 95.2% समय काम करती है और हर 94.5 घंटे में एक खराबी आती है। मरम्मत का समय आधा करने पर यह 97.6% हो जाता है।
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} समय बंद रहता है (उपलब्धता {up}); उसके लिए कुछ भी प्रतीक्षा नहीं करता।

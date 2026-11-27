@@ -1508,3 +1508,8 @@ connection	Flow	Rrjedhë
 	Share turned away	Pjesa e refuzuar
 	{label}: {value}	{label}: {value}
 	{label}: {value} ({terms})	{label}: {value} ({terms})
+	One machine's availability	Disponueshmëria e një makine
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Një makinë që prishet mesatarisht çdo 90 orë dhe riparohet për 4.5 orë (Hristova, Denev dhe Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Sa shpesh ndalet një makinë dhe sa punë kushton kjo?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Punon 90 orë, ndalet 4.5: makina punon 95.2% të kohës dhe një prishje ndodh çdo 94.5 orë. Përgjysmimi i kohës së riparimit e ngre në 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} është i ndalur {down} të kohës (disponueshmëria {up}); asgjë nuk e pret.

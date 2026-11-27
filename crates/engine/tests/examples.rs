@@ -29,6 +29,8 @@
 //!   resource), against the exact long-run answer of their discrete-time Markov chain.
 //! - delayed discharge (Boyle et al., OR Society Simulation Workshop 2023) against Erlang B for
 //!   its two discharge-to-assess services, whose overflow waits in hospital.
+//! - one machine's availability (Hristova, Denev and Tsankov, 2024) against the alternating
+//!   renewal share MTBF / (MTBF + MTTR) of time up and the failures an hour.
 //!
 //! The first five files were written by `stochcraft-cli new -t <name>`; the others were built with
 //! the same engine commands and saved, with their comparison scenarios (each inheriting the first)
@@ -1529,5 +1531,69 @@ fn delayed_discharge_scenarios_match_erlang_b() {
         } else {
             covers(&r, changes, "mean_contents", exact);
         }
+    }
+}
+
+/// One machine's availability, the reliability example of Hristova, Denev and Tsankov
+/// (*Environment. Technology. Resources*, 2024, vol. II, pp. 120–126): a machine up for 90 hours
+/// on average between failures (exponential) and repaired in 4.5 hours on average
+/// (exponential), working jobs of 30 hours and always having one to work. It goes down and comes
+/// back in turn (an alternating renewal process), so it is up the share
+/// A = MTBF / (MTBF + MTTR) = 90 / 94.5 = 0.95238 of the time, and a failure strikes once in
+/// every MTBF + MTTR = 94.5 hours of elapsed time, down time included (1 / 94.5 = 0.010582 an
+/// hour). A job that a failure interrupts carries on after the repair, so the machine works
+/// exactly while it is up (its utilisation is A) and finishes A / 30 jobs an hour.
+///
+/// Not checked here: the paper's share of time that includes planned maintenance (92.5 hours
+/// per 450 hours of work, 450 / 565 = 0.79646), because a breakdown here keeps failing through
+/// time off shift, so no timetable gives the paper's share exactly; and the chance that a job of
+/// 30 hours starts on a working machine and meets no failure, A · e^(−30/90) = 0.68241 (the
+/// paper prints 0.68469, from a failure rate rounded to 0.011), which no result reports.
+///
+/// The second scenario halves the repair time, which raises the availability to 0.97561.
+#[test]
+fn one_machine_matches_its_availability() {
+    for (scenario, repair) in [(None, 4.5), (Some("quick-repair"), 2.25)] {
+        let m = model_of("machine-availability.bpmn", scenario);
+        let (job, units) = server(&m, "machine");
+        assert!((job - 30.0).abs() < 1e-12 && units == 1, "{scenario:?}");
+        let b = match m.element(&ElementId::unchecked("machine")).map(|e| &e.kind) {
+            Some(ElementKind::Server { breakdown, .. }) => breakdown.clone(),
+            _ => None,
+        };
+        let b = b.unwrap_or_else(|| panic!("{scenario:?}: no breakdown"));
+        assert!(b.interruptible, "{scenario:?}");
+        let (mtbf, mttr) = (90.0, repair);
+        let mean = |d: &Dist| d.mean().unwrap_or(f64::NAN);
+        assert!(
+            (mean(&b.time_to_failure) - mtbf).abs() < 1e-12,
+            "{scenario:?}"
+        );
+        assert!((mean(&b.repair) - mttr).abs() < 1e-12, "{scenario:?}");
+        let available = mtbf / (mtbf + mttr);
+        let duration = 100_000.0;
+        let mut e = open_scenario(
+            "machine-availability.bpmn",
+            scenario,
+            json!({ "replications": 20, "warmup": 1_000.0, "duration": duration }),
+        );
+        let r = ok(&mut e, "run", json!({}));
+        covers(&r, "machine", "availability", available);
+        covers(&r, "machine", "time_failed", mttr / (mtbf + mttr));
+        covers(&r, "machine", "utilisation", available);
+        covers(&r, "machine", "left", available / 30.0 * duration);
+        // Failures an hour: the time down over the repair time, once every MTBF + MTTR hours.
+        let (down, hw) = result(&r, "machine", "time_failed");
+        let rate = 1.0 / (mtbf + mttr);
+        eprintln!(
+            "failures an hour: {} ± {}, theory {rate}",
+            down / mttr,
+            hw / mttr
+        );
+        assert!(
+            (down / mttr - rate).abs() <= std::f64::consts::SQRT_2 * hw / mttr,
+            "{scenario:?}: {} vs {rate}",
+            down / mttr
+        );
     }
 }

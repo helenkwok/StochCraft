@@ -1508,3 +1508,8 @@ connection	Flow	Flyt
 	Share turned away	Andel avvist
 	{label}: {value}	{label}: {value}
 	{label}: {value} ({terms})	{label}: {value} ({terms})
+	One machine's availability	Én maskins oppetid
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	En maskin som i gjennomsnitt svikter hver 90. time og bruker 4.5 timer på å repareres (Hristova, Denev og Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Hvor ofte står én maskin stille, og hvor mye arbeid koster det?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Går 90 timer, står stille 4.5: maskinen arbeider 95.2 % av tiden, og en feil inntreffer hver 94.5. time. Halveres reparasjonstiden, stiger det til 97.6 %.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} står stille {down} av tiden (oppetid {up}); ingenting venter på den.

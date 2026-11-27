@@ -1092,6 +1092,20 @@ fields (`“Service time”`) are named in the messages by their own rows.
   sends down it, shown instead of "Share of arrivals lost" there) was machine-drafted from each
   catalog's own "Turned away" and its wording of the other shares ("Share balked"). Not checked
   against any other source and not reviewed by native speakers.
+- The rows for the one-machine-availability example (its title, the line about it, its question
+  and what it teaches) were machine-drafted from the plain meaning of the English, with each
+  catalog's own words for machine, breakdown and repair from the earlier example cards;
+  "availability" is the language's word for the share of time a machine can work (readiness or
+  availability, not a count). The authors' names and the journal's name stay in English and Latin
+  script, and decimals keep the point. Not checked against any other source and not reviewed by
+  native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq, and the title in
+  most of them.
+- The row for the finding that a machine is down part of the time while nothing waits for it
+  ("{block} is down {down} of the time (available {up}); nothing waits for it.") was
+  machine-drafted from the plain meaning of the English, with each catalog's own word for
+  availability from the example above, and `{block}`, `{down}` and `{up}` kept. Not checked
+  against any other source and not reviewed by native speakers; the least certain are lo, th, ta,
+  te, bn, ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
