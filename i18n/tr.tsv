@@ -1491,6 +1491,35 @@ connection	Flow	Akış
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} bloğu {conveyor} konveyörü boyunca {s} uzaklığa yerleştirilmiş, ama yolunun uzunluğu {length}. Onu yol boyunca 0 ile {length} arasına yerleştirin.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	{conveyor} konveyöründeki varlıklar {before} bloğuna {block} bloğundan önce ulaşıyor, ama {block} başlangıca daha yakın yerleştirilmiş (konveyör boyunca {s}, {before} ise {before_s} noktasında). {block} bloğunu yol boyunca {before} bloğundan daha ileriye yerleştirin ya da akışlarda yerlerini değiştirin.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	{flow} akışındaki bağlantıyı geçmek {time} sürüyor. Aktarma süresini 0 veya daha fazla yapın.
+	A path needs at least two points.	Bir yolun en az iki noktası olmalıdır.
+	Finish	Bitir
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name} yolu çiziliyor: nokta eklemek için tıklayın, bitirmek için çift tıklayın veya Enter, son noktayı geri almak için Backspace, iptal için Esc.
+	Draw path	Yol çiz
+	Select a conveyor to draw its path	Yolunu çizmek için bir konveyör seçin
+	Remove path	Yolu kaldır
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Nokta eklemek için tıklayın · Bitirmek için çift tıklama veya Enter · İptal için Esc
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Seçmek için bir banda tıklayın · Noktalarını veya bandı sürükleyin · Nokta eklemek için çift tıklayın · Kaydırmak için zemini sürükleyin · Yakınlaştırmak için kaydırın
+	Point {n} of {name}, x {x} m, y {y} m	{name} noktası {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Yolunu çizmek için burada bir konveyöre tıklayın.
+	Path	Yol
+	Not drawn in the layout yet.	Henüz yerleşimde çizilmedi.
+	Draw in the Layout view	Yerleşim görünümünde çiz
+	Add a straight path	Düz bir yol ekle
+	Drawn length: {length} {unit}	Çizilen uzunluk: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Bu yol yükseliyor veya sarmal içeriyor: noktaları burada düzenlenemez.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Bu yol tek bir yayda tam bir daire veya daha fazla dönüyor: noktaları burada düzenlenemez.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Bu yol başladığı ya da bittiği yerde keskin dönüyor: noktaları burada düzenlenemez.
+	Point {n}	Nokta {n}
+	x of point {n}	{n}. noktanın x'i
+	y of point {n}	{n}. noktanın y'si
+	x	x
+	y	y
+	Bend radius at point {n}	{n}. noktadaki dönüş yarıçapı
+	bend	dönüş
+	tightened to {radius} to fit	sığması için {radius} değerine daraltıldı
+	Remove point {n}	{n}. noktayı kaldır
+	Add a point at the end	Sona bir nokta ekle
+	Change Path	Yolu Değiştir
 	Search examples	Örneklerde ara
 	Clear search	Aramayı temizle
 	Logistics and warehousing	Lojistik ve depolama

@@ -1491,6 +1491,35 @@ connection	Flow	顺序流
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} 放在传送带 {conveyor} 上距起点 {s} 处，但该传送带的路径只有 {length} 长。请把它放在路径上 0 到 {length} 之间。
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	传送带 {conveyor} 上的实体先到达 {before}，后到达 {block}，但 {block} 的位置更靠近起点（沿传送带 {s}，而 {before} 在 {before_s}）。请把 {block} 放在路径上比 {before} 更靠后的位置，或在顺序流中交换它们。
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	顺序流 {flow} 上的衔接处需要 {time} 才能通过。请把它的传送时间设为 0 或更大。
+	A path needs at least two points.	路径至少需要两个点。
+	Finish	完成
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	正在绘制 {name} 的路径：单击添加点，双击或按 Enter 完成，按 Backspace 撤回最后一个点，按 Esc 取消。
+	Draw path	绘制路径
+	Select a conveyor to draw its path	选择一条输送机以绘制其路径
+	Remove path	移除路径
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	单击添加点 · 双击或 Enter 完成 · Esc 取消
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	单击输送带以选中 · 拖动其点或整条输送带 · 双击添加点 · 拖动地面平移 · 滚动缩放
+	Point {n} of {name}, x {x} m, y {y} m	{name} 的第 {n} 个点，x {x} m，y {y} m
+	Click a conveyor here to draw its path.	在此单击一条输送机以绘制其路径。
+	Path	路径
+	Not drawn in the layout yet.	尚未在布局中绘制。
+	Draw in the Layout view	在布局视图中绘制
+	Add a straight path	添加直线路径
+	Drawn length: {length} {unit}	绘制长度：{length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	此路径会爬升或含有螺旋：无法在此编辑其点。
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	此路径在一段圆弧中转了一整圈或更多：无法在此编辑其点。
+	This path turns sharply where it starts or ends: its points cannot be edited here.	此路径在起点或终点急转：无法在此编辑其点。
+	Point {n}	点 {n}
+	x of point {n}	点 {n} 的 x
+	y of point {n}	点 {n} 的 y
+	x	x
+	y	y
+	Bend radius at point {n}	点 {n} 处的转弯半径
+	bend	转弯
+	tightened to {radius} to fit	已收紧到 {radius} 以适配
+	Remove point {n}	移除点 {n}
+	Add a point at the end	在末尾添加点
+	Change Path	更改路径
 	Search examples	搜索示例
 	Clear search	清除搜索
 	Logistics and warehousing	物流与仓储

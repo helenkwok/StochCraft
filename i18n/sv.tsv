@@ -1491,6 +1491,35 @@ connection	Flow	Flöde
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} är placerat {s} längs transportbandet {conveyor}, vars bana är {length} lång. Placera det mellan 0 och {length} längs banan.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteter på transportbandet {conveyor} når {before} före {block}, men {block} är placerat närmare början ({s} längs det, {before} vid {before_s}). Placera {block} längre fram längs banan än {before}, eller byt plats på dem i flödena.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Övergången på flödet {flow} tar {time} att korsa. Sätt dess överföringstid till 0 eller mer.
+	A path needs at least two points.	En bana behöver minst två punkter.
+	Finish	Slutför
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Ritar banan för {name}: klicka för att lägga till punkter, dubbelklicka eller Retur för att slutföra, Backsteg tar bort den sista punkten, Esc avbryter.
+	Draw path	Rita bana
+	Select a conveyor to draw its path	Välj en transportör för att rita dess bana
+	Remove path	Ta bort bana
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klicka för att lägga till en punkt · Dubbelklicka eller Retur för att slutföra · Esc för att avbryta
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Klicka på ett band för att välja det · Dra dess punkter eller bandet · Dubbelklicka för att lägga till en punkt · Dra golvet för att panorera · Rulla för att zooma
+	Point {n} of {name}, x {x} m, y {y} m	Punkt {n} av {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klicka på en transportör här för att rita dess bana.
+	Path	Bana
+	Not drawn in the layout yet.	Inte ritad i layouten än.
+	Draw in the Layout view	Rita i Layout-vyn
+	Add a straight path	Lägg till en rak bana
+	Drawn length: {length} {unit}	Ritad längd: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Den här banan stiger eller har en spiral: dess punkter kan inte redigeras här.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Den här banan svänger en hel cirkel eller mer i en båge: dess punkter kan inte redigeras här.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Den här banan svänger skarpt där den börjar eller slutar: dess punkter kan inte redigeras här.
+	Point {n}	Punkt {n}
+	x of point {n}	x för punkt {n}
+	y of point {n}	y för punkt {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Kurvradie vid punkt {n}
+	bend	kurva
+	tightened to {radius} to fit	åtstramad till {radius} för att få plats
+	Remove point {n}	Ta bort punkt {n}
+	Add a point at the end	Lägg till en punkt i slutet
+	Change Path	Ändra bana
 	Search examples	Sök i exempel
 	Clear search	Rensa sökningen
 	Logistics and warehousing	Logistik och lager

@@ -175,11 +175,11 @@ re-graded. Since then:
   message names the block, uses the window's word for the field and says how to fix it (#221).
 - **Words (heuristic 2):** one vocabulary across the window, the results and the engine's
   messages, which go through the catalogs (#139, #221).
-- **Layout and animation (area 6):** a 3D view (#205, #208, #210, #213) and a read-only Layout
+- **Layout and animation (area 6):** a 3D view (#205, #208, #210, #213) and a Layout
   view to scale (#216), both drawn from the model's layout in the file (conveyor tracks, places,
   scenery, diverts along a conveyor and junctions; #295, #297, #308), which only the parcel sorter
-  example has so far and the window cannot edit yet; entities moving on the flowchart are still
-  missing (#151).
+  example has so far; in the Layout view a conveyor's path is drawn and dragged (#319); entities
+  moving on the flowchart are still missing (#151).
 - **Experiments (area 9):** runs added until the key measures are precise enough (#232); the
   search for the best design runs from the command line and MCP only (#294, #298).
 - **Run controls (area 7):** a run bar with Play/Pause on Space, Reset, Step, a speed with keys to

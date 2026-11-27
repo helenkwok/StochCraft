@@ -49,7 +49,7 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 | `engine` | L4 | Commands with JSON schemas, undo and redo, a journal with its format, version and starting state; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `experiment.evaluate` and `experiment.optimise`; `results.distribution` and `results.compare`; `model.capacity`, `estimate.fit` and `line.balance`; Monte Carlo (`mc.*`), system dynamics (`sd.*`) and agent-based (`agents.*`) models; live runs |
 | `stochcraft-cli` | app | `new`, `validate`, `explain`, `balance`, `run` with a run record, `design`, `evaluate`, `optimize`, `inputs`, `fit`, `exec` (with `--journal`, `--all`, `--force`), `schema`, `mcp` |
 | `render` | L5 | Parametric low-poly meshes (machines, straight, curved and spiral conveyors, racks, totes, operators, forklifts, AGVs, and the sorter's pieces: belts swept along a path, a scanner arch, packing stations, pallets, roll cages, a control cabinet, parcels) as plain vertex and index buffers |
-| `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis and Capacity views; the 3D view and a read-only Layout view, both drawn from the model's layout; the properties of the selection with bold and reset; Monte Carlo and system dynamics models; the dashboard; watching a run from the run bar; autosave; 44 languages besides English |
+| `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis and Capacity views; the 3D view and a Layout view, both drawn from the model's layout, where a conveyor's path is drawn and dragged; the properties of the selection with bold and reset; Monte Carlo and system dynamics models; the dashboard; watching a run from the run bar; autosave; 44 languages besides English |
 | `mcp` | L5 | The MCP server: the engine's commands as tools for agents, headless (with optional read and write roots) or driving the app through its control channel |
 | `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs, `--control` for agents) and the browser shell, published on GitHub Pages |
 | `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy); tandem lines, the hold model and DEVStone LI, HI and HO |
@@ -3941,6 +3941,32 @@ the model unsaved. Left from L10: the hit policies ANY, RULE ORDER and OUTPUT OR
 names, dates and durations in cells; the grid in the spreadsheet view (U6); sharing the
 `.dmn` files with the model (M7.4); a task with a decision is written as a plain task in a new
 file, not a `businessRuleTask`.
+
+L4's first part is done: drawing and dragging paths. A flat path reads as an outline
+(`model::Outline`): its points, straight between them, and a bend of a radius at each corner,
+the circular arc that meets both straights; `Outline::to_path` makes the `Path` back, exactly for
+the flat paths that have an outline (an arc of more than 90 degrees is two or more corners, which
+join again into one arc; tangent bends join only where that keeps their corners), and bends too
+big for a short straight are tightened together to fit. A path that climbs, has a helix, turns a
+whole circle or more in one arc, or turns sharply where it starts or ends or by a half turn or
+more has no outline: it is moved, drawn again or removed, not edited by its points. A drawn corner bends
+at 1 m by default (a bend of 0, typed in the panel, is a sharp corner). The engine's `track.set` sets or removes a conveyor's track in
+one undo step (inside `batch` too), and the conveyor's length follows the path unless a typed
+length already overrode it (D23). In the Layout view: **Draw path** for the selected conveyor, or
+a click on one under Unplaced; click the points, double-click or Enter to finish, Backspace for
+the last point, Esc to cancel. A click selects a belt or a block, shared with the flowchart and
+the properties panel; the selected belt shows its points, which drag, take the arrow keys (0.1 m,
+1 m with Shift) and go with Delete; dragging the belt moves the whole path and a double-click on
+it adds a point; the length shows beside the pointer while dragging. The properties panel lists a
+conveyor's path as fields (each point's x and y, each corner's bend, add and remove), the way
+without a pointer (WCAG 2.5.7). Checks: the sorter's racetrack loop goes to an outline of four
+quarter bends and back to the same path; an L of clicked points with a 1 m bend is 14 + π/2 m;
+two bends on a 1 m straight are tightened to 0.5 m; a path edited by its points is saved and read
+back the same. Known limits: a path that climbs or has a helix has no outline (it can be moved,
+redrawn or removed, not edited point by point); places along a conveyor (a divert at `s`) keep
+their `s` when its path changes, so one past a shortened path is flagged as off it; blocks other
+than conveyors are selected on the plan but not yet placed or moved there; points are kept to
+0.1 mm, not snapped. Parts 2 and 3 follow: snapping and ports, then the background by two points.
 
 L5's first part is done: points along a section and junctions. A divert gateway placed at `s`
 along the conveyor that sends into it is a point of that conveyor (`model::site::points`): its

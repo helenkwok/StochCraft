@@ -1491,6 +1491,35 @@ connection	Flow	Stroom
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} staat {s} langs de transportband {conveyor}, waarvan het pad {length} lang is. Plaats hem tussen 0 en {length} langs het pad.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteiten op de transportband {conveyor} bereiken {before} vóór {block}, maar {block} staat dichter bij het begin ({s} langs de band, {before} op {before_s}). Plaats {block} verderop langs het pad dan {before}, of wissel ze om in de stromen.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	De overgang op de stroom {flow} duurt {time} om over te steken. Maak de transfertijd 0 of meer.
+	A path needs at least two points.	Een traject heeft minstens twee punten nodig.
+	Finish	Voltooien
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Traject van {name} tekenen: klik om punten toe te voegen, dubbelklik of Enter om te voltooien, Backspace haalt het laatste punt weg, Esc annuleert.
+	Draw path	Traject tekenen
+	Select a conveyor to draw its path	Selecteer een transportband om zijn traject te tekenen
+	Remove path	Traject verwijderen
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Klik om een punt toe te voegen · Dubbelklik of Enter om te voltooien · Esc om te annuleren
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Klik op een band om hem te selecteren · Sleep zijn punten of de band · Dubbelklik om een punt toe te voegen · Sleep de vloer om te verschuiven · Scroll om te zoomen
+	Point {n} of {name}, x {x} m, y {y} m	Punt {n} van {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Klik hier op een transportband om zijn traject te tekenen.
+	Path	Traject
+	Not drawn in the layout yet.	Nog niet getekend in de layout.
+	Draw in the Layout view	Tekenen in de Layout-weergave
+	Add a straight path	Recht traject toevoegen
+	Drawn length: {length} {unit}	Getekende lengte: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Dit traject stijgt of heeft een spiraal: de punten kunnen hier niet worden bewerkt.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Dit traject draait in één boog een hele cirkel of meer: de punten kunnen hier niet worden bewerkt.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Dit traject maakt een scherpe bocht waar het begint of eindigt: de punten kunnen hier niet worden bewerkt.
+	Point {n}	Punt {n}
+	x of point {n}	x van punt {n}
+	y of point {n}	y van punt {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Bochtstraal bij punt {n}
+	bend	bocht
+	tightened to {radius} to fit	versmald tot {radius} om te passen
+	Remove point {n}	Punt {n} verwijderen
+	Add a point at the end	Punt aan het eind toevoegen
+	Change Path	Traject wijzigen
 	Search examples	Zoeken in voorbeelden
 	Clear search	Zoekopdracht wissen
 	Logistics and warehousing	Logistiek en opslag

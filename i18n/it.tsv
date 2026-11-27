@@ -1491,6 +1491,35 @@ connection	Flow	Flusso
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} è posizionato a {s} lungo il nastro trasportatore {conveyor}, il cui percorso è lungo {length}. Posizionalo tra 0 e {length} lungo il percorso.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Le entità sul nastro trasportatore {conveyor} raggiungono {before} prima di {block}, ma {block} è posizionato più vicino all'inizio ({s} lungo il nastro, {before} a {before_s}). Posiziona {block} più avanti lungo il percorso rispetto a {before}, oppure scambiali nei flussi.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	La giunzione sul flusso {flow} richiede {time} per essere attraversata. Imposta il suo tempo di trasferimento a 0 o più.
+	A path needs at least two points.	Un percorso richiede almeno due punti.
+	Finish	Fine
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Disegno del percorso di {name}: fai clic per aggiungere punti, doppio clic o Invio per finire, Backspace per togliere l'ultimo punto, Esc per annullare.
+	Draw path	Disegna percorso
+	Select a conveyor to draw its path	Seleziona un trasportatore per disegnarne il percorso
+	Remove path	Rimuovi percorso
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Fai clic per aggiungere un punto · Doppio clic o Invio per finire · Esc per annullare
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Fai clic su un nastro per selezionarlo · Trascina i suoi punti o il nastro · Doppio clic per aggiungere un punto · Trascina il pavimento per spostare · Scorri per zoomare
+	Point {n} of {name}, x {x} m, y {y} m	Punto {n} di {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Fai clic qui su un trasportatore per disegnarne il percorso.
+	Path	Percorso
+	Not drawn in the layout yet.	Non ancora disegnato nel layout.
+	Draw in the Layout view	Disegna nella vista Layout
+	Add a straight path	Aggiungi un percorso dritto
+	Drawn length: {length} {unit}	Lunghezza disegnata: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Questo percorso sale o ha un'elica: i suoi punti non si possono modificare qui.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Questo percorso compie un giro completo o più in un solo arco: i suoi punti non si possono modificare qui.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Questo percorso gira bruscamente dove inizia o dove finisce: i suoi punti non si possono modificare qui.
+	Point {n}	Punto {n}
+	x of point {n}	x del punto {n}
+	y of point {n}	y del punto {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Raggio di curvatura al punto {n}
+	bend	curva
+	tightened to {radius} to fit	ristretto a {radius} per starci
+	Remove point {n}	Rimuovi il punto {n}
+	Add a point at the end	Aggiungi un punto alla fine
+	Change Path	Modifica percorso
 	Search examples	Cerca negli esempi
 	Clear search	Cancella la ricerca
 	Logistics and warehousing	Logistica e magazzino

@@ -32,7 +32,7 @@ pub use calendar::{Calendar, DateTime, Timed};
 pub use montecarlo::{
     Control, McCorrelation, McInput, McOutput, McStop, McTarget, MonteCarlo, Sampling,
 };
-pub use path::{Frame, Path, Segment};
+pub use path::{Frame, Outline, Path, Segment};
 pub use site::{Junction, JunctionKind, Place, Point, Scenery, Site, Track};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};

@@ -1491,6 +1491,35 @@ connection	Flow	Tok
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} je postavljen na {s} duž transportera {conveyor}, čija je putanja duga {length}. Postavite ga između 0 i {length} duž putanje.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteti na transporteru {conveyor} dolaze do {before} prije {block}, ali je {block} postavljen bliže početku ({s} duž njega, {before} na {before_s}). Postavite {block} dalje duž putanje nego {before} ili ih zamijenite u tokovima.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Prelazak preko spoja na toku {flow} traje {time}. Postavite njegovo vrijeme prijenosa na 0 ili više.
+	A path needs at least two points.	Putanja treba najmanje dvije tačke.
+	Finish	Završi
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Crtanje putanje za {name}: kliknite da dodate tačke, dvostruki klik ili Enter za kraj, Backspace vraća posljednju tačku, Esc otkazuje.
+	Draw path	Nacrtaj putanju
+	Select a conveyor to draw its path	Odaberite transporter da nacrtate njegovu putanju
+	Remove path	Ukloni putanju
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Kliknite da dodate tačku · Dvostruki klik ili Enter za kraj · Esc za otkazivanje
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Kliknite traku da je odaberete · Povucite njene tačke ili traku · Dvostruki klik dodaje tačku · Povucite pod za pomicanje · Skrolajte za zumiranje
+	Point {n} of {name}, x {x} m, y {y} m	Tačka {n} od {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Kliknite transporter ovdje da nacrtate njegovu putanju.
+	Path	Putanja
+	Not drawn in the layout yet.	Još nije nacrtan u rasporedu.
+	Draw in the Layout view	Nacrtaj u prikazu Raspored
+	Add a straight path	Dodaj ravnu putanju
+	Drawn length: {length} {unit}	Nacrtana dužina: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ova putanja se penje ili ima spiralu: njene tačke se ovdje ne mogu uređivati.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ova putanja se u jednom luku okreće za cijeli krug ili više: njene tačke se ovdje ne mogu uređivati.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ova putanja oštro skreće na početku ili na kraju: njene tačke se ovdje ne mogu uređivati.
+	Point {n}	Tačka {n}
+	x of point {n}	x tačke {n}
+	y of point {n}	y tačke {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Poluprečnik krivine u tački {n}
+	bend	krivina
+	tightened to {radius} to fit	smanjen na {radius} da stane
+	Remove point {n}	Ukloni tačku {n}
+	Add a point at the end	Dodaj tačku na kraj
+	Change Path	Izmjena putanje
 	Search examples	Pretraži primjere
 	Clear search	Obriši pretragu
 	Logistics and warehousing	Logistika i skladištenje

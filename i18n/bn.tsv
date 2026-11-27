@@ -1491,6 +1491,35 @@ connection	Flow	প্রবাহ
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} কনভেয়ার {conveyor}-এর বরাবর {s} দূরত্বে রাখা হয়েছে, কিন্তু এর পথ মাত্র {length} লম্বা। এটিকে পথ বরাবর 0 থেকে {length}-এর মধ্যে রাখুন।
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	কনভেয়ার {conveyor}-এ সত্তারা {block}-এর আগে {before}-এ পৌঁছায়, কিন্তু {block} শুরুর কাছাকাছি রাখা হয়েছে (এর বরাবর {s}, আর {before} আছে {before_s}-এ)। {block}-কে পথ বরাবর {before}-এর চেয়ে সামনে রাখুন, অথবা প্রবাহগুলিতে ওদের অদলবদল করুন।
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	প্রবাহ {flow}-এর সংযোগস্থল পার হতে {time} লাগে। এর স্থানান্তরের সময় 0 বা তার বেশি করুন।
+	A path needs at least two points.	একটি পথে অন্তত দুটি বিন্দু লাগে।
+	Finish	শেষ করুন
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name}-এর পথ আঁকা হচ্ছে: বিন্দু যোগ করতে ক্লিক করুন, শেষ করতে ডাবল-ক্লিক বা Enter, শেষ বিন্দু ফেরাতে Backspace, বাতিল করতে Esc।
+	Draw path	পথ আঁকুন
+	Select a conveyor to draw its path	পথ আঁকতে একটি কনভেয়র নির্বাচন করুন
+	Remove path	পথ সরান
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	বিন্দু যোগ করতে ক্লিক করুন · শেষ করতে ডাবল-ক্লিক বা Enter · বাতিল করতে Esc
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	নির্বাচন করতে একটি বেল্টে ক্লিক করুন · এর বিন্দু বা বেল্ট টানুন · বিন্দু যোগ করতে ডাবল-ক্লিক করুন · সরাতে মেঝে টানুন · জুম করতে স্ক্রল করুন
+	Point {n} of {name}, x {x} m, y {y} m	{name}-এর বিন্দু {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	পথ আঁকতে এখানে একটি কনভেয়রে ক্লিক করুন।
+	Path	পথ
+	Not drawn in the layout yet.	লেআউটে এখনো আঁকা হয়নি।
+	Draw in the Layout view	লেআউট দৃশ্যে আঁকুন
+	Add a straight path	একটি সোজা পথ যোগ করুন
+	Drawn length: {length} {unit}	আঁকা দৈর্ঘ্য: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	এই পথ ওপরে ওঠে বা এতে হেলিক্স আছে: এর বিন্দু এখানে সম্পাদনা করা যায় না।
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	এই পথ একটি বাঁকে পুরো এক বৃত্ত বা তার বেশি ঘোরে: এর বিন্দু এখানে সম্পাদনা করা যায় না।
+	This path turns sharply where it starts or ends: its points cannot be edited here.	এই পথ শুরুতে বা শেষে তীক্ষ্ণভাবে বাঁক নেয়: এর বিন্দু এখানে সম্পাদনা করা যায় না।
+	Point {n}	বিন্দু {n}
+	x of point {n}	বিন্দু {n}-এর x
+	y of point {n}	বিন্দু {n}-এর y
+	x	x
+	y	y
+	Bend radius at point {n}	বিন্দু {n}-এ বাঁকের ব্যাসার্ধ
+	bend	বাঁক
+	tightened to {radius} to fit	মানাতে {radius} পর্যন্ত ছোট করা হয়েছে
+	Remove point {n}	বিন্দু {n} সরান
+	Add a point at the end	শেষে একটি বিন্দু যোগ করুন
+	Change Path	পথ পরিবর্তন
 	Search examples	উদাহরণ খুঁজুন
 	Clear search	খোঁজা মুছুন
 	Logistics and warehousing	লজিস্টিকস ও গুদামজাতকরণ

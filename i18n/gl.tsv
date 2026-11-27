@@ -1491,6 +1491,35 @@ connection	Flow	Fluxo
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} está colocado a {s} ao longo da cinta transportadora {conveyor}, cuxo trazado mide {length}. Colóqueo entre 0 e {length} ao longo do trazado.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	As entidades da cinta transportadora {conveyor} chegan a {before} antes ca a {block}, pero {block} está colocado máis preto do inicio ({s} ao longo dela, {before} a {before_s}). Coloque {block} máis adiante no trazado ca {before} ou intercámbieos nos fluxos.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A unión no fluxo {flow} tarda {time} en cruzarse. Faga que o seu tempo de transferencia sexa 0 ou máis.
+	A path needs at least two points.	Un percorrido precisa polo menos dous puntos.
+	Finish	Rematar
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Debuxando o percorrido de {name}: preme para engadir puntos, dobre clic ou Intro para rematar, Retroceso para quitar o último punto, Esc para cancelar.
+	Draw path	Debuxar percorrido
+	Select a conveyor to draw its path	Selecciona un transportador para debuxar o seu percorrido
+	Remove path	Quitar percorrido
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Preme para engadir un punto · Dobre clic ou Intro para rematar · Esc para cancelar
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Preme nunha cinta para seleccionala · Arrastra os seus puntos ou a cinta · Dobre clic para engadir un punto · Arrastra o chan para mover · Despraza para ampliar
+	Point {n} of {name}, x {x} m, y {y} m	Punto {n} de {name}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Preme aquí nun transportador para debuxar o seu percorrido.
+	Path	Percorrido
+	Not drawn in the layout yet.	Aínda non debuxado na distribución.
+	Draw in the Layout view	Debuxar na vista Distribución
+	Add a straight path	Engadir un percorrido recto
+	Drawn length: {length} {unit}	Lonxitude debuxada: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Este percorrido sobe ou ten unha hélice: os seus puntos non se poden editar aquí.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Este percorrido xira un círculo completo ou máis nun só arco: os seus puntos non se poden editar aquí.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Este percorrido xira bruscamente onde comeza ou onde remata: os seus puntos non se poden editar aquí.
+	Point {n}	Punto {n}
+	x of point {n}	x do punto {n}
+	y of point {n}	y do punto {n}
+	x	x
+	y	y
+	Bend radius at point {n}	Raio da curva no punto {n}
+	bend	curva
+	tightened to {radius} to fit	reducido a {radius} para que caiba
+	Remove point {n}	Quitar o punto {n}
+	Add a point at the end	Engadir un punto ao final
+	Change Path	Cambiar percorrido
 	Search examples	Buscar nos exemplos
 	Clear search	Borrar a busca
 	Logistics and warehousing	Loxística e almacenaxe

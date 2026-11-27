@@ -1491,6 +1491,35 @@ connection	Flow	Folyamat
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	A(z) {block} blokk a(z) {conveyor} szállítószalag mentén {s} távolságra van elhelyezve, amelynek útvonala {length} hosszú. Helyezze 0 és {length} közé az útvonal mentén.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	A(z) {conveyor} szállítószalagon az entitások a(z) {before} elemet előbb érik el, mint a(z) {block} blokkot, de a(z) {block} közelebb van elhelyezve az elejéhez ({s} távolságra rajta, a(z) {before} pedig {before_s} távolságra). Helyezze a(z) {block} blokkot az útvonalon a(z) {before} után, vagy cserélje fel őket a folyamatokban.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	A(z) {flow} folyamat csatlakozásának átlépése {time} ideig tart. Állítsa a továbbítási időt 0 vagy nagyobb értékre.
+	A path needs at least two points.	Egy útvonalhoz legalább két pont kell.
+	Finish	Befejezés
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name} útvonalának rajzolása: kattintással pontot ad hozzá, dupla kattintás vagy Enter befejezi, a Backspace visszaveszi az utolsó pontot, az Esc megszakítja.
+	Draw path	Útvonal rajzolása
+	Select a conveyor to draw its path	Válasszon ki egy szállítószalagot az útvonala megrajzolásához
+	Remove path	Útvonal eltávolítása
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Kattintás: pont hozzáadása · Dupla kattintás vagy Enter: befejezés · Esc: megszakítás
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Kattintás egy szalagra: kijelölés · Pontjai vagy a szalag húzása · Dupla kattintás: pont hozzáadása · Padló húzása: eltolás · Görgetés: nagyítás
+	Point {n} of {name}, x {x} m, y {y} m	{name} {n}. pontja, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Kattintson itt egy szállítószalagra az útvonala megrajzolásához.
+	Path	Útvonal
+	Not drawn in the layout yet.	Még nincs megrajzolva az elrendezésben.
+	Draw in the Layout view	Rajzolás az Elrendezés nézetben
+	Add a straight path	Egyenes útvonal hozzáadása
+	Drawn length: {length} {unit}	Megrajzolt hossz: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Ez az útvonal emelkedik vagy csavarvonalat tartalmaz: pontjai itt nem szerkeszthetők.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Ez az útvonal egyetlen ívben egy teljes kört vagy többet fordul: pontjai itt nem szerkeszthetők.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Ez az útvonal az elején vagy a végén élesen fordul: pontjai itt nem szerkeszthetők.
+	Point {n}	{n}. pont
+	x of point {n}	{n}. pont x
+	y of point {n}	{n}. pont y
+	x	x
+	y	y
+	Bend radius at point {n}	Ívsugár a(z) {n}. pontban
+	bend	ív
+	tightened to {radius} to fit	{radius} értékre szűkítve, hogy elférjen
+	Remove point {n}	{n}. pont eltávolítása
+	Add a point at the end	Pont hozzáadása a végére
+	Change Path	Útvonal módosítása
 	Search examples	Keresés a példákban
 	Clear search	Keresés törlése
 	Logistics and warehousing	Logisztika és raktározás

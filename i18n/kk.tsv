@@ -1491,6 +1491,35 @@ connection	Flow	Ағын
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	{block} блогы {conveyor} конвейері бойымен {s} қашықтыққа орналастырылған, ал оның жолының ұзындығы {length}. Оны жол бойымен 0 мен {length} аралығына орналастырыңыз.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	{conveyor} конвейеріндегі нысандар {before} блогына {block} блогынан бұрын жетеді, бірақ {block} басына жақынырақ орналастырылған (оның бойымен {s}, {before} {before_s} жерінде). {block} блогын жол бойымен {before} блогынан әрі қарай орналастырыңыз немесе оларды ағындарда ауыстырыңыз.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	{flow} ағынындағы түйіспеден өту {time} алады. Тасымалдау уақытын 0 немесе одан көп етіңіз.
+	A path needs at least two points.	Жолда кемінде екі нүкте болуы керек.
+	Finish	Аяқтау
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	{name} жолы сызылуда: нүкте қосу үшін басыңыз, аяқтау үшін екі рет басыңыз немесе Enter, соңғы нүктені алу үшін Backspace, болдырмау үшін Esc.
+	Draw path	Жол сызу
+	Select a conveyor to draw its path	Жолын сызу үшін конвейерді таңдаңыз
+	Remove path	Жолды жою
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Нүкте қосу үшін басыңыз · Аяқтау үшін екі рет басу немесе Enter · Болдырмау үшін Esc
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Таспаны таңдау үшін басыңыз · Оның нүктелерін немесе таспаны сүйреңіз · Нүкте қосу үшін екі рет басыңыз · Жылжыту үшін еденді сүйреңіз · Масштабтау үшін айналдырыңыз
+	Point {n} of {name}, x {x} m, y {y} m	{name} нүктесі {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Жолын сызу үшін мұнда конвейерді басыңыз.
+	Path	Жол
+	Not drawn in the layout yet.	Орналасуда әлі сызылмаған.
+	Draw in the Layout view	Орналасу көрінісінде сызу
+	Add a straight path	Түзу жол қосу
+	Drawn length: {length} {unit}	Сызылған ұзындық: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Бұл жол көтеріледі немесе спиралі бар: оның нүктелерін мұнда өңдеу мүмкін емес.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Бұл жол бір доғада толық шеңбер немесе одан көп бұрылады: оның нүктелерін мұнда өңдеу мүмкін емес.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Бұл жол басында немесе соңында күрт бұрылады: оның нүктелерін мұнда өңдеу мүмкін емес.
+	Point {n}	Нүкте {n}
+	x of point {n}	{n} нүктенің x
+	y of point {n}	{n} нүктенің y
+	x	x
+	y	y
+	Bend radius at point {n}	{n} нүктедегі иілу радиусы
+	bend	иілу
+	tightened to {radius} to fit	сыю үшін {radius} дейін тарылтылды
+	Remove point {n}	{n} нүктені жою
+	Add a point at the end	Соңына нүкте қосу
+	Change Path	Жолды өзгерту
 	Search examples	Мысалдардан іздеу
 	Clear search	Іздеуді тазарту
 	Logistics and warehousing	Логистика және қойма

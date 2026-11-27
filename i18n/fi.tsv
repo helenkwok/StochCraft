@@ -1491,6 +1491,35 @@ connection	Flow	Virta
 	{block} is placed {s} along the conveyor {conveyor}, whose path is {length} long. Place it between 0 and {length} along the path.	Lohko {block} on sijoitettu {s} etäisyydelle kuljettimen {conveyor} reitillä, jonka pituus on {length}. Sijoita se välille 0–{length} reitillä.
 	Entities on the conveyor {conveyor} reach {before} before {block}, but {block} is placed nearer the start ({s} along it, {before} at {before_s}). Place {block} further along the path than {before}, or swap them in the flows.	Entiteetit kuljettimella {conveyor} saavuttavat kohdan {before} ennen kohtaa {block}, mutta {block} on sijoitettu lähemmäs alkua ({s} reitillä, {before} kohdassa {before_s}). Sijoita {block} reitillä kauemmas kuin {before} tai vaihda niiden paikat virroissa.
 	The junction on the flow {flow} takes {time} to cross. Make its transfer time 0 or more.	Liitoskohdan ylittäminen virrassa {flow} kestää {time}. Aseta sen siirtoaika arvoon 0 tai suuremmaksi.
+	A path needs at least two points.	Reitillä on oltava vähintään kaksi pistettä.
+	Finish	Valmis
+	Drawing the path of {name}: click to add points, double-click or Enter to finish, Backspace to take back a point, Esc to cancel.	Piirretään kohteen {name} reittiä: lisää pisteitä napsauttamalla, lopeta kaksoisnapsautuksella tai Enterillä, Askelpalautin poistaa viimeisen pisteen, Esc peruu.
+	Draw path	Piirrä reitti
+	Select a conveyor to draw its path	Valitse kuljetin piirtääksesi sen reitin
+	Remove path	Poista reitti
+	Click to add a point · Double-click or Enter to finish · Esc to cancel	Lisää piste napsauttamalla · Lopeta kaksoisnapsautuksella tai Enterillä · Esc peruu
+	Click a belt to select it · Drag its points or the belt · Double-click it to add a point · Drag the floor to pan · Scroll to zoom	Valitse hihna napsauttamalla · Vedä sen pisteitä tai hihnaa · Kaksoisnapsautus lisää pisteen · Vedä lattiaa panoroidaksesi · Vieritä zoomataksesi
+	Point {n} of {name}, x {x} m, y {y} m	Kohteen {name} piste {n}, x {x} m, y {y} m
+	Click a conveyor here to draw its path.	Napsauta tässä kuljetinta piirtääksesi sen reitin.
+	Path	Reitti
+	Not drawn in the layout yet.	Ei vielä piirretty asetteluun.
+	Draw in the Layout view	Piirrä Asettelu-näkymässä
+	Add a straight path	Lisää suora reitti
+	Drawn length: {length} {unit}	Piirretty pituus: {length} {unit}
+	This path climbs or has a helix: its points cannot be edited here.	Tämä reitti nousee tai siinä on kierre: sen pisteitä ei voi muokata tässä.
+	This path turns a whole circle or more in one arc: its points cannot be edited here.	Tämä reitti kääntyy yhdessä kaaressa kokonaisen ympyrän tai enemmän: sen pisteitä ei voi muokata tässä.
+	This path turns sharply where it starts or ends: its points cannot be edited here.	Tämä reitti kääntyy jyrkästi alussa tai lopussa: sen pisteitä ei voi muokata tässä.
+	Point {n}	Piste {n}
+	x of point {n}	pisteen {n} x
+	y of point {n}	pisteen {n} y
+	x	x
+	y	y
+	Bend radius at point {n}	Kaarresäde pisteessä {n}
+	bend	kaarre
+	tightened to {radius} to fit	kavennettu arvoon {radius}, jotta se mahtuu
+	Remove point {n}	Poista piste {n}
+	Add a point at the end	Lisää piste loppuun
+	Change Path	Muuta reittiä
 	Search examples	Hae esimerkeistä
 	Clear search	Tyhjennä haku
 	Logistics and warehousing	Logistiikka ja varastointi
