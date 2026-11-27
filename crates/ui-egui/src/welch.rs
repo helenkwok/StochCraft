@@ -9,9 +9,9 @@ use serde_json::Value;
 use stochcraft_stats::warmup::{Truncation, mser5, welch_max_window, welch_moving_average};
 
 use crate::charts::{axis, nice_step};
-use crate::decide::{choose, number};
+use crate::decide::{choose, number, row_label};
 use crate::i18n::{t, tf};
-use crate::results::{grouped, round_warmup, unit_label};
+use crate::results::{grouped, unit_label};
 use crate::theme;
 
 /// The section's choices.
@@ -133,7 +133,8 @@ impl crate::App {
             })
             .or_else(|| options.first().map(|(k, _)| k.clone()));
         let unit = unit_label(results["record"]["time_unit"].as_str().unwrap_or("")).to_owned();
-        ui.horizontal_wrapped(|ui| {
+        ui.horizontal(|ui| {
+            row_label(ui, t("Block"));
             choose(ui, "welch/block", t("Block"), &options, &mut element, 220.0);
         });
         let id = element.clone()?;
@@ -149,7 +150,8 @@ impl crate::App {
             .clone()
             .filter(|q| quantities.iter().any(|(k, _)| k == q))
             .or_else(|| quantities.first().map(|(k, _)| k.clone()));
-        ui.horizontal_wrapped(|ui| {
+        ui.horizontal(|ui| {
+            row_label(ui, t("Measure"));
             choose(
                 ui,
                 "welch/quantity",
@@ -178,7 +180,8 @@ impl crate::App {
             .unwrap_or((y.len() / 50) as f64)
             .round()
             .clamp(1.0, max_w as f64);
-        ui.horizontal_wrapped(|ui| {
+        ui.horizontal(|ui| {
+            row_label(ui, t("Points each side"));
             number(
                 ui,
                 &self.numbers,
@@ -206,7 +209,9 @@ impl crate::App {
         let key = format!("{}/{id}/{q}", results["record"]["model_digest"]);
         let mut chosen = match &self.welch.chosen {
             Some((k, v)) if *k == key => *v,
-            _ => mser.map_or(current, round_warmup),
+            // The current warm-up, not MSER-5's cut, which can be far from where the curve
+            // levels off: the new one is chosen on the plot, deliberately.
+            _ => current,
         };
 
         let name = options
@@ -248,7 +253,8 @@ impl crate::App {
             ));
         }
         let mut set = None;
-        ui.horizontal_wrapped(|ui| {
+        ui.horizontal(|ui| {
+            row_label(ui, t("New warm-up"));
             number(
                 ui,
                 &self.numbers,
@@ -290,7 +296,7 @@ fn plot(
         ui.allocate_exact_size(vec2(width, height + axis_h), egui::Sense::click());
     response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Image, true, label));
     let plot = Rect::from_min_max(
-        pos2(rect.left() + axis_w, rect.top() + 14.0),
+        pos2(rect.left() + axis_w, rect.top() + 18.0),
         pos2(rect.right() - 8.0, rect.bottom() - axis_h),
     );
     let x_top = times.last().copied().filter(|t| *t > 0.0).unwrap_or(1.0);
@@ -313,8 +319,9 @@ fn plot(
         );
         painter.rect_filled(shade, 0.0, p.stripe);
         painter.text(
-            pos2(shade.left() + 4.0, plot.top() + 2.0),
-            Align2::LEFT_TOP,
+            // At the foot, clear of the names over the plot.
+            pos2(shade.left() + 4.0, plot.bottom() - 2.0),
+            Align2::LEFT_BOTTOM,
             t("Warm-up"),
             small.clone(),
             p.text_weak,
@@ -350,6 +357,19 @@ fn plot(
         );
         v += x_step;
     }
+    // The lines' names, each on the side of its line with more room (clear of the y-axis's values
+    // near the left edge), in rows of their own: the new warm-up's over the plot, MSER-5's inside
+    // its top, the current warm-up's at its foot.
+    let cx = x(chosen);
+    let room = |lx: f32| -> f32 { if lx < plot.center().x { 1.0 } else { -1.0 } };
+    let toward = room(cx);
+    let side = |dir: f32| {
+        if dir > 0.0 {
+            Align2::LEFT_TOP
+        } else {
+            Align2::RIGHT_TOP
+        }
+    };
     // MSER-5's cut, a dashed line named at its top.
     if let Some(m) = mser {
         let mx = x(m);
@@ -360,8 +380,8 @@ fn plot(
             3.0,
         ));
         painter.text(
-            pos2(mx + 3.0, plot.top() - 13.0),
-            Align2::LEFT_TOP,
+            pos2(mx + 4.0 * room(mx), plot.top() + 2.0),
+            side(room(mx)),
             "MSER-5",
             small.clone(),
             p.text_weak,
@@ -375,14 +395,13 @@ fn plot(
         .collect();
     painter.add(egui::Shape::line(line, Stroke::new(2.0, p.chart)));
     // The new warm-up, in the accent colour.
-    let cx = x(chosen);
     painter.line_segment(
         [pos2(cx, plot.top()), pos2(cx, plot.bottom())],
         Stroke::new(2.0, p.accent),
     );
     painter.text(
-        pos2(cx - 3.0, plot.top() - 13.0),
-        Align2::RIGHT_TOP,
+        pos2(cx + 3.0 * toward, plot.top() - 16.0),
+        side(toward),
         t("New warm-up"),
         small,
         p.accent,

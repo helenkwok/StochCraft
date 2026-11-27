@@ -380,7 +380,7 @@ fn precision(results: &Value) -> (Option<(&Value, &'static str, f64)>, usize, us
 }
 
 /// A warm-up as a person would set it: two significant figures (437.2 → 440, 0.0234 → 0.023).
-pub(crate) fn round_warmup(w: f64) -> f64 {
+fn round_warmup(w: f64) -> f64 {
     if !(w.is_finite() && w > 0.0) {
         return w;
     }

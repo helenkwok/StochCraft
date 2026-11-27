@@ -248,6 +248,18 @@ fn welchs_plot_shows_the_run_and_sets_the_warm_up() {
     h.get_by_label("Welch's plot of Number inside at Serve customer");
     // 600 min recorded every 6 min: 101 times, so a window of 1 to 25 points each side.
     h.get_by_label("1 to 25");
+    // Each control is named on screen, not only for assistive technology.
+    for name in ["Block", "Measure", "Points each side", "New warm-up"] {
+        assert!(h.query_all_by_label(name).count() >= 2, "{name}");
+    }
+    // The new warm-up starts at the current one, not at MSER-5's cut: it is chosen on purpose.
+    assert_eq!(
+        h.get_by_role_and_label(Role::TextInput, "New warm-up")
+            .accesskit_node()
+            .value()
+            .as_deref(),
+        Some("0")
+    );
     type_into(&mut h, "Points each side", "5");
     assert_eq!(
         h.get_by_role_and_label(Role::TextInput, "Points each side")

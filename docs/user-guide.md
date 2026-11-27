@@ -463,8 +463,8 @@ The **Results** tab shows, from the top:
    the **Block** and the **Measure**: the number inside (the default), waiting or busy, or the
    number leaving or entering in each interval (a count since time 0 never levels off; its
    rate does). The plot marks MSER-5's cut on the same series with a dashed line, shades the
-   current warm-up and draws the new one; click the plot, or type a **New warm-up**, then
-   **Set a … warm-up** to make it the experiment's and run again. Raise the points each side
+   current warm-up and draws the new one, which starts at the current warm-up; click the plot, or
+   type a **New warm-up**, then **Set a … warm-up** to make it the experiment's and run again. Raise the points each side
    until the curve is reasonably smooth, then set the warm-up where it levels off, erring
    later rather than earlier.
 
