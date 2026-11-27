@@ -117,6 +117,15 @@ simulated interval meets it and fails only when the whole interval violates it, 
 fewer than 2. Observed data for a block that is gone is the warning `bad_observation` in
 `check_model` (the run still goes, and says `no_result`).
 
+Random number sources are reached with `execute`: `random.sources`, `random.source.set`,
+`random.estimate`, `random.seed.draw`, `random.fetch` and `random.status`, and `run.start` with
+`random` `{"mode": "live", "source", "file"}` (see the user guide, "Random numbers from a file").
+No command takes or returns a key: an agent sees only whether a source has one (`key`: `present`,
+`absent` or `not_needed`), and keys are entered in the window's source manager. Headless, the
+server fetches and reads keys from the OS keychain itself. With confined roots, a fetch's file and
+a live run's recorded file must lie in the write root. A draw or a fetch waits until it is done
+unless `wait` is false; then `random.status` follows it.
+
 Resources: `stochcraft://model` (`model.get`) and `stochcraft://commands` (the command catalogue).
 
 Errors work as follows:

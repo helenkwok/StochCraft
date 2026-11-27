@@ -535,8 +535,8 @@ section.
 By default every run draws its random numbers from xoshiro256**, a pseudo-random generator, seeded
 from the experiment's seed. A run can instead read them from a file of random bytes, for example
 bytes recorded from a quantum or other physical random number source. This is a setting of the
-run (`random` in the `run` and `run.start` commands, for scripts and agents); choosing a source in
-the window comes later.
+run (`random` in the `run` and `run.start` commands, for scripts and agents), and the window's
+experiment settings choose it (below).
 
 **What it does and does not give you.** Bytes from a physical source are unpredictable, and
 the file, with its SHA-256 in the run record, says exactly which numbers the run used. They do
@@ -585,6 +585,53 @@ compares them as independent runs, with wider intervals.
 run's `seed` runs the usual pseudo-random streams from that seed, and records where the seed came
 from (for example a randomness beacon's pulse). The run repeats from its seed without calling the
 source again.
+
+### Choosing the source in the window
+
+Experiment settings (the model's properties, under the experiment's fields) has a **Random
+numbers** section with four choices:
+
+- **Generator**, the default: xoshiro256** from the experiment's seed, as always.
+- **Seed from a source**: **Draw a seed** asks the chosen source for one draw (by default the NIST
+  Randomness Beacon's latest pulse, 512 bits a minute, public, so never for secrets) and shows
+  "Seed … taken from …". The next run uses that seed, and its record names the source, the time
+  and the pulse; the run repeats from its seed without calling out. The seed is the SHA-256 of
+  the bytes drawn, its first eight bytes read as a little-endian number, keeping the low 53 bits
+  so it stays exact wherever numbers are 64-bit floating point. This is the main free use.
+- **File of random bytes**: the file, the byte to start from and the bytes per run (left empty, a
+  pilot chooses them); **Estimate** gives what a source would be asked for to fill it.
+- **Live from a source**: the run fetches each run's segment while it goes, up to four runs
+  ahead, and records every byte, in order, into the file named, with a manifest beside it
+  (`<file>.json`: the source, each answer's time, the SHA-256 and a health check). A run starts
+  only once its segment has arrived, so a live run goes one run after another, in slices; its
+  record is a run on the recorded file, which repeats it exactly. **Estimate** gives the bytes,
+  requests and least time first. ANU's free tier (100 requests a month, one a second) covers
+  seeds, not live runs: 100 runs of 16 KiB each take 80 requests, and a run of any real size
+  needs its paid tier.
+
+**Sources and keys…** opens the source manager. The presets are ANU Quantum Numbers (a quantum
+source; it needs your own key, free or paid), the NIST Randomness Beacon (seeds only) and
+random.org (off until you enable it; not quantum: atmospheric noise). **Add a source** takes a
+name, an address with `{n}` where the count goes, the header the key goes in, and how the answer
+gives its bytes (a JSON path with hexadecimal, Base64 or numbers from 0 to 255, or the whole
+answer as hexadecimal, Base64, numbers or raw bytes).
+
+**Keys** are entered only there. On the desktop they are kept in the system's keychain (the
+Windows Credential Manager, the macOS Keychain, the Secret Service on Linux); in the browser in
+the site's local storage, unencrypted, which the window warns about. A key is never written to a
+model file, the results, the run record, the journal, the recovery copy or a log, and no command
+takes or shows one (`random.sources` says only whether a source has one). It is sent only over
+HTTPS, to the origin it was given for: changing a source's address to another origin forgets the
+key, a redirect is never followed, and an address with a key in it is refused.
+
+**A health check** runs on every fetch: the frequency (monobit) and runs tests of NIST SP 800-22
+Rev. 1a (sections 2.1 and 2.3) and a check for repeated 32-byte blocks. It warns and never
+blocks, and passing it says little: it catches gross faults, such as a service answering with
+the same bytes twice.
+
+The commands behind the section are `random.sources`, `random.source.set`, `random.estimate`,
+`random.seed.draw`, `random.fetch` and `random.status` (none is journalled, so a replay never
+calls out), and `random` with `"mode": "live"` in `run.start`.
 
 **Not yet.** A file serves process models only. System dynamics, agent-based and Monte Carlo
 models, and sweeps, sensitivity, designed experiments, sizing, evaluation and optimisation, refuse
