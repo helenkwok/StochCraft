@@ -13,6 +13,10 @@
 //!   segment runs out stops with `random_data_exhausted`, and no byte is ever read twice. The
 //!   file's SHA-256 is recorded, and a `sha256` given with the file must match it.
 //!
+//! - `live`: bytes fetched from a random number source while the run goes, each replication's
+//!   segment recorded in order into a file (see the `sources` module); the finished run's record
+//!   is a `byte_file` run on that file.
+//!
 //! The record's `random` object can be given back as `random` to repeat the run: its extra
 //! fields (`bytes_used`, ...) are accepted and ignored.
 //!
@@ -44,6 +48,11 @@ pub enum RandomMode {
     SeedSource,
     /// A file of random bytes, one segment per replication.
     ByteFile,
+    /// Bytes fetched from a source while the run goes (`run.start` only): each replication's
+    /// segment is fetched, up to four ahead, and recorded in order into `file`; a replication
+    /// starts once its segment has arrived. The finished run's record is a `byte_file` run on
+    /// that file, which repeats it without calling out.
+    Live,
 }
 
 /// A run's `random` parameter, and the `random` object of its record.
@@ -52,6 +61,8 @@ pub enum RandomMode {
 pub struct RandomSpec {
     #[serde(default)]
     pub mode: RandomMode,
+    /// `live`: the file the fetched bytes are recorded in (its manifest beside it as
+    /// `<file>.json`).
     /// `byte_file`: the file of random bytes: a path, or a name given to
     /// `Engine::load_random_data` (how the browser passes a file's bytes).
     #[serde(default)]
@@ -68,6 +79,7 @@ pub struct RandomSpec {
     #[serde(default)]
     pub segment_bytes: Option<u64>,
     /// `seed_source`: where the seed came from (a service's name or address, with no key).
+    /// `live`: the id of the source to fetch from (`random.sources`).
     #[serde(default)]
     pub source: Option<String>,
     /// `seed_source`: when it was drawn (ISO 8601).
@@ -94,6 +106,9 @@ pub struct RandomSpec {
     /// Filled in by the run record; accepted and ignored.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pilot: Option<Value>,
+    /// Filled in by the record of a live run (the source it fetched from); accepted and ignored.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub live: Option<Value>,
 }
 
 /// The bytes a run reads: `data`, replication i's segment starting at `offset + i·segment`.
@@ -350,6 +365,8 @@ pub(crate) fn prepare(
                 feed: Some(Arc::new(ByteFeed::new(data, spec.offset, segment))),
             })
         }
+        // Planned by the engine, which has the sources.
+        RandomMode::Live => Err(invalid("a live run is planned by the engine")),
     }
 }
 
@@ -379,7 +396,7 @@ pub(crate) fn screen(command: &str, params: &mut Value) -> Result<(), CommandErr
     };
     let spec: RandomSpec =
         serde_json::from_value(random).map_err(|e| invalid(format!("`random`: {e}")))?;
-    if spec.mode != RandomMode::ByteFile {
+    if !matches!(spec.mode, RandomMode::ByteFile | RandomMode::Live) {
         return Ok(());
     }
     let why = match command {

@@ -19,7 +19,6 @@
 //! gives exactly the results of a fixed run of n, whichever way it ran.
 
 use std::ops::Range;
-#[cfg(not(target_arch = "wasm32"))]
 use std::sync::Arc;
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -92,6 +91,9 @@ pub struct Plan {
     /// Where the random numbers come from: `None` for the experiment's pseudo-random streams,
     /// else a file of random bytes, one segment per replication.
     pub random: Option<std::sync::Arc<crate::random::ByteFeed>>,
+    /// A live run: the bytes fetched from a source while it runs, each replication reading its
+    /// own segment once it has arrived (runs in slices only).
+    pub(crate) live: Option<Arc<Mutex<crate::sources::LiveFeed>>>,
 }
 
 /// What a run does after a look at the replications it has.
@@ -105,10 +107,26 @@ enum Look {
 impl Plan {
     /// The random stream of replication `index`: the experiment's, or its segment of the file.
     pub(crate) fn stream(&self, index: u64) -> stochcraft_random::Rng {
+        if let Some(live) = &self.live {
+            let f = live.lock().unwrap_or_else(|e| e.into_inner());
+            let segment = f.segment;
+            let bytes = f
+                .segment_bytes(index)
+                .unwrap_or_else(|| Arc::from(Vec::new()));
+            return stochcraft_random::Rng::from_bytes(bytes, 0, segment);
+        }
         match &self.random {
             Some(feed) => feed.stream(index),
             None => self.experiment.stream(index),
         }
+    }
+
+    /// Replication `index` can start: always, unless the run is live and its segment has not
+    /// arrived yet.
+    pub(crate) fn ready(&self, index: u64) -> bool {
+        self.live
+            .as_ref()
+            .is_none_or(|l| l.lock().unwrap_or_else(|e| e.into_inner()).ready(index))
     }
 
     /// Runs every replication now, on this thread and any workers.
@@ -186,7 +204,10 @@ impl Plan {
             &check_reports(model, reports),
         );
         v["record"] = self.record.clone();
-        if self.random.is_some() {
+        if let Some(live) = &self.live {
+            v["record"]["random"] = live.lock().unwrap_or_else(|e| e.into_inner()).record();
+        }
+        if self.random.is_some() || self.live.is_some() {
             // What the replications read of the file: in all, and the most any one read (to
             // judge the segment length by).
             let r = &mut v["record"]["random"];
@@ -413,6 +434,10 @@ impl Job {
                     let (mut finished, mut left) = (0, events.max(1));
                     while finished < step.max(1) && (reports.len() as u64) < *target && left > 0 {
                         let index = reports.len() as u64;
+                        // A live run waits for the replication's segment to arrive.
+                        if current.is_none() && !plan.ready(index) {
+                            break;
+                        }
                         // The same replication as on threads: its stream, run to its end.
                         let live = current.get_or_insert_with(|| {
                             Box::new(plan.compiled.live(plan.stream(index)))
@@ -451,6 +476,25 @@ impl Job {
             State::Workers { .. } | State::Finished(_) => {}
         }
         self.status()
+    }
+
+    /// A live run's feed and the replication it is on (or starts next).
+    pub(crate) fn live(&self) -> Option<(Arc<Mutex<crate::sources::LiveFeed>>, u64)> {
+        let feed = Arc::clone(self.plan.live.as_ref()?);
+        let next = match &self.state {
+            State::Slices { reports, .. } => reports.len() as u64,
+            _ => 0,
+        };
+        Some((feed, next))
+    }
+
+    pub(crate) fn is_running(&self) -> bool {
+        !matches!(self.state, State::Finished(_))
+    }
+
+    /// Ends the run with `e` (a live run whose source failed).
+    pub(crate) fn fail(&mut self, e: CommandError) {
+        self.state = State::Finished(Err(e));
     }
 
     /// The run as its workers get it, while it waits for their answers.
@@ -560,6 +604,21 @@ impl Job {
             }
             Some(State::Finished(Err(e))) => v["error"] = e.to_json(),
             _ => v["done"] = json!(done),
+        }
+        // A live run: the bytes fetched so far, and whether the next replication waits for them.
+        if let (
+            Some(live),
+            State::Slices {
+                reports, current, ..
+            },
+        ) = (&self.plan.live, &self.state)
+        {
+            let f = live.lock().unwrap_or_else(|e| e.into_inner());
+            v["random_bytes"] = json!({
+                "fetched": f.download.data().len(),
+                "wanted": f.download.target(),
+                "waiting": current.is_none() && !f.ready(reports.len() as u64),
+            });
         }
         // A sliced run: how far the replication under way has got, in simulated time (0 to 1).
         if let State::Slices { current, .. } = &self.state {

@@ -10,6 +10,8 @@
 //! On other targets this binary only says so, which keeps `cargo build --workspace` working.
 
 #[cfg(target_arch = "wasm32")]
+mod net;
+#[cfg(target_arch = "wasm32")]
 mod pool;
 #[cfg(any(target_arch = "wasm32", test))]
 mod schedule;

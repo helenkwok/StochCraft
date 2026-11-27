@@ -81,7 +81,7 @@ pub struct Source {
     #[serde(default)]
     pub method: Method,
     /// The header the key goes in (`x-api-key`); `None` for a source that needs no key.
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub key_header: Option<String>,
     pub format: Format,
     /// The bytes one unit (`{n}` counts units) brings.
@@ -137,7 +137,7 @@ pub struct Request {
 }
 
 /// Why a source or a change to one is refused.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SourceError {
     BadId,
     BadUrl,
@@ -528,6 +528,13 @@ pub struct SourcesSettings {
     pub user: Vec<Source>,
     #[serde(skip_serializing_if = "BTreeMap::is_empty")]
     pub presets: BTreeMap<String, PresetState>,
+}
+
+impl SourcesSettings {
+    /// Nothing differs from the presets.
+    pub fn is_empty(&self) -> bool {
+        self.user.is_empty() && self.presets.is_empty()
+    }
 }
 
 /// The sources a session knows: the presets, then the user's own.

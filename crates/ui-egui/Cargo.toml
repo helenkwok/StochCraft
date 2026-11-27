@@ -14,6 +14,7 @@ workspace = true
 
 [dependencies]
 stochcraft-engine = { workspace = true }
+stochcraft-qrng = { workspace = true }
 stochcraft-model.workspace = true
 stochcraft-random = { workspace = true }
 stochcraft-render = { workspace = true }

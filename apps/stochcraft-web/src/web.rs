@@ -335,6 +335,10 @@ pub fn start() {
                 eframe::WebOptions::default(),
                 Box::new(move |cc| {
                     let mut app = App::new(Platform::BROWSER);
+                    app.set_random_net(
+                        Box::new(crate::net::WebFetch::default()),
+                        Box::new(crate::net::LocalKeys),
+                    );
                     app.set_workers(Box::new(crate::pool::Pool::new(cc.egui_ctx.clone())));
                     let key = |k| storage::key(scope.as_deref(), k);
                     if let Some(prefs) = cc

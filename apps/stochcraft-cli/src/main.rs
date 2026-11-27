@@ -586,7 +586,7 @@ fn new(template: &str, list: bool, file: Option<&Path>, force: bool) -> Result<u
             file.display()
         )));
     }
-    let mut engine = Engine::new();
+    let mut engine = net_engine();
     for (command, params) in (t.steps)() {
         engine.execute(command, params)?;
     }
@@ -596,7 +596,7 @@ fn new(template: &str, list: bool, file: Option<&Path>, force: bool) -> Result<u
 }
 
 fn validate(file: &Path, scenario: Option<&str>, format: CheckFormat) -> Result<u8, Failure> {
-    let mut engine = Engine::new();
+    let mut engine = net_engine();
     let opened = open(&mut engine, file, scenario)?;
     let notes = opened["notes"].as_array().cloned().unwrap_or_default();
     let mut diagnostics = opened["diagnostics"]
@@ -653,7 +653,7 @@ fn explain(
     target: f64,
     format: CheckFormat,
 ) -> Result<u8, Failure> {
-    let mut engine = Engine::new();
+    let mut engine = net_engine();
     let opened = open(&mut engine, file, scenario)?;
     if opened["kind"] == "agents" {
         return Err(Failure(format!(
@@ -857,7 +857,7 @@ fn balance(
     if let Some(h) = heuristic {
         params["heuristic"] = json!(h.name());
     }
-    let answer = match Engine::new().execute("line.balance", params) {
+    let answer = match net_engine().execute("line.balance", params) {
         Ok(v) => v,
         Err(err) => {
             eprintln!("error: {}", err.message);
@@ -949,7 +949,7 @@ fn run(
     allow_approximations: bool,
 ) -> Result<u8, Failure> {
     refuse_overwriting_input(out, &[file])?;
-    let mut engine = Engine::new();
+    let mut engine = net_engine();
     let opened = open(&mut engine, file, scenario)?;
     if opened["kind"] == "system_dynamics" {
         if warmup.is_some()
@@ -1257,7 +1257,7 @@ fn inputs(
 ) -> Result<u8, Failure> {
     // `--out` writes the table of the model: not over the model.
     refuse_overwriting_input(out, &[file])?;
-    let mut engine = Engine::new();
+    let mut engine = net_engine();
     let opened = open(&mut engine, file, None)?;
     match import {
         None => {
@@ -1334,7 +1334,7 @@ struct DesignArgs<'a> {
 
 fn design(a: &DesignArgs) -> Result<u8, Failure> {
     refuse_overwriting_input(a.out, &[a.file])?;
-    let mut engine = Engine::new();
+    let mut engine = net_engine();
     open(&mut engine, a.file, a.scenario)?;
     let mut params = json!({
         "factors": a.factors.iter().map(|f| factor(f)).collect::<Result<Vec<_>, _>>()?,
@@ -1553,7 +1553,7 @@ fn optimize(a: &OptimizeArgs) -> Result<u8, Failure> {
             finite_number(flag, &x.to_string(), x)?;
         }
     }
-    let mut engine = Engine::new();
+    let mut engine = net_engine();
     open(&mut engine, a.file, a.scenario)?;
     let (sense, flag, terms) = if a.maximize.is_empty() {
         ("minimise", "--minimize", a.minimize)
@@ -1710,7 +1710,7 @@ fn evaluate(a: &EvaluateArgs) -> Result<u8, Failure> {
         .iter()
         .map(|r| decision_range(r))
         .collect::<Result<Vec<_>, _>>()?;
-    let mut engine = Engine::new();
+    let mut engine = net_engine();
     open(&mut engine, a.file, a.scenario)?;
     let mut out = std::io::stdout().lock();
     let mut tally = Tally::default();
@@ -1804,7 +1804,7 @@ fn exec(
             serde_json::from_value(value).map_err(not_a_script)?,
         ))
     };
-    let mut engine = Engine::new();
+    let mut engine = net_engine();
     if let Some(f) = open_file {
         // A journal opens the scenario it was recorded from, so its starting model (and its
         // digest) is the one the journal began with; a bare script reads the first scenario.
@@ -1928,7 +1928,7 @@ fn mcp(
     } else {
         stochcraft_mcp::Roots::default()
     };
-    let (backend, note) = stochcraft_mcp::backend(stochcraft_mcp::Options {
+    let (mut backend, note) = stochcraft_mcp::backend(stochcraft_mcp::Options {
         connect,
         token,
         token_file: None,
@@ -1937,6 +1937,9 @@ fn mcp(
     .map_err(Failure)?;
     if let Some(note) = note {
         eprintln!("stochcraft-cli mcp: {note}");
+    }
+    if let Some(e) = backend.engine_mut() {
+        give_net(e);
     }
     let mut server = stochcraft_mcp::Server::new(backend);
     server
@@ -2151,4 +2154,23 @@ fn main() -> ExitCode {
             ExitCode::from(1)
         }
     }
+}
+
+/// Gives `engine` the network and the OS keychain, for the random number sources
+/// (`random.seed.draw`, `random.fetch`, live runs).
+fn give_net(engine: &mut Engine) {
+    engine.set_random_net(
+        Box::new(stochcraft_qrng_net::HttpFetch::new(concat!(
+            "StochCraft/",
+            env!("CARGO_PKG_VERSION")
+        ))),
+        Box::new(stochcraft_qrng_net::Keychain),
+    );
+}
+
+/// An engine that can fetch from random number sources.
+fn net_engine() -> Engine {
+    let mut e = Engine::new();
+    give_net(&mut e);
+    e
 }

@@ -20,6 +20,11 @@ pub trait Backend {
     fn commands(&mut self) -> Result<Value, String>;
     /// What the agent is driving, for its instructions.
     fn describe(&self) -> String;
+    /// The engine of a headless backend, to give it the app's fetching and key store for random
+    /// number sources; `None` for a running app, which has its own.
+    fn engine_mut(&mut self) -> Option<&mut Engine> {
+        None
+    }
 }
 
 /// The catalogue of commands, as `stochcraft-cli schema` prints it.
@@ -48,15 +53,26 @@ impl Headless {
     /// The command's parameters with its file's path checked against the roots (and resolved,
     /// when confined): what `file.open` reads, and what `file.save` writes, given or not.
     fn confine(&self, command: &str, mut params: Value) -> Result<Value, String> {
-        // A run that reads its random numbers from a file reads that file: it must lie in the
-        // roots too.
-        if matches!(command, "run" | "run.start") && self.roots.is_confined() {
-            if let Some(r) = params
-                .get_mut("random")
-                .filter(|r| r["mode"] == "byte_file")
+        // A run that reads its random numbers from a file reads that file, and a live run or a
+        // fetch writes the file it records the fetched bytes in: they must lie in the roots too.
+        if matches!(command, "run" | "run.start" | "random.fetch") && self.roots.is_confined() {
+            let (slot, access) = if command == "random.fetch" {
+                (Some(&mut params), Access::Write)
+            } else {
+                let access = if params["random"]["mode"] == "live" {
+                    Access::Write
+                } else {
+                    Access::Read
+                };
+                let slot = params
+                    .get_mut("random")
+                    .filter(|r| matches!(r["mode"].as_str(), Some("byte_file" | "live")));
+                (slot, access)
+            };
+            if let Some(r) = slot
                 && let Some(Value::String(file)) = r.get("file").cloned()
             {
-                let resolved = self.roots.check(Path::new(&file), Access::Read)?;
+                let resolved = self.roots.check(Path::new(&file), access)?;
                 r["file"] = Value::String(resolved.to_string_lossy().into_owned());
             }
             return Ok(params);
@@ -109,6 +125,10 @@ impl Default for Headless {
 }
 
 impl Backend for Headless {
+    fn engine_mut(&mut self) -> Option<&mut Engine> {
+        Some(&mut self.engine)
+    }
+
     fn execute(&mut self, command: &str, params: Value) -> Result<Value, String> {
         let params = self.confine(command, params)?;
         self.engine

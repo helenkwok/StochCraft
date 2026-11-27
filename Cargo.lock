@@ -3842,6 +3842,7 @@ dependencies = [
  "serde",
  "serde_json",
  "stochcraft-mcp",
+ "stochcraft-qrng-net",
  "stochcraft-ui-egui",
 ]
 
@@ -3874,6 +3875,7 @@ dependencies = [
  "serde_json",
  "stochcraft-engine",
  "stochcraft-mcp",
+ "stochcraft-qrng-net",
 ]
 
 [[package]]
@@ -3899,6 +3901,7 @@ dependencies = [
  "stochcraft-io",
  "stochcraft-mc",
  "stochcraft-model",
+ "stochcraft-qrng",
  "stochcraft-random",
  "stochcraft-sd",
  "stochcraft-stats",
@@ -4029,6 +4032,7 @@ dependencies = [
  "serde_json",
  "stochcraft-engine",
  "stochcraft-model",
+ "stochcraft-qrng",
  "stochcraft-random",
  "stochcraft-render",
  "web-time",
@@ -4044,6 +4048,7 @@ dependencies = [
  "js-sys",
  "serde_json",
  "stochcraft-engine",
+ "stochcraft-qrng",
  "stochcraft-ui-egui",
  "wasm-bindgen",
  "wasm-bindgen-futures",

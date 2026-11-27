@@ -40,6 +40,7 @@ mod observed;
 mod pools;
 mod prefs;
 mod props;
+mod random;
 mod results;
 mod runs;
 mod sd;
@@ -750,6 +751,10 @@ pub struct Prefs {
     pub appearance: Appearance,
     pub files: Files,
     pub keyboard: Keyboard,
+    /// The random number sources: the presets' states and the user's own (never a key: keys are
+    /// in the keychain, or the browser's storage).
+    #[serde(skip_serializing_if = "stochcraft_qrng::SourcesSettings::is_empty")]
+    pub random_sources: stochcraft_qrng::SourcesSettings,
 }
 
 /// The user's own shortcuts: craft-keymap's overrides of the defaults (`{"file.save": "Ctrl+S"}`,
@@ -970,6 +975,8 @@ pub struct App {
     mc: montecarlo::Mc,
     /// The system dynamics screens' state (an XMILE document).
     sd: sd::Sd,
+    /// Experiment settings ▸ Random numbers: the choices and the source manager.
+    random: random::RandomUi,
     /// Where the charts are drawn this frame (none until the work area draws them), for
     /// exporting them.
     charts_rect: Option<egui::Rect>,
@@ -1097,6 +1104,7 @@ impl App {
             building: false,
             mc: montecarlo::Mc::default(),
             sd: sd::Sd::default(),
+            random: random::RandomUi::default(),
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,
