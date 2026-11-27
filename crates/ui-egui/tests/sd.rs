@@ -591,10 +591,10 @@ fn results_are_marked_out_of_date_once_the_model_is_changed() {
 }
 
 #[test]
-fn the_start_page_offers_the_example_among_25() {
-    assert_eq!(EXAMPLES.len(), 25);
+fn the_start_page_offers_the_example_among_26() {
+    assert_eq!(EXAMPLES.len(), 26);
     let mut h = harness();
-    h.get_by_label("See all 25 examples, including reference models")
+    h.get_by_label("See all 26 examples, including reference models")
         .click_accesskit();
     settle(&mut h);
     click(&mut h, Role::Button, "How fast does a new product spread?");
@@ -812,4 +812,99 @@ fn opening_another_model_cancels_a_run_in_progress() {
     settle(&mut h);
     assert!(!h.state().is_running());
     assert!(h.state().sd_results().is_none());
+}
+
+fn heat_rod() -> &'static Example {
+    EXAMPLES
+        .iter()
+        .find(|e| e.file == "heat-rod.xmile")
+        .expect("the heat rod example")
+}
+
+fn stop_when(h: &mut Harness<'static, App>) -> Value {
+    h.state_mut().execute("sd.get", json!({})).expect("sd.get")["stop_when"].clone()
+}
+
+#[test]
+fn the_stop_condition_is_edited_on_the_model_tab_and_explained_in_the_results() {
+    let mut h = harness();
+    let e = heat_rod();
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    assert!(h.state().is_system_dynamics());
+    // The file's condition, in its field on the Model tab.
+    let field = h.get_by_role_and_label(Role::TextInput, "Stop when");
+    assert_eq!(field.value().as_deref(), Some("u10 > 10000"));
+    h.get_by_label_contains("The run ends at the first step where the condition holds");
+
+    // The run stops there, and the results say when, before anything else.
+    click(&mut h, Role::Tab, "Results");
+    run(&mut h);
+    let results = h.state().sd_results().cloned().expect("results");
+    assert_eq!(results["stopped"]["reason"], "condition");
+    h.get_by_label_contains("Stopped at t = 0.0821");
+    h.get_by_label_contains("when u10 passed 10,000 (it crossed at t = 0.0821");
+
+    // A new condition is typed and taken; one the window cannot read, or one on no variable, is
+    // refused under the field and leaves the model as it was.
+    click(&mut h, Role::Tab, "Model");
+    type_into(&mut h, Role::TextInput, "Stop when", "u10 > 1000");
+    assert_eq!(
+        stop_when(&mut h),
+        json!({ "variable": "u10", "above": 1000.0 })
+    );
+    assert_eq!(h.state().status(), "Changed the stop condition");
+    type_into(&mut h, Role::TextInput, "Stop when", "u10 >= 5");
+    h.get_by_label_contains("Write the condition as a variable, > or <, and a number");
+    assert_eq!(
+        stop_when(&mut h),
+        json!({ "variable": "u10", "above": 1000.0 })
+    );
+    type_into(&mut h, Role::TextInput, "Stop when", "u99 < 5");
+    h.get_by_label_contains("not a variable of the model");
+    assert_eq!(
+        stop_when(&mut h),
+        json!({ "variable": "u10", "above": 1000.0 })
+    );
+    // Empty: the run goes to its stop time.
+    h.get_by_role_and_label(Role::TextInput, "Stop when")
+        .click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.key_press(egui::Key::Backspace);
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
+    assert_eq!(stop_when(&mut h), Value::Null);
+    // Each change is one step of undo.
+    h.state_mut().execute("undo", json!({})).expect("undo");
+    settle(&mut h);
+    assert_eq!(
+        stop_when(&mut h),
+        json!({ "variable": "u10", "above": 1000.0 })
+    );
+}
+
+/// u' = u^2 from 20, past its blow-up at 0.05: at a step of 0.001 it overflows after 0.051.
+const OVERFLOW: &str = "<xmile version=\"1.0\"><sim_specs method=\"RK4\"><start>0</start><stop>0.1</stop><dt>0.001</dt></sim_specs><model><variables><stock name=\"u\"><eqn>20</eqn><inflow>g</inflow></stock><flow name=\"g\"><eqn>u * u</eqn></flow></variables></model></xmile>";
+
+#[test]
+fn a_run_that_overflows_ends_at_its_last_finite_step_and_says_so() {
+    let mut h = harness();
+    h.state_mut()
+        .open_file("overflow.xmile", OVERFLOW.as_bytes());
+    settle(&mut h);
+    click(&mut h, Role::Tab, "Results");
+    run(&mut h);
+    let results = h.state().sd_results().cloned().expect("results");
+    assert_eq!(results["stopped"]["reason"], "not_finite");
+    // Every value shown is a number: none is infinite or missing.
+    let g = variable(&results, "g")["mean"]
+        .as_array()
+        .cloned()
+        .unwrap_or_default();
+    assert!(!g.is_empty() && g.iter().all(Value::is_f64), "{g:?}");
+    h.get_by_label_contains(
+        "Stopped at t = 0.051, the last step where every stock and flow was a finite number",
+    );
+    h.get_by_label_contains("became infinite or not a number at t = 0.052");
 }

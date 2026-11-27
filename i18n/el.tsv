@@ -1501,3 +1501,16 @@ connection	Flow	Ροή
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Δέκα μηχανές πρέπει να λειτουργούν, τέσσερις εφεδρικές περιμένουν σε ετοιμότητα και τρεις τεχνίτες επισκευάζουν όσες χαλάνε (Crane και Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Πόσες εφεδρικές μηχανές και πόσοι τεχνίτες κρατούν σε λειτουργία δέκα μηχανές;
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Οι εφεδρικές μηχανές σε αναμονή δεν παθαίνουν βλάβη: κατά μέσο όρο 3.47 μηχανές είναι χαλασμένες και 9.29 λειτουργούν. Ένας τέταρτος τεχνίτης προσφέρει περίπου όσο τέσσερις εφεδρικές μηχανές επιπλέον.
+	Science and engineering	Επιστήμη και μηχανική
+	Stop when	Διακοπή όταν
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Η εκτέλεση τελειώνει στο πρώτο βήμα όπου ισχύει η συνθήκη, για παράδειγμα u10 > 1000 (μια μεταβλητή, > ή < και ένας αριθμός), και τα αποτελέσματα λένε πότε ξεπεράστηκε το όριο. Αφήστε το κενό για εκτέλεση έως τον χρόνο λήξης.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Γράψτε τη συνθήκη ως μεταβλητή, > ή < και αριθμό, για παράδειγμα u10 > 1000.
+	Changed the stop condition	Η συνθήκη διακοπής άλλαξε
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Διακόπηκε στο t = {time} όταν η {variable} ξεπέρασε το {value} (το ξεπέρασε στο t = {crossing}, ανάμεσα στα δύο τελευταία βήματα).
+	Stopped at t = {time}, when the stop condition held.	Διακόπηκε στο t = {time}, όταν ίσχυσε η συνθήκη διακοπής.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Διακόπηκε στο t = {time}, το τελευταίο βήμα όπου κάθε απόθεμα και κάθε ροή ήταν πεπερασμένος αριθμός: η {variables} έγινε άπειρη ή μη αριθμός στο t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Εκτελέσεις που τελείωσαν νωρίτερα: {n} από {total}. Αυτή είναι η πρώτη τους.
+	Heat in a rod	Θερμότητα σε μια ράβδο
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Μια ράβδος που κρατιέται στο 0 και στα δύο άκρα παράγει θερμότητα ανάλογη με το τετράγωνο της θερμοκρασίας της: 19 αποθέματα κατά μήκος της, με τη μέθοδο των γραμμών (Soheili και Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Πότε μια ράβδος που θερμαίνεται από μέσα ξεφεύγει;
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Η μέθοδος των γραμμών κάνει μια εξίσωση θερμότητας αποθέματα και ροές, και ένα μοντέλο μπορεί να εκραγεί σε πεπερασμένο χρόνο: η μέση ξεπερνά το 10.000 στο t = 0.0821, άρα η ράβδος ξεφεύγει γύρω στο 0.0822, εντός 0.3% από το δημοσιευμένο 0.0824.

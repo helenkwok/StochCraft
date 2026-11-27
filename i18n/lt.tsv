@@ -1501,3 +1501,16 @@ connection	Flow	Srautas
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dešimt mašinų turi veikti, keturios atsarginės laukia parengtos, o trys mechanikai taiso sugedusias (Crane ir Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kiek atsarginių mašinų ir mechanikų reikia, kad veiktų dešimt mašinų?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Parengtos atsarginės mašinos negali sugesti: vidutiniškai 3.47 mašinos sugedusios, o 9.29 veikia. Ketvirtas mechanikas duoda maždaug tiek pat, kiek keturios papildomos atsarginės mašinos.
+	Science and engineering	Mokslas ir inžinerija
+	Stop when	Stabdyti, kai
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Paleidimas baigiasi pirmame žingsnyje, kuriame sąlyga tenkinama, pavyzdžiui, u10 > 1000 (kintamasis, > arba < ir skaičius), o rezultatai nurodo, kada riba buvo peržengta. Palikite tuščią, kad būtų vykdoma iki pabaigos laiko.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Parašykite sąlygą kaip kintamąjį, > arba < ir skaičių, pavyzdžiui, u10 > 1000.
+	Changed the stop condition	Stabdymo sąlyga pakeista
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Sustabdyta ties t = {time}, kai {variable} peržengė {value} (peržengė ties t = {crossing}, tarp dviejų paskutinių žingsnių).
+	Stopped at t = {time}, when the stop condition held.	Sustabdyta ties t = {time}, kai buvo tenkinama stabdymo sąlyga.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Sustabdyta ties t = {time}, paskutiniame žingsnyje, kuriame kiekviena atsarga ir kiekvienas srautas buvo baigtinis skaičius: {variables} tapo begalinis arba ne skaičius ties t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Anksčiau pasibaigę paleidimai: {n} iš {total}. Tai pirmasis iš jų.
+	Heat in a rod	Šiluma strype
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Strypas, kurio abu galai laikomi ties 0, gamina šilumą proporcingai savo temperatūros kvadratui: 19 atsargų išilgai strypo, linijų metodu (Soheili ir Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Kada iš vidaus kaitinamas strypas tampa nevaldomas?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Linijų metodas šilumos lygtį paverčia atsargomis ir srautais, o modelis gali sprogti per baigtinį laiką: vidurys peržengia 10 000 ties t = 0.0821, taigi strypas tampa nevaldomas apie 0.0822, ne daugiau kaip 0.3% nuo paskelbtos 0.0824.

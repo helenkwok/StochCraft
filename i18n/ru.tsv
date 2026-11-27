@@ -1501,3 +1501,16 @@ connection	Flow	Поток
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десять станков должны работать, четыре резервных стоят наготове, а трое слесарей чинят те, что выходят из строя (Crane и Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Сколько резервных станков и слесарей нужно, чтобы десять станков продолжали работать?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервные станки, стоящие наготове, не могут выйти из строя: в среднем 3.47 станка неисправны и 9.29 работают. Четвёртый слесарь даёт примерно столько же, сколько ещё четыре резервных станка.
+	Science and engineering	Наука и техника
+	Stop when	Остановить, когда
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Прогон заканчивается на первом шаге, где условие выполнено, например u10 > 1000 (переменная, > или < и число), а результаты сообщают, когда порог был пройден. Оставьте пустым, чтобы прогон шёл до конечного времени.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Запишите условие как переменную, > или < и число, например u10 > 1000.
+	Changed the stop condition	Условие остановки изменено
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Остановлено при t = {time}, когда {variable} прошла {value} (пересечение при t = {crossing}, между двумя последними шагами).
+	Stopped at t = {time}, when the stop condition held.	Остановлено при t = {time}, когда выполнилось условие остановки.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Остановлено при t = {time}, на последнем шаге, где каждый запас и каждый поток были конечными числами: {variables} стала бесконечной или не числом при t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Прогоны, завершившиеся раньше: {n} из {total}. Это первый из них.
+	Heat in a rod	Тепло в стержне
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Стержень, удерживаемый при 0 на обоих концах, выделяет тепло пропорционально квадрату своей температуры: 19 запасов вдоль стержня, методом прямых (Soheili и Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Когда стержень, нагреваемый изнутри, выходит из-под контроля?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Метод прямых превращает уравнение теплопроводности в запасы и потоки, а модель может взорваться за конечное время: середина проходит 10 000 при t = 0.0821, так что стержень выходит из-под контроля около 0.0822, в пределах 0.3% от опубликованных 0.0824.

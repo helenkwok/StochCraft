@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/xmile/1">
+  <header>
+    <name>Heat in a rod</name>
+    <vendor>StochCraft</vendor>
+    <product version="0.2">StochCraft</product>
+  </header>
+  <sim_specs method="RK4">
+    <start>0</start>
+    <stop>0.1</stop>
+    <dt>2.5e-05</dt>
+    <stochcraft:save_step>0.0005</stochcraft:save_step>
+    <stochcraft:stop_when variable="u10" above="10000"/>
+  </sim_specs>
+  <model>
+    <variables>
+      <stock name="u1">
+        <doc>The temperature at x = 0.05, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>3.1286893008046173</eqn>
+        <inflow>f1</inflow>
+      </stock>
+      <stock name="u2">
+        <doc>The temperature at x = 0.10, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>6.180339887498948</eqn>
+        <inflow>f2</inflow>
+      </stock>
+      <stock name="u3">
+        <doc>The temperature at x = 0.15, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>9.079809994790937</eqn>
+        <inflow>f3</inflow>
+      </stock>
+      <stock name="u4">
+        <doc>The temperature at x = 0.20, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>11.755705045849464</eqn>
+        <inflow>f4</inflow>
+      </stock>
+      <stock name="u5">
+        <doc>The temperature at x = 0.25, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>14.142135623730951</eqn>
+        <inflow>f5</inflow>
+      </stock>
+      <stock name="u6">
+        <doc>The temperature at x = 0.30, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>16.18033988749895</eqn>
+        <inflow>f6</inflow>
+      </stock>
+      <stock name="u7">
+        <doc>The temperature at x = 0.35, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>17.820130483767358</eqn>
+        <inflow>f7</inflow>
+      </stock>
+      <stock name="u8">
+        <doc>The temperature at x = 0.40, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>19.02113032590307</eqn>
+        <inflow>f8</inflow>
+      </stock>
+      <stock name="u9">
+        <doc>The temperature at x = 0.45, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>19.753766811902757</eqn>
+        <inflow>f9</inflow>
+      </stock>
+      <stock name="u10">
+        <doc>The temperature at x = 0.50, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>20.0</eqn>
+        <inflow>f10</inflow>
+      </stock>
+      <stock name="u11">
+        <doc>The temperature at x = 0.55, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>19.753766811902754</eqn>
+        <inflow>f11</inflow>
+      </stock>
+      <stock name="u12">
+        <doc>The temperature at x = 0.60, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>19.02113032590307</eqn>
+        <inflow>f12</inflow>
+      </stock>
+      <stock name="u13">
+        <doc>The temperature at x = 0.65, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>17.820130483767358</eqn>
+        <inflow>f13</inflow>
+      </stock>
+      <stock name="u14">
+        <doc>The temperature at x = 0.70, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>16.18033988749895</eqn>
+        <inflow>f14</inflow>
+      </stock>
+      <stock name="u15">
+        <doc>The temperature at x = 0.75, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>14.142135623730951</eqn>
+        <inflow>f15</inflow>
+      </stock>
+      <stock name="u16">
+        <doc>The temperature at x = 0.80, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>11.755705045849465</eqn>
+        <inflow>f16</inflow>
+      </stock>
+      <stock name="u17">
+        <doc>The temperature at x = 0.85, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>9.07980999479093</eqn>
+        <inflow>f17</inflow>
+      </stock>
+      <stock name="u18">
+        <doc>The temperature at x = 0.90, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>6.18033988749895</eqn>
+        <inflow>f18</inflow>
+      </stock>
+      <stock name="u19">
+        <doc>The temperature at x = 0.95, one of 19 points 0.05 apart along the rod; it starts at 20 sin(pi x).</doc>
+        <eqn>3.1286893008046195</eqn>
+        <inflow>f19</inflow>
+      </stock>
+      <flow name="f1">
+        <doc>The rate of change of u1: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u1 squared.</doc>
+        <eqn>(0 - 2 * u1 + u2) / (h * h) + source * u1 * u1</eqn>
+      </flow>
+      <flow name="f2">
+        <doc>The rate of change of u2: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u2 squared.</doc>
+        <eqn>(u1 - 2 * u2 + u3) / (h * h) + source * u2 * u2</eqn>
+      </flow>
+      <flow name="f3">
+        <doc>The rate of change of u3: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u3 squared.</doc>
+        <eqn>(u2 - 2 * u3 + u4) / (h * h) + source * u3 * u3</eqn>
+      </flow>
+      <flow name="f4">
+        <doc>The rate of change of u4: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u4 squared.</doc>
+        <eqn>(u3 - 2 * u4 + u5) / (h * h) + source * u4 * u4</eqn>
+      </flow>
+      <flow name="f5">
+        <doc>The rate of change of u5: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u5 squared.</doc>
+        <eqn>(u4 - 2 * u5 + u6) / (h * h) + source * u5 * u5</eqn>
+      </flow>
+      <flow name="f6">
+        <doc>The rate of change of u6: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u6 squared.</doc>
+        <eqn>(u5 - 2 * u6 + u7) / (h * h) + source * u6 * u6</eqn>
+      </flow>
+      <flow name="f7">
+        <doc>The rate of change of u7: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u7 squared.</doc>
+        <eqn>(u6 - 2 * u7 + u8) / (h * h) + source * u7 * u7</eqn>
+      </flow>
+      <flow name="f8">
+        <doc>The rate of change of u8: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u8 squared.</doc>
+        <eqn>(u7 - 2 * u8 + u9) / (h * h) + source * u8 * u8</eqn>
+      </flow>
+      <flow name="f9">
+        <doc>The rate of change of u9: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u9 squared.</doc>
+        <eqn>(u8 - 2 * u9 + u10) / (h * h) + source * u9 * u9</eqn>
+      </flow>
+      <flow name="f10">
+        <doc>The rate of change of u10: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u10 squared.</doc>
+        <eqn>(u9 - 2 * u10 + u11) / (h * h) + source * u10 * u10</eqn>
+      </flow>
+      <flow name="f11">
+        <doc>The rate of change of u11: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u11 squared.</doc>
+        <eqn>(u10 - 2 * u11 + u12) / (h * h) + source * u11 * u11</eqn>
+      </flow>
+      <flow name="f12">
+        <doc>The rate of change of u12: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u12 squared.</doc>
+        <eqn>(u11 - 2 * u12 + u13) / (h * h) + source * u12 * u12</eqn>
+      </flow>
+      <flow name="f13">
+        <doc>The rate of change of u13: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u13 squared.</doc>
+        <eqn>(u12 - 2 * u13 + u14) / (h * h) + source * u13 * u13</eqn>
+      </flow>
+      <flow name="f14">
+        <doc>The rate of change of u14: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u14 squared.</doc>
+        <eqn>(u13 - 2 * u14 + u15) / (h * h) + source * u14 * u14</eqn>
+      </flow>
+      <flow name="f15">
+        <doc>The rate of change of u15: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u15 squared.</doc>
+        <eqn>(u14 - 2 * u15 + u16) / (h * h) + source * u15 * u15</eqn>
+      </flow>
+      <flow name="f16">
+        <doc>The rate of change of u16: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u16 squared.</doc>
+        <eqn>(u15 - 2 * u16 + u17) / (h * h) + source * u16 * u16</eqn>
+      </flow>
+      <flow name="f17">
+        <doc>The rate of change of u17: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u17 squared.</doc>
+        <eqn>(u16 - 2 * u17 + u18) / (h * h) + source * u17 * u17</eqn>
+      </flow>
+      <flow name="f18">
+        <doc>The rate of change of u18: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u18 squared.</doc>
+        <eqn>(u17 - 2 * u18 + u19) / (h * h) + source * u18 * u18</eqn>
+      </flow>
+      <flow name="f19">
+        <doc>The rate of change of u19: heat conducted from its neighbours (the ends of the rod are held at 0), plus the heat the rod makes, source times u19 squared.</doc>
+        <eqn>(u18 - 2 * u19 + 0) / (h * h) + source * u19 * u19</eqn>
+      </flow>
+      <aux name="h">
+        <doc>The spacing of the points along the rod, which is 1 long.</doc>
+        <eqn>0.05</eqn>
+      </aux>
+      <aux name="source">
+        <doc>1: the rod makes heat in proportion to the square of its temperature, and runs away. 0: it only conducts, and cools towards its ends.</doc>
+        <eqn>1</eqn>
+      </aux>
+    </variables>
+  </model>
+</xmile>

@@ -75,6 +75,11 @@ pub(crate) struct Sd {
     chosen: Option<BTreeSet<String>>,
     /// The Results tab shows the table in place of the charts.
     table: bool,
+    /// What is typed in the Model tab's stop condition and not committed yet, with the engine's
+    /// revision it was typed at (a change by commands in between drops it).
+    stop_draft: Option<(u64, String)>,
+    /// Why the stop condition typed was refused, shown under the field.
+    stop_refused: Option<String>,
 }
 
 impl Default for Sd {
@@ -89,8 +94,116 @@ impl Default for Sd {
             painted: false,
             chosen: None,
             table: false,
+            stop_draft: None,
+            stop_refused: None,
         }
     }
+}
+
+/// A stop condition as the Model tab writes it, `u10 > 1000`, from `sd.get`'s `stop_when`; empty
+/// for none.
+fn stop_text(w: &Value) -> String {
+    let Some(name) = w["variable"].as_str() else {
+        return String::new();
+    };
+    match (w["above"].as_f64(), w["below"].as_f64()) {
+        (Some(v), _) => format!("{name} > {v}"),
+        (None, Some(v)) => format!("{name} < {v}"),
+        (None, None) => String::new(),
+    }
+}
+
+/// `sd.specs.set`'s `stop_when` for what is typed: `null` for nothing, or the variable, `>` or
+/// `<`, and a number. `None` if it is not of that form.
+fn stop_param(text: &str) -> Option<Value> {
+    let text = text.trim();
+    if text.is_empty() {
+        return Some(Value::Null);
+    }
+    let (at, above) = match (text.find('>'), text.find('<')) {
+        (Some(i), None) => (i, true),
+        (None, Some(i)) => (i, false),
+        _ => return None,
+    };
+    let variable = text.get(..at)?.trim();
+    let value: f64 = text.get(at + 1..)?.trim().parse().ok()?;
+    if variable.is_empty() || !value.is_finite() {
+        return None;
+    }
+    let side = if above { "above" } else { "below" };
+    let mut o = json!({ "variable": variable });
+    o[side] = json!(value);
+    Some(o)
+}
+
+/// A time in a sentence about where a run ended: six significant figures, so the step it ended
+/// at and the crossing between steps can be told apart.
+fn time_text(v: f64) -> String {
+    if v.is_finite() {
+        grouped(round_sig(v, 6))
+    } else {
+        "–".to_owned()
+    }
+}
+
+/// Why the run ended before its stop time, in a sentence (or two), from `sd.run`'s `stopped`.
+fn stopped_text(results: &Value) -> Vec<String> {
+    let s = &results["stopped"];
+    let unit = results["time_unit"].as_str().unwrap_or("");
+    let at = |key: &str| with_unit(time_text(s[key].as_f64().unwrap_or(f64::NAN)), unit);
+    let mut out = Vec::new();
+    match s["reason"].as_str() {
+        Some("condition") => {
+            let w = &results["stop_when"];
+            let value = w["above"].as_f64().or_else(|| w["below"].as_f64());
+            match (w["variable"].as_str(), value) {
+                (Some(name), Some(v)) => out.push(tf(
+                    "Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).",
+                    &[
+                        ("time", &at("time")),
+                        ("variable", name),
+                        ("value", &value_text(v)),
+                        ("crossing", &at("crossing")),
+                    ],
+                )),
+                _ => out.push(tf(
+                    "Stopped at t = {time}, when the stop condition held.",
+                    &[("time", &at("time"))],
+                )),
+            }
+        }
+        Some("not_finite") => {
+            let names: Vec<&str> = s["variables"]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .filter_map(Value::as_str)
+                .collect();
+            out.push(tf(
+                "Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.",
+                &[
+                    ("time", &at("time")),
+                    ("variables", &names.join(", ")),
+                    ("at", &at("failed_at")),
+                ],
+            ));
+        }
+        _ => return out,
+    }
+    let runs = s["runs"].as_u64().unwrap_or(1);
+    if runs > 1 {
+        out.push(tf(
+            "Runs that ended early: {n} of {total}. This is the first of them.",
+            &[
+                ("n", &grouped(runs as f64)),
+                (
+                    "total",
+                    &grouped(results["replications"].as_f64().unwrap_or(0.0)),
+                ),
+            ],
+        ));
+    }
+    out
 }
 
 /// A variable over time as the chart draws it.
@@ -897,6 +1010,7 @@ impl App {
         let p = theme::palette(ui.ctx());
         let info = self.sd_info();
         let name = self.sd_name(&info);
+        let mut stop_commit = None;
         egui::ScrollArea::vertical()
             .id_salt("sd/model")
             .auto_shrink([false, false])
@@ -934,6 +1048,7 @@ impl App {
                     ))
                     .wrap(),
                 );
+                stop_commit = self.sd_stop_field(ui, &stop_text(&info["stop_when"]));
 
                 section(ui, t("Problems"));
                 let warnings: Vec<&str> = info["diagnostics"]
@@ -1023,6 +1138,82 @@ impl App {
                     }
                 });
             });
+        if let Some(text) = stop_commit {
+            self.sd_set_stop(&text);
+        }
+    }
+
+    /// The stop condition's field on the Model tab: a variable, `>` or `<`, and a number, or
+    /// nothing. Enter or leaving the field commits it (what it gives back); Escape gives it up.
+    fn sd_stop_field(&mut self, ui: &mut egui::Ui, current: &str) -> Option<String> {
+        let p = theme::palette(ui.ctx());
+        let revision = self.engine.revision();
+        let label = t("Stop when");
+        section(ui, label);
+        ui.add(
+            egui::Label::new(theme::weak(
+                ui,
+                t("The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time."),
+            ))
+            .wrap(),
+        );
+        let mut text = match &self.sd.stop_draft {
+            Some((r, s)) if *r == revision => s.clone(),
+            _ => current.to_owned(),
+        };
+        let r = ui.add(
+            egui::TextEdit::singleline(&mut text)
+                .id_salt("sd-stop-when")
+                .hint_text("u10 > 1000")
+                .desired_width(320.0),
+        );
+        crate::form::field_outline(ui, &r);
+        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
+        let mut out = None;
+        if r.has_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
+            self.sd.stop_draft = None;
+            self.sd.stop_refused = None;
+            r.surrender_focus();
+        } else if r.lost_focus() {
+            if text.trim() != current {
+                out = Some(text.trim().to_owned());
+            }
+            self.sd.stop_draft = None;
+        } else if r.changed() {
+            self.sd.stop_refused = None;
+            self.sd.stop_draft = Some((revision, text));
+        }
+        if let Some(message) = &self.sd.stop_refused {
+            ui.add(egui::Label::new(egui::RichText::new(message).color(p.error)).wrap());
+        }
+        out
+    }
+
+    /// Sets the stop condition to what was typed (nothing takes it away); a refusal keeps the
+    /// text in the field and says why under it.
+    fn sd_set_stop(&mut self, text: &str) {
+        let Some(param) = stop_param(text) else {
+            self.sd.stop_refused = Some(
+                t("Write the condition as a variable, > or <, and a number, such as u10 > 1000.")
+                    .to_owned(),
+            );
+            self.sd.stop_draft = Some((self.engine.revision(), text.to_owned()));
+            return;
+        };
+        match self
+            .engine
+            .execute("sd.specs.set", json!({ "stop_when": param }))
+        {
+            Ok(_) => {
+                self.sd.stop_refused = None;
+                self.sd.stop_draft = None;
+                self.info(t("Changed the stop condition"));
+            }
+            Err(e) => {
+                self.sd.stop_refused = Some(e.message);
+                self.sd.stop_draft = Some((self.engine.revision(), text.to_owned()));
+            }
+        }
     }
 
     /// The Results tab of a system dynamics model: Run, where each stock ends up in words, then
@@ -1117,6 +1308,10 @@ impl App {
                     },
                 ));
                 ui.add_space(6.0);
+                for sentence in stopped_text(results) {
+                    ui.add(egui::Label::new(theme::strong(sentence)).wrap());
+                    ui.add_space(2.0);
+                }
                 for sentence in findings(results) {
                     ui.add(egui::Label::new(sentence).wrap());
                     ui.add_space(2.0);

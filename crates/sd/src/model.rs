@@ -54,6 +54,40 @@ pub struct SimSpecs {
     /// The interval results are saved at, in the model's time unit; by default the step. XMILE
     /// has no such setting, so it is written as a `stochcraft:save_step` extension.
     pub save_step: Option<f64>,
+    /// A condition that ends the run early, written as a `stochcraft:stop_when` extension.
+    pub stop_when: Option<StopWhen>,
+}
+
+/// A condition that ends a run before its stop time: at the first step where `variable` is
+/// above `value` (or below it). A run that starts with it holding stops at once.
+#[derive(Debug, Clone, PartialEq)]
+pub struct StopWhen {
+    /// The variable, as the model names it.
+    pub variable: String,
+    /// Stop when it is above `value`; false: when it is below.
+    pub above: bool,
+    pub value: f64,
+}
+
+impl StopWhen {
+    /// Whether the condition holds for the value `v`.
+    pub fn holds(&self, v: f64) -> bool {
+        if self.above {
+            v > self.value
+        } else {
+            v < self.value
+        }
+    }
+
+    /// The condition as an equation would write it: `u10 > 1000`.
+    pub fn text(&self) -> String {
+        format!(
+            "{} {} {}",
+            self.variable,
+            if self.above { ">" } else { "<" },
+            self.value
+        )
+    }
 }
 
 impl Default for SimSpecs {
@@ -65,6 +99,7 @@ impl Default for SimSpecs {
             method: Method::Euler,
             time_units: String::new(),
             save_step: None,
+            stop_when: None,
         }
     }
 }

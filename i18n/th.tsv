@@ -1501,3 +1501,16 @@ connection	Flow	โฟลว์
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	เครื่องจักรสิบเครื่องต้องทำงาน เครื่องจักรสำรองสี่เครื่องรอพร้อมใช้ และช่างซ่อมสามคนซ่อมเครื่องที่ขัดข้อง (Crane และ Iglehart, Winter Simulation Conference, 1973)
 	How many spares and repairmen keep ten machines running?	ต้องมีเครื่องจักรสำรองและช่างซ่อมเท่าใด จึงจะให้เครื่องจักรสิบเครื่องทำงานต่อไปได้?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	เครื่องจักรสำรองที่รออยู่ขัดข้องไม่ได้: โดยเฉลี่ยเครื่องจักรเสีย 3.47 เครื่องและทำงาน 9.29 เครื่อง ช่างซ่อมคนที่สี่ช่วยได้พอ ๆ กับเครื่องจักรสำรองอีกสี่เครื่อง
+	Science and engineering	วิทยาศาสตร์และวิศวกรรม
+	Stop when	หยุดเมื่อ
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	การรันจะจบที่ขั้นแรกที่เงื่อนไขเป็นจริง เช่น u10 > 1000 (ตัวแปร, > หรือ < และตัวเลข) และผลลัพธ์จะบอกว่าข้ามค่าเมื่อใด เว้นว่างไว้เพื่อรันจนถึงเวลาสิ้นสุด
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	เขียนเงื่อนไขเป็นตัวแปร, > หรือ < และตัวเลข เช่น u10 > 1000
+	Changed the stop condition	เปลี่ยนเงื่อนไขการหยุดแล้ว
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	หยุดที่ t = {time} เมื่อ {variable} ผ่าน {value} (ข้ามที่ t = {crossing} ระหว่างสองขั้นสุดท้าย)
+	Stopped at t = {time}, when the stop condition held.	หยุดที่ t = {time} เมื่อเงื่อนไขการหยุดเป็นจริง
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	หยุดที่ t = {time} ซึ่งเป็นขั้นสุดท้ายที่ทุกสต็อกและทุกโฟลว์ยังเป็นจำนวนจำกัด: {variables} กลายเป็นอนันต์หรือไม่ใช่ตัวเลขที่ t = {at}
+	Runs that ended early: {n} of {total}. This is the first of them.	การรันที่จบก่อนกำหนด: {n} จาก {total} นี่คือครั้งแรกในนั้น
+	Heat in a rod	ความร้อนในแท่ง
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	แท่งที่ปลายทั้งสองถูกคงไว้ที่ 0 สร้างความร้อนตามกำลังสองของอุณหภูมิของมัน: 19 สต็อกตามแนวแท่ง ด้วยวิธีเส้น (method of lines) (Soheili และ Stockie, Applied Numerical Mathematics, 2008)
+	When does a rod heated from within run away?	แท่งที่ถูกทำให้ร้อนจากภายในจะควบคุมไม่ได้เมื่อใด?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	วิธีเส้นเปลี่ยนสมการความร้อนเป็นสต็อกและโฟลว์ และแบบจำลองอาจระเบิดได้ในเวลาจำกัด: จุดกึ่งกลางผ่าน 10,000 ที่ t = 0.0821 แท่งจึงควบคุมไม่ได้ราว 0.0822 ต่างจากค่าที่ตีพิมพ์ 0.0824 ไม่เกิน 0.3%

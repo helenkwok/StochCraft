@@ -1501,3 +1501,16 @@ connection	Flow	Luồng
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Mười máy phải chạy, bốn máy dự phòng chờ sẵn và ba thợ máy sửa những máy bị hỏng (Crane và Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Cần bao nhiêu máy dự phòng và thợ máy để mười máy luôn chạy?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máy dự phòng đang chờ không thể hỏng: trung bình 3.47 máy bị hỏng và 9.29 máy chạy. Thêm một thợ máy thứ tư được việc gần bằng thêm bốn máy dự phòng.
+	Science and engineering	Khoa học và kỹ thuật
+	Stop when	Dừng khi
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Lần chạy kết thúc ở bước đầu tiên mà điều kiện đúng, ví dụ u10 > 1000 (một biến, > hoặc < và một số), và kết quả cho biết khi nào ngưỡng bị vượt. Để trống để chạy đến thời điểm kết thúc.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Hãy viết điều kiện gồm một biến, > hoặc < và một số, ví dụ u10 > 1000.
+	Changed the stop condition	Đã đổi điều kiện dừng
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Đã dừng tại t = {time} khi {variable} vượt {value} (vượt tại t = {crossing}, giữa hai bước cuối).
+	Stopped at t = {time}, when the stop condition held.	Đã dừng tại t = {time}, khi điều kiện dừng đúng.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Đã dừng tại t = {time}, bước cuối cùng mà mọi kho và mọi dòng đều là số hữu hạn: {variables} trở thành vô hạn hoặc không phải số tại t = {at}.
+	Runs that ended early: {n} of {total}. This is the first of them.	Số lần chạy kết thúc sớm: {n} trên {total}. Đây là lần đầu tiên trong số đó.
+	Heat in a rod	Nhiệt trong một thanh
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Một thanh được giữ ở 0 tại hai đầu sinh nhiệt tỉ lệ với bình phương nhiệt độ của nó: 19 kho dọc theo thanh, theo phương pháp đường (Soheili và Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Khi nào một thanh được nung từ bên trong mất kiểm soát?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Phương pháp đường biến phương trình truyền nhiệt thành kho và dòng, và một mô hình có thể bùng nổ trong thời gian hữu hạn: điểm giữa vượt 10.000 tại t = 0.0821, nên thanh mất kiểm soát vào khoảng 0.0822, trong vòng 0.3% so với giá trị công bố 0.0824.

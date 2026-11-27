@@ -97,6 +97,7 @@ The examples are also under **File ▸ Open Example**:
 | **Every distribution** | One task per BPSim distribution, to compare their spread (a reference model). |
 | **Parcel sorter** | How many parcels go round the loop because their lane is full? Postal parcel sorting, under Logistics and warehousing: a loop feeds four lanes by product, and diverts send a parcel round again when its lane is full. |
 | **Product adoption** | How fast does a new product spread? A system dynamics model (stocks and flows, from an XMILE file): 10,000 potential customers, some buying on their own and the rest after meeting a customer. Checked against the exact solution of its equations (9,087 customers after 12 years). |
+| **Heat in a rod** | When does a rod heated from within run away? A system dynamics model under Science and engineering: the heat equation u_t = u_xx + u² on a rod of length 1, held at 0 at both ends and starting at 20 sin(πx), turned into 19 stocks u1…u19 (one every 0.05 along the rod, x = 0.05 to 0.95) by the method of lines: each flow is (u_{i−1} − 2u_i + u_{i+1}) / h² plus `source` × u_i², run by RK4 at a step of 0.000025. The heat the rod makes grows faster than its ends can draw it away, so the temperature blows up in finite time; the run stops when the midpoint u10 passes 10,000 (the model's stop condition) at t = 0.08212. Near blow-up the midpoint follows u′ ≈ u², which reaches infinity 1/U after it passes U, so the crossing plus 1/10,000 estimates the blow-up time: 0.08222, 0.26% under the 0.08243786 that Soheili and Stockie, *Applied Numerical Mathematics* 58(3), 2008, p. 12, give for the equation itself. The difference is the 19-point grid's error, which shrinks with the square of the spacing (about 0.25% here, a quarter of that with 39 points). Set `source` to 0 on the Diagram tab and the rod only conducts: it cools, and each stock is exactly 20 sin(πx_i) e^(−λ₁t) with λ₁ = (4/h²) sin²(πh/2) = 9.849, which the run matches to 1e-14; the equation itself decays at π² = 9.870, so the 19 points run 0.2% warm at t = 0.1. |
 
 To try the whole cycle, open **M/M/1 queue** and press **Run**. The results show a mean wait close
 to 3 minutes and about 75% utilisation, which is what queueing theory predicts for this model.
@@ -891,6 +892,14 @@ command line (`stochcraft-cli`); the tab reads the model again whenever it chang
 
 - Its name, and its settings in a sentence: from when to when, the time step and the method
   (Euler or fourth-order Runge-Kutta).
+- **Stop when:** a condition that ends the run early, written as a variable, `>` or `<`, and a
+  number (`u10 > 1000`). Type it and press Enter, or move on; Escape gives the change up. The run
+  then ends at the first step where it holds, which may be the start. Empty, the run goes to its
+  stop time. A condition the window cannot read, or one on a variable the model does not have, is
+  refused with the reason under the field, and nothing changes. A change is one step of Undo
+  (Simulation Settings), and a variable named in it cannot be removed until it is changed or
+  cleared (a rename follows it). In the file it is StochCraft's own `stochcraft:stop_when`
+  element in `sim_specs`, which other tools ignore: they run to the stop time.
 - **Problems:** the warnings from the checks (units that do not balance, a time step that is large
   against a delay), or that none were found.
 - **Variables:** each one's kind (stock, flow or auxiliary), equation (for a stock, its starting
@@ -926,6 +935,18 @@ view.
 a random function (`NORMAL`, `RANDOM`) runs in replications: **Runs** and **Seed** choose how many
 and from where, and the same seed gives the same runs.
 
+- **Where it stopped,** when the run ended before its stop time, comes first. For the stop
+  condition: "Stopped at t = 0.082125 when u10 passed 10,000 (it crossed at t = 0.0821218,
+  between the last two steps)." The run ends at the first step past the value, and the crossing
+  is the straight line between that step and the one before meeting the value. For a value that
+  is no longer a finite number (it grew too large to hold, or came from a division by 0): the run
+  ends at the last step where every stock and flow was a finite number, and names the ones that
+  were not at the next step ("Stopped at t = 0.051, the last step where every stock and flow was
+  a finite number: u, g became infinite or not a number at t = 0.052."), so the charts and the
+  table never show such a value. A stock or flow that is not a finite number at the start leaves
+  nothing to show, and the run is refused with the reason. For runs in replications each one
+  ends on its own; the page names the first to end and how many did, and the results end at the
+  last saved time every run reached.
 - **The answer first:** where each stock ends up ("Customers ends at 9,087 customers."). For runs
   in replications it gives the median and the 5th and 95th percentiles of the runs' values at the
   end ("Customers ends near 9,100 (median); its 5th to 95th percentiles at the end are 8,900 and
@@ -935,7 +956,8 @@ and from where, and the same seed gives the same runs.
   auxiliaries). Each gets its own chart over time, scaled to its own values. For runs in
   replications the solid line is the median, the dashed line the mean and the shaded band the 5th to
   95th percentile at each saved time, so a few wild runs do not hide where most went. Where the
-  model leaves a value undefined at a time (a division by zero, say), the line has a gap there.
+  model leaves an auxiliary undefined at a time (a division by zero, say), its line has a gap
+  there; a stock or flow that is undefined ends the run instead (see above).
 - **Table** shows the same values, a row for each saved time, with the median and the 5th and
   95th percentiles beside the mean for runs in replications. **Export table (CSV)** (in the
   browser: **Download table (CSV)**) writes the variables shown. There is no chart image export

@@ -1501,3 +1501,16 @@ connection	Flow	ప్రవాహం
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	పది యంత్రాలు నడుస్తూ ఉండాలి, నాలుగు విడి యంత్రాలు సిద్ధంగా వేచి ఉంటాయి, ముగ్గురు మెకానిక్‌లు పాడైనవాటిని బాగుచేస్తారు (Crane మరియు Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	పది యంత్రాలను నడుపుతూ ఉంచడానికి ఎన్ని విడి యంత్రాలు, ఎంతమంది మెకానిక్‌లు కావాలి?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	సిద్ధంగా వేచి ఉన్న విడి యంత్రాలు పాడవవు: సగటున 3.47 యంత్రాలు పాడై ఉంటాయి, 9.29 నడుస్తాయి. నాలుగో మెకానిక్ మరో నాలుగు విడి యంత్రాలంత ఉపయోగపడతాడు.
+	Science and engineering	విజ్ఞానం మరియు ఇంజినీరింగ్
+	Stop when	ఎప్పుడు ఆపాలి
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	షరతు నిజమయ్యే మొదటి అడుగులో రన్ ముగుస్తుంది, ఉదా. u10 > 1000 (ఒక చరరాశి, > లేదా <, ఒక సంఖ్య), పరిమితి ఎప్పుడు దాటిందో ఫలితాలు చెబుతాయి. ఆపే సమయం వరకు నడపడానికి ఖాళీగా వదలండి.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	షరతును ఒక చరరాశి, > లేదా <, ఒక సంఖ్యగా రాయండి, ఉదా. u10 > 1000.
+	Changed the stop condition	ఆపే షరతు మార్చబడింది
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	t = {time} వద్ద ఆగింది, {variable} {value}ను దాటినప్పుడు (t = {crossing} వద్ద దాటింది, చివరి రెండు అడుగుల మధ్య).
+	Stopped at t = {time}, when the stop condition held.	t = {time} వద్ద ఆగింది, ఆపే షరతు నిజమైనప్పుడు.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	t = {time} వద్ద ఆగింది, ప్రతి నిల్వ మరియు ప్రతి ప్రవాహం పరిమిత సంఖ్యగా ఉన్న చివరి అడుగు: {variables} t = {at} వద్ద అనంతం లేదా సంఖ్య కానిదిగా మారింది.
+	Runs that ended early: {n} of {total}. This is the first of them.	ముందుగా ముగిసిన రన్‌లు: {total}లో {n}. ఇది వాటిలో మొదటిది.
+	Heat in a rod	ఒక కడ్డీలో వేడి
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	రెండు చివరలను 0 వద్ద ఉంచిన కడ్డీ తన ఉష్ణోగ్రత వర్గానికి అనుపాతంగా వేడిని పుట్టిస్తుంది: కడ్డీ పొడవునా 19 నిల్వలు, రేఖల పద్ధతిలో (Soheili మరియు Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	లోపలి నుంచి వేడెక్కే కడ్డీ ఎప్పుడు అదుపు తప్పుతుంది?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	రేఖల పద్ధతి ఉష్ణ సమీకరణాన్ని నిల్వలు, ప్రవాహాలుగా మారుస్తుంది, ఒక మోడల్ పరిమిత సమయంలో పేలవచ్చు: మధ్యభాగం t = 0.0821 వద్ద 10,000ను దాటుతుంది, కాబట్టి కడ్డీ సుమారు 0.0822 వద్ద అదుపు తప్పుతుంది, ప్రచురించిన 0.0824కు 0.3% లోపల.

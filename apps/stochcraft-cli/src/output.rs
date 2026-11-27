@@ -1658,6 +1658,9 @@ pub fn sd_table(name: &str, r: &Value) -> String {
     }
     left.push(true);
     aligned(&rows, &left, &mut out);
+    if let Some(m) = r["stopped"]["message"].as_str() {
+        let _ = writeln!(out, "\n{m}");
+    }
     if let Some(c) = r["dt_check"].as_object() {
         let _ = writeln!(
             out,

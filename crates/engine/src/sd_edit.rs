@@ -12,8 +12,8 @@ use serde::Deserialize;
 use serde_json::{Value, json};
 use stochcraft_model::Model;
 use stochcraft_sd::{
-    Connector, Gf, GfKind, GfX, Layout, Method, SdModel, SimSpecs, Step, VarKind, Variable,
-    canonical, find_variable, flow_ends,
+    Connector, Gf, GfKind, GfX, Layout, Method, SdModel, SimSpecs, Step, StopWhen, VarKind,
+    Variable, canonical, find_variable, flow_ends,
 };
 
 use crate::commands::{parse, some};
@@ -147,6 +147,40 @@ fn set_specs(
         s.time_units = u.trim().to_owned();
     }
     Ok(())
+}
+
+/// A condition that ends the run before its stop time: at the first step where `variable` is
+/// above (or below) a value. Give one of `above` and `below`.
+#[derive(Debug, Clone, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct StopWhenParam {
+    /// The variable (a stock, flow or auxiliary).
+    pub variable: String,
+    /// Stop when it is above this value.
+    #[serde(default)]
+    pub above: Option<f64>,
+    /// Stop when it is below this value.
+    #[serde(default)]
+    pub below: Option<f64>,
+}
+
+impl StopWhenParam {
+    fn condition(&self) -> Result<StopWhen, CommandError> {
+        let (above, value) = match (self.above, self.below) {
+            (Some(v), None) => (true, v),
+            (None, Some(v)) => (false, v),
+            _ => {
+                return Err(invalid(
+                    "`stop_when` needs one of `above` and `below`, not both",
+                ));
+            }
+        };
+        Ok(StopWhen {
+            variable: self.variable.trim().to_owned(),
+            above,
+            value: finite(value, "the value of `stop_when`")?,
+        })
+    }
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -586,6 +620,11 @@ pub struct SpecsSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<f64>")]
     pub save_step: Option<Option<f64>>,
+    /// A condition that ends the run early, `{"variable": "u10", "above": 1000}` (or
+    /// `"below"`); `null` takes it away, so the run goes to its stop time.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<StopWhenParam>")]
+    pub stop_when: Option<Option<StopWhenParam>>,
 }
 
 pub(crate) fn specs_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -598,11 +637,20 @@ pub(crate) fn specs_set(e: &mut Engine, p: Value) -> Result<Value, CommandError>
         p.method.is_some(),
         p.time_units.is_some(),
         p.save_step.is_some(),
+        p.stop_when.is_some(),
     ];
     if !given.contains(&true) {
         return Err(invalid("nothing to change: give at least one setting"));
     }
+    let stop_when = match &p.stop_when {
+        Some(Some(w)) => Some(Some(w.condition()?)),
+        Some(None) => Some(None),
+        None => None,
+    };
     let diagnostics = e.sd_edit("sd.specs.set", |m| {
+        if let Some(w) = stop_when {
+            m.specs.stop_when = w;
+        }
         set_specs(
             &mut m.specs,
             p.start,

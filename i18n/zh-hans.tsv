@@ -1501,3 +1501,16 @@ connection	Flow	顺序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台机器必须运转，四台备用机待命，三名维修工修理出故障的机器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台备用机和多少名维修工，才能让十台机器保持运转？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的备用机不会故障：平均 3.47 台机器在故障中，9.29 台在运转。增加第四名维修工的效果与再增加四台备用机相当。
+	Science and engineering	科学与工程
+	Stop when	停止条件
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	运行在条件首次成立的那一步结束，例如 u10 > 1000（一个变量、> 或 <、一个数），结果会说明何时越过。留空则运行到停止时间。
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	请把条件写成一个变量、> 或 <、一个数，例如 u10 > 1000。
+	Changed the stop condition	已更改停止条件
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	在 t = {time} 停止，因为 {variable} 越过了 {value}（越过时刻 t = {crossing}，在最后两步之间）。
+	Stopped at t = {time}, when the stop condition held.	在 t = {time} 停止，因为停止条件成立。
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	在 t = {time} 停止，这是每个存量和流量都还是有限数的最后一步：{variables} 在 t = {at} 变为无穷大或非数。
+	Runs that ended early: {n} of {total}. This is the first of them.	提前结束的运行：{total} 次中的 {n} 次。这是其中第一次。
+	Heat in a rod	棒中的热
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	两端保持为 0 的棒按其温度的平方产生热量：沿棒设 19 个存量，采用线方法（Soheili 和 Stockie，Applied Numerical Mathematics，2008）。
+	When does a rod heated from within run away?	从内部加热的棒何时失控？
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	线方法把热方程变成存量和流量，模型也可能在有限时间内爆破：中点在 t = 0.0821 越过 10,000，因此棒约在 0.0822 失控，与已发表的 0.0824 相差不到 0.3%。

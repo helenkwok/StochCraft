@@ -310,7 +310,13 @@ A system dynamics model (stocks and flows, an XMILE file) is opened with `file.o
 (the text of the file), run with `sd.run` (`replications` and `seed` for a model with a random
 function, `dt`, `dt_check` to run again at half the step (it reports `inconclusive` rather than 0% when a stock cannot be compared, and `draws_matched`), `time_unit`) and read with `sd.get`. A
 run gives every variable over time: the mean, and for a replicated model the median and the 5th
-and 95th percentiles. `run` refuses such a model and names `sd.run`. `sd.new` starts an empty model
+and 95th percentiles. A model's stop condition (`sd.specs.set` with
+`stop_when: {"variable": "u10", "above": 1000}`, or `below`; `null` takes it away) ends a run at
+the first step where it holds; a stock or flow that stops being a finite number ends it at the
+last step where all were. Either way the results' `stopped` gives the reason (`condition` or
+`not_finite`), the time the results end at, the crossing interpolated between the last two
+steps (for a condition), the variables that were not finite and when (for `not_finite`), and a
+`message`. `run` refuses such a model and names `sd.run`. `sd.new` starts an empty model
 (name, start, stop, `dt`, method, time unit) and `sd.variable.add`, `sd.variable.set` (with
 `rename`), `sd.variable.remove`, `sd.specs.set` and `sd.layout.set` edit the open one. An edit is
 compiled before it is kept: a bad equation, a name that is not there or an algebraic loop is

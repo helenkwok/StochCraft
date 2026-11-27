@@ -2786,12 +2786,20 @@ answers check it: exponential growth (and Euler's error halving with the step), 
 by RK4, `DELAY3`'s pulse response against the Erlang density, `SMTH1`'s step response, a
 non-negative stock and the order of updates of the fisheries example, and an SIR epidemic against
 an RK4 reference at a small step. Numerical contracts (review fixes): a flow that is not a number
-is never limited into a real transfer (it stays not a number, with a warning, and so do the stocks
-it touches); a flow that comes out negative is limited by the non-negative stock it then takes
+is never limited into a real transfer (it stays not a number, which ends the run at the step
+before, as below); a flow that comes out negative is limited by the non-negative stock it then takes
 from, so no stock goes below 0 and mass is kept; a flow listed twice at a stock is refused. The
 halved-step check runs to the same end time, compares by time, and says it is inconclusive (never
 0%) when a stock has no shared time or a value that is missing or not a number, and notes when
-the random draws are not at the same times at the two steps. XMILE namespaces are resolved by
+the random draws are not at the same times at the two steps. Ending early (built with the
+heat-in-a-rod example): a model's stop condition (a variable above or below a value, StochCraft's
+`stochcraft:stop_when` in `sim_specs`, set by `sd.specs.set` and on the Model tab) ends the run
+at the first step where it holds, and the results give that step and the crossing interpolated
+linearly between it and the step before; a stock or flow that stops being a finite number
+(an overflow, a division by 0) ends the run at the last step where all were, naming them and
+the time, so results never hold such a value (at the start, the run is refused). Runs in
+replications each end on their own, and the results end at the last saved time all reached.
+Only the values at each step are checked, not Runge-Kutta's stages between. XMILE namespaces are resolved by
 URI (a prefix bound to the XMILE namespace is read; another namespace is refused), a change of
 time unit converts `dt` and the halved `dt` as well, and under RK4 a `STEP` on a step boundary
 is integrated as under Euler (a jump inside a step is first order, documented). Part 2 so far: a model can be edited, undone and saved. The
@@ -4965,6 +4973,30 @@ are.
     It differs from the machine repair crew above because spares on cold standby do not fail.
     Once regenerative intervals (M2.9) are built, this example is their first check: the
     paper's own intervals come from cycles back to X = 0.
+- **An example from numerical analysis:** checked the same way.
+  - **Heat in a rod** (`heat-rod.xmile`, a system dynamics model, "Science and engineering"):
+    u_t = u_xx + u² on (0, 1), u = 0 at both ends, u(x, 0) = 20 sin(πx), by the method of lines:
+    19 stocks u1…u19 at x_i = i h, h = 0.05, each with one flow
+    (u_{i−1} − 2u_i + u_{i+1}) / h² + source · u_i² (the ends are 0), RK4 at a step of 2.5e-5 to
+    0.1, saved every 0.0005, and the stop condition u10 > 10,000. The auxiliary `source` is 1
+    (the file) or 0 (SD has no scenarios, so the guide says to set it on the Diagram tab).
+    Without the source the sine is an eigenvector of the second difference, so each stock is
+    exactly 20 sin(πx_i) e^(−λ₁t), λ₁ = (4/h²) sin²(πh/2) = 9.8493; `crates/sd/tests/known_answers.rs`
+    checks every stock at t = 0.02 and 0.1 within 1e-9 (the run is within about 1e-14), and the
+    midpoint's difference from the PDE's 20 e^(−π²t), the grid's O(h²) error, exactly as
+    e^((π² − λ₁)t) − 1 (0.04% and 0.20%). With the source the solution blows up: Soheili and
+    Stockie, *A moving mesh method with variable mesh relaxation time*, Applied Numerical
+    Mathematics 58(3):249–263, 2008 (arXiv:math/0602376), give t* ≈ 0.08243786 (p. 12). The run
+    passes 10,000 at t = 0.0821218 (stopping at the step 0.082125), and near blow-up u′ ≈ u²,
+    which reaches infinity 1/U after passing U, so the estimate 0.0821218 + 1/10,000 = 0.0822218 is
+    0.26% under t*; the test asserts within 0.3%. That is the 19 points' grid error (a separate
+    method-of-lines script at a step of 1e-6 gives 8.6e-4 with 9 points, 2.1e-4 with 19 and
+    5.4e-5 with 39). At U = 1,000 the estimate is 0.347% under, because the diffusion term still
+    matters there, which is why the condition is 10,000 (at 100,000 the time step's error grows).
+    The anchor: one stock u′ = u² from 20 crosses U at 0.05 − 1/U, checked within 1e-7. The
+    idea came from Kangro and Kalis (Environment. Technology. Resources., 2024, vol. II, pp.
+    143–149), whose blow-up problem is a different (porous-medium) equation, so it is not used as
+    a check.
 - **Planned examples:** each joins only once its answer is checked against its source with the
   page, as above.
   - **A particle detector's readout** (a new "Science" industry): collisions at a collider

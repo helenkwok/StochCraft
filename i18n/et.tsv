@@ -1501,3 +1501,16 @@ connection	Flow	Voog
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Kümme masinat peavad töötama, neli varumasinat ootavad valmis ja kolm mehaanikut parandavad rikki läinud masinaid (Crane ja Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Mitu varumasinat ja mehaanikut hoiavad kümme masinat töös?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Ootel varumasinad ei saa rikki minna: keskmiselt on rikkis 3.47 masinat ja töötab 9.29. Neljas mehaanik annab umbes sama palju kui neli varumasinat juurde.
+	Science and engineering	Teadus ja tehnika
+	Stop when	Peata, kui
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Käivitus lõpeb esimesel sammul, kus tingimus kehtib, näiteks u10 > 1000 (muutuja, > või < ja arv), ja tulemused ütlevad, millal piir ületati. Jätke tühjaks, et käivitada lõpuajani.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Kirjutage tingimus muutuja, märgi > või < ja arvuna, näiteks u10 > 1000.
+	Changed the stop condition	Peatamistingimus muudetud
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Peatus ajal t = {time}, kui {variable} ületas väärtuse {value} (ületus ajal t = {crossing}, kahe viimase sammu vahel).
+	Stopped at t = {time}, when the stop condition held.	Peatus ajal t = {time}, kui peatamistingimus kehtis.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Peatus ajal t = {time}, viimasel sammul, kus iga varu ja iga voog oli lõplik arv: {variables} muutus ajal t = {at} lõpmatuks või mittearvuks.
+	Runs that ended early: {n} of {total}. This is the first of them.	Varem lõppenud käivitused: {n} / {total}. See on neist esimene.
+	Heat in a rod	Soojus vardas
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Mõlemast otsast väärtusel 0 hoitud varras toodab soojust võrdeliselt oma temperatuuri ruuduga: 19 varu piki varrast, joonte meetodil (Soheili ja Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Millal läheb seestpoolt kuumenev varras kontrolli alt välja?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Joonte meetod teeb soojusvõrrandist varud ja vood ning mudel võib lõpliku ajaga plahvatada: keskkoht ületab 10 000 ajal t = 0.0821, nii et varras läheb kontrolli alt välja umbes ajal 0.0822, 0.3% piires avaldatud väärtusest 0.0824.

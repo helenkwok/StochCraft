@@ -208,6 +208,7 @@ pub(crate) fn describe(model: &SdModel, program: &Program) -> Value {
         "stop": s.stop,
         "dt": program.dt(),
         "save_step": s.save_step.unwrap_or_else(|| program.dt()),
+        "stop_when": program.stop_when().map(stop_when_json),
         "time_unit": s.time_units,
         "random": program.is_random(),
         "variables": vars,
@@ -368,6 +369,65 @@ fn floats(v: &[f64]) -> Value {
     Value::Array(v.iter().map(|x| finite(*x)).collect())
 }
 
+/// A stop condition as JSON: `{"variable": "u10", "above": 1000}` (or `"below"`).
+pub(crate) fn stop_when_json(w: &stochcraft_sd::StopWhen) -> Value {
+    let side = if w.above { "above" } else { "below" };
+    let mut o = json!({ "variable": w.variable });
+    o[side] = json!(w.value);
+    o
+}
+
+/// Why a run ended early, as JSON, with the reason in a sentence (`message`).
+fn stopped_json(s: &stochcraft_sd::Stopped, w: Option<&stochcraft_sd::StopWhen>) -> Value {
+    let runs = if s.runs > 1 {
+        format!(" ({} runs ended early; this is the first)", s.runs)
+    } else {
+        String::new()
+    };
+    match &s.reason {
+        stochcraft_sd::StopReason::Condition => {
+            let what = w.map_or_else(
+                || "the stop condition held".to_owned(),
+                |w| {
+                    format!(
+                        "{} {} {}",
+                        w.variable,
+                        if w.above { "rose above" } else { "fell below" },
+                        w.value
+                    )
+                },
+            );
+            json!({
+                "reason": "condition",
+                "time": s.time,
+                "crossing": s.crossing.map_or(Value::Null, finite),
+                "runs": s.runs,
+                "message": format!(
+                    "stopped at {} when {what}; it crossed at {}, interpolated between the last two steps{runs}",
+                    s.time,
+                    s.crossing.unwrap_or(s.time)
+                ),
+            })
+        }
+        stochcraft_sd::StopReason::NotFinite {
+            variables,
+            failed_at,
+        } => json!({
+            "reason": "not_finite",
+            "time": s.time,
+            "variables": variables,
+            "failed_at": failed_at,
+            "runs": s.runs,
+            "message": format!(
+                "stopped at {}, the last step where every stock and flow was a finite number: {} {} infinite or not a number at {failed_at}{runs}",
+                s.time,
+                variables.join(", "),
+                if variables.len() == 1 { "was" } else { "were" }
+            ),
+        }),
+    }
+}
+
 /// A run's results as JSON: the times, and each variable's mean (with, for a model that was
 /// replicated, the median and the 5th and 95th percentiles) at each of them.
 pub fn results_json(r: &SdResults, digest: &str, notes: &[String]) -> Value {
@@ -415,6 +475,10 @@ pub fn results_json(r: &SdResults, digest: &str, notes: &[String]) -> Value {
     } else {
         "one run: a model with no random function has no spread"
     };
+    let stopped = r
+        .stopped
+        .as_ref()
+        .map(|s| stopped_json(s, r.stop_when.as_ref()));
     json!({
         "model": r.name,
         "method": r.method,
@@ -431,6 +495,8 @@ pub fn results_json(r: &SdResults, digest: &str, notes: &[String]) -> Value {
         "variables": variables,
         "warnings": r.warnings,
         "dt_check": dt_check,
+        "stop_when": r.stop_when.as_ref().map(stop_when_json),
+        "stopped": stopped,
         "record": {
             "stochcraft": env!("CARGO_PKG_VERSION"),
             "model_digest": digest,

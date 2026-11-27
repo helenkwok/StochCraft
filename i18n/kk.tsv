@@ -1501,3 +1501,16 @@ connection	Flow	Ағын
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Он машина жұмыс істеуі керек, төрт қосалқы машина дайын тұрады, ал үш слесарь бұзылғандарын жөндейді (Crane және Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Он машинаның жұмысын қанша қосалқы машина мен слесарь қамтамасыз етеді?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Дайын тұрған қосалқы машиналар бұзыла алмайды: орташа есеппен 3.47 машина бұзық, 9.29 машина жұмыс істейді. Төртінші слесарь тағы төрт қосалқы машинамен шамамен бірдей пайда береді.
+	Science and engineering	Ғылым және инженерия
+	Stop when	Тоқтату шарты
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Іске қосу шарт орындалған алғашқы қадамда аяқталады, мысалы u10 > 1000 (айнымалы, > немесе < және сан), ал нәтижелер шектің қашан өткенін айтады. Аяқталу уақытына дейін жүргізу үшін бос қалдырыңыз.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Шартты айнымалы, > немесе < және сан түрінде жазыңыз, мысалы u10 > 1000.
+	Changed the stop condition	Тоқтату шарты өзгертілді
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	t = {time} кезінде тоқтады: {variable} {value} мәнінен асты (t = {crossing} кезінде асты, соңғы екі қадам арасында).
+	Stopped at t = {time}, when the stop condition held.	t = {time} кезінде тоқтады: тоқтату шарты орындалды.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	t = {time} кезінде тоқтады, бұл әр қор мен әр ағын шекті сан болған соңғы қадам: {variables} t = {at} кезінде шексіз немесе сан емес болды.
+	Runs that ended early: {n} of {total}. This is the first of them.	Ерте аяқталған іске қосулар: {total} ішінен {n}. Бұл олардың біріншісі.
+	Heat in a rod	Өзектегі жылу
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Екі ұшы 0-де ұсталған өзек өз температурасының квадратына пропорционал жылу шығарады: өзек бойында 19 қор, сызықтар әдісімен (Soheili және Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Іштен қызатын өзек қашан бақылаудан шығады?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Сызықтар әдісі жылу теңдеуін қорлар мен ағындарға айналдырады, ал модель шекті уақытта жарылуы мүмкін: орта нүкте t = 0.0821 кезінде 10 000-нан асады, сондықтан өзек шамамен 0.0822 кезінде бақылаудан шығады, жарияланған 0.0824 мәнінен 0.3% шегінде.

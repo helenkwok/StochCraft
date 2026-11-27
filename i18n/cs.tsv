@@ -1501,3 +1501,16 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset strojů musí běžet, čtyři záložní čekají v pohotovosti a tři opraváři opravují ty, které se porouchají (Crane a Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Kolik záložních strojů a opravářů udrží deset strojů v chodu?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Záložní stroje v pohotovosti se nemohou porouchat: v průměru je porouchaných 3.47 strojů a běží 9.29. Čtvrtý opravář pomůže zhruba tolik jako čtyři záložní stroje navíc.
+	Science and engineering	Věda a technika
+	Stop when	Zastavit, když
+	The run ends at the first step where the condition holds, such as u10 > 1000 (a variable, > or <, and a number), and the results say when it crossed. Leave it empty to run to the stop time.	Běh skončí v prvním kroku, ve kterém podmínka platí, například u10 > 1000 (proměnná, > nebo < a číslo), a výsledky řeknou, kdy byla mez překročena. Nechte prázdné, aby běh pokračoval do koncového času.
+	Write the condition as a variable, > or <, and a number, such as u10 > 1000.	Napište podmínku jako proměnnou, > nebo < a číslo, například u10 > 1000.
+	Changed the stop condition	Podmínka zastavení změněna
+	Stopped at t = {time} when {variable} passed {value} (it crossed at t = {crossing}, between the last two steps).	Zastaveno v t = {time}, když {variable} překročila {value} (překročení v t = {crossing}, mezi posledními dvěma kroky).
+	Stopped at t = {time}, when the stop condition held.	Zastaveno v t = {time}, když platila podmínka zastavení.
+	Stopped at t = {time}, the last step where every stock and flow was a finite number: {variables} became infinite or not a number at t = {at}.	Zastaveno v t = {time}, v posledním kroku, kdy každá zásoba a každý tok byly konečné číslo: {variables} se v t = {at} stala nekonečnou nebo přestala být číslem.
+	Runs that ended early: {n} of {total}. This is the first of them.	Běhy ukončené dříve: {n} z {total}. Toto je první z nich.
+	Heat in a rod	Teplo v tyči
+	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Tyč držená na obou koncích na 0 vytváří teplo úměrně druhé mocnině své teploty: 19 zásob podél tyče, metodou přímek (Soheili a Stockie, Applied Numerical Mathematics, 2008).
+	When does a rod heated from within run away?	Kdy se tyč ohřívaná zevnitř vymkne kontrole?
+	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Metoda přímek převádí rovnici vedení tepla na zásoby a toky a model může explodovat v konečném čase: střed překročí 10 000 v t = 0.0821, takže se tyč vymkne kontrole zhruba v 0.0822, do 0.3% od publikovaných 0.0824.
