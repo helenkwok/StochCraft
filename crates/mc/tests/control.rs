@@ -1,4 +1,4 @@
-//! Control variates (ROADMAP M4.1; Law, *Simulation Modeling and Analysis*, 5th ed., §11.3).
+//! Control variates (ROADMAP M4.1; Law, *Simulation Modeling and Analysis*, 5th ed., §11.4).
 //!
 //! The answers are known exactly: for Y = X + Z with X and Z independent, controlling X leaves
 //! the variance of Z, so the controlled estimate's variance is Var(Z) / Var(X + Z) of the plain

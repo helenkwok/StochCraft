@@ -2680,7 +2680,7 @@ The estimate stays unbiased and the interval method is unchanged.
 Both are checked against exact answers (the intervals hold the mean about 95% of the time over
 200 seeds, are much narrower on a monotone and on a smooth integrand, and the first Sobol points
 are the published ones).
-Control variates are built (Law, *Simulation Modeling and Analysis*, 5th ed., §11.3; Glasserman
+Control variates are built (Law, *Simulation Modeling and Analysis*, 5th ed., §11.4; Glasserman
 2003, §4.1; Nelson 1990): an output can name controls, each an input (whose known mean is its
 distribution's exact mean, `Dist::mean`) or an earlier output with a mean the modeller types
 (`expected`). Each trial's value Y becomes Y − bᵀ(C − μ), with b the least-squares coefficients
