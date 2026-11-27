@@ -1505,3 +1505,8 @@ connection	Flow	Rrjedhë
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Dy makineri dhe një punëtor: çdo punë ka nevojë njëkohësisht për makinerinë e saj dhe për punëtorin (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Kufizimi është punëtori apo makineritë?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Një punë mban bashkë makinerinë e saj dhe punëtorin, ndaj punëtori i vetëm është kufizimi: punët presin si në një radhë me një shërbyes, 3 kohë shërbimi në 75% ngarkesë dhe 9 në 90%.
+	One machine's availability	Disponueshmëria e një makine
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Një makinë që prishet mesatarisht çdo 90 orë dhe riparohet për 4.5 orë (Hristova, Denev dhe Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Sa shpesh ndalet një makinë dhe sa punë kushton kjo?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Punon 90 orë, ndalet 4.5: makina punon 95.2% të kohës dhe një prishje ndodh çdo 94.5 orë. Përgjysmimi i kohës së riparimit e ngre në 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} është i ndalur {down} të kohës (disponueshmëria {up}); asgjë nuk e pret.

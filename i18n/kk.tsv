@@ -1505,3 +1505,8 @@ connection	Flow	Ағын
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Екі станок және бір жұмысшы: әр жұмысқа бір мезгілде өз станогы мен жұмысшы керек (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Шектеу жұмысшы ма, әлде станоктар ма?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Жұмыс өз станогы мен жұмысшыны бірге ұстайды, сондықтан жалғыз жұмысшы шектеу болады: жұмыстар бір қызмет көрсетушісі бар кезектегідей күтеді, 75% жүктемеде 3 қызмет уақыты, 90%-да 9.
+	One machine's availability	Бір станоктың дайындығы
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Орта есеппен әр 90 сағат сайын бұзылатын және жөндеуге 4.5 сағат кететін бір станок (Hristova, Denev және Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Бір станок қаншалықты жиі тоқтап қалады және бұл қанша жұмысқа тұрады?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 сағат жұмыс істейді, 4.5 сағат тұрады: станок уақыттың 95.2%-ында жұмыс істейді, ал бұзылу әр 94.5 сағат сайын болады. Жөндеу уақытын екі есе қысқарту оны 97.6%-ға жеткізеді.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} уақыттың {down} бөлігінде тұрады (дайындық {up}); оны ешнәрсе күтпейді.

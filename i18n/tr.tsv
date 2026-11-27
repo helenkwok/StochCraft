@@ -1505,3 +1505,8 @@ connection	Flow	Akış
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	İki makine ve bir işçi: her iş aynı anda kendi makinesine ve işçiye ihtiyaç duyar (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Kısıt işçi mi, makineler mi?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Bir iş makinesini ve işçiyi birlikte tutar, bu yüzden tek işçi kısıttır: işler tek sunuculu bir kuyruktaki gibi bekler, %75 dolulukta 3 hizmet süresi, %90'da 9.
+	One machine's availability	Bir makinenin kullanılabilirliği
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Ortalama her 90 saatte bir arızalanan ve onarımı 4.5 saat süren bir makine (Hristova, Denev ve Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Bir makine ne sıklıkta duruyor ve bu ne kadar işe mal oluyor?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 saat çalışır, 4.5 saat durur: makine zamanın %95.2'sinde çalışır ve her 94.5 saatte bir arıza olur. Onarım süresini yarıya indirmek bunu %97.6'ya çıkarır.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} zamanın {down} kadarında duruyor (kullanılabilirlik {up}); onu bekleyen bir şey yok.

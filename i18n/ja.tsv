@@ -1505,3 +1505,8 @@ connection	Flow	フロー
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	機械2台と作業者1人：各ジョブは自分の機械と作業者を同時に必要とする (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973)。
 	Is the worker or the machines the constraint?	制約は作業者か、それとも機械か？
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	ジョブは機械と作業者を同時に押さえるので、制約は1人の作業者：ジョブは単一窓口の待ち行列と同じように待ち、稼働率75%でサービス時間の3倍、90%で9倍。
+	One machine's availability	機械 1 台の稼働率
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	平均 90 時間ごとに故障し、修理に 4.5 時間かかる機械 1 台（Hristova、Denev、Tsankov、Environment. Technology. Resources、2024）。
+	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	稼働 90 時間、停止 4.5 時間：機械は時間の 95.2% で稼働し、94.5 時間ごとに故障が起きる。修理時間を半分にすると 97.6% に上がる。
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} は時間の {down} で停止している（稼働率 {up}）。待っているものはない。

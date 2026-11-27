@@ -1505,3 +1505,8 @@ connection	Flow	ప్రవాహం
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	రెండు యంత్రాలు, ఒక కార్మికుడు: ప్రతి పనికి ఒకేసారి దాని యంత్రం, కార్మికుడు ఇద్దరూ కావాలి (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	పరిమితి కార్మికుడా, యంత్రాలా?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	ఒక పని తన యంత్రాన్ని, కార్మికుడిని కలిపి పట్టి ఉంచుతుంది, కాబట్టి ఒక్క కార్మికుడే పరిమితి: పనులు ఒకే సేవకుడి వరుసలో లాగా వేచి ఉంటాయి, 75% రద్దీలో 3 సేవా సమయాలు, 90%లో 9.
+	One machine's availability	ఒక యంత్రం అందుబాటు
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	సగటున ప్రతి 90 గంటలకు చెడిపోయి, మరమ్మతుకు 4.5 గంటలు పట్టే ఒక యంత్రం (Hristova, Denev మరియు Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	ఒక యంత్రం ఎంత తరచుగా ఆగిపోతుంది, దానివల్ల ఎంత పని పోతుంది?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 గంటలు పని, 4.5 గంటలు ఆగుదల: యంత్రం 95.2% సమయం పనిచేస్తుంది, ప్రతి 94.5 గంటలకు ఒక చెడిపోవడం జరుగుతుంది. మరమ్మతు సమయాన్ని సగం చేస్తే అది 97.6% అవుతుంది.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} సమయం ఆగిపోతుంది (అందుబాటు {up}); దాని కోసం ఏదీ వేచి ఉండదు.

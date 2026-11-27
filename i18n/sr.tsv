@@ -1505,3 +1505,8 @@ connection	Flow	Ток
 	Two machines and one worker: each job needs its machine and the worker at the same time (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).	Две машине и један радник: сваки посао истовремено треба своју машину и радника (Maggard, Lesso, Hogg and Phillips, Winter Simulation Conference, 1973).
 	Is the worker or the machines the constraint?	Да ли је ограничење радник или машине?
 	A job holds its machine and the worker together, so the one worker is the constraint: jobs wait as in a single-server queue, 3 service times at 75% busy and 9 at 90%.	Посао држи своју машину и радника заједно, па је једини радник ограничење: послови чекају као у реду са једним услужним местом, 3 времена услуге при заузетости од 75% и 9 при 90%.
+	One machine's availability	Расположивост једне машине
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Једна машина која се у просеку квари на сваких 90 сати и поправља се 4.5 сата (Hristova, Denev и Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Колико често једна машина не ради и колико посла то кошта?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Ради 90 сати, стоји 4.5: машина ради 95.2% времена, а квар се јавља на сваких 94.5 сати. Дупло краћи поправак то подиже на 97.6%.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} не ради {down} времена (расположивост {up}); ништа не чека на њу.
