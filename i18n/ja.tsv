@@ -1535,3 +1535,32 @@ connection	Flow	フロー
 	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	稼働 90 時間、停止 4.5 時間：機械は時間の 95.2% で稼働し、94.5 時間ごとに故障が起きる。修理時間を半分にすると 97.6% に上がる。
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} は時間の {down} で停止している（稼働率 {up}）。待っているものはない。
+	Analyse runs from another tool…	別のツールの実行結果を分析…
+	Runs from another tool	別のツールの実行結果
+	What each column holds	各列の内容
+	The roles are guessed from the column names; change any that are wrong.	役割は列名から推測しています。違っているものは変更してください。
+	One row per run	1 行に 1 実行
+	One row per value	1 行に 1 値
+	A time series	時系列
+	Scenario	シナリオ
+	Run number	実行番号
+	Measure name	指標名
+	Not used	使用しない
+	These scenarios used common random numbers (paired)	これらのシナリオは共通乱数を使用 (対応あり)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft は数値からこれを確認できません。実行を作成したツールが各シナリオの実行 i に同じ乱数を与えた場合にのみチェックしてください。実行は実行番号で対応付けられます。
+	Show the answers	答えを表示
+	Change the columns	列を変更
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) は {baseline} と ±{tolerance} 以内で一致しています。
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	その他の比較では偶然を超える差は見られないか、判定不能です。下の表を見てください。
+	About {n} runs would pin it to ± 5%.	約 {n} 回の実行で ± 5% 以内に絞り込めます。
+	{k} of {m} measures are settled: each is known to ± 5% or better.	指標 {m} 個のうち {k} 個が安定しています: いずれも ± 5% 以内でわかっています。
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): すべての実行で同じ値になりましたが、決して変動しないという証拠ではありません。
+	Means, rounded to what the interval supports	平均 (信頼区間に合わせて四捨五入)
+	Each scenario against {baseline}	各シナリオと {baseline} の比較
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	相違: 95% 信頼区間がゼロを含まないか、完全に許容差の外側にあります。一致: 完全に許容差の内側にあります。差は検出されませんでした: ゼロを含みますが、これは一致の証拠ではありません。
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	指定どおり対応ありで比較: StochCraft はシナリオが共通乱数を使用したかどうかを確認できません。使用していない場合、これらの区間は狭すぎます。
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	すべてのシナリオで実行番号が同じです。実行が共通乱数を使用した場合は、「対応あり」をチェックすると、はるかに精度の高い比較になります。
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 は {time} のウォームアップを提案しています: 最初の {k} 時点を除外してください。
+	Fewer than 20 times: too few to suggest a warm-up.	時点が 20 未満: ウォームアップを提案するには少なすぎます。
+	The series is too short to show where the start-up ends: record longer runs.	系列が短すぎて、立ち上がりがどこで終わるかを示せません。より長い実行を記録してください。
+	Averaged over the runs at each time, with the warm-up cut marked	各時点での実行の平均 (ウォームアップの切れ目を表示)

@@ -1535,3 +1535,32 @@ connection	Flow	Flöde
 	How often is one machine down, and how much work does that cost?	Hur ofta står en maskin still, och hur mycket arbete kostar det?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Går 90 timmar, står still 4.5: maskinen arbetar 95.2 % av tiden, och ett fel inträffar var 94.5:e timme. Halveras reparationstiden stiger det till 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} står stilla {down} av tiden (tillgänglighet {up}); ingenting väntar på den.
+	Analyse runs from another tool…	Analysera körningar från ett annat verktyg…
+	Runs from another tool	Körningar från ett annat verktyg
+	What each column holds	Vad varje kolumn innehåller
+	The roles are guessed from the column names; change any that are wrong.	Rollerna gissas utifrån kolumnnamnen; ändra de som är fel.
+	One row per run	En rad per körning
+	One row per value	En rad per värde
+	A time series	En tidsserie
+	Scenario	Scenario
+	Run number	Körningsnummer
+	Measure name	Måttets namn
+	Not used	Används inte
+	These scenarios used common random numbers (paired)	De här scenarierna använde gemensamma slumptal (parvis)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft kan inte kontrollera detta utifrån talen: markera det bara om verktyget som gjorde körningarna gav körning i i varje scenario samma slumptal. Körningarna paras ihop efter körningsnummer.
+	Show the answers	Visa svaren
+	Change the columns	Ändra kolumnerna
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) stämmer med {baseline} inom ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	De andra jämförelserna visar ingen skillnad utöver slumpen eller är inte avgörande: se tabellen nedan.
+	About {n} runs would pin it to ± 5%.	Omkring {n} körningar skulle ge en precision på ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} av {m} mått är stabila: vart och ett är känt med ± 5% eller bättre.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): varje körning gav samma värde, vilket inte bevisar att det aldrig varierar.
+	Means, rounded to what the interval supports	Medelvärden, avrundade efter intervallet
+	Each scenario against {baseline}	Varje scenario jämfört med {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Avviker: 95 %-intervallet utesluter noll eller ligger helt utanför toleransen. Stämmer: det ligger helt inom toleransen. Ingen skillnad påvisad: det omfattar noll, vilket inte är något bevis på överensstämmelse.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Jämförda parvis, enligt angivelse: StochCraft kan inte kontrollera att scenarierna använde gemensamma slumptal; om de inte gjorde det är de här intervallen för smala.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Alla scenarier har samma körningsnummer: om körningarna använde gemensamma slumptal, markera ”parvis” för en mycket snävare jämförelse.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 föreslår en uppvärmning på {time}: utelämna de första {k} tidpunkterna.
+	Fewer than 20 times: too few to suggest a warm-up.	Färre än 20 tidpunkter: för få för att föreslå en uppvärmning.
+	The series is too short to show where the start-up ends: record longer runs.	Serien är för kort för att visa var uppstarten slutar: registrera längre körningar.
+	Averaged over the runs at each time, with the warm-up cut marked	Medelvärde över körningarna vid varje tidpunkt, med uppvärmningsgränsen markerad

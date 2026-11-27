@@ -1535,3 +1535,32 @@ connection	Flow	Srautas
 	How often is one machine down, and how much work does that cost?	Kaip dažnai stovi vienas įrenginys ir kiek darbo tai kainuoja?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Veikia 90 valandų, stovi 4.5: įrenginys dirba 95.2 % laiko, o gedimas įvyksta kas 94.5 valandos. Perpus sutrumpinus remontą, rodiklis pakyla iki 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stovi {down} laiko (parengtis {up}); niekas jo nelaukia.
+	Analyse runs from another tool…	Analizuoti kito įrankio vykdymus…
+	Runs from another tool	Kito įrankio vykdymai
+	What each column holds	Ką turi kiekvienas stulpelis
+	The roles are guessed from the column names; change any that are wrong.	Vaidmenys atspėti pagal stulpelių pavadinimus; pakeiskite neteisingus.
+	One row per run	Viena eilutė vienam vykdymui
+	One row per value	Viena eilutė vienai reikšmei
+	A time series	Laiko eilutė
+	Scenario	Scenarijus
+	Run number	Vykdymo numeris
+	Measure name	Rodiklio pavadinimas
+	Not used	Nenaudojama
+	These scenarios used common random numbers (paired)	Šiuose scenarijuose naudoti bendri atsitiktiniai skaičiai (poriniai)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft negali to patikrinti iš skaičių: pažymėkite tik tada, jei įrankis, atlikęs vykdymus, kiekvieno scenarijaus vykdymui i davė tuos pačius atsitiktinius skaičius. Vykdymai sudaromi į poras pagal vykdymo numerį.
+	Show the answers	Rodyti atsakymus
+	Change the columns	Keisti stulpelius
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) sutampa su {baseline} ±{tolerance} ribose.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Kiti palyginimai nerodo skirtumo, didesnio už atsitiktinumą, arba yra neįrodomi: žr. lentelę žemiau.
+	About {n} runs would pin it to ± 5%.	Maždaug {n} vykdymų leistų jį nustatyti ± 5% tikslumu.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} iš {m} rodiklių nusistovėjo: kiekvienas žinomas ± 5% ar geresniu tikslumu.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): kiekvienas vykdymas davė tą pačią reikšmę, bet tai neįrodo, kad ji niekada nekinta.
+	Means, rounded to what the interval supports	Vidurkiai, suapvalinti tiek, kiek leidžia intervalas
+	Each scenario against {baseline}	Kiekvienas scenarijus, palyginti su {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Skiriasi: 95 % intervalas neapima nulio arba visas yra už leidžiamosios paklaidos ribų. Sutampa: jis visas yra leidžiamosios paklaidos ribose. Skirtumo neaptikta: jis apima nulį, o tai nėra sutapimo įrodymas.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Palyginta poromis, kaip nurodyta: StochCraft negali patikrinti, ar scenarijuose naudoti bendri atsitiktiniai skaičiai; jei ne, šie intervalai per siauri.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Visų scenarijų vykdymų numeriai tie patys: jei vykdymuose naudoti bendri atsitiktiniai skaičiai, pažymėkite „poriniai“, kad palyginimas būtų daug tikslesnis.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 siūlo {time} įšilimo laikotarpį: praleiskite pirmuosius laiko taškus (jų skaičius: {k}).
+	Fewer than 20 times: too few to suggest a warm-up.	Mažiau nei 20 laiko taškų: per mažai įšilimo laikotarpiui pasiūlyti.
+	The series is too short to show where the start-up ends: record longer runs.	Eilutė per trumpa, kad būtų matyti, kur baigiasi pradinis etapas: įrašykite ilgesnius vykdymus.
+	Averaged over the runs at each time, with the warm-up cut marked	Vykdymų vidurkis kiekviename laiko taške, pažymėjus įšilimo laikotarpio pabaigą

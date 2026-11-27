@@ -1535,3 +1535,32 @@ connection	Flow	Потік
 	How often is one machine down, and how much work does that cost?	Як часто простоює один верстат і скільки роботи це коштує?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Працює 90 годин, простоює 4.5: верстат працює 95.2% часу, а поломка трапляється кожні 94.5 години. Якщо ремонт удвічі коротший, показник зростає до 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} простоює {down} часу (готовність {up}); ніщо його не чекає.
+	Analyse runs from another tool…	Аналізувати запуски з іншого інструмента…
+	Runs from another tool	Запуски з іншого інструмента
+	What each column holds	Що містить кожен стовпець
+	The roles are guessed from the column names; change any that are wrong.	Ролі вгадано за назвами стовпців; змініть ті, що визначено неправильно.
+	One row per run	Один рядок на запуск
+	One row per value	Один рядок на значення
+	A time series	Часовий ряд
+	Scenario	Сценарій
+	Run number	Номер запуску
+	Measure name	Назва показника
+	Not used	Не використовується
+	These scenarios used common random numbers (paired)	Ці сценарії використовували спільні випадкові числа (у парах)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft не може перевірити це за числами: позначайте лише тоді, коли інструмент, що створив запуски, дав запуску i кожного сценарію ті самі випадкові числа. Запуски поєднуються в пари за номером запуску.
+	Show the answers	Показати відповіді
+	Change the columns	Змінити стовпці
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) збігається з {baseline} в межах ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Інші порівняння не показують різниці, більшої за випадкову, або невизначені: див. таблицю нижче.
+	About {n} runs would pin it to ± 5%.	Приблизно {n} запусків дали б точність ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} з {m} показників усталилися: кожен відомий з точністю ± 5% або краще.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): кожен запуск дав те саме значення, але це не доводить, що воно ніколи не змінюється.
+	Means, rounded to what the interval supports	Середні, округлені за довірчим інтервалом
+	Each scenario against {baseline}	Кожен сценарій порівняно з {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Відрізняється: 95% інтервал не містить нуля або повністю лежить поза допуском. Збігається: інтервал повністю лежить у межах допуску. Відмінності не виявлено: інтервал містить нуль, а це не доказ збігу.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Порівняно в парах, як зазначено: StochCraft не може перевірити, чи сценарії використовували спільні випадкові числа; якщо ні, ці інтервали завузькі.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Усі сценарії мають однакові номери запусків: якщо запуски використовували спільні випадкові числа, позначте «у парах» для значно точнішого порівняння.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 пропонує розігрів тривалістю {time}: відкиньте перші {k} моментів часу.
+	Fewer than 20 times: too few to suggest a warm-up.	Менше 20 моментів часу: замало, щоб запропонувати розігрів.
+	The series is too short to show where the start-up ends: record longer runs.	Ряд закороткий, щоб показати, де закінчується початковий період: запишіть довші запуски.
+	Averaged over the runs at each time, with the warm-up cut marked	Усереднено за запусками в кожен момент часу, з позначеною межею розігріву

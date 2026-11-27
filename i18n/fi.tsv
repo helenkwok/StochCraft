@@ -1535,3 +1535,32 @@ connection	Flow	Virta
 	How often is one machine down, and how much work does that cost?	Kuinka usein yksi kone seisoo ja kuinka paljon työtä se maksaa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Käy 90 tuntia, seisoo 4.5: kone toimii 95.2 % ajasta ja vika sattuu 94.5 tunnin välein. Puolta lyhyempi korjausaika nostaa luvun 97.6 %:iin.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} seisoo {down} ajasta (käytettävyys {up}); mikään ei odota sitä.
+	Analyse runs from another tool…	Analysoi toisen ohjelman ajoja…
+	Runs from another tool	Toisen ohjelman ajot
+	What each column holds	Mitä kukin sarake sisältää
+	The roles are guessed from the column names; change any that are wrong.	Roolit on arvattu sarakkeiden nimistä; muuta väärät.
+	One row per run	Yksi rivi ajoa kohden
+	One row per value	Yksi rivi arvoa kohden
+	A time series	Aikasarja
+	Scenario	Skenaario
+	Run number	Ajon numero
+	Measure name	Mittarin nimi
+	Not used	Ei käytössä
+	These scenarios used common random numbers (paired)	Nämä skenaariot käyttivät yhteisiä satunnaislukuja (parittainen)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft ei voi tarkistaa tätä luvuista: valitse tämä vain, jos ajot tehnyt ohjelma antoi kunkin skenaarion ajolle i samat satunnaisluvut. Ajot pariutetaan ajon numeron mukaan.
+	Show the answers	Näytä vastaukset
+	Change the columns	Muuta sarakkeita
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) täsmää vertailukohtaan {baseline} rajoissa ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Muut vertailut eivät osoita sattumaa suurempaa eroa tai eivät ole ratkaisevia: katso alla olevaa taulukkoa.
+	About {n} runs would pin it to ± 5%.	Noin {n} ajoa kiinnittäisi sen tarkkuuteen ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	Ratkaistuja mittareita {k}/{m}: kukin tunnetaan tarkkuudella ± 5% tai paremmin.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): jokainen ajo antoi saman arvon, mikä ei todista, ettei se koskaan vaihtele.
+	Means, rounded to what the interval supports	Keskiarvot pyöristettyinä luottamusvälin mukaan
+	Each scenario against {baseline}	Kukin skenaario verrattuna vertailukohtaan {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Poikkeaa: 95%:n väli ei sisällä nollaa tai on kokonaan toleranssin ulkopuolella. Täsmää: väli on kokonaan toleranssin sisällä. Eroa ei havaittu: väli sisältää nollan, mikä ei ole näyttöä yhtäpitävyydestä.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Verrattu pareittain, kuten ilmoitettiin: StochCraft ei voi tarkistaa, käyttivätkö skenaariot yhteisiä satunnaislukuja; jos eivät, nämä välit ovat liian kapeita.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Kaikilla skenaarioilla on samat ajojen numerot: jos ajot käyttivät yhteisiä satunnaislukuja, valitse ”parittainen”, niin vertailu on paljon tarkempi.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 ehdottaa alkulämmittelyksi {time}: jätä pois ensimmäiset {k} ajanhetkeä.
+	Fewer than 20 times: too few to suggest a warm-up.	Alle 20 ajanhetkeä: liian vähän alkulämmittelyn ehdottamiseen.
+	The series is too short to show where the start-up ends: record longer runs.	Sarja on liian lyhyt näyttämään, missä käynnistysvaihe päättyy: tallenna pidempiä ajoja.
+	Averaged over the runs at each time, with the warm-up cut marked	Ajojen keskiarvo kullakin ajanhetkellä, alkulämmittelyn raja merkittynä

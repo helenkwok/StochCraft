@@ -1535,3 +1535,32 @@ connection	Flow	Folyamat
 	How often is one machine down, and how much work does that cost?	Milyen gyakran áll egy gép, és mennyi munkába kerül ez?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 órát működik, 4.5 órát áll: a gép az idő 95.2%-ában dolgozik, és 94.5 óránként következik be egy hiba. Fele akkora javítási idővel ez 97.6%-ra nő.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} az idő {down}-ában áll (rendelkezésre állás {up}); semmi sem vár rá.
+	Analyse runs from another tool…	Másik eszköz futásainak elemzése…
+	Runs from another tool	Másik eszköz futásai
+	What each column holds	Mit tartalmaznak az oszlopok
+	The roles are guessed from the column names; change any that are wrong.	A szerepek az oszlopnevekből lettek kikövetkeztetve; módosítsa a hibásakat.
+	One row per run	Futásonként egy sor
+	One row per value	Értékenként egy sor
+	A time series	Idősor
+	Scenario	Forgatókönyv
+	Run number	Futás sorszáma
+	Measure name	Mérőszám neve
+	Not used	Nem használt
+	These scenarios used common random numbers (paired)	Ezek a forgatókönyvek közös véletlenszámokat használtak (páros)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	A StochCraft ezt a számokból nem tudja ellenőrizni: csak akkor jelölje be, ha a futásokat készítő eszköz minden forgatókönyv i-edik futásának ugyanazokat a véletlenszámokat adta. A futások a sorszámuk szerint alkotnak párt.
+	Show the answers	Válaszok megjelenítése
+	Change the columns	Oszlopok módosítása
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) ±{tolerance} belül egyezik ezzel: {baseline}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	A többi összehasonlítás nem mutat a véletlennél nagyobb különbséget, vagy nem eldönthető: lásd az alábbi táblázatot.
+	About {n} runs would pin it to ± 5%.	Körülbelül {n} futás ± 5%-ra szűkítené.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{m} mérőszámból {k} stabil: mindegyik ± 5% vagy jobb pontossággal ismert.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): minden futás ugyanazt az értéket adta, ami nem bizonyítja, hogy soha nem változik.
+	Means, rounded to what the interval supports	Átlagok, az intervallumhoz kerekítve
+	Each scenario against {baseline}	Minden forgatókönyv összevetve ezzel: {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Eltér: a 95%-os intervallum nem tartalmazza a nullát, vagy teljesen a tűréshatáron kívül esik. Egyezik: teljesen a tűréshatáron belül esik. Nem mutatható ki eltérés: tartalmazza a nullát, ami nem bizonyítja az egyezést.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Párosan összehasonlítva, a megadottak szerint: a StochCraft nem tudja ellenőrizni, hogy a forgatókönyvek közös véletlenszámokat használtak-e; ha nem, ezek az intervallumok túl szűkek.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Minden forgatókönyvnek ugyanazok a futássorszámai: ha a futások közös véletlenszámokat használtak, jelölje be a „páros” lehetőséget a sokkal szorosabb összehasonlításhoz.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	Az MSER-5 {time} bemelegítést javasol: hagyja ki az első {k} időpontot.
+	Fewer than 20 times: too few to suggest a warm-up.	20-nál kevesebb időpont: túl kevés a bemelegítés javaslatához.
+	The series is too short to show where the start-up ends: record longer runs.	Az idősor túl rövid ahhoz, hogy látsszon, hol ér véget az indulási szakasz: rögzítsen hosszabb futásokat.
+	Averaged over the runs at each time, with the warm-up cut marked	A futások átlaga minden időpontban, a bemelegítés vágásának jelölésével

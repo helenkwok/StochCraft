@@ -1098,6 +1098,17 @@ fields (`“Service time”`) are named in the messages by their own rows.
   availability from the example above, and `{block}`, `{down}` and `{up}` kept. Not checked
   against any other source and not reviewed by native speakers; the least certain are lo, th, ta,
   te, bn, ka, kk, hi and sq.
+- The rows for runs from another tool (File ▸ Analyse runs from another tool…: the shapes of the
+  table, the roles of its columns, declaring common random numbers, the answers' sentences, the
+  comparison table's note and the warm-up plot) were machine-drafted from the plain meaning of the
+  English, reusing each catalog's own words for run, measure, baseline, scenario, warm-up,
+  tolerance, paired and the four verdicts, so the answers read like the check against observed
+  data. "Common random numbers" had no row before; it is each language's usual term built from its
+  word for random numbers. "Times" in the warm-up sentences is rendered as time points, and a few
+  languages (cs, et, fi, pl, ru, sk, sl) word a count as "{k} of {m}" or "(number: {k})" to avoid
+  plural agreement. Not checked against any other source and not reviewed by native speakers; the
+  least certain are lo, th, ta, te, bn, ka, kk, hi and sq, and the words for the warm-up cut and
+  for start-up in most of them.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -1535,3 +1535,32 @@ connection	Flow	Luồng
 	How often is one machine down, and how much work does that cost?	Một máy dừng thường xuyên đến mức nào, và việc đó làm mất bao nhiêu công việc?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Chạy 90 giờ, dừng 4.5 giờ: máy làm việc 95.2% thời gian và cứ 94.5 giờ lại có một lần hỏng. Rút ngắn thời gian sửa một nửa thì tỷ lệ này tăng lên 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} dừng {down} thời gian (độ sẵn sàng {up}); không có gì chờ nó.
+	Analyse runs from another tool…	Phân tích các lần chạy từ công cụ khác…
+	Runs from another tool	Các lần chạy từ công cụ khác
+	What each column holds	Mỗi cột chứa gì
+	The roles are guessed from the column names; change any that are wrong.	Vai trò được đoán từ tên cột; hãy đổi những vai trò bị sai.
+	One row per run	Mỗi lần chạy một hàng
+	One row per value	Mỗi giá trị một hàng
+	A time series	Chuỗi thời gian
+	Scenario	Kịch bản
+	Run number	Số thứ tự lần chạy
+	Measure name	Tên chỉ số
+	Not used	Không dùng
+	These scenarios used common random numbers (paired)	Các kịch bản này dùng số ngẫu nhiên chung (theo cặp)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft không thể kiểm tra điều này từ các con số: chỉ đánh dấu nếu công cụ tạo ra các lần chạy đã cho lần chạy i của mỗi kịch bản cùng các số ngẫu nhiên. Các lần chạy được ghép cặp theo số thứ tự lần chạy.
+	Show the answers	Hiện câu trả lời
+	Change the columns	Đổi các cột
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) khớp với {baseline} trong phạm vi ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Các so sánh khác không cho thấy khác biệt vượt quá mức ngẫu nhiên, hoặc chưa kết luận được: xem bảng bên dưới.
+	About {n} runs would pin it to ± 5%.	Khoảng {n} lần chạy sẽ thu hẹp nó về ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k}/{m} chỉ số đã ổn định: mỗi chỉ số được biết đến mức ± 5% hoặc tốt hơn.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): mọi lần chạy đều cho cùng một giá trị, nhưng đó không phải bằng chứng là nó không bao giờ thay đổi.
+	Means, rounded to what the interval supports	Giá trị trung bình, làm tròn theo khoảng tin cậy
+	Each scenario against {baseline}	Từng kịch bản so với {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Khác: khoảng 95% không chứa số 0, hoặc nằm hoàn toàn ngoài dung sai. Khớp: khoảng nằm hoàn toàn trong dung sai. Không phát hiện khác biệt: khoảng chứa số 0, đây không phải bằng chứng về sự khớp.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	So sánh theo cặp, như đã khai báo: StochCraft không thể kiểm tra rằng các kịch bản đã dùng số ngẫu nhiên chung; nếu không, các khoảng này quá hẹp.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Mọi kịch bản đều có cùng các số thứ tự lần chạy: nếu các lần chạy dùng số ngẫu nhiên chung, hãy đánh dấu “theo cặp” để so sánh chặt chẽ hơn nhiều.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 đề xuất giai đoạn khởi động {time}: bỏ {k} thời điểm đầu tiên.
+	Fewer than 20 times: too few to suggest a warm-up.	Ít hơn 20 thời điểm: quá ít để đề xuất giai đoạn khởi động.
+	The series is too short to show where the start-up ends: record longer runs.	Chuỗi quá ngắn để cho thấy giai đoạn khởi đầu kết thúc ở đâu: hãy ghi lại các lần chạy dài hơn.
+	Averaged over the runs at each time, with the warm-up cut marked	Trung bình qua các lần chạy tại mỗi thời điểm, có đánh dấu điểm cắt giai đoạn khởi động

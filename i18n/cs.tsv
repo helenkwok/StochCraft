@@ -1535,3 +1535,32 @@ connection	Flow	Tok
 	How often is one machine down, and how much work does that cost?	Jak často stojí jeden stroj a kolik práce to stojí?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	V provozu 90 hodin, mimo provoz 4.5: stroj pracuje 95.2 % času a porucha nastává každých 94.5 hodiny. Poloviční doba opravy to zvýší na 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stojí {down} času (dostupnost {up}); nic na něj nečeká.
+	Analyse runs from another tool…	Analyzovat běhy z jiného programu…
+	Runs from another tool	Běhy z jiného programu
+	What each column holds	Co obsahuje každý sloupec
+	The roles are guessed from the column names; change any that are wrong.	Role jsou odhadnuty podle názvů sloupců; změňte ty, které jsou špatně.
+	One row per run	Jeden řádek na běh
+	One row per value	Jeden řádek na hodnotu
+	A time series	Časová řada
+	Scenario	Scénář
+	Run number	Číslo běhu
+	Measure name	Název metriky
+	Not used	Nepoužito
+	These scenarios used common random numbers (paired)	Tyto scénáře použily společná náhodná čísla (párové)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft to nemůže z čísel ověřit: zaškrtněte to jen tehdy, pokud program, který běhy vytvořil, dal běhu i každého scénáře stejná náhodná čísla. Běhy se párují podle čísla běhu.
+	Show the answers	Zobrazit odpovědi
+	Change the columns	Změnit sloupce
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) se shoduje s {baseline} v rozmezí ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Ostatní porovnání neukazují rozdíl nad rámec náhody nebo jsou neprůkazná: viz tabulka níže.
+	About {n} runs would pin it to ± 5%.	Přibližně {n} běhů by to určilo na ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	Ustálené metriky: {k} z {m}; každá je známa s přesností ± 5% nebo lepší.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): každý běh dal stejnou hodnotu, což není důkaz, že se nikdy nemění.
+	Means, rounded to what the interval supports	Průměry zaokrouhlené podle intervalu
+	Each scenario against {baseline}	Každý scénář oproti {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Liší se: 95% interval nezahrnuje nulu nebo leží celý mimo toleranci. Shoduje se: leží celý v toleranci. Rozdíl nezjištěn: zahrnuje nulu, což není důkaz shody.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Porovnáno v párech, jak bylo uvedeno: StochCraft nemůže ověřit, že scénáře použily společná náhodná čísla; pokud ne, jsou tyto intervaly příliš úzké.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Každý scénář má stejná čísla běhů: pokud běhy použily společná náhodná čísla, zaškrtněte „párové“ pro mnohem přesnější porovnání.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 navrhuje zahřívání {time}: vynechte prvních {k} časových bodů.
+	Fewer than 20 times: too few to suggest a warm-up.	Méně než 20 časových bodů: příliš málo na návrh zahřívání.
+	The series is too short to show where the start-up ends: record longer runs.	Řada je příliš krátká, aby ukázala, kde končí náběh: zaznamenejte delší běhy.
+	Averaged over the runs at each time, with the warm-up cut marked	Průměr přes běhy v každém časovém bodě, s vyznačeným koncem zahřívání

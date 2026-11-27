@@ -1535,3 +1535,32 @@ connection	Flow	Akış
 	How often is one machine down, and how much work does that cost?	Bir makine ne sıklıkta duruyor ve bu ne kadar işe mal oluyor?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 saat çalışır, 4.5 saat durur: makine zamanın %95.2'sinde çalışır ve her 94.5 saatte bir arıza olur. Onarım süresini yarıya indirmek bunu %97.6'ya çıkarır.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} zamanın {down} kadarında duruyor (kullanılabilirlik {up}); onu bekleyen bir şey yok.
+	Analyse runs from another tool…	Başka bir araçtan gelen çalıştırmaları analiz et…
+	Runs from another tool	Başka bir araçtan gelen çalıştırmalar
+	What each column holds	Her sütunda ne var
+	The roles are guessed from the column names; change any that are wrong.	Roller sütun adlarından tahmin edildi; yanlış olanları değiştirin.
+	One row per run	Çalıştırma başına bir satır
+	One row per value	Değer başına bir satır
+	A time series	Bir zaman serisi
+	Scenario	Senaryo
+	Run number	Çalıştırma numarası
+	Measure name	Ölçüt adı
+	Not used	Kullanılmıyor
+	These scenarios used common random numbers (paired)	Bu senaryolar ortak rastgele sayılar kullandı (eşleştirilmiş)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft bunu sayılardan denetleyemez: yalnızca çalıştırmaları üreten araç her senaryonun i numaralı çalıştırmasına aynı rastgele sayıları verdiyse işaretleyin. Çalıştırmalar çalıştırma numaralarına göre eşleştirilir.
+	Show the answers	Yanıtları göster
+	Change the columns	Sütunları değiştir
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}), {baseline} ile ±{tolerance} içinde uyuşuyor.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Diğer karşılaştırmalar rastlantının ötesinde bir fark göstermiyor ya da sonuçsuz: aşağıdaki tabloya bakın.
+	About {n} runs would pin it to ± 5%.	Yaklaşık {n} çalıştırma bunu ± 5% kesinliğe getirir.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{m} ölçütten {k} tanesi oturdu: her biri ± 5% veya daha iyi kesinlikle biliniyor.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): her çalıştırma aynı değeri verdi; bu, değerin hiç değişmediğinin kanıtı değildir.
+	Means, rounded to what the interval supports	Ortalamalar, güven aralığına göre yuvarlanmış
+	Each scenario against {baseline}	Her senaryonun {baseline} ile karşılaştırması
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Ayrışıyor: %95 aralığı sıfırı dışarıda bırakıyor ya da tamamen toleransın dışında kalıyor. Uyuşuyor: aralık tamamen toleransın içinde. Fark saptanmadı: aralık sıfırı içeriyor; bu, uyuşmanın kanıtı değildir.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Belirtildiği gibi eşleştirilmiş olarak karşılaştırıldı: StochCraft senaryoların ortak rastgele sayılar kullandığını denetleyemez; kullanmadılarsa bu aralıklar olması gerekenden dardır.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Her senaryo aynı çalıştırma numaralarına sahip: çalıştırmalar ortak rastgele sayılar kullandıysa, çok daha dar bir karşılaştırma için “eşleştirilmiş” seçeneğini işaretleyin.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5, {time} ısınma öneriyor: ilk {k} zaman noktasını dışarıda bırakın.
+	Fewer than 20 times: too few to suggest a warm-up.	20'den az zaman noktası: ısınma önermek için çok az.
+	The series is too short to show where the start-up ends: record longer runs.	Seri, başlangıç döneminin nerede bittiğini gösteremeyecek kadar kısa: daha uzun çalıştırmalar kaydedin.
+	Averaged over the runs at each time, with the warm-up cut marked	Her zaman noktasında çalıştırmalar üzerinden ortalaması alınmış, ısınma kesimi işaretli

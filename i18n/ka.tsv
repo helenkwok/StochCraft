@@ -1535,3 +1535,32 @@ connection	Flow	ნაკადი
 	How often is one machine down, and how much work does that cost?	რა ხშირად ჩერდება ერთი მანქანა და რამდენი სამუშაო ღირს ეს?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	მუშაობს 90 საათი, დგას 4.5: მანქანა დროის 95.2%-ში მუშაობს და გაუმართაობა ყოველ 94.5 საათში ერთხელ ხდება. შეკეთების დროის განახევრება მას 97.6%-მდე ზრდის.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} დროის {down}-ში დგას (ხელმისაწვდომობა {up}); მას არაფერი ელოდება.
+	Analyse runs from another tool…	სხვა ხელსაწყოს გაშვებების ანალიზი…
+	Runs from another tool	სხვა ხელსაწყოს გაშვებები
+	What each column holds	რას შეიცავს თითოეული სვეტი
+	The roles are guessed from the column names; change any that are wrong.	როლები სვეტების სახელებიდან არის ნავარაუდევი; შეცვალეთ ის, რაც არასწორია.
+	One row per run	ერთი სტრიქონი თითო გაშვებაზე
+	One row per value	ერთი სტრიქონი თითო მნიშვნელობაზე
+	A time series	დროითი მწკრივი
+	Scenario	სცენარი
+	Run number	გაშვების ნომერი
+	Measure name	მაჩვენებლის სახელი
+	Not used	არ გამოიყენება
+	These scenarios used common random numbers (paired)	ამ სცენარებმა საერთო შემთხვევითი რიცხვები გამოიყენეს (წყვილური)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft-ს არ შეუძლია ამის შემოწმება რიცხვებიდან: მონიშნეთ მხოლოდ მაშინ, თუ გაშვებების შემქმნელმა ხელსაწყომ თითოეული სცენარის გაშვებას i ერთი და იგივე შემთხვევითი რიცხვები მისცა. გაშვებები წყვილდება მათი გაშვების ნომრით.
+	Show the answers	პასუხების ჩვენება
+	Change the columns	სვეტების შეცვლა
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) ემთხვევა {baseline}-ს ±{tolerance}-ის ფარგლებში.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	დანარჩენი შედარებები შემთხვევითობაზე მეტ სხვაობას არ აჩვენებს ან გაურკვეველია: იხილეთ ქვემოთ მოცემული ცხრილი.
+	About {n} runs would pin it to ± 5%.	დაახლოებით {n} გაშვება მას ± 5%-მდე დააზუსტებდა.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{m} მაჩვენებლიდან {k} სტაბილურია: თითოეული ცნობილია ± 5% ან უკეთესი სიზუსტით.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): ყველა გაშვებამ ერთი და იგივე მნიშვნელობა მისცა, რაც არ ამტკიცებს, რომ ის არასოდეს იცვლება.
+	Means, rounded to what the interval supports	საშუალოები, დამრგვალებული ინტერვალის მიხედვით
+	Each scenario against {baseline}	თითოეული სცენარი {baseline}-თან შედარებით
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	განსხვავდება: 95%-იანი ინტერვალი ნულს არ მოიცავს ან მთლიანად დასაშვები გადახრის მიღმაა. ემთხვევა: მთლიანად დასაშვები გადახრის ფარგლებშია. სხვაობა ვერ აღმოჩნდა: ნულს მოიცავს, რაც დამთხვევის მტკიცებულება არ არის.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	შედარებულია წყვილებად, როგორც მითითებულია: StochCraft-ს არ შეუძლია შეამოწმოს, გამოიყენეს თუ არა სცენარებმა საერთო შემთხვევითი რიცხვები; თუ არ გამოიყენეს, ეს ინტერვალები ზედმეტად ვიწროა.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	ყველა სცენარს ერთი და იგივე გაშვების ნომრები აქვს: თუ გაშვებებმა საერთო შემთხვევითი რიცხვები გამოიყენეს, მონიშნეთ „წყვილური“ ბევრად უფრო ზუსტი შედარებისთვის.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 გვთავაზობს {time} გახურების პერიოდს: გამოტოვეთ პირველი {k} დროის წერტილი.
+	Fewer than 20 times: too few to suggest a warm-up.	20-ზე ნაკლები დროის წერტილი: ძალიან ცოტაა გახურების პერიოდის შესათავაზებლად.
+	The series is too short to show where the start-up ends: record longer runs.	მწკრივი ძალიან მოკლეა იმის საჩვენებლად, სად მთავრდება საწყისი ეტაპი: ჩაწერეთ უფრო ხანგრძლივი გაშვებები.
+	Averaged over the runs at each time, with the warm-up cut marked	გაშვებების საშუალო თითოეულ დროის წერტილში, მონიშნული გახურების ზღვრით

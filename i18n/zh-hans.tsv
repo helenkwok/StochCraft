@@ -1535,3 +1535,32 @@ connection	Flow	顺序流
 	How often is one machine down, and how much work does that cost?	一台机器多久停机一次，这会损失多少工作？
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	运行 90 小时，停机 4.5 小时：机器 95.2% 的时间在工作，每 94.5 小时发生一次故障。修理时间减半，可用率升至 97.6%。
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} 有 {down} 的时间处于停机状态（可用率 {up}），没有任何东西在等待它。
+	Analyse runs from another tool…	分析来自其他工具的运行…
+	Runs from another tool	来自其他工具的运行
+	What each column holds	每列包含什么
+	The roles are guessed from the column names; change any that are wrong.	角色是根据列名猜测的；请更改任何错误的角色。
+	One row per run	每次运行一行
+	One row per value	每个值一行
+	A time series	时间序列
+	Scenario	场景
+	Run number	运行编号
+	Measure name	指标名称
+	Not used	未使用
+	These scenarios used common random numbers (paired)	这些场景使用了公共随机数（配对）
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft 无法从数字中核实这一点：仅当生成这些运行的工具为每个场景的第 i 次运行提供了相同的随机数时才勾选。运行按运行编号配对。
+	Show the answers	显示答案
+	Change the columns	更改列
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure}（{block}）与 {baseline} 在 ±{tolerance} 内一致。
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	其他比较未显示超出随机波动的差异，或无法判定：请查看下方的表格。
+	About {n} runs would pin it to ± 5%.	大约 {n} 次运行可将其精确到 ± 5%。
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{m} 个指标中有 {k} 个已稳定：每个都精确到 ± 5% 或更好。
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure}（{block}）：每次运行都得到相同的值，但这并不能证明它从不变化。
+	Means, rounded to what the interval supports	均值，按置信区间四舍五入
+	Each scenario against {baseline}	各场景与 {baseline} 的比较
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	不一致：95% 区间不含零，或完全位于容差之外。一致：区间完全位于容差之内。未检测到差异：区间包含零，这不能证明一致。
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	已按声明进行配对比较：StochCraft 无法核实各场景是否使用了公共随机数；如果没有，这些区间就过窄了。
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	每个场景的运行编号都相同：如果这些运行使用了公共随机数，请勾选“配对”，比较会精确得多。
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 建议预热期为 {time}：舍去前 {k} 个时间点。
+	Fewer than 20 times: too few to suggest a warm-up.	时间点少于 20 个：太少，无法建议预热期。
+	The series is too short to show where the start-up ends: record longer runs.	序列太短，无法显示启动阶段在何处结束：请记录更长的运行。
+	Averaged over the runs at each time, with the warm-up cut marked	在每个时间点上对各次运行取平均，并标出预热截断点

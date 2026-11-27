@@ -1535,3 +1535,32 @@ connection	Flow	Flux
 	How often is one machine down, and how much work does that cost?	Amb quina freqüència està aturada una màquina i quanta feina costa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	En marxa 90 hores, aturada 4.5: la màquina treballa el 95.2% del temps i hi ha una avaria cada 94.5 hores. Si es redueix a la meitat el temps de reparació, passa al 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} està aturat el {down} del temps (disponibilitat {up}); res no l'espera.
+	Analyse runs from another tool…	Analitza execucions d'un altre programa…
+	Runs from another tool	Execucions d'un altre programa
+	What each column holds	Què conté cada columna
+	The roles are guessed from the column names; change any that are wrong.	Els rols s'endevinen a partir dels noms de les columnes; canvieu els que siguin incorrectes.
+	One row per run	Una fila per execució
+	One row per value	Una fila per valor
+	A time series	Una sèrie temporal
+	Scenario	Escenari
+	Run number	Número d'execució
+	Measure name	Nom de la mètrica
+	Not used	No s'utilitza
+	These scenarios used common random numbers (paired)	Aquests escenaris van usar nombres aleatoris comuns (aparellats)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft no ho pot comprovar a partir dels números: marqueu-ho només si el programa que va fer les execucions va donar a l'execució i de cada escenari els mateixos nombres aleatoris. Les execucions s'aparellen pel seu número d'execució.
+	Show the answers	Mostra les respostes
+	Change the columns	Canvia les columnes
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) coincideix amb {baseline} dins de ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Les altres comparacions no mostren cap diferència més enllà de l'atzar, o no són concloents: vegeu la taula de sota.
+	About {n} runs would pin it to ± 5%.	Unes {n} execucions ho fixarien a ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} de {m} mètriques estan establertes: cadascuna es coneix a ± 5% o millor.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): cada execució va donar el mateix valor, cosa que no prova que no variï mai.
+	Means, rounded to what the interval supports	Mitjanes, arrodonides segons l'interval
+	Each scenario against {baseline}	Cada escenari respecte a {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Difereix: l'interval del 95% exclou el zero, o queda del tot fora de la tolerància. Coincideix: queda del tot dins de la tolerància. No s'ha detectat cap diferència: inclou el zero, cosa que no és cap prova de coincidència.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Comparat en parelles, tal com s'ha declarat: StochCraft no pot comprovar que els escenaris usessin nombres aleatoris comuns; si no ho van fer, aquests intervals són massa estrets.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Tots els escenaris tenen els mateixos números d'execució: si les execucions van usar nombres aleatoris comuns, marqueu «aparellats» per a una comparació molt més ajustada.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 suggereix un escalfament de {time}: deixeu fora els primers {k} instants.
+	Fewer than 20 times: too few to suggest a warm-up.	Menys de 20 instants: massa pocs per suggerir un escalfament.
+	The series is too short to show where the start-up ends: record longer runs.	La sèrie és massa curta per mostrar on acaba l'arrencada: registreu execucions més llargues.
+	Averaged over the runs at each time, with the warm-up cut marked	Mitjana de les execucions a cada instant, amb el tall de l'escalfament marcat

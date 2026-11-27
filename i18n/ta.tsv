@@ -1535,3 +1535,32 @@ connection	Flow	ஓட்டம்
 	How often is one machine down, and how much work does that cost?	ஒரு இயந்திரம் எவ்வளவு அடிக்கடி நின்றுவிடுகிறது, அதனால் எவ்வளவு வேலை இழப்பு?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 மணிநேரம் இயக்கம், 4.5 நிறுத்தம்: இயந்திரம் 95.2% நேரம் வேலை செய்கிறது, ஒவ்வொரு 94.5 மணிநேரத்திற்கும் ஒரு பழுது ஏற்படுகிறது. பழுதுபார்க்கும் நேரத்தை பாதியாக்கினால் அது 97.6% ஆகிறது.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} நேரம் நின்றிருக்கிறது (தயார்நிலை {up}); அதற்காக எதுவும் காத்திருக்கவில்லை.
+	Analyse runs from another tool…	மற்றொரு கருவியிலிருந்து வந்த மீள் இயக்கங்களைப் பகுப்பாய்வு செய்…
+	Runs from another tool	மற்றொரு கருவியிலிருந்து வந்த மீள் இயக்கங்கள்
+	What each column holds	ஒவ்வொரு நெடுவரிசையிலும் என்ன உள்ளது
+	The roles are guessed from the column names; change any that are wrong.	நெடுவரிசைப் பெயர்களிலிருந்து பங்குகள் ஊகிக்கப்படுகின்றன; தவறானவற்றை மாற்றவும்.
+	One row per run	ஒரு மீள் இயக்கத்திற்கு ஒரு வரிசை
+	One row per value	ஒரு மதிப்பிற்கு ஒரு வரிசை
+	A time series	ஒரு நேரத் தொடர்
+	Scenario	சூழ்நிலை
+	Run number	மீள் இயக்க எண்
+	Measure name	அளவீட்டின் பெயர்
+	Not used	பயன்படுத்தப்படவில்லை
+	These scenarios used common random numbers (paired)	இந்தச் சூழ்நிலைகள் பொதுவான சீரற்ற எண்களைப் பயன்படுத்தின (இணை)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft இதை எண்களிலிருந்து சரிபார்க்க முடியாது: மீள் இயக்கங்களை உருவாக்கிய கருவி ஒவ்வொரு சூழ்நிலையின் மீள் இயக்கம் i க்கும் அதே சீரற்ற எண்களைக் கொடுத்திருந்தால் மட்டுமே இதைத் தேர்வுசெய்யவும். மீள் இயக்கங்கள் அவற்றின் மீள் இயக்க எண்ணின்படி இணைக்கப்படுகின்றன.
+	Show the answers	விடைகளைக் காட்டு
+	Change the columns	நெடுவரிசைகளை மாற்று
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) {baseline} உடன் ±{tolerance} க்குள் பொருந்துகிறது.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	மற்ற ஒப்பீடுகள் தற்செயலுக்கு அப்பாற்பட்ட வேறுபாட்டைக் காட்டவில்லை, அல்லது தீர்மானிக்க இயலாதவை: கீழே உள்ள அட்டவணையைப் பார்க்கவும்.
+	About {n} runs would pin it to ± 5%.	சுமார் {n} மீள் இயக்கங்கள் இதை ± 5% துல்லியத்திற்குக் கொண்டுவரும்.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{m} அளவீடுகளில் {k} நிலைபெற்றுள்ளன: ஒவ்வொன்றும் ± 5% அல்லது அதைவிடச் சிறந்த துல்லியத்துடன் தெரியும்.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): ஒவ்வொரு மீள் இயக்கமும் ஒரே மதிப்பைத் தந்தது, ஆனால் அது ஒருபோதும் மாறாது என்பதற்கு இது சான்று அல்ல.
+	Means, rounded to what the interval supports	சராசரிகள், இடைவெளிக்கு ஏற்ப முழுமையாக்கப்பட்டவை
+	Each scenario against {baseline}	ஒவ்வொரு சூழ்நிலையும் {baseline} உடன் ஒப்பிடப்பட்டது
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	வேறுபடுகிறது: 95% இடைவெளி பூஜ்ஜியத்தை உள்ளடக்கவில்லை, அல்லது முழுவதும் சகிப்புக்கு வெளியே உள்ளது. பொருந்துகிறது: அது முழுவதும் சகிப்புக்குள் உள்ளது. வேறுபாடு கண்டறியப்படவில்லை: அது பூஜ்ஜியத்தை உள்ளடக்குகிறது, இது பொருத்தத்திற்கான சான்று அல்ல.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	அறிவித்தபடி இணையாக ஒப்பிடப்பட்டது: சூழ்நிலைகள் பொதுவான சீரற்ற எண்களைப் பயன்படுத்தினவா என்பதை StochCraft சரிபார்க்க முடியாது; பயன்படுத்தவில்லை என்றால், இந்த இடைவெளிகள் தேவைக்கு மேல் குறுகியவை.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	ஒவ்வொரு சூழ்நிலைக்கும் ஒரே மீள் இயக்க எண்கள் உள்ளன: மீள் இயக்கங்கள் பொதுவான சீரற்ற எண்களைப் பயன்படுத்தியிருந்தால், மிகவும் துல்லியமான ஒப்பீட்டிற்கு “இணை” என்பதைத் தேர்வுசெய்யவும்.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 {time} தொடக்கச் சீராக்க நேரத்தைப் பரிந்துரைக்கிறது: முதல் {k} நேரப் புள்ளிகளை விட்டுவிடவும்.
+	Fewer than 20 times: too few to suggest a warm-up.	20 க்கும் குறைவான நேரப் புள்ளிகள்: தொடக்கச் சீராக்க நேரத்தைப் பரிந்துரைக்க மிகக் குறைவு.
+	The series is too short to show where the start-up ends: record longer runs.	தொடக்க நிலை எங்கே முடிகிறது என்பதைக் காட்ட இந்தத் தொடர் மிகக் குறுகியது: நீண்ட மீள் இயக்கங்களைப் பதிவுசெய்யவும்.
+	Averaged over the runs at each time, with the warm-up cut marked	ஒவ்வொரு நேரத்திலும் மீள் இயக்கங்களின் சராசரி, தொடக்கச் சீராக்க வெட்டுப் புள்ளி குறிக்கப்பட்டுள்ளது

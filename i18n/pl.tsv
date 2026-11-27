@@ -1535,3 +1535,32 @@ connection	Flow	Przepływ
 	How often is one machine down, and how much work does that cost?	Jak często stoi jedna maszyna i ile pracy to kosztuje?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Pracuje 90 godzin, stoi 4.5: maszyna pracuje przez 95.2% czasu, a awaria zdarza się co 94.5 godziny. Dwa razy krótsza naprawa podnosi to do 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stoi przez {down} czasu (dostępność {up}); nic na nią nie czeka.
+	Analyse runs from another tool…	Analizuj uruchomienia z innego narzędzia…
+	Runs from another tool	Uruchomienia z innego narzędzia
+	What each column holds	Co zawiera każda kolumna
+	The roles are guessed from the column names; change any that are wrong.	Role odgadnięto z nazw kolumn; zmień te, które są błędne.
+	One row per run	Jeden wiersz na uruchomienie
+	One row per value	Jeden wiersz na wartość
+	A time series	Szereg czasowy
+	Scenario	Scenariusz
+	Run number	Numer uruchomienia
+	Measure name	Nazwa miary
+	Not used	Nieużywane
+	These scenarios used common random numbers (paired)	Te scenariusze używały wspólnych liczb losowych (parami)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft nie może tego sprawdzić na podstawie liczb: zaznacz to tylko wtedy, gdy narzędzie, które wykonało uruchomienia, dało uruchomieniu i każdego scenariusza te same liczby losowe. Uruchomienia są łączone w pary według numeru uruchomienia.
+	Show the answers	Pokaż odpowiedzi
+	Change the columns	Zmień kolumny
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) zgadza się z {baseline} w granicach ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Pozostałe porównania nie wykazują różnicy większej niż przypadkowa albo są nierozstrzygające: zob. tabelę poniżej.
+	About {n} runs would pin it to ± 5%.	Około {n} uruchomień ustaliłoby to z dokładnością ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} z {m} miar jest ustalonych: każda jest znana z dokładnością ± 5% lub lepszą.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): każde uruchomienie dało tę samą wartość, co nie dowodzi, że nigdy się ona nie zmienia.
+	Means, rounded to what the interval supports	Średnie, zaokrąglone według tego, na co pozwala przedział
+	Each scenario against {baseline}	Każdy scenariusz w porównaniu z {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Różni się: 95% przedział nie obejmuje zera albo leży w całości poza tolerancją. Zgadza się: leży w całości w granicach tolerancji. Nie wykryto różnicy: obejmuje zero, co nie jest dowodem zgodności.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Porównane parami, zgodnie z deklaracją: StochCraft nie może sprawdzić, czy scenariusze używały wspólnych liczb losowych; jeśli nie, te przedziały są zbyt wąskie.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Każdy scenariusz ma te same numery uruchomień: jeśli uruchomienia używały wspólnych liczb losowych, zaznacz „parami”, aby uzyskać znacznie dokładniejsze porównanie.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 sugeruje rozgrzewkę o długości {time}: pomiń pierwsze punkty czasowe (liczba: {k}).
+	Fewer than 20 times: too few to suggest a warm-up.	Mniej niż 20 punktów czasowych: za mało, by zaproponować rozgrzewkę.
+	The series is too short to show where the start-up ends: record longer runs.	Szereg jest za krótki, by pokazać, gdzie kończy się faza rozruchu: zapisz dłuższe uruchomienia.
+	Averaged over the runs at each time, with the warm-up cut marked	Średnia z uruchomień w każdym punkcie czasowym, z zaznaczonym końcem rozgrzewki

@@ -1535,3 +1535,32 @@ connection	Flow	প্রবাহ
 	How often is one machine down, and how much work does that cost?	একটি যন্ত্র কত ঘন ঘন বিকল থাকে, এবং তাতে কত কাজ নষ্ট হয়?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	৯০ ঘণ্টা চালু, ৪.৫ ঘণ্টা বন্ধ: যন্ত্রটি ৯৫.২% সময় কাজ করে এবং প্রতি ৯৪.৫ ঘণ্টায় একবার বিকল হয়। মেরামতের সময় অর্ধেক করলে তা ৯৭.৬% হয়।
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} সময় বন্ধ থাকে (প্রাপ্যতা {up}); এর জন্য কিছুই অপেক্ষা করে না।
+	Analyse runs from another tool…	অন্য প্রোগ্রামের পুনরাবৃত্তি বিশ্লেষণ করুন…
+	Runs from another tool	অন্য প্রোগ্রামের পুনরাবৃত্তি
+	What each column holds	প্রতিটি কলামে কী আছে
+	The roles are guessed from the column names; change any that are wrong.	কলামের নাম থেকে ভূমিকাগুলি অনুমান করা হয়েছে; যেগুলি ভুল সেগুলি পরিবর্তন করুন।
+	One row per run	প্রতি পুনরাবৃত্তিতে একটি সারি
+	One row per value	প্রতি মানে একটি সারি
+	A time series	একটি সময়-ধারা
+	Scenario	দৃশ্যকল্প
+	Run number	পুনরাবৃত্তি নম্বর
+	Measure name	পরিমাপকের নাম
+	Not used	ব্যবহৃত নয়
+	These scenarios used common random numbers (paired)	এই দৃশ্যকল্পগুলি অভিন্ন যদৃচ্ছ সংখ্যা ব্যবহার করেছে (জোড়াভিত্তিক)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft সংখ্যাগুলি থেকে এটি যাচাই করতে পারে না: কেবল তখনই এতে টিক দিন যদি পুনরাবৃত্তিগুলি তৈরি করা প্রোগ্রামটি প্রতিটি দৃশ্যকল্পের পুনরাবৃত্তি i-কে একই যদৃচ্ছ সংখ্যা দিয়ে থাকে। পুনরাবৃত্তিগুলি তাদের পুনরাবৃত্তি নম্বর অনুযায়ী জোড়া বাঁধা হয়।
+	Show the answers	উত্তরগুলি দেখান
+	Change the columns	কলামগুলি পরিবর্তন করুন
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) ±{tolerance}-এর মধ্যে {baseline}-এর সাথে মিলে যায়।
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	অন্যান্য তুলনাগুলি দৈবতার বাইরে কোনো পার্থক্য দেখায় না, অথবা অনির্ণায়ক: নিচের সারণিটি দেখুন।
+	About {n} runs would pin it to ± 5%.	প্রায় {n}টি পুনরাবৃত্তি এটিকে ± 5%-এর মধ্যে নির্ধারণ করবে।
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{m}টির মধ্যে {k}টি পরিমাপক নিষ্পন্ন: প্রতিটি ± 5% বা তার চেয়ে ভালো নির্ভুলতায় জানা।
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): প্রতিটি পুনরাবৃত্তি একই মান দিয়েছে, যা প্রমাণ করে না যে এটি কখনও বদলায় না।
+	Means, rounded to what the interval supports	গড়, ব্যবধান যতটা সমর্থন করে সেই অনুযায়ী আসন্নীকৃত
+	Each scenario against {baseline}	প্রতিটি দৃশ্যকল্প বনাম {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	মেলে না: 95% ব্যবধান শূন্যকে বাদ দেয়, অথবা পুরোপুরি সহনসীমার বাইরে থাকে। মিলে যায়: এটি পুরোপুরি সহনসীমার মধ্যে থাকে। কোনো পার্থক্য পাওয়া যায়নি: এতে শূন্য পড়ে, যা মিলের প্রমাণ নয়।
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	ঘোষণা অনুযায়ী জোড়ায় জোড়ায় তুলনা করা হয়েছে: দৃশ্যকল্পগুলি অভিন্ন যদৃচ্ছ সংখ্যা ব্যবহার করেছে কি না StochCraft তা যাচাই করতে পারে না; যদি না করে থাকে, তবে এই ব্যবধানগুলি অতিরিক্ত সরু।
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	প্রতিটি দৃশ্যকল্পের পুনরাবৃত্তি নম্বর একই: যদি পুনরাবৃত্তিগুলি অভিন্ন যদৃচ্ছ সংখ্যা ব্যবহার করে থাকে, তবে অনেক বেশি নিখুঁত তুলনার জন্য ‘জোড়াভিত্তিক’-এ টিক দিন।
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 {time} প্রাথমিক প্রস্তুতিকাল প্রস্তাব করে: প্রথম {k}টি সময়বিন্দু বাদ দিন।
+	Fewer than 20 times: too few to suggest a warm-up.	20টির কম সময়বিন্দু: প্রাথমিক প্রস্তুতিকাল প্রস্তাব করার জন্য খুব কম।
+	The series is too short to show where the start-up ends: record longer runs.	সময়-ধারাটি এত ছোট যে প্রারম্ভিক পর্যায় কোথায় শেষ হয় তা দেখানো যায় না: দীর্ঘতর পুনরাবৃত্তি রেকর্ড করুন।
+	Averaged over the runs at each time, with the warm-up cut marked	প্রতিটি সময়বিন্দুতে পুনরাবৃত্তিগুলির গড়, প্রাথমিক প্রস্তুতিকালের সীমা চিহ্নিত

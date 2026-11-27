@@ -1535,3 +1535,32 @@ connection	Flow	Tok
 	How often is one machine down, and how much work does that cost?	Kako pogosto stoji en stroj in koliko dela to stane?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Dela 90 ur, stoji 4.5: stroj dela 95.2 % časa, okvara pa nastopi vsakih 94.5 ure. Pol krajše popravilo to dvigne na 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stoji {down} časa (razpoložljivost {up}); nič ne čaka nanj.
+	Analyse runs from another tool…	Analiziraj zagone iz drugega orodja…
+	Runs from another tool	Zagoni iz drugega orodja
+	What each column holds	Kaj vsebuje vsak stolpec
+	The roles are guessed from the column names; change any that are wrong.	Vloge so ocenjene po imenih stolpcev; spremenite tiste, ki so napačne.
+	One row per run	Ena vrstica na zagon
+	One row per value	Ena vrstica na vrednost
+	A time series	Časovna vrsta
+	Scenario	Scenarij
+	Run number	Številka zagona
+	Measure name	Ime kazalnika
+	Not used	Ni uporabljeno
+	These scenarios used common random numbers (paired)	Ti scenariji so uporabili skupna naključna števila (v parih)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft tega ne more preveriti iz številk: označite le, če je orodje, ki je ustvarilo zagone, zagonu i vsakega scenarija dalo enaka naključna števila. Zagoni so združeni v pare po številki zagona.
+	Show the answers	Prikaži odgovore
+	Change the columns	Spremeni stolpce
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) se ujema z {baseline} v mejah ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Druge primerjave ne kažejo razlike, večje od naključja, ali pa so neodločljive: glejte tabelo spodaj.
+	About {n} runs would pin it to ± 5%.	Približno {n} zagonov bi ga določilo na ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} od {m} kazalnikov je ustaljenih: vsak je znan na ± 5% ali bolje.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): vsak zagon je dal enako vrednost, kar ni dokaz, da se nikoli ne spreminja.
+	Means, rounded to what the interval supports	Povprečja, zaokrožena glede na to, kar dopušča interval
+	Each scenario against {baseline}	Vsak scenarij v primerjavi z {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Se razlikuje: 95 % interval ne vsebuje ničle ali pa leži v celoti zunaj tolerance. Se ujema: leži v celoti znotraj tolerance. Razlika ni zaznana: vsebuje ničlo, kar ni dokaz ujemanja.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Primerjano v parih, kot je navedeno: StochCraft ne more preveriti, ali so scenariji uporabili skupna naključna števila; če jih niso, so ti intervali preozki.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Vsi scenariji imajo enake številke zagonov: če so zagoni uporabili skupna naključna števila, označite »v parih« za veliko natančnejšo primerjavo.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 predlaga ogrevanje {time}: izpustite začetne časovne točke (število: {k}).
+	Fewer than 20 times: too few to suggest a warm-up.	Manj kot 20 časovnih točk: premalo za predlog ogrevanja.
+	The series is too short to show where the start-up ends: record longer runs.	Vrsta je prekratka, da bi pokazala, kje se konča začetno obdobje: zabeležite daljše zagone.
+	Averaged over the runs at each time, with the warm-up cut marked	Povprečje zagonov v vsaki časovni točki, z označeno mejo ogrevanja

@@ -1535,3 +1535,32 @@ connection	Flow	Flyt
 	How often is one machine down, and how much work does that cost?	Hvor ofte står én maskin stille, og hvor mye arbeid koster det?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Går 90 timer, står stille 4.5: maskinen arbeider 95.2 % av tiden, og en feil inntreffer hver 94.5. time. Halveres reparasjonstiden, stiger det til 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} står stille {down} av tiden (oppetid {up}); ingenting venter på den.
+	Analyse runs from another tool…	Analyser kjøringer fra et annet verktøy…
+	Runs from another tool	Kjøringer fra et annet verktøy
+	What each column holds	Hva hver kolonne inneholder
+	The roles are guessed from the column names; change any that are wrong.	Rollene er gjettet ut fra kolonnenavnene; endre dem som er feil.
+	One row per run	Én rad per kjøring
+	One row per value	Én rad per verdi
+	A time series	En tidsserie
+	Scenario	Scenario
+	Run number	Kjøringsnummer
+	Measure name	Navn på måltall
+	Not used	Ikke brukt
+	These scenarios used common random numbers (paired)	Disse scenarioene brukte felles tilfeldige tall (parvis)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft kan ikke kontrollere dette ut fra tallene: kryss av bare hvis verktøyet som laget kjøringene, ga kjøring i i hvert scenario de samme tilfeldige tallene. Kjøringene pares etter kjøringsnummeret.
+	Show the answers	Vis svarene
+	Change the columns	Endre kolonnene
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) stemmer med {baseline} innenfor ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	De andre sammenligningene viser ingen forskjell utover tilfeldigheter, eller er ikke avgjørende: se tabellen nedenfor.
+	About {n} runs would pin it to ± 5%.	Omtrent {n} kjøringer ville fastslå det med ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} av {m} måltall er stabile: hvert er kjent med ± 5% eller bedre.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): hver kjøring ga samme verdi, noe som ikke beviser at den aldri varierer.
+	Means, rounded to what the interval supports	Gjennomsnitt, avrundet etter det intervallet støtter
+	Each scenario against {baseline}	Hvert scenario mot {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Avviker: 95 %-intervallet utelukker null, eller ligger helt utenfor toleransen. Stemmer: det ligger helt innenfor toleransen. Ingen forskjell påvist: det omfatter null, noe som ikke er bevis for samsvar.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Sammenlignet parvis, som angitt: StochCraft kan ikke kontrollere at scenarioene brukte felles tilfeldige tall; hvis de ikke gjorde det, er disse intervallene for smale.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Alle scenarioene har de samme kjøringsnumrene: hvis kjøringene brukte felles tilfeldige tall, kryss av for «parvis» for en mye skarpere sammenligning.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 foreslår en oppvarming på {time}: utelat de første {k} tidspunktene.
+	Fewer than 20 times: too few to suggest a warm-up.	Færre enn 20 tidspunkter: for få til å foreslå en oppvarming.
+	The series is too short to show where the start-up ends: record longer runs.	Serien er for kort til å vise hvor oppstarten slutter: registrer lengre kjøringer.
+	Averaged over the runs at each time, with the warm-up cut marked	Gjennomsnitt over kjøringene ved hvert tidspunkt, med slutten på oppvarmingen markert

@@ -1535,3 +1535,32 @@ connection	Flow	Verbindung
 	How often is one machine down, and how much work does that cost?	Wie oft steht eine Maschine still, und wie viel Arbeit kostet das?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 Stunden in Betrieb, 4.5 Stunden still: Die Maschine arbeitet 95.2 % der Zeit, und alle 94.5 Stunden tritt ein Ausfall auf. Halbiert man die Reparaturzeit, steigt der Wert auf 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} steht {down} der Zeit still (Verfügbarkeit {up}); nichts wartet auf sie.
+	Analyse runs from another tool…	Läufe aus einem anderen Programm analysieren…
+	Runs from another tool	Läufe aus einem anderen Programm
+	What each column holds	Was jede Spalte enthält
+	The roles are guessed from the column names; change any that are wrong.	Die Rollen werden aus den Spaltennamen erraten; ändern Sie alle, die falsch sind.
+	One row per run	Eine Zeile je Lauf
+	One row per value	Eine Zeile je Wert
+	A time series	Eine Zeitreihe
+	Scenario	Szenario
+	Run number	Laufnummer
+	Measure name	Name der Kennzahl
+	Not used	Nicht verwendet
+	These scenarios used common random numbers (paired)	Diese Szenarien verwendeten gemeinsame Zufallszahlen (gepaart)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft kann das nicht anhand der Zahlen prüfen: Kreuzen Sie es nur an, wenn das Programm, das die Läufe erzeugt hat, Lauf i jedes Szenarios dieselben Zufallszahlen gegeben hat. Läufe werden über ihre Laufnummer gepaart.
+	Show the answers	Antworten anzeigen
+	Change the columns	Spalten ändern
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) stimmt mit {baseline} innerhalb ±{tolerance} überein.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Die anderen Vergleiche zeigen keinen Unterschied über den Zufall hinaus oder sind nicht entscheidbar: siehe Tabelle unten.
+	About {n} runs would pin it to ± 5%.	Etwa {n} Läufe würden es auf ± 5% genau festlegen.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} von {m} Kennzahlen stehen fest: Jede ist auf ± 5% oder genauer bekannt.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): Jeder Lauf ergab denselben Wert, was kein Beweis dafür ist, dass er nie schwankt.
+	Means, rounded to what the interval supports	Mittelwerte, gerundet nach dem Intervall
+	Each scenario against {baseline}	Jedes Szenario gegenüber {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Weicht ab: Das 95%-Intervall schließt die Null aus oder liegt ganz außerhalb der Toleranz. Stimmt überein: Es liegt ganz innerhalb der Toleranz. Kein Unterschied festgestellt: Es schließt die Null ein, was kein Beleg für Übereinstimmung ist.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Paarweise verglichen, wie angegeben: StochCraft kann nicht prüfen, ob die Szenarien gemeinsame Zufallszahlen verwendet haben; falls nicht, sind diese Intervalle zu schmal.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Jedes Szenario hat dieselben Laufnummern: Wenn die Läufe gemeinsame Zufallszahlen verwendet haben, kreuzen Sie „gepaart“ an, um einen viel genaueren Vergleich zu erhalten.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 schlägt eine Einschwingphase von {time} vor: Lassen Sie die ersten {k} Zeitpunkte weg.
+	Fewer than 20 times: too few to suggest a warm-up.	Weniger als 20 Zeitpunkte: zu wenige, um eine Einschwingphase vorzuschlagen.
+	The series is too short to show where the start-up ends: record longer runs.	Die Reihe ist zu kurz, um zu zeigen, wo die Anlaufphase endet: Zeichnen Sie längere Läufe auf.
+	Averaged over the runs at each time, with the warm-up cut marked	Über die Läufe zu jedem Zeitpunkt gemittelt, mit markiertem Ende der Einschwingphase

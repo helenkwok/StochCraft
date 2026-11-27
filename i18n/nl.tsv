@@ -1535,3 +1535,32 @@ connection	Flow	Stroom
 	How often is one machine down, and how much work does that cost?	Hoe vaak staat één machine stil, en hoeveel werk kost dat?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 uur in bedrijf, 4.5 uur stil: de machine werkt 95.2% van de tijd en elke 94.5 uur treedt een storing op. Een gehalveerde reparatietijd tilt dat naar 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} staat {down} van de tijd stil (beschikbaarheid {up}); er wacht niets op.
+	Analyse runs from another tool…	Uitvoeringen uit een ander programma analyseren…
+	Runs from another tool	Uitvoeringen uit een ander programma
+	What each column holds	Wat elke kolom bevat
+	The roles are guessed from the column names; change any that are wrong.	De rollen zijn afgeleid uit de kolomnamen; wijzig de rollen die niet kloppen.
+	One row per run	Eén rij per uitvoering
+	One row per value	Eén rij per waarde
+	A time series	Een tijdreeks
+	Scenario	Scenario
+	Run number	Uitvoeringsnummer
+	Measure name	Naam van de metriek
+	Not used	Niet gebruikt
+	These scenarios used common random numbers (paired)	Deze scenario's gebruikten gemeenschappelijke toevalsgetallen (gepaard)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft kan dit niet uit de getallen controleren: vink het alleen aan als het programma dat de uitvoeringen maakte, uitvoering i van elk scenario dezelfde toevalsgetallen gaf. Uitvoeringen worden gepaard op hun uitvoeringsnummer.
+	Show the answers	Toon de antwoorden
+	Change the columns	Wijzig de kolommen
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) komt overeen met {baseline} binnen ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	De andere vergelijkingen tonen geen verschil dat groter is dan toeval, of zijn niet doorslaggevend: zie de tabel hieronder.
+	About {n} runs would pin it to ± 5%.	Ongeveer {n} uitvoeringen zouden het vastleggen tot op ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} van {m} metrieken zijn stabiel: elk is bekend tot op ± 5% of beter.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): elke uitvoering gaf dezelfde waarde, wat geen bewijs is dat die nooit varieert.
+	Means, rounded to what the interval supports	Gemiddelden, afgerond naar wat het interval toelaat
+	Each scenario against {baseline}	Elk scenario tegenover {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Wijkt af: het 95%-interval sluit nul uit, of ligt geheel buiten de tolerantie. Komt overeen: het ligt geheel binnen de tolerantie. Geen verschil aangetoond: het omvat nul, wat geen bewijs van overeenstemming is.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Gepaard vergeleken, zoals opgegeven: StochCraft kan niet controleren of de scenario's gemeenschappelijke toevalsgetallen gebruikten; als dat niet zo was, zijn deze intervallen te smal.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Elk scenario heeft dezelfde uitvoeringsnummers: als de uitvoeringen gemeenschappelijke toevalsgetallen gebruikten, vink dan ‘gepaard’ aan voor een veel nauwkeurigere vergelijking.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 stelt een opwarmperiode van {time} voor: laat de eerste {k} tijdstippen weg.
+	Fewer than 20 times: too few to suggest a warm-up.	Minder dan 20 tijdstippen: te weinig om een opwarmperiode voor te stellen.
+	The series is too short to show where the start-up ends: record longer runs.	De reeks is te kort om te tonen waar de opstartfase eindigt: registreer langere uitvoeringen.
+	Averaged over the runs at each time, with the warm-up cut marked	Gemiddeld over de uitvoeringen op elk tijdstip, met de grens van de opwarmperiode gemarkeerd

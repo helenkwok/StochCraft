@@ -1535,3 +1535,32 @@ connection	Flow	Flux
 	How often is one machine down, and how much work does that cost?	Cât de des stă o mașină și cât de multă muncă costă asta?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Funcționează 90 de ore, stă 4.5: mașina lucrează 95.2% din timp, iar o defecțiune apare la fiecare 94.5 ore. Reducerea la jumătate a timpului de reparație urcă valoarea la 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stă {down} din timp (disponibilitate {up}); nimic nu o așteaptă.
+	Analyse runs from another tool…	Analizează rulări din alt instrument…
+	Runs from another tool	Rulări din alt instrument
+	What each column holds	Ce conține fiecare coloană
+	The roles are guessed from the column names; change any that are wrong.	Rolurile sunt deduse din numele coloanelor; modificați-le pe cele greșite.
+	One row per run	Un rând pe rulare
+	One row per value	Un rând pe valoare
+	A time series	O serie de timp
+	Scenario	Scenariu
+	Run number	Numărul rulării
+	Measure name	Numele indicatorului
+	Not used	Nefolosit
+	These scenarios used common random numbers (paired)	Aceste scenarii au folosit numere aleatoare comune (pe perechi)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft nu poate verifica acest lucru din numere: bifați doar dacă instrumentul care a făcut rulările a dat rulării i din fiecare scenariu aceleași numere aleatoare. Rulările sunt împerecheate după numărul rulării.
+	Show the answers	Arată răspunsurile
+	Change the columns	Schimbă coloanele
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) concordă cu {baseline} în limita ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Celelalte comparații nu arată nicio diferență peste ce ar explica întâmplarea sau sunt neconcludente: vezi tabelul de mai jos.
+	About {n} runs would pin it to ± 5%.	Aproximativ {n} rulări l-ar stabili la ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} din {m} indicatori sunt stabili: fiecare este cunoscut cu ± 5% sau mai bine.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): fiecare rulare a dat aceeași valoare, ceea ce nu dovedește că nu variază niciodată.
+	Means, rounded to what the interval supports	Medii, rotunjite după cât permite intervalul
+	Each scenario against {baseline}	Fiecare scenariu față de {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Diferă: intervalul de 95% exclude zero sau se află în întregime în afara toleranței. Concordă: se află în întregime în limita toleranței. Nicio diferență detectată: include zero, ceea ce nu este o dovadă de concordanță.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Comparate pe perechi, așa cum s-a declarat: StochCraft nu poate verifica dacă scenariile au folosit numere aleatoare comune; dacă nu, aceste intervale sunt prea înguste.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Toate scenariile au aceleași numere de rulare: dacă rulările au folosit numere aleatoare comune, bifați „pe perechi” pentru o comparație mult mai strânsă.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 sugerează o perioadă de încălzire de {time}: omiteți primele {k} momente.
+	Fewer than 20 times: too few to suggest a warm-up.	Mai puțin de 20 de momente: prea puține pentru a sugera o perioadă de încălzire.
+	The series is too short to show where the start-up ends: record longer runs.	Seria este prea scurtă pentru a arăta unde se termină pornirea: înregistrați rulări mai lungi.
+	Averaged over the runs at each time, with the warm-up cut marked	Media rulărilor la fiecare moment, cu sfârșitul perioadei de încălzire marcat

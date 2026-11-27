@@ -1535,3 +1535,32 @@ connection	Flow	Alur
 	How often is one machine down, and how much work does that cost?	Seberapa sering satu mesin berhenti, dan berapa banyak pekerjaan yang hilang karenanya?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Hidup 90 jam, mati 4.5 jam: mesin bekerja 95.2% dari waktu dan kerusakan terjadi setiap 94.5 jam. Memangkas waktu perbaikan setengahnya menaikkan angka itu menjadi 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} berhenti {down} dari waktu (ketersediaan {up}); tidak ada yang menunggunya.
+	Analyse runs from another tool…	Analisis eksekusi dari alat lain…
+	Runs from another tool	Eksekusi dari alat lain
+	What each column holds	Isi setiap kolom
+	The roles are guessed from the column names; change any that are wrong.	Peran ditebak dari nama kolom; ubah yang salah.
+	One row per run	Satu baris per eksekusi
+	One row per value	Satu baris per nilai
+	A time series	Deret waktu
+	Scenario	Skenario
+	Run number	Nomor eksekusi
+	Measure name	Nama metrik
+	Not used	Tidak dipakai
+	These scenarios used common random numbers (paired)	Skenario-skenario ini memakai bilangan acak bersama (berpasangan)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft tidak dapat memeriksa ini dari angkanya: centang hanya jika alat yang membuat eksekusi memberi bilangan acak yang sama pada eksekusi ke-i dari setiap skenario. Eksekusi dipasangkan menurut nomor eksekusinya.
+	Show the answers	Tampilkan jawaban
+	Change the columns	Ubah kolom
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) sesuai dengan {baseline} dalam ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Perbandingan lainnya tidak menunjukkan perbedaan di luar kebetulan, atau belum meyakinkan: lihat tabel di bawah.
+	About {n} runs would pin it to ± 5%.	Sekitar {n} eksekusi akan mempersempitnya hingga ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} dari {m} metrik sudah stabil: masing-masing diketahui hingga ± 5% atau lebih baik.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): setiap eksekusi memberi nilai yang sama, yang bukan bukti bahwa nilainya tidak pernah berubah.
+	Means, rounded to what the interval supports	Rata-rata, dibulatkan sesuai interval
+	Each scenario against {baseline}	Setiap skenario dibandingkan dengan {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Berbeda: interval 95% tidak mencakup nol, atau sepenuhnya di luar toleransi. Sesuai: interval sepenuhnya di dalam toleransi. Tidak ada perbedaan terdeteksi: interval mencakup nol, yang bukan bukti kesesuaian.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Dibandingkan berpasangan, sesuai yang dinyatakan: StochCraft tidak dapat memeriksa apakah skenario memakai bilangan acak bersama; jika tidak, interval ini terlalu sempit.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Setiap skenario memiliki nomor eksekusi yang sama: jika eksekusi memakai bilangan acak bersama, centang "berpasangan" untuk perbandingan yang jauh lebih ketat.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 menyarankan pemanasan {time}: abaikan {k} titik waktu pertama.
+	Fewer than 20 times: too few to suggest a warm-up.	Kurang dari 20 titik waktu: terlalu sedikit untuk menyarankan pemanasan.
+	The series is too short to show where the start-up ends: record longer runs.	Deret terlalu pendek untuk menunjukkan di mana fase awal berakhir: rekam eksekusi yang lebih panjang.
+	Averaged over the runs at each time, with the warm-up cut marked	Rata-rata atas eksekusi pada setiap titik waktu, dengan batas pemanasan ditandai

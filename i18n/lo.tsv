@@ -1535,3 +1535,32 @@ connection	Flow	ເສັ້ນທາງ
 	How often is one machine down, and how much work does that cost?	ເຄື່ອງຈັກໜຶ່ງເຄື່ອງຢຸດເລື້ອຍປານໃດ ແລະ ເສຍງານຫຼາຍປານໃດ?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	ເຮັດວຽກ 90 ຊົ່ວໂມງ, ຢຸດ 4.5: ເຄື່ອງຈັກເຮັດວຽກ 95.2% ຂອງເວລາ ແລະ ເກີດເສຍທຸກ 94.5 ຊົ່ວໂມງ. ຖ້າເວລາສ້ອມຫຼຸດເຫຼືອເຄິ່ງໜຶ່ງ ຈະເພີ່ມເປັນ 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} ຢຸດ {down} ຂອງເວລາ (ຄວາມພ້ອມໃຊ້ງານ {up}); ບໍ່ມີຫຍັງລໍຖ້າມັນ.
+	Analyse runs from another tool…	ວິເຄາະຮອບຈຳລອງຈາກເຄື່ອງມືອື່ນ…
+	Runs from another tool	ຮອບຈຳລອງຈາກເຄື່ອງມືອື່ນ
+	What each column holds	ແຕ່ລະຖັນມີຫຍັງ
+	The roles are guessed from the column names; change any that are wrong.	ບົດບາດຖືກເດົາຈາກຊື່ຖັນ; ໃຫ້ປ່ຽນອັນທີ່ບໍ່ຖືກຕ້ອງ.
+	One row per run	ໜຶ່ງແຖວຕໍ່ຮອບ
+	One row per value	ໜຶ່ງແຖວຕໍ່ຄ່າ
+	A time series	ອະນຸກົມເວລາ
+	Scenario	ສະຖານະການ
+	Run number	ເລກຮອບ
+	Measure name	ຊື່ຕົວຊີ້ວັດ
+	Not used	ບໍ່ໃຊ້
+	These scenarios used common random numbers (paired)	ສະຖານະການເຫຼົ່ານີ້ໃຊ້ເລກສຸ່ມຮ່ວມກັນ (ຈັບຄູ່)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft ບໍ່ສາມາດກວດສອບເລື່ອງນີ້ຈາກຕົວເລກໄດ້: ໝາຍຕິກສະເພາະເມື່ອເຄື່ອງມືທີ່ສ້າງຮອບຈຳລອງໄດ້ໃຫ້ເລກສຸ່ມດຽວກັນແກ່ຮອບທີ i ຂອງທຸກສະຖານະການ. ຮອບຈຳລອງຖືກຈັບຄູ່ຕາມເລກຮອບ.
+	Show the answers	ສະແດງຄຳຕອບ
+	Change the columns	ປ່ຽນຖັນ
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) ກົງກັບ {baseline} ພາຍໃນ ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	ການປຽບທຽບອື່ນໆບໍ່ສະແດງຄວາມແຕກຕ່າງເກີນຄວາມບັງເອີນ ຫຼື ບໍ່ສາມາດສະຫຼຸບໄດ້: ເບິ່ງຕາຕະລາງດ້ານລຸ່ມ.
+	About {n} runs would pin it to ± 5%.	ປະມານ {n} ຮອບຈະກຳນົດມັນໄດ້ພາຍໃນ ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	ຕົວຊີ້ວັດ {k} ຈາກ {m} ຄົງທີ່ແລ້ວ: ແຕ່ລະອັນຮູ້ໄດ້ພາຍໃນ ± 5% ຫຼື ດີກວ່າ.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): ທຸກຮອບໃຫ້ຄ່າດຽວກັນ, ເຊິ່ງບໍ່ແມ່ນຫຼັກຖານວ່າມັນບໍ່ເຄີຍປ່ຽນແປງ.
+	Means, rounded to what the interval supports	ຄ່າສະເລ່ຍ, ປັດເສດຕາມທີ່ຊ່ວງຄວາມເຊື່ອໝັ້ນຮອງຮັບ
+	Each scenario against {baseline}	ແຕ່ລະສະຖານະການທຽບກັບ {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	ແຕກຕ່າງ: ຊ່ວງ 95% ບໍ່ລວມສູນ ຫຼື ຢູ່ນອກຄ່າຍອມຮັບທັງໝົດ. ກົງກັນ: ມັນຢູ່ພາຍໃນຄ່າຍອມຮັບທັງໝົດ. ບໍ່ພົບຄວາມແຕກຕ່າງ: ມັນລວມສູນ, ເຊິ່ງບໍ່ແມ່ນຫຼັກຖານຂອງການກົງກັນ.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	ປຽບທຽບແບບຈັບຄູ່ຕາມທີ່ລະບຸ: StochCraft ບໍ່ສາມາດກວດສອບວ່າສະຖານະການເຫຼົ່ານີ້ໃຊ້ເລກສຸ່ມຮ່ວມກັນແທ້ຫຼືບໍ່; ຖ້າບໍ່ແມ່ນ, ຊ່ວງເຫຼົ່ານີ້ແຄບເກີນໄປ.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	ທຸກສະຖານະການມີເລກຮອບດຽວກັນ: ຖ້າຮອບຈຳລອງໃຊ້ເລກສຸ່ມຮ່ວມກັນ, ໃຫ້ໝາຍຕິກ "ຈັບຄູ່" ເພື່ອການປຽບທຽບທີ່ແນ່ນອນກວ່າຫຼາຍ.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 ແນະນຳໄລຍະອຸ່ນເຄື່ອງ {time}: ຕັດ {k} ຈຸດເວລາທຳອິດອອກ.
+	Fewer than 20 times: too few to suggest a warm-up.	ໜ້ອຍກວ່າ 20 ຈຸດເວລາ: ໜ້ອຍເກີນໄປທີ່ຈະແນະນຳໄລຍະອຸ່ນເຄື່ອງ.
+	The series is too short to show where the start-up ends: record longer runs.	ອະນຸກົມສັ້ນເກີນໄປທີ່ຈະສະແດງວ່າຊ່ວງເລີ່ມຕົ້ນສິ້ນສຸດຢູ່ໃສ: ໃຫ້ບັນທຶກຮອບຈຳລອງທີ່ຍາວກວ່າ.
+	Averaged over the runs at each time, with the warm-up cut marked	ສະເລ່ຍຂ້າມຮອບຈຳລອງໃນແຕ່ລະຈຸດເວລາ, ພ້ອມໝາຍຈຸດຕັດໄລຍະອຸ່ນເຄື່ອງ

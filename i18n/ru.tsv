@@ -1535,3 +1535,32 @@ connection	Flow	Поток
 	How often is one machine down, and how much work does that cost?	Как часто простаивает один станок и сколько работы это стоит?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Работает 90 часов, простаивает 4.5: станок работает 95.2% времени, а поломка случается каждые 94.5 часа. Если ремонт вдвое короче, показатель растёт до 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} простаивает {down} времени (готовность {up}); ничто его не ждёт.
+	Analyse runs from another tool…	Анализ запусков из другой программы…
+	Runs from another tool	Запуски из другой программы
+	What each column holds	Что содержит каждый столбец
+	The roles are guessed from the column names; change any that are wrong.	Роли определены по названиям столбцов; исправьте неверные.
+	One row per run	Одна строка на запуск
+	One row per value	Одна строка на значение
+	A time series	Временной ряд
+	Scenario	Сценарий
+	Run number	Номер запуска
+	Measure name	Название показателя
+	Not used	Не используется
+	These scenarios used common random numbers (paired)	В этих сценариях использовались общие случайные числа (парное сравнение)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft не может проверить это по числам: отмечайте, только если программа, выполнившая запуски, дала запуску i каждого сценария одни и те же случайные числа. Запуски объединяются в пары по номеру запуска.
+	Show the answers	Показать ответы
+	Change the columns	Изменить столбцы
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) совпадает с {baseline} в пределах ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Остальные сравнения не показывают различий сверх случайных или неопределённы: см. таблицу ниже.
+	About {n} runs would pin it to ± 5%.	Примерно {n} запусков дали бы точность ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} из {m} показателей установились: каждый известен с точностью ± 5% или лучше.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): каждый запуск дал одно и то же значение, но это не доказывает, что оно никогда не меняется.
+	Means, rounded to what the interval supports	Средние, округлённые до точности, которую допускает интервал
+	Each scenario against {baseline}	Каждый сценарий в сравнении с {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Отличается: 95% интервал не включает ноль или целиком лежит вне допуска. Совпадает: он целиком лежит в пределах допуска. Различие не обнаружено: он включает ноль, что не является доказательством совпадения.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Сравнение по парам, как указано: StochCraft не может проверить, использовались ли в сценариях общие случайные числа; если нет, эти интервалы слишком узкие.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	У всех сценариев одинаковые номера запусков: если в запусках использовались общие случайные числа, отметьте «парное сравнение» — результат будет гораздо точнее.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 предлагает разогрев {time}: отбросьте начальные моменты времени ({k}).
+	Fewer than 20 times: too few to suggest a warm-up.	Меньше 20 моментов времени: слишком мало, чтобы предложить разогрев.
+	The series is too short to show where the start-up ends: record longer runs.	Ряд слишком короткий, чтобы показать, где заканчивается начальный период: запишите более длинные запуски.
+	Averaged over the runs at each time, with the warm-up cut marked	Среднее по запускам в каждый момент времени, с отмеченной границей разогрева

@@ -1535,3 +1535,32 @@ connection	Flow	โฟลว์
 	How often is one machine down, and how much work does that cost?	เครื่องจักรหนึ่งเครื่องหยุดบ่อยแค่ไหน และทำให้เสียงานไปเท่าใด
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	ทำงาน 90 ชั่วโมง หยุด 4.5 ชั่วโมง: เครื่องทำงาน 95.2% ของเวลา และเกิดเหตุขัดข้องทุก 94.5 ชั่วโมง ถ้าลดเวลาซ่อมลงครึ่งหนึ่ง จะเพิ่มเป็น 97.6%
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} หยุด {down} ของเวลา (ความพร้อมใช้งาน {up}) และไม่มีอะไรรออยู่
+	Analyse runs from another tool…	วิเคราะห์การรันจากเครื่องมืออื่น…
+	Runs from another tool	การรันจากเครื่องมืออื่น
+	What each column holds	แต่ละคอลัมน์เก็บข้อมูลอะไร
+	The roles are guessed from the column names; change any that are wrong.	บทบาทถูกคาดเดาจากชื่อคอลัมน์ เปลี่ยนบทบาทที่ไม่ถูกต้องได้
+	One row per run	หนึ่งแถวต่อการรันหนึ่งรอบ
+	One row per value	หนึ่งแถวต่อหนึ่งค่า
+	A time series	อนุกรมเวลา
+	Scenario	สถานการณ์
+	Run number	หมายเลขรอบ
+	Measure name	ชื่อตัวชี้วัด
+	Not used	ไม่ใช้
+	These scenarios used common random numbers (paired)	สถานการณ์เหล่านี้ใช้ตัวเลขสุ่มร่วมกัน (จับคู่)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft ตรวจสอบเรื่องนี้จากตัวเลขไม่ได้: เลือกช่องนี้เฉพาะเมื่อเครื่องมือที่สร้างการรันให้ตัวเลขสุ่มชุดเดียวกันแก่รอบที่ i ของทุกสถานการณ์ การรันจะจับคู่กันตามหมายเลขรอบ
+	Show the answers	แสดงคำตอบ
+	Change the columns	เปลี่ยนคอลัมน์
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) สอดคล้องกับ {baseline} ภายใน ±{tolerance}
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	การเปรียบเทียบอื่นไม่พบความแตกต่างเกินกว่าความบังเอิญ หรือยังสรุปไม่ได้: ดูตารางด้านล่าง
+	About {n} runs would pin it to ± 5%.	ราว {n} รอบจะทำให้ทราบค่าได้ภายใน ± 5%
+	{k} of {m} measures are settled: each is known to ± 5% or better.	ตัวชี้วัด {k} จาก {m} คงที่แล้ว: แต่ละตัวทราบได้ภายใน ± 5% หรือดีกว่า
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): ทุกรอบให้ค่าเดียวกัน ซึ่งไม่ได้พิสูจน์ว่าค่านี้ไม่เคยแปรผัน
+	Means, rounded to what the interval supports	ค่าเฉลี่ย ปัดเศษตามช่วงความเชื่อมั่น
+	Each scenario against {baseline}	แต่ละสถานการณ์เทียบกับ {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	แตกต่าง: ช่วง 95% ไม่ครอบคลุมศูนย์ หรืออยู่นอกความคลาดเคลื่อนที่ยอมรับได้ทั้งหมด สอดคล้อง: ช่วงอยู่ภายในความคลาดเคลื่อนที่ยอมรับได้ทั้งหมด ไม่พบความแตกต่าง: ช่วงครอบคลุมศูนย์ ซึ่งไม่ใช่หลักฐานของความสอดคล้อง
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	เปรียบเทียบแบบจับคู่ตามที่ระบุ: StochCraft ตรวจสอบไม่ได้ว่าสถานการณ์ใช้ตัวเลขสุ่มร่วมกันจริง หากไม่ได้ใช้ ช่วงเหล่านี้จะแคบเกินไป
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	ทุกสถานการณ์มีหมายเลขรอบชุดเดียวกัน: หากการรันใช้ตัวเลขสุ่มร่วมกัน ให้เลือก “จับคู่” เพื่อการเปรียบเทียบที่แม่นยำกว่ามาก
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 แนะนำระยะอุ่นเครื่อง {time}: ตัดจุดเวลา {k} จุดแรกออก
+	Fewer than 20 times: too few to suggest a warm-up.	น้อยกว่า 20 จุดเวลา: น้อยเกินไปที่จะแนะนำระยะอุ่นเครื่อง
+	The series is too short to show where the start-up ends: record longer runs.	อนุกรมสั้นเกินไปที่จะแสดงว่าช่วงเริ่มต้นสิ้นสุดที่ใด: บันทึกการรันให้นานขึ้น
+	Averaged over the runs at each time, with the warm-up cut marked	ค่าเฉลี่ยของการรันทุกรอบในแต่ละเวลา พร้อมทำเครื่องหมายจุดตัดระยะอุ่นเครื่อง

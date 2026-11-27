@@ -1535,3 +1535,32 @@ connection	Flow	Ροή
 	How often is one machine down, and how much work does that cost?	Πόσο συχνά είναι εκτός λειτουργίας ένα μηχάνημα και πόση δουλειά κοστίζει αυτό;
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Σε λειτουργία 90 ώρες, εκτός 4.5: το μηχάνημα δουλεύει το 95.2% του χρόνου και μια βλάβη συμβαίνει κάθε 94.5 ώρες. Αν ο χρόνος επισκευής μειωθεί στο μισό, το ποσοστό ανεβαίνει στο 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} είναι εκτός λειτουργίας το {down} του χρόνου (διαθεσιμότητα {up}), και τίποτα δεν περιμένει γι' αυτό.
+	Analyse runs from another tool…	Ανάλυση εκτελέσεων από άλλο πρόγραμμα…
+	Runs from another tool	Εκτελέσεις από άλλο πρόγραμμα
+	What each column holds	Τι περιέχει κάθε στήλη
+	The roles are guessed from the column names; change any that are wrong.	Οι ρόλοι μαντεύονται από τα ονόματα των στηλών· αλλάξτε όσους είναι λάθος.
+	One row per run	Μία γραμμή ανά εκτέλεση
+	One row per value	Μία γραμμή ανά τιμή
+	A time series	Χρονοσειρά
+	Scenario	Σενάριο
+	Run number	Αριθμός εκτέλεσης
+	Measure name	Όνομα μετρικής
+	Not used	Δεν χρησιμοποιείται
+	These scenarios used common random numbers (paired)	Αυτά τα σενάρια χρησιμοποίησαν κοινούς τυχαίους αριθμούς (κατά ζεύγη)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	Το StochCraft δεν μπορεί να το ελέγξει από τους αριθμούς: επιλέξτε το μόνο αν το πρόγραμμα που έκανε τις εκτελέσεις έδωσε στην εκτέλεση i κάθε σεναρίου τους ίδιους τυχαίους αριθμούς. Οι εκτελέσεις ζευγαρώνονται με βάση τον αριθμό εκτέλεσής τους.
+	Show the answers	Εμφάνιση απαντήσεων
+	Change the columns	Αλλαγή στηλών
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}): συμφωνεί με {baseline} εντός ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Οι άλλες συγκρίσεις δεν δείχνουν διαφορά πέρα από την τύχη ή είναι μη οριστικές: δείτε τον πίνακα παρακάτω.
+	About {n} runs would pin it to ± 5%.	Περίπου {n} εκτελέσεις θα το προσδιόριζαν με ακρίβεια ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} από {m} μετρικές έχουν προσδιοριστεί: καθεμία είναι γνωστή με ακρίβεια ± 5% ή καλύτερη.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): κάθε εκτέλεση έδωσε την ίδια τιμή, κάτι που δεν αποδεικνύει ότι δεν μεταβάλλεται ποτέ.
+	Means, rounded to what the interval supports	Μέσες τιμές, στρογγυλεμένες σύμφωνα με το διάστημα
+	Each scenario against {baseline}	Κάθε σενάριο έναντι {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Διαφέρει: το διάστημα 95% αποκλείει το μηδέν ή βρίσκεται εξ ολοκλήρου εκτός της ανοχής. Συμφωνεί: βρίσκεται εξ ολοκλήρου εντός της ανοχής. Δεν εντοπίστηκε διαφορά: περιλαμβάνει το μηδέν, κάτι που δεν αποτελεί ένδειξη συμφωνίας.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Σύγκριση κατά ζεύγη, όπως δηλώθηκε: το StochCraft δεν μπορεί να ελέγξει ότι τα σενάρια χρησιμοποίησαν κοινούς τυχαίους αριθμούς· αν δεν το έκαναν, αυτά τα διαστήματα είναι πολύ στενά.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Όλα τα σενάρια έχουν τους ίδιους αριθμούς εκτέλεσης: αν οι εκτελέσεις χρησιμοποίησαν κοινούς τυχαίους αριθμούς, επιλέξτε «κατά ζεύγη» για πολύ πιο ακριβή σύγκριση.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	Το MSER-5 προτείνει προθέρμανση {time}: παραλείψτε τις πρώτες {k} χρονικές στιγμές.
+	Fewer than 20 times: too few to suggest a warm-up.	Λιγότερες από 20 χρονικές στιγμές: πολύ λίγες για να προταθεί προθέρμανση.
+	The series is too short to show where the start-up ends: record longer runs.	Η σειρά είναι πολύ σύντομη για να δείξει πού τελειώνει η εκκίνηση: καταγράψτε μεγαλύτερες εκτελέσεις.
+	Averaged over the runs at each time, with the warm-up cut marked	Μέσος όρος των εκτελέσεων σε κάθε χρονική στιγμή, με σημειωμένο το τέλος της προθέρμανσης

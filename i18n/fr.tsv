@@ -1535,3 +1535,32 @@ connection	Flow	Flux
 	How often is one machine down, and how much work does that cost?	À quelle fréquence une machine est-elle à l'arrêt, et combien de travail cela coûte-t-il ?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	En marche 90 heures, à l'arrêt 4.5 : la machine travaille 95.2 % du temps et une panne survient toutes les 94.5 heures. Une réparation deux fois plus courte porte ce taux à 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} est à l'arrêt {down} du temps (disponibilité {up}) ; rien n'attend devant elle.
+	Analyse runs from another tool…	Analyser des exécutions d'un autre outil…
+	Runs from another tool	Exécutions d'un autre outil
+	What each column holds	Contenu de chaque colonne
+	The roles are guessed from the column names; change any that are wrong.	Les rôles sont déduits des noms de colonnes ; corrigez ceux qui sont faux.
+	One row per run	Une ligne par exécution
+	One row per value	Une ligne par valeur
+	A time series	Une série temporelle
+	Scenario	Scénario
+	Run number	Numéro d'exécution
+	Measure name	Nom de l'indicateur
+	Not used	Non utilisé
+	These scenarios used common random numbers (paired)	Ces scénarios ont utilisé des nombres aléatoires communs (appariés)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft ne peut pas le vérifier à partir des chiffres : cochez cette case uniquement si l'outil qui a produit les exécutions a donné les mêmes nombres aléatoires à l'exécution i de chaque scénario. Les exécutions sont appariées par leur numéro d'exécution.
+	Show the answers	Afficher les réponses
+	Change the columns	Modifier les colonnes
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) concorde avec {baseline} à ±{tolerance} près.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Les autres comparaisons ne montrent aucune différence au-delà du hasard, ou ne sont pas concluantes : voir le tableau ci-dessous.
+	About {n} runs would pin it to ± 5%.	Environ {n} exécutions le fixeraient à ± 5 % près.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} indicateurs sur {m} sont stables : chacun est connu à ± 5 % près ou mieux.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}) : chaque exécution a donné la même valeur, ce qui ne prouve pas qu'elle ne varie jamais.
+	Means, rounded to what the interval supports	Moyennes, arrondies selon l'intervalle
+	Each scenario against {baseline}	Chaque scénario par rapport à {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Diffère : l'intervalle à 95 % exclut zéro, ou se situe entièrement hors de la tolérance. Concorde : il se situe entièrement dans la tolérance. Aucune différence détectée : il contient zéro, ce qui n'est pas une preuve de concordance.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Comparaison par paires, comme déclaré : StochCraft ne peut pas vérifier que les scénarios ont utilisé des nombres aléatoires communs ; si ce n'est pas le cas, ces intervalles sont trop étroits.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Tous les scénarios ont les mêmes numéros d'exécution : si les exécutions ont utilisé des nombres aléatoires communs, cochez « appariés » pour une comparaison beaucoup plus serrée.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 suggère un préchauffage de {time} : écartez les {k} premiers instants.
+	Fewer than 20 times: too few to suggest a warm-up.	Moins de 20 instants : trop peu pour suggérer un préchauffage.
+	The series is too short to show where the start-up ends: record longer runs.	La série est trop courte pour montrer où finit le démarrage : enregistrez des exécutions plus longues.
+	Averaged over the runs at each time, with the warm-up cut marked	Moyenne des exécutions à chaque instant, avec la coupure du préchauffage marquée

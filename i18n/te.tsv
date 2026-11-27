@@ -1535,3 +1535,32 @@ connection	Flow	ప్రవాహం
 	How often is one machine down, and how much work does that cost?	ఒక యంత్రం ఎంత తరచుగా ఆగిపోతుంది, దానివల్ల ఎంత పని పోతుంది?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 గంటలు పని, 4.5 గంటలు ఆగుదల: యంత్రం 95.2% సమయం పనిచేస్తుంది, ప్రతి 94.5 గంటలకు ఒక చెడిపోవడం జరుగుతుంది. మరమ్మతు సమయాన్ని సగం చేస్తే అది 97.6% అవుతుంది.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} సమయం ఆగిపోతుంది (అందుబాటు {up}); దాని కోసం ఏదీ వేచి ఉండదు.
+	Analyse runs from another tool…	మరో సాధనం నుండి వచ్చిన అమలులను విశ్లేషించు…
+	Runs from another tool	మరో సాధనం నుండి వచ్చిన అమలులు
+	What each column holds	ప్రతి నిలువు వరుసలో ఏముంది
+	The roles are guessed from the column names; change any that are wrong.	పాత్రలు నిలువు వరుసల పేర్ల నుండి ఊహించబడ్డాయి; తప్పుగా ఉన్నవాటిని మార్చండి.
+	One row per run	ఒక్కో అమలుకు ఒక అడ్డు వరుస
+	One row per value	ఒక్కో విలువకు ఒక అడ్డు వరుస
+	A time series	ఒక కాల శ్రేణి
+	Scenario	దృశ్యం
+	Run number	అమలు సంఖ్య
+	Measure name	కొలమానం పేరు
+	Not used	ఉపయోగించబడదు
+	These scenarios used common random numbers (paired)	ఈ దృశ్యాలు ఉమ్మడి యాదృచ్ఛిక సంఖ్యలను ఉపయోగించాయి (జత)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft దీనిని సంఖ్యల నుండి తనిఖీ చేయలేదు: అమలులను తయారు చేసిన సాధనం ప్రతి దృశ్యంలోని అమలు i కి అవే యాదృచ్ఛిక సంఖ్యలను ఇచ్చినప్పుడు మాత్రమే దీన్ని ఎంచుకోండి. అమలులు వాటి అమలు సంఖ్య ప్రకారం జత చేయబడతాయి.
+	Show the answers	సమాధానాలను చూపు
+	Change the columns	నిలువు వరుసలను మార్చు
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) {baseline}తో ±{tolerance} లోపు సరిపోతుంది.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	మిగతా పోలికలు యాదృచ్ఛికతకు మించిన తేడాను చూపవు, లేదా నిర్ధారించలేనివి: దిగువ పట్టికను చూడండి.
+	About {n} runs would pin it to ± 5%.	సుమారు {n} అమలులు దీన్ని ± 5% కచ్చితత్వానికి తెస్తాయి.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{m} కొలమానాల్లో {k} స్థిరపడ్డాయి: ప్రతి ఒక్కటి ± 5% లేదా అంతకంటే మెరుగ్గా తెలుసు.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): ప్రతి అమలు ఒకే విలువను ఇచ్చింది, కానీ అది ఎప్పుడూ మారదని దీనికి రుజువు కాదు.
+	Means, rounded to what the interval supports	సగటులు, విశ్వాస అంతరానికి తగినట్లు సవరించినవి
+	Each scenario against {baseline}	ప్రతి దృశ్యం {baseline}తో పోలిస్తే
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	భిన్నంగా ఉంది: 95% అంతరం సున్నాను కలిగి ఉండదు, లేదా పూర్తిగా సహనానికి వెలుపల ఉంటుంది. సరిపోతుంది: అది పూర్తిగా సహనం లోపల ఉంటుంది. తేడా కనుగొనబడలేదు: అది సున్నాను కలిగి ఉంటుంది, ఇది సరిపోలికకు రుజువు కాదు.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	ప్రకటించినట్లుగా జతలుగా పోల్చబడింది: దృశ్యాలు ఉమ్మడి యాదృచ్ఛిక సంఖ్యలను ఉపయోగించాయో లేదో StochCraft తనిఖీ చేయలేదు; ఉపయోగించకపోతే, ఈ అంతరాలు ఉండవలసిన దానికంటే ఇరుకుగా ఉంటాయి.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	ప్రతి దృశ్యానికి అవే అమలు సంఖ్యలు ఉన్నాయి: అమలులు ఉమ్మడి యాదృచ్ఛిక సంఖ్యలను ఉపయోగించి ఉంటే, మరింత కచ్చితమైన పోలిక కోసం “జత”ను ఎంచుకోండి.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 {time} ప్రారంభ సర్దుబాటు సమయాన్ని సూచిస్తోంది: మొదటి {k} సమయ బిందువులను వదిలేయండి.
+	Fewer than 20 times: too few to suggest a warm-up.	20 కంటే తక్కువ సమయ బిందువులు: ప్రారంభ సర్దుబాటు సమయాన్ని సూచించడానికి చాలా తక్కువ.
+	The series is too short to show where the start-up ends: record longer runs.	ప్రారంభ దశ ఎక్కడ ముగుస్తుందో చూపడానికి శ్రేణి చాలా చిన్నది: మరింత పొడవైన అమలులను నమోదు చేయండి.
+	Averaged over the runs at each time, with the warm-up cut marked	ప్రతి సమయంలో అమలులపై సగటు, ప్రారంభ సర్దుబాటు కోత గుర్తించబడింది

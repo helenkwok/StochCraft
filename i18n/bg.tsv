@@ -1535,3 +1535,32 @@ connection	Flow	Поток
 	How often is one machine down, and how much work does that cost?	Колко често е спряна една машина и колко работа струва това?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Работи 90 часа, спряна 4.5: машината работи 95.2% от времето и повреда настъпва на всеки 94.5 часа. Ако ремонтът е два пъти по-кратък, това става 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} не работи {down} от времето (налична {up}); нищо не чака за нея.
+	Analyse runs from another tool…	Анализ на изпълнения от друга програма…
+	Runs from another tool	Изпълнения от друга програма
+	What each column holds	Какво съдържа всяка колона
+	The roles are guessed from the column names; change any that are wrong.	Ролите са отгатнати по имената на колоните; променете всяка, която е грешна.
+	One row per run	Един ред за всяко изпълнение
+	One row per value	Един ред за всяка стойност
+	A time series	Времеви ред
+	Scenario	Сценарий
+	Run number	Номер на изпълнението
+	Measure name	Име на показателя
+	Not used	Не се използва
+	These scenarios used common random numbers (paired)	Тези сценарии са използвали общи случайни числа (сдвоени)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft не може да провери това по числата: отметнете го само ако програмата, създала изпълненията, е дала на изпълнение i от всеки сценарий едни и същи случайни числа. Изпълненията се сдвояват по номера си.
+	Show the answers	Показване на отговорите
+	Change the columns	Промяна на колоните
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) съвпада с {baseline} в рамките на ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Другите сравнения не показват разлика извън случайността или са неубедителни: вижте таблицата по-долу.
+	About {n} runs would pin it to ± 5%.	Около {n} изпълнения биха го определили с точност ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	Установени са {k} от {m} показателя: всеки е известен с точност ± 5% или по-добра.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): всяко изпълнение даде една и съща стойност, което не доказва, че тя никога не се променя.
+	Means, rounded to what the interval supports	Средни стойности, закръглени според интервала
+	Each scenario against {baseline}	Всеки сценарий спрямо {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Различава се: 95% интервал изключва нулата или лежи изцяло извън допуска. Съвпада: лежи изцяло в рамките на допуска. Не е открита разлика: интервалът включва нулата, което не е доказателство за съвпадение.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Сравнени по двойки, както е заявено: StochCraft не може да провери дали сценариите са използвали общи случайни числа; ако не са, тези интервали са твърде тесни.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Всеки сценарий има едни и същи номера на изпълненията: ако изпълненията са използвали общи случайни числа, отметнете „сдвоени“ за много по-точно сравнение.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 предлага загряване от {time}: пропуснете първите {k} времеви точки.
+	Fewer than 20 times: too few to suggest a warm-up.	По-малко от 20 времеви точки: твърде малко, за да се предложи загряване.
+	The series is too short to show where the start-up ends: record longer runs.	Редът е твърде кратък, за да покаже къде свършва началният период: запишете по-дълги изпълнения.
+	Averaged over the runs at each time, with the warm-up cut marked	Осреднено по изпълненията за всяка времева точка, с отбелязан край на загряването

@@ -1535,3 +1535,32 @@ connection	Flow	Ағын
 	How often is one machine down, and how much work does that cost?	Бір станок қаншалықты жиі тоқтап қалады және бұл қанша жұмысқа тұрады?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 сағат жұмыс істейді, 4.5 сағат тұрады: станок уақыттың 95.2%-ында жұмыс істейді, ал бұзылу әр 94.5 сағат сайын болады. Жөндеу уақытын екі есе қысқарту оны 97.6%-ға жеткізеді.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} уақыттың {down} бөлігінде тұрады (дайындық {up}); оны ешнәрсе күтпейді.
+	Analyse runs from another tool…	Басқа құралдың іске қосуларын талдау…
+	Runs from another tool	Басқа құралдың іске қосулары
+	What each column holds	Әр бағанда не бар
+	The roles are guessed from the column names; change any that are wrong.	Рөлдер баған атауларынан болжанған; қателерін өзгертіңіз.
+	One row per run	Әр іске қосуға бір жол
+	One row per value	Әр мәнге бір жол
+	A time series	Уақыттық қатар
+	Scenario	Сценарий
+	Run number	Іске қосу нөмірі
+	Measure name	Көрсеткіш атауы
+	Not used	Пайдаланылмайды
+	These scenarios used common random numbers (paired)	Бұл сценарийлер ортақ кездейсоқ сандарды пайдаланды (жұптық)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft мұны сандардан тексере алмайды: іске қосуларды жасаған құрал әр сценарийдің i-ші іске қосуына бірдей кездейсоқ сандар берген жағдайда ғана белгілеңіз. Іске қосулар нөмірі бойынша жұпталады.
+	Show the answers	Жауаптарды көрсету
+	Change the columns	Бағандарды өзгерту
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) {baseline} нұсқасымен ±{tolerance} шегінде сәйкес келеді.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Қалған салыстырулар кездейсоқтықтан тыс айырманы көрсетпейді немесе анық емес: төмендегі кестені қараңыз.
+	About {n} runs would pin it to ± 5%.	Шамамен {n} іске қосу оны ± 5% дәлдікке жеткізер еді.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{m} көрсеткіштің {k} тұрақты: әрқайсысы ± 5% немесе одан жақсы дәлдікпен белгілі.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): әр іске қосу бірдей мән берді, бірақ бұл оның ешқашан өзгермейтінінің дәлелі емес.
+	Means, rounded to what the interval supports	Орташа мәндер, аралыққа қарай дөңгелектенген
+	Each scenario against {baseline}	Әр сценарий {baseline} нұсқасымен салыстырғанда
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Ерекшеленеді: 95% аралығы нөлді қамтымайды немесе толығымен рұқсат етілген ауытқудан тыс жатыр. Сәйкес келеді: толығымен рұқсат етілген ауытқу ішінде жатыр. Айырмашылық табылмады: нөлді қамтиды, бұл сәйкестіктің дәлелі емес.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Мәлімделгендей жұптап салыстырылды: StochCraft сценарийлердің ортақ кездейсоқ сандарды пайдаланғанын тексере алмайды; егер пайдаланбаса, бұл аралықтар тым тар.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Барлық сценарийдің іске қосу нөмірлері бірдей: егер іске қосулар ортақ кездейсоқ сандарды пайдаланса, әлдеқайда дәл салыстыру үшін «жұптық» белгісін қойыңыз.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 {time} қыздыру кезеңін ұсынады: алғашқы {k} уақыт нүктесін алып тастаңыз.
+	Fewer than 20 times: too few to suggest a warm-up.	20-дан аз уақыт нүктесі: қыздыру кезеңін ұсыну үшін тым аз.
+	The series is too short to show where the start-up ends: record longer runs.	Қатар бастапқы кезеңнің қай жерде аяқталатынын көрсету үшін тым қысқа: ұзағырақ іске қосуларды жазыңыз.
+	Averaged over the runs at each time, with the warm-up cut marked	Әр уақыт нүктесінде іске қосулар бойынша орташаланған, қыздыру кезеңінің шегі белгіленген

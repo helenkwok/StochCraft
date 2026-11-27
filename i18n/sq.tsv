@@ -1535,3 +1535,32 @@ connection	Flow	Rrjedhë
 	How often is one machine down, and how much work does that cost?	Sa shpesh ndalet një makinë dhe sa punë kushton kjo?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Punon 90 orë, ndalet 4.5: makina punon 95.2% të kohës dhe një prishje ndodh çdo 94.5 orë. Përgjysmimi i kohës së riparimit e ngre në 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} është i ndalur {down} të kohës (disponueshmëria {up}); asgjë nuk e pret.
+	Analyse runs from another tool…	Analizo ekzekutime nga një mjet tjetër…
+	Runs from another tool	Ekzekutime nga një mjet tjetër
+	What each column holds	Çfarë përmban secila kolonë
+	The roles are guessed from the column names; change any that are wrong.	Rolet janë hamendësuar nga emrat e kolonave; ndryshoni ato që janë gabim.
+	One row per run	Një rresht për ekzekutim
+	One row per value	Një rresht për vlerë
+	A time series	Një seri kohore
+	Scenario	Skenari
+	Run number	Numri i ekzekutimit
+	Measure name	Emri i treguesit
+	Not used	Nuk përdoret
+	These scenarios used common random numbers (paired)	Këta skenarë përdorën numra të rastësishëm të përbashkët (në çifte)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft nuk mund ta kontrollojë këtë nga numrat: shënojeni vetëm nëse mjeti që bëri ekzekutimet i dha ekzekutimit i të çdo skenari të njëjtët numra të rastësishëm. Ekzekutimet çiftohen sipas numrit të ekzekutimit.
+	Show the answers	Shfaq përgjigjet
+	Change the columns	Ndrysho kolonat
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) përputhet me {baseline} brenda ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Krahasimet e tjera nuk tregojnë ndryshim përtej rastësisë, ose janë jo përfundimtare: shiko tabelën më poshtë.
+	About {n} runs would pin it to ± 5%.	Rreth {n} ekzekutime do ta përcaktonin me ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} nga {m} tregues janë të qëndrueshëm: secili njihet me ± 5% ose më mirë.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): çdo ekzekutim dha të njëjtën vlerë, gjë që nuk provon se ajo nuk ndryshon kurrë.
+	Means, rounded to what the interval supports	Mesataret, të rrumbullakosura sipas asaj që lejon intervali
+	Each scenario against {baseline}	Çdo skenar kundrejt {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Ndryshon: intervali 95% e përjashton zeron, ose shtrihet tërësisht jashtë tolerancës. Përputhet: shtrihet tërësisht brenda tolerancës. Nuk u zbulua ndryshim: përfshin zeron, gjë që nuk është provë përputhjeje.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Krahasuar në çifte, siç u deklarua: StochCraft nuk mund të kontrollojë nëse skenarët përdorën numra të rastësishëm të përbashkët; nëse jo, këto intervale janë shumë të ngushta.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Të gjithë skenarët kanë të njëjtët numra ekzekutimi: nëse ekzekutimet përdorën numra të rastësishëm të përbashkët, shënoni „në çifte” për një krahasim shumë më të saktë.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 sugjeron një ngrohje prej {time}: lini jashtë {k} pikat e para kohore.
+	Fewer than 20 times: too few to suggest a warm-up.	Më pak se 20 pika kohore: shumë pak për të sugjeruar një ngrohje.
+	The series is too short to show where the start-up ends: record longer runs.	Seria është shumë e shkurtër për të treguar ku mbaron faza fillestare: regjistroni ekzekutime më të gjata.
+	Averaged over the runs at each time, with the warm-up cut marked	Mesatarja e ekzekutimeve në çdo pikë kohore, me fundin e ngrohjes të shënuar

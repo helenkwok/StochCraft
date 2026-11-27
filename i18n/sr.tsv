@@ -1535,3 +1535,32 @@ connection	Flow	Ток
 	How often is one machine down, and how much work does that cost?	Колико често једна машина не ради и колико посла то кошта?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Ради 90 сати, стоји 4.5: машина ради 95.2% времена, а квар се јавља на сваких 94.5 сати. Дупло краћи поправак то подиже на 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} не ради {down} времена (расположивост {up}); ништа не чека на њу.
+	Analyse runs from another tool…	Анализирај покретања из другог алата…
+	Runs from another tool	Покретања из другог алата
+	What each column holds	Шта садржи свака колона
+	The roles are guessed from the column names; change any that are wrong.	Улоге су претпостављене на основу назива колона; промените оне које нису тачне.
+	One row per run	Један ред по покретању
+	One row per value	Један ред по вредности
+	A time series	Временска серија
+	Scenario	Сценарио
+	Run number	Редни број покретања
+	Measure name	Назив метрике
+	Not used	Не користи се
+	These scenarios used common random numbers (paired)	Ови сценарији су користили заједничке случајне бројеве (у паровима)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft то не може да провери из бројева: означите ово само ако је алат који је направио покретања дао покретању i сваког сценарија исте случајне бројеве. Покретања се упарују по редном броју покретања.
+	Show the answers	Прикажи одговоре
+	Change the columns	Промени колоне
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) се слаже са {baseline} у границама ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Остала поређења не показују разлику већу од случајне или су неодлучна: погледајте таблицу испод.
+	About {n} runs would pin it to ± 5%.	Око {n} покретања би то сузило на ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{k} од {m} метрика је устаљено: свака је позната до ± 5% или боље.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): свако покретање дало је исту вредност, што није доказ да се она никад не мења.
+	Means, rounded to what the interval supports	Средње вредности, заокружене према интервалу
+	Each scenario against {baseline}	Сваки сценарио у односу на {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Разликује се: 95% интервал не обухвата нулу или лежи потпуно изван толеранције. Слаже се: лежи потпуно унутар толеранције. Разлика није откривена: обухвата нулу, што није доказ слагања.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Упоређено у паровима, како је наведено: StochCraft не може да провери да су сценарији користили заједничке случајне бројеве; ако нису, ови интервали су преуски.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Сваки сценарио има исте редне бројеве покретања: ако су покретања користила заједничке случајне бројеве, означите „у паровима“ за много прецизније поређење.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 предлаже загревање од {time}: изоставите првих {k} временских тачака.
+	Fewer than 20 times: too few to suggest a warm-up.	Мање од 20 временских тачака: премало да би се предложило загревање.
+	The series is too short to show where the start-up ends: record longer runs.	Серија је прекратка да покаже где се завршава почетни период: снимите дужа покретања.
+	Averaged over the runs at each time, with the warm-up cut marked	Усредњено преко покретања у свакој временској тачки, са означеним пресеком загревања

@@ -1535,3 +1535,32 @@ connection	Flow	प्रवाह
 	How often is one machine down, and how much work does that cost?	एक मशीन कितनी बार बंद रहती है, और इससे कितना काम घटता है?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 घंटे चालू, 4.5 घंटे बंद: मशीन 95.2% समय काम करती है और हर 94.5 घंटे में एक खराबी आती है। मरम्मत का समय आधा करने पर यह 97.6% हो जाता है।
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} समय बंद रहता है (उपलब्धता {up}); उसके लिए कुछ भी प्रतीक्षा नहीं करता।
+	Analyse runs from another tool…	किसी अन्य टूल के रन का विश्लेषण करें…
+	Runs from another tool	किसी अन्य टूल के रन
+	What each column holds	हर कॉलम में क्या है
+	The roles are guessed from the column names; change any that are wrong.	भूमिकाएँ कॉलम के नामों से अनुमानित की गई हैं; जो गलत हों, उन्हें बदलें।
+	One row per run	प्रति रन एक पंक्ति
+	One row per value	प्रति मान एक पंक्ति
+	A time series	समय श्रृंखला
+	Scenario	परिदृश्य
+	Run number	रन संख्या
+	Measure name	मापदंड का नाम
+	Not used	उपयोग नहीं
+	These scenarios used common random numbers (paired)	इन परिदृश्यों ने साझा यादृच्छिक संख्याएँ इस्तेमाल कीं (युग्मित)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft संख्याओं से इसकी जाँच नहीं कर सकता: इसे तभी चुनें जब रन बनाने वाले टूल ने हर परिदृश्य के रन i को एक जैसी यादृच्छिक संख्याएँ दी हों। रन अपनी रन संख्या के आधार पर युग्मित किए जाते हैं।
+	Show the answers	उत्तर दिखाएँ
+	Change the columns	कॉलम बदलें
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) ±{tolerance} के भीतर {baseline} से मेल खाता है।
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	बाकी तुलनाएँ संयोग से अधिक कोई अंतर नहीं दिखातीं, या अनिर्णायक हैं: नीचे दी गई तालिका देखें।
+	About {n} runs would pin it to ± 5%.	लगभग {n} रन इसे ± 5% तक तय कर देंगे।
+	{k} of {m} measures are settled: each is known to ± 5% or better.	{m} में से {k} मापदंड स्थिर हैं: हर एक ± 5% या बेहतर तक ज्ञात है।
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): हर रन ने एक ही मान दिया, जो इस बात का प्रमाण नहीं है कि यह कभी नहीं बदलता।
+	Means, rounded to what the interval supports	माध्य, अंतराल के अनुसार पूर्णांकित
+	Each scenario against {baseline}	{baseline} की तुलना में हर परिदृश्य
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	अलग है: 95% अंतराल शून्य को शामिल नहीं करता, या पूरी तरह सहनसीमा के बाहर है। मेल खाता है: यह पूरी तरह सहनसीमा के भीतर है। कोई अंतर नहीं मिला: यह शून्य को शामिल करता है, जो मेल का प्रमाण नहीं है।
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	घोषित अनुसार युग्मों में तुलना: StochCraft यह जाँच नहीं कर सकता कि परिदृश्यों ने साझा यादृच्छिक संख्याएँ इस्तेमाल कीं; अगर नहीं कीं, तो ये अंतराल बहुत संकरे हैं।
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	हर परिदृश्य की रन संख्याएँ एक जैसी हैं: अगर रनों ने साझा यादृच्छिक संख्याएँ इस्तेमाल कीं, तो कहीं अधिक सटीक तुलना के लिए "युग्मित" चुनें।
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 {time} का वार्म-अप सुझाता है: पहले {k} समय-बिंदु छोड़ दें।
+	Fewer than 20 times: too few to suggest a warm-up.	20 से कम समय-बिंदु: वार्म-अप सुझाने के लिए बहुत कम।
+	The series is too short to show where the start-up ends: record longer runs.	श्रृंखला इतनी छोटी है कि यह नहीं दिखता कि शुरुआती दौर कहाँ खत्म होता है: लंबे रन रिकॉर्ड करें।
+	Averaged over the runs at each time, with the warm-up cut marked	हर समय-बिंदु पर रनों का औसत, वार्म-अप की कटौती चिह्नित

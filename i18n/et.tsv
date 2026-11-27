@@ -1535,3 +1535,32 @@ connection	Flow	Voog
 	How often is one machine down, and how much work does that cost?	Kui tihti seisab üks masin ja kui palju tööd see maksab?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Töötab 90 tundi, seisab 4.5: masin töötab 95.2% ajast ja rike juhtub iga 94.5 tunni järel. Poole lühem remont tõstab selle 97.6%-ni.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} seisab {down} ajast (käideldavus {up}); keegi ei oota seda.
+	Analyse runs from another tool…	Analüüsi teise programmi käivitamisi…
+	Runs from another tool	Teise programmi käivitamised
+	What each column holds	Mida iga veerg sisaldab
+	The roles are guessed from the column names; change any that are wrong.	Rollid on arvatud veergude nimede järgi; muuda need, mis on valed.
+	One row per run	Üks rida käivitamise kohta
+	One row per value	Üks rida väärtuse kohta
+	A time series	Aegrida
+	Scenario	Stsenaarium
+	Run number	Käivitamise number
+	Measure name	Mõõdiku nimi
+	Not used	Ei kasutata
+	These scenarios used common random numbers (paired)	Need stsenaariumid kasutasid ühiseid juhuslikke arve (paaris)
+	StochCraft cannot check this from the numbers: tick it only if the tool that made the runs gave run i of each scenario the same random numbers. Runs are paired by their run number.	StochCraft ei saa seda arvude põhjal kontrollida: märgi see ainult siis, kui käivitamised teinud programm andis iga stsenaariumi käivitamisele i samad juhuslikud arvud. Käivitamised seotakse paarideks käivitamise numbri järgi.
+	Show the answers	Näita vastuseid
+	Change the columns	Muuda veerge
+	{measure} ({block}) agrees with {baseline} within ±{tolerance}.	{measure} ({block}) langeb kokku võrdlusalusega {baseline} piirides ±{tolerance}.
+	The other comparisons show no difference beyond chance, or are inconclusive: see the table below.	Ülejäänud võrdlused ei näita juhusest suuremat erinevust või on otsustamatud: vaata allolevat tabelit.
+	About {n} runs would pin it to ± 5%.	Umbes {n} käivitamist määraks selle täpsusega ± 5%.
+	{k} of {m} measures are settled: each is known to ± 5% or better.	Selgunud mõõdikuid: {k}/{m}; igaüks on teada täpsusega ± 5% või paremini.
+	{measure} ({block}): every run gave the same value, which is not proof that it never varies.	{measure} ({block}): iga käivitamine andis sama väärtuse, mis ei tõesta, et see kunagi ei muutu.
+	Means, rounded to what the interval supports	Keskmised, ümardatud usaldusvahemiku järgi
+	Each scenario against {baseline}	Iga stsenaarium võrreldes võrdlusalusega {baseline}
+	Differs: the 95% interval leaves out zero, or lies wholly outside the tolerance. Agrees: it lies wholly within the tolerance. No difference detected: it takes in zero, which is not evidence of agreement.	Erineb: 95% vahemik ei hõlma nulli või jääb täielikult tolerantsist välja. Langeb kokku: see jääb täielikult tolerantsi piiresse. Erinevust ei tuvastatud: see hõlmab nulli, mis ei ole kokkulangevuse tõend.
+	Compared in pairs, as declared: StochCraft cannot check that the scenarios used common random numbers; if they did not, these intervals are too narrow.	Võrreldud paarikaupa, nagu märgitud: StochCraft ei saa kontrollida, kas stsenaariumid kasutasid ühiseid juhuslikke arve; kui ei kasutanud, on need vahemikud liiga kitsad.
+	Every scenario has the same run numbers: if the runs used common random numbers, tick paired for a much tighter comparison.	Igal stsenaariumil on samad käivitamise numbrid: kui käivitamised kasutasid ühiseid juhuslikke arve, märgi „paaris“, et võrdlus oleks palju täpsem.
+	MSER-5 suggests a warm-up of {time}: leave out the first {k} times.	MSER-5 soovitab soojendust {time}: jäta välja esimesed {k} ajahetke.
+	Fewer than 20 times: too few to suggest a warm-up.	Alla 20 ajahetke: liiga vähe, et soojendust soovitada.
+	The series is too short to show where the start-up ends: record longer runs.	Rida on liiga lühike, et näidata, kus käivitusfaas lõpeb: salvesta pikemad käivitamised.
+	Averaged over the runs at each time, with the warm-up cut marked	Käivitamiste keskmine igal ajahetkel, soojenduse lõpp märgitud
