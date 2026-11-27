@@ -1620,8 +1620,25 @@ fn the_heat_rods_diagram_is_the_rod() {
     }
     // 19 own, 18 + 18 neighbours, and h and source into every flow.
     assert_eq!(l.connectors.len(), 19 + 36 + 38);
-    let width = shape("u19").x - shape("h").x;
-    assert!(width < 1400.0, "{width}");
+    let (first, last) = (shape("u1").x, shape("u19").x);
+    assert!(last - first < 1400.0, "{}", last - first);
+    // h and source side by side above the middle of the rod, so their links fan out evenly; they
+    // are drawn straight (each leaves at the angle that points at its flow's valve).
+    let middle = (first + last) / 2.0;
+    for a in ["h", "source"] {
+        let s = shape(a);
+        assert!((s.x - middle).abs() <= 40.0 && s.y < shape("f1").y, "{a}");
+        for i in 1..=19 {
+            let f = shape(&format!("f{i}"));
+            let c = l
+                .connectors
+                .iter()
+                .find(|c| c.from == a && c.to == format!("f{i}"))
+                .unwrap_or_else(|| panic!("no link {a} -> f{i}"));
+            let want = (-(f.y - s.y)).atan2(f.x - s.x).to_degrees();
+            assert!((c.angle.unwrap() - want).abs() < 0.01, "{a} -> f{i}");
+        }
+    }
     // Written and read again, the diagram is the same.
     let back = read_xmile(&write_xmile(&m)).unwrap();
     assert_eq!(&back.model.layout, l);

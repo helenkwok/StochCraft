@@ -215,141 +215,141 @@
         <stock name="u17" x="1130" y="300" width="60" height="40"/>
         <stock name="u18" x="1200" y="300" width="60" height="40"/>
         <stock name="u19" x="1270" y="300" width="60" height="40"/>
-        <flow name="f1" uid="1" x="40" y="230">
+        <flow name="f1" uid="1" x="40" y="180">
           <pts>
             <pt x="40" y="150"/>
             <pt x="40" y="300"/>
           </pts>
         </flow>
         <cloud uid="2" flow_uid="1" x="40" y="150"/>
-        <flow name="f2" uid="3" x="110" y="230">
+        <flow name="f2" uid="3" x="110" y="180">
           <pts>
             <pt x="110" y="150"/>
             <pt x="110" y="300"/>
           </pts>
         </flow>
         <cloud uid="4" flow_uid="3" x="110" y="150"/>
-        <flow name="f3" uid="5" x="180" y="230">
+        <flow name="f3" uid="5" x="180" y="180">
           <pts>
             <pt x="180" y="150"/>
             <pt x="180" y="300"/>
           </pts>
         </flow>
         <cloud uid="6" flow_uid="5" x="180" y="150"/>
-        <flow name="f4" uid="7" x="250" y="230">
+        <flow name="f4" uid="7" x="250" y="180">
           <pts>
             <pt x="250" y="150"/>
             <pt x="250" y="300"/>
           </pts>
         </flow>
         <cloud uid="8" flow_uid="7" x="250" y="150"/>
-        <flow name="f5" uid="9" x="320" y="230">
+        <flow name="f5" uid="9" x="320" y="180">
           <pts>
             <pt x="320" y="150"/>
             <pt x="320" y="300"/>
           </pts>
         </flow>
         <cloud uid="10" flow_uid="9" x="320" y="150"/>
-        <flow name="f6" uid="11" x="390" y="230">
+        <flow name="f6" uid="11" x="390" y="180">
           <pts>
             <pt x="390" y="150"/>
             <pt x="390" y="300"/>
           </pts>
         </flow>
         <cloud uid="12" flow_uid="11" x="390" y="150"/>
-        <flow name="f7" uid="13" x="460" y="230">
+        <flow name="f7" uid="13" x="460" y="180">
           <pts>
             <pt x="460" y="150"/>
             <pt x="460" y="300"/>
           </pts>
         </flow>
         <cloud uid="14" flow_uid="13" x="460" y="150"/>
-        <flow name="f8" uid="15" x="530" y="230">
+        <flow name="f8" uid="15" x="530" y="180">
           <pts>
             <pt x="530" y="150"/>
             <pt x="530" y="300"/>
           </pts>
         </flow>
         <cloud uid="16" flow_uid="15" x="530" y="150"/>
-        <flow name="f9" uid="17" x="600" y="230">
+        <flow name="f9" uid="17" x="600" y="180">
           <pts>
             <pt x="600" y="150"/>
             <pt x="600" y="300"/>
           </pts>
         </flow>
         <cloud uid="18" flow_uid="17" x="600" y="150"/>
-        <flow name="f10" uid="19" x="670" y="230">
+        <flow name="f10" uid="19" x="670" y="180">
           <pts>
             <pt x="670" y="150"/>
             <pt x="670" y="300"/>
           </pts>
         </flow>
         <cloud uid="20" flow_uid="19" x="670" y="150"/>
-        <flow name="f11" uid="21" x="740" y="230">
+        <flow name="f11" uid="21" x="740" y="180">
           <pts>
             <pt x="740" y="150"/>
             <pt x="740" y="300"/>
           </pts>
         </flow>
         <cloud uid="22" flow_uid="21" x="740" y="150"/>
-        <flow name="f12" uid="23" x="810" y="230">
+        <flow name="f12" uid="23" x="810" y="180">
           <pts>
             <pt x="810" y="150"/>
             <pt x="810" y="300"/>
           </pts>
         </flow>
         <cloud uid="24" flow_uid="23" x="810" y="150"/>
-        <flow name="f13" uid="25" x="880" y="230">
+        <flow name="f13" uid="25" x="880" y="180">
           <pts>
             <pt x="880" y="150"/>
             <pt x="880" y="300"/>
           </pts>
         </flow>
         <cloud uid="26" flow_uid="25" x="880" y="150"/>
-        <flow name="f14" uid="27" x="950" y="230">
+        <flow name="f14" uid="27" x="950" y="180">
           <pts>
             <pt x="950" y="150"/>
             <pt x="950" y="300"/>
           </pts>
         </flow>
         <cloud uid="28" flow_uid="27" x="950" y="150"/>
-        <flow name="f15" uid="29" x="1020" y="230">
+        <flow name="f15" uid="29" x="1020" y="180">
           <pts>
             <pt x="1020" y="150"/>
             <pt x="1020" y="300"/>
           </pts>
         </flow>
         <cloud uid="30" flow_uid="29" x="1020" y="150"/>
-        <flow name="f16" uid="31" x="1090" y="230">
+        <flow name="f16" uid="31" x="1090" y="180">
           <pts>
             <pt x="1090" y="150"/>
             <pt x="1090" y="300"/>
           </pts>
         </flow>
         <cloud uid="32" flow_uid="31" x="1090" y="150"/>
-        <flow name="f17" uid="33" x="1160" y="230">
+        <flow name="f17" uid="33" x="1160" y="180">
           <pts>
             <pt x="1160" y="150"/>
             <pt x="1160" y="300"/>
           </pts>
         </flow>
         <cloud uid="34" flow_uid="33" x="1160" y="150"/>
-        <flow name="f18" uid="35" x="1230" y="230">
+        <flow name="f18" uid="35" x="1230" y="180">
           <pts>
             <pt x="1230" y="150"/>
             <pt x="1230" y="300"/>
           </pts>
         </flow>
         <cloud uid="36" flow_uid="35" x="1230" y="150"/>
-        <flow name="f19" uid="37" x="1300" y="230">
+        <flow name="f19" uid="37" x="1300" y="180">
           <pts>
             <pt x="1300" y="150"/>
             <pt x="1300" y="300"/>
           </pts>
         </flow>
         <cloud uid="38" flow_uid="37" x="1300" y="150"/>
-        <aux name="h" x="0" y="40" width="20" height="20"/>
-        <aux name="source" x="70" y="40" width="20" height="20"/>
+        <aux name="h" x="630" y="-70" width="20" height="20"/>
+        <aux name="source" x="690" y="-70" width="20" height="20"/>
         <connector>
           <from>u1</from>
           <to>f1</to>
@@ -358,11 +358,11 @@
           <from>u2</from>
           <to>f1</to>
         </connector>
-        <connector>
+        <connector angle="-158.2">
           <from>h</from>
           <to>f1</to>
         </connector>
-        <connector>
+        <connector angle="-160.02">
           <from>source</from>
           <to>f1</to>
         </connector>
@@ -378,11 +378,11 @@
           <from>u3</from>
           <to>f2</to>
         </connector>
-        <connector>
+        <connector angle="-155.64">
           <from>h</from>
           <to>f2</to>
         </connector>
-        <connector>
+        <connector angle="-157.86">
           <from>source</from>
           <to>f2</to>
         </connector>
@@ -398,11 +398,11 @@
           <from>u4</from>
           <to>f3</to>
         </connector>
-        <connector>
+        <connector angle="-152.45">
           <from>h</from>
           <to>f3</to>
         </connector>
-        <connector>
+        <connector angle="-155.22">
           <from>source</from>
           <to>f3</to>
         </connector>
@@ -418,11 +418,11 @@
           <from>u5</from>
           <to>f4</to>
         </connector>
-        <connector>
+        <connector angle="-148.39">
           <from>h</from>
           <to>f4</to>
         </connector>
-        <connector>
+        <connector angle="-151.93">
           <from>source</from>
           <to>f4</to>
         </connector>
@@ -438,11 +438,11 @@
           <from>u6</from>
           <to>f5</to>
         </connector>
-        <connector>
+        <connector angle="-143.13">
           <from>h</from>
           <to>f5</to>
         </connector>
-        <connector>
+        <connector angle="-147.72">
           <from>source</from>
           <to>f5</to>
         </connector>
@@ -458,11 +458,11 @@
           <from>u7</from>
           <to>f6</to>
         </connector>
-        <connector>
+        <connector angle="-136.17">
           <from>h</from>
           <to>f6</to>
         </connector>
-        <connector>
+        <connector angle="-142.25">
           <from>source</from>
           <to>f6</to>
         </connector>
@@ -478,11 +478,11 @@
           <from>u8</from>
           <to>f7</to>
         </connector>
-        <connector>
+        <connector angle="-126.87">
           <from>h</from>
           <to>f7</to>
         </connector>
-        <connector>
+        <connector angle="-135.0">
           <from>source</from>
           <to>f7</to>
         </connector>
@@ -498,11 +498,11 @@
           <from>u9</from>
           <to>f8</to>
         </connector>
-        <connector>
+        <connector angle="-114.62">
           <from>h</from>
           <to>f8</to>
         </connector>
-        <connector>
+        <connector angle="-125.31">
           <from>source</from>
           <to>f8</to>
         </connector>
@@ -518,11 +518,11 @@
           <from>u10</from>
           <to>f9</to>
         </connector>
-        <connector>
+        <connector angle="-99.46">
           <from>h</from>
           <to>f9</to>
         </connector>
-        <connector>
+        <connector angle="-112.62">
           <from>source</from>
           <to>f9</to>
         </connector>
@@ -538,11 +538,11 @@
           <from>u11</from>
           <to>f10</to>
         </connector>
-        <connector>
+        <connector angle="-82.87">
           <from>h</from>
           <to>f10</to>
         </connector>
-        <connector>
+        <connector angle="-97.13">
           <from>source</from>
           <to>f10</to>
         </connector>
@@ -558,11 +558,11 @@
           <from>u12</from>
           <to>f11</to>
         </connector>
-        <connector>
+        <connector angle="-67.38">
           <from>h</from>
           <to>f11</to>
         </connector>
-        <connector>
+        <connector angle="-80.54">
           <from>source</from>
           <to>f11</to>
         </connector>
@@ -578,11 +578,11 @@
           <from>u13</from>
           <to>f12</to>
         </connector>
-        <connector>
+        <connector angle="-54.69">
           <from>h</from>
           <to>f12</to>
         </connector>
-        <connector>
+        <connector angle="-65.38">
           <from>source</from>
           <to>f12</to>
         </connector>
@@ -598,11 +598,11 @@
           <from>u14</from>
           <to>f13</to>
         </connector>
-        <connector>
+        <connector angle="-45.0">
           <from>h</from>
           <to>f13</to>
         </connector>
-        <connector>
+        <connector angle="-53.13">
           <from>source</from>
           <to>f13</to>
         </connector>
@@ -618,11 +618,11 @@
           <from>u15</from>
           <to>f14</to>
         </connector>
-        <connector>
+        <connector angle="-37.75">
           <from>h</from>
           <to>f14</to>
         </connector>
-        <connector>
+        <connector angle="-43.83">
           <from>source</from>
           <to>f14</to>
         </connector>
@@ -638,11 +638,11 @@
           <from>u16</from>
           <to>f15</to>
         </connector>
-        <connector>
+        <connector angle="-32.28">
           <from>h</from>
           <to>f15</to>
         </connector>
-        <connector>
+        <connector angle="-36.87">
           <from>source</from>
           <to>f15</to>
         </connector>
@@ -658,11 +658,11 @@
           <from>u17</from>
           <to>f16</to>
         </connector>
-        <connector>
+        <connector angle="-28.07">
           <from>h</from>
           <to>f16</to>
         </connector>
-        <connector>
+        <connector angle="-31.61">
           <from>source</from>
           <to>f16</to>
         </connector>
@@ -678,11 +678,11 @@
           <from>u18</from>
           <to>f17</to>
         </connector>
-        <connector>
+        <connector angle="-24.78">
           <from>h</from>
           <to>f17</to>
         </connector>
-        <connector>
+        <connector angle="-27.55">
           <from>source</from>
           <to>f17</to>
         </connector>
@@ -698,11 +698,11 @@
           <from>u19</from>
           <to>f18</to>
         </connector>
-        <connector>
+        <connector angle="-22.14">
           <from>h</from>
           <to>f18</to>
         </connector>
-        <connector>
+        <connector angle="-24.36">
           <from>source</from>
           <to>f18</to>
         </connector>
@@ -714,11 +714,11 @@
           <from>u19</from>
           <to>f19</to>
         </connector>
-        <connector>
+        <connector angle="-19.98">
           <from>h</from>
           <to>f19</to>
         </connector>
-        <connector>
+        <connector angle="-21.8">
           <from>source</from>
           <to>f19</to>
         </connector>
