@@ -193,6 +193,10 @@ fn the_start_page_says_which_examples_have_scenarios() {
     // The M/M/1 queue's card, which is featured, counts its file's scenarios.
     let n = stochcraft_engine::file_scenarios(EXAMPLES[0].bytes).len();
     assert!(n > 1);
-    h.get_by_label(&format!("{n} scenarios to compare"));
+    assert!(
+        h.query_all_by_label(&format!("{n} scenarios to compare"))
+            .count()
+            >= 1
+    );
     assert!(h.query_by_label("1 scenario to compare").is_none());
 }
