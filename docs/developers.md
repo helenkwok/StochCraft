@@ -1078,7 +1078,8 @@ The golden digests pin one search of a rule beside a count and one of a mean.
 ### The journal
 
 The engine records every command that is not a query in its journal. A new or opened document
-(`model.new`, `file.open`, and opening a file in the app) starts a new journal, so a journal is
+(`model.new`, `file.open`, `file.reopen` for another scenario of the same file, and opening a
+file or a scenario in the app) starts a new journal, so a journal is
 the history of one document. `exec --journal out.json` writes the journal of what the script did,
 also when a step failed (atomically, and never over the script, the file given with `--open` or
 the file the script opened or saved: those are refused), as a JSON object:

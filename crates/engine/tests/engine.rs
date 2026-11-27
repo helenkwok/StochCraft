@@ -78,7 +78,7 @@ fn catalogue_is_complete_and_its_examples_run_in_order() {
     for (c, applied) in COMMANDS.iter().zip(&applied) {
         if matches!(
             c.name,
-            "file.open" | "model.new" | "sd.open" | "sd.new" | "agents.open"
+            "file.open" | "file.reopen" | "model.new" | "sd.open" | "sd.new" | "agents.open"
         ) {
             journalled = 0;
         } else if c.kind != CommandKind::Query {
@@ -4547,4 +4547,83 @@ fn cancelling_a_run_that_already_finished_keeps_its_results() {
     let cancelled = ok(&mut e, "run.cancel", json!({}));
     assert_eq!(cancelled["state"], "finished", "{cancelled}");
     ok(&mut e, "results.compare", json!({}));
+}
+
+/// The bank example's file holds two scenarios: five cashiers, and six, which inherits the rest.
+#[test]
+fn a_files_scenarios_are_listed_and_another_one_reopens() {
+    let path =
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/bank.bpmn");
+    let path = path.to_string_lossy().into_owned();
+    let cashiers = |m: &stochcraft_model::Model| {
+        stochcraft_engine::wire::model(m)["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|e| e["id"] == "cashiers"))
+            .map(|e| e["capacity"].clone())
+            .unwrap_or_default()
+    };
+    let mut e = Engine::new();
+    // A new model has no file, so no scenarios, and none to reopen.
+    assert_eq!(
+        ok(&mut e, "file.scenarios", json!({})),
+        json!({ "open": null, "scenarios": [] })
+    );
+    assert_eq!(
+        err(&mut e, "file.reopen", json!({ "scenario": "scenario" })),
+        ErrorCode::InvalidParams
+    );
+
+    ok(&mut e, "file.open", json!({ "path": path }));
+    assert_eq!(
+        ok(&mut e, "file.scenarios", json!({})),
+        json!({
+            "open": "scenario",
+            "scenarios": [
+                { "id": "scenario", "name": "Five cashiers", "description": null, "inherits": null, "open": true },
+                { "id": "six-cashiers", "name": "Six cashiers", "description": null, "inherits": "scenario", "open": false },
+            ],
+        })
+    );
+    assert_eq!(cashiers(e.model()), json!(5));
+    assert!(e.inherited_model().is_none());
+
+    // A scenario the file does not have, and unsaved changes, are refused.
+    assert_eq!(
+        err(
+            &mut e,
+            "file.reopen",
+            json!({ "scenario": "seven-cashiers" })
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(&mut e, "experiment.set", json!({ "replications": 3 }));
+    assert_eq!(
+        err(&mut e, "file.reopen", json!({ "scenario": "six-cashiers" })),
+        ErrorCode::Conflict
+    );
+    assert_eq!(e.model().experiment.replications, 3);
+
+    let opened = ok(
+        &mut e,
+        "file.reopen",
+        json!({ "scenario": "six-cashiers", "discard_changes": true }),
+    );
+    assert_eq!(opened["scenario"], "six-cashiers");
+    assert_eq!(opened["path"], json!(path));
+    assert_eq!(e.path(), Some(path.as_str()));
+    assert!(!e.is_dirty());
+    assert_eq!(e.model().experiment.replications, 10);
+    assert_eq!(cashiers(e.model()), json!(6));
+    // The values it changes are measured against the scenario it inherits from.
+    assert_eq!(e.inherited_model().map(cashiers), Some(json!(5)));
+    let listed = ok(&mut e, "file.scenarios", json!({}));
+    assert_eq!(listed["open"], "six-cashiers");
+    assert_eq!(listed["scenarios"][1]["open"], true);
+    // A new document: no undo history, and a journal that starts from this scenario.
+    assert_eq!(ok(&mut e, "history", json!({}))["undo"], json!([]));
+    assert_eq!(e.journal_start().scenario.as_deref(), Some("six-cashiers"));
+
+    // And back to the first.
+    ok(&mut e, "file.reopen", json!({ "scenario": "scenario" }));
+    assert_eq!(cashiers(e.model()), json!(5));
 }

@@ -213,7 +213,7 @@ impl App {
         let before = matches!(command, "run" | "mc.run").then(|| comparable(self.engine.model()));
         let result = self.engine.execute(command, params)?;
         match command {
-            "file.open" | "model.new" | "model.set" | "sd.open" | "agents.open" => {
+            "file.open" | "file.reopen" | "model.new" | "model.set" | "sd.open" | "agents.open" => {
                 self.forget_view();
                 if let Some(path) = result["path"].as_str() {
                     self.info(tf("Opened {file}", &[("file", file_name(path))]));

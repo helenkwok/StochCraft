@@ -102,6 +102,7 @@ fn an_agent_opens_builds_checks_runs_and_saves() {
         "inspect_model",
         "check_model",
         "open",
+        "scenarios",
         "save",
         "run",
         "undo",

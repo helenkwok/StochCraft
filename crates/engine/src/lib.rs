@@ -1109,6 +1109,32 @@ impl Engine {
         self.file.as_ref()?.inherited.as_ref()
     }
 
+    /// The opened file's input scenarios, as `file.scenarios` gives them: `open`, the id of the
+    /// one the model was read from, and `scenarios`, each with its `id`, `name`, `description`,
+    /// the scenario it `inherits` from and whether it is the `open` one. None without a file,
+    /// and none for a system dynamics model.
+    pub fn scenarios(&self) -> Value {
+        let Some(f) = self.file.as_ref().filter(|_| self.sd.is_none()) else {
+            return json!({ "open": null, "scenarios": [] });
+        };
+        let open = f.opened.scenario.as_deref();
+        let list: Vec<Value> = f
+            .opened
+            .scenario_details()
+            .iter()
+            .map(|s| {
+                json!({
+                    "id": s.id,
+                    "name": s.name,
+                    "description": s.description,
+                    "inherits": s.inherits,
+                    "open": open == Some(s.id.as_str()),
+                })
+            })
+            .collect();
+        json!({ "open": open, "scenarios": list })
+    }
+
     /// Whether the opened file uses `id` for something it keeps that the model does not have, so
     /// a new element, connection or pool may not take it.
     fn file_uses_id(&self, id: &str) -> bool {

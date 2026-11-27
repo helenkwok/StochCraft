@@ -845,6 +845,16 @@ pub struct FileOpen {
 
 #[derive(Debug, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
+pub struct FileReopen {
+    /// The id of the scenario to open, as `file.scenarios` lists it.
+    pub scenario: String,
+    /// Reopen even though the model has unsaved changes, which are lost.
+    #[serde(default)]
+    pub discard_changes: bool,
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct FileSave {
     /// Where to save; by default the file the model was opened from or last saved to.
     #[serde(default)]
@@ -2521,6 +2531,59 @@ fn file_open(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     })
 }
 
+fn file_scenarios(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    parse::<NoParams>(p)?;
+    Ok(e.scenarios())
+}
+
+fn file_reopen(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: FileReopen = parse(p)?;
+    let Some(f) = e.file.as_ref().filter(|_| e.sd.is_none()) else {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            "no file with scenarios is open: open one with file.open",
+        ));
+    };
+    let ids: Vec<&str> = f
+        .opened
+        .scenario_details()
+        .iter()
+        .map(|s| s.id.as_str())
+        .collect();
+    if !ids.contains(&p.scenario.as_str()) {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            if ids.is_empty() {
+                format!("the file has no scenario `{}`; it has none", p.scenario)
+            } else {
+                format!(
+                    "the file has no scenario `{}`; its scenarios are {}",
+                    p.scenario,
+                    ids.join(", ")
+                )
+            },
+        ));
+    }
+    if e.is_dirty() && !p.discard_changes {
+        return Err(CommandError::new(
+            ErrorCode::Conflict,
+            "the model has unsaved changes, which opening another scenario drops: save them first, or `\"discard_changes\": true` opens it anyway",
+        ));
+    }
+    let bytes = f.opened.bytes().to_vec();
+    let name = f.path.clone().unwrap_or_default();
+    // An agent-based model's charts and lists of links, and a process model's decision tables,
+    // are read from beside the file, as `file.open` reads them.
+    let dir = std::path::Path::new(&name)
+        .parent()
+        .map(std::path::Path::to_path_buf)
+        .unwrap_or_default();
+    e.open_bytes_with(&name, &bytes, Some(&p.scenario), &mut |href: &str| {
+        let path = crate::agents::beside(&dir, href)?;
+        std::fs::read(path).map_err(|err| err.to_string())
+    })
+}
+
 /// A file to write beside the model: its reference, where, its bytes, and what was there when the
 /// save looked (`None`: nothing).
 type Sibling = (String, std::path::PathBuf, Vec<u8>, Option<Vec<u8>>);
@@ -3302,6 +3365,22 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<FileOpen>,
         example: || json!({ "path": "help-desk.bpmn" }),
         run: file_open,
+    },
+    Command {
+        name: "file.scenarios",
+        summary: "The opened file's input scenarios (BPSim): each with its id, name, description and the scenario it inherits from, and which one is open.",
+        kind: CommandKind::Query,
+        schema: schema::<NoParams>,
+        example: || json!({}),
+        run: file_scenarios,
+    },
+    Command {
+        name: "file.reopen",
+        summary: "Open another of the opened file's scenarios (file.scenarios), from the file as it was opened or last saved, replacing the model, clearing the history and starting a new journal. Unsaved changes are refused unless `discard_changes` is true.",
+        kind: CommandKind::Action,
+        schema: schema::<FileReopen>,
+        example: || json!({ "scenario": "scenario" }),
+        run: file_reopen,
     },
     Command {
         name: "model.new",
