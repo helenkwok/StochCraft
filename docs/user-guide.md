@@ -18,6 +18,7 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 - [Ask what-if questions: the Analysis view](#ask-what-if-questions-the-analysis-view)
 - [Find the best numbers of servers, operators and buffers, rules and times](#find-the-best-numbers-of-servers-operators-and-buffers-rules-and-times)
 - [Drive the runs from an optimiser of your own](#drive-the-runs-from-an-optimiser-of-your-own)
+- [Analysing runs from another tool](#analysing-runs-from-another-tool)
 - [Monte Carlo models](#monte-carlo-models)
 - [System dynamics models](#system-dynamics-models)
 - [Agent-based models](#agent-based-models)
@@ -793,6 +794,91 @@ print(result.X[0])
 Run them with the path to the command line: `python optuna_mm1.py path/to/stochcraft-cli`.
 What such a search finds is the best it found, not a proven best: neither method says how sure
 it is that nothing it did not try is better.
+
+## Analysing runs from another tool
+
+A model built elsewhere can still have StochCraft's output analysis, without being rebuilt: any
+simulation tool, spreadsheet or script that can write CSV writes one row per replication, and
+`stochcraft-cli analyse` reads it. Agents and programs use the same analysis as the engine command
+`data.analyse`, with the file's text as `csv`.
+
+**The file.** The first row is the header. A *wide* table has a column per measure, and
+optionally a `scenario` column and a `replication` column:
+
+```text
+scenario,replication,wait,served
+one desk,1,4.0,100
+one desk,2,6.0,102
+two desks,1,3.0,110
+two desks,2,4.0,111
+```
+
+A *long* table has a row per value, with the measure's name in a `measure` column and the number
+in a `value` column (and the same optional `scenario` and `replication` columns):
+
+```text
+scenario,replication,measure,value
+one desk,1,wait,4.0
+one desk,1,served,100
+two desks,1,wait,3.0
+two desks,1,served,110
+```
+
+Cells may be separated by commas, semicolons or tabs, and quoted; with semicolons a number may
+have a decimal comma (`4,0`). An empty cell is a replication with no value for that measure. Any
+other cell of a measure that is not a number is an error naming its line and column. Columns
+named otherwise are given with `--scenario`, `--replication`, `--measure` and `--value`. A column
+headed like a role that is not one (a `run` column that counts something, say) is kept from it with
+`--no-scenario` or `--no-replication`: it is then a measure if it holds numbers, and left out if not.
+
+```bash
+stochcraft-cli analyse runs.csv
+stochcraft-cli analyse runs.csv --baseline "one desk" --paired --tolerance wait=0.5
+stochcraft-cli analyse runs.csv --json
+```
+
+**What it says**, for each scenario and measure:
+
+- n, the mean with its 95% interval, the lowest and highest value. The mean and the half-width
+  are rounded together to what the interval supports, as the Results tab rounds them: the
+  half-width to one significant figure (two where it starts with a 1), the mean to the same
+  place.
+- How sure the mean is: settled when the half-width is within ±5% of the mean, otherwise wide,
+  with about how many runs would settle it (the interval narrows with the square root of the
+  number of runs). "No spread" means every run gave the same value, which is not proof that it
+  never varies. `data.analyse` takes another target per measure (`targets`), such as points for
+  a share or a half-width in the measure's own unit.
+- Two outcomes, where the runs fall into two clearly separate groups (some near one value, the
+  rest near another): their mean then describes no actual run.
+
+And for each other scenario against the baseline (the first, or the one given with
+`--baseline`): the difference with its 95% interval and a verdict, judged as the check against
+observed data judges a difference. *Differs* when the interval leaves out zero; *no difference
+detected* when it holds zero, which is not evidence that the two agree, since a wide interval
+holds zero whatever the truth. With a tolerance set in advance (`--tolerance wait=0.5`) the
+verdict is *agrees* when the whole interval lies within ± it, *differs* when it lies wholly
+outside, and *inconclusive* otherwise.
+
+**Why pairing must be declared.** When the scenarios were run with common random numbers
+(replication i of each met the same random numbers), comparing them replication by replication
+gives a much narrower interval than comparing them as independent samples. StochCraft cannot see
+from the numbers whether that was so, so it compares them as independent (Welch's interval) unless
+told otherwise with `--paired`. Pairs are matched by replication id, so pairing needs a
+replication column and the same ids in every scenario; declaring it for runs that did not share
+their random numbers makes the intervals too narrow.
+
+**Warm-up.** A time series per replication (a `time` column, a `replication` column and one or
+more measures, recorded at the same times in every replication) gives a suggested warm-up:
+
+```bash
+stochcraft-cli warmup series.csv --time time --replication replication
+```
+
+Each measure is averaged across the replications at each time, and MSER-5 on that average says
+how many of the first times to leave out; the answer is the first time kept. With fewer than 20
+times there is too little to judge, and when the start-up seems to last beyond the middle of the
+series, the series is too short to show where it ends. `data.warmup` also gives the averaged
+series, for a plot.
 
 ## Monte Carlo models
 

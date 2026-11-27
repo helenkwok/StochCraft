@@ -137,7 +137,7 @@ which moved "Edit several objects at once" from missing to done: the rows now co
 | Times in the model's units, shown beside the field | done | For example "0.2 h" in the field. The flowchart-first tool: a unit control per time field (from public summaries, not confirmed) |
 | Fit a distribution from data | missing | The 3D-first tool: a fitting add-on appears in community answers but not in its manual's contents (not verified). The flowchart-first tool: empirical distributions from samples with a histogram preview, no built-in fitter found (from public summaries, not confirmed). StochCraft: none in the window; fitting from event logs is planned after M3 |
 | Three-point estimate (minimum, most likely, maximum or 95th percentile) | done (ours) | "Estimate from three values…" fits a block's time and keeps the estimate as the time's pedigree. Not found in the vendor pages read |
-| Import data tables (spreadsheet, CSV, database) | missing | The 3D-first tool: tables filled from spreadsheets or databases with an importer. The flowchart-first tool: a built-in database that imports spreadsheets (from public summaries, not confirmed). StochCraft: none |
+| Import data tables (spreadsheet, CSV, database) | missing | The 3D-first tool: tables filled from spreadsheets or databases with an importer. The flowchart-first tool: a built-in database that imports spreadsheets (from public summaries, not confirmed). StochCraft: the engine reads per-replication results made by another tool from CSV (`data.analyse`, `data.warmup`, on the command line and over MCP), with no control in the window yet |
 
 ## 6 Layout, 2D/3D and animation
 

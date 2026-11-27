@@ -96,6 +96,28 @@ fn mean(xs: &[Option<f64>]) -> (Option<f64>, u64) {
     ((n > 0).then(|| v.iter().sum::<f64>() / n as f64), n)
 }
 
+/// The difference b − a of one result with its 95% interval, from each run's value in each
+/// replication (`None` where it had none): the paired-t interval over the replications where
+/// both have a value when the runs are `paired` (common random numbers), Welch's two-sample t
+/// interval otherwise. `results.compare` and `data.analyse` both judge a difference by it.
+pub(crate) fn difference_of(
+    a: &[Option<f64>],
+    b: &[Option<f64>],
+    paired: bool,
+) -> Option<Difference> {
+    if paired {
+        difference::paired(a, b)
+    } else {
+        let flat = |xs: &[Option<f64>]| xs.iter().flatten().copied().collect::<Vec<_>>();
+        difference::welch(&flat(a), &flat(b))
+    }
+}
+
+/// The name of the interval [`difference_of`] uses, as the answers give it.
+pub(crate) fn interval_name(paired: bool) -> &'static str {
+    if paired { "paired_t" } else { "welch_t" }
+}
+
 /// Compares `a` with `b` (results as `run` returns them).
 pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, CommandError> {
     let (ra, rb) = (RunResults::read(a, "a")?, RunResults::read(b, "b")?);
@@ -139,12 +161,7 @@ pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, C
                 rb.samples(element, metric).unwrap_or_default(),
             );
             let ((mean_a, n_a), (mean_b, n_b)) = (mean(&xa), mean(&xb));
-            let d: Option<Difference> = if paired {
-                difference::paired(&xa, &xb)
-            } else {
-                let flat = |xs: &[Option<f64>]| xs.iter().flatten().copied().collect::<Vec<_>>();
-                difference::welch(&flat(&xa), &flat(&xb))
-            };
+            let d = difference_of(&xa, &xb, paired);
             let mut c = json!({
                 "element": element,
                 "metric": metric,
@@ -154,7 +171,7 @@ pub fn compare(a: &Value, b: &Value, only: Option<&[Output]>) -> Result<Value, C
                 "half_width": d.map(|d| d.half_width),
                 "df": d.and_then(|d| d.df),
                 "significant": d.and_then(|d| d.significant()),
-                "interval": if paired { "paired_t" } else { "welch_t" },
+                "interval": interval_name(paired),
             });
             if paired {
                 c["pairs"] = json!(d.map_or(0, |d| d.n_a));

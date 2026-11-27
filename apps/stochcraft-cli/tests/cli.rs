@@ -1771,3 +1771,135 @@ fn optimize_refuses_numbers_that_are_not_finite() {
         assert!(stderr(&o).contains(flag), "{flag}: {}", stderr(&o));
     }
 }
+
+fn data(name: &str) -> String {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/data")
+        .join(name)
+        .to_string_lossy()
+        .into_owned()
+}
+
+#[test]
+fn analyse_reads_runs_from_another_tool() {
+    let wide = data("runs-wide.csv");
+    let text = ok(&["analyse", &wide]);
+    assert!(
+        text.starts_with(&format!(
+            "runs from {wide}: 10 rows, a wide table, 2 measures, scenarios one desk, two desks"
+        )),
+        "{text}"
+    );
+    let row = |text: &str, starts: &str| {
+        text.lines()
+            .find(|l| l.starts_with(starts))
+            .map(|l| l.split_whitespace().collect::<Vec<_>>().join(" "))
+            .unwrap_or_else(|| panic!("no {starts} row:\n{text}"))
+    };
+    // 6 ± 1.96 rounded to what the interval supports; ±33% of the mean, so about 220 runs.
+    assert_eq!(
+        row(&text, "one desk   wait"),
+        "one desk wait 5 6 ± 2 wide (about 220 runs) 4 8"
+    );
+    assert!(
+        row(&text, "one desk   served").contains("4 (1 empty)"),
+        "{text}"
+    );
+    // Independent: Welch's interval −1.6 ± 2.06 holds 0.
+    let against = text
+        .split_once("against the baseline one desk, as independent runs")
+        .map_or("", |(_, rest)| rest);
+    assert_eq!(
+        row(against, "two desks  wait"),
+        "two desks wait -2 ± 2 no difference detected"
+    );
+    assert!(
+        text.contains("note: every scenario has the same replication ids"),
+        "{text}"
+    );
+
+    // Declared pairs: −1.6 ± 0.68, and within ±3 it agrees.
+    let paired = ok(&["analyse", &wide, "--paired", "--tolerance", "wait=3"]);
+    assert!(
+        paired.contains("in pairs by replication (paired t)"),
+        "{paired}"
+    );
+    assert!(
+        paired.lines().any(|l| l.starts_with("two desks")
+            && l.contains("-1.6 ± 0.7")
+            && l.contains("agrees within tolerance (±3)")),
+        "{paired}"
+    );
+    let r = json(&ok(&["analyse", &wide, "--paired", "--json"]));
+    assert_eq!(r["comparisons"][0]["verdict"], "differs");
+
+    // A replication column whose ids repeat is refused, saying which.
+    let o = cli(&["analyse", &wide, "--paired", "--replication", "note"]);
+    assert!(
+        !o.status.success() && stderr(&o).contains("`ok` appears twice"),
+        "{}",
+        stderr(&o)
+    );
+    let o = cli(&["analyse", &wide, "--tolerance", "wait"]);
+    assert!(
+        !o.status.success() && stderr(&o).contains("--tolerance"),
+        "{}",
+        stderr(&o)
+    );
+}
+
+#[test]
+fn warmup_finds_the_end_of_the_start_up() {
+    let text = ok(&[
+        "warmup",
+        &data("series-step.csv"),
+        "--time",
+        "time",
+        "--replication",
+        "replication",
+    ]);
+    assert!(
+        text.contains(
+            "queue (2 replications): delete the first 10 of 40 times: steady from time 11"
+        ),
+        "{text}"
+    );
+    let r = json(&ok(&["warmup", &data("series-step.csv"), "--json"]));
+    assert_eq!(r["series"][0]["warmup"]["time"], 11.0);
+}
+
+#[test]
+fn a_column_headed_like_a_role_can_be_said_to_be_none() {
+    let path = scratch("roles.csv");
+    let _ = std::fs::write(&path, "scenario,run,wait\nbusy,3,4\nbusy,5,6\nquiet,4,5\n");
+    let p = path.to_string_lossy();
+    // Guessed: `scenario` and `run` are taken for their roles.
+    let r = json(&ok(&["analyse", &p, "--json"]));
+    assert_eq!(r["scenarios"], serde_json::json!(["busy", "quiet"]));
+    // Said to be none: one scenario, `run` a measure, `scenario` left out.
+    let r = json(&ok(&[
+        "analyse",
+        &p,
+        "--no-scenario",
+        "--no-replication",
+        "--json",
+    ]));
+    assert_eq!(r["scenarios"], serde_json::json!([null]));
+    assert_eq!(r["measures"], serde_json::json!(["run", "wait"]));
+    assert_eq!(r["columns"]["ignored"], serde_json::json!(["scenario"]));
+    // A name and "none" for the same role cannot both be given.
+    let o = cli(&["analyse", &p, "--scenario", "scenario", "--no-scenario"]);
+    assert!(!o.status.success());
+
+    let series = scratch("roles-series.csv");
+    let _ = std::fs::write(
+        &series,
+        "time,replication,scenario,queue\n1,1,7,2\n2,1,7,3\n1,2,8,1\n2,2,8,2\n",
+    );
+    let s = series.to_string_lossy();
+    let r = json(&ok(&["warmup", &s, "--no-scenario", "--json"]));
+    assert_eq!(
+        r["columns"]["measures"],
+        serde_json::json!(["scenario", "queue"])
+    );
+}

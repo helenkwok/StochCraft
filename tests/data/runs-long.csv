@@ -1,0 +1,21 @@
+scenario;replication;measure;value
+one desk;1;wait;4,0
+one desk;1;served;100
+one desk;2;wait;6,0
+one desk;2;served;102
+one desk;3;wait;5,0
+one desk;3;served;
+one desk;4;wait;7,0
+one desk;4;served;98
+one desk;5;wait;8,0
+one desk;5;served;101
+two desks;3;wait;4,0
+two desks;3;served;109
+two desks;1;wait;3,0
+two desks;1;served;110
+two desks;2;wait;4,0
+two desks;2;served;111
+two desks;5;wait;6,0
+two desks;5;served;108
+two desks;4;wait;5,0
+two desks;4;served;112
