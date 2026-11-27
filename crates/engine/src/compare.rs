@@ -110,8 +110,7 @@ fn mean(xs: &[Option<f64>]) -> (Option<f64>, u64) {
 }
 
 /// Compares `a` with `b` (results as `run` returns them) with intervals at confidence `level`,
-/// held together by Bonferroni's
-/// rule over the comparisons made when `bonferroni` is set.
+/// held together by Bonferroni's rule over the comparisons made when `bonferroni` is set.
 pub fn compare_at(
     a: &Value,
     b: &Value,

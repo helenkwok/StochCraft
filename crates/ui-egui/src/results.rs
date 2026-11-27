@@ -1761,7 +1761,8 @@ mod tests {
         // 92% ± 3 points: a warning.
         assert!(score(&m(0.92, 0.03), &Unit::Share).is_some_and(|s| s > 2.0));
         // A time is judged against its mean, and a time of zero not at all.
-        assert!(score(&m(38.0, 12.16), &Unit::Time).is_some_and(|s| (s - 6.4).abs() < 1e-9));
+        // ± 32% against ± 5% of the true mean (4.76% of the estimate): 6.72.
+        assert!(score(&m(38.0, 12.16), &Unit::Time).is_some_and(|s| (s - 6.4 * 1.05).abs() < 1e-9));
         assert!(score(&m(0.0, 0.0), &Unit::Time).is_none());
     }
 
