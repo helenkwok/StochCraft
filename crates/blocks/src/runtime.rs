@@ -4656,6 +4656,17 @@ fn requirements(model: &Model, needs: &[Requirement]) -> Vec<Vec<Alternative>> {
 /// requirement takes its next alternative only when its first would leave a later one unmet.
 /// `false`, with `free` and `taken` as they were, when there is no way to meet them all now.
 fn take_all(requirements: &[Vec<Alternative>], free: &mut [i64], taken: &mut Taken) -> bool {
+    take_within(MAX_COMBINATIONS, requirements, free, taken)
+}
+
+/// [`take_all`], trying at most `limit` ways to choose the later requirements' alternatives one
+/// by one ([`any_way`]).
+fn take_within(
+    limit: usize,
+    requirements: &[Vec<Alternative>],
+    free: &mut [i64],
+    taken: &mut Taken,
+) -> bool {
     let Some((first, rest)) = requirements.split_first() else {
         return true;
     };
@@ -4664,56 +4675,63 @@ fn take_all(requirements: &[Vec<Alternative>], free: &mut [i64], taken: &mut Tak
     // spread of units, which for many pools of one unit each would be millions.
     first.iter().any(|alt| {
         alt.quantity > 0
-            && feasible(Some((alt.pools.as_slice(), alt.quantity)), rest, free)
-            && fill(&alt.pools, alt.quantity, rest, free, taken)
+            && feasible(
+                limit,
+                Some((alt.pools.as_slice(), alt.quantity)),
+                rest,
+                free,
+            )
+            && fill(limit, &alt.pools, alt.quantity, rest, free, taken)
     })
 }
 
-/// Most ways to choose one alternative for each requirement that [`feasible`] tries one by one.
+/// Most ways to choose one alternative for each requirement that [`any_way`] tries one by one.
 const MAX_COMBINATIONS: usize = 4096;
 
-/// Whether `current` (the pools a requirement still takes from, and the units it still needs)
-/// and every one of `rest` can be met together from `free`. Each of `rest` is met by one of its
-/// alternatives; for each way to choose them, [`shared_out`] says whether the free units can be
-/// shared out among them all. [`take_all`] and [`fill`] ask this before each step, so they only
-/// step where a way through lies ahead: the first way they find is still the first in their
-/// order, found without trying the dead ends. With more than [`MAX_COMBINATIONS`] ways to
-/// choose, it only asks whether each could be met alone, which is weaker but still never says
-/// no to a take that could be met.
-fn feasible(current: Option<(&[usize], u32)>, rest: &[Vec<Alternative>], free: &[i64]) -> bool {
-    let current_alone = || current.is_none_or(|(pools, left)| have(pools, free) >= i64::from(left));
-    // With nothing after it, the current one only needs enough free in its own pools: the
-    // common case of a task with one requirement, checked without building a flow.
-    if rest.is_empty() {
-        return current_alone();
-    }
+/// What a requirement takes: the pools it takes from and the units it needs from them.
+type Share<'a> = (&'a [usize], u32);
+
+/// Whether `f` holds for some way to meet every one of `rest`, each by one of its alternatives
+/// (of more than no units): the needs of each way to choose them, the first requirement's turning
+/// fastest, while there are at most `limit` ways. With more, `f` is asked once, of a weaker way
+/// that any choice meets: each requirement taking the fewest units any of its alternatives needs
+/// from any pool any of them names. So a `false` still means that no choice will do. `false` when
+/// a requirement has no alternative.
+fn any_way(limit: usize, rest: &[Vec<Alternative>], mut f: impl FnMut(&[Share]) -> bool) -> bool {
     let choices: Vec<Vec<&Alternative>> = rest
         .iter()
         .map(|r| r.iter().filter(|alt| alt.quantity > 0).collect())
         .collect();
+    if choices.iter().any(Vec::is_empty) {
+        return false;
+    }
     let combinations = choices.iter().try_fold(1_usize, |n, c| {
-        n.checked_mul(c.len()).filter(|&n| n <= MAX_COMBINATIONS)
+        n.checked_mul(c.len()).filter(|&n| n <= limit)
     });
     let Some(combinations) = combinations else {
-        return current_alone()
-            && choices.iter().all(|c| {
-                c.iter()
-                    .any(|alt| have(&alt.pools, free) >= i64::from(alt.quantity))
-            });
+        let relaxed: Vec<(Vec<usize>, u32)> = choices
+            .iter()
+            .map(|c| {
+                let mut pools: Vec<usize> =
+                    c.iter().flat_map(|alt| alt.pools.iter().copied()).collect();
+                pools.sort_unstable();
+                pools.dedup();
+                let fewest = c.iter().map(|alt| alt.quantity).min().unwrap_or(0);
+                (pools, fewest)
+            })
+            .collect();
+        let way: Vec<Share> = relaxed.iter().map(|(p, q)| (p.as_slice(), *q)).collect();
+        return f(&way);
     };
-    // Counts through the choices like an odometer, the first requirement's turning fastest.
+    // Counts through the choices like an odometer.
     let mut pick = vec![0_usize; choices.len()];
     for _ in 0..combinations {
-        let needs: Vec<(&[usize], u32)> = current
-            .into_iter()
-            .chain(
-                choices
-                    .iter()
-                    .zip(&pick)
-                    .filter_map(|(c, &i)| c.get(i).map(|alt| (alt.pools.as_slice(), alt.quantity))),
-            )
+        let way: Vec<Share> = choices
+            .iter()
+            .zip(&pick)
+            .filter_map(|(c, &i)| c.get(i).map(|alt| (alt.pools.as_slice(), alt.quantity)))
             .collect();
-        if shared_out(&needs, free) {
+        if f(&way) {
             return true;
         }
         for (i, c) in pick.iter_mut().zip(&choices) {
@@ -4725,6 +4743,25 @@ fn feasible(current: Option<(&[usize], u32)>, rest: &[Vec<Alternative>], free: &
         }
     }
     false
+}
+
+/// Whether `current` (the pools a requirement still takes from, and the units it still needs)
+/// and every one of `rest` can be met together from `free`: for some way to choose the
+/// alternatives of `rest` ([`any_way`]), [`shared_out`] says the free units can be shared out
+/// among them all. [`take_all`] and [`fill`] ask this before each step, so they only step where
+/// a way through may lie ahead: the first way they find is still the first in their order, found
+/// without trying the dead ends. With more than `limit` ways to choose, the check is the weaker
+/// one, which still never says no to a take that could be met.
+fn feasible(limit: usize, current: Option<Share>, rest: &[Vec<Alternative>], free: &[i64]) -> bool {
+    // With nothing after it, the current one only needs enough free in its own pools: the
+    // common case of a task with one requirement, checked without building a flow.
+    if rest.is_empty() {
+        return current.is_none_or(|(pools, left)| have(pools, free) >= i64::from(left));
+    }
+    any_way(limit, rest, |way| {
+        let needs: Vec<Share> = current.into_iter().chain(way.iter().copied()).collect();
+        shared_out(&needs, free)
+    })
 }
 
 /// Units free in `pools` all told.
@@ -4799,10 +4836,12 @@ fn shared_out(needs: &[(&[usize], u32)], free: &[i64]) -> bool {
 /// ([`take_all`]). The units are spread over the pools as many from the first as it has free,
 /// then the next, and so on; only when that leaves a later requirement unmet are other spreads
 /// tried, fewer from an earlier pool first. So a take that succeeded before is unchanged, and
-/// one pool of a role is left for a later requirement that names it. Each spread is tried only
-/// when [`feasible`] says the units it leaves can still meet the rest, so no dead end is walked
-/// into. `false`, with `free` and `taken` as they were, when no spread meets them all.
+/// one pool of a role is left for a later requirement that names it. Only amounts from which
+/// the units left can still meet the rest ([`largest`]) are tried, the largest first, so no dead
+/// end is walked into, and a range of amounts that cannot work is passed over at once, not one
+/// unit at a time. `false`, with `free` and `taken` as they were, when no spread meets them all.
 fn fill(
+    limit: usize,
     pools: &[usize],
     left: u32,
     rest: &[Vec<Alternative>],
@@ -4810,21 +4849,13 @@ fn fill(
     taken: &mut Taken,
 ) -> bool {
     if left == 0 {
-        return take_all(rest, free, taken);
+        return take_within(limit, rest, free, taken);
     }
     let Some((&p, others)) = pools.split_first() else {
         return false;
     };
-    let elsewhere: i64 = others
-        .iter()
-        .map(|&q| free.get(q).copied().unwrap_or(0).max(0))
-        .sum();
-    let here = free.get(p).copied().unwrap_or(0).clamp(0, i64::from(left)) as u32;
-    for n in (0..=here).rev() {
-        // Fewer from this pool cannot be made up by the others.
-        if i64::from(left - n) > elsewhere {
-            break;
-        }
+    let mut most = free.get(p).copied().unwrap_or(0).clamp(0, i64::from(left)) as u32;
+    while let Some(n) = largest(limit, (p, others), left, most, rest, free) {
         let mark = taken.len();
         if n > 0
             && let Some(f) = free.get_mut(p)
@@ -4832,9 +4863,7 @@ fn fill(
             *f -= i64::from(n);
             taken.push((p, n));
         }
-        if feasible(Some((others, left - n)), rest, free)
-            && fill(others, left - n, rest, free, taken)
-        {
+        if fill(limit, others, left - n, rest, free, taken) {
             return true;
         }
         if n > 0
@@ -4843,8 +4872,81 @@ fn fill(
             *f += i64::from(n);
         }
         taken.truncate(mark);
+        // Only with the weaker check ([`any_way`]) can a step it lets through fail.
+        let Some(fewer) = n.checked_sub(1) else {
+            return false;
+        };
+        most = fewer;
     }
     false
+}
+
+/// The largest number of units, at most `most`, that a requirement still needing `left` units
+/// from pool `p` and then `others` can take from `p` with the units left still able to meet the
+/// rest of it from `others` and every one of `rest` ([`feasible`], with the same ways to choose).
+/// `None` when no number can.
+///
+/// For one way to choose the alternatives of `rest`, the numbers that can be taken from `p` are
+/// those from some least to some largest, with none missing between: they are the flows on one
+/// edge of a network carrying every unit needed, and those flows make a convex set whose ends
+/// are whole numbers. So the largest at most `most` is found by halving, a few flows for a
+/// billion units: `at_least(m)` (taking `m` from `p` and the rest of `left` from any of the
+/// pools) holds for every `m` up to the largest number and none above. Over the ways to choose,
+/// the largest of their largest numbers is the one wanted.
+fn largest(
+    limit: usize,
+    (p, others): (usize, &[usize]),
+    left: u32,
+    most: u32,
+    rest: &[Vec<Alternative>],
+    free: &[i64],
+) -> Option<u32> {
+    if rest.is_empty() {
+        // Fewer from `p` must be made up by the others.
+        return (i64::from(left - most) <= have(others, free)).then_some(most);
+    }
+    let pools: Vec<usize> = std::iter::once(p).chain(others.iter().copied()).collect();
+    let mut best: Option<u32> = None;
+    any_way(limit, rest, |way| {
+        // With `m` taken from `p`, whether `left - m` from `from` and all of `way` can be met.
+        let meets = |m: u32, from: &[usize]| {
+            let mut after = free.to_vec();
+            if let Some(f) = after.get_mut(p) {
+                *f -= i64::from(m);
+            }
+            let needs: Vec<Share> = std::iter::once((from, left - m))
+                .chain(way.iter().copied())
+                .collect();
+            shared_out(&needs, &after)
+        };
+        let exactly = |n: u32| meets(n, others);
+        let at_least = |m: u32| meets(m, &pools);
+        // Only a number above the best found so far is worth finding.
+        let least = best.map_or(0, |b| b + 1);
+        if least > most {
+            return true;
+        }
+        if exactly(most) {
+            best = Some(most);
+            return true;
+        }
+        // Either every number that works here is above `most`, or none reaches `least`.
+        if at_least(most) || !at_least(least) {
+            return false;
+        }
+        let (mut lo, mut hi) = (least, most - 1);
+        while lo < hi {
+            let mid = lo + (hi - lo).div_ceil(2);
+            if at_least(mid) {
+                lo = mid;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        best = Some(lo);
+        false
+    });
+    best
 }
 
 /// Units taken from the pools: (pool, how many).
@@ -6120,14 +6222,161 @@ mod tests {
         let mut want: Taken = vec![(13, 1)];
         want.extend((0..13).map(|p| (p, 1)));
         assert_eq!(taken, want);
-        // With pool 5 busy, each need alone could still be met, so the check over all of them
-        // lets the search go on; it finds no take, and leaves the pools as they were.
+        // With pool 5 busy, each need alone could still be met, but not all together: fourteen
+        // units are needed and thirteen are free. The weaker check made over all the ways to
+        // choose at once (each need taking its own pool or the spare) sees that.
         let mut free = vec![1_i64; 14];
         free[5] = 0;
         let mut taken = Taken::new();
-        assert!(feasible(None, &needs, &free));
+        assert!(!feasible(MAX_COMBINATIONS, None, &needs, &free));
         assert!(!take_all(&needs, &mut free, &mut taken));
         assert!(taken.is_empty());
         assert_eq!(free.iter().sum::<i64>(), 13);
+    }
+
+    #[test]
+    fn a_combined_shortage_is_found_at_once_with_too_many_ways_to_choose() {
+        // Thirty-one worker pools of one unit each, one of them busy, a task needing fifteen
+        // workers and then sixteen, and thirteen more requirements each taking a unit of its own
+        // pool or else of another: 2^13 = 8,192 ways to choose, more than are tried one by one.
+        // Each requirement alone could be met, and the fifteen could be spread over the pools in
+        // 155,117,520 ways.
+        let mut free = vec![1_i64; 31 + 26];
+        free[30] = 0;
+        let mut needs = vec![vec![alt(0..31, 15)], vec![alt(0..31, 16)]];
+        needs.extend((0..13).map(|i| {
+            let p = 31 + 2 * i;
+            vec![alt(p..p + 1, 1), alt(p + 1..p + 2, 1)]
+        }));
+        let mut taken = Taken::new();
+        let start = std::time::Instant::now();
+        assert!(!take_all(&needs, &mut free, &mut taken));
+        assert!(start.elapsed() < std::time::Duration::from_millis(250));
+        assert!(taken.is_empty());
+        assert_eq!(free.iter().sum::<i64>(), 56);
+        // With every worker free: the first fifteen pools, the other sixteen, then each of the
+        // thirteen its first pool.
+        free[30] = 1;
+        assert!(take_all(&needs, &mut free, &mut taken));
+        let mut want: Taken = (0..31).map(|p| (p, 1)).collect();
+        want.extend((0..13).map(|i| (31 + 2 * i, 1)));
+        assert_eq!(taken, want);
+    }
+
+    #[test]
+    fn a_range_of_amounts_that_cannot_work_is_passed_over_at_once() {
+        // Two pools of a billion units each; a billion from either, then a billion from the
+        // first alone. Any units the first need takes from the first pool leave the second
+        // unmet, so it takes them all from the second pool; finding that by trying one unit
+        // fewer at a time would take a billion checks.
+        let mut free = vec![1_000_000_000_i64; 2];
+        let needs = vec![
+            vec![alt(0..2, 1_000_000_000)],
+            vec![alt(0..1, 1_000_000_000)],
+        ];
+        let mut taken = Taken::new();
+        let start = std::time::Instant::now();
+        assert!(take_all(&needs, &mut free, &mut taken));
+        assert!(start.elapsed() < std::time::Duration::from_millis(250));
+        assert_eq!(taken, vec![(1, 1_000_000_000), (0, 1_000_000_000)]);
+        assert_eq!(free, vec![0, 0]);
+    }
+
+    /// The take of [`take_all`] found the plain way: every alternative in order, and every
+    /// amount from each pool from the most down, one unit at a time, with no check ahead.
+    fn take_all_unit_step(
+        requirements: &[Vec<Alternative>],
+        free: &mut [i64],
+        taken: &mut Taken,
+    ) -> bool {
+        let Some((first, rest)) = requirements.split_first() else {
+            return true;
+        };
+        first.iter().any(|alt| {
+            alt.quantity > 0 && fill_unit_step(&alt.pools, alt.quantity, rest, free, taken)
+        })
+    }
+
+    fn fill_unit_step(
+        pools: &[usize],
+        left: u32,
+        rest: &[Vec<Alternative>],
+        free: &mut [i64],
+        taken: &mut Taken,
+    ) -> bool {
+        if left == 0 {
+            return take_all_unit_step(rest, free, taken);
+        }
+        let Some((&p, others)) = pools.split_first() else {
+            return false;
+        };
+        let elsewhere: i64 = others.iter().map(|&q| free[q].max(0)).sum();
+        let here = free[p].clamp(0, i64::from(left)) as u32;
+        for n in (0..=here).rev() {
+            if i64::from(left - n) > elsewhere {
+                break;
+            }
+            let mark = taken.len();
+            if n > 0 {
+                free[p] -= i64::from(n);
+                taken.push((p, n));
+            }
+            if fill_unit_step(others, left - n, rest, free, taken) {
+                return true;
+            }
+            if n > 0 {
+                free[p] += i64::from(n);
+            }
+            taken.truncate(mark);
+        }
+        false
+    }
+
+    #[test]
+    fn the_take_is_the_one_found_one_unit_at_a_time() {
+        // Small random cases (seeded): up to four pools, some with none free or fewer than none,
+        // and up to three requirements of up to three alternatives, some of no units and some
+        // naming no pool. Each is taken with every way to choose tried one by one, and with only
+        // the weaker check (at most one way, or none), and must give what the plain search gives.
+        let mut state = 0x5eed_u64;
+        let mut next = |below: u64| {
+            state = state.wrapping_add(0x9E37_79B9_7F4A_7C15);
+            let mut z = state;
+            z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+            z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
+            (z ^ (z >> 31)) % below
+        };
+        let mut takes = 0;
+        for _ in 0..3000 {
+            let k = 1 + next(4) as usize;
+            let free: Vec<i64> = (0..k).map(|_| next(5) as i64 - 1).collect();
+            let needs: Vec<Vec<Alternative>> = (0..1 + next(3))
+                .map(|_| {
+                    (0..1 + next(3))
+                        .map(|_| Alternative {
+                            pools: (0..k).filter(|_| next(2) == 1).collect(),
+                            quantity: next(4) as u32,
+                        })
+                        .collect()
+                })
+                .collect();
+            let mut want_free = free.clone();
+            let mut want = Taken::new();
+            let found = take_all_unit_step(&needs, &mut want_free, &mut want);
+            takes += usize::from(found);
+            for limit in [MAX_COMBINATIONS, 1, 0] {
+                let mut got_free = free.clone();
+                let mut got = Taken::new();
+                assert_eq!(
+                    take_within(limit, &needs, &mut got_free, &mut got),
+                    found,
+                    "{limit}: {free:?}"
+                );
+                assert_eq!(got, want, "{limit}: {free:?}");
+                assert_eq!(got_free, want_free, "{limit}: {free:?}");
+            }
+        }
+        // Both kinds of case come up.
+        assert!(takes > 100 && takes < 2900, "{takes}");
     }
 }

@@ -2574,7 +2574,15 @@ impl Editor {
                                 let v = selection(&need.alternatives);
                                 writes.push((r, "ResourceParameters", "Selection", Some(v)));
                             }
-                            writes.push((id.clone(), "ResourceParameters", "Selection", None));
+                            // The task's own selection goes, as the roles' are read instead.
+                            // One an inherited scenario sets is read past all the same and
+                            // could not be removed here, so it stays.
+                            let inherited = ancestors(root, scenario)
+                                .iter()
+                                .any(|a| sets_param(a, &id, "ResourceParameters", "Selection"));
+                            if !inherited {
+                                writes.push((id.clone(), "ResourceParameters", "Selection", None));
+                            }
                         }
                     }
                     if op != priority {

@@ -2444,3 +2444,78 @@ fn a_replaced_element_keeps_another_scenario_s_decision_table_if_it_can_use_one(
         );
     }
 }
+
+/// A task whose performers have selections of their own in the opened scenario, and to which a
+/// scenario it inherits from gives a selection of its own (read past, as the performers' come
+/// first), saves a changed quantity: the inherited selection, which removing here would not
+/// remove, stays where it is.
+#[test]
+fn a_task_selection_an_inherited_scenario_sets_stays_when_a_role_s_quantity_changes() {
+    let task_selection = "orResource(getResource('machine1', 1), getResource('machine2', 1))";
+    let original = text(&file("job-shop.bpmn"))
+        .replacen(
+            r#"<bpsim:NegativeExponentialDistribution mean="0.75"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>"#,
+            &format!(
+                r#"<bpsim:NegativeExponentialDistribution mean="0.75"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="{task_selection}"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>"#
+            ),
+            1,
+        )
+        .replace(
+            r#"<bpsim:Scenario id="busier" name="Worker 90% busy" inherits="scenario">"#,
+            r#"<bpsim:Scenario id="busier" name="Worker 90% busy" inherits="scenario">
+          <bpsim:ElementParameters elementRef="job1_need1">
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('machine1', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="job1_need2">
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('worker', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>"#,
+        );
+    assert_eq!(
+        original.matches(task_selection).count(),
+        1,
+        "the parent sets it"
+    );
+    assert_eq!(original.matches("elementRef=\"job1_need2\"").count(), 2);
+    let child =
+        read_scenario(original.as_bytes(), Some("busier")).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = child.model.clone();
+    let ElementKind::SharedTask { needs, .. } = &mut element(&mut m, "job1").kind else {
+        panic!("job1 is a task with shared resources");
+    };
+    assert_eq!(needs.len(), 2, "the performers' selections are read");
+    let Some(stochcraft_model::Need::Resource { quantity, .. }) =
+        needs.get_mut(1).and_then(|r| r.alternatives.first_mut())
+    else {
+        panic!("job1's second requirement is a worker");
+    };
+    *quantity = 2;
+    let saved = child.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    assert!(text(&saved).contains("getResource('worker', 2)"));
+    assert_eq!(text(&saved).matches(task_selection).count(), 1, "kept");
+    let back = read_scenario(&saved, Some("busier")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+    // The scenario it inherits from is as it was.
+    let parent = |b: &[u8]| {
+        read_scenario(b, Some("scenario"))
+            .unwrap_or_else(|e| panic!("{e}"))
+            .model
+    };
+    assert_eq!(parent(&saved), parent(original.as_bytes()));
+}
