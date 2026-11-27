@@ -258,6 +258,9 @@
   value: the length units per drawing unit of the diagram (1 without it). The distance between
   two elements is the straight line between the centres of their shapes, times this.
 
+  stochcraft:confidence, on the scenario, with the value 0.9, 0.95 or 0.99: the confidence level
+  of every interval in the results (0.95 without it).
+
   stochcraft:transport, on a task's ElementParameters: the task carries each item from the
   element before it to the element after it with a unit of the mobile resource `pool`. The unit
   loads for a time drawn from load and unloads for one drawn from unload. Other tools see a
