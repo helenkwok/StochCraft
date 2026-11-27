@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – φόντο «{background}»: {ratio}:1, απαιτείται {min}:1
 	{title}: now {now}, at most {most}	{title}: τώρα {now}, το πολύ {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% ΔΕ
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	Το ± είναι το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των εκτελέσεων.
+	± {level}% CI	± {level}% ΔΕ
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	Το ± είναι το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t {level}% για τη μέση τιμή μεταξύ των εκτελέσεων.
 	· no results yet	· δεν υπάρχουν ακόμη αποτελέσματα
 unit	d	ημ
 unit	h	ώ
@@ -697,7 +697,7 @@ unit	yr	έτ
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Το μοντέλο ξεκινά άδειο και δεν έχει οριστεί προθέρμανση, οπότε η αρχή απομακρύνει τις μέσες τιμές από τις μακροπρόθεσμες.
 	Set a {value} warm-up	Ορισμός προθέρμανσης {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Η εκτέλεση είναι πολύ σύντομη για να προταθεί προθέρμανση: επιμηκύνετέ την και μετά ορίστε μία.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} από {m} κύριες μετρικές έχουν σταθεροποιηθεί: η καθεμία είναι γνωστή με ± 5% (± 1 ποσοστιαία μονάδα για ποσοστό) ή καλύτερα.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} από {m} κύριες μετρικές έχουν σταθεροποιηθεί: η καθεμία είναι γνωστή με ± 5% (± 1 ποσοστιαία μονάδα για ποσοστό) ή καλύτερα (με εμπιστοσύνη {level}%).
 	What the run found	Τι βρήκε η εκτέλεση
 	See the numbers	Δείτε τους αριθμούς
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	Το {block} περιορίζει τη ροή: απασχολημένο {busy} του χρόνου, με {queue} κατά μέσο όρο σε αναμονή μπροστά του.
@@ -731,15 +731,15 @@ unit	yr	έτ
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Καμία από τις κύριες μετρικές δεν μετακινήθηκε περισσότερο απ' όσο θα εξηγούσε η τύχη: η αλλαγή ίσως κάνει λίγα, ή περισσότερες εκτελέσεις μπορεί να το δείξουν.
 	What the change did	Τι έκανε η αλλαγή
 	Baseline and now, key measures	Βάση αναφοράς και τώρα, κύριες μετρικές
-	Difference (paired, 95%)	Διαφορά (κατά ζεύγη, 95%)
-	Difference (95%)	Διαφορά (95%)
+	Difference (paired, {level}%)	Διαφορά (κατά ζεύγη, {level}%)
+	Difference ({level}%)	Διαφορά ({level}%)
 	Measure	Μετρική
 	Baseline	Βάση αναφοράς
 	Now	Τώρα
 	Change from baseline	Αλλαγή από τη βάση αναφοράς
 	Verdict	Ετυμηγορία
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Μια ετυμηγορία είναι πραγματική όταν το διάστημα 95% της διαφοράς αποκλείει το μηδέν. Κάθε γραμμή κρίνεται χωριστά.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Μια ετυμηγορία είναι πραγματική όταν το διάστημα {level}% της διαφοράς αποκλείει το μηδέν. Κάθε γραμμή κρίνεται χωριστά.
 	This run is the baseline.	Αυτή η εκτέλεση είναι η βάση αναφοράς.
 	Change the model and run it again to compare.	Αλλάξτε το μοντέλο και εκτελέστε το ξανά για σύγκριση.
 	Compared with the baseline:	Σε σύγκριση με τη βάση αναφοράς:
@@ -1223,7 +1223,7 @@ unit	yr	έτ
 @plural	Allow up to {n} run|Allow up to {n} runs	Να επιτρέπεται έως {n} εκτέλεση|Να επιτρέπονται έως {n} εκτελέσεις
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: ίδιο και στις {n} εκτελέσεις, γι' αυτό δεν θεωρείται σταθεροποιημένο. Κάτι που καμία εκτέλεση δεν συνάντησε μπορεί να συμβεί σε έως και {rate} των εκτελέσεων.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: η μέση τιμή είναι μηδέν ή σχεδόν μηδέν, οπότε δεν μπορεί να είναι γνωστή με ακρίβεια εκφρασμένη ως ποσοστό του εαυτού της.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	Το ± είναι η εκτιμώμενη ακρίβεια: το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των εκτελέσεων. Ο αριθμός των εκτελέσεων επιλέχθηκε με βάση τα αποτελέσματα, οπότε το διάστημα μπορεί να καλύπτει την πραγματική μέση τιμή λιγότερο συχνά από 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	Το ± είναι η εκτιμώμενη ακρίβεια: το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t {level}% για τη μέση τιμή μεταξύ των εκτελέσεων. Ο αριθμός των εκτελέσεων επιλέχθηκε με βάση τα αποτελέσματα, οπότε το διάστημα μπορεί να καλύπτει την πραγματική μέση τιμή λιγότερο συχνά από {level}%.
 	Not yet within its target: {results}.	Δεν είναι ακόμη εντός του στόχου: {results}.
 	then more until precise enough, at most {max}	έπειτα περισσότερες μέχρι να γίνουν αρκετά ακριβείς, το πολύ {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Διακοπή μετά από {n} εκτέλεση: {result} είναι εντός του στόχου.|Διακοπή μετά από {n} εκτελέσεις: {result} είναι εντός του στόχου.
@@ -1535,3 +1535,7 @@ connection	Flow	Ροή
 	How often is one machine down, and how much work does that cost?	Πόσο συχνά είναι εκτός λειτουργίας ένα μηχάνημα και πόση δουλειά κοστίζει αυτό;
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Σε λειτουργία 90 ώρες, εκτός 4.5: το μηχάνημα δουλεύει το 95.2% του χρόνου και μια βλάβη συμβαίνει κάθε 94.5 ώρες. Αν ο χρόνος επισκευής μειωθεί στο μισό, το ποσοστό ανεβαίνει στο 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} είναι εκτός λειτουργίας το {down} του χρόνου (διαθεσιμότητα {up}), και τίποτα δεν περιμένει γι' αυτό.
+	Confidence level	Επίπεδο εμπιστοσύνης
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Κάθε ± στα αποτελέσματα είναι διάστημα σε αυτό το επίπεδο. Υψηλότερο επίπεδο δίνει ευρύτερα διαστήματα και χρειάζεται περισσότερες εκτελέσεις για την ίδια ακρίβεια.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Μια ετυμηγορία είναι πραγματική όταν το διάστημα της διαφοράς αφήνει έξω το μηδέν. Οι {k} γραμμές κρίνονται από κοινού: όλα τα διαστήματά τους ισχύουν ταυτόχρονα με εμπιστοσύνη τουλάχιστον {level}% (Bonferroni).
+	Judge the rows together (Bonferroni)	Κρίση των γραμμών από κοινού (Bonferroni)

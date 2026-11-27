@@ -669,8 +669,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} ເທິງ {background}: {ratio}:1, ຕ້ອງການ {min}:1
 	{title}: now {now}, at most {most}	{title}: ຕອນນີ້ {now} ສູງສຸດ {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% CI
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ.
+	± {level}% CI	± {level}% CI
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t {level}% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ.
 	· no results yet	· ຍັງບໍ່ມີຜົນໄດ້ຮັບ
 unit	d	ວັນ
 unit	h	ຊົ່ວໂມງ
@@ -697,7 +697,7 @@ unit	yr	ປີ
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	ແບບຈຳລອງເລີ່ມຈາກວ່າງເປົ່າ ແລະ ບໍ່ໄດ້ກຳນົດໄລຍະອຸ່ນເຄື່ອງ, ສະນັ້ນຊ່ວງເລີ່ມຕົ້ນດຶງຄ່າສະເລ່ຍອອກຈາກຄ່າໃນໄລຍະຍາວ.
 	Set a {value} warm-up	ກຳນົດໄລຍະອຸ່ນເຄື່ອງ {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	ການຈຳລອງສັ້ນເກີນໄປທີ່ຈະແນະນຳໄລຍະອຸ່ນເຄື່ອງ: ໃຫ້ຍືດມັນອອກ ແລ້ວກຳນົດໄລຍະອຸ່ນເຄື່ອງ.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	ຕົວຊີ້ວັດຫຼັກ {k} ຈາກ {m} ຄົງທີ່ແລ້ວ: ແຕ່ລະອັນຮູ້ໄດ້ພາຍໃນ ± 5% (± 1 ຈຸດສຳລັບສັດສ່ວນ) ຫຼື ດີກວ່າ.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	ຕົວຊີ້ວັດຫຼັກ {k} ຈາກ {m} ຄົງທີ່ແລ້ວ: ແຕ່ລະອັນຮູ້ໄດ້ພາຍໃນ ± 5% (± 1 ຈຸດສຳລັບສັດສ່ວນ) ຫຼື ດີກວ່າ (ທີ່ຄວາມໝັ້ນໃຈ {level}%).
 	What the run found	ສິ່ງທີ່ການຈຳລອງພົບ
 	See the numbers	ເບິ່ງຕົວເລກ
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ຈຳກັດການໄຫຼ: ຫວ່າງບໍ່ໄດ້ {busy} ຂອງເວລາ, ມີ {queue} ລໍຖ້າຢູ່ທາງໜ້າໂດຍສະເລ່ຍ.
@@ -731,15 +731,15 @@ unit	yr	ປີ
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	ບໍ່ມີຕົວຊີ້ວັດຫຼັກໃດປ່ຽນໄປຫຼາຍກວ່າທີ່ຄວາມບັງເອີນຈະອະທິບາຍໄດ້: ການປ່ຽນແປງອາດມີຜົນໜ້ອຍ, ຫຼື ຮອບເພີ່ມອາດສະແດງໃຫ້ເຫັນ.
 	What the change did	ຜົນຂອງການປ່ຽນແປງ
 	Baseline and now, key measures	ເສັ້ນຖານ ແລະ ປັດຈຸບັນ, ຕົວຊີ້ວັດຫຼັກ
-	Difference (paired, 95%)	ຜົນຕ່າງ (ຈັບຄູ່, 95%)
-	Difference (95%)	ຜົນຕ່າງ (95%)
+	Difference (paired, {level}%)	ຜົນຕ່າງ (ຈັບຄູ່, {level}%)
+	Difference ({level}%)	ຜົນຕ່າງ ({level}%)
 	Measure	ຕົວຊີ້ວັດ
 	Baseline	ເສັ້ນຖານ
 	Now	ປັດຈຸບັນ
 	Change from baseline	ການປ່ຽນແປງຈາກເສັ້ນຖານ
 	Verdict	ຜົນຕັດສິນ
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	ຜົນຕັດສິນເປັນຈິງເມື່ອຊ່ວງ 95% ຂອງຜົນຕ່າງບໍ່ລວມສູນ. ແຕ່ລະແຖວຕັດສິນແຍກກັນ.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	ຜົນຕັດສິນເປັນຈິງເມື່ອຊ່ວງ {level}% ຂອງຜົນຕ່າງບໍ່ລວມສູນ. ແຕ່ລະແຖວຕັດສິນແຍກກັນ.
 	This run is the baseline.	ການປະມວນຜົນນີ້ແມ່ນເສັ້ນຖານ.
 	Change the model and run it again to compare.	ປ່ຽນແບບຈຳລອງ ແລ້ວແລ່ນອີກຄັ້ງເພື່ອປຽບທຽບ.
 	Compared with the baseline:	ທຽບກັບເສັ້ນຖານ:
@@ -1223,7 +1223,7 @@ unit	yr	ປີ
 @plural	Allow up to {n} run|Allow up to {n} runs	ອະນຸຍາດສູງສຸດ {n} ຮອບ
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: ຄືກັນໃນທຸກ {n} ຮອບ ຈຶ່ງບໍ່ນັບວ່າຄົງທີ່. ສິ່ງທີ່ບໍ່ມີຮອບໃດພົບ ກໍຍັງອາດເກີດຂຶ້ນໄດ້ໃນສູງສຸດ {rate} ຂອງຮອບທັງໝົດ.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: ຄ່າສະເລ່ຍເປັນສູນ ຫຼື ໃກ້ສູນ ຈຶ່ງບໍ່ສາມາດຮູ້ຄວາມແມ່ນຍຳເປັນສັດສ່ວນຂອງຕົວມັນເອງໄດ້.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± ແມ່ນຄວາມແມ່ນຍຳທີ່ຄາດຄະເນ: ເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ. ຈຳນວນຮອບຖືກເລືອກຈາກຜົນລັບ ຊ່ວງຈຶ່ງອາດຄອບຄຸມຄ່າສະເລ່ຍຈິງໄດ້ໜ້ອຍກວ່າ 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± ແມ່ນຄວາມແມ່ນຍຳທີ່ຄາດຄະເນ: ເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t {level}% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ. ຈຳນວນຮອບຖືກເລືອກຈາກຜົນລັບ ຊ່ວງຈຶ່ງອາດຄອບຄຸມຄ່າສະເລ່ຍຈິງໄດ້ໜ້ອຍກວ່າ {level}%.
 	Not yet within its target: {results}.	ຍັງບໍ່ຢູ່ພາຍໃນເປົ້າໝາຍ: {results}.
 	then more until precise enough, at most {max}	ຈາກນັ້ນເພີ່ມອີກຈົນແມ່ນຍຳພໍ, ສູງສຸດ {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	ຢຸດຫຼັງຈາກຈຳລອງຊ້ຳ {n} ຮອບ: {result} ຢູ່ພາຍໃນເປົ້າໝາຍຂອງມັນ.
@@ -1535,3 +1535,7 @@ connection	Flow	ເສັ້ນທາງ
 	How often is one machine down, and how much work does that cost?	ເຄື່ອງຈັກໜຶ່ງເຄື່ອງຢຸດເລື້ອຍປານໃດ ແລະ ເສຍງານຫຼາຍປານໃດ?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	ເຮັດວຽກ 90 ຊົ່ວໂມງ, ຢຸດ 4.5: ເຄື່ອງຈັກເຮັດວຽກ 95.2% ຂອງເວລາ ແລະ ເກີດເສຍທຸກ 94.5 ຊົ່ວໂມງ. ຖ້າເວລາສ້ອມຫຼຸດເຫຼືອເຄິ່ງໜຶ່ງ ຈະເພີ່ມເປັນ 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} ຢຸດ {down} ຂອງເວລາ (ຄວາມພ້ອມໃຊ້ງານ {up}); ບໍ່ມີຫຍັງລໍຖ້າມັນ.
+	Confidence level	ລະດັບຄວາມໝັ້ນໃຈ
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	ທຸກ ± ໃນຜົນລັບແມ່ນຊ່ວງທີ່ລະດັບນີ້. ລະດັບສູງຂຶ້ນໃຫ້ຊ່ວງກວ້າງຂຶ້ນ ແລະ ຕ້ອງການການແລ່ນຫຼາຍຂຶ້ນເພື່ອຄວາມແມ່ນຍຳເທົ່າເດີມ.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	ຄຳຕັດສິນເປັນຈິງເມື່ອຊ່ວງຂອງຄວາມແຕກຕ່າງບໍ່ລວມສູນ. {k} ແຖວຖືກຕັດສິນຮ່ວມກັນ: ທຸກຊ່ວງຂອງມັນຖືກຕ້ອງພ້ອມກັນດ້ວຍຄວາມໝັ້ນໃຈຢ່າງໜ້ອຍ {level}% (Bonferroni).
+	Judge the rows together (Bonferroni)	ຕັດສິນແຖວຮ່ວມກັນ (Bonferroni)

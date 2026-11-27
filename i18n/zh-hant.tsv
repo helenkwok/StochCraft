@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{background}上的{text}：{ratio}:1，需要 {min}:1
 	{title}: now {now}, at most {most}	{title}：目前 {now}，最多 {most}
 	{word}: {message}	{word}：{message}
-	± 95% CI	± 95% 信賴區間
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± 表示各次執行平均值的 95% Student-t 信賴區間的半寬。
+	± {level}% CI	± {level}% 信賴區間
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± 表示各次執行平均值的 {level}% Student-t 信賴區間的半寬。
 	· no results yet	· 尚無結果
 unit	d	天
 unit	h	小時
@@ -697,7 +697,7 @@ unit	yr	年
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	模型從空狀態開始且未設定暖機期，因此開始階段會使平均值偏離長期值。
 	Set a {value} warm-up	設定 {value} 的暖機期
 	The run is too short to suggest a warm-up: make it longer, then set one.	執行時間太短，無法建議暖機期：請延長執行，然後設定暖機期。
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} 個關鍵指標中有 {k} 個已穩定：每個都精確到 ± 5%（比例為 ± 1 個百分點）或更好。
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{m} 個關鍵指標中有 {k} 個已穩定：每個都精確到 ± 5%（比例為 ± 1 個百分點）或更好（信賴水準 {level}%）。
 	What the run found	本次執行的發現
 	See the numbers	查看數字
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} 限制了流量：{busy} 的時間處於忙碌，前面平均有 {queue} 在等待。
@@ -731,15 +731,15 @@ unit	yr	年
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	沒有任何關鍵指標的變動超出偶然所能解釋的程度：變更的作用可能很小，或需要更多次執行才能顯示出來。
 	What the change did	變更的作用
 	Baseline and now, key measures	基準與目前的關鍵指標
-	Difference (paired, 95%)	差值（配對，95%）
-	Difference (95%)	差值（95%）
+	Difference (paired, {level}%)	差值（配對，{level}%）
+	Difference ({level}%)	差值（{level}%）
 	Measure	指標
 	Baseline	基準
 	Now	目前
 	Change from baseline	相對基準的變化
 	Verdict	結論
 	{block}: {measure}	{block}：{measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	當差值的 95% 區間不包含零時，結論為確實。每一列分別判斷。
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	當差值的 {level}% 區間不包含零時，結論為確實。每一列分別判斷。
 	This run is the baseline.	此次執行即為基準。
 	Change the model and run it again to compare.	變更模型並再次執行即可比較。
 	Compared with the baseline:	與基準相比：
@@ -1223,7 +1223,7 @@ unit	yr	年
 @plural	Allow up to {n} run|Allow up to {n} runs	最多允許 {n} 次執行
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}：{n} 次執行中全部相同，因此不算已穩定。任何一次執行都沒遇到的情況，仍可能在最多 {rate} 的執行中出現。
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}：平均值為零或接近零，因此無法按其自身的百分比來確定精度。
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± 表示估計精度：各次執行平均值的 95% Student-t 信賴區間的半寬。執行次數是根據結果選定的，因此該區間涵蓋真實平均值的頻率可能低於 95%。
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± 表示估計精度：各次執行平均值的 {level}% Student-t 信賴區間的半寬。執行次數是根據結果選定的，因此該區間涵蓋真實平均值的頻率可能低於 {level}%。
 	Not yet within its target: {results}.	尚未進入目標範圍：{results}。
 	then more until precise enough, at most {max}	之後繼續，直到足夠精確，最多 {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	執行 {n} 次後停止：{result} 在其目標內。
@@ -1535,3 +1535,7 @@ connection	Flow	順序流
 	How often is one machine down, and how much work does that cost?	一台機器多久停機一次，這會損失多少工作？
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	運轉 90 小時，停機 4.5 小時：機器 95.2% 的時間在工作，每 94.5 小時發生一次故障。修理時間減半，可用率升至 97.6%。
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} 有 {down} 的時間處於停機狀態（可用率 {up}），沒有任何東西在等待它。
+	Confidence level	信賴水準
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	結果中的每個 ± 都是此水準下的區間。水準越高，區間越寬，達到同樣精度需要更多次執行。
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	當差值的區間不含零時，判斷才是真實的。這 {k} 列一併判斷：它們的所有區間同時成立的信賴度至少為 {level}%（Bonferroni）。
+	Judge the rows together (Bonferroni)	將各列一併判斷（Bonferroni）

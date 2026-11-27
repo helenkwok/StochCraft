@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} 上の {text}: {ratio}:1、{min}:1 以上が必要
 	{title}: now {now}, at most {most}	{title}: 現在 {now}、最大 {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% 信頼区間
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± は、実行間の平均値に対する 95% Student-t 信頼区間の半幅です。
+	± {level}% CI	± {level}% 信頼区間
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± は、実行間の平均値に対する {level}% Student-t 信頼区間の半幅です。
 	· no results yet	· 結果はまだありません
 unit	d	日
 unit	h	時間
@@ -697,7 +697,7 @@ unit	yr	年
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	モデルは空の状態から始まり、ウォームアップが設定されていないため、開始時の影響で平均が長期的な値からずれます。
 	Set a {value} warm-up	{value} のウォームアップを設定
 	The run is too short to suggest a warm-up: make it longer, then set one.	実行が短すぎてウォームアップを提案できません: 実行を長くしてから設定してください。
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	主な指標 {m} 個のうち {k} 個が安定しています: いずれも ± 5% (割合では ± 1 ポイント) 以内でわかっています。
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	主な指標 {m} 個のうち {k} 個が安定しています: いずれも ± 5% (割合では ± 1 ポイント) 以内でわかっています（信頼水準 {level}%）。
 	What the run found	実行でわかったこと
 	See the numbers	数値を見る
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} が流れを制約しています: 時間の {busy} が稼働中で、その前で平均 {queue} が待っています。
@@ -731,15 +731,15 @@ unit	yr	年
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	主な指標はどれも偶然を超えて動いていません。変更の効果が小さいか、実行回数を増やせば見えてくるかもしれません。
 	What the change did	変更の効果
 	Baseline and now, key measures	ベースラインと現在の主な指標
-	Difference (paired, 95%)	差 (対応あり、95%)
-	Difference (95%)	差 (95%)
+	Difference (paired, {level}%)	差 (対応あり、{level}%)
+	Difference ({level}%)	差 ({level}%)
 	Measure	指標
 	Baseline	ベースライン
 	Now	現在
 	Change from baseline	ベースラインからの変化
 	Verdict	判定
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	差の 95% 信頼区間がゼロを含まないとき、判定は「実際」になります。各行は個別に判定されます。
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	差の {level}% 信頼区間がゼロを含まないとき、判定は「実際」になります。各行は個別に判定されます。
 	This run is the baseline.	この実行がベースラインです。
 	Change the model and run it again to compare.	モデルを変更して再実行すると比較できます。
 	Compared with the baseline:	ベースラインとの比較:
@@ -1223,7 +1223,7 @@ unit	yr	年
 @plural	Allow up to {n} run|Allow up to {n} runs	最大 {n} 回まで実行を許可
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} 回すべての実行で同じなので、安定とは数えません。どの実行でも起きなかったことが、実行のうち最大 {rate} で起こる可能性は残ります。
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: 平均がゼロまたはゼロに近いため、平均に対する割合では精度を知ることができません。
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± は推定精度で、実行間の平均値に対する 95% Student-t 信頼区間の半幅です。実行回数は結果に基づいて決めたため、区間が真の平均を含む頻度は 95% より低くなることがあります。
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± は推定精度で、実行間の平均値に対する {level}% Student-t 信頼区間の半幅です。実行回数は結果に基づいて決めたため、区間が真の平均を含む頻度は {level}% より低くなることがあります。
 	Not yet within its target: {results}.	まだ目標内に収まっていません: {results}。
 	then more until precise enough, at most {max}	その後、十分な精度になるまで追加、最大 {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} 回の実行で停止しました: {result} は目標内に収まっています。
@@ -1535,3 +1535,7 @@ connection	Flow	フロー
 	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	稼働 90 時間、停止 4.5 時間：機械は時間の 95.2% で稼働し、94.5 時間ごとに故障が起きる。修理時間を半分にすると 97.6% に上がる。
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} は時間の {down} で停止している（稼働率 {up}）。待っているものはない。
+	Confidence level	信頼水準
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	結果の ± はすべてこの水準の区間です。水準を上げると区間は広くなり、同じ精度により多くの実行が必要です。
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	差の区間がゼロを含まないとき、判定は本物です。{k} 行はまとめて判定されます: すべての区間が同時に少なくとも {level}% の信頼度で成り立ちます (ボンフェローニ)。
+	Judge the rows together (Bonferroni)	行をまとめて判定 (ボンフェローニ)

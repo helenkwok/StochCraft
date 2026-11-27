@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} — фон «{background}»: {ratio}:1, нужно {min}:1
 	{title}: now {now}, at most {most}	{title}: сейчас {now}, не более {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% ДИ
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± — половина ширины 95% доверительного интервала Student-t для среднего значения по запускам.
+	± {level}% CI	± {level}% ДИ
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± — половина ширины {level}% доверительного интервала Student-t для среднего значения по запускам.
 	· no results yet	· результатов пока нет
 unit	d	сут
 unit	h	ч
@@ -697,7 +697,7 @@ unit	yr	г.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Модель начинает работу пустой, и разогрев не задан, поэтому начало смещает средние от долгосрочного значения.
 	Set a {value} warm-up	Задать разогрев {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Запуск слишком короткий, чтобы предложить разогрев: удлините его, затем задайте разогрев.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} из {m} основных показателей установились: каждый известен с точностью ± 5% (± 1 процентный пункт для доли) или лучше.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} из {m} основных показателей установились: каждый известен с точностью ± 5% (± 1 процентный пункт для доли) или лучше (при доверительной вероятности {level}%).
 	What the run found	Что показал запуск
 	See the numbers	Смотреть числа
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ограничивает поток: занят {busy} времени, перед ним в среднем ждут {queue}.
@@ -731,15 +731,15 @@ unit	yr	г.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Ни один из основных показателей не изменился больше, чем объяснила бы случайность: изменение, возможно, мало что даёт, или больше запусков это покажут.
 	What the change did	Что дало изменение
 	Baseline and now, key measures	Базовый вариант и сейчас, основные показатели
-	Difference (paired, 95%)	Разница (парная, 95%)
-	Difference (95%)	Разница (95%)
+	Difference (paired, {level}%)	Разница (парная, {level}%)
+	Difference ({level}%)	Разница ({level}%)
 	Measure	Показатель
 	Baseline	Базовый вариант
 	Now	Сейчас
 	Change from baseline	Изменение от базового варианта
 	Verdict	Вывод
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Вывод реален, когда 95% интервал разницы не включает ноль. Каждая строка оценивается отдельно.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Вывод реален, когда {level}% интервал разницы не включает ноль. Каждая строка оценивается отдельно.
 	This run is the baseline.	Этот запуск — базовый вариант.
 	Change the model and run it again to compare.	Измените модель и запустите её снова, чтобы сравнить.
 	Compared with the baseline:	По сравнению с базовым вариантом:
@@ -1223,7 +1223,7 @@ unit	yr	г.
 @plural	Allow up to {n} run|Allow up to {n} runs	Разрешить до {n} запуска|Разрешить до {n} запусков|Разрешить до {n} запусков
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: одинаково во всех {n} запусках, поэтому не считается установившимся. То, чего не встретил ни один запуск, всё же может произойти не более чем в {rate} запусков.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: среднее равно нулю или близко к нулю, поэтому его точность нельзя выразить как долю от него самого.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± — оценочная точность: половина ширины 95% доверительного интервала Student-t для среднего значения по запускам. Число запусков выбрано по результатам, поэтому интервал может накрывать истинное среднее реже, чем в 95% случаев.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± — оценочная точность: половина ширины {level}% доверительного интервала Student-t для среднего значения по запускам. Число запусков выбрано по результатам, поэтому интервал может накрывать истинное среднее реже, чем в {level}% случаев.
 	Not yet within its target: {results}.	Пока не в пределах цели: {results}.
 	then more until precise enough, at most {max}	затем больше, пока не станут достаточно точными, не более {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Остановлено после {n} запуска: {result} в пределах своей цели.|Остановлено после {n} запусков: {result} в пределах своей цели.|Остановлено после {n} запусков: {result} в пределах своей цели.
@@ -1535,3 +1535,7 @@ connection	Flow	Поток
 	How often is one machine down, and how much work does that cost?	Как часто простаивает один станок и сколько работы это стоит?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Работает 90 часов, простаивает 4.5: станок работает 95.2% времени, а поломка случается каждые 94.5 часа. Если ремонт вдвое короче, показатель растёт до 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} простаивает {down} времени (готовность {up}); ничто его не ждёт.
+	Confidence level	Доверительная вероятность
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Каждое ± в результатах — интервал на этом уровне. Более высокий уровень даёт более широкие интервалы и требует больше прогонов для той же точности.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Вывод реален, когда интервал разности не содержит нуля. {k} строк оцениваются совместно: все их интервалы выполняются одновременно с доверительной вероятностью не ниже {level}% (Бонферрони).
+	Judge the rows together (Bonferroni)	Оценивать строки совместно (Бонферрони)

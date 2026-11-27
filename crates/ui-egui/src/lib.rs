@@ -854,7 +854,7 @@ pub trait Workers {
 
 /// The engine's comparison of the baseline with the results on show, keyed by their serials and
 /// the interface language its list of changes is written in.
-type Comparison = ((u64, u64, craft_i18n::Lang), Value, Vec<String>);
+type Comparison = ((u64, u64, craft_i18n::Lang, bool), Value, Vec<String>);
 
 /// The application: one model document and what the window shows of it.
 pub struct App {
@@ -881,6 +881,8 @@ pub struct App {
     /// the model between them, by their serials and the interface language the changes are
     /// written in.
     comparison: Option<Comparison>,
+    /// The baseline's rows are judged together (Bonferroni) rather than each on its own.
+    together: bool,
     running: Option<Running>,
     /// The shell's workers for runs, if it has any.
     workers: Option<Box<dyn Workers>>,
@@ -1065,6 +1067,7 @@ impl App {
             results_serial: 0,
             baseline: None,
             comparison: None,
+            together: false,
             running: None,
             workers: None,
             status: String::new(),

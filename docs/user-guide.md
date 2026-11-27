@@ -388,9 +388,15 @@ With nothing selected, the **Experiment** section of the inspector sets how the 
 - **How many runs:** **Exactly that many**, or **More until precise enough**: the runs set above
   come first, then more follow in batches until every key measure that varies is within its
   target (± 5% of its mean, ± 1 point for a share such as utilisation, by default), or the most
-  runs (200 by default) is reached. A result that is the same in every run, such as a count the
-  model fixes, is never counted as settled, but it does not hold back the others. A run that
-  stops at 40 gives exactly the results of 40 runs set by hand.
+  runs (200 by default) is reached. A target of ± 5% means ± 5% of the true mean, so a result
+  is settled when its half-width is within 5/1.05 = 4.76% of its estimated mean (Law,
+  *Simulation Modeling and Analysis*, 5th ed., section 9.4.1). The runs never stop on precision
+  before 10, since fewer give too unsure an estimate of the spread. A result that is the same
+  in every run, such as a count the model fixes, is never counted as settled, but it does not
+  hold back the others. A run that stops at 40 gives exactly the results of 40 runs set by hand.
+- **Confidence level:** 90%, 95% (the default) or 99%. Every ± in the results is an interval at
+  this level, and the sequential rule and the checks against observed data use it too. A higher
+  level gives wider intervals and needs more runs for the same precision.
 - **Observed data:** real measurements to check the results against, from the system the model
   stands for. Choose a result under **Add an observed value** (a block or a pool, and a result
   such as **Mean wait** or **Utilisation**), then say what you know of it: an **Observed value**,
@@ -442,7 +448,8 @@ The **Results** tab shows, from the top:
    the run's targets (it judges them by its own targets, not the ± 5% above), and any result that was the
    same in every run, with how often something none of the runs met could still happen (about
    3 in N runs at most). The ± is then called the estimated precision: the number of runs was
-   chosen from the results, so the interval may cover the true mean less often than 95%.
+   chosen from the results, so the interval may cover the true mean less often than its
+  confidence level says.
 4. **Key measures:** up to four per block (for a task: utilisation, mean wait, mean queue length,
    and time failed when it fails). Every mean is rounded to what its interval supports: "38 ± 12"
    rather than "38.42 ± 12.31".
@@ -477,10 +484,13 @@ To see what a change does, click **Keep as baseline** under the run record, chan
 - **What the change did:** the largest real changes in sentences, for example "Mean wait (Paint)
   fell from 38 min to 17 min, by −21 ± 6 min: more than chance would explain".
 - **Baseline and now, key measures:** each block's key measures in both runs, the difference with
-  its 95% interval (shares in percentage points), a mark of the change against a zero line, and a
-  verdict: **Real: lower**, **Real: higher**, **Could be chance**, **No change** (every run gave
-  the same value), or **Too few runs to tell**. A verdict is real when the difference's interval
-  leaves out zero. Each row is judged on its own, so with many rows one may look real by chance.
+  its interval at the results' confidence level (shares in percentage points), a mark of the
+  change against a zero line, and a verdict: **Real: lower**, **Real: higher**, **Could be
+  chance**, **No change** (every run gave the same value), or **Too few runs to tell**. A verdict
+  is real when the difference's interval leaves out zero. Each row is judged on its own, so with
+  many rows one may look real by chance. **Judge the rows together (Bonferroni)** widens each of
+  the k rows' intervals to 1 − (1 − level)/k, so all of them hold at once with at least the
+  confidence level (Law, 5th ed., section 10.3): with 4 rows at 90%, each is at 97.5%.
 
 **Keep this as the baseline** makes the new run the baseline; **Clear baseline** removes it.
 Opening another model or file clears it too.

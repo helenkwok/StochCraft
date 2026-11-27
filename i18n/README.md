@@ -1098,6 +1098,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   availability from the example above, and `{block}`, `{down}` and `{up}` kept. Not checked
   against any other source and not reviewed by native speakers; the least certain are lo, th, ta,
   te, bn, ka, kk, hi and sq.
+- The rows for the confidence level (Confidence level, its hint, the baseline's "Judge the rows
+  together (Bonferroni)" and the note for rows judged together) were machine-drafted from the
+  plain meaning of the English, using each catalog's existing words for interval, row, verdict
+  and run. The rows that named 95% ("± 95% CI", "Difference (95%)", the notes under the results
+  and the baseline table) keep each catalog's wording with `{level}` in place of 95; the
+  settled-measures row keeps its wording with the level added in parentheses. Not checked against
+  any other source and not reviewed by native speakers; the least certain are lo, th, ta, te, bn,
+  ka, kk, hi and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

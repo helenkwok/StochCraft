@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} üzerinde {text}: {ratio}:1, en az {min}:1 gerekli
 	{title}: now {now}, at most {most}	{title}: şu an {now}, en fazla {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% güven aralığı
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	±, çalıştırmalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliğidir.
+	± {level}% CI	± {level}% güven aralığı
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	±, çalıştırmalar arasındaki ortalama için %{level}'lik Student-t güven aralığının yarı genişliğidir.
 	· no results yet	· henüz sonuç yok
 unit	d	gün
 unit	h	sa
@@ -697,7 +697,7 @@ unit	yr	yıl
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model boş başlıyor ve ısınma ayarlanmamış, bu yüzden başlangıç ortalamaları uzun dönem değerinden uzaklaştırıyor.
 	Set a {value} warm-up	{value} ısınma ayarla
 	The run is too short to suggest a warm-up: make it longer, then set one.	Çalıştırma bir ısınma önermek için çok kısa: uzatın, ardından bir ısınma ayarlayın.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} temel ölçütten {k} tanesi oturdu: her biri ± 5% (oranlarda ± 1 yüzde puan) veya daha iyi kesinlikle biliniyor.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{m} temel ölçütten {k} tanesi oturdu: her biri ± 5% (oranlarda ± 1 yüzde puan) veya daha iyi kesinlikle biliniyor ({level}% güven düzeyinde).
 	What the run found	Çalıştırmanın bulduğu
 	See the numbers	Sayılara bak
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} akışı sınırlıyor: zamanın {busy} kadarında meşgul, önünde ortalama {queue} bekliyor.
@@ -731,15 +731,15 @@ unit	yr	yıl
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Temel ölçütlerin hiçbiri şansın açıklayacağından fazla değişmedi: değişikliğin etkisi az olabilir ya da daha fazla çalıştırma bunu gösterebilir.
 	What the change did	Değişiklik ne yaptı
 	Baseline and now, key measures	Referans ve şimdi, temel ölçütler
-	Difference (paired, 95%)	Fark (eşleştirilmiş, %95)
-	Difference (95%)	Fark (%95)
+	Difference (paired, {level}%)	Fark (eşleştirilmiş, %{level})
+	Difference ({level}%)	Fark (%{level})
 	Measure	Ölçüt
 	Baseline	Referans
 	Now	Şimdi
 	Change from baseline	Referansa göre değişim
 	Verdict	Karar
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Farkın %95 aralığı sıfırı dışarıda bıraktığında karar gerçektir. Her satır kendi başına değerlendirilir.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Farkın %{level} aralığı sıfırı dışarıda bıraktığında karar gerçektir. Her satır kendi başına değerlendirilir.
 	This run is the baseline.	Bu çalıştırma referanstır.
 	Change the model and run it again to compare.	Karşılaştırmak için modeli değiştirip yeniden çalıştırın.
 	Compared with the baseline:	Referansla karşılaştırıldığında:
@@ -1223,7 +1223,7 @@ unit	yr	yıl
 @plural	Allow up to {n} run|Allow up to {n} runs	En fazla {n} çalıştırmaya izin ver|En fazla {n} çalıştırmaya izin ver
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} çalıştırmanın hepsinde aynı, bu yüzden oturmuş sayılmaz. Hiçbir çalıştırmada görülmeyen bir şey yine de çalıştırmaların en fazla {rate} kadarında olabilir.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: ortalama sıfır ya da sıfıra yakın, bu yüzden kendisinin bir oranı olarak kesinliği bilinemez.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	±, tahmini kesinliktir: çalıştırmalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliği. Çalıştırma sayısı sonuçlara bakılarak seçildi, bu yüzden aralık gerçek ortalamayı %95'ten daha seyrek kapsayabilir.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	±, tahmini kesinliktir: çalıştırmalar arasındaki ortalama için %{level}'lik Student-t güven aralığının yarı genişliği. Çalıştırma sayısı sonuçlara bakılarak seçildi, bu yüzden aralık gerçek ortalamayı %{level}'ten daha seyrek kapsayabilir.
 	Not yet within its target: {results}.	Henüz hedefinin içinde değil: {results}.
 	then more until precise enough, at most {max}	ardından yeterince kesinleşene kadar daha fazla, en çok {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} çalıştırmadan sonra durdu: {result} hedefinin içinde.|{n} çalıştırmadan sonra durdu: {result} hedefinin içinde.
@@ -1535,3 +1535,7 @@ connection	Flow	Akış
 	How often is one machine down, and how much work does that cost?	Bir makine ne sıklıkta duruyor ve bu ne kadar işe mal oluyor?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 saat çalışır, 4.5 saat durur: makine zamanın %95.2'sinde çalışır ve her 94.5 saatte bir arıza olur. Onarım süresini yarıya indirmek bunu %97.6'ya çıkarır.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} zamanın {down} kadarında duruyor (kullanılabilirlik {up}); onu bekleyen bir şey yok.
+	Confidence level	Güven düzeyi
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Sonuçlardaki her ± bu düzeyde bir aralıktır. Daha yüksek bir düzey daha geniş aralıklar verir ve aynı kesinlik için daha fazla çalıştırma gerektirir.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Farkın aralığı sıfırı dışarıda bıraktığında karar gerçektir. {k} satır birlikte değerlendirilir: tüm aralıkları aynı anda en az {level}% güvenle geçerlidir (Bonferroni).
+	Judge the rows together (Bonferroni)	Satırları birlikte değerlendir (Bonferroni)

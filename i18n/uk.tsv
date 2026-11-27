@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} — тло «{background}»: {ratio}:1, потрібно {min}:1
 	{title}: now {now}, at most {most}	{title}: зараз {now}, щонайбільше {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% ДІ
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± — половина ширини 95% довірчого інтервалу Student-t для середнього значення за запусками.
+	± {level}% CI	± {level}% ДІ
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± — половина ширини {level}% довірчого інтервалу Student-t для середнього значення за запусками.
 	· no results yet	· результатів поки немає
 unit	d	д
 unit	h	год
@@ -697,7 +697,7 @@ unit	yr	р.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Модель починає роботу порожньою, і розігрів не задано, тому початок зміщує середні від довгострокового значення.
 	Set a {value} warm-up	Задати розігрів {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Запуск надто короткий, щоб запропонувати розігрів: подовжте його, потім задайте розігрів.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} з {m} основних показників усталилися: кожен відомий з точністю ± 5% (± 1 відсотковий пункт для частки) або краще.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} з {m} основних показників усталилися: кожен відомий з точністю ± 5% (± 1 відсотковий пункт для частки) або краще (за довірчої ймовірності {level}%).
 	What the run found	Що показав запуск
 	See the numbers	Переглянути числа
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} обмежує потік: зайнятий {busy} часу, перед ним у середньому чекають {queue}.
@@ -731,15 +731,15 @@ unit	yr	р.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Жоден з основних показників не змінився більше, ніж пояснила б випадковість: зміна, можливо, мало що дає, або більше запусків це покажуть.
 	What the change did	Що дала зміна
 	Baseline and now, key measures	Базовий варіант і зараз, основні показники
-	Difference (paired, 95%)	Різниця (парна, 95%)
-	Difference (95%)	Різниця (95%)
+	Difference (paired, {level}%)	Різниця (парна, {level}%)
+	Difference ({level}%)	Різниця ({level}%)
 	Measure	Показник
 	Baseline	Базовий варіант
 	Now	Зараз
 	Change from baseline	Зміна від базового варіанта
 	Verdict	Висновок
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Висновок реальний, коли 95% інтервал різниці не містить нуля. Кожен рядок оцінюється окремо.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Висновок реальний, коли {level}% інтервал різниці не містить нуля. Кожен рядок оцінюється окремо.
 	This run is the baseline.	Цей запуск — базовий варіант.
 	Change the model and run it again to compare.	Змініть модель і запустіть її знову, щоб порівняти.
 	Compared with the baseline:	Порівняно з базовим варіантом:
@@ -1223,7 +1223,7 @@ unit	yr	р.
 @plural	Allow up to {n} run|Allow up to {n} runs	Дозволити до {n} запуску|Дозволити до {n} запусків|Дозволити до {n} запусків
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: однаково в усіх {n} запусках, тому не вважається усталеним. Те, чого не зустрів жоден запуск, усе ж може статися максимум у {rate} запусків.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: середнє дорівнює нулю або близьке до нуля, тому його точність не можна виразити як частку від нього самого.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± — оцінна точність: половина ширини 95% довірчого інтервалу Student-t для середнього значення за запусками. Кількість запусків обрано за результатами, тому інтервал може накривати істинне середнє рідше, ніж у 95% випадків.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± — оцінна точність: половина ширини {level}% довірчого інтервалу Student-t для середнього значення за запусками. Кількість запусків обрано за результатами, тому інтервал може накривати істинне середнє рідше, ніж у {level}% випадків.
 	Not yet within its target: {results}.	Ще не в межах цілі: {results}.
 	then more until precise enough, at most {max}	потім більше, поки не стануть достатньо точними, не більше {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Зупинено після {n} запуску: {result} у межах своєї цілі.|Зупинено після {n} запусків: {result} у межах своєї цілі.|Зупинено після {n} запусків: {result} у межах своєї цілі.
@@ -1535,3 +1535,7 @@ connection	Flow	Потік
 	How often is one machine down, and how much work does that cost?	Як часто простоює один верстат і скільки роботи це коштує?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Працює 90 годин, простоює 4.5: верстат працює 95.2% часу, а поломка трапляється кожні 94.5 години. Якщо ремонт удвічі коротший, показник зростає до 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} простоює {down} часу (готовність {up}); ніщо його не чекає.
+	Confidence level	Довірча ймовірність
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Кожне ± у результатах — інтервал на цьому рівні. Вищий рівень дає ширші інтервали й потребує більше прогонів для тієї ж точності.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Висновок справжній, коли інтервал різниці не містить нуля. {k} рядків оцінюються разом: усі їхні інтервали виконуються одночасно з довірчою ймовірністю щонайменше {level}% (Бонферроні).
+	Judge the rows together (Bonferroni)	Оцінювати рядки разом (Бонферроні)

@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон «{background}»: {ratio}:1, кемінде {min}:1 керек
 	{title}: now {now}, at most {most}	{title}: қазір {now}, ең көбі {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% сенімділік аралығы
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± — іске қосулар арасындағы орташа мәннің 95% Student-t сенімділік аралығының жарты ені.
+	± {level}% CI	± {level}% сенімділік аралығы
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± — іске қосулар арасындағы орташа мәннің {level}% Student-t сенімділік аралығының жарты ені.
 	· no results yet	· әлі нәтижелер жоқ
 unit	d	күн
 unit	h	сағ
@@ -697,7 +697,7 @@ unit	yr	ж.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Модель бос күйден басталады және қыздыру кезеңі орнатылмаған, сондықтан бастапқы кезең орташа мәндерді ұзақ мерзімді мәннен ауытқытады.
 	Set a {value} warm-up	{value} қыздыру кезеңін орнату
 	The run is too short to suggest a warm-up: make it longer, then set one.	Іске қосу қыздыру кезеңін ұсыну үшін тым қысқа: оны ұзартып, содан кейін орнатыңыз.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} негізгі көрсеткіштің {k} тұрақты: әрқайсысы ± 5% (үлес үшін ± 1 пайыздық тармақ) немесе одан жақсы дәлдікпен белгілі.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{m} негізгі көрсеткіштің {k} тұрақты: әрқайсысы ± 5% (үлес үшін ± 1 пайыздық тармақ) немесе одан жақсы дәлдікпен белгілі ({level}% сенімділікпен).
 	What the run found	Іске қосу не көрсетті
 	See the numbers	Сандарды көру
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ағынды шектейді: уақыттың {busy} бөлігінде бос емес, алдында орта есеппен {queue} күтеді.
@@ -731,15 +731,15 @@ unit	yr	ж.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Негізгі көрсеткіштердің ешқайсысы кездейсоқтық түсіндіретіннен көп өзгерген жоқ: өзгерістің әсері аз болуы мүмкін немесе көбірек іске қосу оны көрсетуі мүмкін.
 	What the change did	Өзгеріс не істеді
 	Baseline and now, key measures	Базалық нұсқа және қазір, негізгі көрсеткіштер
-	Difference (paired, 95%)	Айырма (жұптық, 95%)
-	Difference (95%)	Айырма (95%)
+	Difference (paired, {level}%)	Айырма (жұптық, {level}%)
+	Difference ({level}%)	Айырма ({level}%)
 	Measure	Көрсеткіш
 	Baseline	Базалық нұсқа
 	Now	Қазір
 	Change from baseline	Базалық нұсқадан өзгеріс
 	Verdict	Қорытынды
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Айырманың 95% аралығы нөлді қамтымаса, қорытынды нақты болады. Әр жол жеке бағаланады.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Айырманың {level}% аралығы нөлді қамтымаса, қорытынды нақты болады. Әр жол жеке бағаланады.
 	This run is the baseline.	Бұл іске қосу — базалық нұсқа.
 	Change the model and run it again to compare.	Салыстыру үшін модельді өзгертіп, оны қайта іске қосыңыз.
 	Compared with the baseline:	Базалық нұсқамен салыстырғанда:
@@ -1223,7 +1223,7 @@ unit	yr	ж.
 @plural	Allow up to {n} run|Allow up to {n} runs	Ең көбі {n} іске қосуға рұқсат ету|Ең көбі {n} іске қосуға рұқсат ету
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: барлық {n} іске қосуда бірдей, сондықтан тұрақты деп саналмайды. Ешбір іске қосуда болмаған жағдай да іске қосулардың {rate} дейінгі бөлігінде орын алуы мүмкін.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: орташа нөлге тең немесе нөлге жақын, сондықтан оны өзінің үлесі ретінде дәлдікпен білу мүмкін емес.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± — бағалық дәлдік: іске қосулар арасындағы орташа мәннің 95% Student-t сенімділік аралығының жарты ені. Іске қосулар саны нәтижелерге қарап таңдалды, сондықтан аралық нақты орташаны 95%-дан сирегірек қамтуы мүмкін.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± — бағалық дәлдік: іске қосулар арасындағы орташа мәннің {level}% Student-t сенімділік аралығының жарты ені. Іске қосулар саны нәтижелерге қарап таңдалды, сондықтан аралық нақты орташаны {level}%-дан сирегірек қамтуы мүмкін.
 	Not yet within its target: {results}.	Әлі мақсат шегінде емес: {results}.
 	then more until precise enough, at most {max}	содан кейін жеткілікті дәл болғанша көбірек, ең көбі {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} іске қосудан кейін тоқтатылды: {result} өз мақсатының шегінде.|{n} іске қосудан кейін тоқтатылды: {result} өз мақсатының шегінде.
@@ -1535,3 +1535,7 @@ connection	Flow	Ағын
 	How often is one machine down, and how much work does that cost?	Бір станок қаншалықты жиі тоқтап қалады және бұл қанша жұмысқа тұрады?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 сағат жұмыс істейді, 4.5 сағат тұрады: станок уақыттың 95.2%-ында жұмыс істейді, ал бұзылу әр 94.5 сағат сайын болады. Жөндеу уақытын екі есе қысқарту оны 97.6%-ға жеткізеді.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} уақыттың {down} бөлігінде тұрады (дайындық {up}); оны ешнәрсе күтпейді.
+	Confidence level	Сенімділік деңгейі
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Нәтижелердегі әрбір ± осы деңгейдегі аралық. Жоғары деңгей кеңірек аралықтар береді және сол дәлдік үшін көбірек іске қосуды қажет етеді.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Айырманың аралығы нөлді қамтымаса, шешім шынайы. {k} жол бірге бағаланады: олардың барлық аралықтары бір мезгілде кемінде {level}% сенімділікпен орындалады (Бонферрони).
+	Judge the rows together (Bonferroni)	Жолдарды бірге бағалау (Бонферрони)

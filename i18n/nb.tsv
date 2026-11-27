@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, krever {min}:1
 	{title}: now {now}, at most {most}	{title}: nå {now}, høyst {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% KI
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± er halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av kjøringer.
+	± {level}% CI	± {level}% KI
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± er halve bredden av et {level}% Student-t-konfidensintervall for gjennomsnittet på tvers av kjøringer.
 	· no results yet	· ingen resultater ennå
 unit	d	d
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	år
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Modellen starter tom og ingen oppvarming er angitt, så starten trekker gjennomsnittene bort fra langtidsverdien.
 	Set a {value} warm-up	Angi en oppvarming på {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Kjøringen er for kort til å foreslå en oppvarming: gjør den lengre, og angi deretter en.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} av {m} viktige måltall er stabile: hvert er kjent med ± 5% (± 1 prosentpoeng for en andel) eller bedre.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} av {m} viktige måltall er stabile: hvert er kjent med ± 5% (± 1 prosentpoeng for en andel) eller bedre (med {level}% konfidens).
 	What the run found	Hva kjøringen fant
 	See the numbers	Se tallene
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} begrenser flyten: opptatt {busy} av tiden, med {queue} som venter foran i gjennomsnitt.
@@ -731,15 +731,15 @@ unit	yr	år
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Ingen av de viktigste måltallene endret seg mer enn tilfeldigheter ville forklare: endringen gjør kanskje lite, eller flere kjøringer kan vise det.
 	What the change did	Hva endringen gjorde
 	Baseline and now, key measures	Referanse og nå, viktigste måltall
-	Difference (paired, 95%)	Differanse (parvis, 95 %)
-	Difference (95%)	Differanse (95 %)
+	Difference (paired, {level}%)	Differanse (parvis, {level} %)
+	Difference ({level}%)	Differanse ({level} %)
 	Measure	Måltall
 	Baseline	Referanse
 	Now	Nå
 	Change from baseline	Endring fra referanse
 	Verdict	Vurdering
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	En vurdering er reell når differansens 95 %-intervall utelukker null. Hver rad vurderes for seg.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	En vurdering er reell når differansens {level} %-intervall utelukker null. Hver rad vurderes for seg.
 	This run is the baseline.	Denne kjøringen er referansen.
 	Change the model and run it again to compare.	Endre modellen og kjør den igjen for å sammenligne.
 	Compared with the baseline:	Sammenlignet med referansen:
@@ -1223,7 +1223,7 @@ unit	yr	år
 @plural	Allow up to {n} run|Allow up to {n} runs	Tillat opptil {n} kjøring|Tillat opptil {n} kjøringer
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: lik i alle {n} kjøringer, så det regnes ikke som stabilt. Noe ingen av kjøringene har støtt på, kan likevel skje i opptil {rate} av kjøringene.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: gjennomsnittet er null eller nær null, så det kan ikke kjennes med en presisjon uttrykt som en andel av seg selv.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± er den estimerte presisjonen: halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av kjøringer. Antall kjøringer ble valgt ut fra resultatene, så intervallet kan dekke det sanne gjennomsnittet sjeldnere enn 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± er den estimerte presisjonen: halve bredden av et {level}% Student-t-konfidensintervall for gjennomsnittet på tvers av kjøringer. Antall kjøringer ble valgt ut fra resultatene, så intervallet kan dekke det sanne gjennomsnittet sjeldnere enn {level}%.
 	Not yet within its target: {results}.	Ennå ikke innenfor målet: {results}.
 	then more until precise enough, at most {max}	deretter flere til de er presise nok, høyst {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Stoppet etter {n} kjøring: {result} er innenfor målet sitt.|Stoppet etter {n} kjøringer: {result} er innenfor målet sitt.
@@ -1535,3 +1535,7 @@ connection	Flow	Flyt
 	How often is one machine down, and how much work does that cost?	Hvor ofte står én maskin stille, og hvor mye arbeid koster det?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Går 90 timer, står stille 4.5: maskinen arbeider 95.2 % av tiden, og en feil inntreffer hver 94.5. time. Halveres reparasjonstiden, stiger det til 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} står stille {down} av tiden (oppetid {up}); ingenting venter på den.
+	Confidence level	Konfidensnivå
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Hvert ± i resultatene er et intervall på dette nivået. Et høyere nivå gir bredere intervaller og krever flere kjøringer for samme presisjon.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	En vurdering er reell når forskjellens intervall utelukker null. De {k} radene vurderes samlet: alle intervallene deres holder samtidig med minst {level}% konfidens (Bonferroni).
+	Judge the rows together (Bonferroni)	Vurder radene samlet (Bonferroni)

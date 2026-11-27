@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – నేపథ్యం {background}: {ratio}:1, అవసరం {min}:1
 	{title}: now {now}, at most {most}	{title}: ఇప్పుడు {now}, గరిష్ఠం {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% CI
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± అనేది అమలుల సగటుకు సంబంధించిన 95% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం.
+	± {level}% CI	± {level}% CI
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± అనేది అమలుల సగటుకు సంబంధించిన {level}% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం.
 	· no results yet	· ఇంకా ఫలితాలు లేవు
 unit	d	రోజు
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	సం.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	నమూనా ఖాళీగా ప్రారంభమవుతుంది, ప్రారంభ సర్దుబాటు సమయం సెట్ చేయలేదు, కాబట్టి ప్రారంభం సగటులను దీర్ఘకాలిక విలువ నుండి దూరం చేస్తుంది.
 	Set a {value} warm-up	{value} ప్రారంభ సర్దుబాటు సమయాన్ని సెట్ చేయి
 	The run is too short to suggest a warm-up: make it longer, then set one.	ప్రారంభ సర్దుబాటు సమయాన్ని సూచించడానికి అమలు చాలా చిన్నది: దాన్ని పొడిగించి, ఆపై ప్రారంభ సర్దుబాటు సమయాన్ని సెట్ చేయండి.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} ముఖ్య కొలమానాల్లో {k} స్థిరపడ్డాయి: ప్రతి ఒక్కటి ± 5% (నిష్పత్తికి ± 1 శాతం పాయింట్) లేదా అంతకంటే మెరుగ్గా తెలుసు.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{m} ముఖ్య కొలమానాల్లో {k} స్థిరపడ్డాయి: ప్రతి ఒక్కటి ± 5% (నిష్పత్తికి ± 1 శాతం పాయింట్) లేదా అంతకంటే మెరుగ్గా తెలుసు ({level}% విశ్వాసంతో).
 	What the run found	అమలులో తేలినది
 	See the numbers	సంఖ్యలను చూడండి
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ప్రవాహాన్ని పరిమితం చేస్తుంది: {busy} సమయం పనిలో ఉంటుంది, దాని ముందు సగటున {queue} వేచి ఉంటాయి.
@@ -731,15 +731,15 @@ unit	yr	సం.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	ఏ ముఖ్య కొలమానమూ యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ మారలేదు: మార్పు ప్రభావం తక్కువ కావచ్చు, లేదా మరిన్ని అమలులు దాన్ని చూపవచ్చు.
 	What the change did	మార్పు ఏమి చేసింది
 	Baseline and now, key measures	ప్రాతిపదిక మరియు ఇప్పుడు, ముఖ్య కొలమానాలు
-	Difference (paired, 95%)	తేడా (జత, 95%)
-	Difference (95%)	తేడా (95%)
+	Difference (paired, {level}%)	తేడా (జత, {level}%)
+	Difference ({level}%)	తేడా ({level}%)
 	Measure	కొలమానం
 	Baseline	ప్రాతిపదిక
 	Now	ఇప్పుడు
 	Change from baseline	ప్రాతిపదిక నుండి మార్పు
 	Verdict	తీర్పు
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	తేడా యొక్క 95% అంతరం సున్నాను మినహాయించినప్పుడు తీర్పు నిజం. ప్రతి వరుసను విడిగా నిర్ణయిస్తారు.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	తేడా యొక్క {level}% అంతరం సున్నాను మినహాయించినప్పుడు తీర్పు నిజం. ప్రతి వరుసను విడిగా నిర్ణయిస్తారు.
 	This run is the baseline.	ఈ అమలే ప్రాతిపదిక.
 	Change the model and run it again to compare.	పోల్చడానికి మోడల్‌ను మార్చి మళ్లీ అమలు చేయండి.
 	Compared with the baseline:	ప్రాతిపదికతో పోలిస్తే:
@@ -1223,7 +1223,7 @@ unit	yr	సం.
 @plural	Allow up to {n} run|Allow up to {n} runs	గరిష్ఠంగా {n} అమలును అనుమతించు|గరిష్ఠంగా {n} అమలులను అనుమతించు
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: మొత్తం {n} అమలులలో ఒకేలా ఉంది, కాబట్టి స్థిరపడినదిగా లెక్కించలేదు. ఏ అమలులోనూ ఎదురుకాని దేనికైనా, అమలులలో గరిష్ఠంగా {rate}లో ఇంకా జరగవచ్చు.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: సగటు సున్నా లేదా సున్నాకు దగ్గరగా ఉంది, కాబట్టి దాని సొంత వాటాగా కచ్చితత్వాన్ని తెలుసుకోలేము.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± అనేది అంచనా వేసిన కచ్చితత్వం: అమలుల సగటుకు సంబంధించిన 95% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం. అమలుల సంఖ్యను ఫలితాల ఆధారంగా ఎంచుకున్నందున, అంతరం నిజమైన సగటును 95% కంటే తక్కువసార్లు కవర్ చేయవచ్చు.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± అనేది అంచనా వేసిన కచ్చితత్వం: అమలుల సగటుకు సంబంధించిన {level}% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం. అమలుల సంఖ్యను ఫలితాల ఆధారంగా ఎంచుకున్నందున, అంతరం నిజమైన సగటును {level}% కంటే తక్కువసార్లు కవర్ చేయవచ్చు.
 	Not yet within its target: {results}.	ఇంకా లక్ష్యం లోపలికి రాలేదు: {results}.
 	then more until precise enough, at most {max}	ఆ తర్వాత తగినంత కచ్చితత్వం వచ్చే వరకు ఇంకా, గరిష్ఠంగా {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} అమలు తర్వాత ఆగింది: {result} తన లక్ష్యం లోపల ఉంది.|{n} అమలుల తర్వాత ఆగింది: {result} తన లక్ష్యం లోపల ఉంది.
@@ -1535,3 +1535,7 @@ connection	Flow	ప్రవాహం
 	How often is one machine down, and how much work does that cost?	ఒక యంత్రం ఎంత తరచుగా ఆగిపోతుంది, దానివల్ల ఎంత పని పోతుంది?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 గంటలు పని, 4.5 గంటలు ఆగుదల: యంత్రం 95.2% సమయం పనిచేస్తుంది, ప్రతి 94.5 గంటలకు ఒక చెడిపోవడం జరుగుతుంది. మరమ్మతు సమయాన్ని సగం చేస్తే అది 97.6% అవుతుంది.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} సమయం ఆగిపోతుంది (అందుబాటు {up}); దాని కోసం ఏదీ వేచి ఉండదు.
+	Confidence level	విశ్వాస స్థాయి
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	ఫలితాలలోని ప్రతి ± ఈ స్థాయిలోని అంతరం. ఎక్కువ స్థాయి విశాలమైన అంతరాలను ఇస్తుంది, అదే ఖచ్చితత్వానికి ఎక్కువ రన్‌లు కావాలి.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	తేడా అంతరం సున్నాను మినహాయించినప్పుడు తీర్పు నిజమైనది. {k} వరుసలను కలిపి నిర్ణయిస్తారు: వాటి అన్ని అంతరాలు ఒకేసారి కనీసం {level}% విశ్వాసంతో నిలుస్తాయి (బాన్‌ఫెరోని).
+	Judge the rows together (Bonferroni)	వరుసలను కలిపి నిర్ణయించు (బాన్‌ఫెరోని)

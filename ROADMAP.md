@@ -1679,6 +1679,18 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     engine, the file (`stochcraft:sequential`), the command line (`--until`, `--max`, `--fixed`)
     and the window (**How many runs** in the model overview). Sweeps, designs, sensitivity and
     sizing still run a fixed number.
+  - **Done:** relative precision on the true mean and a least number of runs (Law, *Simulation
+    Modeling and Analysis*, 5th ed., section 9.4.1). A relative target γ is met when
+    hw/|mean| ≤ γ/(1 + γ), and a precision rule stops a run only after at least 10 replications
+    (`stats::precision::relative_target`, `MIN_RUNS`). Monte Carlo's stop rule is not changed.
+- **Confidence levels and joint intervals.** **Done:** an experiment's confidence level, 90, 95
+  (the default) or 99% (`stochcraft:confidence`, `experiment.set`'s `confidence`, **Confidence
+  level** in the model overview), sets every half-width a run reports, the sequential rule and
+  the checks against observed data; at 95% the intervals are exactly as before. Other levels use
+  a computed Student-t quantile (`stats::critical`). `results.compare` takes a `confidence` and
+  `bonferroni`, which makes its k intervals hold together at 1 − (1 − level)/k each (Law,
+  section 10.3; the baseline's **Judge the rows together (Bonferroni)**). Sweeps, designs,
+  sensitivity, sizing, search and Monte Carlo stay at 95%.
 - **Streams by element id:** done (#152). Each block's streams are keyed by its id and their
   purpose, derived from the seed and the replication, not its place in the model, so that a
   variant that adds, removes or reorders an element keeps common random numbers for the others,

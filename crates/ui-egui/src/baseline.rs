@@ -2,8 +2,9 @@
 //! with them, measure by measure. The comparison is the engine's `results.compare`: two runs with
 //! the same seed and number of runs meet the same random numbers run by run, so their runs are
 //! compared in pairs (the paired-t interval); otherwise they are compared as independent runs
-//! (Welch's interval), which is wider. A difference is called real when its 95% interval leaves
-//! out zero, each measure on its own.
+//! (Welch's interval), which is wider. A difference is called real when its interval, at the
+//! results' confidence level, leaves out zero: each measure on its own, or, when the rows are
+//! judged together, with Bonferroni's level for each so that all hold at once.
 //!
 //! The window shows, over the rest of the results: how the two runs were run, what the change
 //! did in sentences, and a table of each block's key measures with the baseline, now, the
@@ -315,14 +316,15 @@ fn sentences(rows: &[Row]) -> Vec<(bool, String)> {
 }
 
 /// The comparison over the results: how the runs were compared, what the change did, and the
-/// table of key measures.
+/// table of key measures. Returns whether the rows are to be judged together when that choice
+/// changes.
 pub fn show(
     ui: &mut egui::Ui,
     baseline: &Value,
     now: &Value,
     comparison: &Value,
     changes: &[String],
-) {
+) -> Option<bool> {
     let p = theme::palette(ui.ctx());
     let rows = rows(baseline, now, comparison);
     egui::Frame::new()
@@ -363,7 +365,7 @@ pub fn show(
             });
         ui.add_space(10.0);
     }
-    table(ui, &p, &rows, comparison["paired"] == true);
+    table(ui, &p, &rows, comparison)
 }
 
 /// The most changes "Changed since the baseline" lists before "and n more changes".
@@ -424,10 +426,19 @@ const COLUMNS: [(f32, f32); 6] = [
 /// The verdict's column where the window is too narrow for the change mark.
 const NARROW_VERDICT: (f32, f32) = (622.0, 770.0);
 
-fn table(ui: &mut egui::Ui, p: &theme::Palette, rows: &[Row], paired: bool) {
+/// A confidence level as the table writes it: 0.95 is "95", 0.9875 is "98.8".
+fn level_text(level: f64) -> String {
+    results::grouped((level * 1000.0).round() / 10.0)
+}
+
+fn table(ui: &mut egui::Ui, p: &theme::Palette, rows: &[Row], comparison: &Value) -> Option<bool> {
     if rows.is_empty() {
-        return;
+        return None;
     }
+    let paired = comparison["paired"] == true;
+    let together = comparison["bonferroni"] == true;
+    let level = comparison["confidence"].as_f64().unwrap_or(0.95);
+    let each = level_text(comparison["each_confidence"].as_f64().unwrap_or(level));
     ui.label(theme::strong(t("Baseline and now, key measures")).size(15.0));
     ui.add_space(4.0);
     let wide = ui.available_width() >= COLUMNS[5].1;
@@ -441,15 +452,15 @@ fn table(ui: &mut egui::Ui, p: &theme::Palette, rows: &[Row], paired: bool) {
         });
     let scale = (-nice(-lo), nice(hi));
     let difference = if paired {
-        t("Difference (paired, 95%)")
+        tf("Difference (paired, {level}%)", &[("level", &each)])
     } else {
-        t("Difference (95%)")
+        tf("Difference ({level}%)", &[("level", &each)])
     };
     let header = [
         t("Measure"),
         t("Baseline"),
         t("Now"),
-        difference,
+        difference.as_str(),
         if wide { t("Change from baseline") } else { "" },
         t("Verdict"),
     ];
@@ -522,13 +533,26 @@ fn table(ui: &mut egui::Ui, p: &theme::Palette, rows: &[Row], paired: bool) {
         }
     }
     ui.add_space(4.0);
-    ui.add(
-        egui::Label::new(theme::weak(
-            ui,
-            t("A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own."),
-        ))
-        .wrap(),
-    );
+    let note = if together {
+        tf(
+            "A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).",
+            &[
+                ("k", &rows.len().to_string()),
+                ("level", &level_text(level)),
+            ],
+        )
+    } else {
+        tf(
+            "A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.",
+            &[("level", &level_text(level))],
+        )
+    };
+    ui.add(egui::Label::new(theme::weak(ui, note)).wrap());
+    let mut on = together;
+    let changed = ui
+        .checkbox(&mut on, t("Judge the rows together (Bonferroni)"))
+        .changed();
+    changed.then_some(on)
 }
 
 /// A table row: its stripe, and a `cell(ui, column, text)` to fill it with.

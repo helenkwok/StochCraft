@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} op {background}: {ratio}:1, nodig {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, hoogstens {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95%-BI
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± is de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de uitvoeringen.
+	± {level}% CI	± {level}%-BI
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± is de halve breedte van een {level}%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de uitvoeringen.
 	· no results yet	· nog geen resultaten
 unit	d	d
 unit	h	u
@@ -697,7 +697,7 @@ unit	yr	j
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Het model start leeg en er is geen opwarmperiode ingesteld, dus de start trekt de gemiddelden weg van de waarde op lange termijn.
 	Set a {value} warm-up	Opwarmperiode van {value} instellen
 	The run is too short to suggest a warm-up: make it longer, then set one.	De uitvoering is te kort om een opwarmperiode voor te stellen: maak haar langer en stel er dan een in.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} van {m} belangrijke metrieken zijn stabiel: elk is bekend tot op ± 5% (± 1 procentpunt voor een aandeel) of beter.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} van {m} belangrijke metrieken zijn stabiel: elk is bekend tot op ± 5% (± 1 procentpunt voor een aandeel) of beter (bij {level}% betrouwbaarheid).
 	What the run found	Wat de uitvoering vond
 	See the numbers	Bekijk de getallen
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} beperkt de stroom: {busy} van de tijd bezet, met gemiddeld {queue} wachtend ervoor.
@@ -731,15 +731,15 @@ unit	yr	j
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Geen van de belangrijkste metrieken bewoog meer dan toeval zou verklaren: de wijziging doet misschien weinig, of meer uitvoeringen kunnen het laten zien.
 	What the change did	Wat de wijziging deed
 	Baseline and now, key measures	Referentie en nu, belangrijkste metrieken
-	Difference (paired, 95%)	Verschil (gepaard, 95%)
-	Difference (95%)	Verschil (95%)
+	Difference (paired, {level}%)	Verschil (gepaard, {level}%)
+	Difference ({level}%)	Verschil ({level}%)
 	Measure	Metriek
 	Baseline	Referentie
 	Now	Nu
 	Change from baseline	Verandering t.o.v. referentie
 	Verdict	Oordeel
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Een oordeel is echt als het 95%-interval van het verschil nul uitsluit. Elke rij wordt apart beoordeeld.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Een oordeel is echt als het {level}%-interval van het verschil nul uitsluit. Elke rij wordt apart beoordeeld.
 	This run is the baseline.	Deze uitvoering is de referentie.
 	Change the model and run it again to compare.	Wijzig het model en voer het opnieuw uit om te vergelijken.
 	Compared with the baseline:	Vergeleken met de referentie:
@@ -1223,7 +1223,7 @@ unit	yr	j
 @plural	Allow up to {n} run|Allow up to {n} runs	Maximaal {n} uitvoering toestaan|Maximaal {n} uitvoeringen toestaan
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: gelijk in alle {n} uitvoeringen, dus niet als stabiel geteld. Iets wat geen enkele uitvoering heeft gezien, kan toch nog gebeuren in maximaal {rate} van de uitvoeringen.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: het gemiddelde is nul of bijna nul, dus het is niet te kennen met een nauwkeurigheid uitgedrukt als aandeel van zichzelf.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± is de geschatte nauwkeurigheid: de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de uitvoeringen. Het aantal uitvoeringen is gekozen op basis van de resultaten, dus het interval kan het ware gemiddelde minder vaak dekken dan 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± is de geschatte nauwkeurigheid: de halve breedte van een {level}%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de uitvoeringen. Het aantal uitvoeringen is gekozen op basis van de resultaten, dus het interval kan het ware gemiddelde minder vaak dekken dan {level}%.
 	Not yet within its target: {results}.	Nog niet binnen het doel: {results}.
 	then more until precise enough, at most {max}	daarna meer tot ze nauwkeurig genoeg zijn, hoogstens {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Gestopt na {n} uitvoering: {result} valt binnen het doel.|Gestopt na {n} uitvoeringen: {result} valt binnen het doel.
@@ -1535,3 +1535,7 @@ connection	Flow	Stroom
 	How often is one machine down, and how much work does that cost?	Hoe vaak staat één machine stil, en hoeveel werk kost dat?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 uur in bedrijf, 4.5 uur stil: de machine werkt 95.2% van de tijd en elke 94.5 uur treedt een storing op. Een gehalveerde reparatietijd tilt dat naar 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} staat {down} van de tijd stil (beschikbaarheid {up}); er wacht niets op.
+	Confidence level	Betrouwbaarheidsniveau
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Elke ± in de resultaten is een interval op dit niveau. Een hoger niveau geeft bredere intervallen en vraagt meer runs voor dezelfde precisie.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Een oordeel is echt wanneer het interval van het verschil nul uitsluit. De {k} rijen worden samen beoordeeld: al hun intervallen gelden tegelijk met minstens {level}% betrouwbaarheid (Bonferroni).
+	Judge the rows together (Bonferroni)	Rijen samen beoordelen (Bonferroni)

@@ -255,7 +255,9 @@ impl App {
                 baseline_action = self.baseline_line(ui);
                 ui.add_space(6.0);
                 if let Some((before, now, comparison, changes)) = &compared {
-                    baseline::show(ui, before, now, comparison, changes);
+                    if let Some(together) = baseline::show(ui, before, now, comparison, changes) {
+                        self.together = together;
+                    }
                     ui.add_space(12.0);
                 }
                 results::findings(ui, &results);

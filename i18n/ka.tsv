@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – ფონი „{background}“: {ratio}:1, საჭიროა {min}:1
 	{title}: now {now}, at most {most}	{title}: ახლა {now}, მაქსიმუმ {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% ნდობის ინტერვალი
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± არის გაშვებებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე.
+	± {level}% CI	± {level}% ნდობის ინტერვალი
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± არის გაშვებებს შორის საშუალო მნიშვნელობის {level}% Student-t ნდობის ინტერვალის ნახევარსიგანე.
 	· no results yet	· შედეგები ჯერ არ არის
 unit	d	დღე
 unit	h	სთ
@@ -697,7 +697,7 @@ unit	yr	წელი
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	მოდელი ცარიელი იწყება და გახურების პერიოდი არ არის დაყენებული, ამიტომ დასაწყისი საშუალოებს გრძელვადიანი მნიშვნელობისგან აშორებს.
 	Set a {value} warm-up	{value} გახურების პერიოდის დაყენება
 	The run is too short to suggest a warm-up: make it longer, then set one.	გაშვება ძალიან მოკლეა გახურების პერიოდის შესათავაზებლად: გაახანგრძლივეთ და შემდეგ დააყენეთ.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} ძირითადი მაჩვენებლიდან {k} სტაბილურია: თითოეული ცნობილია ± 5% (წილისთვის ± 1 პროცენტული პუნქტი) ან უკეთესი სიზუსტით.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{m} ძირითადი მაჩვენებლიდან {k} სტაბილურია: თითოეული ცნობილია ± 5% (წილისთვის ± 1 პროცენტული პუნქტი) ან უკეთესი სიზუსტით ({level}% სანდოობით).
 	What the run found	რა აჩვენა გაშვებამ
 	See the numbers	რიცხვების ნახვა
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ზღუდავს ნაკადს: დაკავებულია დროის {busy}, მის წინ საშუალოდ {queue} ელოდება.
@@ -731,15 +731,15 @@ unit	yr	წელი
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	არცერთი ძირითადი მაჩვენებელი არ შეცვლილა იმაზე მეტად, ვიდრე შემთხვევითობა ახსნიდა: ცვლილებამ შეიძლება ცოტა რამ მოახდინოს, ან მეტმა გაშვებამ აჩვენოს ეს.
 	What the change did	რა მოახდინა ცვლილებამ
 	Baseline and now, key measures	საბაზისო ვარიანტი და ახლა, ძირითადი მაჩვენებლები
-	Difference (paired, 95%)	სხვაობა (წყვილური, 95%)
-	Difference (95%)	სხვაობა (95%)
+	Difference (paired, {level}%)	სხვაობა (წყვილური, {level}%)
+	Difference ({level}%)	სხვაობა ({level}%)
 	Measure	მაჩვენებელი
 	Baseline	საბაზისო ვარიანტი
 	Now	ახლა
 	Change from baseline	ცვლილება საბაზისო ვარიანტთან შედარებით
 	Verdict	დასკვნა
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	დასკვნა რეალურია, როცა სხვაობის 95%-იანი ინტერვალი ნულს არ მოიცავს. თითოეული სტრიქონი ცალკე ფასდება.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	დასკვნა რეალურია, როცა სხვაობის {level}%-იანი ინტერვალი ნულს არ მოიცავს. თითოეული სტრიქონი ცალკე ფასდება.
 	This run is the baseline.	ეს გაშვება საბაზისო ვარიანტია.
 	Change the model and run it again to compare.	შეცვალეთ მოდელი და ხელახლა გაუშვით შესადარებლად.
 	Compared with the baseline:	საბაზისო ვარიანტთან შედარებით:
@@ -1223,7 +1223,7 @@ unit	yr	წელი
 @plural	Allow up to {n} run|Allow up to {n} runs	დაშვებული იყოს არაუმეტეს {n} გაშვებისა|დაშვებული იყოს არაუმეტეს {n} გაშვებისა
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: ყველა {n} გაშვებაში ერთნაირია, ამიტომ სტაბილურად არ ითვლება. რაც არც ერთ გაშვებაში არ მომხდარა, მაინც შეიძლება მოხდეს გაშვებების არაუმეტეს {rate}-ში.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: საშუალო ნულია ან ნულთან ახლოსაა, ამიტომ მისი სიზუსტე საკუთარი წილის სახით ვერ განისაზღვრება.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± არის სავარაუდო სიზუსტე: გაშვებებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე. გაშვებების რაოდენობა შედეგების მიხედვით შეირჩა, ამიტომ ინტერვალმა ჭეშმარიტი საშუალო შეიძლება 95%-ზე იშვიათად მოიცვას.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± არის სავარაუდო სიზუსტე: გაშვებებს შორის საშუალო მნიშვნელობის {level}% Student-t ნდობის ინტერვალის ნახევარსიგანე. გაშვებების რაოდენობა შედეგების მიხედვით შეირჩა, ამიტომ ინტერვალმა ჭეშმარიტი საშუალო შეიძლება {level}%-ზე იშვიათად მოიცვას.
 	Not yet within its target: {results}.	ჯერ არ არის სამიზნეში: {results}.
 	then more until precise enough, at most {max}	შემდეგ მეტი, სანამ საკმარისად ზუსტი არ გახდება, მაქსიმუმ {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	შეჩერდა {n} გაშვების შემდეგ: {result} თავის სამიზნეშია.|შეჩერდა {n} გაშვების შემდეგ: {result} თავის სამიზნეშია.
@@ -1535,3 +1535,7 @@ connection	Flow	ნაკადი
 	How often is one machine down, and how much work does that cost?	რა ხშირად ჩერდება ერთი მანქანა და რამდენი სამუშაო ღირს ეს?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	მუშაობს 90 საათი, დგას 4.5: მანქანა დროის 95.2%-ში მუშაობს და გაუმართაობა ყოველ 94.5 საათში ერთხელ ხდება. შეკეთების დროის განახევრება მას 97.6%-მდე ზრდის.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} დროის {down}-ში დგას (ხელმისაწვდომობა {up}); მას არაფერი ელოდება.
+	Confidence level	სანდოობის დონე
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	შედეგებში ყოველი ± ამ დონის ინტერვალია. უფრო მაღალი დონე უფრო ფართო ინტერვალებს იძლევა და იმავე სიზუსტისთვის მეტ გაშვებას საჭიროებს.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	ვერდიქტი რეალურია, როცა სხვაობის ინტერვალი ნულს არ მოიცავს. {k} მწკრივი ერთად ფასდება: მათი ყველა ინტერვალი ერთდროულად სრულდება არანაკლებ {level}% სანდოობით (ბონფერონი).
+	Judge the rows together (Bonferroni)	მწკრივების ერთად შეფასება (ბონფერონი)

@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – fonas „{background}“: {ratio}:1, reikia {min}:1
 	{title}: now {now}, at most {most}	{title}: dabar {now}, daugiausia {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% pasikliautinasis intervalas
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± yra 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp vykdymų, pusplotis.
+	± {level}% CI	± {level}% pasikliautinasis intervalas
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± yra {level}% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp vykdymų, pusplotis.
 	· no results yet	· rezultatų dar nėra
 unit	d	d.
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	m.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Modelis pradeda tuščias ir įšilimo laikotarpis nenustatytas, todėl pradžia atitolina vidurkius nuo ilgalaikės vertės.
 	Set a {value} warm-up	Nustatyti {value} įšilimo laikotarpį
 	The run is too short to suggest a warm-up: make it longer, then set one.	Vykdymas per trumpas įšilimo laikotarpiui pasiūlyti: pailginkite jį, tada nustatykite įšilimo laikotarpį.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} iš {m} pagrindinių rodiklių nusistovėjo: kiekvienas žinomas ± 5% (daliai ± 1 procentinio punkto) ar geresniu tikslumu.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} iš {m} pagrindinių rodiklių nusistovėjo: kiekvienas žinomas ± 5% (daliai ± 1 procentinio punkto) ar geresniu tikslumu (esant {level}% pasikliovimo lygmeniui).
 	What the run found	Ką parodė vykdymas
 	See the numbers	Žiūrėti skaičius
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} riboja srautą: užimtas {busy} laiko, prieš jį vidutiniškai laukia {queue}.
@@ -731,15 +731,15 @@ unit	yr	m.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Nė vienas pagrindinis rodiklis nepasikeitė daugiau, nei paaiškintų atsitiktinumas: pakeitimas galbūt mažai ką keičia, arba daugiau vykdymų tai parodytų.
 	What the change did	Ką padarė pakeitimas
 	Baseline and now, key measures	Atskaitos taškas ir dabar, pagrindiniai rodikliai
-	Difference (paired, 95%)	Skirtumas (porinis, 95 %)
-	Difference (95%)	Skirtumas (95 %)
+	Difference (paired, {level}%)	Skirtumas (porinis, {level} %)
+	Difference ({level}%)	Skirtumas ({level} %)
 	Measure	Rodiklis
 	Baseline	Atskaitos taškas
 	Now	Dabar
 	Change from baseline	Pokytis nuo atskaitos taško
 	Verdict	Išvada
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Išvada tikra, kai skirtumo 95 % intervalas neapima nulio. Kiekviena eilutė vertinama atskirai.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Išvada tikra, kai skirtumo {level} % intervalas neapima nulio. Kiekviena eilutė vertinama atskirai.
 	This run is the baseline.	Šis vykdymas yra atskaitos taškas.
 	Change the model and run it again to compare.	Pakeiskite modelį ir paleiskite jį dar kartą, kad palygintumėte.
 	Compared with the baseline:	Lyginant su atskaitos tašku:
@@ -1223,7 +1223,7 @@ unit	yr	m.
 @plural	Allow up to {n} run|Allow up to {n} runs	Leisti iki {n} vykdymo|Leisti iki {n} vykdymų|Leisti iki {n} vykdymų
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: tas pats visuose {n} vykdymuose, todėl nelaikoma nusistovėjusiu. Tai, ko nepatyrė joks vykdymas, vis tiek gali nutikti iki {rate} vykdymų.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: vidurkis lygus nuliui arba artimas nuliui, todėl jo tikslumo negalima išreikšti jo paties dalimi.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± yra numatomas tikslumas: 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp vykdymų, pusplotis. Vykdymų skaičius parinktas pagal rezultatus, todėl intervalas tikrąjį vidurkį gali dengti rečiau nei 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± yra numatomas tikslumas: {level}% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp vykdymų, pusplotis. Vykdymų skaičius parinktas pagal rezultatus, todėl intervalas tikrąjį vidurkį gali dengti rečiau nei {level}%.
 	Not yet within its target: {results}.	Dar ne tikslo ribose: {results}.
 	then more until precise enough, at most {max}	tada daugiau, kol bus pakankamai tikslūs, daugiausia {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Sustabdyta po {n} vykdymo: {result} yra savo tikslo ribose.|Sustabdyta po {n} vykdymų: {result} yra savo tikslo ribose.|Sustabdyta po {n} vykdymų: {result} yra savo tikslo ribose.
@@ -1535,3 +1535,7 @@ connection	Flow	Srautas
 	How often is one machine down, and how much work does that cost?	Kaip dažnai stovi vienas įrenginys ir kiek darbo tai kainuoja?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Veikia 90 valandų, stovi 4.5: įrenginys dirba 95.2 % laiko, o gedimas įvyksta kas 94.5 valandos. Perpus sutrumpinus remontą, rodiklis pakyla iki 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stovi {down} laiko (parengtis {up}); niekas jo nelaukia.
+	Confidence level	Pasikliovimo lygmuo
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Kiekvienas ± rezultatuose yra šio lygmens intervalas. Aukštesnis lygmuo duoda platesnius intervalus ir tam pačiam tikslumui reikia daugiau paleidimų.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Išvada tikra, kai skirtumo intervalas neapima nulio. {k} eilutės vertinamos kartu: visi jų intervalai galioja vienu metu su ne mažesniu kaip {level}% pasikliovimu (Bonferroni).
+	Judge the rows together (Bonferroni)	Vertinti eilutes kartu (Bonferroni)

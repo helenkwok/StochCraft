@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} su {background}: {ratio}:1, serve {min}:1
 	{title}: now {now}, at most {most}	{title}: ora {now}, al massimo {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± IC al 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± è la semiampiezza di un intervallo di confidenza Student-t al 95% della media tra le esecuzioni.
+	± {level}% CI	± IC al {level}%
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± è la semiampiezza di un intervallo di confidenza Student-t al {level}% della media tra le esecuzioni.
 	· no results yet	· nessun risultato per ora
 unit	d	g
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	a
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Il modello parte vuoto e non è impostato alcun riscaldamento, quindi l'avvio allontana le medie dal valore a lungo termine.
 	Set a {value} warm-up	Imposta un riscaldamento di {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	L'esecuzione è troppo breve per suggerire un riscaldamento: allungala, poi impostane uno.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} metriche principali su {m} sono stabili: ciascuna è nota a ± 5% (± 1 punto per una quota) o meglio.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} metriche principali su {m} sono stabili: ciascuna è nota a ± 5% (± 1 punto per una quota) o meglio (con una confidenza del {level}%).
 	What the run found	Cosa ha trovato l'esecuzione
 	See the numbers	Vedi i numeri
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} limita il flusso: occupato {busy} del tempo, con in media {queue} in attesa davanti.
@@ -731,15 +731,15 @@ unit	yr	a
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Nessuna delle metriche principali si è mossa più di quanto spiegherebbe il caso: la modifica potrebbe fare poco, o più esecuzioni potrebbero mostrarlo.
 	What the change did	Cosa ha fatto la modifica
 	Baseline and now, key measures	Riferimento e ora, metriche principali
-	Difference (paired, 95%)	Differenza (appaiata, 95%)
-	Difference (95%)	Differenza (95%)
+	Difference (paired, {level}%)	Differenza (appaiata, {level}%)
+	Difference ({level}%)	Differenza ({level}%)
 	Measure	Metrica
 	Baseline	Riferimento
 	Now	Ora
 	Change from baseline	Variazione dal riferimento
 	Verdict	Verdetto
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Un verdetto è reale quando l'intervallo al 95% della differenza esclude lo zero. Ogni riga è giudicata a sé.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Un verdetto è reale quando l'intervallo al {level}% della differenza esclude lo zero. Ogni riga è giudicata a sé.
 	This run is the baseline.	Questa esecuzione è il riferimento.
 	Change the model and run it again to compare.	Modifica il modello ed eseguilo di nuovo per confrontare.
 	Compared with the baseline:	Rispetto al riferimento:
@@ -1223,7 +1223,7 @@ unit	yr	a
 @plural	Allow up to {n} run|Allow up to {n} runs	Consenti fino a {n} esecuzione|Consenti fino a {n} esecuzioni
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: uguale in tutte le {n} esecuzioni, quindi non conteggiato come stabile. Qualcosa che nessuna esecuzione ha incontrato può comunque accadere in fino a {rate} delle esecuzioni.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: la media è zero o quasi, quindi non può essere nota con una precisione espressa come quota di se stessa.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± è la precisione stimata: la semiampiezza di un intervallo di confidenza Student-t al 95% della media tra le esecuzioni. Il numero di esecuzioni è stato scelto in base ai risultati, quindi l'intervallo può coprire la vera media meno spesso del 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± è la precisione stimata: la semiampiezza di un intervallo di confidenza Student-t al {level}% della media tra le esecuzioni. Il numero di esecuzioni è stato scelto in base ai risultati, quindi l'intervallo può coprire la vera media meno spesso del {level}%.
 	Not yet within its target: {results}.	Non ancora entro l'obiettivo: {results}.
 	then more until precise enough, at most {max}	poi altre finché non sono abbastanza precisi, al massimo {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Fermato dopo {n} esecuzione: {result} rientra nel proprio obiettivo.|Fermato dopo {n} esecuzioni: {result} rientra nel proprio obiettivo.
@@ -1535,3 +1535,7 @@ connection	Flow	Flusso
 	How often is one machine down, and how much work does that cost?	Quanto spesso una macchina è ferma e quanto lavoro costa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	In funzione 90 ore, ferma 4.5: la macchina lavora il 95.2% del tempo e un guasto avviene ogni 94.5 ore. Dimezzando il tempo di riparazione si sale al 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} è fermo il {down} del tempo (disponibilità {up}); nulla lo aspetta.
+	Confidence level	Livello di confidenza
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Ogni ± nei risultati è un intervallo a questo livello. Un livello più alto dà intervalli più ampi e richiede più esecuzioni per la stessa precisione.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Un verdetto è reale quando l'intervallo della differenza esclude lo zero. Le {k} righe sono giudicate insieme: tutti i loro intervalli valgono contemporaneamente con una confidenza di almeno il {level}% (Bonferroni).
+	Judge the rows together (Bonferroni)	Giudica le righe insieme (Bonferroni)

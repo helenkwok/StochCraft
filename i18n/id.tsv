@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} di atas {background}: {ratio}:1, perlu {min}:1
 	{title}: now {now}, at most {most}	{title}: sekarang {now}, paling banyak {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± IK 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh eksekusi.
+	± {level}% CI	± IK {level}%
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± adalah setengah lebar interval kepercayaan Student-t {level}% untuk rata-rata di seluruh eksekusi.
 	· no results yet	· belum ada hasil
 unit	d	hr
 unit	h	jam
@@ -697,7 +697,7 @@ unit	yr	thn
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model dimulai kosong dan tidak ada pemanasan yang ditetapkan, jadi awal menarik rata-rata menjauh dari nilai jangka panjang.
 	Set a {value} warm-up	Tetapkan pemanasan {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Eksekusi terlalu singkat untuk menyarankan pemanasan: perpanjang, lalu tetapkan pemanasan.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} dari {m} metrik utama sudah stabil: masing-masing diketahui hingga ± 5% (± 1 poin persentase untuk proporsi) atau lebih baik.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} dari {m} metrik utama sudah stabil: masing-masing diketahui hingga ± 5% (± 1 poin persentase untuk proporsi) atau lebih baik (pada tingkat kepercayaan {level}%).
 	What the run found	Apa yang ditemukan eksekusi
 	See the numbers	Lihat angkanya
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} membatasi aliran: sibuk {busy} dari waktu, dengan rata-rata {queue} menunggu di depannya.
@@ -731,15 +731,15 @@ unit	yr	thn
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Tidak satu pun metrik utama bergerak lebih dari yang bisa dijelaskan oleh kebetulan: perubahan mungkin berdampak kecil, atau lebih banyak eksekusi mungkin menunjukkannya.
 	What the change did	Apa yang dilakukan perubahan
 	Baseline and now, key measures	Acuan dan sekarang, metrik utama
-	Difference (paired, 95%)	Selisih (berpasangan, 95%)
-	Difference (95%)	Selisih (95%)
+	Difference (paired, {level}%)	Selisih (berpasangan, {level}%)
+	Difference ({level}%)	Selisih ({level}%)
 	Measure	Metrik
 	Baseline	Acuan
 	Now	Sekarang
 	Change from baseline	Perubahan dari acuan
 	Verdict	Putusan
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Putusan nyata jika interval 95% dari selisih tidak mencakup nol. Setiap baris dinilai sendiri.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Putusan nyata jika interval {level}% dari selisih tidak mencakup nol. Setiap baris dinilai sendiri.
 	This run is the baseline.	Eksekusi ini adalah acuan.
 	Change the model and run it again to compare.	Ubah model dan jalankan lagi untuk membandingkan.
 	Compared with the baseline:	Dibandingkan dengan acuan:
@@ -1223,7 +1223,7 @@ unit	yr	thn
 @plural	Allow up to {n} run|Allow up to {n} runs	Izinkan hingga {n} eksekusi
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: sama di seluruh {n} eksekusi, sehingga tidak dihitung sebagai stabil. Kejadian yang tidak dialami eksekusi mana pun tetap bisa terjadi pada hingga {rate} dari eksekusi.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: rata-rata nol atau mendekati nol, sehingga tidak dapat diketahui dengan presisi sebagai bagian dari dirinya sendiri.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± adalah presisi perkiraan: setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh eksekusi. Jumlah eksekusi dipilih berdasarkan hasil, sehingga interval bisa menutupi rata-rata sebenarnya lebih jarang dari 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± adalah presisi perkiraan: setengah lebar interval kepercayaan Student-t {level}% untuk rata-rata di seluruh eksekusi. Jumlah eksekusi dipilih berdasarkan hasil, sehingga interval bisa menutupi rata-rata sebenarnya lebih jarang dari {level}%.
 	Not yet within its target: {results}.	Belum dalam target: {results}.
 	then more until precise enough, at most {max}	lalu lebih banyak sampai cukup presisi, paling banyak {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Berhenti setelah {n} eksekusi: {result} berada dalam targetnya.
@@ -1535,3 +1535,7 @@ connection	Flow	Alur
 	How often is one machine down, and how much work does that cost?	Seberapa sering satu mesin berhenti, dan berapa banyak pekerjaan yang hilang karenanya?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Hidup 90 jam, mati 4.5 jam: mesin bekerja 95.2% dari waktu dan kerusakan terjadi setiap 94.5 jam. Memangkas waktu perbaikan setengahnya menaikkan angka itu menjadi 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} berhenti {down} dari waktu (ketersediaan {up}); tidak ada yang menunggunya.
+	Confidence level	Tingkat kepercayaan
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Setiap ± dalam hasil adalah interval pada tingkat ini. Tingkat yang lebih tinggi memberi interval lebih lebar dan perlu lebih banyak jalankan untuk presisi yang sama.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Putusan nyata bila interval selisih tidak mencakup nol. {k} baris dinilai bersama: semua intervalnya berlaku sekaligus dengan kepercayaan sedikitnya {level}% (Bonferroni).
+	Judge the rows together (Bonferroni)	Nilai baris secara bersama (Bonferroni)

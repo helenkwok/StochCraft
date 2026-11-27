@@ -669,8 +669,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – பின்னணி {background}: {ratio}:1, தேவை {min}:1
 	{title}: now {now}, at most {most}	{title}: இப்போது {now}, அதிகபட்சம் {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% CI
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± என்பது மீள்சோதனைகளின் சராசரிக்கான 95% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதியாகும்.
+	± {level}% CI	± {level}% CI
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± என்பது மீள்சோதனைகளின் சராசரிக்கான {level}% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதியாகும்.
 	· no results yet	· இன்னும் முடிவுகள் இல்லை
 unit	d	நாள்
 unit	h	மணி
@@ -697,7 +697,7 @@ unit	yr	ஆண்டு
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	மாதிரி காலியாகத் தொடங்குகிறது, தொடக்கச் சீராக்க நேரம் அமைக்கப்படவில்லை, எனவே தொடக்கம் சராசரிகளை நீண்டகால மதிப்பிலிருந்து விலக்குகிறது.
 	Set a {value} warm-up	{value} தொடக்கச் சீராக்க நேரத்தை அமை
 	The run is too short to suggest a warm-up: make it longer, then set one.	தொடக்கச் சீராக்க நேரத்தைப் பரிந்துரைக்க இயக்கம் மிகக் குறுகியது: அதை நீட்டி, பின்னர் தொடக்கச் சீராக்க நேரத்தை அமைக்கவும்.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} முக்கிய அளவீடுகளில் {k} நிலைபெற்றுள்ளன: ஒவ்வொன்றும் ± 5% (விகிதத்திற்கு ± 1 சதவீதப் புள்ளி) அல்லது அதைவிடச் சிறந்த துல்லியத்துடன் தெரியும்.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{m} முக்கிய அளவீடுகளில் {k} நிலைபெற்றுள்ளன: ஒவ்வொன்றும் ± 5% (விகிதத்திற்கு ± 1 சதவீதப் புள்ளி) அல்லது அதைவிடச் சிறந்த துல்லியத்துடன் தெரியும் ({level}% நம்பிக்கையில்).
 	What the run found	இயக்கம் கண்டறிந்தவை
 	See the numbers	எண்களைப் பார்
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ஓட்டத்தைக் கட்டுப்படுத்துகிறது: {busy} நேரம் பணியில், அதன் முன் சராசரியாக {queue} காத்திருக்கின்றன.
@@ -731,15 +731,15 @@ unit	yr	ஆண்டு
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	எந்த முக்கிய அளவீடும் தற்செயல் விளக்குவதை விட அதிகமாக மாறவில்லை: மாற்றத்தின் விளைவு சிறியதாக இருக்கலாம், அல்லது அதிக மீள் இயக்கங்கள் அதைக் காட்டலாம்.
 	What the change did	மாற்றம் என்ன செய்தது
 	Baseline and now, key measures	ஒப்பீட்டு அடிப்படையும் இப்போதும், முக்கிய அளவீடுகள்
-	Difference (paired, 95%)	வேறுபாடு (இணை, 95%)
-	Difference (95%)	வேறுபாடு (95%)
+	Difference (paired, {level}%)	வேறுபாடு (இணை, {level}%)
+	Difference ({level}%)	வேறுபாடு ({level}%)
 	Measure	அளவீடு
 	Baseline	ஒப்பீட்டு அடிப்படை
 	Now	இப்போது
 	Change from baseline	ஒப்பீட்டு அடிப்படையிலிருந்து மாற்றம்
 	Verdict	தீர்ப்பு
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	வேறுபாட்டின் 95% இடைவெளி பூஜ்ஜியத்தை விலக்கும்போது தீர்ப்பு உண்மையானது. ஒவ்வொரு வரிசையும் தனித்தனியாக மதிப்பிடப்படுகிறது.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	வேறுபாட்டின் {level}% இடைவெளி பூஜ்ஜியத்தை விலக்கும்போது தீர்ப்பு உண்மையானது. ஒவ்வொரு வரிசையும் தனித்தனியாக மதிப்பிடப்படுகிறது.
 	This run is the baseline.	இந்த இயக்கமே ஒப்பீட்டு அடிப்படை.
 	Change the model and run it again to compare.	ஒப்பிட, மாதிரியை மாற்றி மீண்டும் இயக்கவும்.
 	Compared with the baseline:	ஒப்பீட்டு அடிப்படையுடன் ஒப்பிடும்போது:
@@ -1223,7 +1223,7 @@ unit	yr	ஆண்டு
 @plural	Allow up to {n} run|Allow up to {n} runs	அதிகபட்சம் {n} மீள் இயக்கத்தை அனுமதி|அதிகபட்சம் {n} மீள் இயக்கங்களை அனுமதி
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} மீள் இயக்கங்கள் அனைத்திலும் ஒரே மாதிரி, எனவே நிலைபெற்றதாகக் கணக்கிடப்படவில்லை. எந்த மீள் இயக்கமும் சந்திக்காத ஒன்று, மீள் இயக்கங்களில் அதிகபட்சம் {rate} இல் இன்னும் நிகழலாம்.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: சராசரி பூஜ்யம் அல்லது பூஜ்யத்திற்கு அருகில் உள்ளது, எனவே அதைத் தன்னுடைய ஒரு பங்காகத் துல்லியமாக அறிய முடியாது.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± என்பது மதிப்பிடப்பட்ட துல்லியம்: மீள் இயக்கங்களின் சராசரிக்கான 95% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதி. மீள் இயக்கங்களின் எண்ணிக்கை முடிவுகளைப் பார்த்துத் தேர்ந்தெடுக்கப்பட்டதால், இடைவெளி உண்மையான சராசரியை 95%-ஐ விடக் குறைவாகவே உள்ளடக்கக்கூடும்.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± என்பது மதிப்பிடப்பட்ட துல்லியம்: மீள் இயக்கங்களின் சராசரிக்கான {level}% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதி. மீள் இயக்கங்களின் எண்ணிக்கை முடிவுகளைப் பார்த்துத் தேர்ந்தெடுக்கப்பட்டதால், இடைவெளி உண்மையான சராசரியை {level}%-ஐ விடக் குறைவாகவே உள்ளடக்கக்கூடும்.
 	Not yet within its target: {results}.	இன்னும் இலக்குக்குள் வரவில்லை: {results}.
 	then more until precise enough, at most {max}	பிறகு போதுமான துல்லியம் வரும் வரை மேலும், அதிகபட்சம் {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} மீள் இயக்கத்திற்குப் பிறகு நிறுத்தப்பட்டது: {result} தன் இலக்குக்குள் உள்ளது.|{n} மீள் இயக்கங்களுக்குப் பிறகு நிறுத்தப்பட்டது: {result} தன் இலக்குக்குள் உள்ளது.
@@ -1535,3 +1535,7 @@ connection	Flow	ஓட்டம்
 	How often is one machine down, and how much work does that cost?	ஒரு இயந்திரம் எவ்வளவு அடிக்கடி நின்றுவிடுகிறது, அதனால் எவ்வளவு வேலை இழப்பு?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 மணிநேரம் இயக்கம், 4.5 நிறுத்தம்: இயந்திரம் 95.2% நேரம் வேலை செய்கிறது, ஒவ்வொரு 94.5 மணிநேரத்திற்கும் ஒரு பழுது ஏற்படுகிறது. பழுதுபார்க்கும் நேரத்தை பாதியாக்கினால் அது 97.6% ஆகிறது.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} நேரம் நின்றிருக்கிறது (தயார்நிலை {up}); அதற்காக எதுவும் காத்திருக்கவில்லை.
+	Confidence level	நம்பிக்கை நிலை
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	முடிவுகளில் உள்ள ஒவ்வொரு ±-உம் இந்த நிலையில் ஒரு இடைவெளி. உயர்ந்த நிலை அகலமான இடைவெளிகளைத் தரும், அதே துல்லியத்துக்கு அதிக ஓட்டங்கள் தேவை.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	வேறுபாட்டின் இடைவெளி பூஜ்ஜியத்தை விலக்கும்போது தீர்ப்பு உண்மையானது. {k} வரிசைகள் ஒன்றாக மதிப்பிடப்படுகின்றன: அவற்றின் எல்லா இடைவெளிகளும் ஒரே நேரத்தில் குறைந்தது {level}% நம்பிக்கையுடன் பொருந்தும் (போன்ஃபெரோனி).
+	Judge the rows together (Bonferroni)	வரிசைகளை ஒன்றாக மதிப்பிடு (போன்ஃபெரோனி)

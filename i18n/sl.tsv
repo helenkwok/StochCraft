@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – ozadje »{background}«: {ratio}:1, potrebno {min}:1
 	{title}: now {now}, at most {most}	{title}: zdaj {now}, največ {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% interval zaupanja
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± je polovica širine 95% Student-t intervala zaupanja za povprečje med zagoni.
+	± {level}% CI	± {level}% interval zaupanja
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± je polovica širine {level}% Student-t intervala zaupanja za povprečje med zagoni.
 	· no results yet	· rezultatov še ni
 unit	d	d
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	l.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model se začne prazen in ogrevanje ni nastavljeno, zato začetek odmakne povprečja od dolgoročne vrednosti.
 	Set a {value} warm-up	Nastavi ogrevanje {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Zagon je prekratek, da bi predlagali ogrevanje: podaljšajte ga in nato nastavite ogrevanje.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} od {m} ključnih kazalnikov je ustaljenih: vsak je znan na ± 5% (± 1 odstotna točka za delež) ali bolje.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} od {m} ključnih kazalnikov je ustaljenih: vsak je znan na ± 5% (± 1 odstotna točka za delež) ali bolje (pri zaupanju {level}%).
 	What the run found	Kaj je pokazal zagon
 	See the numbers	Poglej številke
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} omejuje tok: zaseden {busy} časa, pred njim pa v povprečju čaka {queue}.
@@ -731,15 +731,15 @@ unit	yr	l.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Noben ključni kazalnik se ni premaknil bolj, kot bi pojasnilo naključje: sprememba morda naredi malo, ali pa bi to pokazalo več zagonov.
 	What the change did	Kaj je naredila sprememba
 	Baseline and now, key measures	Referenca in zdaj, ključni kazalniki
-	Difference (paired, 95%)	Razlika (v parih, 95 %)
-	Difference (95%)	Razlika (95 %)
+	Difference (paired, {level}%)	Razlika (v parih, {level} %)
+	Difference ({level}%)	Razlika ({level} %)
 	Measure	Kazalnik
 	Baseline	Referenca
 	Now	Zdaj
 	Change from baseline	Sprememba glede na referenco
 	Verdict	Ocena
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Ocena je resnična, ko 95-odstotni interval razlike ne vsebuje ničle. Vsaka vrstica se ocenjuje posebej.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Ocena je resnična, ko {level}-odstotni interval razlike ne vsebuje ničle. Vsaka vrstica se ocenjuje posebej.
 	This run is the baseline.	Ta zagon je referenca.
 	Change the model and run it again to compare.	Spremenite model in ga znova zaženite za primerjavo.
 	Compared with the baseline:	V primerjavi z referenco:
@@ -1223,7 +1223,7 @@ unit	yr	l.
 @plural	Allow up to {n} run|Allow up to {n} runs	Dovoli do {n} zagona|Dovoli do {n} zagonov|Dovoli do {n} zagonov|Dovoli do {n} zagonov
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: enako v vseh {n} zagonih, zato ni štet za ustaljeno. Nekaj, česar ni doživel noben zagon, se lahko še vedno zgodi v do {rate} zagonov.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: povprečje je nič ali blizu nič, zato ga ni mogoče poznati z natančnostjo, izraženo kot delež njega samega.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± je ocenjena natančnost: polovica širine 95% Student-t intervala zaupanja za povprečje med zagoni. Število zagonov je bilo izbrano glede na rezultate, zato interval pravo povprečje morda pokrije redkeje kot v 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± je ocenjena natančnost: polovica širine {level}% Student-t intervala zaupanja za povprečje med zagoni. Število zagonov je bilo izbrano glede na rezultate, zato interval pravo povprečje morda pokrije redkeje kot v {level}%.
 	Not yet within its target: {results}.	Še ni znotraj cilja: {results}.
 	then more until precise enough, at most {max}	nato več, dokler niso dovolj natančni, največ {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Ustavljeno po {n} zagonu: {result} je znotraj svojega cilja.|Ustavljeno po {n} zagonih: {result} je znotraj svojega cilja.|Ustavljeno po {n} zagonih: {result} je znotraj svojega cilja.|Ustavljeno po {n} zagonih: {result} je znotraj svojega cilja.
@@ -1535,3 +1535,7 @@ connection	Flow	Tok
 	How often is one machine down, and how much work does that cost?	Kako pogosto stoji en stroj in koliko dela to stane?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Dela 90 ur, stoji 4.5: stroj dela 95.2 % časa, okvara pa nastopi vsakih 94.5 ure. Pol krajše popravilo to dvigne na 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stoji {down} časa (razpoložljivost {up}); nič ne čaka nanj.
+	Confidence level	Stopnja zaupanja
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Vsak ± v rezultatih je interval na tej stopnji. Višja stopnja da širše intervale in za enako natančnost potrebuje več zagonov.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Razsodba je resnična, ko interval razlike ne vsebuje ničle. {k} vrstic se presoja skupaj: vsi njihovi intervali veljajo hkrati z zaupanjem vsaj {level}% (Bonferroni).
+	Judge the rows together (Bonferroni)	Presojaj vrstice skupaj (Bonferroni)

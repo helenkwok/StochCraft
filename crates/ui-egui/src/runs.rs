@@ -74,14 +74,15 @@ impl App {
         if b.serial == self.results_serial {
             return None;
         }
-        let key = (b.serial, self.results_serial, self.lang);
+        let key = (b.serial, self.results_serial, self.lang, self.together);
         if self.comparison.as_ref().map(|c| c.0) != Some(key) {
             let wanted = baseline::wanted(&b.results, now);
-            let params = if wanted.is_empty() {
-                json!({ "a": b.results, "b": now })
-            } else {
-                json!({ "a": b.results, "b": now, "results": wanted })
-            };
+            // At the level of the results on show, each row on its own or all together.
+            let level = now["record"]["confidence"].as_f64().unwrap_or(0.95);
+            let mut params = json!({ "a": b.results, "b": now, "confidence": level, "bonferroni": self.together });
+            if !wanted.is_empty() {
+                params["results"] = json!(wanted);
+            }
             let answer = self
                 .engine
                 .execute("results.compare", params)

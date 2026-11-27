@@ -537,6 +537,37 @@ impl App {
         }
     }
 
+    /// The confidence level of the results' intervals: 90, 95 (the default) or 99%.
+    pub(crate) fn confidence_row(&mut self, ui: &mut egui::Ui, model: &Value) {
+        let now = model["experiment"]["confidence"].as_f64().unwrap_or(0.95);
+        let name = |l: f64| format!("{}%", crate::results::grouped((l * 1000.0).round() / 10.0));
+        let mut chosen = now;
+        ui.horizontal(|ui| {
+            row_label(ui, t("Confidence level"));
+            craft_ui::ComboBox::from_id_salt("x/confidence")
+                .selected_text(name(now))
+                .width(90.0)
+                .show_ui(ui, |ui| {
+                    for l in [0.90, 0.95, 0.99] {
+                        if ui.selectable_label(now == l, name(l)).clicked() {
+                            chosen = l;
+                        }
+                    }
+                })
+                .response
+                .widget_info(|| {
+                    egui::WidgetInfo::labeled(egui::Role::ComboBox, true, t("Confidence level"))
+                });
+        });
+        ui.label(theme::weak(
+            ui,
+            t("Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision."),
+        ));
+        if chosen != now {
+            self.execute("experiment.set", json!({ "confidence": chosen }));
+        }
+    }
+
     /// The block's estimate, if it has one, and a form to fit its time to a new one.
     pub(crate) fn estimate_section(&mut self, ui: &mut egui::Ui, el: &Value) {
         let id = el["id"].as_str().unwrap_or("").to_owned();

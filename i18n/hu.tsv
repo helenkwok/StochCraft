@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – {background} háttér: {ratio}:1, legalább {min}:1 kell
 	{title}: now {now}, at most {most}	{title}: most {now}, legfeljebb {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95%-os konfidenciaintervallum
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	A ± a futások átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége.
+	± {level}% CI	± {level}%-os konfidenciaintervallum
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	A ± a futások átlagára számított {level}%-os Student-t-konfidenciaintervallum fél szélessége.
 	· no results yet	· még nincsenek eredmények
 unit	d	nap
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	év
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	A modell üresen indul, és nincs bemelegítés beállítva, így az indulás eltolja az átlagokat a hosszú távú értéktől.
 	Set a {value} warm-up	{value} bemelegítés beállítása
 	The run is too short to suggest a warm-up: make it longer, then set one.	A futás túl rövid ahhoz, hogy bemelegítést javasoljunk: hosszabbítsa meg, majd állítson be egyet.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} fő mérőszámból {k} stabil: mindegyik ± 5% (aránynál ± 1 százalékpont) vagy jobb pontossággal ismert.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{m} fő mérőszámból {k} stabil: mindegyik ± 5% (aránynál ± 1 százalékpont) vagy jobb pontossággal ismert ({level}%-os megbízhatósággal).
 	What the run found	Mit talált a futás
 	See the numbers	Számok megtekintése
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} korlátozza az áramlást: az idő {busy} részében foglalt, előtte átlagosan {queue} várakozik.
@@ -731,15 +731,15 @@ unit	yr	év
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Egyik fő mérőszám sem változott többel, mint amit a véletlen megmagyarázna: a változtatás talán keveset tesz, vagy több futás megmutathatja.
 	What the change did	Mit tett a változtatás
 	Baseline and now, key measures	Viszonyítási alap és most, fő mérőszámok
-	Difference (paired, 95%)	Különbség (páros, 95%)
-	Difference (95%)	Különbség (95%)
+	Difference (paired, {level}%)	Különbség (páros, {level}%)
+	Difference ({level}%)	Különbség ({level}%)
 	Measure	Mérőszám
 	Baseline	Viszonyítási alap
 	Now	Most
 	Change from baseline	Változás a viszonyítási alaphoz képest
 	Verdict	Ítélet
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Az ítélet valós, ha a különbség 95%-os intervalluma nem tartalmazza a nullát. Minden sort külön ítélünk meg.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Az ítélet valós, ha a különbség {level}%-os intervalluma nem tartalmazza a nullát. Minden sort külön ítélünk meg.
 	This run is the baseline.	Ez a futás a viszonyítási alap.
 	Change the model and run it again to compare.	Módosítsd a modellt, és futtasd újra az összehasonlításhoz.
 	Compared with the baseline:	A viszonyítási alaphoz képest:
@@ -1223,7 +1223,7 @@ unit	yr	év
 @plural	Allow up to {n} run|Allow up to {n} runs	Legfeljebb {n} futás engedélyezése|Legfeljebb {n} futás engedélyezése
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: {n} futásból mindegyikben azonos, ezért nem számít stabilnak. Ami egyik futásban sem fordult elő, az még megtörténhet a futások legfeljebb {rate} részében.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: az átlag nulla vagy közel nulla, ezért nem ismerhető önmaga hányadában kifejezett pontossággal.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	A ± a becsült pontosság: a futások átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége. A futások számát az eredmények alapján választottuk, ezért az intervallum ritkábban fedheti le a valódi átlagot, mint 95%-ban.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	A ± a becsült pontosság: a futások átlagára számított {level}%-os Student-t-konfidenciaintervallum fél szélessége. A futások számát az eredmények alapján választottuk, ezért az intervallum ritkábban fedheti le a valódi átlagot, mint {level}%-ban.
 	Not yet within its target: {results}.	Még nincs a célján belül: {results}.
 	then more until precise enough, at most {max}	utána több, amíg elég pontosak nem lesznek, legfeljebb {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} futás után leállt: {result} a célján belül van.|{n} futás után leállt: {result} a célján belül van.
@@ -1535,3 +1535,7 @@ connection	Flow	Folyamat
 	How often is one machine down, and how much work does that cost?	Milyen gyakran áll egy gép, és mennyi munkába kerül ez?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 órát működik, 4.5 órát áll: a gép az idő 95.2%-ában dolgozik, és 94.5 óránként következik be egy hiba. Fele akkora javítási idővel ez 97.6%-ra nő.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} az idő {down}-ában áll (rendelkezésre állás {up}); semmi sem vár rá.
+	Confidence level	Megbízhatósági szint
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Az eredményekben minden ± ezen a szinten vett intervallum. Magasabb szint szélesebb intervallumokat ad, és ugyanahhoz a pontossághoz több futás kell.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Az ítélet valós, ha a különbség intervalluma kizárja a nullát. A(z) {k} sort együtt ítéljük meg: minden intervallumuk egyszerre teljesül legalább {level}%-os megbízhatósággal (Bonferroni).
+	Judge the rows together (Bonferroni)	A sorok együttes megítélése (Bonferroni)

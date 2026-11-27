@@ -464,8 +464,14 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
             let (label, unit_kind) = metric(key, kind);
             let (scale, unit) = scale_and_unit(&unit_kind, time);
             let (mean, hw) = mean_and_half_width(&e["metrics"][key], scale);
-            // A share in points as the table shows it; anything else also as a share of its mean.
-            let relative = grouped((score * SETTLED * 100.0).round());
+            // A share in points as the table shows it; anything else also as a share of its mean
+            // (its half-width over the mean, not the score, whose target is a share of the true
+            // mean).
+            let m = &e["metrics"][key];
+            let relative = match (m["mean"].as_f64(), m["half_width"].as_f64()) {
+                (Some(mean), Some(hw)) if mean != 0.0 => grouped((hw / mean.abs() * 100.0).round()),
+                _ => grouped((score * SETTLED * 100.0).round()),
+            };
             let value = match unit {
                 "%" => format!("{mean} ± {hw}%"),
                 "" => format!("{mean} ± {hw}, ± {relative}%"),
@@ -524,8 +530,12 @@ pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
         // A sequential run judged its key measures by its own targets, in its own rows above.
         if settled > 0 && !sequential {
             let text = tf(
-                "{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.",
-                &[("k", &settled.to_string()), ("m", &judged.to_string())],
+                "{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better, with {level}% confidence.",
+                &[
+                    ("k", &settled.to_string()),
+                    ("m", &judged.to_string()),
+                    ("level", &level_text(results)),
+                ],
             );
             trust_row(ui, &p, true, &text, None);
         }
@@ -576,6 +586,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
     let r = &results["record"];
     let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
     let order = order(results);
+    let ci = ci_header(results);
     let n_of = |m: &Value| n_of(results, m);
     let partial = results["elements"]
         .as_array()
@@ -641,7 +652,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 ui,
                 &p,
                 None,
-                [t("Metric"), t("Mean"), t("± 95% CI"), t("Unit"), ""],
+                [t("Metric"), t("Mean"), &ci, t("Unit"), ""],
             );
             for (i, key) in order.iter().enumerate() {
                 let m = &e["metrics"][*key];
@@ -734,12 +745,16 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
         }
         // A sequential run chose its count from the results, so its interval is an estimate of
         // precision whose coverage is not guaranteed.
+        let level = level_text(results);
         let interval = if results["sequential"].is_object() {
-            t("± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.")
+            tf(
+                "± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.",
+                &[("level", &level)],
+            )
         } else {
-            t(
-                "± is the half-width of a 95% Student-t confidence interval of the mean across \
-               runs.",
+            tf(
+                "± is the half-width of a {level}% Student-t confidence interval of the mean across runs.",
+                &[("level", &level)],
             )
         };
         ui.label(theme::weak(ui, interval));
@@ -779,6 +794,7 @@ fn key_measures(
         .map(|e| (e, key_of(e)))
         .filter(|(_, keys)| !keys.is_empty())
         .collect();
+    let ci = ci_header(results);
     if blocks.is_empty() {
         return;
     }
@@ -812,7 +828,7 @@ fn key_measures(
                             ui.label(theme::strong(name));
                             ui.label(theme::weak(ui, kind_label(kind)));
                         });
-                        key_row(ui, p, None, [t("Metric"), t("Mean"), t("± 95% CI"), ""]);
+                        key_row(ui, p, None, [t("Metric"), t("Mean"), &ci, ""]);
                         for (i, key) in keys.iter().enumerate() {
                             let m = &e["metrics"][*key];
                             let (label, unit_kind) = metric(key, kind);
@@ -869,6 +885,18 @@ fn key_row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [
 
 /// A result's mean and half-width as the tables show them, each multiplied by `scale`: rounded
 /// together by [`rounded`] where both are known, otherwise as they are ("–" where missing).
+/// The confidence level of `results`' intervals as a number of percent ("95"), from the run
+/// record; 95 for results from before the level could be set.
+pub(crate) fn level_text(results: &Value) -> String {
+    let level = results["record"]["confidence"].as_f64().unwrap_or(0.95);
+    grouped((level * 1000.0).round() / 10.0)
+}
+
+/// The header of the column of half-widths: "± 95% CI" at the results' level.
+fn ci_header(results: &Value) -> String {
+    tf("± {level}% CI", &[("level", &level_text(results))])
+}
+
 fn mean_and_half_width(m: &Value, scale: f64) -> (String, String) {
     let show = |v: Option<f64>| v.map_or_else(|| "–".to_owned(), |v| grouped(v * scale));
     match (m["mean"].as_f64(), m["half_width"].as_f64()) {
@@ -1719,7 +1747,7 @@ mod tests {
         );
         h.get_by_label_contains("no warm-up is set");
         h.get_by_label(
-            "2 of 4 key measures are settled: each is known to ± 5% (± 1 point for a share) or better.",
+            "2 of 4 key measures are settled: each is known to ± 5% (± 1 point for a share) or better, with 95% confidence.",
         );
     }
 

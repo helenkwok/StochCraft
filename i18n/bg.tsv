@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон „{background}“: {ratio}:1, нужно е {min}:1
 	{title}: now {now}, at most {most}	{title}: сега {now}, най-много {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% ДИ
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± означава половината от ширината на 95% доверителен интервал по Student-t за средната стойност от изпълненията.
+	± {level}% CI	± {level}% ДИ
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± означава половината от ширината на {level}% доверителен интервал по Student-t за средната стойност от изпълненията.
 	· no results yet	· все още няма резултати
 unit	d	д
 unit	h	ч
@@ -697,7 +697,7 @@ unit	yr	г.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Моделът започва празен и няма зададено загряване, така че началото отклонява средните стойности от дългосрочните.
 	Set a {value} warm-up	Задаване на загряване {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Изпълнението е твърде кратко, за да се предложи загряване: удължете го и след това задайте загряване.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} от {m} основни показатели са установени: всеки е известен с точност ± 5% (± 1 процентен пункт за дял) или по-добре.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} от {m} основни показатели са установени: всеки е известен с точност ± 5% (± 1 процентен пункт за дял) или по-добре (при {level}% доверителност).
 	What the run found	Какво установи изпълнението
 	See the numbers	Вижте числата
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ограничава потока: зает {busy} от времето, като пред него чакат средно {queue}.
@@ -731,15 +731,15 @@ unit	yr	г.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Нито един от основните показатели не се промени повече, отколкото би обяснила случайността: промяната може би прави малко, или повече изпълнения ще го покажат.
 	What the change did	Какво направи промяната
 	Baseline and now, key measures	Базов вариант и сега, основни показатели
-	Difference (paired, 95%)	Разлика (сдвоена, 95%)
-	Difference (95%)	Разлика (95%)
+	Difference (paired, {level}%)	Разлика (сдвоена, {level}%)
+	Difference ({level}%)	Разлика ({level}%)
 	Measure	Показател
 	Baseline	Базов вариант
 	Now	Сега
 	Change from baseline	Промяна спрямо базовия вариант
 	Verdict	Извод
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Изводът е реален, когато 95% интервал на разликата изключва нулата. Всеки ред се оценява самостоятелно.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Изводът е реален, когато {level}% интервал на разликата изключва нулата. Всеки ред се оценява самостоятелно.
 	This run is the baseline.	Това изпълнение е базовият вариант.
 	Change the model and run it again to compare.	Променете модела и го изпълнете отново, за да сравните.
 	Compared with the baseline:	Спрямо базовия вариант:
@@ -1223,7 +1223,7 @@ unit	yr	г.
 @plural	Allow up to {n} run|Allow up to {n} runs	Позволи до {n} изпълнение|Позволи до {n} изпълнения
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: еднакви във всичките {n} изпълнения, затова не се броят за установени. Нещо, което никое от изпълненията не е срещнало, пак може да се случи при до {rate} от изпълненията.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: средната стойност е нула или близо до нула, затова не може да се определи с точност, изразена като дял от нея самата.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± е приблизителната точност: половината от ширината на 95% доверителен интервал по Student-t за средната стойност от изпълненията. Броят на изпълненията е избран според резултатите, затова интервалът може да покрива истинската средна стойност по-рядко от 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± е приблизителната точност: половината от ширината на {level}% доверителен интервал по Student-t за средната стойност от изпълненията. Броят на изпълненията е избран според резултатите, затова интервалът може да покрива истинската средна стойност по-рядко от {level}%.
 	Not yet within its target: {results}.	Още не е в рамките на целта си: {results}.
 	then more until precise enough, at most {max}	след това още, докато станат достатъчно точни, най-много {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Спряно след {n} изпълнение: {result} е в рамките на целта си.|Спряно след {n} изпълнения: {result} е в рамките на целта си.
@@ -1535,3 +1535,7 @@ connection	Flow	Поток
 	How often is one machine down, and how much work does that cost?	Колко често е спряна една машина и колко работа струва това?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Работи 90 часа, спряна 4.5: машината работи 95.2% от времето и повреда настъпва на всеки 94.5 часа. Ако ремонтът е два пъти по-кратък, това става 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} не работи {down} от времето (налична {up}); нищо не чака за нея.
+	Confidence level	Ниво на доверие
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Всяко ± в резултатите е интервал на това ниво. По-високо ниво дава по-широки интервали и изисква повече пускания за същата точност.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Изводът е реален, когато интервалът на разликата не включва нула. {k} реда се оценяват заедно: всичките им интервали са верни едновременно с поне {level}% доверителност (Бонферони).
+	Judge the rows together (Bonferroni)	Оценявай редовете заедно (Бонферони)

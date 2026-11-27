@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} sobre {background}: {ratio}:1, cal {min}:1
 	{title}: now {now}, at most {most}	{title}: ara {now}, com a màxim {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± IC del 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± és la semiamplada d'un interval de confiança Student-t del 95% de la mitjana entre execucions.
+	± {level}% CI	± IC del {level}%
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± és la semiamplada d'un interval de confiança Student-t del {level}% de la mitjana entre execucions.
 	· no results yet	· encara no hi ha resultats
 unit	d	d
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	a
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	El model comença buit i no hi ha cap escalfament definit, de manera que l'inici allunya les mitjanes del seu valor a llarg termini.
 	Set a {value} warm-up	Defineix un escalfament de {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	L'execució és massa curta per suggerir un escalfament: allargueu-la i després definiu-ne un.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} de {m} mètriques clau són estables: cadascuna es coneix amb ± 5% (± 1 punt per a una proporció) o millor.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} de {m} mètriques clau són estables: cadascuna es coneix amb ± 5% (± 1 punt per a una proporció) o millor (amb una confiança del {level}%).
 	What the run found	Què ha trobat l'execució
 	See the numbers	Vegeu els números
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} limita el flux: ocupat {busy} del temps, amb {queue} esperant-hi al davant de mitjana.
@@ -731,15 +731,15 @@ unit	yr	a
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Cap de les mètriques clau no s'ha mogut més del que explicaria l'atzar: potser el canvi fa poc, o més execucions ho podrien mostrar.
 	What the change did	Què ha fet el canvi
 	Baseline and now, key measures	Referència i ara, mètriques clau
-	Difference (paired, 95%)	Diferència (aparellada, 95%)
-	Difference (95%)	Diferència (95%)
+	Difference (paired, {level}%)	Diferència (aparellada, {level}%)
+	Difference ({level}%)	Diferència ({level}%)
 	Measure	Mètrica
 	Baseline	Referència
 	Now	Ara
 	Change from baseline	Canvi respecte a la referència
 	Verdict	Veredicte
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Un veredicte és real quan l'interval del 95% de la diferència exclou el zero. Cada fila es jutja per separat.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Un veredicte és real quan l'interval del {level}% de la diferència exclou el zero. Cada fila es jutja per separat.
 	This run is the baseline.	Aquesta execució és la referència.
 	Change the model and run it again to compare.	Canvia el model i torna'l a executar per comparar.
 	Compared with the baseline:	Comparat amb la referència:
@@ -1223,7 +1223,7 @@ unit	yr	a
 @plural	Allow up to {n} run|Allow up to {n} runs	Permet fins a {n} execució|Permet fins a {n} execucions
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: igual en les {n} execucions, així que no es compta com a estable. Alguna cosa que cap execució ha trobat encara podria passar en fins a {rate} de les execucions.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: la mitjana és zero o gairebé zero, així que no es pot conèixer amb una precisió expressada com a proporció d'ella mateixa.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± és la precisió estimada: la semiamplada d'un interval de confiança Student-t del 95% de la mitjana entre execucions. El nombre d'execucions s'ha triat a partir dels resultats, així que l'interval pot cobrir la mitjana real menys vegades que el 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± és la precisió estimada: la semiamplada d'un interval de confiança Student-t del {level}% de la mitjana entre execucions. El nombre d'execucions s'ha triat a partir dels resultats, així que l'interval pot cobrir la mitjana real menys vegades que el {level}%.
 	Not yet within its target: {results}.	Encara no és dins del seu objectiu: {results}.
 	then more until precise enough, at most {max}	després, més fins que siguin prou precisos, com a màxim {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	S'ha aturat després de {n} execució: {result} és dins del seu objectiu.|S'ha aturat després de {n} execucions: {result} és dins del seu objectiu.
@@ -1535,3 +1535,7 @@ connection	Flow	Flux
 	How often is one machine down, and how much work does that cost?	Amb quina freqüència està aturada una màquina i quanta feina costa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	En marxa 90 hores, aturada 4.5: la màquina treballa el 95.2% del temps i hi ha una avaria cada 94.5 hores. Si es redueix a la meitat el temps de reparació, passa al 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} està aturat el {down} del temps (disponibilitat {up}); res no l'espera.
+	Confidence level	Nivell de confiança
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Cada ± dels resultats és un interval a aquest nivell. Un nivell més alt dona intervals més amplis i necessita més execucions per a la mateixa precisió.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Un veredicte és real quan l'interval de la diferència deixa fora el zero. Les {k} files es jutgen conjuntament: tots els seus intervals es compleixen alhora amb una confiança d'almenys el {level}% (Bonferroni).
+	Judge the rows together (Bonferroni)	Jutja les files conjuntament (Bonferroni)

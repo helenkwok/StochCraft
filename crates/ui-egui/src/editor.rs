@@ -692,6 +692,7 @@ impl App {
         ));
         self.stop_row(ui, model);
         self.sequential_row(ui, model);
+        self.confidence_row(ui, model);
         self.observed_section(ui, model);
 
         section(ui, t("Connections"));

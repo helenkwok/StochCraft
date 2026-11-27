@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – tło „{background}”: {ratio}:1, wymagane {min}:1
 	{title}: now {now}, at most {most}	{title}: teraz {now}, najwyżej {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% PU
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± oznacza połowę szerokości 95% przedziału ufności Student-t dla średniej z uruchomień.
+	± {level}% CI	± {level}% PU
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± oznacza połowę szerokości {level}% przedziału ufności Student-t dla średniej z uruchomień.
 	· no results yet	· brak wyników
 unit	d	d
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	r.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model startuje pusty i nie ustawiono rozgrzewki, więc początek odciąga średnie od wartości długoterminowej.
 	Set a {value} warm-up	Ustaw rozgrzewkę {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Uruchomienie jest za krótkie, by zaproponować rozgrzewkę: wydłuż je, a następnie ustaw rozgrzewkę.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} z {m} najważniejszych miar jest ustalonych: każda jest znana z dokładnością ± 5% (± 1 punkt procentowy dla udziału) lub lepszą.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} z {m} najważniejszych miar jest ustalonych: każda jest znana z dokładnością ± 5% (± 1 punkt procentowy dla udziału) lub lepszą (przy ufności {level}%).
 	What the run found	Co wykazało uruchomienie
 	See the numbers	Zobacz liczby
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ogranicza przepływ: zajęty przez {busy} czasu, a przed nim czeka średnio {queue}.
@@ -731,15 +731,15 @@ unit	yr	r.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Żadna z najważniejszych miar nie zmieniła się bardziej, niż wyjaśniałby przypadek: zmiana może niewiele dawać albo więcej uruchomień to pokaże.
 	What the change did	Co dała zmiana
 	Baseline and now, key measures	Punkt odniesienia i teraz, najważniejsze miary
-	Difference (paired, 95%)	Różnica (parami, 95%)
-	Difference (95%)	Różnica (95%)
+	Difference (paired, {level}%)	Różnica (parami, {level}%)
+	Difference ({level}%)	Różnica ({level}%)
 	Measure	Miara
 	Baseline	Punkt odniesienia
 	Now	Teraz
 	Change from baseline	Zmiana względem punktu odniesienia
 	Verdict	Werdykt
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Werdykt jest rzeczywisty, gdy 95% przedział różnicy nie obejmuje zera. Każdy wiersz jest oceniany osobno.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Werdykt jest rzeczywisty, gdy {level}% przedział różnicy nie obejmuje zera. Każdy wiersz jest oceniany osobno.
 	This run is the baseline.	To uruchomienie jest punktem odniesienia.
 	Change the model and run it again to compare.	Zmień model i uruchom go ponownie, aby porównać.
 	Compared with the baseline:	W porównaniu z punktem odniesienia:
@@ -1223,7 +1223,7 @@ unit	yr	r.
 @plural	Allow up to {n} run|Allow up to {n} runs	Dopuść do {n} uruchomienia|Dopuść do {n} uruchomień|Dopuść do {n} uruchomień
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: takie samo we wszystkich {n} uruchomieniach, więc nie liczy się jako ustalone. Coś, czego nie napotkało żadne uruchomienie, może nadal wystąpić w nawet {rate} uruchomień.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: średnia wynosi zero lub prawie zero, więc nie da się jej poznać z dokładnością wyrażoną jako ułamek niej samej.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± to szacowana dokładność: połowa szerokości 95% przedziału ufności Student-t dla średniej z uruchomień. Liczbę uruchomień wybrano na podstawie wyników, więc przedział może pokrywać prawdziwą średnią rzadziej niż w 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± to szacowana dokładność: połowa szerokości {level}% przedziału ufności Student-t dla średniej z uruchomień. Liczbę uruchomień wybrano na podstawie wyników, więc przedział może pokrywać prawdziwą średnią rzadziej niż w {level}%.
 	Not yet within its target: {results}.	Jeszcze nie w celu: {results}.
 	then more until precise enough, at most {max}	potem więcej, aż będą dość dokładne, najwyżej {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Zatrzymano po {n} uruchomieniu: {result} mieści się w swoim celu.|Zatrzymano po {n} uruchomieniach: {result} mieści się w swoim celu.|Zatrzymano po {n} uruchomieniach: {result} mieści się w swoim celu.
@@ -1535,3 +1535,7 @@ connection	Flow	Przepływ
 	How often is one machine down, and how much work does that cost?	Jak często stoi jedna maszyna i ile pracy to kosztuje?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Pracuje 90 godzin, stoi 4.5: maszyna pracuje przez 95.2% czasu, a awaria zdarza się co 94.5 godziny. Dwa razy krótsza naprawa podnosi to do 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stoi przez {down} czasu (dostępność {up}); nic na nią nie czeka.
+	Confidence level	Poziom ufności
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Każde ± w wynikach to przedział na tym poziomie. Wyższy poziom daje szersze przedziały i wymaga więcej przebiegów dla tej samej dokładności.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Werdykt jest rzeczywisty, gdy przedział różnicy nie obejmuje zera. {k} wierszy ocenia się łącznie: wszystkie ich przedziały zachodzą jednocześnie z ufnością co najmniej {level}% (Bonferroni).
+	Judge the rows together (Bonferroni)	Oceniaj wiersze łącznie (Bonferroni)

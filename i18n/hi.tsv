@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – पृष्ठभूमि {background}: {ratio}:1, आवश्यक {min}:1
 	{title}: now {now}, at most {most}	{title}: अभी {now}, अधिकतम {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% विश्वास अंतराल
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± रनों में प्राप्त माध्य के 95% Student-t विश्वास अंतराल की आधी चौड़ाई है।
+	± {level}% CI	± {level}% विश्वास अंतराल
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± रनों में प्राप्त माध्य के {level}% Student-t विश्वास अंतराल की आधी चौड़ाई है।
 	· no results yet	· अभी कोई परिणाम नहीं हैं
 unit	d	दिन
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	वर्ष
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	मॉडल खाली शुरू होता है और कोई वार्म-अप सेट नहीं है, इसलिए शुरुआत माध्यों को दीर्घकालिक मान से दूर कर देती है।
 	Set a {value} warm-up	{value} का वार्म-अप सेट करें
 	The run is too short to suggest a warm-up: make it longer, then set one.	वार्म-अप सुझाने के लिए रन बहुत छोटा है: इसे लंबा करें, फिर एक वार्म-अप सेट करें।
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} में से {k} मुख्य मापदंड स्थिर हैं: हर एक ± 5% (अनुपात के लिए ± 1 प्रतिशत अंक) या बेहतर तक ज्ञात है।
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{m} में से {k} मुख्य मापदंड स्थिर हैं: हर एक ± 5% (अनुपात के लिए ± 1 प्रतिशत अंक) या बेहतर तक ज्ञात है ({level}% विश्वास पर)।
 	What the run found	रन से क्या पता चला
 	See the numbers	संख्याएँ देखें
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} प्रवाह को सीमित करता है: {busy} समय व्यस्त, इसके आगे औसतन {queue} प्रतीक्षा में।
@@ -731,15 +731,15 @@ unit	yr	वर्ष
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	कोई भी मुख्य मापदंड संयोग जितना समझा सकता है उससे अधिक नहीं बदला: बदलाव का असर कम हो सकता है, या अधिक रन इसे दिखा सकते हैं।
 	What the change did	बदलाव का असर
 	Baseline and now, key measures	आधार रेखा और अभी, मुख्य मापदंड
-	Difference (paired, 95%)	अंतर (युग्मित, 95%)
-	Difference (95%)	अंतर (95%)
+	Difference (paired, {level}%)	अंतर (युग्मित, {level}%)
+	Difference ({level}%)	अंतर ({level}%)
 	Measure	मापदंड
 	Baseline	आधार रेखा
 	Now	अभी
 	Change from baseline	आधार रेखा से बदलाव
 	Verdict	निर्णय
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	निर्णय वास्तविक तब होता है जब अंतर का 95% अंतराल शून्य को शामिल नहीं करता। हर पंक्ति को अलग से आँका जाता है।
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	निर्णय वास्तविक तब होता है जब अंतर का {level}% अंतराल शून्य को शामिल नहीं करता। हर पंक्ति को अलग से आँका जाता है।
 	This run is the baseline.	यह रन आधार रेखा है।
 	Change the model and run it again to compare.	तुलना करने के लिए मॉडल बदलें और उसे फिर से चलाएँ।
 	Compared with the baseline:	आधार रेखा की तुलना में:
@@ -1223,7 +1223,7 @@ unit	yr	वर्ष
 @plural	Allow up to {n} run|Allow up to {n} runs	अधिकतम {n} रन की अनुमति दें|अधिकतम {n} रन की अनुमति दें
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: सभी {n} रन में समान, इसलिए स्थिर नहीं गिना गया। जो किसी भी रन में नहीं हुआ, वह अब भी अधिकतम {rate} रन में हो सकता है।
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: माध्य शून्य या शून्य के करीब है, इसलिए उसे अपने ही किसी अंश की सटीकता से नहीं जाना जा सकता।
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± अनुमानित सटीकता है: रनों में प्राप्त माध्य के 95% Student-t विश्वास अंतराल की आधी चौड़ाई। रनों की संख्या परिणामों के आधार पर चुनी गई थी, इसलिए अंतराल वास्तविक माध्य को 95% से कम बार समेट सकता है।
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± अनुमानित सटीकता है: रनों में प्राप्त माध्य के {level}% Student-t विश्वास अंतराल की आधी चौड़ाई। रनों की संख्या परिणामों के आधार पर चुनी गई थी, इसलिए अंतराल वास्तविक माध्य को {level}% से कम बार समेट सकता है।
 	Not yet within its target: {results}.	अभी तक लक्ष्य के भीतर नहीं: {results}।
 	then more until precise enough, at most {max}	फिर पर्याप्त सटीक होने तक और, अधिकतम {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	{n} रन के बाद रुका: {result} अपने लक्ष्य के भीतर है।|{n} रन के बाद रुका: {result} अपने लक्ष्य के भीतर है।
@@ -1535,3 +1535,7 @@ connection	Flow	प्रवाह
 	How often is one machine down, and how much work does that cost?	एक मशीन कितनी बार बंद रहती है, और इससे कितना काम घटता है?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 घंटे चालू, 4.5 घंटे बंद: मशीन 95.2% समय काम करती है और हर 94.5 घंटे में एक खराबी आती है। मरम्मत का समय आधा करने पर यह 97.6% हो जाता है।
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} समय बंद रहता है (उपलब्धता {up}); उसके लिए कुछ भी प्रतीक्षा नहीं करता।
+	Confidence level	विश्वास स्तर
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	परिणामों में हर ± इस स्तर का एक अंतराल है। ऊँचा स्तर चौड़े अंतराल देता है और उसी सटीकता के लिए अधिक रन चाहिए।
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	निर्णय वास्तविक है जब अंतर का अंतराल शून्य को बाहर रखता है। {k} पंक्तियों को एक साथ आँका जाता है: उनके सभी अंतराल एक साथ कम से कम {level}% विश्वास से सही हैं (बोनफ़ेरोनी)।
+	Judge the rows together (Bonferroni)	पंक्तियों को एक साथ आँकें (बोनफ़ेरोनी)

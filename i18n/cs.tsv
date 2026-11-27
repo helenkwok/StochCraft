@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadí „{background}“: {ratio}:1, je třeba {min}:1
 	{title}: now {now}, at most {most}	{title}: nyní {now}, nejvýše {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% interval spolehlivosti
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± představuje polovinu šířky 95% Student-t intervalu spolehlivosti průměru napříč běhy.
+	± {level}% CI	± {level}% interval spolehlivosti
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± představuje polovinu šířky {level}% Student-t intervalu spolehlivosti průměru napříč běhy.
 	· no results yet	· zatím žádné výsledky
 unit	d	d
 unit	h	h
@@ -697,7 +697,7 @@ unit	yr	r.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model začíná prázdný a zahřívání není nastaveno, takže začátek posouvá průměry od dlouhodobých hodnot.
 	Set a {value} warm-up	Nastavit zahřívání {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Běh je příliš krátký na návrh zahřívání: prodlužte ho a pak zahřívání nastavte.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} z {m} klíčových metrik je ustálených: každá je známa s přesností ± 5% (± 1 procentní bod u podílu) nebo lepší.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} z {m} klíčových metrik je ustálených: každá je známa s přesností ± 5% (± 1 procentní bod u podílu) nebo lepší (při spolehlivosti {level}%).
 	What the run found	Co běh zjistil
 	See the numbers	Zobrazit čísla
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} omezuje tok: je obsazený {busy} času a před ním čeká v průměru {queue}.
@@ -731,15 +731,15 @@ unit	yr	r.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Žádná z klíčových metrik se nepohnula víc, než by vysvětlila náhoda: změna možná dělá málo, nebo to ukáže více běhů.
 	What the change did	Co změna udělala
 	Baseline and now, key measures	Reference a nyní, klíčové metriky
-	Difference (paired, 95%)	Rozdíl (párový, 95%)
-	Difference (95%)	Rozdíl (95%)
+	Difference (paired, {level}%)	Rozdíl (párový, {level}%)
+	Difference ({level}%)	Rozdíl ({level}%)
 	Measure	Metrika
 	Baseline	Reference
 	Now	Nyní
 	Change from baseline	Změna oproti referenci
 	Verdict	Verdikt
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Verdikt je skutečný, když 95% interval rozdílu nezahrnuje nulu. Každý řádek se posuzuje samostatně.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Verdikt je skutečný, když {level}% interval rozdílu nezahrnuje nulu. Každý řádek se posuzuje samostatně.
 	This run is the baseline.	Tento běh je referencí.
 	Change the model and run it again to compare.	Změňte model a spusťte ho znovu pro porovnání.
 	Compared with the baseline:	Ve srovnání s referencí:
@@ -1223,7 +1223,7 @@ unit	yr	r.
 @plural	Allow up to {n} run|Allow up to {n} runs	Povolit až {n} běh|Povolit až {n} běhy|Povolit až {n} běhů
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: stejné ve všech {n} bězích, proto se nepočítá jako ustálené. Něco, co nenastalo v žádném z běhů, se přesto může stát až v {rate} běhů.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: průměr je nulový nebo blízký nule, takže jej nelze znát s přesností vyjádřenou jako podíl jeho samého.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± je odhadovaná přesnost: polovina šířky 95% Student-t intervalu spolehlivosti průměru napříč běhy. Počet běhů byl zvolen podle výsledků, takže interval může pokrýt skutečný průměr méně často než 95%.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± je odhadovaná přesnost: polovina šířky {level}% Student-t intervalu spolehlivosti průměru napříč běhy. Počet běhů byl zvolen podle výsledků, takže interval může pokrýt skutečný průměr méně často než {level}%.
 	Not yet within its target: {results}.	Zatím není v rámci svého cíle: {results}.
 	then more until precise enough, at most {max}	poté další, dokud nejsou dostatečně přesné, nejvýše {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Zastaveno po {n} běhu: {result} je v rámci svého cíle.|Zastaveno po {n} bězích: {result} je v rámci svého cíle.|Zastaveno po {n} bězích: {result} je v rámci svého cíle.
@@ -1535,3 +1535,7 @@ connection	Flow	Tok
 	How often is one machine down, and how much work does that cost?	Jak často stojí jeden stroj a kolik práce to stojí?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	V provozu 90 hodin, mimo provoz 4.5: stroj pracuje 95.2 % času a porucha nastává každých 94.5 hodiny. Poloviční doba opravy to zvýší na 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stojí {down} času (dostupnost {up}); nic na něj nečeká.
+	Confidence level	Hladina spolehlivosti
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Každé ± ve výsledcích je interval na této hladině. Vyšší hladina dává širší intervaly a pro stejnou přesnost potřebuje více běhů.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Verdikt je skutečný, když interval rozdílu nezahrnuje nulu. {k} řádků se posuzuje společně: všechny jejich intervaly platí současně se spolehlivostí alespoň {level}% (Bonferroni).
+	Judge the rows together (Bonferroni)	Posuzovat řádky společně (Bonferroni)

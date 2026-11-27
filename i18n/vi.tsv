@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} trên {background}: {ratio}:1, cần {min}:1
 	{title}: now {now}, at most {most}	{title}: hiện tại {now}, tối đa {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± KTC 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± là một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần chạy.
+	± {level}% CI	± KTC {level}%
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± là một nửa độ rộng của khoảng tin cậy Student-t {level}% cho giá trị trung bình qua các lần chạy.
 	· no results yet	· chưa có kết quả
 unit	d	ngày
 unit	h	giờ
@@ -697,7 +697,7 @@ unit	yr	năm
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Mô hình bắt đầu trống và chưa đặt giai đoạn khởi động, nên phần đầu kéo các giá trị trung bình lệch khỏi giá trị dài hạn.
 	Set a {value} warm-up	Đặt giai đoạn khởi động {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Lần chạy quá ngắn để đề xuất giai đoạn khởi động: hãy kéo dài lần chạy rồi đặt giai đoạn khởi động.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k}/{m} chỉ số chính đã ổn định: mỗi chỉ số được biết đến mức ± 5% (± 1 điểm phần trăm với tỷ lệ) hoặc tốt hơn.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k}/{m} chỉ số chính đã ổn định: mỗi chỉ số được biết đến mức ± 5% (± 1 điểm phần trăm với tỷ lệ) hoặc tốt hơn (ở độ tin cậy {level}%).
 	What the run found	Những gì lần chạy tìm thấy
 	See the numbers	Xem các con số
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} giới hạn dòng chảy: bận {busy} thời gian, trung bình có {queue} chờ phía trước.
@@ -731,15 +731,15 @@ unit	yr	năm
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Không chỉ số chính nào thay đổi nhiều hơn mức ngẫu nhiên có thể giải thích: thay đổi có thể ít tác dụng, hoặc chạy thêm có thể cho thấy điều đó.
 	What the change did	Thay đổi đã tác động gì
 	Baseline and now, key measures	Mốc so sánh và hiện tại, chỉ số chính
-	Difference (paired, 95%)	Chênh lệch (theo cặp, 95%)
-	Difference (95%)	Chênh lệch (95%)
+	Difference (paired, {level}%)	Chênh lệch (theo cặp, {level}%)
+	Difference ({level}%)	Chênh lệch ({level}%)
 	Measure	Chỉ số
 	Baseline	Mốc so sánh
 	Now	Hiện tại
 	Change from baseline	Thay đổi so với mốc so sánh
 	Verdict	Kết luận
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Kết luận là thực sự khi khoảng 95% của chênh lệch không chứa số 0. Mỗi hàng được đánh giá riêng.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Kết luận là thực sự khi khoảng {level}% của chênh lệch không chứa số 0. Mỗi hàng được đánh giá riêng.
 	This run is the baseline.	Lần chạy này là mốc so sánh.
 	Change the model and run it again to compare.	Hãy thay đổi mô hình và chạy lại để so sánh.
 	Compared with the baseline:	So với mốc so sánh:
@@ -1223,7 +1223,7 @@ unit	yr	năm
 @plural	Allow up to {n} run|Allow up to {n} runs	Cho phép tối đa {n} lần chạy
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: giống nhau trong cả {n} lần chạy, nên không được tính là ổn định. Điều mà không lần chạy nào gặp vẫn có thể xảy ra trong tối đa {rate} số lần chạy.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: giá trị trung bình bằng không hoặc gần bằng không, nên không thể biết độ chính xác dưới dạng một tỷ lệ của chính nó.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± là độ chính xác ước tính: một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần chạy. Số lần chạy được chọn dựa trên kết quả, nên khoảng này có thể bao phủ giá trị trung bình thật ít hơn 95% số lần.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± là độ chính xác ước tính: một nửa độ rộng của khoảng tin cậy Student-t {level}% cho giá trị trung bình qua các lần chạy. Số lần chạy được chọn dựa trên kết quả, nên khoảng này có thể bao phủ giá trị trung bình thật ít hơn {level}% số lần.
 	Not yet within its target: {results}.	Chưa nằm trong mục tiêu: {results}.
 	then more until precise enough, at most {max}	sau đó thêm cho đến khi đủ chính xác, tối đa {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Đã dừng sau {n} lần chạy: {result} nằm trong mục tiêu của nó.
@@ -1535,3 +1535,7 @@ connection	Flow	Luồng
 	How often is one machine down, and how much work does that cost?	Một máy dừng thường xuyên đến mức nào, và việc đó làm mất bao nhiêu công việc?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Chạy 90 giờ, dừng 4.5 giờ: máy làm việc 95.2% thời gian và cứ 94.5 giờ lại có một lần hỏng. Rút ngắn thời gian sửa một nửa thì tỷ lệ này tăng lên 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} dừng {down} thời gian (độ sẵn sàng {up}); không có gì chờ nó.
+	Confidence level	Độ tin cậy
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Mỗi ± trong kết quả là một khoảng ở mức này. Mức cao hơn cho khoảng rộng hơn và cần nhiều lần chạy hơn cho cùng độ chính xác.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Kết luận là thật khi khoảng của chênh lệch không chứa số không. {k} hàng được đánh giá cùng nhau: mọi khoảng của chúng cùng đúng với độ tin cậy ít nhất {level}% (Bonferroni).
+	Judge the rows together (Bonferroni)	Đánh giá các hàng cùng nhau (Bonferroni)

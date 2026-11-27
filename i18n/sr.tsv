@@ -662,8 +662,8 @@
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – позадина „{background}“: {ratio}:1, потребно {min}:1
 	{title}: now {now}, at most {most}	{title}: сада {now}, највише {most}
 	{word}: {message}	{word}: {message}
-	± 95% CI	± 95% ИП
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± је половина ширине 95% Student-t интервала поверења за средњу вредност кроз покретања.
+	± {level}% CI	± {level}% ИП
+	± is the half-width of a {level}% Student-t confidence interval of the mean across runs.	± је половина ширине {level}% Student-t интервала поверења за средњу вредност кроз покретања.
 	· no results yet	· још нема резултата
 unit	d	д
 unit	h	ч
@@ -697,7 +697,7 @@ unit	yr	год.
 	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Модел почиње празан и загревање није постављено, па почетак удаљава средње вредности од дугорочних.
 	Set a {value} warm-up	Постави загревање од {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Покретање је прекратко да би се предложило загревање: продужите га, а затим поставите загревање.
-	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} од {m} кључних метрика је устаљено: свака је позната до ± 5% (± 1 процентни поен за удео) или боље.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better (at {level}% confidence).	{k} од {m} кључних метрика је устаљено: свака је позната до ± 5% (± 1 процентни поен за удео) или боље (уз поузданост од {level}%).
 	What the run found	Шта је покретање показало
 	See the numbers	Погледајте бројеве
 	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ограничава ток: заузет {busy} времена, а испред њега у просеку чека {queue}.
@@ -731,15 +731,15 @@ unit	yr	год.
 	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Ниједна кључна метрика се није померила више него што би објаснио случај: промена можда чини мало, или би то показало више покретања.
 	What the change did	Шта је промена урадила
 	Baseline and now, key measures	Референца и сада, кључне метрике
-	Difference (paired, 95%)	Разлика (у паровима, 95%)
-	Difference (95%)	Разлика (95%)
+	Difference (paired, {level}%)	Разлика (у паровима, {level}%)
+	Difference ({level}%)	Разлика ({level}%)
 	Measure	Метрика
 	Baseline	Референца
 	Now	Сада
 	Change from baseline	Промена у односу на референцу
 	Verdict	Оцена
 	{block}: {measure}	{block}: {measure}
-	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Оцена је стварна када 95% интервал разлике не обухвата нулу. Сваки ред се оцењује засебно.
+	A verdict is real when the difference's {level}% interval leaves out zero. Each row is judged on its own.	Оцена је стварна када {level}% интервал разлике не обухвата нулу. Сваки ред се оцењује засебно.
 	This run is the baseline.	Ово покретање је референца.
 	Change the model and run it again to compare.	Промените модел и поново га покрените ради поређења.
 	Compared with the baseline:	У поређењу са референцом:
@@ -1223,7 +1223,7 @@ unit	yr	год.
 @plural	Allow up to {n} run|Allow up to {n} runs	Дозволи до {n} покретања|Дозволи до {n} покретања|Дозволи до {n} покретања
 	{results}: the same in all {n} runs, so not counted as settled. Something none of the runs met could still happen in up to {rate} of runs.	{results}: исто у свих {n} покретања, па се не рачуна као устаљено. Нешто што ниједно покретање није доживело и даље се може догодити у до {rate} покретања.
 	{results}: the mean is at or near zero, so it cannot be known to a share of itself.	{results}: средња вредност је нула или близу нуле, па се не може знати са прецизношћу израженом као удео ње саме.
-	± is the estimated precision: the half-width of a 95% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than 95%.	± је процењена прецизност: половина ширине 95% Student-t интервала поверења за средњу вредност кроз покретања. Број покретања изабран је према резултатима, па интервал може ређе од 95% обухватити праву средњу вредност.
+	± is the estimated precision: the half-width of a {level}% Student-t confidence interval of the mean across runs. The number of runs was chosen from the results, so the interval may cover the true mean less often than {level}%.	± је процењена прецизност: половина ширине {level}% Student-t интервала поверења за средњу вредност кроз покретања. Број покретања изабран је према резултатима, па интервал може ређе од {level}% обухватити праву средњу вредност.
 	Not yet within its target: {results}.	Још није унутар циља: {results}.
 	then more until precise enough, at most {max}	затим још, док не постану довољно прецизни, највише {max}
 @plural	Stopped after {n} run: {result} is within its target.|Stopped after {n} runs: {result} is within its target.	Заустављено након {n} покретања: {result} је унутар свог циља.|Заустављено након {n} покретања: {result} је унутар свог циља.|Заустављено након {n} покретања: {result} је унутар свог циља.
@@ -1535,3 +1535,7 @@ connection	Flow	Ток
 	How often is one machine down, and how much work does that cost?	Колико често једна машина не ради и колико посла то кошта?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Ради 90 сати, стоји 4.5: машина ради 95.2% времена, а квар се јавља на сваких 94.5 сати. Дупло краћи поправак то подиже на 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} не ради {down} времена (расположивост {up}); ништа не чека на њу.
+	Confidence level	Ниво поузданости
+	Every ± in the results is an interval at this level. A higher level gives wider intervals and needs more runs for the same precision.	Свако ± у резултатима је интервал на овом нивоу. Виши ниво даје шире интервале и тражи више покретања за исту прецизност.
+	A verdict is real when the difference's interval leaves out zero. The {k} rows are judged together: all their intervals hold at once with at least {level}% confidence (Bonferroni).	Пресуда је стварна када интервал разлике не обухвата нулу. {k} редова се процењује заједно: сви њихови интервали важе истовремено уз поузданост од најмање {level}% (Бонферони).
+	Judge the rows together (Bonferroni)	Процењуј редове заједно (Бонферони)
