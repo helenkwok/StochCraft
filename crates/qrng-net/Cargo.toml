@@ -1,0 +1,25 @@
+[package]
+name = "stochcraft-qrng-net"
+description = "The desktop apps' side of StochCraft's random number sources: an HTTPS client (`Fetch`) and the OS keychain for keys (`KeyStore`). Empty in the browser, whose app has its own."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-qrng = { workspace = true }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+# Blocking HTTPS with rustls and the platform's own certificate verifier, no async runtime and no
+# OpenSSL (MIT OR Apache-2.0), as craft-libs' craft-update uses it; each request runs on a thread
+# of its own, so the apps never wait for one.
+ureq = { version = "3.5", default-features = false, features = ["rustls-no-provider", "_ring", "platform-verifier"] }
+# Keys in the OS keychain: the Windows Credential Manager, the macOS Keychain, the Secret Service
+# on Linux (MIT OR Apache-2.0).
+keyring = "4.2"
+
+[lints]
+workspace = true

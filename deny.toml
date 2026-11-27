@@ -21,6 +21,13 @@ allow = ["OFL-1.1", "Ubuntu-font-1.0"]
 [[licenses.exceptions]]
 name = "option-ext"
 allow = ["MPL-2.0"]
+# webpki-root-certs: CA root certificate data, pulled in only through rustls-platform-verifier's
+# wasm32 dependency (the desktop HTTP client for random number sources uses the platform's own
+# verifier). Used unmodified from crates.io, it puts no terms on StochCraft's own code; craft-libs
+# carries the same exception.
+[[licenses.exceptions]]
+name = "webpki-root-certs"
+allow = ["CDLA-Permissive-2.0"]
 
 [bans]
 multiple-versions = "warn"
