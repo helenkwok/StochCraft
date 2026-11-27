@@ -1501,3 +1501,8 @@ connection	Flow	Flow
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Ti maskiner skal køre, fire reservemaskiner står klar, og tre mekanikere reparerer dem, der bryder ned (Crane og Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hvor mange reservemaskiner og mekanikere holder ti maskiner kørende?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemaskiner, der står klar, kan ikke bryde ned: i gennemsnit er 3.47 maskiner i stykker, og 9.29 kører. En fjerde mekaniker gør omtrent lige så meget som fire reservemaskiner mere.
+	One machine's availability	En maskines oppetid
+	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	En maskine, der i gennemsnit går i stykker hver 90. time og tager 4.5 timer at reparere (Hristova, Denev og Tsankov, Environment. Technology. Resources, 2024).
+	How often is one machine down, and how much work does that cost?	Hvor ofte står en maskine stille, og hvor meget arbejde koster det?
+	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Kører 90 timer, står stille 4.5: maskinen arbejder 95.2 % af tiden, og en fejl opstår hver 94.5. time. Halveres reparationstiden, stiger det til 97.6 %.
+	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} står stille {down} af tiden (oppetid {up}); intet venter på den.
