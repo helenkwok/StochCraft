@@ -300,6 +300,9 @@ impl App {
                 ui.add_space(6.0);
                 results::show(ui, &results);
                 self.distribution_section(ui, &results);
+                if let Some(w) = self.warmup_section(ui, &results) {
+                    fix = Some(results::Fix::Warmup(w));
+                }
             });
         // A fix from "How sure are these numbers?": made in the model as one undoable step, then
         // the experiment runs again.

@@ -1553,3 +1553,18 @@ connection	Flow	흐름
 	How often is one machine down, and how much work does that cost?	기계 한 대가 얼마나 자주 멈추고, 그로 인해 얼마나 많은 일이 손실되는가?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90시간 가동, 4.5시간 정지: 기계는 시간의 95.2%를 가동하며 94.5시간마다 고장이 난다. 수리 시간을 절반으로 줄이면 97.6%로 올라간다.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block}은(는) 시간의 {down} 동안 멈춰 있습니다(가용성 {up}). 기다리는 것은 없습니다.
+	Choose a warm-up	준비 기간 고르기
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	웰치 그림: 기록된 각 시점의 실행 평균을 이동 평균으로 매끄럽게 한 것입니다. 곡선이 평탄해지는 곳에 준비 기간을 설정하세요. MSER-5의 절단점은 출발점일 뿐입니다.
+	Number inside	내부 개수
+	Busy units	사용 중인 단위
+	Leaving per interval	구간당 나간 수
+	Entering per interval	구간당 들어온 수
+	The run recorded too few times to plot.	실행이 기록한 시점이 너무 적어 그림을 그릴 수 없습니다.
+	Points each side	양쪽 각각의 점 수
+	1 to {max}	1~{max}
+	Welch's plot of {measure} at {block}	{block}의 {measure} 웰치 그림
+	MSER-5 suggests {value}.	MSER-5 제안: {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5는 여기서 제안하지 않습니다: 계열이 실행 중반에도 아직 안정되는 중일 수 있습니다.
+	The warm-up now is {value}.	현재 준비 기간은 {value}입니다.
+	Later times, which fewer runs reached, are left out.	더 적은 실행만 도달한 이후 시점은 제외했습니다.
+	New warm-up	새 준비 기간

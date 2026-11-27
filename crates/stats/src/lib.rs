@@ -11,7 +11,8 @@
 //!   meeting a target with Wilson's interval.
 //! - [`difference`]: the difference between two systems' results with a 95% confidence interval:
 //!   paired-t for runs with common random numbers, Welch's two-sample t otherwise.
-//! - [`warmup`]: where the start-up of a series ends (MSER-5), for choosing a warm-up.
+//! - [`warmup`]: where the start-up of a series ends, for choosing a warm-up: Welch's moving
+//!   average of the mean across replications, to plot, and MSER-5's suggestion.
 //! - [`split`]: whether the replications split into two outcomes (some runs near one value, the
 //!   rest near another), so that their mean describes no actual run.
 //! - [`observed`]: a simulated result checked against real data: an observed value (with its own

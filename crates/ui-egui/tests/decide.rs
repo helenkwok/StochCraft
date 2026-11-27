@@ -238,3 +238,52 @@ fn the_analysis_view_sweeps_ranks_and_sizes() {
     assert_eq!(capacity(&model(&h)), capacity(&before));
     h.get_by_label_contains("With every time at its mean:");
 }
+
+#[test]
+fn welchs_plot_shows_the_run_and_sets_the_warm_up() {
+    let mut h = mm1();
+    run(&mut h);
+    h.get_by_label("Choose a warm-up");
+    // The number inside the busiest task by default, the quantity MSER-5 judges.
+    h.get_by_label("Welch's plot of Number inside at Serve customer");
+    // 600 min recorded every 6 min: 101 times, so a window of 1 to 25 points each side.
+    h.get_by_label("1 to 25");
+    // Each control is named on screen, not only for assistive technology.
+    for name in ["Block", "Measure", "Points each side", "New warm-up"] {
+        assert!(h.query_all_by_label(name).count() >= 2, "{name}");
+    }
+    // The new warm-up starts at the current one, not at MSER-5's cut: it is chosen on purpose.
+    assert_eq!(
+        h.get_by_role_and_label(Role::TextInput, "New warm-up")
+            .accesskit_node()
+            .value()
+            .as_deref(),
+        Some("0")
+    );
+    type_into(&mut h, "Points each side", "5");
+    assert_eq!(
+        h.get_by_role_and_label(Role::TextInput, "Points each side")
+            .accesskit_node()
+            .value()
+            .as_deref(),
+        Some("5")
+    );
+    h.get_by_label_contains("MSER-5 suggests");
+    h.get_by_label("The warm-up now is 0 min.");
+    // Departures as a rate, which levels off, not the count since time 0.
+    choose(&mut h, "Measure", "Leaving per interval");
+    h.get_by_label("Welch's plot of Leaving per interval at Serve customer");
+
+    // A warm-up typed under the plot becomes the experiment's, and the run goes again.
+    type_into(&mut h, "New warm-up", "60");
+    click(&mut h, Role::Button, "Set a 60 min warm-up");
+    assert_eq!(model(&h)["experiment"]["warmup"], json!(60.0));
+    for _ in 0..2000 {
+        if !h.state().is_running() {
+            break;
+        }
+        h.step();
+    }
+    settle(&mut h);
+    h.get_by_label("The warm-up now is 60 min.");
+}

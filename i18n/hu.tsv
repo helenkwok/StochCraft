@@ -1553,3 +1553,18 @@ connection	Flow	Folyamat
 	How often is one machine down, and how much work does that cost?	Milyen gyakran áll egy gép, és mennyi munkába kerül ez?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 órát működik, 4.5 órát áll: a gép az idő 95.2%-ában dolgozik, és 94.5 óránként következik be egy hiba. Fele akkora javítási idővel ez 97.6%-ra nő.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} az idő {down}-ában áll (rendelkezésre állás {up}); semmi sem vár rá.
+	Choose a warm-up	Bemelegítés választása
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welch-ábra: a futások átlaga minden rögzített időpontban, mozgóátlaggal simítva. A bemelegítést ott állítsa be, ahol a görbe kiegyenlítődik; az MSER-5 vágása csak kiindulópont.
+	Number inside	Belső darabszám
+	Busy units	Foglalt egységek
+	Leaving per interval	Távozók intervallumonként
+	Entering per interval	Érkezők intervallumonként
+	The run recorded too few times to plot.	A futás túl kevés időpontot rögzített egy ábrához.
+	Points each side	Pontok mindkét oldalon
+	1 to {max}	1–{max}
+	Welch's plot of {measure} at {block}	Welch-ábra: {measure}, {block}
+	MSER-5 suggests {value}.	Az MSER-5 javaslata: {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	Az MSER-5 itt nem javasol semmit: a sor a futás felénél talán még nem állt be.
+	The warm-up now is {value}.	A bemelegítés most {value}.
+	Later times, which fewer runs reached, are left out.	A későbbi időpontok, amelyeket kevesebb futás ért el, kimaradnak.
+	New warm-up	Új bemelegítés

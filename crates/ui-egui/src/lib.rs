@@ -51,6 +51,7 @@ pub mod theme;
 mod theme_editor;
 mod view3d;
 mod views;
+mod welch;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -991,6 +992,8 @@ pub struct App {
     capacity: capacity::State,
     /// The M2.8 screens' choices and last answers.
     decide: decide::Decide,
+    /// "Choose a warm-up" under the results: Welch's plot and its choices.
+    welch: welch::Welch,
     /// The Help panel.
     help: help::Help,
     /// The guided first model: "Show me" in Getting started.
@@ -1127,6 +1130,7 @@ impl App {
             layout_view: layout_view::LayoutView::default(),
             capacity: capacity::State::default(),
             decide: decide::Decide::default(),
+            welch: welch::Welch::default(),
             help: help::Help::default(),
             guide: guide::Guide::default(),
             start: start::Start::default(),

@@ -1105,6 +1105,14 @@ fields (`“Service time”`) are named in the messages by their own rows.
   availability from the example above, and `{block}`, `{down}` and `{up}` kept. Not checked
   against any other source and not reviewed by native speakers; the least certain are lo, th, ta,
   te, bn, ka, kk, hi and sq.
+- The rows for Welch's plot under the results ("Choose a warm-up": its explanation, the block's
+  quantities plotted, the window's points each side, MSER-5's suggestion, the warm-up now and the
+  new one) were machine-drafted from the plain meaning of the English, with each catalog's own
+  words for warm-up (and its "Set a {value} warm-up"), run, number waiting and number inside.
+  "Welch" is the statistician's name, transliterated where the catalog's script is not Latin
+  (bg, kk, ru, sr, uk, ja, ko, zh, ta, te, hi, bn, ka) and kept in Latin script in el, lo and th;
+  "MSER-5" stays as it is everywhere. Not checked against any other source and not reviewed by
+  native speakers; the least certain are lo, th, ta, te, bn, ka, kk, hi and sq.
 
 - The rows for choosing a file's scenario (the **Scenario** choice, the status bar's
   "Scenario: {name}", the question before unsaved changes are dropped, and the start page's
