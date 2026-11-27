@@ -1535,3 +1535,18 @@ connection	Flow	ເສັ້ນທາງ
 	How often is one machine down, and how much work does that cost?	ເຄື່ອງຈັກໜຶ່ງເຄື່ອງຢຸດເລື້ອຍປານໃດ ແລະ ເສຍງານຫຼາຍປານໃດ?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	ເຮັດວຽກ 90 ຊົ່ວໂມງ, ຢຸດ 4.5: ເຄື່ອງຈັກເຮັດວຽກ 95.2% ຂອງເວລາ ແລະ ເກີດເສຍທຸກ 94.5 ຊົ່ວໂມງ. ຖ້າເວລາສ້ອມຫຼຸດເຫຼືອເຄິ່ງໜຶ່ງ ຈະເພີ່ມເປັນ 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} ຢຸດ {down} ຂອງເວລາ (ຄວາມພ້ອມໃຊ້ງານ {up}); ບໍ່ມີຫຍັງລໍຖ້າມັນ.
+	Choose a warm-up	ເລືອກໄລຍະອຸ່ນເຄື່ອງ
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	ກຣາຟຂອງ Welch: ຄ່າສະເລ່ຍຂອງການຈຳລອງໃນແຕ່ລະເວລາທີ່ບັນທຶກ, ເຮັດໃຫ້ລຽບດ້ວຍຄ່າສະເລ່ຍເຄື່ອນທີ່. ກຳນົດໄລຍະອຸ່ນເຄື່ອງບ່ອນທີ່ເສັ້ນໂຄ້ງຄົງທີ່; ຈຸດຕັດຂອງ MSER-5 ເປັນພຽງຈຸດເລີ່ມຕົ້ນ.
+	Number inside	ຈຳນວນພາຍໃນ
+	Busy units	ໜ່ວຍທີ່ບໍ່ຫວ່າງ
+	Leaving per interval	ອອກຕໍ່ຊ່ວງ
+	Entering per interval	ເຂົ້າຕໍ່ຊ່ວງ
+	The run recorded too few times to plot.	ການຈຳລອງບັນທຶກເວລາໜ້ອຍເກີນໄປສຳລັບກຣາຟ.
+	Points each side	ຈຸດແຕ່ລະຂ້າງ
+	1 to {max}	1 ຫາ {max}
+	Welch's plot of {measure} at {block}	ກຣາຟຂອງ Welch: {measure} ທີ່ {block}
+	MSER-5 suggests {value}.	MSER-5 ແນະນຳ {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 ບໍ່ແນະນຳຫຍັງຢູ່ນີ້: ຊຸດຂໍ້ມູນອາດຍັງບໍ່ຄົງທີ່ໃນເຄິ່ງທາງຂອງການຈຳລອງ.
+	The warm-up now is {value}.	ຕອນນີ້ໄລຍະອຸ່ນເຄື່ອງແມ່ນ {value}.
+	Later times, which fewer runs reached, are left out.	ເວລາຕໍ່ມາ ທີ່ການຈຳລອງໜ້ອຍກວ່າໄປເຖິງ ຖືກລະໄວ້.
+	New warm-up	ໄລຍະອຸ່ນເຄື່ອງໃໝ່

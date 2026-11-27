@@ -1535,3 +1535,18 @@ connection	Flow	Ағын
 	How often is one machine down, and how much work does that cost?	Бір станок қаншалықты жиі тоқтап қалады және бұл қанша жұмысқа тұрады?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 сағат жұмыс істейді, 4.5 сағат тұрады: станок уақыттың 95.2%-ында жұмыс істейді, ал бұзылу әр 94.5 сағат сайын болады. Жөндеу уақытын екі есе қысқарту оны 97.6%-ға жеткізеді.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} уақыттың {down} бөлігінде тұрады (дайындық {up}); оны ешнәрсе күтпейді.
+	Choose a warm-up	Қыздыру кезеңін таңдау
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Уэлч графигі: әр жазылған уақыттағы іске қосулардың орташасы, жылжымалы орташамен тегістелген. Қыздыру кезеңін қисық теңесетін жерге орнатыңыз; MSER-5 кесуі тек бастапқы нүкте.
+	Number inside	Ішіндегі саны
+	Busy units	Бос емес бірліктер
+	Leaving per interval	Аралықтағы шығулар
+	Entering per interval	Аралықтағы кірулер
+	The run recorded too few times to plot.	Іске қосу график үшін тым аз уақыт жазды.
+	Points each side	Әр жақтағы нүктелер
+	1 to {max}	1-ден {max}-ге дейін
+	Welch's plot of {measure} at {block}	Уэлч графигі: {measure}, {block}
+	MSER-5 suggests {value}.	MSER-5 ұсынысы: {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 мұнда ештеңе ұсынбайды: қатар іске қосудың ортасында әлі тұрақталып жатқан болуы мүмкін.
+	The warm-up now is {value}.	Қазір қыздыру кезеңі {value}.
+	Later times, which fewer runs reached, are left out.	Азырақ іске қосу жеткен кейінгі уақыттар алынып тасталды.
+	New warm-up	Жаңа қыздыру кезеңі

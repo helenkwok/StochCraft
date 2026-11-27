@@ -1535,3 +1535,18 @@ connection	Flow	Flux
 	How often is one machine down, and how much work does that cost?	Cât de des stă o mașină și cât de multă muncă costă asta?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Funcționează 90 de ore, stă 4.5: mașina lucrează 95.2% din timp, iar o defecțiune apare la fiecare 94.5 ore. Reducerea la jumătate a timpului de reparație urcă valoarea la 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stă {down} din timp (disponibilitate {up}); nimic nu o așteaptă.
+	Choose a warm-up	Alegeți o perioadă de încălzire
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Graficul Welch: media rulărilor la fiecare moment înregistrat, netezită cu o medie mobilă. Setați perioada de încălzire acolo unde curba se nivelează; tăietura MSER-5 este doar un punct de plecare.
+	Number inside	Număr în interior
+	Busy units	Unități ocupate
+	Leaving per interval	Ieșiri pe interval
+	Entering per interval	Intrări pe interval
+	The run recorded too few times to plot.	Rularea a înregistrat prea puține momente pentru un grafic.
+	Points each side	Puncte de fiecare parte
+	1 to {max}	De la 1 la {max}
+	Welch's plot of {measure} at {block}	Graficul Welch pentru {measure} la {block}
+	MSER-5 suggests {value}.	MSER-5 sugerează {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 nu sugerează nimic aici: seria poate încă se stabilizează la jumătatea rulării.
+	The warm-up now is {value}.	Perioada de încălzire este acum {value}.
+	Later times, which fewer runs reached, are left out.	Momentele ulterioare, atinse de mai puține rulări, sunt omise.
+	New warm-up	Perioadă de încălzire nouă

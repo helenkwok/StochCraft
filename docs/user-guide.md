@@ -457,6 +457,22 @@ The **Results** tab shows, from the top:
    cycle time.
 7. **Spread across runs:** pick a result to see its percentiles and how often it met a
    target, for example "the wait is at most 5 minutes in 14 of 16 runs".
+8. **Choose a warm-up:** Welch's plot of a block's quantity over the run: its mean across runs
+   at each recorded time, smoothed by a moving average over **Points each side** (from 1 to a
+   quarter of the recorded times; near the start the window shrinks so it stays centred). Pick
+   the **Block** and the **Measure**: the number inside (the default), waiting or busy, or the
+   number leaving or entering in each interval (a count since time 0 never levels off; its
+   rate does). The plot marks MSER-5's cut on the same series with a dashed line, shades the
+   current warm-up and draws the new one; click the plot, or type a **New warm-up**, then
+   **Set a … warm-up** to make it the experiment's and run again. Raise the points each side
+   until the curve is reasonably smooth, then set the warm-up where it levels off, erring
+   later rather than earlier.
+
+**The plot is the main tool for the warm-up; MSER-5's suggestion is a starting point.** MSER-5
+can cut far too little: Law (*Simulation Modeling and Analysis*, 5th ed., Examples 9.28 and
+9.29, pp. 521–522) reports it deleting 15 of 65,000 delays of an M/M/1 queue at load 0.9
+started empty, and 10 observations of a network model whose Welch's plot calls for 6,200. Look
+at the plot before accepting it.
 
 **How sure is a number?** "2.99 ± 0.09" means the mean is most likely between 2.90 and 3.08. If
 the ± is large compared with the difference you care about, add runs. Notes under the

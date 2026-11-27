@@ -1535,3 +1535,18 @@ connection	Flow	Потік
 	How often is one machine down, and how much work does that cost?	Як часто простоює один верстат і скільки роботи це коштує?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Працює 90 годин, простоює 4.5: верстат працює 95.2% часу, а поломка трапляється кожні 94.5 години. Якщо ремонт удвічі коротший, показник зростає до 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} простоює {down} часу (готовність {up}); ніщо його не чекає.
+	Choose a warm-up	Вибрати розігрів
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Графік Велча: середнє за запусками в кожен записаний момент, згладжене ковзним середнім. Задайте розігрів там, де крива вирівнюється; відсікання MSER-5 — лише відправна точка.
+	Number inside	Кількість усередині
+	Busy units	Зайняті одиниці
+	Leaving per interval	Виходи за інтервал
+	Entering per interval	Входи за інтервал
+	The run recorded too few times to plot.	Запуск записав замало моментів для графіка.
+	Points each side	Точок з кожного боку
+	1 to {max}	Від 1 до {max}
+	Welch's plot of {measure} at {block}	Графік Велча: {measure} у {block}
+	MSER-5 suggests {value}.	MSER-5 пропонує {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 тут нічого не пропонує: ряд, можливо, ще встановлюється до середини запуску.
+	The warm-up now is {value}.	Зараз розігрів — {value}.
+	Later times, which fewer runs reached, are left out.	Пізніші моменти, до яких дійшло менше запусків, пропущено.
+	New warm-up	Новий розігрів

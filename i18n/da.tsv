@@ -1535,3 +1535,18 @@ connection	Flow	Flow
 	How often is one machine down, and how much work does that cost?	Hvor ofte står en maskine stille, og hvor meget arbejde koster det?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Kører 90 timer, står stille 4.5: maskinen arbejder 95.2 % af tiden, og en fejl opstår hver 94.5. time. Halveres reparationstiden, stiger det til 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} står stille {down} af tiden (oppetid {up}); intet venter på den.
+	Choose a warm-up	Vælg en opvarmning
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welchs plot: gennemsnittet af kørslerne på hvert registreret tidspunkt, udglattet med et glidende gennemsnit. Angiv opvarmningen, hvor kurven flader ud; MSER-5's snit er kun et udgangspunkt.
+	Number inside	Antal indeni
+	Busy units	Optagne enheder
+	Leaving per interval	Afgange pr. interval
+	Entering per interval	Ankomster pr. interval
+	The run recorded too few times to plot.	Kørslen registrerede for få tidspunkter til et plot.
+	Points each side	Punkter på hver side
+	1 to {max}	1 til {max}
+	Welch's plot of {measure} at {block}	Welchs plot af {measure} ved {block}
+	MSER-5 suggests {value}.	MSER-5 foreslår {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 foreslår intet her: serien er måske stadig ved at falde til ro halvvejs i kørslen.
+	The warm-up now is {value}.	Opvarmningen er nu {value}.
+	Later times, which fewer runs reached, are left out.	Senere tidspunkter, som færre kørsler nåede, er udeladt.
+	New warm-up	Ny opvarmning

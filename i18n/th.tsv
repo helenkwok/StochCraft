@@ -1535,3 +1535,18 @@ connection	Flow	โฟลว์
 	How often is one machine down, and how much work does that cost?	เครื่องจักรหนึ่งเครื่องหยุดบ่อยแค่ไหน และทำให้เสียงานไปเท่าใด
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	ทำงาน 90 ชั่วโมง หยุด 4.5 ชั่วโมง: เครื่องทำงาน 95.2% ของเวลา และเกิดเหตุขัดข้องทุก 94.5 ชั่วโมง ถ้าลดเวลาซ่อมลงครึ่งหนึ่ง จะเพิ่มเป็น 97.6%
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} หยุด {down} ของเวลา (ความพร้อมใช้งาน {up}) และไม่มีอะไรรออยู่
+	Choose a warm-up	เลือกระยะอุ่นเครื่อง
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	กราฟของ Welch: ค่าเฉลี่ยของการรันในแต่ละเวลาที่บันทึก ปรับให้เรียบด้วยค่าเฉลี่ยเคลื่อนที่ กำหนดระยะอุ่นเครื่องตรงที่เส้นโค้งคงที่ จุดตัดของ MSER-5 เป็นเพียงจุดเริ่มต้น
+	Number inside	จำนวนภายใน
+	Busy units	หน่วยที่ไม่ว่าง
+	Leaving per interval	ออกต่อช่วง
+	Entering per interval	เข้าต่อช่วง
+	The run recorded too few times to plot.	การรันบันทึกเวลาน้อยเกินไปสำหรับกราฟ
+	Points each side	จุดแต่ละข้าง
+	1 to {max}	1 ถึง {max}
+	Welch's plot of {measure} at {block}	กราฟของ Welch: {measure} ที่ {block}
+	MSER-5 suggests {value}.	MSER-5 แนะนำ {value}
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 ไม่แนะนำอะไรที่นี่: อนุกรมอาจยังไม่คงที่เมื่อถึงครึ่งทางของการรัน
+	The warm-up now is {value}.	ตอนนี้ระยะอุ่นเครื่องคือ {value}
+	Later times, which fewer runs reached, are left out.	เวลาหลังจากนั้นที่การรันไปถึงน้อยกว่าถูกตัดออก
+	New warm-up	ระยะอุ่นเครื่องใหม่

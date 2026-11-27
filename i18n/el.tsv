@@ -1535,3 +1535,18 @@ connection	Flow	Ροή
 	How often is one machine down, and how much work does that cost?	Πόσο συχνά είναι εκτός λειτουργίας ένα μηχάνημα και πόση δουλειά κοστίζει αυτό;
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Σε λειτουργία 90 ώρες, εκτός 4.5: το μηχάνημα δουλεύει το 95.2% του χρόνου και μια βλάβη συμβαίνει κάθε 94.5 ώρες. Αν ο χρόνος επισκευής μειωθεί στο μισό, το ποσοστό ανεβαίνει στο 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} είναι εκτός λειτουργίας το {down} του χρόνου (διαθεσιμότητα {up}), και τίποτα δεν περιμένει γι' αυτό.
+	Choose a warm-up	Επιλογή προθέρμανσης
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Διάγραμμα Welch: ο μέσος όρος των εκτελέσεων σε κάθε καταγεγραμμένη χρονική στιγμή, εξομαλυμένος με κινητό μέσο όρο. Ορίστε την προθέρμανση εκεί όπου η καμπύλη ισορροπεί· η τομή του MSER-5 είναι μόνο σημείο εκκίνησης.
+	Number inside	Πλήθος εντός
+	Busy units	Απασχολημένες μονάδες
+	Leaving per interval	Αναχωρήσεις ανά διάστημα
+	Entering per interval	Αφίξεις ανά διάστημα
+	The run recorded too few times to plot.	Η εκτέλεση κατέγραψε πολύ λίγες χρονικές στιγμές για διάγραμμα.
+	Points each side	Σημεία σε κάθε πλευρά
+	1 to {max}	1 έως {max}
+	Welch's plot of {measure} at {block}	Διάγραμμα Welch: {measure} στο {block}
+	MSER-5 suggests {value}.	Το MSER-5 προτείνει {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	Το MSER-5 δεν προτείνει τίποτα εδώ: η σειρά ίσως σταθεροποιείται ακόμη στη μέση της εκτέλεσης.
+	The warm-up now is {value}.	Η προθέρμανση είναι τώρα {value}.
+	Later times, which fewer runs reached, are left out.	Οι μεταγενέστερες στιγμές, στις οποίες έφτασαν λιγότερες εκτελέσεις, παραλείπονται.
+	New warm-up	Νέα προθέρμανση

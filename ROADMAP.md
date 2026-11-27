@@ -13,7 +13,7 @@ answer the question, has steps 1–5 done, and M5's sorter is built alongside it
 are done, and so is M2.10 (abandonment and balking) apart from the gaps listed in it. M2.11
 (changeovers and lean measures) has its changeovers, product-type times, takt and cycle times,
 state times and most of OEE done; M2.9 (output analysis) has its recorder of results over time,
-MSER-5's warm-up suggestion, its warnings, streams by element id, starting contents and
+MSER-5's warm-up suggestion and Welch's plot in the window, its warnings, streams by element id, starting contents and
 validation against observed data (values and bounds, #226) done. M4
 is being planned, and M4.1 (Monte Carlo) has its engine, files and command line (part 1), its
 window (part 2) and which inputs matter (part 3: tornado, rank correlations and Sobol shares) done.
@@ -1641,8 +1641,7 @@ treats these as standard practice (Robinson, ch. 2; Morecroft and Robinson, ch. 
 ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and already done:
 `overloaded` and `no_steady_state` (M2.8, #68, #75) and `ended_in_warmup` (#67).
 
-- **Choosing a warm-up.** The default warm-up is 0. Done in the engine and the CLI; the window's
-  Welch plot is not yet (M3.7 step 3 draws its charts over the run from the same series).
+- **Choosing a warm-up.** The default warm-up is 0. Done in the engine, the CLI and the window.
   - **Done:** a recorder of values at fixed times in every replication (`blocks/src/series.rs`,
     `Compiled::record_every`): each element's queue length, number inside, busy units, and
     counts entered and left since time 0, and each pool's busy units, at time 0 and every
@@ -1665,6 +1664,18 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     replications. A start-up too small to tell from the noise of few replications is not warned
     about; the suggestion is there whenever the series has at least 20 points (a 50-unit run
     recorded every 5 units has 11, and gets none).
+  - **Done:** Welch's plot (Law, *Simulation Modeling and Analysis*, 5th ed., section 9.5.1,
+    pp. 513–515) under the results, **Choose a warm-up**: a block's number inside, waiting or
+    busy, or leaving or entering per interval, as the mean across runs at each recorded time,
+    smoothed by Welch's moving average (`stats::warmup::welch_moving_average`: centred on
+    2w + 1 points, shrunk to 2i − 1 near the start, w from 1 to a quarter of the points; Law's
+    Example 9.24 is its test). MSER-5's cut on the same series is marked, the current warm-up
+    shaded, and a warm-up clicked on the plot or typed becomes the experiment's. The guide calls
+    the plot the main tool and MSER-5 a starting point: a test re-simulates Law's Example 9.28
+    (M/M/1 at ρ = 0.9 from empty, 5 runs of 65,000 delays), where MSER-5 cuts a few batches
+    while the exact mean delay there is under a third of its steady state 8.1. Example 9.29 (a
+    network model) has no data to reproduce. Times later than some runs reached (a stop
+    condition) are left out of the plot.
   - Tests: `blocks/tests/series.rs` (a D/D/1 trace; the values a live run shows at each time;
     no result changes, in slices too; M/M/1's mean queue ρ²/(1 − ρ) at late times; the
     start-up at ρ = 0.9 and none at 0.3; the warnings), `engine/tests/series.rs` (the JSON, the

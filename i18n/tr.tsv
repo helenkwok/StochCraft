@@ -1535,3 +1535,18 @@ connection	Flow	Akış
 	How often is one machine down, and how much work does that cost?	Bir makine ne sıklıkta duruyor ve bu ne kadar işe mal oluyor?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 saat çalışır, 4.5 saat durur: makine zamanın %95.2'sinde çalışır ve her 94.5 saatte bir arıza olur. Onarım süresini yarıya indirmek bunu %97.6'ya çıkarır.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} zamanın {down} kadarında duruyor (kullanılabilirlik {up}); onu bekleyen bir şey yok.
+	Choose a warm-up	Isınma seçin
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welch grafiği: kaydedilen her anda çalıştırmaların ortalaması, hareketli ortalamayla düzleştirilmiş. Isınmayı eğrinin dengelendiği yere ayarlayın; MSER-5 kesimi yalnızca bir başlangıç noktasıdır.
+	Number inside	İçerideki sayı
+	Busy units	Meşgul birimler
+	Leaving per interval	Aralık başına çıkışlar
+	Entering per interval	Aralık başına girişler
+	The run recorded too few times to plot.	Çalıştırma grafik için çok az an kaydetti.
+	Points each side	Her yandaki nokta
+	1 to {max}	1 ile {max} arası
+	Welch's plot of {measure} at {block}	{block} için {measure} Welch grafiği
+	MSER-5 suggests {value}.	MSER-5 önerisi: {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 burada bir şey önermiyor: seri çalıştırmanın yarısında hâlâ oturuyor olabilir.
+	The warm-up now is {value}.	Isınma şimdi {value}.
+	Later times, which fewer runs reached, are left out.	Daha az çalıştırmanın ulaştığı sonraki anlar dışarıda bırakıldı.
+	New warm-up	Yeni ısınma
