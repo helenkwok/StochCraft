@@ -194,7 +194,7 @@ impl App {
         self.mark_stale_results();
         // A table of runs from another tool, over the model until it is closed.
         if self.from_file.is_some() {
-            self.from_file_view(ui);
+            self.runs_view(ui);
             return;
         }
         let has_model = self.has_model();

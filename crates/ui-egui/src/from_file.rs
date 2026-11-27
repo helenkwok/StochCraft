@@ -478,7 +478,7 @@ impl App {
     }
 
     /// The work area while a table of runs is open: its mapping or its answers.
-    pub(crate) fn from_file_view(&mut self, ui: &mut egui::Ui) {
+    pub(crate) fn runs_view(&mut self, ui: &mut egui::Ui) {
         let Some(mut f) = self.from_file.take() else {
             return;
         };
@@ -862,7 +862,7 @@ fn comparisons(ui: &mut egui::Ui, p: &theme::Palette, a: &Value, file: &str) {
                 rect.left() + baseline::COLUMNS[4].0..=rect.left() + baseline::COLUMNS[4].1,
                 rect.y_range(),
             );
-            baseline::paint_mark(ui, p, mark, relative(*c), scale, &change);
+            baseline::paint_mark(ui, p, mark, relative(c), scale, &change);
         }
     }
     ui.add_space(4.0);

@@ -7,7 +7,7 @@
 
 use egui::accesskit::Role;
 use egui_kittest::Harness;
-use egui_kittest::kittest::Queryable;
+use egui_kittest::kittest::{NodeT, Queryable};
 use stochcraft_ui_egui::commands::{self, CommandRef};
 use stochcraft_ui_egui::{App, EXAMPLES, Platform, Request};
 
