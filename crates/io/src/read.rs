@@ -12,7 +12,7 @@ use stochcraft_model::{
     ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck, Mobility, Model, Need,
     OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy,
     ProcessingByResource, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing,
-    Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    Scrap, Setup, Stop, ThreePoint, TimeInSystem, TimeUnit, Timed, Transfer, Upper,
 };
 
 use stochcraft_model::dmn::DecisionUse;
@@ -1045,6 +1045,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             NodeKind::End => ElementKind::Sink {
                 scrap: scrap_of(scenario, id),
                 demand: demand_of(scenario, id, notes),
+                time_in_system: time_in_system_of(scenario, id, unit, notes),
             },
             NodeKind::Task => {
                 for t in OTHER_TIMES {
@@ -1271,6 +1272,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "a demand (stochcraft:demand) applies only to an end event; it is ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Sink { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::TIME_IN_SYSTEM)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "time in system by percentile (stochcraft:timeInSystem) applies only to an end event; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Sink { .. })
@@ -1637,6 +1648,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::BALKED,
             bpsim::SCRAP,
             bpsim::DEMAND,
+            bpsim::TIME_IN_SYSTEM,
             bpsim::REWORK,
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
@@ -1814,6 +1826,50 @@ fn demand_of(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> Op
             None
         }
     }
+}
+
+/// The time in system by percentile StochCraft's vendor extension asks end event `id` to
+/// report, if any: a target time (a constant above 0, in `unit`) and a calendar whose active
+/// time alone counts, each optional.
+fn time_in_system_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Option<TimeInSystem> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::TIME_IN_SYSTEM))?;
+    let Some(body) = ext.elements().find(|e| e.local() == "timeInSystem") else {
+        notes.push(Note::error(
+            Some(id),
+            format!(
+                "time in system by percentile (`{}`) needs a stochcraft:timeInSystem element; it is ignored",
+                bpsim::TIME_IN_SYSTEM
+            ),
+        ));
+        return None;
+    };
+    let calendar = body
+        .attr("calendar")
+        .map(|c| c.trim().to_owned())
+        .filter(|c| !c.is_empty())
+        .map(|c| ElementId::unchecked(&c));
+    let within = match body.elements().find(|e| e.local() == "within") {
+        None => None,
+        Some(w) => {
+            let value = bpsim::default_value(w, unit, notes, Some(id));
+            match dist_of(value, "the target time in system", id, notes) {
+                Some(Dist::Constant(x)) if x.is_finite() && x > 0.0 => Some(x),
+                _ => {
+                    notes.push(Note::error(
+                        Some(id),
+                        "the target time in system must be a time above 0; the share within it is not reported",
+                    ));
+                    None
+                }
+            }
+        }
+    };
+    Some(TimeInSystem { within, calendar })
 }
 
 /// The batch or split StochCraft's vendor extensions make task `id`, if any.

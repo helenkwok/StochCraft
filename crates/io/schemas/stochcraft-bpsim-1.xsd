@@ -175,6 +175,19 @@
       <stochcraft:demand quantity="480" per="shift" calendar="day-shift"/>
     </bpsim:VendorExtension>
 
+  stochcraft:timeInSystem, on an end event's ElementParameters: report the median, 90th and
+  95th percentiles of the time each entity reaching it spent in the system, from its creation,
+  and with stochcraft:within (one BPSim constant or duration: the target) the share of them
+  that took at most that long. With calendar, only the time that calendar is active counts
+  (working time). Entities still inside when the run ends are left out, so a run should stop
+  once all are done.
+
+    <bpsim:VendorExtension name="stochcraft:timeInSystem" xmlns:stochcraft="…">
+      <stochcraft:timeInSystem calendar="weekdays">
+        <stochcraft:within><bpsim:DurationParameter value="P3D"/></stochcraft:within>
+      </stochcraft:timeInSystem>
+    </bpsim:VendorExtension>
+
   stochcraft:plannedRunTime, on a task's ElementParameters: the planned time for the task's
   resource to make one item (ISO 22400-2's planned runtime per item), holding one BPSim
   distribution or constant whose mean is the plan. It is not simulated; results use it for
@@ -534,6 +547,14 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="calendar" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="timeInSystem">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="within" type="stochcraft:Value" minOccurs="0"/>
+      </xs:sequence>
       <xs:attribute name="calendar" type="xs:string"/>
     </xs:complexType>
   </xs:element>

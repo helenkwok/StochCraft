@@ -1531,6 +1531,18 @@ connection	Flow	フロー
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	10 台の機械が稼働していなければならず、予備機 4 台が待機し、整備士 3 人が故障した機械を修理する（Crane と Iglehart、Winter Simulation Conference、1973）。
 	How many spares and repairmen keep ten machines running?	10 台の機械を動かし続けるには、予備機と整備士がいくつ必要か？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待機中の予備機は故障しない。平均 3.47 台が故障中で、9.29 台が稼働する。整備士を 1 人増やすと、予備機を 4 台増やすのとほぼ同じ効果がある。
+	Median time in system	システム内の滞在時間の中央値
+	Time in system, 90th percentile	システム内の滞在時間（90 パーセンタイル）
+	Time in system, 95th percentile	システム内の滞在時間（95 パーセンタイル）
+	Share done within the target time	目標時間内に完了した割合
+	Percentiles of time in system	システム内の滞在時間のパーセンタイル
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	各エンティティが生成されてからこの退出に至るまでの時間の中央値、90 パーセンタイル、95 パーセンタイルを表示し、目標時間を指定するとその時間内に完了した割合も表示します。
+	Target time ({unit})	目標時間（{unit}）
+	The target time is a time above 0	目標時間は 0 より大きい時間です
+	Count only working time on	稼働時間のみを数えるカレンダー
+	Entities still inside when the run ends are left out, so stop the run once all are done.	実行の終了時に内部に残っているエンティティは含まれないため、すべてが完了してから実行を止めてください。
+	Set the target time in system of {block} to a time above 0.	{block} のシステム内の目標時間を 0 より大きい時間に設定してください。
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} のシステム内の滞在時間が、存在しないカレンダーで稼働時間を数えています。存在するカレンダーを選んでください。
 	One machine's availability	機械 1 台の稼働率
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	平均 90 時間ごとに故障し、修理に 4.5 時間かかる機械 1 台（Hristova、Denev、Tsankov、Environment. Technology. Resources、2024）。
 	How often is one machine down, and how much work does that cost?	機械 1 台はどのくらいの頻度で止まり、どれだけの仕事が失われるか？

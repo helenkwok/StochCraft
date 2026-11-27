@@ -1531,6 +1531,18 @@ connection	Flow	Folyamat
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Tíz gépnek kell üzemelnie, négy tartalékgép készenlétben vár, és három szerelő javítja a meghibásodottakat (Crane és Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hány tartalékgép és szerelő tart üzemben tíz gépet?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	A készenlétben álló tartalékgépek nem hibásodhatnak meg: átlagosan 3.47 gép hibás, és 9.29 üzemel. Egy negyedik szerelő nagyjából annyit ér, mint négy további tartalékgép.
+	Median time in system	A rendszerben töltött idő mediánja
+	Time in system, 90th percentile	Rendszerben töltött idő, 90. percentilis
+	Time in system, 95th percentile	Rendszerben töltött idő, 95. percentilis
+	Share done within the target time	A célidőn belül elkészültek aránya
+	Percentiles of time in system	A rendszerben töltött idő percentilisei
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Megmutatja, mennyi idő telt el az egyes egyedek létrejöttétől az itteni kilépésig: a mediánt, a 90. és a 95. percentilist, célidővel pedig az azon belül elkészültek arányát.
+	Target time ({unit})	Célidő ({unit})
+	The target time is a time above 0	A célidő 0-nál nagyobb idő
+	Count only working time on	Csak a munkaidő számít e szerint
+	Entities still inside when the run ends are left out, so stop the run once all are done.	A futás végén még bent lévő egyedek kimaradnak, ezért akkor állítsa le a futást, amikor mind elkészült.
+	Set the target time in system of {block} to a time above 0.	Állítsa a(z) {block} blokk rendszerben töltött célidejét 0-nál nagyobb időre.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	A(z) {block} blokk rendszerben töltött ideje olyan naptár szerint számolja a munkaidőt, amely nem létezik. Válasszon létező naptárat.
 	One machine's availability	Egy gép rendelkezésre állása
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Egy gép, amely átlagosan 90 óránként meghibásodik, és a javítása 4.5 órát vesz igénybe (Hristova, Denev és Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Milyen gyakran áll egy gép, és mennyi munkába kerül ez?

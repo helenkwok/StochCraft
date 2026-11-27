@@ -283,6 +283,11 @@ fn samples() -> Vec<Diagnostic> {
         found(task, Problem::DemandNotPositive),
         found(task, Problem::ShiftWithoutCalendar),
         found(task, Problem::DemandCalendarUnknown { id: id("nowhere") }),
+        found(task, Problem::TimeInSystemWithinNotPositive),
+        found(
+            task,
+            Problem::TimeInSystemCalendarUnknown { id: id("nowhere") },
+        ),
         found(flow, Problem::BadProbability { value: 1.5 }),
         found(Some("n3"), Problem::ProbabilitySum { sum: 0.99 }),
         found(

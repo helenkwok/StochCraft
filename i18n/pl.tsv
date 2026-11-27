@@ -1531,6 +1531,18 @@ connection	Flow	Przepływ
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Dziesięć maszyn musi pracować, cztery zapasowe czekają w gotowości, a trzech mechaników naprawia te, które ulegną awarii (Crane i Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Ile maszyn zapasowych i mechaników utrzyma w ruchu dziesięć maszyn?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Maszyny zapasowe w gotowości nie mogą ulec awarii: średnio 3.47 maszyny są zepsute, a 9.29 pracuje. Czwarty mechanik daje mniej więcej tyle, co cztery dodatkowe maszyny zapasowe.
+	Median time in system	Mediana czasu w systemie
+	Time in system, 90th percentile	Czas w systemie, 90. percentyl
+	Time in system, 95th percentile	Czas w systemie, 95. percentyl
+	Share done within the target time	Odsetek ukończonych w czasie docelowym
+	Percentiles of time in system	Percentyle czasu w systemie
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Pokazuje medianę oraz 90. i 95. percentyl czasu, jaki każdy obiekt spędził od utworzenia do tych wyjść, a z czasem docelowym odsetek ukończonych w tym czasie.
+	Target time ({unit})	Czas docelowy ({unit})
+	The target time is a time above 0	Czas docelowy musi być większy od 0
+	Count only working time on	Licz tylko czas pracy według
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Obiekty, które są wciąż wewnątrz, gdy uruchomienie się kończy, nie są wliczane, więc zatrzymaj uruchomienie, gdy wszystkie są gotowe.
+	Set the target time in system of {block} to a time above 0.	Ustaw czas docelowy w systemie bloku {block} na czas większy od 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Czas w systemie bloku {block} liczy czas pracy według kalendarza, który nie istnieje. Wybierz istniejący kalendarz.
 	One machine's availability	Dostępność jednej maszyny
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jedna maszyna, która psuje się średnio co 90 godzin, a jej naprawa trwa 4.5 godziny (Hristova, Denev i Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Jak często stoi jedna maszyna i ile pracy to kosztuje?

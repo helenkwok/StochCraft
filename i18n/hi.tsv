@@ -1531,6 +1531,18 @@ connection	Flow	प्रवाह
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	दस मशीनों को चलते रहना है, चार अतिरिक्त मशीनें तैयार रखी हैं और तीन मिस्त्री खराब होने वाली मशीनें ठीक करते हैं (Crane और Iglehart, Winter Simulation Conference, 1973)।
 	How many spares and repairmen keep ten machines running?	दस मशीनों को चालू रखने के लिए कितनी अतिरिक्त मशीनें और कितने मिस्त्री चाहिए?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	तैयार रखी अतिरिक्त मशीनें खराब नहीं हो सकतीं: औसतन 3.47 मशीनें खराब रहती हैं और 9.29 चलती हैं। चौथा मिस्त्री लगभग उतना ही करता है जितना चार और अतिरिक्त मशीनें।
+	Median time in system	सिस्टम में समय की माध्यिका
+	Time in system, 90th percentile	सिस्टम में समय, 90वाँ प्रतिशतक
+	Time in system, 95th percentile	सिस्टम में समय, 95वाँ प्रतिशतक
+	Share done within the target time	लक्ष्य समय में पूरे हुए हिस्से
+	Percentiles of time in system	सिस्टम में समय के प्रतिशतक
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	हर इकाई को बनने से इन निकासों तक पहुँचने में लगे समय की माध्यिका, 90वाँ और 95वाँ प्रतिशतक दिखाता है, और लक्ष्य समय देने पर उसके भीतर पूरे हुए हिस्से।
+	Target time ({unit})	लक्ष्य समय ({unit})
+	The target time is a time above 0	लक्ष्य समय 0 से अधिक समय होना चाहिए
+	Count only working time on	केवल कार्य समय गिनें, इसके अनुसार
+	Entities still inside when the run ends are left out, so stop the run once all are done.	रन समाप्त होने पर जो अब भी अंदर हैं, वे शामिल नहीं होते, इसलिए सभी के पूरे होने पर रन रोकें।
+	Set the target time in system of {block} to a time above 0.	{block} का सिस्टम में लक्ष्य समय 0 से अधिक समय पर सेट करें।
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block} का सिस्टम में समय ऐसे कैलेंडर के अनुसार कार्य समय गिनता है जो मौजूद नहीं है। कोई मौजूदा कैलेंडर चुनें।
 	One machine's availability	एक मशीन की उपलब्धता
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	एक मशीन जो औसतन हर 90 घंटे में खराब होती है और जिसकी मरम्मत में 4.5 घंटे लगते हैं (Hristova, Denev और Tsankov, Environment. Technology. Resources, 2024)।
 	How often is one machine down, and how much work does that cost?	एक मशीन कितनी बार बंद रहती है, और इससे कितना काम घटता है?

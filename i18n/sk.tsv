@@ -1531,6 +1531,18 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Desať strojov musí bežať, štyri záložné čakajú v pohotovosti a traja opravári opravujú tie, ktoré sa pokazia (Crane a Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koľko záložných strojov a opravárov udrží desať strojov v chode?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Záložné stroje v pohotovosti sa nemôžu pokaziť: v priemere je pokazených 3.47 strojov a beží 9.29. Štvrtý opravár pomôže zhruba toľko ako štyri záložné stroje navyše.
+	Median time in system	Medián času v systéme
+	Time in system, 90th percentile	Čas v systéme, 90. percentil
+	Time in system, 95th percentile	Čas v systéme, 95. percentil
+	Share done within the target time	Podiel hotových v cieľovom čase
+	Percentiles of time in system	Percentily času v systéme
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	Zobrazí medián, 90. a 95. percentil času, ktorý každá entita strávila od svojho vzniku po tieto výstupy, a s cieľovým časom podiel hotových v ňom.
+	Target time ({unit})	Cieľový čas ({unit})
+	The target time is a time above 0	Cieľový čas je čas väčší ako 0
+	Count only working time on	Počítať len pracovný čas podľa
+	Entities still inside when the run ends are left out, so stop the run once all are done.	Entity, ktoré sú na konci behu stále vnútri, nie sú zahrnuté, preto beh zastavte, až budú všetky hotové.
+	Set the target time in system of {block} to a time above 0.	Nastavte cieľový čas v systéme bloku {block} na čas väčší ako 0.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	Čas v systéme bloku {block} počíta pracovný čas podľa kalendára, ktorý neexistuje. Vyberte existujúci kalendár.
 	One machine's availability	Dostupnosť jedného stroja
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	Jeden stroj, ktorý sa v priemere pokazí každých 90 hodín a oprava trvá 4.5 hodiny (Hristova, Denev a Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	Ako často stojí jeden stroj a koľko práce to stojí?

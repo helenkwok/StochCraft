@@ -1531,6 +1531,18 @@ connection	Flow	ნაკადი
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	ათი მანქანა უნდა მუშაობდეს, ოთხი სათადარიგო მზადყოფნაში ელოდება, ხოლო სამი ზეინკალი აკეთებს გაფუჭებულებს (Crane და Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	რამდენი სათადარიგო მანქანა და ზეინკალი ინარჩუნებს ათ მანქანას მუშა მდგომარეობაში?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	მზადყოფნაში მყოფი სათადარიგო მანქანები ვერ გაფუჭდება: საშუალოდ 3.47 მანქანაა გაფუჭებული და 9.29 მუშაობს. მეოთხე ზეინკალი დაახლოებით იმდენს აკეთებს, რამდენსაც კიდევ ოთხი სათადარიგო მანქანა.
+	Median time in system	სისტემაში გატარებული დროის მედიანა
+	Time in system, 90th percentile	სისტემაში გატარებული დრო, 90-ე პროცენტილი
+	Time in system, 95th percentile	სისტემაში გატარებული დრო, 95-ე პროცენტილი
+	Share done within the target time	სამიზნე დროში დასრულებულთა წილი
+	Percentiles of time in system	სისტემაში გატარებული დროის პროცენტილები
+	Report the median, 90th and 95th percentiles of the time each entity took from its creation to these departures, and with a target time the share done within it.	აჩვენებს იმ დროის მედიანას, 90-ე და 95-ე პროცენტილებს, რაც თითოეულ ობიექტს დასჭირდა შექმნიდან ამ გასვლებამდე, ხოლო სამიზნე დროით — მასში დასრულებულთა წილს.
+	Target time ({unit})	სამიზნე დრო ({unit})
+	The target time is a time above 0	სამიზნე დრო უნდა იყოს 0-ზე მეტი
+	Count only working time on	დაითვალე მხოლოდ სამუშაო დრო კალენდრით
+	Entities still inside when the run ends are left out, so stop the run once all are done.	ობიექტები, რომლებიც გაშვების დასრულებისას ჯერ კიდევ შიგნით არიან, არ ითვლება, ამიტომ გააჩერეთ გაშვება, როცა ყველა დასრულდება.
+	Set the target time in system of {block} to a time above 0.	დააყენეთ {block}-ის სისტემაში სამიზნე დრო 0-ზე მეტ დროზე.
+	The time in system of {block} counts working time on a calendar that does not exist. Choose a calendar that exists.	{block}-ის სისტემაში გატარებული დრო სამუშაო დროს ითვლის კალენდრით, რომელიც არ არსებობს. აირჩიეთ არსებული კალენდარი.
 	One machine's availability	ერთი მანქანის ხელმისაწვდომობა
 	One machine that fails every 90 hours on average and takes 4.5 hours to repair (Hristova, Denev and Tsankov, Environment. Technology. Resources, 2024).	მანქანა, რომელიც საშუალოდ ყოველ 90 საათში გაუმართავდება და შესაკეთებლად 4.5 საათი სჭირდება (Hristova, Denev და Tsankov, Environment. Technology. Resources, 2024).
 	How often is one machine down, and how much work does that cost?	რა ხშირად ჩერდება ერთი მანქანა და რამდენი სამუშაო ღირს ეს?
