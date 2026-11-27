@@ -1544,6 +1544,11 @@ connection	Flow	Verbindung
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Ein Stab, an beiden Enden auf 0 gehalten, erzeugt Wärme proportional zum Quadrat seiner Temperatur: 19 Bestände entlang des Stabs, nach der Linienmethode (Soheili und Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Wann gerät ein von innen erhitzter Stab außer Kontrolle?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Die Linienmethode macht aus einer Wärmeleitungsgleichung Bestände und Flüsse, und ein Modell kann in endlicher Zeit explodieren: Die Mitte überschreitet 10 000 bei t = 0.0821, also gerät der Stab bei etwa 0.0822 außer Kontrolle, innerhalb von 0.3% der veröffentlichten 0.0824.
+	Scenario	Szenario
+	Scenario: {name}	Szenario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Beim Öffnen von {scenario} gehen die ungespeicherten Änderungen an {name} verloren. Zuerst speichern?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} Szenario zum Vergleichen|{n} Szenarien zum Vergleichen
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Es wurde als neue Datei gespeichert, die nur das geöffnete Szenario enthält, daher wurde nicht zu {scenario} gewechselt.
 	Median time in system	Median der Verweilzeit im System
 	Time in system, 90th percentile	Verweilzeit im System, 90. Perzentil
 	Time in system, 95th percentile	Verweilzeit im System, 95. Perzentil
@@ -1561,3 +1566,18 @@ connection	Flow	Verbindung
 	How often is one machine down, and how much work does that cost?	Wie oft steht eine Maschine still, und wie viel Arbeit kostet das?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 Stunden in Betrieb, 4.5 Stunden still: Die Maschine arbeitet 95.2 % der Zeit, und alle 94.5 Stunden tritt ein Ausfall auf. Halbiert man die Reparaturzeit, steigt der Wert auf 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} steht {down} der Zeit still (Verfügbarkeit {up}); nichts wartet auf sie.
+	Choose a warm-up	Einschwingphase wählen
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welch-Diagramm: der Mittelwert der Läufe zu jedem aufgezeichneten Zeitpunkt, geglättet mit einem gleitenden Mittelwert. Legen Sie die Einschwingphase dort fest, wo die Kurve abflacht; der Schnitt von MSER-5 ist nur ein Ausgangspunkt.
+	Number inside	Anzahl im System
+	Busy units	Belegte Einheiten
+	Leaving per interval	Abgänge je Intervall
+	Entering per interval	Zugänge je Intervall
+	The run recorded too few times to plot.	Der Lauf hat zu wenige Zeitpunkte für ein Diagramm aufgezeichnet.
+	Points each side	Punkte je Seite
+	1 to {max}	1 bis {max}
+	Welch's plot of {measure} at {block}	Welch-Diagramm: {measure} bei {block}
+	MSER-5 suggests {value}.	MSER-5 schlägt {value} vor.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 schlägt hier nichts vor: Die Reihe schwingt sich zur Mitte des Laufs vielleicht noch ein.
+	The warm-up now is {value}.	Die Einschwingphase beträgt jetzt {value}.
+	Later times, which fewer runs reached, are left out.	Spätere Zeitpunkte, die weniger Läufe erreichten, sind ausgelassen.
+	New warm-up	Neue Einschwingphase

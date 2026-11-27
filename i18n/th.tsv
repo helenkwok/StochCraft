@@ -1544,6 +1544,11 @@ connection	Flow	โฟลว์
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	แท่งที่ปลายทั้งสองถูกคงไว้ที่ 0 สร้างความร้อนตามกำลังสองของอุณหภูมิของมัน: 19 สต็อกตามแนวแท่ง ด้วยวิธีเส้น (method of lines) (Soheili และ Stockie, Applied Numerical Mathematics, 2008)
 	When does a rod heated from within run away?	แท่งที่ถูกทำให้ร้อนจากภายในจะควบคุมไม่ได้เมื่อใด?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	วิธีเส้นเปลี่ยนสมการความร้อนเป็นสต็อกและโฟลว์ และแบบจำลองอาจระเบิดได้ในเวลาจำกัด: จุดกึ่งกลางผ่าน 10,000 ที่ t = 0.0821 แท่งจึงควบคุมไม่ได้ราว 0.0822 ต่างจากค่าที่ตีพิมพ์ 0.0824 ไม่เกิน 0.3%
+	Scenario	สถานการณ์
+	Scenario: {name}	สถานการณ์: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	การเปิด {scenario} จะทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกใน {name} บันทึกก่อนหรือไม่
+@plural	{n} scenario to compare|{n} scenarios to compare	สถานการณ์ให้เปรียบเทียบ {n} แบบ
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	บันทึกเป็นไฟล์ใหม่ที่มีเฉพาะสถานการณ์ที่เปิดอยู่ จึงไม่ได้สลับไปที่ {scenario}
 	Median time in system	ค่ามัธยฐานของเวลาในระบบ
 	Time in system, 90th percentile	เวลาในระบบ เปอร์เซ็นไทล์ที่ 90
 	Time in system, 95th percentile	เวลาในระบบ เปอร์เซ็นไทล์ที่ 95
@@ -1561,3 +1566,18 @@ connection	Flow	โฟลว์
 	How often is one machine down, and how much work does that cost?	เครื่องจักรหนึ่งเครื่องหยุดบ่อยแค่ไหน และทำให้เสียงานไปเท่าใด
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	ทำงาน 90 ชั่วโมง หยุด 4.5 ชั่วโมง: เครื่องทำงาน 95.2% ของเวลา และเกิดเหตุขัดข้องทุก 94.5 ชั่วโมง ถ้าลดเวลาซ่อมลงครึ่งหนึ่ง จะเพิ่มเป็น 97.6%
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} หยุด {down} ของเวลา (ความพร้อมใช้งาน {up}) และไม่มีอะไรรออยู่
+	Choose a warm-up	เลือกระยะอุ่นเครื่อง
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	กราฟของ Welch: ค่าเฉลี่ยของการรันในแต่ละเวลาที่บันทึก ปรับให้เรียบด้วยค่าเฉลี่ยเคลื่อนที่ กำหนดระยะอุ่นเครื่องตรงที่เส้นโค้งคงที่ จุดตัดของ MSER-5 เป็นเพียงจุดเริ่มต้น
+	Number inside	จำนวนภายใน
+	Busy units	หน่วยที่ไม่ว่าง
+	Leaving per interval	ออกต่อช่วง
+	Entering per interval	เข้าต่อช่วง
+	The run recorded too few times to plot.	การรันบันทึกเวลาน้อยเกินไปสำหรับกราฟ
+	Points each side	จุดแต่ละข้าง
+	1 to {max}	1 ถึง {max}
+	Welch's plot of {measure} at {block}	กราฟของ Welch: {measure} ที่ {block}
+	MSER-5 suggests {value}.	MSER-5 แนะนำ {value}
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 ไม่แนะนำอะไรที่นี่: อนุกรมอาจยังไม่คงที่เมื่อถึงครึ่งทางของการรัน
+	The warm-up now is {value}.	ตอนนี้ระยะอุ่นเครื่องคือ {value}
+	Later times, which fewer runs reached, are left out.	เวลาหลังจากนั้นที่การรันไปถึงน้อยกว่าถูกตัดออก
+	New warm-up	ระยะอุ่นเครื่องใหม่

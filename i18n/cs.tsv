@@ -1544,6 +1544,11 @@ connection	Flow	Tok
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Tyč držená na obou koncích na 0 vytváří teplo úměrně druhé mocnině své teploty: 19 zásob podél tyče, metodou přímek (Soheili a Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Kdy se tyč ohřívaná zevnitř vymkne kontrole?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Metoda přímek převádí rovnici vedení tepla na zásoby a toky a model může explodovat v konečném čase: střed překročí 10 000 v t = 0.0821, takže se tyč vymkne kontrole zhruba v 0.0822, do 0.3% od publikovaných 0.0824.
+	Scenario	Scénář
+	Scenario: {name}	Scénář: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otevřením scénáře {scenario} se zahodí neuložené změny v {name}. Uložit je nejprve?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scénář k porovnání|{n} scénáře k porovnání|{n} scénářů k porovnání
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Byl uložen jako nový soubor, který obsahuje jen otevřený scénář, takže k přepnutí na {scenario} nedošlo.
 	Median time in system	Medián doby v systému
 	Time in system, 90th percentile	Doba v systému, 90. percentil
 	Time in system, 95th percentile	Doba v systému, 95. percentil
@@ -1561,3 +1566,18 @@ connection	Flow	Tok
 	How often is one machine down, and how much work does that cost?	Jak často stojí jeden stroj a kolik práce to stojí?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	V provozu 90 hodin, mimo provoz 4.5: stroj pracuje 95.2 % času a porucha nastává každých 94.5 hodiny. Poloviční doba opravy to zvýší na 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stojí {down} času (dostupnost {up}); nic na něj nečeká.
+	Choose a warm-up	Zvolit zahřívání
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welchův graf: průměr běhů v každém zaznamenaném čase, vyhlazený klouzavým průměrem. Nastavte zahřívání tam, kde se křivka vyrovná; řez MSER-5 je jen výchozí bod.
+	Number inside	Počet uvnitř
+	Busy units	Obsazené jednotky
+	Leaving per interval	Odchody za interval
+	Entering per interval	Příchody za interval
+	The run recorded too few times to plot.	Běh zaznamenal příliš málo časů pro graf.
+	Points each side	Bodů na každé straně
+	1 to {max}	1 až {max}
+	Welch's plot of {measure} at {block}	Welchův graf: {measure} v {block}
+	MSER-5 suggests {value}.	MSER-5 navrhuje {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 zde nic nenavrhuje: řada se možná v polovině běhu stále ustaluje.
+	The warm-up now is {value}.	Zahřívání je nyní {value}.
+	Later times, which fewer runs reached, are left out.	Pozdější časy, kterých dosáhlo méně běhů, jsou vynechány.
+	New warm-up	Nové zahřívání

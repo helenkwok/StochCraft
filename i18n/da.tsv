@@ -1544,6 +1544,11 @@ connection	Flow	Flow
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	En stang, der holdes på 0 i begge ender, danner varme i forhold til kvadratet på sin temperatur: 19 beholdninger langs stangen, med linjemetoden (Soheili og Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Hvornår løber en stang, der opvarmes indefra, løbsk?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Linjemetoden gør en varmeligning til beholdninger og flows, og en model kan eksplodere på endelig tid: midten passerer 10.000 ved t = 0.0821, så stangen løber løbsk ved omkring 0.0822, inden for 0.3% af de offentliggjorte 0.0824.
+	Scenario	Scenarie
+	Scenario: {name}	Scenarie: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Hvis {scenario} åbnes, kasseres de ikke-gemte ændringer i {name}. Gem dem først?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenarie at sammenligne|{n} scenarier at sammenligne
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Den blev gemt som en ny fil, der kun indeholder det åbne scenarie, så der blev ikke skiftet til {scenario}.
 	Median time in system	Median for tid i systemet
 	Time in system, 90th percentile	Tid i systemet, 90. percentil
 	Time in system, 95th percentile	Tid i systemet, 95. percentil
@@ -1561,3 +1566,18 @@ connection	Flow	Flow
 	How often is one machine down, and how much work does that cost?	Hvor ofte står en maskine stille, og hvor meget arbejde koster det?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Kører 90 timer, står stille 4.5: maskinen arbejder 95.2 % af tiden, og en fejl opstår hver 94.5. time. Halveres reparationstiden, stiger det til 97.6 %.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} står stille {down} af tiden (oppetid {up}); intet venter på den.
+	Choose a warm-up	Vælg en opvarmning
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welchs plot: gennemsnittet af kørslerne på hvert registreret tidspunkt, udglattet med et glidende gennemsnit. Angiv opvarmningen, hvor kurven flader ud; MSER-5's snit er kun et udgangspunkt.
+	Number inside	Antal indeni
+	Busy units	Optagne enheder
+	Leaving per interval	Afgange pr. interval
+	Entering per interval	Ankomster pr. interval
+	The run recorded too few times to plot.	Kørslen registrerede for få tidspunkter til et plot.
+	Points each side	Punkter på hver side
+	1 to {max}	1 til {max}
+	Welch's plot of {measure} at {block}	Welchs plot af {measure} ved {block}
+	MSER-5 suggests {value}.	MSER-5 foreslår {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 foreslår intet her: serien er måske stadig ved at falde til ro halvvejs i kørslen.
+	The warm-up now is {value}.	Opvarmningen er nu {value}.
+	Later times, which fewer runs reached, are left out.	Senere tidspunkter, som færre kørsler nåede, er udeladt.
+	New warm-up	Ny opvarmning

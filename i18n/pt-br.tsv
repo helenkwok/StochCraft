@@ -1544,6 +1544,11 @@ connection	Flow	Fluxo
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Uma barra mantida a 0 nas duas pontas gera calor proporcional ao quadrado da sua temperatura: 19 estoques ao longo dela, pelo método das linhas (Soheili e Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Quando uma barra aquecida por dentro dispara?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	O método das linhas transforma uma equação do calor em estoques e fluxos, e um modelo pode explodir em tempo finito: o meio passa de 10.000 em t = 0.0821, então a barra dispara por volta de 0.0822, a 0.3% do valor publicado de 0.0824.
+	Scenario	Cenário
+	Scenario: {name}	Cenário: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Abrir {scenario} descarta as alterações não salvas em {name}. Salvá-las primeiro?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} cenário para comparar|{n} cenários para comparar
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Foi salvo como um arquivo novo que contém só o cenário aberto, então a troca para {scenario} não foi feita.
 	Median time in system	Mediana do tempo no sistema
 	Time in system, 90th percentile	Tempo no sistema, percentil 90
 	Time in system, 95th percentile	Tempo no sistema, percentil 95
@@ -1561,3 +1566,18 @@ connection	Flow	Fluxo
 	How often is one machine down, and how much work does that cost?	Com que frequência uma máquina fica parada e quanto trabalho isso custa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Funciona 90 horas, fica parada 4.5: a máquina trabalha 95.2% do tempo e uma quebra acontece a cada 94.5 horas. Reduzir o tempo de conserto pela metade eleva isso a 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} fica parado {down} do tempo (disponibilidade {up}); nada espera por ela.
+	Choose a warm-up	Escolher um aquecimento
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Gráfico de Welch: a média das execuções em cada instante registrado, suavizada por uma média móvel. Defina o aquecimento onde a curva se nivela; o corte do MSER-5 é apenas um ponto de partida.
+	Number inside	Número no sistema
+	Busy units	Unidades ocupadas
+	Leaving per interval	Saídas por intervalo
+	Entering per interval	Entradas por intervalo
+	The run recorded too few times to plot.	A execução registrou instantes de menos para um gráfico.
+	Points each side	Pontos de cada lado
+	1 to {max}	De 1 a {max}
+	Welch's plot of {measure} at {block}	Gráfico de Welch de {measure} em {block}
+	MSER-5 suggests {value}.	O MSER-5 sugere {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	O MSER-5 não sugere nada aqui: a série talvez ainda esteja se estabilizando na metade da execução.
+	The warm-up now is {value}.	O aquecimento agora é de {value}.
+	Later times, which fewer runs reached, are left out.	Os instantes posteriores, alcançados por menos execuções, foram omitidos.
+	New warm-up	Novo aquecimento

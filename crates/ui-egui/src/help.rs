@@ -295,6 +295,10 @@ pub fn show(
             .hint_text(t("Search help and terms"))
             .desired_width(f32::INFINITY),
     );
+    // Named for assistive technology: the hint is not a label.
+    search.widget_info(|| {
+        egui::WidgetInfo::labeled(egui::Role::TextInput, true, t("Search help and terms"))
+    });
     if search.has_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
         help.search.clear();
     }

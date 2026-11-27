@@ -1544,6 +1544,11 @@ connection	Flow	Voog
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Mõlemast otsast väärtusel 0 hoitud varras toodab soojust võrdeliselt oma temperatuuri ruuduga: 19 varu piki varrast, joonte meetodil (Soheili ja Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Millal läheb seestpoolt kuumenev varras kontrolli alt välja?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Joonte meetod teeb soojusvõrrandist varud ja vood ning mudel võib lõpliku ajaga plahvatada: keskkoht ületab 10 000 ajal t = 0.0821, nii et varras läheb kontrolli alt välja umbes ajal 0.0822, 0.3% piires avaldatud väärtusest 0.0824.
+	Scenario	Stsenaarium
+	Scenario: {name}	Stsenaarium: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Stsenaariumi {scenario} avamine kaotab faili {name} salvestamata muudatused. Kas salvestada need enne?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} stsenaarium võrdlemiseks|{n} stsenaariumi võrdlemiseks
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	See salvestati uue failina, milles on ainult avatud stsenaarium, seega stsenaariumile {scenario} ei lülitutud.
 	Median time in system	Süsteemis oleku aja mediaan
 	Time in system, 90th percentile	Aeg süsteemis, 90. protsentiil
 	Time in system, 95th percentile	Aeg süsteemis, 95. protsentiil
@@ -1561,3 +1566,18 @@ connection	Flow	Voog
 	How often is one machine down, and how much work does that cost?	Kui tihti seisab üks masin ja kui palju tööd see maksab?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Töötab 90 tundi, seisab 4.5: masin töötab 95.2% ajast ja rike juhtub iga 94.5 tunni järel. Poole lühem remont tõstab selle 97.6%-ni.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} seisab {down} ajast (käideldavus {up}); keegi ei oota seda.
+	Choose a warm-up	Vali soojendus
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welchi graafik: käivituste keskmine igal salvestatud ajahetkel, silutud libiseva keskmisega. Määra soojendus sinna, kus kõver ühtlustub; MSER-5 lõige on vaid lähtekoht.
+	Number inside	Arv sees
+	Busy units	Hõivatud ühikud
+	Leaving per interval	Väljujad intervalli kohta
+	Entering per interval	Sisenejad intervalli kohta
+	The run recorded too few times to plot.	Käivitus salvestas graafiku jaoks liiga vähe ajahetki.
+	Points each side	Punkte kummalgi pool
+	1 to {max}	1 kuni {max}
+	Welch's plot of {measure} at {block}	Welchi graafik: {measure}, {block}
+	MSER-5 suggests {value}.	MSER-5 soovitab {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 ei soovita siin midagi: rida võib käivituse poole peal alles stabiliseeruda.
+	The warm-up now is {value}.	Soojendus on nüüd {value}.
+	Later times, which fewer runs reached, are left out.	Hilisemad ajahetked, milleni jõudis vähem käivitusi, on välja jäetud.
+	New warm-up	Uus soojendus

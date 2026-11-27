@@ -1544,6 +1544,11 @@ connection	Flow	Virta
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Molemmista päistään arvossa 0 pidetty sauva tuottaa lämpöä suhteessa lämpötilansa neliöön: 19 varantoa sauvan suuntaisesti, viivojen menetelmällä (Soheili ja Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Milloin sisältä lämpenevä sauva karkaa käsistä?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Viivojen menetelmä tekee lämpöyhtälöstä varantoja ja virtoja, ja malli voi räjähtää äärellisessä ajassa: keskikohta ohittaa arvon 10 000 hetkellä t = 0.0821, joten sauva karkaa noin hetkellä 0.0822, alle 0.3%:n päässä julkaistusta arvosta 0.0824.
+	Scenario	Skenaario
+	Scenario: {name}	Skenaario: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Skenaarion {scenario} avaaminen hylkää kohteen {name} tallentamattomat muutokset. Tallennetaanko ne ensin?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} vertailtava skenaario|{n} vertailtavaa skenaariota
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Se tallennettiin uutena tiedostona, jossa on vain avoin skenaario, joten skenaarioon {scenario} ei vaihdettu.
 	Median time in system	Järjestelmässä vietetyn ajan mediaani
 	Time in system, 90th percentile	Aika järjestelmässä, 90. persentiili
 	Time in system, 95th percentile	Aika järjestelmässä, 95. persentiili
@@ -1561,3 +1566,18 @@ connection	Flow	Virta
 	How often is one machine down, and how much work does that cost?	Kuinka usein yksi kone seisoo ja kuinka paljon työtä se maksaa?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Käy 90 tuntia, seisoo 4.5: kone toimii 95.2 % ajasta ja vika sattuu 94.5 tunnin välein. Puolta lyhyempi korjausaika nostaa luvun 97.6 %:iin.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} seisoo {down} ajasta (käytettävyys {up}); mikään ei odota sitä.
+	Choose a warm-up	Valitse alkulämmittely
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welchin kuvaaja: ajojen keskiarvo jokaisena tallennettuna hetkenä, tasoitettuna liukuvalla keskiarvolla. Aseta alkulämmittely kohtaan, jossa käyrä tasaantuu; MSER-5:n katkaisukohta on vain lähtökohta.
+	Number inside	Määrä sisällä
+	Busy units	Varatut yksiköt
+	Leaving per interval	Poistuvat aikaväliä kohden
+	Entering per interval	Saapuvat aikaväliä kohden
+	The run recorded too few times to plot.	Ajo tallensi liian vähän hetkiä kuvaajaa varten.
+	Points each side	Pisteitä kummallakin puolella
+	1 to {max}	1–{max}
+	Welch's plot of {measure} at {block}	Welchin kuvaaja: {measure}, {block}
+	MSER-5 suggests {value}.	MSER-5 ehdottaa {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 ei ehdota tässä mitään: sarja saattaa yhä vakiintua ajon puolivälissä.
+	The warm-up now is {value}.	Alkulämmittely on nyt {value}.
+	Later times, which fewer runs reached, are left out.	Myöhemmät hetket, joihin harvemmat ajot ehtivät, jätetään pois.
+	New warm-up	Uusi alkulämmittely

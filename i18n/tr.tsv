@@ -1544,6 +1544,11 @@ connection	Flow	Akış
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	İki ucu 0'da tutulan bir çubuk, sıcaklığının karesiyle orantılı ısı üretir: çubuk boyunca 19 stok, çizgiler yöntemiyle (Soheili ve Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	İçeriden ısınan bir çubuk ne zaman kontrolden çıkar?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Çizgiler yöntemi bir ısı denklemini stoklara ve akışlara dönüştürür ve bir model sonlu sürede patlayabilir: orta nokta t = 0.0821'de 10.000'i geçer, yani çubuk yaklaşık 0.0822'de kontrolden çıkar; bu, yayımlanmış 0.0824 değerinin %0.3'ü içindedir.
+	Scenario	Senaryo
+	Scenario: {name}	Senaryo: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} açılırsa {name} içindeki kaydedilmemiş değişiklikler atılır. Önce kaydedilsin mi?
+@plural	{n} scenario to compare|{n} scenarios to compare	Karşılaştırılacak {n} senaryo|Karşılaştırılacak {n} senaryo
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Yalnızca açık senaryoyu içeren yeni bir dosya olarak kaydedildi, bu yüzden {scenario} senaryosuna geçilmedi.
 	Median time in system	Sistemdeki sürenin medyanı
 	Time in system, 90th percentile	Sistemdeki süre, 90. yüzdelik
 	Time in system, 95th percentile	Sistemdeki süre, 95. yüzdelik
@@ -1561,3 +1566,18 @@ connection	Flow	Akış
 	How often is one machine down, and how much work does that cost?	Bir makine ne sıklıkta duruyor ve bu ne kadar işe mal oluyor?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 saat çalışır, 4.5 saat durur: makine zamanın %95.2'sinde çalışır ve her 94.5 saatte bir arıza olur. Onarım süresini yarıya indirmek bunu %97.6'ya çıkarır.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} zamanın {down} kadarında duruyor (kullanılabilirlik {up}); onu bekleyen bir şey yok.
+	Choose a warm-up	Isınma seçin
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Welch grafiği: kaydedilen her anda çalıştırmaların ortalaması, hareketli ortalamayla düzleştirilmiş. Isınmayı eğrinin dengelendiği yere ayarlayın; MSER-5 kesimi yalnızca bir başlangıç noktasıdır.
+	Number inside	İçerideki sayı
+	Busy units	Meşgul birimler
+	Leaving per interval	Aralık başına çıkışlar
+	Entering per interval	Aralık başına girişler
+	The run recorded too few times to plot.	Çalıştırma grafik için çok az an kaydetti.
+	Points each side	Her yandaki nokta
+	1 to {max}	1 ile {max} arası
+	Welch's plot of {measure} at {block}	{block} için {measure} Welch grafiği
+	MSER-5 suggests {value}.	MSER-5 önerisi: {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 burada bir şey önermiyor: seri çalıştırmanın yarısında hâlâ oturuyor olabilir.
+	The warm-up now is {value}.	Isınma şimdi {value}.
+	Later times, which fewer runs reached, are left out.	Daha az çalıştırmanın ulaştığı sonraki anlar dışarıda bırakıldı.
+	New warm-up	Yeni ısınma

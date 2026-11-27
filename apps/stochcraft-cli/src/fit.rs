@@ -6,7 +6,7 @@ use std::io::Read as _;
 use std::path::Path;
 
 use serde_json::{Value, json};
-use stochcraft_engine::Engine;
+use stochcraft_engine::{Engine, table};
 
 use crate::output::number;
 use crate::{Failure, Format};
@@ -19,88 +19,19 @@ pub struct Column {
     pub empty: usize,
 }
 
-/// One record of delimited text as cells: double quotes around a cell are removed, and `""`
-/// inside them is a quote.
-fn cells(line: &str, delimiter: char) -> Vec<String> {
-    let mut out = Vec::new();
-    let mut cell = String::new();
-    let mut quoted = false;
-    let mut chars = line.chars().peekable();
-    while let Some(c) = chars.next() {
-        match c {
-            '"' if quoted && chars.peek() == Some(&'"') => {
-                cell.push('"');
-                chars.next();
-            }
-            '"' => quoted = !quoted,
-            c if c == delimiter && !quoted => out.push(std::mem::take(&mut cell)),
-            c => cell.push(c),
-        }
-    }
-    out.push(cell);
-    out.into_iter().map(|c| c.trim().to_owned()).collect()
-}
-
-fn value(cell: &str) -> Option<f64> {
-    cell.parse::<f64>().ok().filter(|v| v.is_finite())
-}
-
-/// A cell that reads as a number, finite or not: `inf` and `NaN` are data to refuse, not a
-/// header.
-fn numeric(cell: &str) -> bool {
-    cell.parse::<f64>().is_ok()
-}
-
-/// The records of delimited text with the line each starts on, blank ones left out. A line
-/// break inside double quotes belongs to the cell, so a quoted cell may run over several lines.
-fn records(text: &str) -> Result<Vec<(usize, &str)>, Failure> {
-    let mut out = Vec::new();
-    let (mut start, mut line, mut first_line, mut quoted) = (0, 1, 1, false);
-    for (i, c) in text.char_indices() {
-        match c {
-            '"' => quoted = !quoted,
-            '\n' => {
-                if !quoted {
-                    out.push((first_line, &text[start..i]));
-                    start = i + 1;
-                    first_line = line + 1;
-                }
-                line += 1;
-            }
-            _ => {}
-        }
-    }
-    if quoted {
-        return Err(Failure(format!(
-            "line {first_line}: a double quote is not closed"
-        )));
-    }
-    out.push((first_line, &text[start..]));
-    Ok(out
-        .into_iter()
-        .map(|(l, r)| (l, r.trim_end_matches('\r')))
-        .filter(|(_, r)| !r.trim().is_empty())
-        .collect())
-}
-
 /// The column `column` (a header, or a number from 1) of `text`; with none given, the only
-/// column. The first row is a header when its cell in the column is not a number. The cells are
-/// separated by tabs if the first row has one, by semicolons if it has those and no commas, and
-/// otherwise by commas.
+/// column. The first row is a header when its cell in the column is not a number. The text is
+/// read as the engine reads every table ([`stochcraft_engine::table`]): quoted cells, a comma,
+/// semicolon or tab between cells, and a decimal comma with semicolons.
 pub fn read_column(text: &str, column: Option<&str>) -> Result<Column, Failure> {
-    let text = text.strip_prefix('\u{feff}').unwrap_or(text);
-    let rows = records(text)?;
-    let Some(&(_, first)) = rows.first() else {
+    let sheet = table::read(text).map_err(Failure)?;
+    let Some(first) = sheet.records.first() else {
         return Err(Failure("no values: the input is empty".into()));
     };
-    let delimiter = if first.contains('\t') {
-        '\t'
-    } else if first.contains(';') && !first.contains(',') {
-        ';'
-    } else {
-        ','
-    };
-    let head = cells(first, delimiter);
+    // A cell that reads as a number, finite or not: `inf` and `NaN` are data to refuse, not a
+    // header.
+    let numeric = |cell: &str| sheet.number(cell).is_some();
+    let head = &first.cells;
     let (index, label) = match column {
         None if head.len() == 1 => (0, String::new()),
         None => {
@@ -131,14 +62,12 @@ pub fn read_column(text: &str, column: Option<&str>) -> Result<Column, Failure> 
     };
     let mut values = Vec::new();
     let mut empty = 0;
-    for &(line, row) in rows.iter().skip(usize::from(has_header)) {
-        let cs = cells(row, delimiter);
-        match cs.get(index).map(String::as_str) {
+    for r in sheet.records.iter().skip(usize::from(has_header)) {
+        match r.cells.get(index).map(String::as_str) {
             None | Some("") => empty += 1,
-            Some(c) => values
-                .push(value(c).ok_or_else(|| {
-                    Failure(format!("line {line}: `{c}` is not a finite number"))
-                })?),
+            Some(c) => values.push(sheet.number(c).filter(|v| v.is_finite()).ok_or_else(|| {
+                Failure(format!("line {}: `{c}` is not a finite number", r.line))
+            })?),
         }
     }
     Ok(Column {
@@ -343,6 +272,9 @@ mod tests {
         assert_eq!((c.values.len(), c.label.as_str()), (2, "column time"));
         let c = read("a;b\n1;2\n3;4\n", Some("b")).unwrap_or_else(|m| panic!("{m}"));
         assert_eq!(c.values, [2.0, 4.0]);
+        // With semicolons, a decimal comma.
+        let c = read("a;b\n1,5;2\n3,25;4\n", Some("a")).unwrap_or_else(|m| panic!("{m}"));
+        assert_eq!(c.values, [1.5, 3.25]);
         let c = read("a\tb\n1\t2\n", Some("a")).unwrap_or_else(|m| panic!("{m}"));
         assert_eq!(c.values, [1.0]);
         assert!(read("1\nx\n", None).is_err_and(|m| m.contains("line 2")));

@@ -1544,6 +1544,11 @@ connection	Flow	ஓட்டம்
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	இரு முனைகளிலும் 0-இல் வைக்கப்பட்ட ஒரு கம்பி தன் வெப்பநிலையின் வர்க்கத்துக்கு விகிதமாக வெப்பத்தை உண்டாக்குகிறது: கம்பியின் நீளத்தில் 19 இருப்புகள், கோடுகளின் முறையில் (Soheili மற்றும் Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	உள்ளிருந்து சூடாக்கப்படும் கம்பி எப்போது கட்டுப்பாட்டை மீறுகிறது?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	கோடுகளின் முறை வெப்பச் சமன்பாட்டை இருப்புகளாகவும் ஓட்டங்களாகவும் மாற்றுகிறது, ஒரு மாதிரி முடிவுள்ள நேரத்தில் வெடிக்கலாம்: நடுப்பகுதி t = 0.0821-இல் 10,000-ஐக் கடக்கிறது, எனவே கம்பி சுமார் 0.0822-இல் கட்டுப்பாட்டை மீறுகிறது, வெளியிடப்பட்ட 0.0824-இன் 0.3%-க்குள்.
+	Scenario	சூழ்நிலை
+	Scenario: {name}	சூழ்நிலை: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ஐத் திறந்தால் {name} இல் சேமிக்கப்படாத மாற்றங்கள் நீக்கப்படும். முதலில் சேமிக்கவா?
+@plural	{n} scenario to compare|{n} scenarios to compare	ஒப்பிட {n} சூழ்நிலை|ஒப்பிட {n} சூழ்நிலைகள்
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	திறந்துள்ள சூழ்நிலை மட்டும் உள்ள புதிய கோப்பாக இது சேமிக்கப்பட்டது, எனவே {scenario} க்கு மாற்றப்படவில்லை.
 	Median time in system	அமைப்பில் கழித்த நேரத்தின் இடைநிலை
 	Time in system, 90th percentile	அமைப்பில் கழித்த நேரம், 90-ஆம் சதமானம்
 	Time in system, 95th percentile	அமைப்பில் கழித்த நேரம், 95-ஆம் சதமானம்
@@ -1561,3 +1566,18 @@ connection	Flow	ஓட்டம்
 	How often is one machine down, and how much work does that cost?	ஒரு இயந்திரம் எவ்வளவு அடிக்கடி நின்றுவிடுகிறது, அதனால் எவ்வளவு வேலை இழப்பு?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	90 மணிநேரம் இயக்கம், 4.5 நிறுத்தம்: இயந்திரம் 95.2% நேரம் வேலை செய்கிறது, ஒவ்வொரு 94.5 மணிநேரத்திற்கும் ஒரு பழுது ஏற்படுகிறது. பழுதுபார்க்கும் நேரத்தை பாதியாக்கினால் அது 97.6% ஆகிறது.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} {down} நேரம் நின்றிருக்கிறது (தயார்நிலை {up}); அதற்காக எதுவும் காத்திருக்கவில்லை.
+	Choose a warm-up	தொடக்கச் சீராக்க நேரத்தைத் தேர்ந்தெடு
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	வெல்ச் வரைபடம்: பதிவான ஒவ்வொரு நேரத்திலும் இயக்கங்களின் சராசரி, நகரும் சராசரியால் மென்மையாக்கப்பட்டது. வளைவு சமமாகும் இடத்தில் தொடக்கச் சீராக்க நேரத்தை அமைக்கவும்; MSER-5 இன் வெட்டு ஒரு தொடக்கப் புள்ளி மட்டுமே.
+	Number inside	உள்ளே உள்ள எண்ணிக்கை
+	Busy units	பணியிலுள்ள அலகுகள்
+	Leaving per interval	இடைவெளிக்கு வெளியேறுபவை
+	Entering per interval	இடைவெளிக்கு நுழைபவை
+	The run recorded too few times to plot.	வரைபடத்துக்கு இயக்கம் மிகக் குறைவான நேரங்களைப் பதிவுசெய்தது.
+	Points each side	ஒவ்வொரு பக்கமும் உள்ள புள்ளிகள்
+	1 to {max}	1 முதல் {max} வரை
+	Welch's plot of {measure} at {block}	{block} இல் {measure} இன் வெல்ச் வரைபடம்
+	MSER-5 suggests {value}.	MSER-5 பரிந்துரைப்பது {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 இங்கே எதையும் பரிந்துரைக்கவில்லை: இயக்கத்தின் பாதியிலும் தொடர் இன்னும் நிலைபெறலாம்.
+	The warm-up now is {value}.	இப்போது தொடக்கச் சீராக்க நேரம் {value}.
+	Later times, which fewer runs reached, are left out.	குறைவான இயக்கங்கள் அடைந்த பிந்தைய நேரங்கள் விடப்பட்டுள்ளன.
+	New warm-up	புதிய தொடக்கச் சீராக்க நேரம்

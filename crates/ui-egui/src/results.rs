@@ -11,6 +11,8 @@ use serde_json::Value;
 
 use crate::i18n::{t, tc, tf, tnf};
 use crate::theme;
+pub(crate) use stochcraft_engine::round::round_sig;
+use stochcraft_engine::round::{self, magnitude, pow10, round_to};
 
 /// A number for a table: about five significant digits, without a run of trailing zeros.
 pub fn number(v: f64) -> String {
@@ -937,56 +939,17 @@ fn mean_and_half_width(m: &Value, scale: f64) -> (String, String) {
 /// A half-width of zero (every run gave the same value) or one that is not a number leaves the
 /// mean as [`grouped`] writes it.
 pub fn rounded(mean: f64, half_width: f64) -> (String, String) {
-    if !(mean.is_finite() && half_width.is_finite() && half_width > 0.0) {
-        return (grouped(mean), grouped(half_width));
+    // The places come from the one rule every table uses (`stochcraft_stats::round`); only the
+    // writing, in the user's region, is the window's.
+    match round::places(half_width).filter(|_| mean.is_finite()) {
+        Some(places) => (
+            fixed(round_to(mean, places), places),
+            fixed(round_to(half_width, places), places),
+        ),
+        None => (grouped(mean), grouped(half_width)),
     }
-    // The decimal place of the half-width's first significant figure; one place further where,
-    // once rounded there, it reads as a 1 (0.96 → 1.0, 0.14 → 0.14, 12.3 → 12).
-    let first = |v: f64| -magnitude(v);
-    let mut places = first(half_width);
-    let hw = round_to(half_width, places);
-    if (hw / pow10(magnitude(hw))).round() as i64 == 1 {
-        places = first(hw) + 1;
-    }
-    (
-        fixed(round_to(mean, places), places),
-        fixed(round_to(half_width, places), places),
-    )
 }
 
-/// The power of ten of `v`'s first significant figure (`v` finite and not zero), by repeated
-/// scaling rather than `log10`, as in [`number`].
-pub(crate) fn magnitude(v: f64) -> i32 {
-    let mut m = 0i32;
-    let mut a = v.abs();
-    while a >= 10.0 && m < 400 {
-        a /= 10.0;
-        m += 1;
-    }
-    while a < 1.0 && m > -400 {
-        a *= 10.0;
-        m -= 1;
-    }
-    m
-}
-
-/// Ten to the power `e`, by repeated multiplication (`powi` is disallowed: it can differ between
-/// platforms); exact for the few places a table rounds to.
-pub(crate) fn pow10(e: i32) -> f64 {
-    let f = (0..e.unsigned_abs().min(400)).fold(1.0, |f, _| f * 10.0);
-    if e < 0 { 1.0 / f } else { f }
-}
-
-/// `v` to `figures` significant figures (60.0014 → 60.0 to three), for a number with no interval
-/// to round it by.
-pub(crate) fn round_sig(v: f64, figures: i32) -> f64 {
-    if !v.is_finite() || v == 0.0 {
-        return v;
-    }
-    round_to(v, figures - 1 - magnitude(v))
-}
-
-/// `v` rounded to `places` decimal places (to tens, hundreds… where `places` is negative).
 /// An upper bound as a person would read it: rounded up, never down, to one decimal at 1 or
 /// more and to two significant figures below (25.86 → 25.9, 0.02995 → 0.03), so a bound above
 /// zero never shows as 0.
@@ -998,11 +961,6 @@ fn up_to(v: f64) -> f64 {
     let f = pow10(places);
     // Less a hair, so a product just above a whole number (259.000…01) does not round up past it.
     (v * f - 1e-9).ceil() / f
-}
-
-fn round_to(v: f64, places: i32) -> f64 {
-    let f = pow10(places);
-    (v * f).round() / f
 }
 
 /// `v` with `places` decimals (none where `places` is negative) in the user's region, grouped
@@ -1515,6 +1473,90 @@ mod tests {
         // No "-0", and a mean every run agreed on is left as it is.
         assert_eq!(r(-0.004, 0.2), "0.0 ± 0.2");
         assert_eq!(r(12.5, 0.0), "12.5 ± 0");
+    }
+
+    /// The rule moved to `stochcraft_stats::round` (one rule for the window, the command line
+    /// and the engine's answers). This is the window's code as it was before the move, kept here
+    /// to show that every mean and half-width is still written byte for byte as before.
+    #[test]
+    fn rounding_reads_the_same_as_before_the_rule_moved() {
+        fn magnitude(v: f64) -> i32 {
+            let mut m = 0i32;
+            let mut a = v.abs();
+            while a >= 10.0 && m < 400 {
+                a /= 10.0;
+                m += 1;
+            }
+            while a < 1.0 && m > -400 {
+                a *= 10.0;
+                m -= 1;
+            }
+            m
+        }
+        fn pow10(e: i32) -> f64 {
+            let f = (0..e.unsigned_abs().min(400)).fold(1.0, |f, _| f * 10.0);
+            if e < 0 { 1.0 / f } else { f }
+        }
+        fn round_to(v: f64, places: i32) -> f64 {
+            let f = pow10(places);
+            (v * f).round() / f
+        }
+        fn before(mean: f64, half_width: f64) -> (String, String) {
+            if !(mean.is_finite() && half_width.is_finite() && half_width > 0.0) {
+                return (super::grouped(mean), super::grouped(half_width));
+            }
+            let first = |v: f64| -magnitude(v);
+            let mut places = first(half_width);
+            let hw = round_to(half_width, places);
+            if (hw / pow10(magnitude(hw))).round() as i64 == 1 {
+                places = first(hw) + 1;
+            }
+            (
+                super::fixed(round_to(mean, places), places),
+                super::fixed(round_to(half_width, places), places),
+            )
+        }
+        let means = [
+            0.0, -0.004, 0.3042, 1.0, 2.04, 5.03, 7.37, 9.95, 12.5, 38.4, 80.696, 999.5, 1234.0,
+            14990.0, -1.6, -250.25, 1.0e-6, 3.0e7,
+        ];
+        let widths = [
+            0.0,
+            -1.0,
+            f64::INFINITY,
+            f64::NAN,
+            1.0e-7,
+            0.0095,
+            0.0813,
+            0.095,
+            0.14,
+            0.15,
+            0.61,
+            0.95,
+            0.96,
+            0.99,
+            1.0,
+            1.4999,
+            2.8373,
+            9.5,
+            12.3,
+            56.0,
+            99.9,
+            312.0,
+            1.0e5,
+        ];
+        let mut checked = 0;
+        for &m in &means {
+            for &h in &widths {
+                // Also the values a table multiplies a share by to show it as a percentage.
+                for (m, h) in [(m, h), (m * 100.0, h * 100.0), (m / 3.0, h / 7.0)] {
+                    assert_eq!(super::rounded(m, h), before(m, h), "{m} ± {h}");
+                    checked += 1;
+                }
+            }
+        }
+        assert_eq!(checked, means.len() * widths.len() * 3);
+        assert_eq!(super::rounded(f64::NAN, 1.0), before(f64::NAN, 1.0));
     }
 
     #[test]

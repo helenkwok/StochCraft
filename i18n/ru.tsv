@@ -1544,6 +1544,11 @@ connection	Flow	Поток
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	Стержень, удерживаемый при 0 на обоих концах, выделяет тепло пропорционально квадрату своей температуры: 19 запасов вдоль стержня, методом прямых (Soheili и Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Когда стержень, нагреваемый изнутри, выходит из-под контроля?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Метод прямых превращает уравнение теплопроводности в запасы и потоки, а модель может взорваться за конечное время: середина проходит 10 000 при t = 0.0821, так что стержень выходит из-под контроля около 0.0822, в пределах 0.3% от опубликованных 0.0824.
+	Scenario	Сценарий
+	Scenario: {name}	Сценарий: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	При открытии {scenario} несохранённые изменения в {name} будут потеряны. Сначала сохранить их?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} сценарий для сравнения|{n} сценария для сравнения|{n} сценариев для сравнения
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	Сохранено как новый файл, в котором есть только открытый сценарий, поэтому переход к {scenario} не выполнен.
 	Median time in system	Медиана времени в системе
 	Time in system, 90th percentile	Время в системе, 90-й процентиль
 	Time in system, 95th percentile	Время в системе, 95-й процентиль
@@ -1561,3 +1566,18 @@ connection	Flow	Поток
 	How often is one machine down, and how much work does that cost?	Как часто простаивает один станок и сколько работы это стоит?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Работает 90 часов, простаивает 4.5: станок работает 95.2% времени, а поломка случается каждые 94.5 часа. Если ремонт вдвое короче, показатель растёт до 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} простаивает {down} времени (готовность {up}); ничто его не ждёт.
+	Choose a warm-up	Выбрать разогрев
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	График Уэлча: среднее по запускам в каждый записанный момент, сглаженное скользящим средним. Задайте разогрев там, где кривая выравнивается; отсечение MSER-5 — лишь отправная точка.
+	Number inside	Число внутри
+	Busy units	Занятые единицы
+	Leaving per interval	Выходы за интервал
+	Entering per interval	Входы за интервал
+	The run recorded too few times to plot.	Запуск записал слишком мало моментов для графика.
+	Points each side	Точек с каждой стороны
+	1 to {max}	От 1 до {max}
+	Welch's plot of {measure} at {block}	График Уэлча: {measure} в {block}
+	MSER-5 suggests {value}.	MSER-5 предлагает {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 здесь ничего не предлагает: ряд, возможно, ещё устанавливается к середине запуска.
+	The warm-up now is {value}.	Сейчас разогрев — {value}.
+	Later times, which fewer runs reached, are left out.	Более поздние моменты, до которых дошло меньше запусков, опущены.
+	New warm-up	Новый разогрев

@@ -412,6 +412,31 @@ pub fn scenario_list(data: &Element) -> Vec<(String, Option<String>)> {
         .collect()
 }
 
+/// An input scenario as a file lists it.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ScenarioInfo {
+    pub id: String,
+    pub name: Option<String>,
+    pub description: Option<String>,
+    /// The scenario it inherits its values from (BPSim `inherits`), if any.
+    pub inherits: Option<String>,
+}
+
+/// The input scenarios of [`scenario_list`] with their descriptions and what each inherits from.
+pub fn scenario_details(data: &Element) -> Vec<ScenarioInfo> {
+    data.children_named(&NSS, "Scenario")
+        .filter(|s| s.attr("result").is_none())
+        .filter_map(|s| {
+            Some(ScenarioInfo {
+                id: s.attr("id")?,
+                name: s.attr("name"),
+                description: s.attr("description"),
+                inherits: s.attr("inherits"),
+            })
+        })
+        .collect()
+}
+
 /// Reads scenario `id` (or the first input scenario), resolving `inherits`.
 pub fn read_scenario(data: &Element, id: Option<&str>, notes: &mut Vec<Note>) -> Option<Scenario> {
     let scenarios: Vec<&Element> = data.children_named(&NSS, "Scenario").collect();

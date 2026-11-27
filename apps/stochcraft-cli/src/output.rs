@@ -172,7 +172,7 @@ fn sequential_lines(results: &Value, out: &mut String) {
 }
 
 /// `rows` as aligned columns, two spaces apart: text left where `left` says so, numbers right.
-fn aligned<R: AsRef<[String]>>(rows: &[R], left: &[bool], out: &mut String) {
+pub(crate) fn aligned<R: AsRef<[String]>>(rows: &[R], left: &[bool], out: &mut String) {
     let cols = rows.iter().map(|r| r.as_ref().len()).max().unwrap_or(0);
     let widths: Vec<usize> = (0..cols)
         .map(|c| {

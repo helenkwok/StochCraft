@@ -1544,6 +1544,11 @@ connection	Flow	Flux
 	A rod held at 0 at both ends makes heat in proportion to the square of its temperature: 19 stocks along it, by the method of lines (Soheili and Stockie, Applied Numerical Mathematics, 2008).	O bară ținută la 0 la ambele capete produce căldură proporțional cu pătratul temperaturii sale: 19 stocuri de-a lungul ei, prin metoda liniilor (Soheili și Stockie, Applied Numerical Mathematics, 2008).
 	When does a rod heated from within run away?	Când scapă de sub control o bară încălzită din interior?
 	The method of lines turns a heat equation into stocks and flows, and a model can blow up in finite time: the middle passes 10,000 at t = 0.0821, so the rod runs away at about 0.0822, within 0.3% of the published 0.0824.	Metoda liniilor transformă o ecuație a căldurii în stocuri și fluxuri, iar un model poate exploda într-un timp finit: mijlocul depășește 10.000 la t = 0.0821, deci bara scapă de sub control pe la 0.0822, la mai puțin de 0.3% de valoarea publicată de 0.0824.
+	Scenario	Scenariu
+	Scenario: {name}	Scenariu: {name}
+	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Deschiderea {scenario} renunță la modificările nesalvate din {name}. Le salvați mai întâi?
+@plural	{n} scenario to compare|{n} scenarios to compare	{n} scenariu de comparat|{n} scenarii de comparat|{n} de scenarii de comparat
+	It was saved as a new file that holds only the open scenario, so the switch to {scenario} was not made.	A fost salvat ca fișier nou, care conține doar scenariul deschis, așa că trecerea la {scenario} nu s-a făcut.
 	Median time in system	Mediana timpului în sistem
 	Time in system, 90th percentile	Timp în sistem, percentila 90
 	Time in system, 95th percentile	Timp în sistem, percentila 95
@@ -1561,3 +1566,18 @@ connection	Flow	Flux
 	How often is one machine down, and how much work does that cost?	Cât de des stă o mașină și cât de multă muncă costă asta?
 	Up 90 hours, down 4.5: the machine works 95.2% of the time and a failure strikes every 94.5 hours. Halving the repair time lifts that to 97.6%.	Funcționează 90 de ore, stă 4.5: mașina lucrează 95.2% din timp, iar o defecțiune apare la fiecare 94.5 ore. Reducerea la jumătate a timpului de reparație urcă valoarea la 97.6%.
 	{block} is down {down} of the time (available {up}); nothing waits for it.	{block} stă {down} din timp (disponibilitate {up}); nimic nu o așteaptă.
+	Choose a warm-up	Alegeți o perioadă de încălzire
+	Welch's plot: the mean across runs at each recorded time, smoothed by a moving average. Set the warm-up where the curve levels off; MSER-5's cut is only a starting point.	Graficul Welch: media rulărilor la fiecare moment înregistrat, netezită cu o medie mobilă. Setați perioada de încălzire acolo unde curba se nivelează; tăietura MSER-5 este doar un punct de plecare.
+	Number inside	Număr în interior
+	Busy units	Unități ocupate
+	Leaving per interval	Ieșiri pe interval
+	Entering per interval	Intrări pe interval
+	The run recorded too few times to plot.	Rularea a înregistrat prea puține momente pentru un grafic.
+	Points each side	Puncte de fiecare parte
+	1 to {max}	De la 1 la {max}
+	Welch's plot of {measure} at {block}	Graficul Welch pentru {measure} la {block}
+	MSER-5 suggests {value}.	MSER-5 sugerează {value}.
+	MSER-5 suggests nothing here: the series may still be settling halfway through the run.	MSER-5 nu sugerează nimic aici: seria poate încă se stabilizează la jumătatea rulării.
+	The warm-up now is {value}.	Perioada de încălzire este acum {value}.
+	Later times, which fewer runs reached, are left out.	Momentele ulterioare, atinse de mai puține rulări, sunt omise.
+	New warm-up	Perioadă de încălzire nouă
