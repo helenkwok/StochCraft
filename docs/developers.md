@@ -1288,7 +1288,8 @@ Proved, for every input the harness allows:
 
 - Random streams (`crates/random/src/lib.rs`): seeding never gives the all-zero state and a
   xoshiro256** step keeps a non-zero state non-zero; `uniform` is in [0, 1) and `uniform_open0`
-  in (0, 1] from any state.
+  in (0, 1] from any state; a draw over any eight bytes of a file is strictly inside (0, 1), and
+  so is one minus it.
 - Distribution parameters (`crates/random/src/dist.rs`): when `Dist::check` accepts a Uniform,
   Triangular, Truncated normal, Exponential, Poisson, Normal, Log-normal, Erlang, Gamma, Beta,
   Weibull or Binomial, its parameters are finite and in the documented ranges, for any `f64`

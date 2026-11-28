@@ -450,6 +450,7 @@ fn empty() -> Report {
         measured_to: 0.0,
         after_warmup: true,
         recording: None,
+        random_bytes: 0,
     }
 }
 

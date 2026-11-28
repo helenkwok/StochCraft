@@ -1,0 +1,10 @@
+[package]
+name = "stochcraft-random-before"
+description = "stochcraft-random's generator as it was at main d4b0441a, for the rng benchmark."
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[dependencies]
+libm = "0.2"

@@ -723,8 +723,9 @@ unit	yr	J.
 	Could be chance	Könnte Zufall sein
 	No change	Keine Änderung
 	Too few runs to tell	Zu wenige Läufe für ein Urteil
+	Not judged	Nicht beurteilt
 	{value} points	{value} Prozentpunkte
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Die Referenz verwendete Startwert {seed_a} und {n_a} Läufe, dieser Lauf Startwert {seed_b} und {n_b} Läufe, daher werden sie als unabhängige Läufe verglichen und die Intervalle sind breiter. Derselbe Startwert und dieselbe Anzahl Läufe ergeben einen gepaarten Vergleich.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Die Referenz verwendete Startwert {seed_a} und dieser Lauf Startwert {seed_b}, daher werden sie als unabhängige Läufe verglichen und die Intervalle sind breiter. Derselbe Startwert ergibt einen gepaarten Vergleich.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Die Referenz hat die Zeit in {a} gemessen und dieser Lauf in {b}, daher werden Zeiten nicht verglichen.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) fiel von {before} auf {after}, um {change}: mehr, als der Zufall erklären würde.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) stieg von {before} auf {after}, um {change}: mehr, als der Zufall erklären würde.
@@ -733,6 +734,7 @@ unit	yr	J.
 	Baseline and now, key measures	Referenz und jetzt, wichtigste Kennzahlen
 	Difference (paired, 95%)	Differenz (gepaart, 95%)
 	Difference (95%)	Differenz (95%)
+	Difference of means	Differenz der Mittelwerte
 	Measure	Kennzahl
 	Baseline	Referenz
 	Now	Jetzt
@@ -962,7 +964,7 @@ unit	yr	J.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} Problem: {blocks}|{n} Probleme: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} Lauf verwenden|{n} Läufe verwenden
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} Lauf verwenden (etwa ± 5%)|{n} Läufe verwenden (etwa ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Beide verwendeten Startwert {seed} und denselben {n} Lauf, sodass jeder Lauf dieselben Zufallszahlen erhält wie sein Gegenstück: Die Unterschiede kommen von der Änderung, nicht von zufälligen Ziehungen.|Beide verwendeten Startwert {seed} und dieselben {n} Läufe, sodass jeder Lauf dieselben Zufallszahlen erhält wie sein Gegenstück: Die Unterschiede kommen von der Änderung, nicht von zufälligen Ziehungen.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Beide verwendeten Startwert {seed}, sodass jeder Lauf dieselben Zufallszahlen erhält wie sein Gegenstück und die Läufe paarweise verglichen werden: Ein großer Teil des zufälligen Unterschieds zwischen ihnen hebt sich auf, und das Intervall berücksichtigt den Rest.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} weitere wichtige Kennzahl hat sich nicht stärker bewegt, als der Zufall es könnte.|{n} weitere wichtige Kennzahlen haben sich nicht stärker bewegt, als der Zufall es könnte.
 @plural	and {n} more change|and {n} more changes	und {n} weitere Änderung|und {n} weitere Änderungen
 	Conveyor	Förderband
@@ -1531,6 +1533,12 @@ connection	Flow	Verbindung
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Zehn Maschinen müssen laufen, vier Reservemaschinen stehen bereit, und drei Instandhalter reparieren die ausgefallenen (Crane und Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Wie viele Reservemaschinen und Instandhalter halten zehn Maschinen am Laufen?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Bereitstehende Reservemaschinen können nicht ausfallen: Im Mittel sind 3.47 Maschinen ausgefallen und 9.29 laufen. Ein vierter Instandhalter bringt etwa so viel wie vier Reservemaschinen mehr.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Beide lasen ihre Zufallszahlen aus derselben Datei an derselben Stelle, sodass jeder Lauf von denselben Zahlen ausgeht wie sein Gegenstück und die Läufe paarweise verglichen werden. Jede Ziehung nimmt die nächsten Zahlen in der Datei, daher kann eine Änderung verschieben, welches Ereignis welche Zahl liest, und es hebt sich womöglich weniger vom zufälligen Unterschied auf; das Intervall berücksichtigt das.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Die Referenz und dieser Lauf haben ihre Zufallszahlen von verschiedenen Stellen genommen (ein Startwert, eine andere Datei oder Teile einer Datei, die sich nicht überlappen), daher gelten sie als unabhängige Läufe und die Intervalle sind breiter.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Die Referenz und dieser Lauf lasen sich überlappende Teile derselben Datei mit Zufallszahlen, aber nicht Lauf für Lauf; sie sind daher weder unabhängig noch gepaart, und kein Intervall gilt: Verglichen werden nur die Mittelwerte. Lesen Sie beide von derselben Stelle in der Datei oder aus Teilen, die sich nicht überlappen.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Die Referenz hat {n_a} Läufe und dieser Lauf {n_b}, daher werden die ersten {n} von jedem paarweise verglichen; die Referenz und Jetzt sind ihre Mittelwerte über diese Läufe.
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Zufallszahlen aus der Datei {file} (SHA-256 {sha}…), {bytes} Bytes für jeden Lauf ab Byte {offset}
+	Seed {seed} taken from {source}	Startwert {seed}, übernommen aus {source}
 	Scenario	Szenario
 	Scenario: {name}	Szenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Beim Öffnen von {scenario} gehen die ungespeicherten Änderungen an {name} verloren. Zuerst speichern?

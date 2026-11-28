@@ -48,6 +48,19 @@ impl Headless {
     /// The command's parameters with its file's path checked against the roots (and resolved,
     /// when confined): what `file.open` reads, and what `file.save` writes, given or not.
     fn confine(&self, command: &str, mut params: Value) -> Result<Value, String> {
+        // A run that reads its random numbers from a file reads that file: it must lie in the
+        // roots too.
+        if matches!(command, "run" | "run.start") && self.roots.is_confined() {
+            if let Some(r) = params
+                .get_mut("random")
+                .filter(|r| r["mode"] == "byte_file")
+                && let Some(Value::String(file)) = r.get("file").cloned()
+            {
+                let resolved = self.roots.check(Path::new(&file), Access::Read)?;
+                r["file"] = Value::String(resolved.to_string_lossy().into_owned());
+            }
+            return Ok(params);
+        }
         let access = match command {
             "file.open" => Access::Read,
             "file.save" => Access::Write,

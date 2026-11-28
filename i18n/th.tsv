@@ -723,8 +723,9 @@ unit	yr	ปี
 	Could be chance	อาจเป็นความบังเอิญ
 	No change	ไม่เปลี่ยนแปลง
 	Too few runs to tell	จำนวนการรันน้อยเกินไปที่จะบอกได้
+	Not judged	ไม่ได้ตัดสิน
 	{value} points	{value} จุดร้อยละ
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	เส้นฐานใช้เมล็ดสุ่ม {seed_a} และรัน {n_a} รอบ การรันนี้ใช้เมล็ดสุ่ม {seed_b} และรัน {n_b} รอบ จึงเปรียบเทียบแบบการรันที่เป็นอิสระต่อกันและช่วงจะกว้างขึ้น การใช้เมล็ดสุ่มและจำนวนรอบเดียวกันจะให้การเปรียบเทียบแบบจับคู่
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	เส้นฐานใช้เมล็ดสุ่ม {seed_a} และการรันนี้ใช้เมล็ดสุ่ม {seed_b} จึงเปรียบเทียบแบบการรันที่เป็นอิสระต่อกันและช่วงจะกว้างขึ้น การใช้เมล็ดสุ่มเดียวกันจะให้การเปรียบเทียบแบบจับคู่
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	เส้นฐานวัดเวลาเป็น {a} ส่วนการรันนี้วัดเป็น {b} จึงไม่เปรียบเทียบเวลา
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) ลดลงจาก {before} เป็น {after} ต่างกัน {change}: มากกว่าที่ความบังเอิญจะอธิบายได้
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) เพิ่มขึ้นจาก {before} เป็น {after} ต่างกัน {change}: มากกว่าที่ความบังเอิญจะอธิบายได้
@@ -733,6 +734,7 @@ unit	yr	ปี
 	Baseline and now, key measures	เส้นฐานและปัจจุบัน ตัวชี้วัดหลัก
 	Difference (paired, 95%)	ผลต่าง (จับคู่, 95%)
 	Difference (95%)	ผลต่าง (95%)
+	Difference of means	ผลต่างของค่าเฉลี่ย
 	Measure	ตัวชี้วัด
 	Baseline	เส้นฐาน
 	Now	ปัจจุบัน
@@ -962,7 +964,7 @@ unit	yr	ปี
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	ปัญหา {n} รายการ: {blocks}
 @plural	Use {n} run|Use {n} runs	ใช้การรัน {n} รอบ
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	ใช้การรัน {n} รอบ (ประมาณ ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ทั้งสองใช้เมล็ดสุ่ม {seed} และการรัน {n} รอบชุดเดียวกัน แต่ละการรันจึงได้ตัวเลขสุ่มชุดเดียวกับคู่ของมัน: ความแตกต่างมาจากการเปลี่ยนแปลง ไม่ใช่จากการสุ่มโดยบังเอิญ
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	ทั้งสองใช้เมล็ดสุ่ม {seed} แต่ละการรันจึงได้ตัวเลขสุ่มชุดเดียวกับคู่ของมัน และเปรียบเทียบการรันแบบจับคู่: ความแตกต่างจากความบังเอิญระหว่างทั้งสองส่วนใหญ่หักล้างกันไป และช่วงจะคำนึงถึงส่วนที่เหลือ
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ตัวชี้วัดหลักอื่นอีก {n} ตัวเปลี่ยนไปไม่เกินที่ความบังเอิญจะทำได้
 @plural	and {n} more change|and {n} more changes	และการเปลี่ยนแปลงอื่นอีก {n} รายการ
 	Conveyor	สายพานลำเลียง
@@ -1531,6 +1533,12 @@ connection	Flow	โฟลว์
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	เครื่องจักรสิบเครื่องต้องทำงาน เครื่องจักรสำรองสี่เครื่องรอพร้อมใช้ และช่างซ่อมสามคนซ่อมเครื่องที่ขัดข้อง (Crane และ Iglehart, Winter Simulation Conference, 1973)
 	How many spares and repairmen keep ten machines running?	ต้องมีเครื่องจักรสำรองและช่างซ่อมเท่าใด จึงจะให้เครื่องจักรสิบเครื่องทำงานต่อไปได้?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	เครื่องจักรสำรองที่รออยู่ขัดข้องไม่ได้: โดยเฉลี่ยเครื่องจักรเสีย 3.47 เครื่องและทำงาน 9.29 เครื่อง ช่างซ่อมคนที่สี่ช่วยได้พอ ๆ กับเครื่องจักรสำรองอีกสี่เครื่อง
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	ทั้งสองอ่านตัวเลขสุ่มจากไฟล์เดียวกันที่ตำแหน่งเดียวกัน แต่ละการรันจึงเริ่มจากตัวเลขชุดเดียวกับคู่ของมัน และเปรียบเทียบการรันแบบจับคู่ การสุ่มแต่ละครั้งจะหยิบตัวเลขถัดไปในไฟล์ การเปลี่ยนแปลงจึงอาจทำให้เหตุการณ์ใดอ่านตัวเลขใดเลื่อนไป และความแตกต่างจากความบังเอิญอาจหักล้างกันได้น้อยลง ช่วงจะคำนึงถึงเรื่องนี้ด้วย
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	เส้นฐานและการรันนี้นำตัวเลขสุ่มมาจากคนละที่ (เมล็ดสุ่ม ไฟล์อื่น หรือส่วนของไฟล์เดียวกันที่ไม่ทับซ้อนกัน) จึงถือเป็นการรันที่เป็นอิสระต่อกันและช่วงจะกว้างขึ้น
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	เส้นฐานและการรันนี้อ่านส่วนที่ทับซ้อนกันของไฟล์ตัวเลขสุ่มไฟล์เดียวกัน แต่ไม่ได้ตรงกันทีละการรัน จึงไม่เป็นอิสระต่อกันและไม่ได้จับคู่กัน และไม่มีช่วงใดใช้ได้: เปรียบเทียบเฉพาะค่าเฉลี่ยเท่านั้น ให้อ่านทั้งสองจากตำแหน่งเดียวกันในไฟล์ หรือจากส่วนที่ไม่ทับซ้อนกัน
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	เส้นฐานมี {n_a} รอบ และการรันนี้มี {n_b} รอบ จึงเปรียบเทียบ {n} รอบแรกของแต่ละอันแบบจับคู่ เส้นฐานและปัจจุบันคือค่าเฉลี่ยของรอบเหล่านั้น
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ตัวเลขสุ่มจากไฟล์ {file} (SHA-256 {sha}…), {bytes} ไบต์ต่อการรันแต่ละครั้ง เริ่มจากไบต์ที่ {offset}
+	Seed {seed} taken from {source}	เมล็ดสุ่ม {seed} ที่นำมาจาก {source}
 	Scenario	สถานการณ์
 	Scenario: {name}	สถานการณ์: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	การเปิด {scenario} จะทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกใน {name} บันทึกก่อนหรือไม่

@@ -723,8 +723,9 @@ unit	yr	年
 	Could be chance	可能是偶然
 	No change	無變化
 	Too few runs to tell	執行次數太少，無法判斷
+	Not judged	未作判斷
 	{value} points	{value} 個百分點
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	基準使用隨機種子 {seed_a} 與 {n_a} 次執行，此次執行使用隨機種子 {seed_b} 與 {n_b} 次執行，因此以獨立執行進行比較，區間較寬。使用相同的隨機種子與執行次數即可進行配對比較。
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	基準使用隨機種子 {seed_a}，此次執行使用隨機種子 {seed_b}，因此以獨立執行進行比較，區間較寬。使用相同的隨機種子即可進行配對比較。
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	基準以 {a} 計時，此次執行以 {b} 計時，因此不比較時間。
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure}（{block}）從 {before} 降至 {after}，下降 {change}：超出偶然所能解釋的程度。
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure}（{block}）從 {before} 升至 {after}，上升 {change}：超出偶然所能解釋的程度。
@@ -733,6 +734,7 @@ unit	yr	年
 	Baseline and now, key measures	基準與目前的關鍵指標
 	Difference (paired, 95%)	差值（配對，95%）
 	Difference (95%)	差值（95%）
+	Difference of means	平均值之差
 	Measure	指標
 	Baseline	基準
 	Now	目前
@@ -962,7 +964,7 @@ unit	yr	年
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} 個問題：{blocks}
 @plural	Use {n} run|Use {n} runs	使用 {n} 次執行
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	使用 {n} 次執行（約 ± 5%）
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	兩者都使用隨機種子 {seed} 與相同的 {n} 次執行，因此每次執行與其配對的執行取得相同的隨機數：差異來自變更，而非隨機抽取。
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	兩者都使用隨機種子 {seed}，因此每次執行與其配對的執行取得相同的隨機數，各次執行以配對方式比較：兩者之間由偶然造成的差異大部分會互相抵消，區間則把剩下的部分納入考量。
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	其他 {n} 個關鍵指標的變動未超出偶然所能造成的程度。
 @plural	and {n} more change|and {n} more changes	以及另外 {n} 項變更
 	Conveyor	輸送帶
@@ -1531,6 +1533,12 @@ connection	Flow	順序流
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	十台機器必須運轉，四台備用機待命，三名維修技師修理故障的機器（Crane 和 Iglehart，Winter Simulation Conference，1973）。
 	How many spares and repairmen keep ten machines running?	需要多少台備用機和多少名維修技師，才能讓十台機器保持運轉？
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	待命的備用機不會故障：平均 3.47 台機器在故障中，9.29 台在運轉。增加第四名維修技師的效果與再增加四台備用機相當。
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	兩者都從同一個檔案的同一位置讀取隨機數，因此每次執行與其配對的執行從相同的隨機數開始，各次執行以配對方式比較。每次抽取都會取檔案中接下來的隨機數，所以一項變更可能改變哪個事件讀取哪個隨機數，由偶然造成的差異可能抵消得較少；區間已把這一點納入考量。
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	基準和此次執行從不同的位置（隨機種子、另一個檔案，或同一檔案中互不重疊的部分）取得隨機數，因此以獨立執行處理，區間較寬。
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	基準和此次執行讀取了同一個隨機數檔案中互相重疊的部分，但並非逐次執行對應，因此既不是獨立的也不是配對的，沒有任何區間成立：只比較平均值。請從檔案中的同一位置讀取兩者，或從互不重疊的部分讀取。
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	基準有 {n_a} 次執行，此次執行有 {n_b} 次，因此各取前 {n} 次執行進行配對比較；基準和目前是它們在這些執行上的平均值。
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	來自檔案 {file} 的隨機數 (SHA-256 {sha}…)，每次執行從位元組 {offset} 起取 {bytes} 位元組
+	Seed {seed} taken from {source}	取自 {source} 的隨機種子 {seed}
 	Scenario	情境
 	Scenario: {name}	情境：{name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	開啟 {scenario} 會捨棄 {name} 中未儲存的變更。要先儲存嗎？

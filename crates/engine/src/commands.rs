@@ -800,6 +800,13 @@ pub struct Run {
     /// this, a file read with errors does not run.
     #[serde(default)]
     pub allow_approximations: bool,
+    /// Where the random numbers come from: `{"mode": "prng"}` (the default, the experiment's
+    /// streams from its seed), `{"mode": "seed_source", "source", "time", "pulse"}` (those
+    /// streams from the `seed` given, drawn from a source the record names), or `{"mode":
+    /// "byte_file", "file", "sha256", "offset", "segment_bytes"}` (a file of random bytes, one
+    /// segment per replication; see the user guide). The record's `random` repeats the run.
+    #[serde(default)]
+    pub random: Option<crate::random::RandomSpec>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -828,6 +835,13 @@ pub struct RunStart {
     /// As for `run`: accept what StochCraft substituted for errors in the file.
     #[serde(default)]
     pub allow_approximations: bool,
+    /// Where the random numbers come from: `{"mode": "prng"}` (the default, the experiment's
+    /// streams from its seed), `{"mode": "seed_source", "source", "time", "pulse"}` (those
+    /// streams from the `seed` given, drawn from a source the record names), or `{"mode":
+    /// "byte_file", "file", "sha256", "offset", "segment_bytes"}` (a file of random bytes, one
+    /// segment per replication; see the user guide). The record's `random` repeats the run.
+    #[serde(default)]
+    pub random: Option<crate::random::RandomSpec>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -1308,13 +1322,17 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let records = e.sensitivity.len();
     let mut results = Vec::with_capacity(p.commands.len());
     for (i, step) in p.commands.into_iter().enumerate() {
-        let params = if step.params.is_null() {
+        let mut params = if step.params.is_null() {
             json!({})
         } else {
             step.params
         };
         let result = match COMMANDS.iter().find(|c| c.name == step.command) {
-            Some(c) if c.kind == CommandKind::Edit => (c.run)(e, params),
+            // As `Engine::execute` does: a command that cannot read a file of random bytes
+            // refuses one.
+            Some(c) if c.kind == CommandKind::Edit => {
+                crate::random::screen(c.name, &mut params).and_then(|()| (c.run)(e, params))
+            }
             Some(_) => Err(CommandError::new(
                 ErrorCode::InvalidParams,
                 format!("`{}` is not an editing command", step.command),
@@ -2658,6 +2676,7 @@ fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         p.series.unwrap_or(true),
         sequential,
         p.allow_approximations,
+        p.random,
     )?
     .run_now()
 }
@@ -2672,8 +2691,41 @@ fn run_start(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         p.series.unwrap_or(true),
         sequential,
         p.allow_approximations,
+        p.random,
     )?;
     e.start_run(plan, p.mode.unwrap_or_else(RunMode::default_for_target))
+}
+
+/// `random.pilot`'s parameters.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct RandomPilot {
+    /// Pilot replications: by default the experiment's first ten (or all, if fewer).
+    #[serde(default)]
+    pub replications: Option<u32>,
+    /// The seed of the pseudo-random numbers the pilot draws; by default the experiment's.
+    #[serde(default)]
+    pub seed: Option<u64>,
+}
+
+fn random_pilot(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: RandomPilot = parse(p)?;
+    let plan = e.plan(None, p.seed, None, false, Some(None), false, None)?;
+    let count = p.replications.map_or_else(
+        || {
+            plan.experiment
+                .replications
+                .clamp(1, crate::random::PILOT_REPLICATIONS)
+        },
+        u64::from,
+    );
+    if count > 1_000 {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            "a pilot runs at most 1,000 replications",
+        ));
+    }
+    Ok(crate::random::pilot(&plan.compiled, &plan.experiment, count)?.json())
 }
 
 fn run_status(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -3549,7 +3601,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "results.compare",
-        summary: "Compare two runs' results, by default the last run with the one before it: per element and metric both means and the difference with its 95% interval, paired-t when the runs share their seed and replications (common random numbers), Welch's two-sample t otherwise.",
+        summary: "Compare two runs' results, by default the last run with the one before it: per element and metric both means and the difference with its 95% interval. How follows where the runs' random numbers came from (`class`): paired-t over the first min(n_a, n_b) replications when they share them replication by replication (the same seed, or the same random-data file, offset and segment length: common random numbers); Welch's two-sample t when they are independent (other seeds, other files, or parts of one file that do not overlap); and the means with no interval, and a `reason`, when they read overlapping parts of one file but not replication for replication (`dependent`).",
         kind: CommandKind::Query,
         schema: schema::<crate::compare::Params>,
         example: || {
@@ -3597,6 +3649,14 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<NoParams>,
         example: || json!({}),
         run: run_cancel,
+    },
+    Command {
+        name: "random.pilot",
+        summary: "Estimate the segment of a random-data file each replication needs (`random` with `byte_file` in `run` and `run.start`): run the first replications drawing as a run on a file does, one cursor per replication, from pseudo-random numbers, and report the bytes each would read and `segment_bytes`, the most × 1.5 rounded up to 4 KiB (what a run on a file uses when it is given no `segment_bytes`). An estimate: a run on the file draws other numbers, so its replications can read more or fewer.",
+        kind: CommandKind::Query,
+        schema: schema::<RandomPilot>,
+        example: || json!({ "replications": 2 }),
+        run: random_pilot,
     },
     Command {
         name: "file.save",

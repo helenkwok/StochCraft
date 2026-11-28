@@ -723,8 +723,9 @@ unit	yr	년
 	Could be chance	우연일 수 있음
 	No change	변화 없음
 	Too few runs to tell	판단하기에 실행 횟수 부족
+	Not judged	판단 안 함
 	{value} points	{value}%p
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	기준선은 난수 시드 {seed_a}로 실행 {n_a}회, 이 실행은 난수 시드 {seed_b}로 실행 {n_b}회를 사용했으므로 독립 실행으로 비교되며 구간이 더 넓습니다. 같은 난수 시드와 실행 횟수를 쓰면 대응 비교가 됩니다.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	기준선은 난수 시드 {seed_a}, 이 실행은 난수 시드 {seed_b}를 사용했으므로 독립 실행으로 비교되며 구간이 더 넓습니다. 같은 난수 시드를 쓰면 대응 비교가 됩니다.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	기준선은 시간을 {a} 단위로, 이 실행은 {b} 단위로 측정했으므로 시간은 비교하지 않습니다.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure}({block})이(가) {before}에서 {after}(으)로 {change}만큼 떨어졌습니다. 우연으로는 설명되지 않는 크기입니다.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure}({block})이(가) {before}에서 {after}(으)로 {change}만큼 올랐습니다. 우연으로는 설명되지 않는 크기입니다.
@@ -733,6 +734,7 @@ unit	yr	년
 	Baseline and now, key measures	기준선과 현재, 주요 지표
 	Difference (paired, 95%)	차이 (대응, 95%)
 	Difference (95%)	차이 (95%)
+	Difference of means	평균 차이
 	Measure	지표
 	Baseline	기준선
 	Now	현재
@@ -962,7 +964,7 @@ unit	yr	년
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	문제 {n}개: {blocks}
 @plural	Use {n} run|Use {n} runs	실행 {n}회 사용
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	실행 {n}회 사용(약 ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	둘 다 난수 시드 {seed}와 같은 실행 {n}회를 사용했으므로 각 실행은 짝이 되는 실행과 같은 난수를 받습니다. 차이는 우연한 추출이 아니라 변경에서 나옵니다.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	둘 다 난수 시드 {seed}를 사용했으므로 각 실행은 짝이 되는 실행과 같은 난수를 받고 실행들은 쌍으로 비교됩니다. 둘 사이의 우연한 차이 대부분은 서로 상쇄되고, 구간은 남은 부분을 반영합니다.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	다른 주요 지표 {n}개는 우연이 만들 수 있는 정도 이상으로 움직이지 않았습니다.
 @plural	and {n} more change|and {n} more changes	외 {n}개 변경
 	Conveyor	컨베이어
@@ -1531,6 +1533,12 @@ connection	Flow	흐름
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	기계 10대가 돌아가야 하고, 예비 기계 4대가 대기하며, 정비공 3명이 고장 난 기계를 수리함 (Crane과 Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	예비 기계와 정비공이 몇이면 기계 10대를 계속 돌릴 수 있을까?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	대기 중인 예비 기계는 고장 나지 않음: 평균 3.47대가 고장 나 있고 9.29대가 돌아감. 정비공 한 명을 더 두면 예비 기계 4대를 더 두는 것과 거의 같은 효과가 있음.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	둘 다 같은 파일의 같은 위치에서 난수를 읽었으므로 각 실행은 짝이 되는 실행과 같은 난수에서 시작하고 실행들은 쌍으로 비교됩니다. 추출할 때마다 파일의 다음 난수를 가져오므로, 변경으로 인해 어떤 사건이 어떤 난수를 읽는지가 달라질 수 있고 우연한 차이가 덜 상쇄될 수 있습니다. 구간은 이를 반영합니다.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	기준선과 이 실행은 난수를 서로 다른 곳(시드, 다른 파일, 또는 한 파일에서 겹치지 않는 부분)에서 가져왔으므로 독립 실행으로 취급되며 구간이 더 넓습니다.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	기준선과 이 실행은 같은 난수 파일에서 서로 겹치는 부분을 읽었지만 실행별로 대응하지는 않으므로, 독립도 대응도 아니어서 성립하는 구간이 없습니다. 평균만 비교합니다. 둘 다 파일의 같은 위치에서 읽거나, 겹치지 않는 부분에서 읽으세요.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	기준선은 {n_a}회, 이 실행은 {n_b}회이므로 각각의 처음 {n}회를 쌍으로 비교합니다. 기준선과 현재는 그 실행들에 대한 평균입니다.
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	파일 {file}의 난수 (SHA-256 {sha}…), 실행마다 바이트 {offset}부터 {bytes}바이트
+	Seed {seed} taken from {source}	{source}에서 가져온 난수 시드 {seed}
 	Scenario	시나리오
 	Scenario: {name}	시나리오: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}을(를) 열면 {name}의 저장하지 않은 변경 사항이 사라집니다. 먼저 저장할까요?

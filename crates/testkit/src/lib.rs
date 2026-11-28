@@ -63,6 +63,36 @@ pub static GOLDEN: &[Golden] = &[
             include_bytes!("../../../tests/models/sir-person.scxml"),
         )],
     },
+    // Breakdowns, transfer times and finite buffers on a line of machines.
+    Golden {
+        name: "case-a.bpmn",
+        bytes: include_bytes!("../../../tests/models/case-a.bpmn"),
+        files: &[],
+    },
+    // Breakdowns on two stations with a buffer between them.
+    Golden {
+        name: "weld-paint.bpmn",
+        bytes: include_bytes!("../../../tests/models/weld-paint.bpmn"),
+        files: &[],
+    },
+    // Health checks that take units out for a restart.
+    Golden {
+        name: "it-service.bpmn",
+        bytes: include_bytes!("../../../tests/models/it-service.bpmn"),
+        files: &[],
+    },
+    // Callers who give up waiting (patience).
+    Golden {
+        name: "call-centre.bpmn",
+        bytes: include_bytes!("../../../tests/models/call-centre.bpmn"),
+        files: &[],
+    },
+    // Conveyors, junctions and a divert gateway.
+    Golden {
+        name: "sorter.bpmn",
+        bytes: include_bytes!("../../../tests/models/sorter.bpmn"),
+        files: &[],
+    },
 ];
 
 /// Replications per golden run: enough to exercise the experiment, few enough to be quick on a
@@ -239,6 +269,61 @@ pub fn optimise_mean() -> Result<Value, String> {
         .map_err(|e| format!("optimise mean: {e}"))
 }
 
+/// A help desk with the features no golden file has, each drawing from a stream of its own: a
+/// property drawn from a mix, a service time by that property, a setup before every job,
+/// balking, patience, breakdowns and a transfer time. Its run's results, as `run` gives them.
+pub fn features() -> Result<Value, String> {
+    let exp = |mean: f64| json!({ "type": "exponential", "mean": mean });
+    let mut engine = Engine::new();
+    let steps = [
+        ("model.set", stochcraft_engine::COMMANDS[0].example()),
+        (
+            "property.set",
+            json!({ "element": "arrivals", "name": "tier",
+                    "value": { "mix": [{ "value": "gold", "share": 0.4 }, { "value": "plain", "share": 0.6 }] } }),
+        ),
+        (
+            "block.set",
+            json!({ "id": "desk", "processing_by": {
+                "property": "tier",
+                "by_value": [{ "value": "gold", "time": exp(0.5) }],
+            } }),
+        ),
+        (
+            "block.set",
+            json!({ "id": "desk", "setup": { "time": { "type": "uniform", "min": 0.05, "max": 0.2 } } }),
+        ),
+        (
+            "block.set",
+            json!({ "id": "desk", "balking": { "type": "reciprocal" } }),
+        ),
+        (
+            "block.set",
+            json!({ "id": "desk", "patience": { "time": exp(4.0) } }),
+        ),
+        (
+            "block.set",
+            json!({ "id": "desk", "breakdown": { "time_to_failure": exp(30.0), "repair": exp(2.0) } }),
+        ),
+        (
+            "block.set",
+            json!({ "id": "desk", "transfer": { "type": "triangular", "min": 0.0, "mode": 0.1, "max": 0.3 } }),
+        ),
+        (
+            "experiment.set",
+            json!({ "warmup": 10.0, "duration": 400.0, "seed": 2026 }),
+        ),
+    ];
+    for (command, params) in steps {
+        engine
+            .execute(command, params)
+            .map_err(|e| format!("features, {command}: {e}"))?;
+    }
+    engine
+        .execute("run", json!({ "replications": REPLICATIONS }))
+        .map_err(|e| format!("features: {e}"))
+}
+
 /// The digest of a whole answer, exactly.
 pub fn digest_all(answer: &Value) -> String {
     let text = serde_json::to_string(answer).unwrap_or_default();
@@ -254,6 +339,7 @@ pub fn digests() -> Result<String, String> {
     for g in GOLDEN {
         lines.push(format!("{} {}", g.name, digest(&run(g)?)));
     }
+    lines.push(format!("features {}", digest(&features()?)));
     lines.push(format!("optimise {}", digest_all(&optimise()?)));
     lines.push(format!("optimise-rules {}", digest_all(&optimise_rules()?)));
     lines.push(format!("optimise-mean {}", digest_all(&optimise_mean()?)));

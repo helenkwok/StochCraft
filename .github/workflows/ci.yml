@@ -278,6 +278,7 @@ jobs:
       # The model benchmarks fail when a check does (W against theory, event counts).
       - run: cargo test --release --manifest-path bench/Cargo.toml --locked
       - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- tandem 20000
+      - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- rng 50000000 9
       - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- hold 200000
       - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- devstone 60 20
 

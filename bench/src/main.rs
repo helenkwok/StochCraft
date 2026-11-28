@@ -8,6 +8,7 @@
 //! - `hold [EVENTS]`: the hold model with 10, 1,000 and 100,000 processes.
 //! - `devstone [MAX] [STEP]`: DEVStone LI, HI and HO for every width and depth in `STEP..=MAX`.
 //! - `models`: all three with their defaults.
+//! - `rng [DRAWS] [ROUNDS]`: the generator against a frozen copy of its pre-byte-file self.
 //!
 //! Workloads (λ = 0.9, μ = 1, N customers, then the queue drains; theory W = 10):
 //! - `store`: an arrival process puts timestamps into an unbounded FIFO store and one server
@@ -22,6 +23,7 @@
 
 mod devstone;
 mod hold;
+mod rng;
 mod tandem;
 
 use std::cell::{Cell, RefCell};
@@ -200,6 +202,17 @@ fn models(which: &str, args: &[String]) -> bool {
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let which = args.first().map_or("all", String::as_str);
+    if which == "rng" {
+        let draws = args
+            .get(1)
+            .and_then(|a| a.parse().ok())
+            .unwrap_or(50_000_000);
+        let rounds = args.get(2).and_then(|a| a.parse().ok()).unwrap_or(9);
+        if rng::run(draws, rounds) {
+            return ExitCode::SUCCESS;
+        }
+        return ExitCode::FAILURE;
+    }
     if matches!(which, "tandem" | "hold" | "devstone" | "models") {
         if models(which, &args) {
             return ExitCode::SUCCESS;

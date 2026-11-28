@@ -17,6 +17,9 @@ stochcraft-blocks = { path = "../crates/blocks" }
 stochcraft-model = { path = "../crates/model" }
 stochcraft-random = { path = "../crates/random" }
 stochcraft-experiment = { path = "../crates/experiment" }
+# The generator as it was before streams could read a file of random bytes (main at d4b0441a,
+# copied), for the `rng` benchmark: the old code in a crate of its own, against the current one.
+stochcraft-random-before = { path = "random-before" }
 # simu-des 0.1.0 (MIT OR Apache-2.0), a SimPy-style Rust engine.
 simu-des = { version = "=0.1.0", optional = true }
 

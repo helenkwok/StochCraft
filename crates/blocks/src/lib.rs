@@ -308,6 +308,11 @@ pub enum RunError {
         time: f64,
         element: Option<(ElementId, String)>,
     },
+    /// The replication read a file of random bytes and its segment ran out at time `time`,
+    /// having read all `used` bytes of it; `needed` estimates the bytes the whole replication
+    /// would read (those asked for so far, scaled by the share of the run done). Its results are
+    /// discarded, and the file is never read again from the start.
+    RandomDataExhausted { time: f64, used: u64, needed: u64 },
 }
 
 /// Writes `element` as `"name" (id)`, or just the id when the name adds nothing.
@@ -355,6 +360,13 @@ impl std::fmt::Display for RunError {
                      can be represented; check its durations",
                 )
             }
+            RunError::RandomDataExhausted { time, used, needed } => write!(
+                f,
+                "the random-data file ran out: this replication used all {used} bytes of its \
+                 segment by time {time}, and would need about {needed} (an estimate). Give each \
+                 replication a longer segment (`segment_bytes`) or use a larger file; bytes are \
+                 never read twice"
+            ),
         }
     }
 }
@@ -1261,6 +1273,8 @@ pub struct Report {
     pub after_warmup: bool,
     /// The values recorded at fixed times, when asked for ([`Compiled::record_every`]).
     pub recording: Option<Recording>,
+    /// The bytes it read from a file of random bytes (0 when its numbers are pseudo-random).
+    pub random_bytes: u64,
 }
 
 impl Report {

@@ -16,7 +16,7 @@ use stochcraft_model::{
     Need, OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, QueueLimit, ResourcePool,
     Routing, Setup, Timed,
 };
-use stochcraft_random::{Dist, Rng};
+use stochcraft_random::{ByteHandle, Dist, Rng, StreamRoot};
 use stochcraft_stats::{Tally, TimeWeighted};
 
 use crate::series::{Quantity, Recording};
@@ -363,10 +363,12 @@ impl Compiled {
         let next_id = Rc::new(RefCell::new(0u64));
         // Every stream is keyed by its element's id and its purpose, never by its position, so
         // adding, removing or reordering an element changes no other element's draws.
-        let base = rng.next_u64();
+        // Over a file of random bytes, every stream reads the one cursor of the replication.
+        let bytes = rng.byte_handle();
+        let root = StreamRoot::new(&mut rng);
         let stream = |purpose: &str, i: usize| {
             let id = elements.get(i).map_or("", |e| e.id.as_str());
-            Rng::keyed(base, &format!("{purpose}/{id}"))
+            root.keyed(&format!("{purpose}/{id}"))
         };
         let streams: Vec<Rng> = (0..elements.len()).map(|i| stream("element", i)).collect();
         // A stream for each server's transfer times.
@@ -874,6 +876,7 @@ impl Compiled {
             stopped_at: None,
             reset_at,
             watching: Watching::new(0.0),
+            bytes,
             recording: self.record.map(|interval| Recording {
                 interval,
                 times: Vec::new(),
@@ -941,6 +944,9 @@ pub struct Live<'a> {
     /// How far the simulation has got, kept between advances so that a run in slices
     /// ([`Live::advance_by`]) counts the events at one time across them.
     watching: Watching,
+    /// The replication's cursor when it reads a file of random bytes (or is a pilot), to stop
+    /// it when its segment runs out and to report the bytes it read.
+    bytes: Option<ByteHandle>,
     /// The values recorded so far, when the compiled model records them
     /// ([`Compiled::record_every`]).
     recording: Option<Recording>,
@@ -1069,7 +1075,39 @@ impl Live<'_> {
     /// run, so a budget that runs out at that time leaves the record to the next call) and reads
     /// the blocks' state there. Stopping the clock between events changes none of them: the
     /// events and their order are those of one advance (as for a run in slices).
+    ///
+    /// A replication reading a file of random bytes stops, within a thousand or so events, once
+    /// its segment has run out, with [`RunError::RandomDataExhausted`].
     fn advance_watched(
+        &mut self,
+        until: f64,
+        cancelled: &dyn Fn() -> bool,
+        budget: u64,
+    ) -> Result<bool, RunError> {
+        let Some(bytes) = self.bytes.clone() else {
+            return self.advance_unwatched_bytes(until, cancelled, budget);
+        };
+        let watch = || cancelled() || bytes.exhausted();
+        let result = self.advance_unwatched_bytes(until, &watch, budget);
+        if bytes.exhausted() {
+            let (now, end) = (self.now(), self.end);
+            // The bytes asked for so far, scaled to the whole run: an estimate.
+            let needed = if now > 0.0 && end > now {
+                (bytes.asked() as f64 * (end / now)).ceil() as u64
+            } else {
+                bytes.asked()
+            };
+            return Err(RunError::RandomDataExhausted {
+                time: now,
+                used: bytes.used(),
+                needed: needed.max(bytes.asked()),
+            });
+        }
+        result
+    }
+
+    /// [`Live::advance_watched`] without the check of a random-data segment.
+    fn advance_unwatched_bytes(
         &mut self,
         until: f64,
         cancelled: &dyn Fn() -> bool,
@@ -1340,6 +1378,7 @@ impl Live<'_> {
             measured_to: now,
             after_warmup: after_warmup.is_some(),
             recording: self.recording.clone(),
+            random_bytes: self.bytes.as_ref().map_or(0, ByteHandle::used),
         }
     }
 }
@@ -3695,15 +3734,15 @@ impl Times {
                 .binary_search_by(|s| s.as_str().cmp(by.property.trim()))
                 .ok(),
             by,
-            rng: RefCell::new(Rng::new(rng.clone().next_u64() ^ BY_VALUE_STREAM)),
+            rng: RefCell::new(rng.derive(BY_VALUE_STREAM)),
         });
-        let seed = rng.clone().next_u64() ^ BY_RESOURCE_STREAM;
+        let root = StreamRoot::peek(rng, BY_RESOURCE_STREAM);
         let by_resource = by_pool
             .iter()
             .map(|(pool, id, time)| ByResource {
                 pool: *pool,
                 time: time.clone(),
-                rng: RefCell::new(Rng::keyed(seed, &format!("by-resource/{}", id.as_str()))),
+                rng: RefCell::new(root.keyed(&format!("by-resource/{}", id.as_str()))),
             })
             .collect();
         Rc::new(Self {
@@ -3842,18 +3881,12 @@ fn spawn_unit_server(sim: &mut Sim, env: BlockEnv, parts: UnitServer) {
     // setups and health checks below, it is seeded without drawing from the element's own
     // (forking would advance it), so adding or removing a breakdown leaves the service times of
     // the same seed as they were, which keeps paired comparisons paired.
-    let mut fail_rng = breakdown
-        .as_ref()
-        .map(|_| Rng::new(env.rng.clone().next_u64() ^ BREAKDOWN_STREAM));
+    let mut fail_rng = breakdown.as_ref().map(|_| env.rng.derive(BREAKDOWN_STREAM));
     // So do the setups. Their stream is seeded without drawing from the element's own (forking
     // would), so the service times and the failures stay those of the model without setups.
-    let mut setup_rng = setup
-        .as_ref()
-        .map(|_| Rng::new(env.rng.clone().next_u64() ^ SETUP_STREAM));
+    let mut setup_rng = setup.as_ref().map(|_| env.rng.derive(SETUP_STREAM));
     // So do the health checks, seeded the same way: adding a check changes no other draw.
-    let mut health_rng = health
-        .as_ref()
-        .map(|_| Rng::new(env.rng.clone().next_u64() ^ HEALTH_STREAM));
+    let mut health_rng = health.as_ref().map(|_| env.rng.derive(HEALTH_STREAM));
     let units: Rc<RefCell<Vec<Unit>>> = Rc::new(RefCell::new(
         (0..capacity).map(|_| Unit::default()).collect(),
     ));

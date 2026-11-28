@@ -78,6 +78,7 @@ pub mod mc;
 pub mod observed;
 mod optimize;
 pub mod precision;
+pub mod random;
 mod run;
 pub mod sd;
 mod sd_edit;
@@ -136,6 +137,10 @@ pub enum ErrorCode {
     /// A replication stopped because simulated time stopped moving (entities going round a loop
     /// whose steps all take no time); `details` names the element and the time.
     TimeStopped,
+    /// A replication reading a file of random bytes used up its segment; `details` names the
+    /// replication, the bytes it read and an estimate of the bytes it needs. The file is never
+    /// read twice: give a longer segment or a larger file.
+    RandomDataExhausted,
     Internal,
 }
 
@@ -154,11 +159,12 @@ impl ErrorCode {
             ErrorCode::Unsupported => "unsupported",
             ErrorCode::Cancelled => "cancelled",
             ErrorCode::TimeStopped => "time_stopped",
+            ErrorCode::RandomDataExhausted => "random_data_exhausted",
             ErrorCode::Internal => "internal",
         }
     }
 
-    const ALL: [ErrorCode; 13] = [
+    const ALL: [ErrorCode; 14] = [
         ErrorCode::UnknownCommand,
         ErrorCode::InvalidParams,
         ErrorCode::NotFound,
@@ -171,6 +177,7 @@ impl ErrorCode {
         ErrorCode::Unsupported,
         ErrorCode::Cancelled,
         ErrorCode::TimeStopped,
+        ErrorCode::RandomDataExhausted,
         ErrorCode::Internal,
     ];
 
@@ -643,6 +650,9 @@ pub struct Engine {
     /// Counts changes to the model (edits, undo, redo, a new or opened document, a save that
     /// fixes its shapes), so a view can tell it changed without comparing it.
     revision: u64,
+    /// Files of random bytes given to the engine by name (`load_random_data`), for runs that
+    /// read their random numbers from a file where there is no file system (the browser).
+    random_data: BTreeMap<String, std::sync::Arc<[u8]>>,
 }
 
 impl Default for Engine {
@@ -682,6 +692,7 @@ impl Engine {
             previous_results: None,
             sensitivity: Vec::new(),
             revision: 0,
+            random_data: BTreeMap::new(),
         }
     }
 
@@ -696,6 +707,13 @@ impl Engine {
         self.revision
     }
 
+    /// Gives the engine a file of random bytes under `name`, for runs with `random` `{"mode":
+    /// "byte_file", "file": name}` to read: how the browser, which has no file system, passes a
+    /// file the user chose. A name loaded here is used before a file at that path.
+    pub fn load_random_data(&mut self, name: &str, bytes: Vec<u8>) {
+        self.random_data.insert(name.to_owned(), bytes.into());
+    }
+
     /// Runs `command` with JSON `params` (`null` counts as `{}`). Every command that is not a
     /// query, and succeeds, is added to the journal, except `model.new` and `file.open`: they
     /// start a new journal, whose [`JournalStart`] records them.
@@ -705,6 +723,9 @@ impl Engine {
             CommandError::new(ErrorCode::UnknownCommand, format!("no command `{command}`"))
         })?;
         let documents = self.documents;
+        // The commands that cannot read random numbers from a file refuse one here.
+        let mut params = params;
+        random::screen(command, &mut params)?;
         let result = (c.run)(self, params.clone())?;
         // Keep the last two results, for questions about their distributions and to compare
         // them (a background run's are kept as it finishes, in `poll_run`).
@@ -1368,6 +1389,7 @@ impl Engine {
     /// the experiment's sequential replications: `Some(None)` runs a fixed number, `None` keeps
     /// the experiment's. `allow_approximations` accepts what StochCraft substituted for errors
     /// in the file (see [`Engine::approximations`]).
+    #[allow(clippy::too_many_arguments)] // Each is a run's own override.
     fn plan(
         &self,
         replications: Option<u32>,
@@ -1376,6 +1398,7 @@ impl Engine {
         series: bool,
         sequential: Option<Option<stochcraft_model::Sequential>>,
         allow_approximations: bool,
+        random: Option<random::RandomSpec>,
     ) -> Result<Plan, CommandError> {
         if self.model.is_monte_carlo() {
             return Err(CommandError::new(
@@ -1421,11 +1444,32 @@ impl Engine {
             // of each is in the record, beside the results it explains.
             record["approximations"] = Value::Array(approximations);
         }
+        let sequential = sequential.unwrap_or_else(|| x.sequential.clone());
+        // The most replications the run may make, so a file is checked against all of them.
+        let first = experiment.replications;
+        let max = sequential
+            .as_ref()
+            .map_or(first, |q| u64::from(q.max).max(first));
+        let prepared = random::prepare(
+            random,
+            seed.is_some(),
+            &self.random_data,
+            &compiled,
+            &experiment,
+            max,
+        )?;
+        if prepared.feed.is_some() {
+            record["random_streams"] = json!(
+                "one segment of the random-data file per replication, read in the order the replication's events draw; every element draws from that one cursor"
+            );
+        }
+        record["random"] = prepared.record;
         Ok(Plan {
             compiled,
             experiment,
             record,
-            sequential: sequential.unwrap_or_else(|| x.sequential.clone()),
+            sequential,
+            random: prepared.feed,
         })
     }
 

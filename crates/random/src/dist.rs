@@ -2237,7 +2237,7 @@ mod proofs {
     /// A constant never samples NaN, infinite or negative, whatever the value.
     #[kani::proof]
     fn a_constant_samples_finite_and_non_negative() {
-        let mut rng = Rng { s: [1, 2, 3, 4] };
+        let mut rng = Rng::from_state([1, 2, 3, 4]);
         let x = Dist::Constant(any_f64()).sample(&mut rng);
         assert!(x.is_finite() && x >= 0.0);
     }

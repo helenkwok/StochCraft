@@ -723,8 +723,9 @@ unit	yr	р.
 	Could be chance	Може бути випадковістю
 	No change	Без змін
 	Too few runs to tell	Замало запусків для висновку
+	Not judged	Не оцінено
 	{value} points	{value} в. п.
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Базовий варіант використав початкове значення генератора {seed_a} і кількість запусків {n_a}, цей запуск — значення {seed_b} і кількість запусків {n_b}, тож їх порівнюють як незалежні запуски, а інтервали ширші. Однакові початкове значення й кількість запусків дають парне порівняння.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Базовий варіант використав початкове значення генератора {seed_a}, а цей запуск — {seed_b}, тож їх порівнюють як незалежні запуски, а інтервали ширші. Однакове початкове значення дає парне порівняння.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Базовий варіант вимірював час у {a}, а цей запуск — у {b}, тож час не порівнюється.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) знизився з {before} до {after}, на {change}: більше, ніж пояснила б випадковість.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) зріс з {before} до {after}, на {change}: більше, ніж пояснила б випадковість.
@@ -733,6 +734,7 @@ unit	yr	р.
 	Baseline and now, key measures	Базовий варіант і зараз, основні показники
 	Difference (paired, 95%)	Різниця (парна, 95%)
 	Difference (95%)	Різниця (95%)
+	Difference of means	Різниця середніх
 	Measure	Показник
 	Baseline	Базовий варіант
 	Now	Зараз
@@ -962,7 +964,7 @@ unit	yr	р.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} проблема: {blocks}|{n} проблеми: {blocks}|{n} проблем: {blocks}
 @plural	Use {n} run|Use {n} runs	Використати {n} запуск|Використати {n} запуски|Використати {n} запусків
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Використати {n} запуск (близько ± 5%)|Використати {n} запуски (близько ± 5%)|Використати {n} запусків (близько ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Обидва використали початкове значення генератора {seed} і той самий {n} запуск, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.|Обидва використали початкове значення генератора {seed} і ті самі {n} запуски, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.|Обидва використали початкове значення генератора {seed} і ті самі {n} запусків, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Обидва використали початкове значення генератора {seed}, тож кожен запуск отримує ті самі випадкові числа, що й його пара, і запуски порівнюють парами: значна частина випадкової різниці між ними взаємно знищується, а інтервал враховує те, що залишилося.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ще {n} основний показник змінився не більше, ніж могла б випадковість.|Ще {n} основні показники змінилися не більше, ніж могла б випадковість.|Ще {n} основних показників змінилися не більше, ніж могла б випадковість.
 @plural	and {n} more change|and {n} more changes	і ще {n} зміна|і ще {n} зміни|і ще {n} змін
 	Conveyor	Конвеєр
@@ -1531,6 +1533,12 @@ connection	Flow	Потік
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Десять верстатів мають працювати, чотири резервні стоять напоготові, а троє слюсарів лагодять ті, що виходять з ладу (Crane і Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Скільки резервних верстатів і слюсарів потрібно, щоб десять верстатів працювали?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Резервні верстати напоготові не можуть вийти з ладу: у середньому 3.47 верстата несправні, а 9.29 працюють. Четвертий слюсар дає приблизно стільки ж, скільки ще чотири резервні верстати.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Обидва прочитали свої випадкові числа з того самого файлу в тому самому місці, тож кожен запуск починає з тих самих чисел, що й його пара, і запуски порівнюють парами. Кожне добування бере наступні числа у файлі, тож зміна може зсунути, яка подія читає яке число, і менша частина випадкової різниці може знищитися; інтервал це враховує.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Базовий варіант і цей запуск брали випадкові числа з різних місць (початкове значення, інший файл або частини одного файлу, що не перекриваються), тож їх вважають незалежними запусками, а інтервали ширші.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Базовий варіант і цей запуск читали частини одного й того самого файлу випадкових чисел, що перекриваються, але не запуск за запуском, тож вони не незалежні й не парні, і жоден інтервал не чинний: порівнюють лише середні. Читайте обидва з того самого місця у файлі або з частин, що не перекриваються.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	У базового варіанта {n_a} запусків, а в цього запуску {n_b}, тож перші {n} з кожного порівнюють парами; базовий варіант і зараз — їхні середні за цими запусками.
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Випадкові числа з файлу {file} (SHA-256 {sha}…), {bytes} байтів на кожен запуск, починаючи з байта {offset}
+	Seed {seed} taken from {source}	Початкове значення генератора {seed}, взяте з {source}
 	Scenario	Сценарій
 	Scenario: {name}	Сценарій: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Відкриття {scenario} скасує незбережені зміни в {name}. Спершу зберегти їх?

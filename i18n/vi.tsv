@@ -723,8 +723,9 @@ unit	yr	năm
 	Could be chance	Có thể do ngẫu nhiên
 	No change	Không đổi
 	Too few runs to tell	Quá ít lần chạy để kết luận
+	Not judged	Chưa đánh giá
 	{value} points	{value} điểm phần trăm
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Mốc so sánh dùng hạt giống ngẫu nhiên {seed_a} và {n_a} lần chạy, lần chạy này dùng hạt giống ngẫu nhiên {seed_b} và {n_b} lần chạy, nên chúng được so sánh như các lần chạy độc lập và khoảng rộng hơn. Cùng hạt giống ngẫu nhiên và cùng số lần chạy cho phép so sánh theo cặp.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Mốc so sánh dùng hạt giống ngẫu nhiên {seed_a} và lần chạy này dùng hạt giống ngẫu nhiên {seed_b}, nên chúng được so sánh như các lần chạy độc lập và khoảng rộng hơn. Cùng hạt giống ngẫu nhiên cho phép so sánh theo cặp.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Mốc so sánh đo thời gian bằng {a} còn lần chạy này bằng {b}, nên thời gian không được so sánh.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) giảm từ {before} xuống {after}, mức {change}: nhiều hơn mức ngẫu nhiên có thể giải thích.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) tăng từ {before} lên {after}, mức {change}: nhiều hơn mức ngẫu nhiên có thể giải thích.
@@ -733,6 +734,7 @@ unit	yr	năm
 	Baseline and now, key measures	Mốc so sánh và hiện tại, chỉ số chính
 	Difference (paired, 95%)	Chênh lệch (theo cặp, 95%)
 	Difference (95%)	Chênh lệch (95%)
+	Difference of means	Chênh lệch của trung bình
 	Measure	Chỉ số
 	Baseline	Mốc so sánh
 	Now	Hiện tại
@@ -962,7 +964,7 @@ unit	yr	năm
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} vấn đề: {blocks}
 @plural	Use {n} run|Use {n} runs	Dùng {n} lần chạy
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Dùng {n} lần chạy (khoảng ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Cả hai dùng hạt giống ngẫu nhiên {seed} và cùng {n} lần chạy, nên mỗi lần chạy nhận cùng các số ngẫu nhiên như lần chạy cặp với nó: khác biệt đến từ thay đổi, không phải từ các lần rút ngẫu nhiên.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Cả hai dùng hạt giống ngẫu nhiên {seed}, nên mỗi lần chạy nhận cùng các số ngẫu nhiên như lần chạy cặp với nó và các lần chạy được so sánh theo cặp: phần lớn chênh lệch do ngẫu nhiên giữa chúng triệt tiêu lẫn nhau, và khoảng tính đến phần còn lại.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} chỉ số chính khác thay đổi không quá mức ngẫu nhiên có thể gây ra.
 @plural	and {n} more change|and {n} more changes	và {n} thay đổi khác
 	Conveyor	Băng tải
@@ -1531,6 +1533,12 @@ connection	Flow	Luồng
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Mười máy phải chạy, bốn máy dự phòng chờ sẵn và ba thợ máy sửa những máy bị hỏng (Crane và Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Cần bao nhiêu máy dự phòng và thợ máy để mười máy luôn chạy?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Máy dự phòng đang chờ không thể hỏng: trung bình 3.47 máy bị hỏng và 9.29 máy chạy. Thêm một thợ máy thứ tư được việc gần bằng thêm bốn máy dự phòng.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Cả hai đọc các số ngẫu nhiên của mình từ cùng một tệp ở cùng một vị trí, nên mỗi lần chạy bắt đầu từ cùng các số như lần chạy cặp với nó và các lần chạy được so sánh theo cặp. Mỗi lần rút lấy các số kế tiếp trong tệp, nên một thay đổi có thể làm lệch sự kiện nào đọc số nào và phần chênh lệch do ngẫu nhiên triệt tiêu có thể ít hơn; khoảng có tính đến điều đó.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Mốc so sánh và lần chạy này lấy số ngẫu nhiên từ những nơi khác nhau (một hạt giống ngẫu nhiên, một tệp khác, hoặc các phần không chồng lên nhau của một tệp), nên được coi là các lần chạy độc lập và khoảng rộng hơn.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Mốc so sánh và lần chạy này đọc các phần chồng lên nhau của cùng một tệp số ngẫu nhiên, nhưng không theo từng lần chạy, nên chúng không độc lập cũng không theo cặp và không có khoảng nào đứng vững: chỉ so sánh các giá trị trung bình. Hãy đọc cả hai từ cùng một vị trí trong tệp, hoặc từ các phần không chồng lên nhau.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Mốc so sánh có {n_a} lần chạy còn lần chạy này có {n_b}, nên {n} lần chạy đầu của mỗi bên được so sánh theo cặp; mốc so sánh và hiện tại là giá trị trung bình của chúng trên các lần chạy đó.
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Số ngẫu nhiên từ tệp {file} (SHA-256 {sha}…), {bytes} byte cho mỗi lần chạy từ byte {offset}
+	Seed {seed} taken from {source}	Hạt giống ngẫu nhiên {seed} lấy từ {source}
 	Scenario	Kịch bản
 	Scenario: {name}	Kịch bản: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Mở {scenario} sẽ bỏ các thay đổi chưa lưu của {name}. Lưu trước?

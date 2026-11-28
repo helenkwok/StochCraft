@@ -89,6 +89,9 @@ pub struct Plan {
     /// Sequential replications: after the experiment's, more in batches until the results it
     /// watches are precise enough or it reaches its maximum. `None` for a fixed run.
     pub sequential: Option<Sequential>,
+    /// Where the random numbers come from: `None` for the experiment's pseudo-random streams,
+    /// else a file of random bytes, one segment per replication.
+    pub random: Option<std::sync::Arc<crate::random::ByteFeed>>,
 }
 
 /// What a run does after a look at the replications it has.
@@ -100,6 +103,14 @@ enum Look {
 }
 
 impl Plan {
+    /// The random stream of replication `index`: the experiment's, or its segment of the file.
+    pub(crate) fn stream(&self, index: u64) -> stochcraft_random::Rng {
+        match &self.random {
+            Some(feed) => feed.stream(index),
+            None => self.experiment.stream(index),
+        }
+    }
+
     /// Runs every replication now, on this thread and any workers.
     pub fn run_now(&self) -> Result<Value, CommandError> {
         self.run_with(&Control::new(), None)
@@ -120,12 +131,7 @@ impl Plan {
                 t.store(next, Ordering::Relaxed);
             }
             let from = reports.len() as u64;
-            reports.extend(replicate(
-                &self.compiled,
-                &self.experiment,
-                from..next,
-                control,
-            )?);
+            reports.extend(replicate(self, from..next, control)?);
             match self.look(&reports, &mut stages) {
                 Look::Finished(v) => return Ok(v),
                 Look::More(n) => next = n,
@@ -135,7 +141,7 @@ impl Plan {
 
     /// The most replications the run may make: the sequential maximum, or the experiment's
     /// count where that is more (or the run is fixed).
-    fn max(&self) -> u64 {
+    pub(crate) fn max_replications(&self) -> u64 {
         let first = self.experiment.replications;
         self.sequential
             .as_ref()
@@ -155,7 +161,7 @@ impl Plan {
         stages.push(n);
         let watched = precision::watched(&v, x);
         let verdicts: Vec<Verdict> = watched.iter().map(|w| w.verdict).collect();
-        match next_count(n, self.max(), &verdicts) {
+        match next_count(n, self.max_replications(), &verdicts) {
             Step::Continue(next) => Look::More(next),
             Step::Stop(reason) => {
                 v["sequential"] = precision::summary(x, stages, reason, &watched);
@@ -180,28 +186,45 @@ impl Plan {
             &check_reports(model, reports),
         );
         v["record"] = self.record.clone();
+        if self.random.is_some() {
+            // What the replications read of the file: in all, and the most any one read (to
+            // judge the segment length by).
+            let r = &mut v["record"]["random"];
+            r["bytes_used"] = json!(reports.iter().map(|x| x.random_bytes).sum::<u64>());
+            r["most_bytes_in_a_replication"] =
+                json!(reports.iter().map(|x| x.random_bytes).max().unwrap_or(0));
+        }
         v
     }
 }
 
-/// Runs replications `range` of `experiment`, reporting to `control`, which cancels them. The
-/// first replication in which time stops moving cancels the others: they would most likely stop
-/// the same way, each only after its own [`stochcraft_blocks::MAX_EVENTS_AT_ONE_TIME`] events.
+/// Runs replications `range` of `plan`'s experiment, each on its own stream ([`Plan::stream`]),
+/// reporting to `control`, which cancels them. The first replication in which time stops moving
+/// cancels the others: they would most likely stop the same way, each only after its own
+/// [`stochcraft_blocks::MAX_EVENTS_AT_ONE_TIME`] events. So does the first whose segment of a
+/// random-data file runs out: the run has failed, and its results are discarded.
 fn replicate(
-    compiled: &Compiled,
-    experiment: &Experiment,
+    plan: &Plan,
     range: Range<u64>,
     control: &Control,
 ) -> Result<Vec<Report>, CommandError> {
+    let compiled = &plan.compiled;
     let first = range.start;
     // The replication with the lowest index among those that stopped, and why.
     let stopped: Mutex<Option<(u64, RunError)>> = Mutex::new(None);
-    let outcome = experiment.run_range(
+    let outcome = plan.experiment.run_range(
         range,
         |r| {
             let index = r.index;
-            let report = compiled.run_watched(r.rng, &|| control.is_cancelled());
-            if let Err(e @ RunError::TimeStopped { .. }) = &report {
+            // Over a file, the replication's segment instead of the experiment's stream.
+            let rng = match &plan.random {
+                Some(feed) => feed.stream(index),
+                None => r.rng,
+            };
+            let report = compiled.run_watched(rng, &|| control.is_cancelled());
+            if let Err(e @ (RunError::TimeStopped { .. } | RunError::RandomDataExhausted { .. })) =
+                &report
+            {
                 let mut s = stopped.lock().unwrap_or_else(|e| e.into_inner());
                 if s.as_ref().is_none_or(|(i, _)| index < *i) {
                     *s = Some((index, e.clone()));
@@ -243,6 +266,16 @@ pub(crate) fn run_failed(index: u64, e: &RunError) -> CommandError {
                 "replication": index,
                 "time": time,
                 "at": element.as_ref().map(|(id, _)| id.as_str()),
+            })),
+        },
+        RunError::RandomDataExhausted { time, used, needed } => CommandError {
+            code: ErrorCode::RandomDataExhausted,
+            message: format!("replication {index}: {e}"),
+            details: Some(json!({
+                "replication": index,
+                "time": time,
+                "bytes_used": used,
+                "bytes_needed_estimate": needed,
             })),
         },
         // A model problem found only by running it: reported as the model's diagnostics are.
@@ -309,12 +342,13 @@ impl Job {
                 stages: Vec::new(),
             },
             RunMode::Workers => {
+                // Only for the names and kinds of a report: no event runs, nothing is drawn.
                 let rng = plan.experiment.stream(0);
                 State::Workers {
                     reports: vec![None; usize::try_from(first).unwrap_or(0)],
                     received: 0,
                     template: plan.compiled.live(rng).report(),
-                    task: workers::task(&plan.compiled, &plan.experiment),
+                    task: workers::task(&plan)?,
                     stages: Vec::new(),
                 }
             }
@@ -375,13 +409,13 @@ impl Job {
                 if *cancelled {
                     self.state = State::Finished(Err(failed(ExperimentError::Cancelled)));
                 } else {
-                    let x = &self.plan.experiment;
+                    let plan = &self.plan;
                     let (mut finished, mut left) = (0, events.max(1));
                     while finished < step.max(1) && (reports.len() as u64) < *target && left > 0 {
                         let index = reports.len() as u64;
                         // The same replication as on threads: its stream, run to its end.
                         let live = current.get_or_insert_with(|| {
-                            Box::new(self.plan.compiled.live(x.replication(index).rng))
+                            Box::new(plan.compiled.live(plan.stream(index)))
                         });
                         let before = live.events();
                         match live.advance_by(left) {
@@ -427,11 +461,14 @@ impl Job {
         }
     }
 
-    /// Takes a worker's answer for one replication. The first failure ends the run with it; an
-    /// answer arriving after the run has finished is ignored. Once every replication the run has
-    /// set out to have has answered, it looks at the results: a sequential run that goes on
-    /// sets out to have more (`run.status` gives the new `total`), and the caller hands those
-    /// out too.
+    /// Takes a worker's answer for one replication. An answer for a replication the run does not
+    /// have is refused, and one for a replication that has already answered is ignored (a
+    /// worker's answer can come twice), before anything else is looked at. Then the first
+    /// failure ends the run with it; an answer with no index and an error (a worker that
+    /// stopped) ends it too, and an answer arriving after the run has finished is ignored. Once
+    /// every replication the run has set out to have has answered, it looks at the results: a
+    /// sequential run that goes on sets out to have more (`run.status` gives the new `total`),
+    /// and the caller hands those out too.
     pub fn deliver(&mut self, answer: &str) -> Result<(), CommandError> {
         let State::Workers {
             reports,
@@ -445,21 +482,29 @@ impl Job {
         };
         let bad = |why: &str| CommandError::new(ErrorCode::InvalidParams, format!("answer: {why}"));
         let answer: Answer = serde_json::from_str(answer).map_err(|e| bad(&e.to_string()))?;
+        let Some(index) = answer.index else {
+            // Not a replication's answer: a worker stopped.
+            let e = answer.error().ok_or_else(|| bad("no index"))?;
+            self.state = State::Finished(Err(e));
+            return Ok(());
+        };
+        let slot = usize::try_from(index)
+            .ok()
+            .and_then(|i| reports.get_mut(i))
+            .ok_or_else(|| bad("no such replication"))?;
+        if slot.is_some() {
+            return Ok(());
+        }
         if let Some(e) = answer.error() {
             self.state = State::Finished(Err(e));
             return Ok(());
         }
-        let slot = usize::try_from(answer.index)
-            .ok()
-            .and_then(|i| reports.get_mut(i))
-            .ok_or_else(|| bad("no such replication"))?;
         let report = answer
             .report
             .and_then(|r| r.decode(template))
             .ok_or_else(|| bad("not a report of this model"))?;
-        if slot.replace(report).is_none() {
-            *received += 1;
-        }
+        *slot = Some(report);
+        *received += 1;
         if *received == reports.len() as u64 {
             let r: Vec<Report> = std::mem::take(reports).into_iter().flatten().collect();
             match self.plan.look(&r, stages) {

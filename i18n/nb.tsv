@@ -723,8 +723,9 @@ unit	yr	år
 	Could be chance	Kan være tilfeldig
 	No change	Ingen endring
 	Too few runs to tell	For få kjøringer til å avgjøre
+	Not judged	Ikke vurdert
 	{value} points	{value} prosentpoeng
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referansen brukte tilfeldighetsfrø {seed_a} og {n_a} kjøringer, denne kjøringen tilfeldighetsfrø {seed_b} og {n_b} kjøringer, så de sammenlignes som uavhengige kjøringer, og intervallene er bredere. Samme tilfeldighetsfrø og antall kjøringer gir en parvis sammenligning.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Referansen brukte tilfeldighetsfrø {seed_a} og denne kjøringen tilfeldighetsfrø {seed_b}, så de sammenlignes som uavhengige kjøringer, og intervallene er bredere. Samme tilfeldighetsfrø gir en parvis sammenligning.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referansen målte tid i {a} og denne kjøringen i {b}, så tider sammenlignes ikke.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) falt fra {before} til {after}, med {change}: mer enn tilfeldigheter ville forklare.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) steg fra {before} til {after}, med {change}: mer enn tilfeldigheter ville forklare.
@@ -733,6 +734,7 @@ unit	yr	år
 	Baseline and now, key measures	Referanse og nå, viktigste måltall
 	Difference (paired, 95%)	Differanse (parvis, 95 %)
 	Difference (95%)	Differanse (95 %)
+	Difference of means	Differanse av gjennomsnitt
 	Measure	Måltall
 	Baseline	Referanse
 	Now	Nå
@@ -962,7 +964,7 @@ unit	yr	år
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemer: {blocks}
 @plural	Use {n} run|Use {n} runs	Bruk {n} kjøring|Bruk {n} kjøringer
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Bruk {n} kjøring (ca. ± 5%)|Bruk {n} kjøringer (ca. ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Begge brukte tilfeldighetsfrø {seed} og den samme {n} kjøringen, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.|Begge brukte tilfeldighetsfrø {seed} og de samme {n} kjøringene, så hver kjøring får de samme tilfeldige tallene som sin partner: forskjellene kommer fra endringen, ikke fra tilfeldige trekk.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Begge brukte tilfeldighetsfrø {seed}, så hver kjøring får de samme tilfeldige tallene som sin partner, og kjøringene sammenlignes parvis: mye av den tilfeldige forskjellen mellom dem utlignes, og intervallet tar hensyn til det som er igjen.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annet viktig måltall endret seg ikke mer enn tilfeldigheter kunne.|{n} andre viktige måltall endret seg ikke mer enn tilfeldigheter kunne.
 @plural	and {n} more change|and {n} more changes	og {n} endring til|og {n} endringer til
 	Conveyor	Transportbånd
@@ -1531,6 +1533,12 @@ connection	Flow	Flyt
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Ti maskiner må gå, fire reservemaskiner står klare, og tre mekanikere reparerer dem som svikter (Crane og Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Hvor mange reservemaskiner og mekanikere holder ti maskiner i gang?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Reservemaskiner som står klare, kan ikke svikte: i snitt er 3.47 maskiner i stykker og 9.29 går. En fjerde mekaniker gjør omtrent like mye som fire reservemaskiner til.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Begge leste de tilfeldige tallene sine fra den samme filen på det samme stedet, så hver kjøring starter fra de samme tallene som sin partner, og kjøringene sammenlignes parvis. Hvert trekk tar de neste tallene i filen, så en endring kan flytte hvilken hendelse som leser hvilket tall, og mindre av den tilfeldige forskjellen utlignes kanskje; intervallet tar hensyn til det.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Referansen og denne kjøringen hentet de tilfeldige tallene sine fra forskjellige steder (et tilfeldighetsfrø, en annen fil eller deler av én fil som ikke overlapper), så de behandles som uavhengige kjøringer, og intervallene er bredere.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Referansen og denne kjøringen leste overlappende deler av den samme filen med tilfeldige tall, men ikke kjøring for kjøring, så de er verken uavhengige eller parvise, og ingen intervaller gjelder: bare gjennomsnittene sammenlignes. Les begge fra det samme stedet i filen eller fra deler som ikke overlapper.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referansen har {n_a} kjøringer og denne kjøringen {n_b}, så de første {n} av hver sammenlignes parvis; referansen og nå er gjennomsnittene deres over de kjøringene.
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Tilfeldige tall fra filen {file} (SHA-256 {sha}…), {bytes} byte for hver kjøring fra byte {offset}
+	Seed {seed} taken from {source}	Tilfeldighetsfrø {seed} hentet fra {source}
 	Scenario	Scenario
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Å åpne {scenario} forkaster de ulagrede endringene i {name}. Lagre dem først?

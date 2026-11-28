@@ -723,8 +723,9 @@ unit	yr	a
 	Could be chance	Võib olla juhus
 	No change	Muutust pole
 	Too few runs to tell	Liiga vähe käivitamisi, et otsustada
+	Not judged	Hindamata
 	{value} points	{value} protsendipunkti
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Võrdlusalus kasutas juhuarvuseemet {seed_a} ja {n_a} käivitamist, see käivitamine juhuarvuseemet {seed_b} ja {n_b} käivitamist, seega võrreldakse neid sõltumatute käivitamistena ja vahemikud on laiemad. Sama juhuarvuseeme ja käivitamiste arv annavad paarisvõrdluse.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Võrdlusalus kasutas juhuarvuseemet {seed_a} ja see käivitamine juhuarvuseemet {seed_b}, seega võrreldakse neid sõltumatute käivitamistena ja vahemikud on laiemad. Sama juhuarvuseeme annab paarisvõrdluse.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Võrdlusalus mõõtis aega ühikutes {a} ja see käivitamine ühikutes {b}, seega aegu ei võrrelda.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) langes väärtuselt {before} väärtusele {after}, {change} võrra: rohkem, kui juhus seletaks.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) tõusis väärtuselt {before} väärtusele {after}, {change} võrra: rohkem, kui juhus seletaks.
@@ -733,6 +734,7 @@ unit	yr	a
 	Baseline and now, key measures	Võrdlusalus ja praegu, peamised mõõdikud
 	Difference (paired, 95%)	Erinevus (paaris, 95%)
 	Difference (95%)	Erinevus (95%)
+	Difference of means	Keskmiste erinevus
 	Measure	Mõõdik
 	Baseline	Võrdlusalus
 	Now	Praegu
@@ -962,7 +964,7 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probleem: {blocks}|{n} probleemi: {blocks}
 @plural	Use {n} run|Use {n} runs	Kasuta {n} käivitamine|Kasuta {n} käivitamist
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Kasuta {n} käivitamine (umbes ± 5%)|Kasuta {n} käivitamist (umbes ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Mõlemad kasutasid juhuarvuseemet {seed} ja sama {n} käivitamist, nii et iga käivitamine saab samad juhuslikud arvud kui tema paariline: erinevused tulevad muudatusest, mitte juhuslikest valikutest.|Mõlemad kasutasid juhuarvuseemet {seed} ja samu {n} käivitamist, nii et iga käivitamine saab samad juhuslikud arvud kui tema paariline: erinevused tulevad muudatusest, mitte juhuslikest valikutest.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Mõlemad kasutasid juhuarvuseemet {seed}, nii et iga käivitamine saab samad juhuslikud arvud kui tema paariline ja käivitamisi võrreldakse paaris: suur osa nendevahelisest juhuslikust erinevusest taandub ära ning vahemik arvestab ülejäänuga.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Veel {n} peamine mõõdik ei muutunud rohkem, kui juhus võiks.|Veel {n} peamist mõõdikut ei muutunud rohkem, kui juhus võiks.
 @plural	and {n} more change|and {n} more changes	ja veel {n} muudatus|ja veel {n} muudatust
 	Conveyor	Konveier
@@ -1531,6 +1533,12 @@ connection	Flow	Voog
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Kümme masinat peavad töötama, neli varumasinat ootavad valmis ja kolm mehaanikut parandavad rikki läinud masinaid (Crane ja Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Mitu varumasinat ja mehaanikut hoiavad kümme masinat töös?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Ootel varumasinad ei saa rikki minna: keskmiselt on rikkis 3.47 masinat ja töötab 9.29. Neljas mehaanik annab umbes sama palju kui neli varumasinat juurde.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Mõlemad lugesid oma juhuslikud arvud samast failist samast kohast, nii et iga käivitamine algab samadest arvudest kui tema paariline ja käivitamisi võrreldakse paaris. Iga valik võtab faili järgmised arvud, mistõttu muudatus võib nihutada, milline sündmus millist arvu loeb, ja juhuslikust erinevusest võib vähem ära taanduda; vahemik arvestab seda.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Võrdlusalus ja see käivitamine võtsid oma juhuslikud arvud erinevatest kohtadest (juhuarvuseeme, teine fail või ühe faili osad, mis ei kattu), seega käsitletakse neid sõltumatute käivitamistena ja vahemikud on laiemad.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Võrdlusalus ja see käivitamine lugesid sama juhuslike arvude faili kattuvaid osi, kuid mitte käivitamine käivitamise haaval, seega ei ole nad ei sõltumatud ega paaris ning ükski vahemik ei kehti: võrreldakse ainult keskmisi. Lugege mõlemad samast kohast failis või osadest, mis ei kattu.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Võrdlusalusel on {n_a} käivitamist ja sellel käivitamisel {n_b}, seega võrreldakse kummagi esimest {n} paaris; võrdlusalus ja praegu on nende keskmised nende käivitamiste põhjal.
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Juhuslikud arvud failist {file} (SHA-256 {sha}…), {bytes} baiti iga käivitamise kohta alates baidist {offset}
+	Seed {seed} taken from {source}	Juhuarvuseeme {seed}, võetud allikast {source}
 	Scenario	Stsenaarium
 	Scenario: {name}	Stsenaarium: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Stsenaariumi {scenario} avamine kaotab faili {name} salvestamata muudatused. Kas salvestada need enne?

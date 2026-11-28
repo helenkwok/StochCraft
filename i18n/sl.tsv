@@ -723,8 +723,9 @@ unit	yr	l.
 	Could be chance	Lahko je naključje
 	No change	Brez spremembe
 	Too few runs to tell	Premalo zagonov za oceno
+	Not judged	Ni ocenjeno
 	{value} points	{value} o. t.
-	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referenca je uporabila seme {seed_a} in število zagonov {n_a}, ta zagon pa seme {seed_b} in število zagonov {n_b}, zato se primerjata kot neodvisna zagona in intervali so širši. Isto seme in isto število zagonov dajeta primerjavo v parih.
+	The baseline used seed {seed_a} and this run seed {seed_b}, so they are compared as independent runs and the intervals are wider. The same seed gives a paired comparison.	Referenca je uporabila seme {seed_a}, ta zagon pa seme {seed_b}, zato se primerjata kot neodvisna zagona in so intervali širši. Isto seme da primerjavo v parih.
 	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referenca je čas merila v {a}, ta zagon pa v {b}, zato se časi ne primerjajo.
 	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) je padel s {before} na {after}, za {change}: več, kot bi pojasnilo naključje.
 	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) je narasel s {before} na {after}, za {change}: več, kot bi pojasnilo naključje.
@@ -733,6 +734,7 @@ unit	yr	l.
 	Baseline and now, key measures	Referenca in zdaj, ključni kazalniki
 	Difference (paired, 95%)	Razlika (v parih, 95 %)
 	Difference (95%)	Razlika (95 %)
+	Difference of means	Razlika povprečij
 	Measure	Kazalnik
 	Baseline	Referenca
 	Now	Zdaj
@@ -962,7 +964,7 @@ unit	yr	l.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} težava: {blocks}|{n} težavi: {blocks}|{n} težave: {blocks}|{n} težav: {blocks}
 @plural	Use {n} run|Use {n} runs	Uporabi {n} zagon|Uporabi {n} zagona|Uporabi {n} zagone|Uporabi {n} zagonov
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Uporabi {n} zagon (približno ± 5%)|Uporabi {n} zagona (približno ± 5%)|Uporabi {n} zagone (približno ± 5%)|Uporabi {n} zagonov (približno ± 5%)
-@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba sta uporabila seme {seed} in isti {n} zagon, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in ista {n} zagona, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in iste {n} zagone, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.|Oba sta uporabila seme {seed} in istih {n} zagonov, zato vsak zagon dobi enaka naključna števila kot njegov par: razlike izhajajo iz spremembe, ne iz naključnih izborov.
+	Both used seed {seed}, so each run meets the same random numbers as its pair and the runs are compared in pairs: much of the chance difference between them cancels out, and the interval allows for what is left.	Oba sta uporabila seme {seed}, zato vsak zagon dobi enaka naključna števila kot njegov par in se zagoni primerjajo v parih: velik del naključne razlike med njima se izniči, interval pa upošteva, kar ostane.
 @plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Še {n} ključni kazalnik se ni premaknil bolj, kot bi lahko naključje.|Še {n} ključna kazalnika se nista premaknila bolj, kot bi lahko naključje.|Še {n} ključni kazalniki se niso premaknili bolj, kot bi lahko naključje.|Še {n} ključnih kazalnikov se ni premaknilo bolj, kot bi lahko naključje.
 @plural	and {n} more change|and {n} more changes	in še {n} sprememba|in še {n} spremembi|in še {n} spremembe|in še {n} sprememb
 	Conveyor	Tekoči trak
@@ -1531,6 +1533,12 @@ connection	Flow	Tok
 	Ten machines must run, four spares stand by and three repairmen fix the ones that break (Crane and Iglehart, Winter Simulation Conference, 1973).	Deset strojev mora obratovati, štirje rezervni čakajo v pripravljenosti, trije mehaniki pa popravljajo tiste, ki se pokvarijo (Crane in Iglehart, Winter Simulation Conference, 1973).
 	How many spares and repairmen keep ten machines running?	Koliko rezervnih strojev in mehanikov je potrebnih, da deset strojev obratuje?
 	Spares on standby cannot break down: 3.47 machines are broken on average and 9.29 run. A fourth repairman does about as much as four more spares.	Rezervni stroji v pripravljenosti se ne morejo pokvariti: v povprečju je pokvarjenih 3.47 strojev, obratuje pa 9.29. Četrti mehanik doseže približno toliko kot štirje rezervni stroji več.
+	Both read their random numbers from the same file at the same place, so each run starts from the same numbers as its pair and the runs are compared in pairs. Every draw takes the next numbers in the file, so a change can shift which event reads which number and less of the chance difference may cancel; the interval allows for it.	Oba sta svoja naključna števila prebrala iz iste datoteke na istem mestu, zato vsak zagon začne z enakimi števili kot njegov par in se zagoni primerjajo v parih. Vsako izbiranje vzame naslednja števila v datoteki, zato lahko sprememba premakne, kateri dogodek prebere katero število, in se manj naključne razlike izniči; interval to upošteva.
+	The baseline and this run took their random numbers from different places (a seed, another file, or parts of one file that do not overlap), so they are taken as independent runs and the intervals are wider.	Referenca in ta zagon sta svoja naključna števila vzela z različnih mest (seme, druga datoteka ali deli ene datoteke, ki se ne prekrivajo), zato se obravnavata kot neodvisna zagona in so intervali širši.
+	The baseline and this run read overlapping parts of the same file of random numbers, but not run for run, so they are neither independent nor paired and no interval holds: only the means are compared. Read both from the same place in the file, or from parts that do not overlap.	Referenca in ta zagon sta prebrala prekrivajoča se dela iste datoteke z naključnimi števili, vendar ne zagon za zagonom, zato nista ne neodvisna ne v parih in noben interval ne velja: primerjajo se le povprečja. Preberite oboje z istega mesta v datoteki ali iz delov, ki se ne prekrivajo.
+	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referenca ima {n_a} zagonov, ta zagon pa {n_b}, zato se prvih {n} vsakega primerja v parih; referenca in zdaj sta njuni povprečji čez te zagone.
+	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Naključna števila iz datoteke {file} (SHA-256 {sha}…), {bytes} bajtov za vsak zagon od bajta {offset}
+	Seed {seed} taken from {source}	Seme {seed}, vzeto iz {source}
 	Scenario	Scenarij
 	Scenario: {name}	Scenarij: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Odpiranje scenarija {scenario} zavrže neshranjene spremembe v {name}. Jih najprej shranim?

@@ -13,6 +13,7 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 - [Set up the experiment](#set-up-the-experiment)
 - [Run it](#run-it)
 - [Read the results](#read-the-results)
+- [Random numbers from a file](#random-numbers-from-a-file)
 - [Watch a run](#watch-a-run)
 - [Other views of the model](#other-views-of-the-model)
 - [Ask what-if questions: the Analysis view](#ask-what-if-questions-the-analysis-view)
@@ -516,17 +517,29 @@ To see what a change does, click **Keep as baseline** under the run record, chan
 - **Changed since the baseline:** what is different in the model, block by block, with both
   values, for example "Paint › Service time, Mean: 5.2 → 4.6". A change that was undone is not
   listed; moving blocks is not a change.
-- **How the runs were compared.** With the same seed and number of runs, run 1 of each meets the
-  same random numbers, and so on, and the runs are compared in pairs: the difference comes from
-  the change, not from chance draws. With another seed or number of runs (for example after
-  **Use N runs**), they are compared as independent runs, and the intervals are wider.
+- **How the runs were compared.** There are three ways, from where the two runs' random numbers
+  came from:
+  - **In pairs.** With the same seed, run 1 of each meets the same random numbers, and so on, so
+    the runs are compared in pairs: much of the chance difference between them cancels out, and
+    the interval allows for what is left. Run *i*'s numbers do not depend on how many runs there
+    are, so after **Use N runs** the first runs of each are still paired (20 runs against 10 pair
+    over the first 10), and the baseline and now are the means over those runs. Runs that read
+    the same file of random numbers from the same place with the same segment length are paired
+    too, but less of the chance difference may cancel: every draw takes the next numbers in the
+    file, so a change can shift which event reads which number.
+  - **As independent runs**, with wider intervals: another seed, a seed against a file, another
+    file (taken to be independent), or parts of one file that do not overlap.
+  - **Not judged**: runs that read overlapping parts of one file, but not run for run (another
+    offset or segment length), are neither independent nor paired, so no interval holds. Only
+    the means are shown, with the difference of means and the verdict **Not judged**.
 - **What the change did:** the largest real changes in sentences, for example "Mean wait (Paint)
   fell from 38 min to 17 min, by −21 ± 6 min: more than chance would explain".
 - **Baseline and now, key measures:** each block's key measures in both runs, the difference with
   its 95% interval (shares in percentage points), a mark of the change against a zero line, and a
   verdict: **Real: lower**, **Real: higher**, **Could be chance**, **No change** (every run gave
-  the same value), or **Too few runs to tell**. A verdict is real when the difference's interval
-  leaves out zero. Each row is judged on its own, so with many rows one may look real by chance.
+  the same value), **Too few runs to tell**, or **Not judged** (runs that shared some random
+  numbers but not run for run, as above: the column then gives the difference of means alone).
+  A verdict is real when the difference's interval leaves out zero. Each row is judged on its own, so with many rows one may look real by chance.
 
 **Keep this as the baseline** makes the new run the baseline; **Clear baseline** removes it.
 Opening another model or file clears it too.
@@ -575,6 +588,74 @@ agree on one result and differ on another. The observed data are part of the
 experiment, so changing them marks the results out of date; run again to check against the new
 ones. They are saved with the experiment in the file, and the command line prints the same
 section.
+
+## Random numbers from a file
+
+By default every run draws its random numbers from xoshiro256**, a pseudo-random generator, seeded
+from the experiment's seed. A run can instead read them from a file of random bytes, for example
+bytes recorded from a quantum or other physical random number source. This is a setting of the
+run (`random` in the `run` and `run.start` commands, for scripts and agents); choosing a source in
+the window comes later.
+
+**What it does and does not give you.** Bytes from a physical source are unpredictable, and
+the file, with its SHA-256 in the run record, says exactly which numbers the run used. They do
+not make the answers more accurate: a well-designed pseudo-random generator such as
+xoshiro256** is what simulation normally uses, and in practice it works fine. Being repeatable is
+a major advantage of a generator over a physical device, for checking a program and for
+comparing variants on common random numbers (L'Ecuyer, "Software for uniform random number
+generation: distinguishing the good and the bad", Proceedings of the 2001 Winter Simulation
+Conference, pp. 95–105, section 1.3); a file keeps that, since a run on it repeats exactly. The
+same paper shows that simplistic generators fail simple simulation tests, and a file can be no
+better than the device that made it. The bytes in the file are taken as they are: StochCraft does
+not test them, so a file of poor bytes gives poor random numbers.
+
+**How the file is read.**
+- Each run (replication) *i* reads its own segment of the file: *L* bytes from byte
+  `offset + i × L`. The segments do not overlap, so a run gives the same results on one thread or
+  many, in the browser's slices or on its workers.
+- Each draw takes the next eight bytes as a little-endian number *x* and uses
+  (2·⌊*x* / 2¹²⌋ + 1)·2⁻⁵³, which lies strictly between 0 and 1, as is 1 minus it. Every part of
+  the model (each block's times, routing, properties, breakdowns, setups) draws from the run's one
+  cursor, in the order its events happen.
+- *L* is `segment_bytes`. Left out, a short pilot chooses it: the first ten runs drawn the same
+  way from pseudo-random numbers, the most bytes one of them read × 1.5, rounded up to 4 KiB.
+  `random.pilot` gives that estimate on its own. It is an estimate: the file's numbers lead to
+  other events, so a run can read more.
+- A file too short for every run (for a run that adds runs until its results are precise
+  enough, its maximum) is refused before anything runs, with the bytes it would need.
+- A run whose segment runs out stops the whole run with `random_data_exhausted`, naming the run
+  and estimating the bytes it needs. No result is kept from it, and no byte is ever read twice:
+  give a longer segment or a larger file.
+
+```json
+{"replications": 20, "random": {"mode": "byte_file", "file": "qrng-2026-11-27.bin", "segment_bytes": 65536}}
+```
+
+The run record's `random` names the file, its SHA-256 and size, the offset, *L* and the bytes the
+runs read. Given back as `random`, it repeats the run exactly; a file whose SHA-256 differs from
+the one given is refused. The results show the file under the run's settings line.
+
+**Comparing runs.** Two runs meet the same random numbers run by run only if they read the same
+file (the same SHA-256) from the same offset with the same *L*, or both use the same seed; then
+Compare with a baseline pairs them, over the first runs of each if their numbers of runs differ.
+Runs on another file, on a seed, or on parts of the same file that do not overlap are compared
+as independent runs, with wider intervals. Runs on overlapping parts of the same file that are
+not run for run (another offset or *L*) are neither: only their means are shown, with no
+interval, and the verdict is **Not judged**. Read both from the same place, or from parts that do not overlap.
+
+**Limits.** A file of more than 1 GiB (256 MiB in the browser) is refused before it is read. A
+run on the browser's web workers sends every worker the bytes of all the runs it may have, so one
+that needs more than 8 MiB of the file is refused before it starts; run it in slices instead.
+
+**A seed from a source.** `{"mode": "seed_source", "source": …, "time": …, "pulse": …}` with the
+run's `seed` runs the usual pseudo-random streams from that seed, and records where the seed came
+from (for example a randomness beacon's pulse). The run repeats from its seed without calling the
+source again.
+
+**Not yet.** A file serves process models only. System dynamics, agent-based and Monte Carlo
+models, and sweeps, sensitivity, designed experiments, sizing, evaluation and optimisation, refuse
+one: they draw from streams keyed by the seed and each draw's purpose, which do not fit one cursor
+per run.
 
 ## Watch a run
 

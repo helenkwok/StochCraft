@@ -140,6 +140,7 @@ dependencies = [
  "stochcraft-experiment",
  "stochcraft-model",
  "stochcraft-random",
+ "stochcraft-random-before",
 ]
 
 [[package]]
@@ -174,6 +175,13 @@ dependencies = [
 [[package]]
 name = "stochcraft-random"
 version = "0.2.0"
+dependencies = [
+ "libm",
+]
+
+[[package]]
+name = "stochcraft-random-before"
+version = "0.1.0"
 dependencies = [
  "libm",
 ]
