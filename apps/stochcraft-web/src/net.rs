@@ -1,12 +1,16 @@
 //! Random number sources in the browser: fetching with the page's own `fetch` (no redirect
-//! followed, no cookies sent, a key only over HTTPS), answered between frames; and keys in the
+//! followed, no cookies sent, a key only over HTTPS, the body read in pieces under its cap, the
+//! whole request stopped at its timeout), answered between frames; and keys in the
 //! page's local storage, which the window warns about.
 
+use std::cell::Cell;
 use std::collections::BTreeMap;
+use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 
 use stochcraft_qrng::{Fetch, FetchError, KeyError, KeyStore, Method, Request, Secret, Ticket};
 use wasm_bindgen::JsCast as _;
+use wasm_bindgen::closure::Closure;
 use wasm_bindgen_futures::JsFuture;
 
 type Answer = Result<Vec<u8>, FetchError>;
@@ -16,6 +20,49 @@ type Answer = Result<Vec<u8>, FetchError>;
 pub struct WebFetch {
     next: u64,
     answers: Arc<Mutex<BTreeMap<u64, Option<Answer>>>>,
+}
+
+/// The timer that stops a request once its time is up: it aborts the request (the fetch and the
+/// reading of its body) and notes that it fired. Dropped, it is cleared, so it never fires after
+/// the request is over.
+struct Timer {
+    window: web_sys::Window,
+    handle: i32,
+    fired: Rc<Cell<bool>>,
+    _callback: Closure<dyn FnMut()>,
+}
+
+impl Timer {
+    fn start(
+        window: &web_sys::Window,
+        controller: &web_sys::AbortController,
+        timeout_ms: u64,
+    ) -> Result<Self, FetchError> {
+        let fired = Rc::new(Cell::new(false));
+        let (flag, abort) = (Rc::clone(&fired), controller.clone());
+        let callback = Closure::<dyn FnMut()>::new(move || {
+            flag.set(true);
+            abort.abort();
+        });
+        let handle = window
+            .set_timeout_with_callback_and_timeout_and_arguments_0(
+                callback.as_ref().unchecked_ref(),
+                crate::body::delay_ms(timeout_ms),
+            )
+            .map_err(|_| FetchError::Failed)?;
+        Ok(Self {
+            window: window.clone(),
+            handle,
+            fired,
+            _callback: callback,
+        })
+    }
+}
+
+impl Drop for Timer {
+    fn drop(&mut self) {
+        self.window.clear_timeout_with_handle(self.handle);
+    }
 }
 
 async fn get(r: Request, key: Option<String>) -> Answer {
@@ -29,6 +76,8 @@ async fn get(r: Request, key: Option<String>) -> Answer {
     });
     init.set_redirect(web_sys::RequestRedirect::Error);
     init.set_credentials(web_sys::RequestCredentials::Omit);
+    let controller = web_sys::AbortController::new().map_err(|_| FetchError::Failed)?;
+    init.set_signal(Some(&controller.signal()));
     let headers = web_sys::Headers::new().map_err(|_| FetchError::Failed)?;
     if let (Some(h), Some(k)) = (&r.key_header, &key) {
         headers.set(h, k).map_err(|_| FetchError::Failed)?;
@@ -37,9 +86,29 @@ async fn get(r: Request, key: Option<String>) -> Answer {
     let request =
         web_sys::Request::new_with_str_and_init(&r.url, &init).map_err(|_| FetchError::Failed)?;
     let window = web_sys::window().ok_or(FetchError::Unavailable)?;
+    // `timeout_ms` covers the whole request: the answer's headers and all of its body.
+    let timer = Timer::start(&window, &controller, r.timeout_ms)?;
+    let answer = fetch_body(&window, &request, r.max_bytes).await;
+    if answer.is_err() {
+        // A request stopped early is aborted, so nothing more of it is fetched.
+        controller.abort();
+    }
+    match answer {
+        Err(_) if timer.fired.get() => Err(FetchError::Timeout),
+        other => other,
+    }
+}
+
+/// The answer to `request`, its body read piece by piece and given up as soon as it passes
+/// `max_bytes`, so a larger one is never held whole.
+async fn fetch_body(
+    window: &web_sys::Window,
+    request: &web_sys::Request,
+    max_bytes: u64,
+) -> Answer {
     // The browser says only that it failed: no network, or a site that allows no requests from
     // other sites (CORS), look the same from here.
-    let response = JsFuture::from(window.fetch_with_request(&request))
+    let response = JsFuture::from(window.fetch_with_request(request))
         .await
         .map_err(|_| FetchError::Blocked)?;
     let response: web_sys::Response = response.dyn_into().map_err(|_| FetchError::Failed)?;
@@ -50,14 +119,32 @@ async fn get(r: Request, key: Option<String>) -> Answer {
     if !(200..300).contains(&status) {
         return Err(FetchError::Status(status));
     }
-    let buffer = JsFuture::from(response.array_buffer().map_err(|_| FetchError::Failed)?)
-        .await
+    let Some(stream) = response.body() else {
+        return Ok(Vec::new());
+    };
+    let reader: web_sys::ReadableStreamDefaultReader = stream
+        .get_reader()
+        .dyn_into()
         .map_err(|_| FetchError::Failed)?;
-    let bytes = js_sys::Uint8Array::new(&buffer).to_vec();
-    if bytes.len() as u64 > r.max_bytes {
-        return Err(FetchError::TooLarge);
+    let mut body = crate::body::Capped::new(max_bytes);
+    loop {
+        let read: web_sys::ReadableStreamReadResult = JsFuture::from(reader.read())
+            .await
+            .map_err(|_| FetchError::Failed)?
+            .unchecked_into();
+        if read.get_done().unwrap_or(true) {
+            return Ok(body.into_bytes());
+        }
+        let piece: js_sys::Uint8Array = read
+            .get_value()
+            .dyn_into()
+            .map_err(|_| FetchError::Failed)?;
+        if !body.fits(u64::from(piece.length())) || !body.push(&piece.to_vec()) {
+            // The rest is not read: the stream is cancelled (and the request aborted).
+            let _ = reader.cancel();
+            return Err(FetchError::TooLarge);
+        }
     }
-    Ok(bytes)
 }
 
 impl Fetch for WebFetch {
