@@ -78,8 +78,10 @@ impl LiveFeed {
         &data[..self.committed.min(data.len())]
     }
 
-    /// The record's `random` for the finished run: a run on the recorded file, which repeats it.
-    pub fn record(&self) -> Value {
+    /// The record's `random` for the finished run of `replications`: a run on the recorded file,
+    /// which repeats it. The file holds at least their segments (a sequential run that stopped
+    /// early holds no more than it fetched), and the record says so.
+    pub fn record(&self, replications: u64) -> Value {
         let data = self.recorded();
         let source = self.download.source();
         json!({
@@ -89,6 +91,7 @@ impl LiveFeed {
             "file_bytes": data.len(),
             "offset": 0,
             "segment_bytes": self.segment,
+            "replications": replications,
             "mapping": "each replication i reads bytes offset + i × segment_bytes on, eight at a time as a little-endian u64 x, mapped to (2·(x >> 12) + 1)·2^-53, strictly inside (0, 1)",
             "live": {
                 "source": source.id,

@@ -205,7 +205,10 @@ impl Plan {
         );
         v["record"] = self.record.clone();
         if let Some(live) = &self.live {
-            v["record"]["random"] = live.lock().unwrap_or_else(|e| e.into_inner()).record();
+            v["record"]["random"] = live
+                .lock()
+                .unwrap_or_else(|e| e.into_inner())
+                .record(reports.len() as u64);
         }
         if self.random.is_some() || self.live.is_some() {
             // What the replications read of the file: in all, and the most any one read (to

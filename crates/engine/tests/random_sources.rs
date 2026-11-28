@@ -131,9 +131,70 @@ fn a_live_run_equals_a_run_on_the_file_it_recorded() {
     // Its journal replays from the file.
     let journal = serde_json::to_string(&e.journal_document()).unwrap();
     assert!(
-        journal.contains("byte_file") && !journal.contains("\"live\""),
+        journal.contains("byte_file") && !journal.contains("\"mode\":\"live\""),
         "{journal}"
     );
+}
+
+#[test]
+fn a_sequential_live_run_that_stops_early_replays_from_what_it_recorded() {
+    let mut e = help_desk(ScriptedFetch::anu(13));
+    e.set_random_key("anu", KEY).unwrap();
+    let file = scratch("sequential-live.bin");
+    // ± 50 points on the desk's utilisation is met by the first batch of 4, far short of 200.
+    let sequential = json!({
+        "measure": { "element": "desk", "metric": "utilisation", "half_width": 0.5 },
+        "max": 200,
+    });
+    let status = run_started(
+        &mut e,
+        json!({ "replications": 4, "sequential": sequential, "random": {
+            "mode": "live", "source": "anu", "file": file } }),
+    );
+    assert_eq!(status["state"], "finished", "{status}");
+    let live = status["result"].clone();
+    assert_eq!(live["sequential"]["reason"], "target_met", "{live}");
+    let rec = live["record"]["random"].clone();
+    assert_eq!(rec["replications"], 4, "{rec}");
+    let segment = rec["segment_bytes"].as_u64().unwrap();
+    let bytes = std::fs::read(&file).unwrap();
+    let held = bytes.len() as u64;
+    // The file holds the segments fetched, not the 200 the run might have made.
+    assert!(held >= 4 * segment && held < 200 * segment, "{held}");
+    assert_eq!(rec["sha256"], stochcraft_qrng::sha256_hex(&bytes));
+    // The record repeats the run exactly: the same bytes, so the same stop.
+    let mut replay = Engine::new();
+    ok(&mut replay, "model.set", COMMANDS[0].example());
+    let from_file = ok(
+        &mut replay,
+        "run",
+        json!({ "replications": 4, "sequential": sequential, "random": rec }),
+    );
+    assert_eq!(from_file["record"]["random"]["replications"], 4);
+    assert_eq!(without_record(from_file), without_record(live.clone()));
+    // So does the journal, which knows no count: its file is checked for the first batch.
+    let journal = e.journal_document();
+    let mut again = Engine::new();
+    again.replay(&journal.entries).unwrap();
+    let replayed = ok(&mut again, "run.status", json!({}));
+    assert_eq!(replayed["state"], "finished", "{replayed}");
+    assert_eq!(
+        without_record(replayed["result"].clone()),
+        without_record(live)
+    );
+    // A replay that would go further than the run did stops where the bytes run out.
+    let tight = json!({
+        "measure": { "element": "desk", "metric": "mean_wait" },
+        "relative": 1e-9,
+        "max": 200,
+    });
+    let err = replay
+        .execute(
+            "run",
+            json!({ "replications": 4, "sequential": tight, "random": rec }),
+        )
+        .unwrap_err();
+    assert_eq!(err.code.name(), "random_data_exhausted", "{err}");
 }
 
 #[test]

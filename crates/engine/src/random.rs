@@ -15,7 +15,11 @@
 //!
 //! - `live`: bytes fetched from a random number source while the run goes, each replication's
 //!   segment recorded in order into a file (see the `sources` module); the finished run's record
-//!   is a `byte_file` run on that file.
+//!   is a `byte_file` run on that file. A sequential live run that met its target early recorded
+//!   only the segments it fetched, so its record (marked by `live`) gives the `replications` it
+//!   made, and the file is checked up front for those only (a journalled run, which has no count,
+//!   for its first batch): a replay draws the same bytes, so it stops where the run did, and one
+//!   that went further would stop with `random_data_exhausted` where the bytes run out.
 //!
 //! The record's `random` object can be given back as `random` to repeat the run: its extra
 //! fields (`bytes_used`, ...) are accepted and ignored.
@@ -106,9 +110,14 @@ pub struct RandomSpec {
     /// Filled in by the run record; accepted and ignored.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pilot: Option<Value>,
-    /// Filled in by the record of a live run (the source it fetched from); accepted and ignored.
+    /// Filled in by the record of a live run (the source it fetched from): marks a file as a
+    /// live run's recording, which is checked up front for `replications` only.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub live: Option<Value>,
+    /// A live run's recording: the replications the run made, which the file holds (by default
+    /// the first batch's). Filled in by the record.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub replications: Option<u64>,
 }
 
 /// The bytes a run reads: `data`, replication i's segment starting at `offset + i·segment`.
@@ -131,6 +140,12 @@ impl ByteFeed {
     /// Each replication's segment length.
     pub fn segment(&self) -> u64 {
         self.segment
+    }
+
+    /// The whole segments the data holds from the first replication's on.
+    pub fn segments(&self) -> u64 {
+        let have = u64::try_from(self.data.len()).unwrap_or(u64::MAX);
+        have.saturating_sub(self.offset) / self.segment.max(1)
     }
 
     /// Replication `index`'s stream: its segment.
@@ -378,14 +393,23 @@ pub(crate) fn prepare(
                 return Err(invalid("`segment_bytes` must be at least 8"));
             }
             let have = u64::try_from(data.len()).unwrap_or(u64::MAX);
-            let need = max
+            // A live run's recording holds the replications the run made: a replay stops where
+            // the run did. Any other file must hold every replication the run may make.
+            let checked = if spec.live.is_some() {
+                spec.replications
+                    .unwrap_or(experiment.replications)
+                    .min(max)
+            } else {
+                max
+            };
+            let need = checked
                 .checked_mul(segment)
                 .and_then(|n| n.checked_add(spec.offset));
             if need.is_none_or(|n| n > have) {
                 let need_text =
                     need.map_or_else(|| "more than can be counted".to_owned(), |n| n.to_string());
                 return Err(invalid(format!(
-                    "`{name}` has {have} bytes, but {max} replications of {segment} bytes from byte {} need {need_text}: give a larger file, fewer replications or a shorter segment (the file is never read twice)",
+                    "`{name}` has {have} bytes, but {checked} replications of {segment} bytes from byte {} need {need_text}: give a larger file, fewer replications or a shorter segment (the file is never read twice)",
                     spec.offset
                 )));
             }
@@ -400,6 +424,10 @@ pub(crate) fn prepare(
             });
             if let Some(p) = pilot {
                 record["pilot"] = p;
+            }
+            if let Some(live) = spec.live {
+                record["live"] = live;
+                record["replications"] = json!(checked);
             }
             Ok(Prepared {
                 record,

@@ -425,12 +425,16 @@ fn journalled(command: &str, params: Value, result: &Value) -> Vec<JournalEntry>
     };
     match command {
         // A live run is replayed from the file it recorded, without calling out.
+        // Marked as a live run's recording (`live`), the file is checked for the first batch
+        // only: the run's count is not known when it starts, and a replay stops where it did.
         "run.start" if params["random"]["mode"] == "live" => {
             let mut params = params;
+            let source = params["random"]["source"].clone();
             params["random"] = json!({
                 "mode": "byte_file",
                 "file": result["random"]["file"],
                 "segment_bytes": result["random"]["segment_bytes"],
+                "live": { "source": source },
             });
             vec![entry(command, params)]
         }
