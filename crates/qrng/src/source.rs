@@ -147,6 +147,8 @@ pub enum SourceError {
     KeyNeedsHttps,
     /// Asks for more than one unit, but the address has no `{n}`.
     NoCount,
+    /// The address has `{n}` in its host or port, not in its path or query.
+    CountInOrigin,
     BadHeader,
     BadNumbers,
     BadPath,
@@ -176,6 +178,9 @@ impl fmt::Display for SourceError {
             SourceError::NoCount => {
                 "the address needs {n} where the number to fetch goes, unless a request brings one unit (max_units 1)"
             }
+            SourceError::CountInOrigin => {
+                "{n} goes in the address's path or query, not its host or port: every request must go to the one origin the key is kept for"
+            }
             SourceError::BadHeader => {
                 "the key header is a header name: letters, digits and hyphens, not Host, Cookie or another reserved header"
             }
@@ -202,7 +207,7 @@ impl std::error::Error for SourceError {}
 const MOST_PER_REQUEST: u64 = 16 << 20;
 
 /// The parts of an `http(s)://` address: scheme, authority (host and port) and the rest.
-fn split_url(url: &str) -> Option<(&str, &str, &str)> {
+pub(crate) fn split_url(url: &str) -> Option<(&str, &str, &str)> {
     let (scheme, rest) = url.split_once("://")?;
     if !matches!(scheme, "https" | "http") {
         return None;
@@ -213,6 +218,55 @@ fn split_url(url: &str) -> Option<(&str, &str, &str)> {
         return None;
     }
     Some((scheme, authority, tail))
+}
+
+/// Whether an address split by [`split_url`] carries what looks like a credential: a user name
+/// or password before its host, or a query parameter whose name, percent-decoded, looks like a
+/// key. A name that does not decode counts as one.
+pub(crate) fn carries_credentials(authority: &str, tail: &str) -> bool {
+    if authority.contains('@') {
+        return true;
+    }
+    let Some((_, query)) = tail.split_once('?') else {
+        return false;
+    };
+    let query = query.split('#').next().unwrap_or("");
+    query.split(['&', ';']).any(|pair| {
+        let name = pair.split('=').next().unwrap_or("");
+        key_like(name) || percent_decoded(name).is_none_or(|n| key_like(&n))
+    })
+}
+
+/// `text` with its `%XX` escapes and `+` decoded; `None` when an escape is malformed or the
+/// bytes are not UTF-8.
+fn percent_decoded(text: &str) -> Option<String> {
+    let hex = |b: u8| {
+        char::from(b)
+            .to_digit(16)
+            .and_then(|d| u8::try_from(d).ok())
+    };
+    let bytes = text.as_bytes();
+    let mut out = Vec::with_capacity(bytes.len());
+    let mut i = 0;
+    while let Some(&b) = bytes.get(i) {
+        match b {
+            b'%' => {
+                let hi = hex(*bytes.get(i + 1)?)?;
+                let lo = hex(*bytes.get(i + 2)?)?;
+                out.push((hi << 4) | lo);
+                i += 3;
+            }
+            b'+' => {
+                out.push(b' ');
+                i += 1;
+            }
+            _ => {
+                out.push(b);
+                i += 1;
+            }
+        }
+    }
+    String::from_utf8(out).ok()
 }
 
 /// Query parameter names that look like they carry a key.
@@ -276,17 +330,13 @@ impl Source {
             return Err(SourceError::BadId);
         }
         let (scheme, authority, tail) = split_url(&self.url).ok_or(SourceError::BadUrl)?;
-        if authority.contains('@') {
+        if carries_credentials(authority, tail) {
             return Err(SourceError::KeyInUrl);
         }
-        if let Some((_, query)) = tail.split_once('?') {
-            let query = query.split('#').next().unwrap_or("");
-            if query
-                .split('&')
-                .any(|pair| key_like(pair.split('=').next().unwrap_or("")))
-            {
-                return Err(SourceError::KeyInUrl);
-            }
+        // The count goes in the path or the query: in the host or the port, requests for
+        // different counts would go to different origins with the key bound to one.
+        if authority.contains("{n}") {
+            return Err(SourceError::CountInOrigin);
         }
         if let Some(h) = &self.key_header {
             if !good_header(h) {
@@ -785,8 +835,46 @@ mod tests {
             "https://x.example/r?n={n}&api_key=abc",
             "https://x.example/r?token=abc&n={n}",
             "https://user:pw@x.example/r?n={n}",
+            // Percent-encoded names are decoded before the check (`%6B` is `k`, `%4B` `K`).
+            "https://x.example/r?n={n}&api%5Fkey=abc",
+            "https://x.example/r?n={n}&%6Bey=abc",
+            "https://x.example/r?%54OKEN=abc&n={n}",
+            "https://x.example/r?n={n};secret=abc",
+            // A name that does not decode is refused rather than let through.
+            "https://x.example/r?n={n}&%zzkey=abc",
+            "https://x.example/r?n={n}&ke%=abc",
+            "https://x.example/r?n={n}&%ff%fe=abc",
         ] {
             assert_eq!(s.set(&user(url)), Err(SourceError::KeyInUrl), "{url}");
+        }
+        // Ordinary names, encoded or not, pass.
+        for url in [
+            "https://x.example/r?n={n}&type=hex%31%36",
+            "https://x.example/r?n={n}&for%6Dat=hex",
+        ] {
+            assert!(s.set(&user(url)).is_ok(), "{url}");
+        }
+    }
+
+    #[test]
+    fn the_count_goes_in_the_path_or_query_never_the_origin() {
+        let mut s = Sources::default();
+        for url in [
+            "https://{n}.x.example/r",
+            "https://x{n}.example/r?n=1",
+            "https://x.example:{n}/r",
+        ] {
+            assert_eq!(s.set(&user(url)), Err(SourceError::CountInOrigin), "{url}");
+        }
+        for url in ["https://x.example/r/{n}", "https://x.example/r?n={n}"] {
+            let mut c = user(url);
+            c.id = format!("ok-{}", url.len());
+            assert!(s.set(&c).is_ok(), "{url}");
+            let source = s.get(&c.id).unwrap_or_else(|| panic!("{url}"));
+            let r = source.request(64).unwrap_or_else(|e| panic!("{e}"));
+            assert_eq!(source.origin().as_deref(), Some("https://x.example"));
+            assert!(r.url.starts_with("https://x.example/r"), "{}", r.url);
+            assert!(!r.url.contains("{n}"), "{}", r.url);
         }
     }
 

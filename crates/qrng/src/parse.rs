@@ -69,14 +69,21 @@ pub fn parse_answer(source: &Source, body: &[u8]) -> Result<(Vec<u8>, Option<Str
         Some(p) => json(body)
             .ok()
             .and_then(|doc| at(&doc, p).and_then(Value::as_str).map(str::to_owned))
-            .filter(|u| {
-                u.starts_with("https://")
-                    && u.len() <= 200
-                    && u.bytes().all(|b| b.is_ascii_graphic())
-            }),
+            .filter(|u| good_pulse(u)),
         None => None,
     };
     Ok((bytes, pulse))
+}
+
+/// A pulse address fit to record: `https://`, short, printable, and with nothing that looks
+/// like a credential (a user name or password, or a query parameter named like a key, checked
+/// as a source's own address is).
+fn good_pulse(url: &str) -> bool {
+    url.len() <= 200
+        && url.bytes().all(|b| b.is_ascii_graphic())
+        && crate::source::split_url(url).is_some_and(|(scheme, authority, tail)| {
+            scheme == "https" && !crate::source::carries_credentials(authority, tail)
+        })
 }
 
 fn text(body: &[u8]) -> Result<&str, ParseError> {
@@ -240,6 +247,31 @@ mod tests {
             parse_answer(org, b"12\n0\n255\n").map(|x| x.0),
             Ok(vec![12, 0, 255])
         );
+    }
+
+    #[test]
+    fn a_pulse_address_with_a_credential_is_not_recorded() {
+        let nist = presets()
+            .into_iter()
+            .find(|p| p.id == "nist-beacon")
+            .unwrap();
+        let answer = |uri: &str| {
+            let body = format!(r#"{{"pulse":{{"outputValue":"00ff","uri":"{uri}"}}}}"#);
+            parse_answer(&nist, body.as_bytes()).unwrap()
+        };
+        let plain = "https://beacon.nist.gov/beacon/2.0/chain/2/pulse/2044989";
+        assert_eq!(answer(plain), (vec![0, 255], Some(plain.to_owned())));
+        for uri in [
+            "https://user:pw@beacon.nist.gov/beacon/2.0/chain/2/pulse/1",
+            "https://beacon.nist.gov/beacon/2.0/pulse/1?token=abc",
+            "https://beacon.nist.gov/beacon/2.0/pulse/1?a=1&api%5Fkey=abc",
+            "https://beacon.nist.gov/beacon/2.0/pulse/1?%zz=1",
+            "http://beacon.nist.gov/beacon/2.0/pulse/1",
+            "https:///beacon/2.0/pulse/1",
+        ] {
+            // The bytes are kept; only the address is dropped.
+            assert_eq!(answer(uri), (vec![0, 255], None), "{uri}");
+        }
     }
 
     #[test]
