@@ -73,7 +73,14 @@ impl Headless {
                 && let Some(Value::String(file)) = r.get("file").cloned()
             {
                 let resolved = self.roots.check(Path::new(&file), access)?;
-                r["file"] = Value::String(resolved.to_string_lossy().into_owned());
+                let resolved = resolved.to_string_lossy().into_owned();
+                // The manifest the engine writes beside a recorded file, `<file>.json`: checked
+                // too, before anything is written, so a link there cannot lead out of the root.
+                if access == Access::Write {
+                    let manifest = format!("{resolved}.json");
+                    self.roots.check(Path::new(&manifest), Access::Write)?;
+                }
+                r["file"] = Value::String(resolved);
             }
             return Ok(params);
         }
@@ -316,5 +323,53 @@ mod tests {
         let stream = first_reachable(targets).unwrap();
         assert_eq!(stream.peer_addr().unwrap().port(), port);
         assert!(first_reachable(Vec::new()).is_err());
+    }
+
+    /// A link at `link` to `target`; `false` where the system does not allow one (Windows
+    /// without the privilege to make links).
+    fn link(target: &Path, link: &Path) -> bool {
+        #[cfg(unix)]
+        let made = std::os::unix::fs::symlink(target, link);
+        #[cfg(windows)]
+        let made = std::os::windows::fs::symlink_file(target, link);
+        #[cfg(not(any(unix, windows)))]
+        let made: std::io::Result<()> = Err(std::io::ErrorKind::Unsupported.into());
+        made.is_ok()
+    }
+
+    #[test]
+    fn a_manifest_linked_out_of_the_write_root_is_refused_before_anything_is_written() {
+        let dir = std::env::temp_dir().join(format!("stochcraft-manifest-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let root = dir.join("root");
+        std::fs::create_dir_all(&root).unwrap();
+        let root = std::fs::canonicalize(&root).unwrap();
+        let outside = std::fs::canonicalize(&dir).unwrap().join("outside.json");
+        std::fs::write(&outside, "{}").unwrap();
+        let file = root.join("bytes.bin");
+        if !link(&outside, &root.join("bytes.bin.json")) {
+            // No links here (Windows without the privilege): nothing to check.
+            let _ = std::fs::remove_dir_all(&dir);
+            return;
+        }
+        let h = Headless::new(Roots::new(Some(&root), Some(&root)).unwrap());
+        let file_text = file.to_string_lossy().into_owned();
+        let fetch = json!({ "source": "anu", "bytes": 64, "file": file_text });
+        let live = json!({ "random": { "mode": "live", "source": "anu", "file": file_text } });
+        for (command, params) in [("random.fetch", fetch), ("run.start", live)] {
+            let refused = h.confine(command, params).unwrap_err();
+            assert!(refused.contains("outside"), "{command}: {refused}");
+        }
+        // A run that only reads the file writes no manifest, so its link is not checked.
+        std::fs::write(&file, [0u8; 64]).unwrap();
+        let read = json!({ "random": { "mode": "byte_file", "file": file_text } });
+        assert!(h.confine("run", read).is_ok());
+        // Nothing was written outside the root.
+        assert_eq!(std::fs::read_to_string(&outside).unwrap(), "{}");
+        // A manifest beside the file, in the root, is fine.
+        std::fs::remove_file(root.join("bytes.bin.json")).unwrap();
+        let fetch = json!({ "source": "anu", "bytes": 64, "file": file_text });
+        assert!(h.confine("random.fetch", fetch).is_ok());
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }
