@@ -66,7 +66,6 @@ pub struct Download {
     last_start: Option<u64>,
     error: Option<DownloadError>,
     requests: u64,
-    handed_out: usize,
 }
 
 impl Download {
@@ -89,7 +88,6 @@ impl Download {
             last_start: None,
             error: None,
             requests: 0,
-            handed_out: 0,
         })
     }
 
@@ -164,13 +162,6 @@ impl Download {
         &self.data
     }
 
-    /// The bytes that arrived since the last call (to append to a recorded file as they come).
-    pub fn take_new(&mut self) -> &[u8] {
-        let from = self.handed_out.min(self.data.len());
-        self.handed_out = self.data.len();
-        &self.data[from..]
-    }
-
     pub fn chunks(&self) -> &[Chunk] {
         &self.chunks
     }
@@ -216,8 +207,6 @@ mod tests {
         let starts = fetch.started_at();
         assert!(starts.windows(2).all(|w| w[1] - w[0] >= 1000), "{starts:?}");
         assert_eq!(d.chunks().len(), 3);
-        assert_eq!(d.take_new().len(), d.data().len());
-        assert!(d.take_new().is_empty());
         assert!(fetch.keys_sent().iter().all(|k| k.as_deref() == Some("k")));
     }
 

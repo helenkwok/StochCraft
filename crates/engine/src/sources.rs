@@ -52,7 +52,10 @@ pub(crate) struct LiveFeed {
     pub segment: u64,
     pub max: u64,
     pub file: String,
-    written: bool,
+    /// The file has been created (emptied, if it was there).
+    created: bool,
+    /// The bytes written to the file so far: the first `committed` of the download's.
+    committed: usize,
     finished: bool,
 }
 
@@ -69,9 +72,15 @@ impl LiveFeed {
         self.download.data().get(from..to).map(Arc::from)
     }
 
+    /// The bytes recorded in the file (all fetched, in the browser, where nothing is written).
+    fn recorded(&self) -> &[u8] {
+        let data = self.download.data();
+        &data[..self.committed.min(data.len())]
+    }
+
     /// The record's `random` for the finished run: a run on the recorded file, which repeats it.
     pub fn record(&self) -> Value {
-        let data = self.download.data();
+        let data = self.recorded();
         let source = self.download.source();
         json!({
             "mode": "byte_file",
@@ -412,26 +421,28 @@ impl Engine {
         }
         let file = f.file.clone();
         let io = |e: std::io::Error| CommandError::new(ErrorCode::Io, format!("{file}: {e}"));
-        if !cfg!(target_arch = "wasm32") {
-            use std::io::Write;
-            let first = !f.written;
-            let new = f.download.take_new().to_vec();
-            if first || !new.is_empty() {
-                let mut out = std::fs::OpenOptions::new()
-                    .create(true)
-                    .write(true)
-                    .append(!first)
-                    .truncate(first)
-                    .open(&file)
-                    .map_err(io)?;
-                out.write_all(&new).map_err(io)?;
-                f.written = true;
-            }
+        if cfg!(target_arch = "wasm32") {
+            f.committed = f.download.data().len();
+        } else if !f.created || f.committed < f.download.data().len() {
+            // Appends what is not yet in the file. A write that fails counts the bytes that
+            // landed, so the next step (or the end of the run) writes only those still pending.
+            let f = &mut *f;
+            let mut out = std::fs::OpenOptions::new()
+                .create(true)
+                .write(true)
+                .append(f.committed > 0)
+                .truncate(f.committed == 0)
+                .open(&file)
+                .map_err(io)?;
+            f.created = true;
+            stochcraft_qrng::record::append_pending(&mut out, f.download.data(), &mut f.committed)
+                .map_err(io)?;
         }
         if over {
             f.finished = true;
             let d = &f.download;
-            let manifest = Manifest::new(d.source(), d.data(), d.chunks(), d.requests());
+            // The bytes in the file, which are every byte fetched once the writes succeeded.
+            let manifest = Manifest::new(d.source(), f.recorded(), d.chunks(), d.requests());
             if cfg!(target_arch = "wasm32") {
                 let data = d.data().to_vec();
                 drop(f);
@@ -472,7 +483,8 @@ impl Engine {
             segment,
             max,
             file: file.to_owned(),
-            written: false,
+            created: false,
+            committed: 0,
             finished: false,
         })))
     }
