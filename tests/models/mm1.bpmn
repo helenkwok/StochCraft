@@ -58,6 +58,33 @@
             <bpsim:ResourceParameters><bpsim:Quantity><bpsim:NumericParameter value="2"/></bpsim:Quantity></bpsim:ResourceParameters>
           </bpsim:ElementParameters>
         </bpsim:Scenario>
+        <bpsim:Scenario id="near-full-load" name="Near full load, four runs from empty" inherits="base">
+          <bpsim:ScenarioParameters replication="4">
+            <bpsim:Warmup><bpsim:FloatingParameter value="0"/></bpsim:Warmup>
+            <bpsim:Duration><bpsim:FloatingParameter value="10000"/></bpsim:Duration>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="arrive">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer><bpsim:NegativeExponentialDistribution mean="1.0526315789"/></bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="workstation" name="Workstation (M/G/1)" inherits="base">
+          <bpsim:ScenarioParameters replication="30">
+            <bpsim:Warmup><bpsim:FloatingParameter value="2000"/></bpsim:Warmup>
+            <bpsim:Duration><bpsim:FloatingParameter value="12080"/></bpsim:Duration>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="arrive">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer><bpsim:NegativeExponentialDistribution mean="6"/></bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="serve">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime><bpsim:TriangularDistribution mode="4" min="3" max="8"/></bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
       </bpsim:BPSimData>
     </semantic:extensionElements>
     <semantic:source>defs</semantic:source>

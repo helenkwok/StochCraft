@@ -776,8 +776,10 @@ fn changing_the_time_unit_rescales_values_with_their_own_unit() {
     }
     // Three lines in "base"; "two-clerks", which inherits from it, gets `baseTimeUnit="min"`
     // and the two rescaled values as they were: eight new lines, four of them the lines "base"
-    // had before (which a count of changed lines does not see).
-    assert_eq!(n, 10, "{}", diff(&file("mm1.bpmn"), &hours));
+    // had before (which a count of changed lines does not see); "near-full-load", which sets
+    // its own warm-up and arrivals, gets `baseTimeUnit="min"` on its parameters, as does
+    // "workstation": two more each.
+    assert_eq!(n, 14, "{}", diff(&file("mm1.bpmn"), &hours));
     // And back: the original numbers again.
     let t = text(&relabel(&hours, TimeUnit::Minutes));
     for want in [

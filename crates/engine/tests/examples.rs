@@ -27,6 +27,10 @@
 //!   beside Poisson arrivals at the same rate (M/M/1).
 //! - Able and Baker, two servers that differ in speed behind one queue (a service time by
 //!   resource), against the exact long-run answer of their discrete-time Markov chain.
+//! - the M/M/1 queue near full load (a scenario of `mm1.bpmn`), against the exact mean
+//!   and spread of a run of 10,000 minutes started empty, beside the twenty values Barton
+//!   (Simulation Workshop 2023) published; and a workstation with triangular processing (a
+//!   scenario of `mm1.bpmn`, after Wagner, same workshop), against Pollaczek–Khinchine.
 //! - one machine's availability (Hristova, Denev and Tsankov, 2024) against the alternating
 //!   renewal share MTBF / (MTBF + MTTR) of time up and the failures an hour.
 //!
@@ -1314,6 +1318,145 @@ fn able_and_baker_match_their_markov_chain() {
     );
 }
 
+/// One run of an M/M/1 queue near full load is very noisy. R. R. Barton (a tutorial on
+/// metamodelling, Proceedings of the Operational Research Society Simulation Workshop 2023, pp.
+/// 48-62, Table 1 on p. 51) ran an M/M/1 queue (service rate 1,
+/// first come first served) four times for 10,000 time units, starting empty, at arrival rates
+/// 0.75, 0.80, 0.85, 0.90 and 0.95, and reports each run's time-average number in the system.
+///
+/// Exact answers, for service rate μ = 1 and ρ = λ:
+/// - the long-run number in the system is L = ρ / (1 − ρ);
+/// - starting empty, the shortfall ∫ (L − E[N(t)]) dt over all time is ρ / (1 − ρ)³, so the
+///   expected time-average over a run of length T is L − ρ / ((1 − ρ)³ T): 2.9952 at ρ = 0.75
+///   and 18.24 at 0.95, a little under L;
+/// - the time-average of one long run has variance about 2ρ(1 + ρ) / ((1 − ρ)⁴ T) (the
+///   asymptotic constant of the time-average), so one run's standard deviation is 0.26 at 0.75
+///   and 7.70 at 0.95: a single run at 0.95 can say 10 or 30 for a true 19.
+///
+/// The test runs 200 replications per rate from the scenario "Near full load" (with the rate
+/// set for each) and checks, for each rate, the mean of the replications against the
+/// from-empty expectation, and the standard deviation of one run against the exact one. A run
+/// of finite length starting empty varies a little less than the asymptotic constant says
+/// (simulated: 0.87 of it at 0.95), so the ratio is only bounded loosely, between 0.7 and 1.25
+/// (200 runs put a sample standard deviation within about ±5% of the true one).
+///
+/// The twenty published values are checked only as "within 4 exact standard deviations of the
+/// expected mean": all are (the largest, 8.35 at 0.85, lies 3.4 away), since four runs say
+/// little. They are not an exact reproduction, which no other run could give.
+#[test]
+#[ignore = "heavy: 1,000 runs of 10,000 time units; CI runs it in release with the ignored tests"]
+fn one_run_near_full_load_is_noisy_as_exact_mm1_theory_says() {
+    let published: [(f64, [f64; 4]); 5] = [
+        (0.75, [2.73, 2.77, 3.13, 3.53]),
+        (0.80, [4.68, 3.54, 3.57, 3.93]),
+        (0.85, [5.50, 8.35, 5.69, 5.05]),
+        (0.90, [9.32, 8.48, 7.42, 9.32]),
+        (0.95, [23.68, 20.29, 28.35, 33.67]),
+    ];
+    let horizon = 10_000.0;
+
+    // The scenario is Barton's: ρ = 0.95, four runs of 10,000 minutes with no warm-up.
+    let m = model_of("mm1.bpmn", Some("near-full-load"));
+    let (service, capacity) = server(&m, "serve");
+    assert_eq!(capacity, 1);
+    assert!((service - 1.0).abs() < 1e-9, "{service}");
+    assert!((service / interarrival(&m, "arrive") - 0.95).abs() < 1e-6);
+    let x = &m.experiment;
+    assert_eq!(x.replications, 4);
+    assert!(x.warmup.abs() < 1e-9 && (x.duration - horizon).abs() < 1e-9);
+
+    for (rho, runs) in published {
+        let q = 1.0 - rho;
+        let long_run = rho / q;
+        let expected = long_run - rho / (q * q * q * horizon);
+        let sd = (2.0 * rho * (1.0 + rho) / (q * q * q * q) / horizon).sqrt();
+
+        let mut e = open_scenario(
+            "mm1.bpmn",
+            Some("near-full-load"),
+            json!({ "replications": 200, "seed": 2026 }),
+        );
+        ok(
+            &mut e,
+            "block.set",
+            json!({ "id": "arrive", "interarrival": { "type": "exponential", "mean": 1.0 / rho } }),
+        );
+        let r = ok(&mut e, "run", json!({}));
+        let (mean, hw) = result(&r, "serve", "mean_work_in_progress");
+        let each: Vec<f64> = r["values"]["serve"]["mean_work_in_progress"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter_map(Value::as_f64)
+            .collect();
+        assert_eq!(each.len(), 200, "{rho}");
+        let n = each.len() as f64;
+        let spread = (each.iter().map(|v| (v - mean) * (v - mean)).sum::<f64>() / (n - 1.0)).sqrt();
+        eprintln!(
+            "rho {rho}: mean {mean} ± {hw}, expected {expected} (L {long_run}); sd of one run {spread}, exact {sd}"
+        );
+        covers(&r, "serve", "mean_work_in_progress", expected);
+        assert!(
+            (0.7..=1.25).contains(&(spread / sd)),
+            "rho {rho}: sd of one run {spread}, exact {sd}"
+        );
+        for y in runs {
+            assert!(
+                (y - expected).abs() <= 4.0 * sd,
+                "rho {rho}: published {y}, expected {expected}, sd {sd}"
+            );
+        }
+    }
+}
+
+/// A workstation with random arrivals and a triangular processing time: G. Wagner (a tutorial on business
+/// process simulation, Proceedings of the Operational Research Society Simulation Workshop
+/// 2023, pp. 22-36, Fig. 6 on p. 31). The
+/// paper's figure swaps the two distributions: as printed, arrivals every 3 to 8 minutes and
+/// exponential processing at mean 6 minutes give ρ = 1.2, an unstable queue. The author's
+/// published code (MIT licence, github.com/gwagner57/oes, JavaScript/Core1/Workstation-1) has
+/// arrivals exponential with rate 1/6 a minute and processing triangular (minimum 3, mode 4,
+/// maximum 8) minutes, a 168 hour run, and the scenario follows the code.
+///
+/// Pollaczek–Khinchine: E[S] = 5 minutes, Var[S] = (3² + 4² + 8² − 3·4 − 3·8 − 4·8) / 18 =
+/// 21/18, so ρ = 5/6, E[S²] = 25 + 21/18, Wq = λ E[S²] / (2 (1 − ρ)) = 13.083 minutes, and by
+/// Little's law Lq = λ Wq = 2.1806 jobs.
+#[test]
+fn the_workstation_with_triangular_processing_matches_pollaczek_khinchine() {
+    let m = model_of("mm1.bpmn", Some("workstation"));
+    let gap = interarrival(&m, "arrive");
+    assert!((gap - 6.0).abs() < 1e-9, "{gap}");
+    let lambda = 1.0 / gap;
+    let service = match m.element(&ElementId::unchecked("serve")).map(|e| &e.kind) {
+        Some(ElementKind::Server { service, .. }) => service.clone(),
+        _ => panic!("the workstation is not a server"),
+    };
+    assert!(
+        matches!(service, Dist::Triangular { min, mode, max }
+            if (min - 3.0).abs() < 1e-9 && (mode - 4.0).abs() < 1e-9 && (max - 8.0).abs() < 1e-9),
+        "{service:?}"
+    );
+    let mean = service.mean().unwrap_or(f64::NAN);
+    let variance = service.variance().unwrap_or(f64::NAN);
+    assert!((mean - 5.0).abs() < 1e-9 && (variance - 21.0 / 18.0).abs() < 1e-9);
+    let rho = lambda * mean;
+    assert!((rho - 5.0 / 6.0).abs() < 1e-9, "{rho}");
+    let wait = pollaczek_khinchine(lambda, mean, mean * mean + variance);
+    assert!((wait - 13.083).abs() < 1e-3, "{wait}");
+    assert!((lambda * wait - 2.1806).abs() < 1e-4, "{}", lambda * wait);
+    assert!((m.experiment.duration - 168.0 * 60.0).abs() < 1e-9);
+
+    // Each run is 168 hours measured after a warm-up (about three times the queue's relaxation time).
+    let mut e = open_scenario(
+        "mm1.bpmn",
+        Some("workstation"),
+        json!({ "replications": 200, "seed": 2026 }),
+    );
+    let r = ok(&mut e, "run", json!({}));
+    covers(&r, "serve", "utilisation", rho);
+    covers(&r, "serve", "mean_wait", wait);
+    covers(&r, "serve", "mean_queue_length", lambda * wait);
+}
 /// One barista at ρ = 0.8: each customer's time in the shop (FIFO M/M/1) is exponential with
 /// rate μ − λ, so its p-quantile is −ln(1 − p) / (μ − λ) and the share done within X is
 /// 1 − e^{−(μ − λ)X}. The percentiles and the share at the departures match them; the mean time
