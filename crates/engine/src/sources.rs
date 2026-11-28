@@ -261,6 +261,25 @@ impl Engine {
                 "the browser cannot wait: give `wait: false` and poll random.status",
             ));
         }
+        // One acquisition at a time: a new one would drop the bytes of the one in progress.
+        // That one is stepped first, so one that has just finished or failed gives way.
+        if self
+            .random_job
+            .as_ref()
+            .is_some_and(|j| j.outcome.is_none())
+        {
+            let _ = self.random_status_now(false);
+        }
+        if self
+            .random_job
+            .as_ref()
+            .is_some_and(|j| j.outcome.is_none())
+        {
+            return Err(CommandError::new(
+                ErrorCode::Conflict,
+                "a draw or fetch is in progress: poll random.status until it is done, or stop it with random.status `cancel: true`",
+            ));
+        }
         self.random_job = Some(RandomJob {
             purpose,
             download,

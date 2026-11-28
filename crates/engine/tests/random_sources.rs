@@ -197,6 +197,49 @@ fn a_sequential_live_run_that_stops_early_replays_from_what_it_recorded() {
     assert_eq!(err.code.name(), "random_data_exhausted", "{err}");
 }
 
+/// Polls random.status until the draw or fetch is no longer running.
+fn settled(e: &mut Engine) -> Value {
+    for _ in 0..10_000 {
+        let s = ok(e, "random.status", json!({}));
+        if s["state"] != "running" {
+            return s;
+        }
+    }
+    panic!("the draw or fetch did not settle");
+}
+
+#[test]
+fn one_draw_or_fetch_at_a_time() {
+    let mut e = help_desk(ScriptedFetch::anu(5));
+    e.set_random_key("anu", KEY).unwrap();
+    let fetch =
+        json!({ "source": "anu", "bytes": 50_000, "file": scratch("one.bin"), "wait": false });
+    let draw = json!({ "source": "anu", "wait": false });
+    let started = ok(&mut e, "random.fetch", fetch.clone());
+    assert_eq!(started["state"], "running", "{started}");
+    // While it runs, another is refused, and it goes on.
+    let err = e.execute("random.seed.draw", draw.clone()).unwrap_err();
+    assert_eq!(err.code.name(), "conflict", "{err}");
+    let err = e.execute("random.fetch", fetch.clone()).unwrap_err();
+    assert_eq!(err.code.name(), "conflict", "{err}");
+    assert_eq!(ok(&mut e, "random.status", json!({}))["kind"], "file");
+    // Once cancelled, a new one starts.
+    let cancelled = ok(&mut e, "random.status", json!({ "cancel": true }));
+    assert_eq!(cancelled["state"], "cancelled", "{cancelled}");
+    ok(&mut e, "random.seed.draw", draw.clone());
+    // Once finished, too.
+    assert_eq!(settled(&mut e)["state"], "finished");
+    ok(&mut e, "random.fetch", fetch.clone());
+    assert_eq!(settled(&mut e)["state"], "finished");
+    // And once failed.
+    let mut failing = help_desk(ScriptedFetch::failing(FetchError::Status(503)));
+    failing.set_random_key("anu", KEY).unwrap();
+    ok(&mut failing, "random.seed.draw", draw.clone());
+    assert_eq!(settled(&mut failing)["state"], "failed");
+    let again = ok(&mut failing, "random.seed.draw", draw);
+    assert_ne!(again["state"], "idle", "{again}");
+}
+
 #[test]
 fn a_live_run_whose_source_fails_stops_with_its_reason() {
     let mut e = help_desk(ScriptedFetch::failing(FetchError::Status(403)));
