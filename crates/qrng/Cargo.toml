@@ -1,0 +1,22 @@
+[package]
+name = "stochcraft-qrng"
+description = "StochCraft's random number sources: presets and user-added services, response parsers, quota estimates, a health check on fetched bytes and the recorded-file format. No I/O: each app fetches through the `Fetch` trait."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-random = { workspace = true }
+# Sources, settings and records as JSON (MIT OR Apache-2.0), and their JSON schemas (MIT).
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+schemars = "1"
+# The SHA-256 of fetched and recorded bytes (MIT OR Apache-2.0).
+sha2 = "0.11"
+
+[lints]
+workspace = true

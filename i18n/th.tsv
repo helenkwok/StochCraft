@@ -1539,6 +1539,41 @@ connection	Flow	โฟลว์
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	เส้นฐานมี {n_a} รอบ และการรันนี้มี {n_b} รอบ จึงเปรียบเทียบ {n} รอบแรกของแต่ละอันแบบจับคู่ เส้นฐานและปัจจุบันคือค่าเฉลี่ยของรอบเหล่านั้น
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ตัวเลขสุ่มจากไฟล์ {file} (SHA-256 {sha}…), {bytes} ไบต์ต่อการรันแต่ละครั้ง เริ่มจากไบต์ที่ {offset}
 	Seed {seed} taken from {source}	เมล็ดสุ่ม {seed} ที่นำมาจาก {source}
+	quantum	ควอนตัม
+	public beacon, for seeds only	บีคอนสาธารณะ สำหรับเมล็ดสุ่มเท่านั้น
+	not quantum (atmospheric noise)	ไม่ใช่ควอนตัม (สัญญาณรบกวนในบรรยากาศ)
+	added by you	คุณเพิ่มเอง
+	Draw a seed first.	สุ่มเมล็ดสุ่มก่อน
+	Give the file of random bytes.	ระบุไฟล์ไบต์สุ่ม
+	Random numbers	ตัวเลขสุ่ม
+	Generator	ตัวสร้าง
+	Seed from a source	เมล็ดสุ่มจากแหล่งที่มา
+	File of random bytes	ไฟล์ไบต์สุ่ม
+	Live from a source	สดจากแหล่งที่มา
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256** เริ่มจากเมล็ดสุ่มของการทดลอง: ทำซ้ำได้ และเป็นสิ่งที่การจำลองใช้ตามปกติ
+	Draw a seed	สุ่มเมล็ดสุ่ม
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ระดับฟรีของ ANU (100 คำขอต่อเดือน) ครอบคลุมเมล็ดสุ่ม ไม่ครอบคลุมการรันสด: การรันสดต้องใช้ระดับที่เสียเงิน การรันแต่ละครั้งรอไบต์ของตน และทุกไบต์จะถูกบันทึกในไฟล์ จึงรันซ้ำจากไฟล์นั้นได้
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	ตัวเลขจากแหล่งทางกายภาพคาดเดาไม่ได้และบอกว่ามาจากที่ใด เมื่อเทียบกับตัวสร้างที่ดี การศึกษาที่ผ่านมายังไม่พบความแตกต่างด้านความแม่นยำ คู่มือสรุปหลักฐานไว้ให้
+	Hide the sources	ซ่อนแหล่งที่มา
+	Sources and keys…	แหล่งที่มาและคีย์…
+	No key	ไม่มีคีย์
+	From byte	จากไบต์ที่
+	Bytes per run	ไบต์ต่อการรัน
+	from a pilot	จากการรันนำร่อง
+	Estimate	การประมาณ
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} ไบต์สำหรับ {runs} การรัน: {requests} คำขอ อย่างน้อย {time}
+	More than a month of the free tier allows.	มากกว่าที่ระดับฟรีอนุญาตในหนึ่งเดือน
+	Key kept	เก็บคีย์ไว้แล้ว
+	Forget key	ลืมคีย์
+	Key	คีย์
+	Save key	บันทึกคีย์
+	Add a source	เพิ่มแหล่งที่มา
+	Address, with {n} for the count	ที่อยู่ โดย {n} แทนจำนวน
+	Key header	ส่วนหัวของคีย์
+	JSON path	พาธ JSON
+	Encoding	การเข้ารหัส
+	Add	เพิ่ม
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	ในเบราว์เซอร์ คีย์จะถูกเก็บไว้ในที่เก็บข้อมูลภายในเครื่องของเว็บไซต์นี้โดยไม่เข้ารหัส: ทุกสิ่งที่ทำงานบนหน้านี้และทุกคนที่ใช้โปรไฟล์เบราว์เซอร์นี้อ่านคีย์ได้ ใช้คีย์ที่คุณเพิกถอนได้ หรือแอปเดสก์ท็อปซึ่งเก็บคีย์ไว้ในพวงกุญแจของระบบ
 	Scenario	สถานการณ์
 	Scenario: {name}	สถานการณ์: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	การเปิด {scenario} จะทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกใน {name} บันทึกก่อนหรือไม่

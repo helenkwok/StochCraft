@@ -2668,6 +2668,15 @@ fn sequential_override(
 
 fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Run = parse(p)?;
+    if p.random
+        .as_ref()
+        .is_some_and(|r| r.mode == crate::random::RandomMode::Live)
+    {
+        return Err(CommandError::new(
+            ErrorCode::Unsupported,
+            "a live run fetches its random numbers while it runs: start it with run.start and follow it with run.status",
+        ));
+    }
     let sequential = sequential_override(e.model(), p.sequential)?;
     e.plan(
         p.replications,
@@ -3657,6 +3666,54 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<RandomPilot>,
         example: || json!({ "replications": 2 }),
         run: random_pilot,
+    },
+    Command {
+        name: "random.sources",
+        summary: "The random number sources this session knows: the presets (ANU Quantum Numbers, the NIST Randomness Beacon for seeds, random.org, off until enabled) and any added with random.source.set, each with its kind, its address without the query, its limits and whether a key is `present`, `absent` or `not_needed`. Keys are never shown, and no command takes one: they are entered in the window's source manager and kept in the OS keychain (in the browser, the page's storage).",
+        kind: CommandKind::Query,
+        schema: schema::<NoParams>,
+        example: || json!({}),
+        run: crate::sources::random_sources,
+    },
+    Command {
+        name: "random.source.set",
+        summary: "Change the random number sources: enable or disable a preset (`enabled`), or add, change or remove (`remove`) a source of your own: `url` with {n} for the count, `method`, the `key_header` name (never the key, and no key in the address: one is refused), `format` (`{\"type\": \"json\", \"path\", \"encoding\": \"hex\" | \"base64\" | \"numbers\"}`, `hex`, `base64`, `numbers` or `raw`), `bytes_per_unit`, `max_units` per request and `min_interval_ms` between requests. A key needs HTTPS; a new origin unbinds the key.",
+        kind: CommandKind::Query,
+        schema: schema::<stochcraft_qrng::SourceChange>,
+        example: || json!({ "id": "random-org", "enabled": true }),
+        run: crate::sources::random_source_set,
+    },
+    Command {
+        name: "random.estimate",
+        summary: "What drawing a seed (`mode` `seed`), fetching a file (`file`) or a live run (`live`, the default) of the experiment asks of a source: the bytes (replications × each one's segment, from a pilot unless given), the requests, the least time their spacing takes, and the requests a month of the source's free tier allows. ANU's free tier (100 requests a month) covers seeds; a live run of any size needs its paid tier.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::sources::RandomEstimate>,
+        example: || json!({ "source": "anu", "mode": "seed" }),
+        run: crate::sources::random_estimate,
+    },
+    Command {
+        name: "random.seed.draw",
+        summary: "Draw a seed from a source: its answer's bytes (a beacon pulse's 512 bits) through SHA-256, the low 53 bits of the first eight bytes (`rule`). Returns the `seed` and `random`, the provenance to give `run` or `run.start` with that `seed` (`seed_source`: the source, the time and the pulse), so a run records where its seed came from and repeats without calling out. Waits until done unless `wait` is false (always in the browser): then poll random.status.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::sources::RandomSeedDraw>,
+        example: || json!({ "source": "nist-beacon", "wait": false }),
+        run: crate::sources::random_seed_draw,
+    },
+    Command {
+        name: "random.fetch",
+        summary: "Fetch `bytes` random bytes (or enough for `replications` of `segment_bytes`, from a pilot unless given) from a source into `file`, one request at a time no faster than it allows, with a manifest beside it (`<file>.json`: the source, each answer's time, the SHA-256 and a health check, the SP 800-22 frequency and runs tests and repeated blocks, which warns and never blocks). A run reads the file with `random` `byte_file`. Waits until done unless `wait` is false (always in the browser, where the bytes are kept under the name `file`): then poll random.status.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::sources::RandomFetch>,
+        example: || json!({ "source": "random-org", "bytes": 1024, "file": "random-org.bin", "wait": false }),
+        run: crate::sources::random_fetch,
+    },
+    Command {
+        name: "random.status",
+        summary: "Where the draw or fetch in progress is (`running`, with the bytes so far and how long until the next request; `finished`, with the `result`; `failed` or `cancelled`, with the `error`), stepping it on: call it until it is done. `cancel` stops it; a fetch keeps what it fetched.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::sources::RandomStatus>,
+        example: || json!({}),
+        run: crate::sources::random_status,
     },
     Command {
         name: "file.save",

@@ -29,3 +29,6 @@ accepted = ["OFL-1.1", "Ubuntu-font-1.0"]
 # A file-level licence; used unmodified from crates.io.
 [option-ext]
 accepted = ["MPL-2.0"]
+# CA root certificate data, used unmodified from crates.io (the same exception as deny.toml).
+[webpki-root-certs]
+accepted = ["CDLA-Permissive-2.0"]

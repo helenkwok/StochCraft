@@ -16,6 +16,8 @@ workspace = true
 stochcraft-ui-egui = { workspace = true }
 # The control channel the MCP server connects to (`--control`).
 stochcraft-mcp = { workspace = true }
+# The network and the OS keychain for random number sources.
+stochcraft-qrng-net = { workspace = true }
 eframe = { workspace = true, features = ["default_fonts", "glow", "accesskit", "wayland", "x11"] }
 egui = { workspace = true }
 craft-atomic = { workspace = true }

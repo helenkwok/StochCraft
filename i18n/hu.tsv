@@ -1539,6 +1539,41 @@ connection	Flow	Folyamat
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	A viszonyítási alapnak {n_a} futása van, ennek a futásnak {n_b}, ezért mindkettő első {n} futását páronként hasonlítjuk össze; a viszonyítási alap és a mostani ezeknek a futásoknak az átlagai.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Véletlen számok a(z) {file} fájlból (SHA-256 {sha}…), futásonként {bytes} bájt a(z) {offset}. bájttól
 	Seed {seed} taken from {source}	A(z) {seed} véletlenszám-mag innen: {source}
+	quantum	kvantum
+	public beacon, for seeds only	nyilvános jeladó, csak magokhoz
+	not quantum (atmospheric noise)	nem kvantum (légköri zaj)
+	added by you	általad hozzáadva
+	Draw a seed first.	Előbb húzz egy véletlenszám-magot.
+	Give the file of random bytes.	Add meg a véletlen bájtok fájlját.
+	Random numbers	Véletlen számok
+	Generator	Generátor
+	Seed from a source	Véletlenszám-mag forrásból
+	File of random bytes	Véletlen bájtok fájlja
+	Live from a source	Élőben egy forrásból
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, a kísérlet véletlenszám-magjából indítva: megismételhető, és ezt használja a szimuláció általában.
+	Draw a seed	Véletlenszám-mag húzása
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Az ANU ingyenes szintje (havi 100 kérés) magokat fedez, élő futásokat nem: az élő futáshoz a fizetős szint kell. Minden futás megvárja a saját bájtjait, és minden bájt rögzítésre kerül a fájlban, így a futás abból megismételhető.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	A fizikai forrásból származó számok kiszámíthatatlanok, és megmondják, honnan jöttek. Egy jó generátorral összevetve az eddigi vizsgálatok nem találnak különbséget a pontosságban; az útmutató összefoglalja a bizonyítékokat.
+	Hide the sources	Források elrejtése
+	Sources and keys…	Források és kulcsok…
+	No key	Nincs kulcs
+	From byte	Bájttól
+	Bytes per run	Bájt futásonként
+	from a pilot	próbafutásból
+	Estimate	Becslés
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bájt {runs} futáshoz: {requests} kérés, legalább {time}
+	More than a month of the free tier allows.	Több, mint amit az ingyenes szint egy hónapban megenged.
+	Key kept	Kulcs megőrizve
+	Forget key	Kulcs elfelejtése
+	Key	Kulcs
+	Save key	Kulcs mentése
+	Add a source	Forrás hozzáadása
+	Address, with {n} for the count	Cím, ahol {n} a darabszám
+	Key header	Kulcs fejléce
+	JSON path	JSON-útvonal
+	Encoding	Kódolás
+	Add	Hozzáadás
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	A böngészőben a kulcsok titkosítatlanul az oldal helyi tárolójában maradnak: elolvashatja őket bármi, ami ezen az oldalon fut, és bárki, aki ezt a böngészőprofilt használja. Használj olyan kulcsot, amelyet vissza tudsz vonni, vagy az asztali alkalmazást, amely a kulcsokat a rendszer kulcstartójában őrzi.
 	Scenario	Forgatókönyv
 	Scenario: {name}	Forgatókönyv: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	A(z) {scenario} megnyitása elveti a(z) {name} mentetlen módosításait. Előbb menti őket?

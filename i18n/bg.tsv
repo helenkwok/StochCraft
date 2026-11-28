@@ -1539,6 +1539,41 @@ connection	Flow	Поток
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Базовият вариант има {n_a} изпълнения, а това изпълнение {n_b}, затова първите {n} от всяко се сравняват по двойки; базовият вариант и сега са техните средни за тези изпълнения.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Случайни числа от файла {file} (SHA-256 {sha}…), {bytes} байта за всяко изпълнение от байт {offset}
 	Seed {seed} taken from {source}	Начална стойност {seed}, взета от {source}
+	quantum	квантов
+	public beacon, for seeds only	публичен маяк, само за начални стойности
+	not quantum (atmospheric noise)	неквантов (атмосферен шум)
+	added by you	добавен от вас
+	Draw a seed first.	Първо изтеглете начална стойност.
+	Give the file of random bytes.	Задайте файла със случайни байтове.
+	Random numbers	Случайни числа
+	Generator	Генератор
+	Seed from a source	Начална стойност от източник
+	File of random bytes	Файл със случайни байтове
+	Live from a source	На живо от източник
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, стартиран от началната стойност на експеримента: повторяем и това, което симулацията обикновено използва.
+	Draw a seed	Изтегляне на начална стойност
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Безплатното ниво на ANU (100 заявки на месец) покрива начални стойности, не изпълнения на живо: изпълнение на живо изисква платеното ниво. Всяко изпълнение чака своите байтове, а всеки байт се записва във файла, така че изпълнението може да се повтори от него.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Числата от физически източник са непредсказуеми и казват откъде идват. В сравнение с добър генератор проучванията досега не откриват разлика в точността; ръководството обобщава доказателствата.
+	Hide the sources	Скриване на източниците
+	Sources and keys…	Източници и ключове…
+	No key	Няма ключ
+	From byte	От байт
+	Bytes per run	Байтове на изпълнение
+	from a pilot	от пилотно изпълнение
+	Estimate	Оценка
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} байта за {runs} изпълнения: {requests} заявки, поне {time}
+	More than a month of the free tier allows.	Повече, отколкото позволява безплатното ниво за месец.
+	Key kept	Ключът е запазен
+	Forget key	Забравяне на ключа
+	Key	Ключ
+	Save key	Запазване на ключа
+	Add a source	Добавяне на източник
+	Address, with {n} for the count	Адрес, където {n} е броят
+	Key header	Заглавна част на ключа
+	JSON path	JSON път
+	Encoding	Кодиране
+	Add	Добавяне
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	В браузъра ключовете се съхраняват некриптирани в локалното хранилище на този сайт: могат да ги прочетат всичко, което работи на тази страница, и всеки, който ползва този профил на браузъра. Използвайте ключ, който можете да отмените, или настолното приложение, което пази ключовете в ключодържателя на системата.
 	Scenario	Сценарий
 	Scenario: {name}	Сценарий: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Отварянето на {scenario} отхвърля незаписаните промени в {name}. Да се запишат ли първо?

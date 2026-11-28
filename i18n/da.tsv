@@ -1539,6 +1539,41 @@ connection	Flow	Flow
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referencen har {n_a} kørsler og denne kørsel {n_b}, så de første {n} af hver sammenlignes parvis; referencen og nu er deres gennemsnit over de kørsler.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Tilfældige tal fra filen {file} (SHA-256 {sha}…), {bytes} bytes for hver kørsel fra byte {offset}
 	Seed {seed} taken from {source}	Tilfældighedsfrø {seed} hentet fra {source}
+	quantum	kvante
+	public beacon, for seeds only	offentligt beacon, kun til frø
+	not quantum (atmospheric noise)	ikke kvante (atmosfærisk støj)
+	added by you	tilføjet af dig
+	Draw a seed first.	Træk først et frø.
+	Give the file of random bytes.	Angiv filen med tilfældige bytes.
+	Random numbers	Tilfældige tal
+	Generator	Generator
+	Seed from a source	Frø fra en kilde
+	File of random bytes	Fil med tilfældige bytes
+	Live from a source	Live fra en kilde
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, sat i gang fra eksperimentets frø: gentagelig, og det simulation normalt bruger.
+	Draw a seed	Træk et frø
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU's gratis niveau (100 forespørgsler om måneden) dækker frø, ikke live-kørsler: en live-kørsel kræver det betalte niveau. Hver kørsel venter på sine bytes, og hver byte gemmes i filen, så kørslen kan gentages ud fra den.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Tal fra en fysisk kilde er uforudsigelige og fortæller, hvor de kommer fra. Sammenlignet med en god generator finder hidtidige studier ingen forskel i præcision; vejledningen opsummerer beviserne.
+	Hide the sources	Skjul kilderne
+	Sources and keys…	Kilder og nøgler…
+	No key	Ingen nøgle
+	From byte	Fra byte
+	Bytes per run	Bytes pr. kørsel
+	from a pilot	fra en pilotkørsel
+	Estimate	Skøn
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bytes til {runs} kørsler: {requests} forespørgsler, mindst {time}
+	More than a month of the free tier allows.	Mere, end det gratis niveau tillader på en måned.
+	Key kept	Nøgle gemt
+	Forget key	Glem nøgle
+	Key	Nøgle
+	Save key	Gem nøgle
+	Add a source	Tilføj en kilde
+	Address, with {n} for the count	Adresse, med {n} for antallet
+	Key header	Nøgle-header
+	JSON path	JSON-sti
+	Encoding	Kodning
+	Add	Tilføj
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	I browseren gemmes nøgler ukrypteret i dette websteds lokale lager: alt, der kører på denne side, og enhver, der bruger denne browserprofil, kan læse dem. Brug en nøgle, du kan tilbagekalde, eller skrivebordsprogrammet, som gemmer nøgler i systemets nøglering.
 	Scenario	Scenarie
 	Scenario: {name}	Scenarie: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Hvis {scenario} åbnes, kasseres de ikke-gemte ændringer i {name}. Gem dem først?

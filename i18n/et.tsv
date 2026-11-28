@@ -1539,6 +1539,41 @@ connection	Flow	Voog
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Võrdlusalusel on {n_a} käivitamist ja sellel käivitamisel {n_b}, seega võrreldakse kummagi esimest {n} paaris; võrdlusalus ja praegu on nende keskmised nende käivitamiste põhjal.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Juhuslikud arvud failist {file} (SHA-256 {sha}…), {bytes} baiti iga käivitamise kohta alates baidist {offset}
 	Seed {seed} taken from {source}	Juhuarvuseeme {seed}, võetud allikast {source}
+	quantum	kvant
+	public beacon, for seeds only	avalik majakas, ainult seemnetele
+	not quantum (atmospheric noise)	mitte kvant (atmosfäärimüra)
+	added by you	sinu lisatud
+	Draw a seed first.	Tõmba kõigepealt juhuarvuseeme.
+	Give the file of random bytes.	Anna juhuslike baitide fail.
+	Random numbers	Juhuslikud arvud
+	Generator	Generaator
+	Seed from a source	Juhuarvuseeme allikast
+	File of random bytes	Juhuslike baitide fail
+	Live from a source	Otse allikast
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, algväärtustatud katse juhuarvuseemnest: korratav ja see, mida simulatsioon tavaliselt kasutab.
+	Draw a seed	Tõmba juhuarvuseeme
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU tasuta tase (100 päringut kuus) katab seemned, mitte otsekäivitusi: otsekäivitus vajab tasulist taset. Iga käivitamine ootab oma baite ja iga bait salvestatakse faili, nii et käivitamist saab sellest korrata.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Füüsilise allika arvud on ettearvamatud ja ütlevad, kust nad pärinevad. Hea generaatoriga võrreldes ei leia seni tehtud uuringud täpsuses vahet; juhend võtab tõendid kokku.
+	Hide the sources	Peida allikad
+	Sources and keys…	Allikad ja võtmed…
+	No key	Võtit pole
+	From byte	Baidist alates
+	Bytes per run	Baite käivitamise kohta
+	from a pilot	pilootkäivitusest
+	Estimate	Hinnang
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} baiti {runs} käivitamise jaoks: {requests} päringut, vähemalt {time}
+	More than a month of the free tier allows.	Rohkem, kui tasuta tase kuus lubab.
+	Key kept	Võti salvestatud
+	Forget key	Unusta võti
+	Key	Võti
+	Save key	Salvesta võti
+	Add a source	Lisa allikas
+	Address, with {n} for the count	Aadress, kus {n} on arv
+	Key header	Võtme päis
+	JSON path	JSON-tee
+	Encoding	Kodeering
+	Add	Lisa
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Brauseris hoitakse võtmeid selle saidi kohalikus salvestuses krüpteerimata: neid saab lugeda kõik, mis sellel lehel töötab, ja igaüks, kes seda brauseriprofiili kasutab. Kasuta võtit, mida saad tühistada, või töölauarakendust, mis hoiab võtmeid süsteemi võtmehoidjas.
 	Scenario	Stsenaarium
 	Scenario: {name}	Stsenaarium: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Stsenaariumi {scenario} avamine kaotab faili {name} salvestamata muudatused. Kas salvestada need enne?

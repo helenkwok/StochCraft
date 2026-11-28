@@ -1539,6 +1539,41 @@ connection	Flow	Потік
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	У базового варіанта {n_a} запусків, а в цього запуску {n_b}, тож перші {n} з кожного порівнюють парами; базовий варіант і зараз — їхні середні за цими запусками.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Випадкові числа з файлу {file} (SHA-256 {sha}…), {bytes} байтів на кожен запуск, починаючи з байта {offset}
 	Seed {seed} taken from {source}	Початкове значення генератора {seed}, взяте з {source}
+	quantum	квантовий
+	public beacon, for seeds only	публічний маяк, лише для початкових значень
+	not quantum (atmospheric noise)	не квантовий (атмосферний шум)
+	added by you	додано вами
+	Draw a seed first.	Спершу отримайте початкове значення.
+	Give the file of random bytes.	Вкажіть файл із випадковими байтами.
+	Random numbers	Випадкові числа
+	Generator	Генератор
+	Seed from a source	Початкове значення з джерела
+	File of random bytes	Файл із випадковими байтами
+	Live from a source	Наживо з джерела
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, запущений від початкового значення експерименту: відтворюваний, і те, що зазвичай використовує моделювання.
+	Draw a seed	Отримати початкове значення
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Безкоштовний рівень ANU (100 запитів на місяць) покриває початкові значення, але не запуски наживо: для запуску наживо потрібен платний рівень. Кожен запуск чекає на свої байти, і кожен байт записується у файл, тож запуск можна повторити за ним.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Числа з фізичного джерела непередбачувані та повідомляють, звідки вони взяті. Порівняно з хорошим генератором, дослідження досі не виявляють різниці в точності; посібник підсумовує докази.
+	Hide the sources	Сховати джерела
+	Sources and keys…	Джерела й ключі…
+	No key	Немає ключа
+	From byte	З байта
+	Bytes per run	Байтів на запуск
+	from a pilot	із пробного запуску
+	Estimate	Оцінка
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} байтів на {runs} запусків: {requests} запитів, щонайменше {time}
+	More than a month of the free tier allows.	Більше, ніж дозволяє безкоштовний рівень за місяць.
+	Key kept	Ключ збережено
+	Forget key	Забути ключ
+	Key	Ключ
+	Save key	Зберегти ключ
+	Add a source	Додати джерело
+	Address, with {n} for the count	Адреса, де {n} — кількість
+	Key header	Заголовок ключа
+	JSON path	Шлях JSON
+	Encoding	Кодування
+	Add	Додати
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	У браузері ключі зберігаються в локальному сховищі цього сайту без шифрування: прочитати їх може все, що працює на цій сторінці, і будь-хто, хто користується цим профілем браузера. Використовуйте ключ, який можна відкликати, або настільний застосунок, який зберігає ключі в в’язці ключів системи.
 	Scenario	Сценарій
 	Scenario: {name}	Сценарій: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Відкриття {scenario} скасує незбережені зміни в {name}. Спершу зберегти їх?

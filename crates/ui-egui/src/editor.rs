@@ -695,6 +695,7 @@ impl App {
         self.stop_row(ui, model);
         self.sequential_row(ui, model);
         self.observed_section(ui, model);
+        self.random_section(ui);
 
         section(ui, t("Connections"));
         self.connections_table(ui, p, model);

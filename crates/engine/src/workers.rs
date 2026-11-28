@@ -83,19 +83,9 @@ impl Worker {
     /// stopped, for [`crate::Engine::deliver`].
     pub fn run(&self, index: u64) -> String {
         let rng = match &self.random {
-            // The task carries the segments of the replications the run may have, no more.
-            Some(feed) if feed.window(index.saturating_add(1)).is_none() => {
-                let error = CommandError::new(
-                    ErrorCode::InvalidParams,
-                    format!("replication {index} is past the bytes the task carries"),
-                );
-                return serde_json::to_string(&Answer {
-                    index: Some(index),
-                    report: None,
-                    error: Some(error.to_json()),
-                })
-                .unwrap_or_default();
-            }
+            // The task carries the segments the file holds of the replications the run may have;
+            // a replication past them reads an empty segment, and stops with
+            // `random_data_exhausted` as it would in slices or on threads.
             Some(feed) => feed.stream(index),
             None => self.experiment.stream(index),
         };
@@ -529,7 +519,9 @@ pub(crate) fn task(plan: &crate::run::Plan) -> Result<String, CommandError> {
     let random = match plan.random.as_ref() {
         None => None,
         Some(feed) => {
-            let max = plan.max_replications();
+            // A live run's recording may hold fewer than the most the run may make (it stopped
+            // early): the task carries what it holds.
+            let max = plan.max_replications().min(feed.segments());
             let limit = crate::random::MAX_TASK_WINDOW_BYTES;
             let need = max.saturating_mul(feed.segment());
             if need > limit {

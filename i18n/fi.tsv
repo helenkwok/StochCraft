@@ -1539,6 +1539,41 @@ connection	Flow	Virta
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Vertailukohdassa on {n_a} ajoa ja tässä ajossa {n_b}, joten kummankin {n} ensimmäistä verrataan pareittain; vertailukohta ja nyt ovat niiden keskiarvot näiden ajojen yli.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Satunnaisluvut tiedostosta {file} (SHA-256 {sha}…), {bytes} tavua kutakin ajoa kohden tavusta {offset} alkaen
 	Seed {seed} taken from {source}	Siemen {seed} otettu kohteesta {source}
+	quantum	kvantti
+	public beacon, for seeds only	julkinen majakka, vain siemenille
+	not quantum (atmospheric noise)	ei kvantti (ilmakehän kohina)
+	added by you	itse lisätty
+	Draw a seed first.	Arvo ensin siemen.
+	Give the file of random bytes.	Anna satunnaisten tavujen tiedosto.
+	Random numbers	Satunnaisluvut
+	Generator	Generaattori
+	Seed from a source	Siemen lähteestä
+	File of random bytes	Satunnaisten tavujen tiedosto
+	Live from a source	Suoraan lähteestä
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, alustettu kokeen siemenestä: toistettava, ja se, mitä simulointi yleensä käyttää.
+	Draw a seed	Arvo siemen
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU:n ilmainen taso (100 pyyntöä kuukaudessa) kattaa siemenet, ei suoria ajoja: suora ajo tarvitsee maksullisen tason. Jokainen ajo odottaa tavujaan, ja jokainen tavu tallennetaan tiedostoon, joten ajo voidaan toistaa siitä.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Fyysisen lähteen luvut ovat arvaamattomia ja kertovat, mistä ne ovat peräisin. Hyvään generaattoriin verrattuna tähänastiset tutkimukset eivät löydä eroa tarkkuudessa; opas tiivistää näytön.
+	Hide the sources	Piilota lähteet
+	Sources and keys…	Lähteet ja avaimet…
+	No key	Ei avainta
+	From byte	Tavusta alkaen
+	Bytes per run	Tavuja ajoa kohden
+	from a pilot	pilottiajosta
+	Estimate	Arvio
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} tavua {runs} ajolle: {requests} pyyntöä, vähintään {time}
+	More than a month of the free tier allows.	Enemmän kuin ilmainen taso sallii kuukaudessa.
+	Key kept	Avain tallennettu
+	Forget key	Unohda avain
+	Key	Avain
+	Save key	Tallenna avain
+	Add a source	Lisää lähde
+	Address, with {n} for the count	Osoite, jossa {n} on lukumäärä
+	Key header	Avaimen otsake
+	JSON path	JSON-polku
+	Encoding	Koodaus
+	Add	Lisää
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Selaimessa avaimet säilytetään salaamattomina tämän sivuston paikallisessa tallennustilassa: kaikki, mikä ajetaan tällä sivulla, ja jokainen, joka käyttää tätä selainprofiilia, voi lukea ne. Käytä avainta, jonka voit perua, tai työpöytäsovellusta, joka säilyttää avaimet järjestelmän avainnipussa.
 	Scenario	Skenaario
 	Scenario: {name}	Skenaario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Skenaarion {scenario} avaaminen hylkää kohteen {name} tallentamattomat muutokset. Tallennetaanko ne ensin?

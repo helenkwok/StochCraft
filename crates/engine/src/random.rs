@@ -13,6 +13,14 @@
 //!   segment runs out stops with `random_data_exhausted`, and no byte is ever read twice. The
 //!   file's SHA-256 is recorded, and a `sha256` given with the file must match it.
 //!
+//! - `live`: bytes fetched from a random number source while the run goes, each replication's
+//!   segment recorded in order into a file (see the `sources` module); the finished run's record
+//!   is a `byte_file` run on that file. A sequential live run that met its target early recorded
+//!   only the segments it fetched, so its record (marked by `live`) gives the `replications` it
+//!   made, and the file is checked up front for those only (a journalled run, which has no count,
+//!   for its first batch): a replay draws the same bytes, so it stops where the run did, and one
+//!   that went further would stop with `random_data_exhausted` where the bytes run out.
+//!
 //! The record's `random` object can be given back as `random` to repeat the run: its extra
 //! fields (`bytes_used`, ...) are accepted and ignored.
 //!
@@ -44,6 +52,11 @@ pub enum RandomMode {
     SeedSource,
     /// A file of random bytes, one segment per replication.
     ByteFile,
+    /// Bytes fetched from a source while the run goes (`run.start` only): each replication's
+    /// segment is fetched, up to four ahead, and recorded in order into `file`; a replication
+    /// starts once its segment has arrived. The finished run's record is a `byte_file` run on
+    /// that file, which repeats it without calling out.
+    Live,
 }
 
 /// A run's `random` parameter, and the `random` object of its record.
@@ -52,6 +65,8 @@ pub enum RandomMode {
 pub struct RandomSpec {
     #[serde(default)]
     pub mode: RandomMode,
+    /// `live`: the file the fetched bytes are recorded in (its manifest beside it as
+    /// `<file>.json`).
     /// `byte_file`: the file of random bytes: a path, or a name given to
     /// `Engine::load_random_data` (how the browser passes a file's bytes).
     #[serde(default)]
@@ -68,6 +83,7 @@ pub struct RandomSpec {
     #[serde(default)]
     pub segment_bytes: Option<u64>,
     /// `seed_source`: where the seed came from (a service's name or address, with no key).
+    /// `live`: the id of the source to fetch from (`random.sources`).
     #[serde(default)]
     pub source: Option<String>,
     /// `seed_source`: when it was drawn (ISO 8601).
@@ -94,6 +110,14 @@ pub struct RandomSpec {
     /// Filled in by the run record; accepted and ignored.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pilot: Option<Value>,
+    /// Filled in by the record of a live run (the source it fetched from): marks a file as a
+    /// live run's recording, which is checked up front for `replications` only.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub live: Option<Value>,
+    /// A live run's recording: the replications the run made, which the file holds (by default
+    /// the first batch's). Filled in by the record.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub replications: Option<u64>,
 }
 
 /// The bytes a run reads: `data`, replication i's segment starting at `offset + i·segment`.
@@ -116,6 +140,12 @@ impl ByteFeed {
     /// Each replication's segment length.
     pub fn segment(&self) -> u64 {
         self.segment
+    }
+
+    /// The whole segments the data holds from the first replication's on.
+    pub fn segments(&self) -> u64 {
+        let have = u64::try_from(self.data.len()).unwrap_or(u64::MAX);
+        have.saturating_sub(self.offset) / self.segment.max(1)
     }
 
     /// Replication `index`'s stream: its segment.
@@ -363,14 +393,23 @@ pub(crate) fn prepare(
                 return Err(invalid("`segment_bytes` must be at least 8"));
             }
             let have = u64::try_from(data.len()).unwrap_or(u64::MAX);
-            let need = max
+            // A live run's recording holds the replications the run made: a replay stops where
+            // the run did. Any other file must hold every replication the run may make.
+            let checked = if spec.live.is_some() {
+                spec.replications
+                    .unwrap_or(experiment.replications)
+                    .min(max)
+            } else {
+                max
+            };
+            let need = checked
                 .checked_mul(segment)
                 .and_then(|n| n.checked_add(spec.offset));
             if need.is_none_or(|n| n > have) {
                 let need_text =
                     need.map_or_else(|| "more than can be counted".to_owned(), |n| n.to_string());
                 return Err(invalid(format!(
-                    "`{name}` has {have} bytes, but {max} replications of {segment} bytes from byte {} need {need_text}: give a larger file, fewer replications or a shorter segment (the file is never read twice)",
+                    "`{name}` has {have} bytes, but {checked} replications of {segment} bytes from byte {} need {need_text}: give a larger file, fewer replications or a shorter segment (the file is never read twice)",
                     spec.offset
                 )));
             }
@@ -386,11 +425,17 @@ pub(crate) fn prepare(
             if let Some(p) = pilot {
                 record["pilot"] = p;
             }
+            if let Some(live) = spec.live {
+                record["live"] = live;
+                record["replications"] = json!(checked);
+            }
             Ok(Prepared {
                 record,
                 feed: Some(Arc::new(ByteFeed::new(data, spec.offset, segment))),
             })
         }
+        // Planned by the engine, which has the sources.
+        RandomMode::Live => Err(invalid("a live run is planned by the engine")),
     }
 }
 
@@ -420,7 +465,7 @@ pub(crate) fn screen(command: &str, params: &mut Value) -> Result<(), CommandErr
     };
     let spec: RandomSpec =
         serde_json::from_value(random).map_err(|e| invalid(format!("`random`: {e}")))?;
-    if spec.mode != RandomMode::ByteFile {
+    if !matches!(spec.mode, RandomMode::ByteFile | RandomMode::Live) {
         return Ok(());
     }
     let why = match command {

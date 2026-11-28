@@ -1539,6 +1539,41 @@ connection	Flow	ნაკადი
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	საბაზისო ვარიანტს აქვს {n_a} გაშვება, ამ გაშვებას — {n_b}, ამიტომ თითოეულის პირველი {n} წყვილურად შედარდება; საბაზისო ვარიანტი და ახლა ამ გაშვებებზე მათი საშუალოებია.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	შემთხვევითი რიცხვები ფაილიდან {file} (SHA-256 {sha}…), {bytes} ბაიტი თითოეული გაშვებისთვის {offset}-ე ბაიტიდან
 	Seed {seed} taken from {source}	საწყისი მნიშვნელობა {seed}, აღებული {source}-დან
+	quantum	კვანტური
+	public beacon, for seeds only	საჯარო ბიკონი, მხოლოდ საწყისი მნიშვნელობებისთვის
+	not quantum (atmospheric noise)	არაკვანტური (ატმოსფერული ხმაური)
+	added by you	თქვენ მიერ დამატებული
+	Draw a seed first.	ჯერ აიღეთ საწყისი მნიშვნელობა.
+	Give the file of random bytes.	მიუთითეთ შემთხვევითი ბაიტების ფაილი.
+	Random numbers	შემთხვევითი რიცხვები
+	Generator	გენერატორი
+	Seed from a source	საწყისი მნიშვნელობა წყაროდან
+	File of random bytes	შემთხვევითი ბაიტების ფაილი
+	Live from a source	პირდაპირ წყაროდან
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, ექსპერიმენტის საწყისი მნიშვნელობიდან გაშვებული: განმეორებადი და ის, რასაც სიმულაცია ჩვეულებრივ იყენებს.
+	Draw a seed	საწყისი მნიშვნელობის აღება
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-ს უფასო დონე (თვეში 100 მოთხოვნა) მოიცავს საწყის მნიშვნელობებს, არა პირდაპირ გაშვებებს: პირდაპირ გაშვებას ფასიანი დონე სჭირდება. თითოეული გაშვება თავის ბაიტებს ელოდება და ყოველი ბაიტი ფაილში იწერება, ასე რომ გაშვება მისგან განმეორდება.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	ფიზიკური წყაროდან მიღებული რიცხვები არაპროგნოზირებადია და გვეუბნება, საიდან მოვიდა. კარგ გენერატორთან შედარებით, აქამდე ჩატარებული კვლევები სიზუსტეში განსხვავებას ვერ პოულობს; სახელმძღვანელო მტკიცებულებებს აჯამებს.
+	Hide the sources	წყაროების დამალვა
+	Sources and keys…	წყაროები და გასაღებები…
+	No key	გასაღები არ არის
+	From byte	ბაიტიდან
+	Bytes per run	ბაიტები თითო გაშვებაზე
+	from a pilot	საპილოტე გაშვებიდან
+	Estimate	შეფასება
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} ბაიტი {runs} გაშვებისთვის: {requests} მოთხოვნა, მინიმუმ {time}
+	More than a month of the free tier allows.	უფრო მეტი, ვიდრე უფასო დონე თვეში იძლევა.
+	Key kept	გასაღები შენახულია
+	Forget key	გასაღების დავიწყება
+	Key	გასაღები
+	Save key	გასაღების შენახვა
+	Add a source	წყაროს დამატება
+	Address, with {n} for the count	მისამართი, სადაც {n} რაოდენობაა
+	Key header	გასაღების სათაური
+	JSON path	JSON-ის გზა
+	Encoding	კოდირება
+	Add	დამატება
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	ბრაუზერში გასაღებები ამ საიტის ლოკალურ საცავში დაუშიფრავად ინახება: მათ წაკითხვა შეუძლია ყველაფერს, რაც ამ გვერდზე მუშაობს, და ყველას, ვინც ამ ბრაუზერის პროფილს იყენებს. გამოიყენეთ გასაღები, რომლის გაუქმებაც შეგიძლიათ, ან დესკტოპ აპი, რომელიც გასაღებებს სისტემის გასაღებების საცავში ინახავს.
 	Scenario	სცენარი
 	Scenario: {name}	სცენარი: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario}-ის გახსნა {name}-ში შეუნახავ ცვლილებებს გააუქმებს. ჯერ შევინახო?

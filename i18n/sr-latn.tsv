@@ -1539,6 +1539,41 @@ connection	Flow	Tok
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referenca ima {n_a} pokretanja, a ovo pokretanje {n_b}, pa se prvih {n} svakog upoređuje u parovima; referenca i sada su njihove srednje vrednosti preko tih pokretanja.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Slučajni brojevi iz datoteke {file} (SHA-256 {sha}…), {bytes} bajtova za svako pokretanje od bajta {offset}
 	Seed {seed} taken from {source}	Seme {seed} preuzeto iz {source}
+	quantum	kvantno
+	public beacon, for seeds only	javni far, samo za semena
+	not quantum (atmospheric noise)	nekvantno (atmosferski šum)
+	added by you	dodali ste
+	Draw a seed first.	Prvo izvucite seme.
+	Give the file of random bytes.	Navedite fajl nasumičnih bajtova.
+	Random numbers	Nasumični brojevi
+	Generator	Generator
+	Seed from a source	Seme iz izvora
+	File of random bytes	Fajl nasumičnih bajtova
+	Live from a source	Uživo iz izvora
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, pokrenut iz semena eksperimenta: ponovljiv, i ono što simulacija obično koristi.
+	Draw a seed	Izvuci seme
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-ov besplatni nivo (100 zahteva mesečno) pokriva semena, ne pokretanja uživo: pokretanje uživo traži plaćeni nivo. Svako pokretanje čeka svoje bajtove, a svaki bajt se beleži u fajl, pa se pokretanje može ponoviti iz njega.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Brojevi iz fizičkog izvora su nepredvidivi i govore odakle dolaze. U poređenju s dobrim generatorom, dosadašnje studije ne nalaze razliku u tačnosti; uputstvo sažima dokaze.
+	Hide the sources	Sakrij izvore
+	Sources and keys…	Izvori i ključevi…
+	No key	Nema ključa
+	From byte	Od bajta
+	Bytes per run	Bajtova po pokretanju
+	from a pilot	iz probnog pokretanja
+	Estimate	Procena
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bajtova za {runs} pokretanja: {requests} zahteva, najmanje {time}
+	More than a month of the free tier allows.	Više nego što besplatni nivo dozvoljava za mesec dana.
+	Key kept	Ključ sačuvan
+	Forget key	Zaboravi ključ
+	Key	Ključ
+	Save key	Sačuvaj ključ
+	Add a source	Dodaj izvor
+	Address, with {n} for the count	Adresa, gde je {n} broj
+	Key header	Zaglavlje ključa
+	JSON path	JSON putanja
+	Encoding	Kodiranje
+	Add	Dodaj
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	U pregledaču se ključevi čuvaju nešifrovani u lokalnoj memoriji ovog sajta: može ih pročitati sve što radi na ovoj stranici i svako ko koristi ovaj profil pregledača. Koristite ključ koji možete opozvati ili desktop aplikaciju, koja ključeve čuva u sistemskom privesku ključeva.
 	Scenario	Scenario
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otvaranjem scenarija {scenario} odbacuju se nesačuvane izmene u {name}. Prvo ih sačuvati?

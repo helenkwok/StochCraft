@@ -1539,6 +1539,41 @@ connection	Flow	Flusso
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Il riferimento ha {n_a} esecuzioni e questa esecuzione {n_b}, quindi le prime {n} di ciascuna sono confrontate a coppie; il riferimento e ora sono le loro medie su quelle esecuzioni.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Numeri casuali dal file {file} (SHA-256 {sha}…), {bytes} byte per ogni esecuzione dal byte {offset}
 	Seed {seed} taken from {source}	Seme {seed} preso da {source}
+	quantum	quantistico
+	public beacon, for seeds only	beacon pubblico, solo per i semi
+	not quantum (atmospheric noise)	non quantistico (rumore atmosferico)
+	added by you	aggiunta da te
+	Draw a seed first.	Prima estrai un seme.
+	Give the file of random bytes.	Indica il file di byte casuali.
+	Random numbers	Numeri casuali
+	Generator	Generatore
+	Seed from a source	Seme da una fonte
+	File of random bytes	File di byte casuali
+	Live from a source	In diretta da una fonte
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, inizializzato con il seme dell'esperimento: ripetibile, ed è ciò che la simulazione usa normalmente.
+	Draw a seed	Estrai un seme
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Il livello gratuito di ANU (100 richieste al mese) copre i semi, non le esecuzioni in diretta: un'esecuzione in diretta richiede il livello a pagamento. Ogni esecuzione attende i suoi byte e ogni byte viene registrato nel file, così l'esecuzione si ripete a partire da esso.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	I numeri di una fonte fisica sono imprevedibili e dicono da dove vengono. Rispetto a un buon generatore, gli studi finora non trovano alcuna differenza di accuratezza; la guida riassume le prove.
+	Hide the sources	Nascondi le fonti
+	Sources and keys…	Fonti e chiavi…
+	No key	Nessuna chiave
+	From byte	Dal byte
+	Bytes per run	Byte per esecuzione
+	from a pilot	da una prova pilota
+	Estimate	Stima
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} byte per {runs} esecuzioni: {requests} richieste, almeno {time}
+	More than a month of the free tier allows.	Più di quanto consenta il livello gratuito in un mese.
+	Key kept	Chiave conservata
+	Forget key	Dimentica la chiave
+	Key	Chiave
+	Save key	Salva la chiave
+	Add a source	Aggiungi una fonte
+	Address, with {n} for the count	Indirizzo, con {n} per il conteggio
+	Key header	Intestazione della chiave
+	JSON path	Percorso JSON
+	Encoding	Codifica
+	Add	Aggiungi
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Nel browser le chiavi sono conservate nell'archivio locale di questo sito, non cifrate: qualsiasi cosa venga eseguita su questa pagina, e chiunque usi questo profilo del browser, può leggerle. Usa una chiave che puoi revocare, oppure l'app desktop, che conserva le chiavi nel portachiavi del sistema.
 	Scenario	Scenario
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Aprire {scenario} scarta le modifiche non salvate di {name}. Salvarle prima?

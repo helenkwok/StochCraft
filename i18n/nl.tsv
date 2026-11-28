@@ -1539,6 +1539,41 @@ connection	Flow	Stroom
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	De referentie heeft {n_a} uitvoeringen en deze uitvoering {n_b}, dus de eerste {n} van elk worden in paren vergeleken; de referentie en nu zijn hun gemiddelden over die uitvoeringen.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Willekeurige getallen uit het bestand {file} (SHA-256 {sha}…), {bytes} bytes voor elke uitvoering vanaf byte {offset}
 	Seed {seed} taken from {source}	Startwaarde {seed}, overgenomen uit {source}
+	quantum	kwantum
+	public beacon, for seeds only	openbare beacon, alleen voor startwaarden
+	not quantum (atmospheric noise)	niet kwantum (atmosferische ruis)
+	added by you	zelf toegevoegd
+	Draw a seed first.	Trek eerst een startwaarde.
+	Give the file of random bytes.	Geef het bestand met willekeurige bytes op.
+	Random numbers	Willekeurige getallen
+	Generator	Generator
+	Seed from a source	Startwaarde uit een bron
+	File of random bytes	Bestand met willekeurige bytes
+	Live from a source	Live uit een bron
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, gestart vanaf de startwaarde van het experiment: herhaalbaar, en wat simulatie normaal gebruikt.
+	Draw a seed	Startwaarde trekken
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	De gratis variant van ANU (100 verzoeken per maand) dekt startwaarden, geen live uitvoeringen: een live uitvoering heeft de betaalde variant nodig. Elke uitvoering wacht op zijn bytes en elke byte wordt in het bestand vastgelegd, zodat de uitvoering daaruit opnieuw kan worden gedaan.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Getallen uit een fysieke bron zijn onvoorspelbaar en vermelden waar ze vandaan komen. Vergeleken met een goede generator vinden studies tot nu toe geen verschil in nauwkeurigheid; de gebruikershandleiding vat het bewijs samen.
+	Hide the sources	Bronnen verbergen
+	Sources and keys…	Bronnen en sleutels…
+	No key	Geen sleutel
+	From byte	Vanaf byte
+	Bytes per run	Bytes per uitvoering
+	from a pilot	uit een proefuitvoering
+	Estimate	Schatting
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bytes voor {runs} uitvoeringen: {requests} verzoeken, minstens {time}
+	More than a month of the free tier allows.	Meer dan de gratis variant per maand toestaat.
+	Key kept	Sleutel bewaard
+	Forget key	Sleutel vergeten
+	Key	Sleutel
+	Save key	Sleutel opslaan
+	Add a source	Een bron toevoegen
+	Address, with {n} for the count	Adres, met {n} voor het aantal
+	Key header	Sleutelheader
+	JSON path	JSON-pad
+	Encoding	Codering
+	Add	Toevoegen
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	In de browser worden sleutels onversleuteld bewaard in de lokale opslag van deze site: alles wat op deze pagina draait, en iedereen die dit browserprofiel gebruikt, kan ze lezen. Gebruik een sleutel die je kunt intrekken, of de desktop-app, die sleutels in de sleutelhanger van het systeem bewaart.
 	Scenario	Scenario
 	Scenario: {name}	Scenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Als u {scenario} opent, gaan de niet-opgeslagen wijzigingen in {name} verloren. Eerst opslaan?

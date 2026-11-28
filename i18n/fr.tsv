@@ -1539,6 +1539,41 @@ connection	Flow	Flux
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	La référence compte {n_a} exécutions et cette exécution {n_b} : les {n} premières de chacune sont donc comparées par paires ; la référence et maintenant sont leurs moyennes sur ces exécutions.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Nombres aléatoires du fichier {file} (SHA-256 {sha}…), {bytes} octets pour chaque exécution à partir de l'octet {offset}
 	Seed {seed} taken from {source}	Graine {seed} prise dans {source}
+	quantum	quantique
+	public beacon, for seeds only	balise publique, pour les graines seulement
+	not quantum (atmospheric noise)	non quantique (bruit atmosphérique)
+	added by you	ajoutée par vous
+	Draw a seed first.	Tirez d'abord une graine.
+	Give the file of random bytes.	Indiquez le fichier d'octets aléatoires.
+	Random numbers	Nombres aléatoires
+	Generator	Générateur
+	Seed from a source	Graine issue d'une source
+	File of random bytes	Fichier d'octets aléatoires
+	Live from a source	En direct depuis une source
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, initialisé avec la graine de l'expérience : reproductible, et ce que la simulation utilise normalement.
+	Draw a seed	Tirer une graine
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	L'offre gratuite d'ANU (100 requêtes par mois) couvre les graines, pas les exécutions en direct : une exécution en direct demande son offre payante. Chaque exécution attend ses octets, et chaque octet est enregistré dans le fichier, de sorte que l'exécution se rejoue à partir de ce fichier.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Les nombres issus d'une source physique sont imprévisibles et disent d'où ils viennent. Face à un bon générateur, les études menées jusqu'ici ne trouvent aucune différence de précision ; le guide résume les preuves.
+	Hide the sources	Masquer les sources
+	Sources and keys…	Sources et clés…
+	No key	Pas de clé
+	From byte	À partir de l'octet
+	Bytes per run	Octets par exécution
+	from a pilot	d'un essai pilote
+	Estimate	Estimation
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} octets pour {runs} exécutions : {requests} requêtes, au moins {time}
+	More than a month of the free tier allows.	Plus que ce que permet l'offre gratuite en un mois.
+	Key kept	Clé conservée
+	Forget key	Oublier la clé
+	Key	Clé
+	Save key	Enregistrer la clé
+	Add a source	Ajouter une source
+	Address, with {n} for the count	Adresse, avec {n} pour le nombre
+	Key header	En-tête de la clé
+	JSON path	Chemin JSON
+	Encoding	Encodage
+	Add	Ajouter
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Dans le navigateur, les clés sont conservées en clair dans le stockage local de ce site : tout ce qui s'exécute sur cette page, et toute personne qui utilise ce profil de navigateur, peut les lire. Utilisez une clé que vous pouvez révoquer, ou l'application de bureau, qui conserve les clés dans le trousseau du système.
 	Scenario	Scénario
 	Scenario: {name}	Scénario : {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Ouvrir {scenario} abandonne les modifications non enregistrées de {name}. Les enregistrer d’abord ?

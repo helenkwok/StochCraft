@@ -46,12 +46,16 @@ pub const TABLE: &[(&str, Class)] = &[
     // L1: the discrete-event core, and the model in memory (which uses `random::Dist`).
     ("des", Class::Layer(1)),
     ("model", Class::Layer(1)),
+    // Random number sources: presets, parsers, quotas and the recorded-file format (no I/O).
+    ("qrng", Class::Layer(1)),
     // L2: modelling libraries on the core.
     ("blocks", Class::Layer(2)),
     ("agents", Class::Layer(2)),
     ("sd", Class::Layer(2)),
     // Monte Carlo models: a calculation, not a process (ROADMAP M4.1).
     ("mc", Class::Layer(2)),
+    // The desktop apps' HTTP client and keychain for random number sources.
+    ("qrng-net", Class::Layer(2)),
     // L3: running models and moving data.
     ("experiment", Class::Layer(3)),
     ("io", Class::Layer(3)),

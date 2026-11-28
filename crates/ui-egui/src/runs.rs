@@ -125,11 +125,21 @@ impl App {
         if self.running.is_some() || self.go_to_problem() {
             return;
         }
-        let on_workers = self.workers.is_some() && self.start_on_workers();
+        // Where the random numbers come from (Experiment settings ▸ Random numbers): the
+        // generator's runs may go to the shell's workers; the others run here.
+        let params = match self.random_run_params() {
+            Ok(p) => p,
+            Err(why) => {
+                self.report_error(why);
+                return;
+            }
+        };
+        let on_workers =
+            self.random_is_generator() && self.workers.is_some() && self.start_on_workers();
         let status = if on_workers {
             Some(self.engine.poll_run(0, 0))
         } else {
-            self.execute("run.start", json!({}))
+            self.execute("run.start", params)
         };
         if let Some(status) = status {
             self.show_results = true;

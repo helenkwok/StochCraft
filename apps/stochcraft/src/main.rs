@@ -69,6 +69,13 @@ impl Desktop {
     fn new(ctx: &egui::Context, file: Option<PathBuf>, control_port: Option<u16>) -> Self {
         let wake = ctx.clone();
         let mut app = App::new(Platform::DESKTOP);
+        app.set_random_net(
+            Box::new(stochcraft_qrng_net::HttpFetch::new(concat!(
+                "StochCraft/",
+                env!("CARGO_PKG_VERSION")
+            ))),
+            Box::new(stochcraft_qrng_net::Keychain),
+        );
         let (settings, report) = SettingsStore::<Stored>::open(Location::Auto);
         app.set_prefs(&settings.get().0);
         if report.has_problems() {

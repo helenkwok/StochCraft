@@ -523,10 +523,10 @@ fn a_workers_answer_is_checked_by_its_index_first_and_counted_once() {
     assert_eq!(failed["state"], "failed", "{failed}");
     assert_eq!(failed["error"]["code"], "internal", "{failed}");
 
-    // A worker asked for a replication past the bytes its task carries answers with an error.
+    // A worker asked for a replication past the bytes its task carries runs out of them.
     let past: Value = serde_json::from_str(&worker.run(3)).expect("an answer");
     assert_eq!(past["index"], 3, "{past}");
-    assert_eq!(past["error"]["code"], "invalid_params", "{past}");
+    assert_eq!(past["error"]["code"], "random_data_exhausted", "{past}");
 }
 
 /// Every worker gets the bytes of every replication the run may have, so a run on workers whose

@@ -84,6 +84,7 @@ pub mod sd;
 mod sd_edit;
 mod sd_window;
 pub mod site;
+mod sources;
 pub mod table;
 pub mod wire;
 mod workers;
@@ -141,6 +142,10 @@ pub enum ErrorCode {
     /// replication, the bytes it read and an estimate of the bytes it needs. The file is never
     /// read twice: give a longer segment or a larger file.
     RandomDataExhausted,
+    /// A random number source could not be reached, refused the request or answered with
+    /// something that is not random bytes: a draw, a fetch or a live run stopped. The message
+    /// gives the reason and never the key or the address's query.
+    RandomSourceFailed,
     Internal,
 }
 
@@ -160,11 +165,12 @@ impl ErrorCode {
             ErrorCode::Cancelled => "cancelled",
             ErrorCode::TimeStopped => "time_stopped",
             ErrorCode::RandomDataExhausted => "random_data_exhausted",
+            ErrorCode::RandomSourceFailed => "random_source_failed",
             ErrorCode::Internal => "internal",
         }
     }
 
-    const ALL: [ErrorCode; 14] = [
+    const ALL: [ErrorCode; 15] = [
         ErrorCode::UnknownCommand,
         ErrorCode::InvalidParams,
         ErrorCode::NotFound,
@@ -178,6 +184,7 @@ impl ErrorCode {
         ErrorCode::Cancelled,
         ErrorCode::TimeStopped,
         ErrorCode::RandomDataExhausted,
+        ErrorCode::RandomSourceFailed,
         ErrorCode::Internal,
     ];
 
@@ -417,6 +424,20 @@ fn journalled(command: &str, params: Value, result: &Value) -> Vec<JournalEntry>
         params,
     };
     match command {
+        // A live run is replayed from the file it recorded, without calling out.
+        // Marked as a live run's recording (`live`), the file is checked for the first batch
+        // only: the run's count is not known when it starts, and a replay stops where it did.
+        "run.start" if params["random"]["mode"] == "live" => {
+            let mut params = params;
+            let source = params["random"]["source"].clone();
+            params["random"] = json!({
+                "mode": "byte_file",
+                "file": result["random"]["file"],
+                "segment_bytes": result["random"]["segment_bytes"],
+                "live": { "source": source },
+            });
+            vec![entry(command, params)]
+        }
         "experiment.optimise" | "experiment.size"
             if result.get("applied") == Some(&json!(true)) =>
         {
@@ -653,6 +674,15 @@ pub struct Engine {
     /// Files of random bytes given to the engine by name (`load_random_data`), for runs that
     /// read their random numbers from a file where there is no file system (the browser).
     random_data: BTreeMap<String, std::sync::Arc<[u8]>>,
+    /// The random number sources the session knows (presets and the user's own; no keys).
+    sources: stochcraft_qrng::Sources,
+    /// Counts changes to `sources`, so an app knows when to keep them in its settings.
+    sources_revision: u64,
+    /// How this app fetches, and where it keeps keys ([`Engine::set_random_net`]).
+    fetch: Box<dyn stochcraft_qrng::Fetch>,
+    keys: Box<dyn stochcraft_qrng::KeyStore>,
+    /// The draw or fetch in progress, or its outcome (`random.status`).
+    random_job: Option<sources::RandomJob>,
 }
 
 impl Default for Engine {
@@ -693,6 +723,11 @@ impl Engine {
             sensitivity: Vec::new(),
             revision: 0,
             random_data: BTreeMap::new(),
+            sources: stochcraft_qrng::Sources::default(),
+            sources_revision: 0,
+            fetch: Box::new(stochcraft_qrng::NoFetch),
+            keys: Box::new(stochcraft_qrng::MemoryKeys::default()),
+            random_job: None,
         }
     }
 
@@ -712,6 +747,72 @@ impl Engine {
     /// file the user chose. A name loaded here is used before a file at that path.
     pub fn load_random_data(&mut self, name: &str, bytes: Vec<u8>) {
         self.random_data.insert(name.to_owned(), bytes.into());
+    }
+
+    /// The bytes kept under `name` ([`Engine::load_random_data`], or a fetch or live run in the
+    /// browser), to offer for download.
+    pub fn random_data(&self, name: &str) -> Option<&[u8]> {
+        self.random_data.get(name).map(|d| &d[..])
+    }
+
+    /// How the app fetches from random number sources and where it keeps their keys. Without
+    /// this the engine cannot fetch, and keys last for the session only.
+    pub fn set_random_net(
+        &mut self,
+        fetch: Box<dyn stochcraft_qrng::Fetch>,
+        keys: Box<dyn stochcraft_qrng::KeyStore>,
+    ) {
+        self.fetch = fetch;
+        self.keys = keys;
+    }
+
+    /// The sources as the app's settings keep them (no keys).
+    pub fn random_sources_settings(&self) -> stochcraft_qrng::SourcesSettings {
+        self.sources.settings()
+    }
+
+    /// Sets the sources from the app's settings.
+    pub fn set_random_sources(&mut self, settings: &stochcraft_qrng::SourcesSettings) {
+        self.sources = stochcraft_qrng::Sources::from_settings(settings);
+        self.sources_revision += 1;
+    }
+
+    /// Counts changes to the sources (a change, a key bound or forgotten), for the app to keep
+    /// them when it moves.
+    pub fn random_sources_revision(&self) -> u64 {
+        self.sources_revision
+    }
+
+    /// Keeps `key` for source `id` in the key store, bound to its address's origin. The window's
+    /// source manager is the only way a key comes in: no command takes one.
+    pub fn set_random_key(&mut self, id: &str, key: &str) -> Result<(), String> {
+        let key = key.trim();
+        if key.is_empty() {
+            return Err("the key is empty".into());
+        }
+        let old = self.sources.get(id).and_then(|s| s.key_ref.clone());
+        let r = self.sources.bind_key(id).map_err(|e| e.to_string())?;
+        if let Some(old) = old.filter(|o| *o != r) {
+            self.keys.delete(&old);
+        }
+        self.keys
+            .set(&r, &stochcraft_qrng::Secret::new(key))
+            .map_err(|e| e.to_string())?;
+        self.sources_revision += 1;
+        Ok(())
+    }
+
+    /// Forgets source `id`'s key, from the key store too.
+    pub fn forget_random_key(&mut self, id: &str) {
+        if let Some(r) = self.sources.unbind_key(id) {
+            self.keys.delete(&r);
+            self.sources_revision += 1;
+        }
+    }
+
+    /// Where keys are kept, when the window should warn about it (the browser's storage).
+    pub fn random_key_warning(&self) -> Option<&'static str> {
+        self.keys.warning()
     }
 
     /// Runs `command` with JSON `params` (`null` counts as `{}`). Every command that is not a
@@ -1450,6 +1551,44 @@ impl Engine {
         let max = sequential
             .as_ref()
             .map_or(first, |q| u64::from(q.max).max(first));
+        if let Some(spec) = random
+            .as_ref()
+            .filter(|r| r.mode == random::RandomMode::Live)
+        {
+            let source = spec.source.clone().unwrap_or_default();
+            let file = spec.file.clone().unwrap_or_default();
+            let segment = match spec.segment_bytes {
+                Some(l) if l >= 8 => l,
+                Some(_) => {
+                    return Err(CommandError::new(
+                        ErrorCode::InvalidParams,
+                        "`segment_bytes` must be at least 8",
+                    ));
+                }
+                None => {
+                    let count = experiment.replications.clamp(1, random::PILOT_REPLICATIONS);
+                    random::pilot(&compiled, &experiment, count)?.segment
+                }
+            };
+            let live = self.live_feed(&source, &file, segment, max)?;
+            record["random_streams"] = json!(
+                "one segment of the random-data file per replication, read in the order the replication's events draw; every element draws from that one cursor"
+            );
+            record["random"] = json!({
+                "mode": "live",
+                "source": source,
+                "file": file,
+                "segment_bytes": segment,
+            });
+            return Ok(Plan {
+                compiled,
+                experiment,
+                record,
+                sequential,
+                random: None,
+                live: Some(live),
+            });
+        }
         let prepared = random::prepare(
             random,
             seed.is_some(),
@@ -1470,6 +1609,7 @@ impl Engine {
             record,
             sequential,
             random: prepared.feed,
+            live: None,
         })
     }
 
@@ -1511,8 +1651,21 @@ impl Engine {
                 "a run is in progress: cancel it or wait for it to finish",
             ));
         }
+        // A live run waits for each replication's segment, which only a run in slices can.
+        let mode = if plan.live.is_some() {
+            RunMode::Slices
+        } else {
+            mode
+        };
+        let live = plan.live.as_ref().map(|l| {
+            let f = l.lock().unwrap_or_else(|e| e.into_inner());
+            json!({ "file": f.file, "segment_bytes": f.segment })
+        });
         let job = Job::start(plan, mode)?;
-        let status = job.status();
+        let mut status = job.status();
+        if let Some(l) = live {
+            status["random"] = l;
+        }
         self.job = Some(job);
         self.job_kept = false;
         Ok(status)
@@ -1523,10 +1676,26 @@ impl Engine {
     /// A finished run's results are kept for `results.distribution` and `results.compare`,
     /// however it was followed (`run.status`, or a window polling here).
     pub fn poll_run(&mut self, step: u64, events: u64) -> Value {
+        // A live run: fetch ahead of the replication it is on, before it goes on.
+        if let Some((feed, next)) = self.job.as_ref().and_then(Job::live) {
+            let running = self.job.as_ref().is_some_and(Job::is_running);
+            if let Err(e) = self.step_live(&feed, next, !running) {
+                if let Some(j) = self.job.as_mut() {
+                    j.fail(e);
+                }
+                let _ = self.step_live(&feed, next, true);
+            }
+        }
         let status = self
             .job
             .as_mut()
             .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step, events));
+        // The run is over: the recorded file's manifest is written once.
+        if status["state"] != "running"
+            && let Some((feed, next)) = self.job.as_ref().and_then(Job::live)
+        {
+            let _ = self.step_live(&feed, next, true);
+        }
         self.keep_if_finished(&status);
         status
     }
@@ -1565,6 +1734,10 @@ impl Engine {
             .job
             .as_mut()
             .map_or_else(|| json!({ "state": "idle" }), Job::cancel);
+        // A live run keeps the bytes it fetched, with their manifest.
+        if let Some((feed, next)) = self.job.as_ref().and_then(Job::live) {
+            let _ = self.step_live(&feed, next, true);
+        }
         self.keep_if_finished(&status);
         status
     }

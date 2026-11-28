@@ -1539,6 +1539,41 @@ connection	Flow	Verbindung
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Die Referenz hat {n_a} Läufe und dieser Lauf {n_b}, daher werden die ersten {n} von jedem paarweise verglichen; die Referenz und Jetzt sind ihre Mittelwerte über diese Läufe.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Zufallszahlen aus der Datei {file} (SHA-256 {sha}…), {bytes} Bytes für jeden Lauf ab Byte {offset}
 	Seed {seed} taken from {source}	Startwert {seed}, übernommen aus {source}
+	quantum	Quanten
+	public beacon, for seeds only	öffentlicher Beacon, nur für Startwerte
+	not quantum (atmospheric noise)	nicht quantenbasiert (atmosphärisches Rauschen)
+	added by you	von Ihnen hinzugefügt
+	Draw a seed first.	Ziehen Sie zuerst einen Startwert.
+	Give the file of random bytes.	Geben Sie die Datei mit den Zufallsbytes an.
+	Random numbers	Zufallszahlen
+	Generator	Generator
+	Seed from a source	Startwert aus einer Quelle
+	File of random bytes	Datei mit Zufallsbytes
+	Live from a source	Live aus einer Quelle
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, vom Startwert des Experiments aus gestartet: wiederholbar und das, was die Simulation normalerweise verwendet.
+	Draw a seed	Startwert ziehen
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Das kostenlose Kontingent von ANU (100 Anfragen im Monat) deckt Startwerte ab, nicht Live-Läufe: Ein Live-Lauf braucht das kostenpflichtige Kontingent. Jeder Lauf wartet auf seine Bytes, und jedes Byte wird in der Datei festgehalten, sodass sich der Lauf daraus wiederholen lässt.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Zahlen aus einer physikalischen Quelle sind unvorhersagbar und sagen, woher sie stammen. Gegenüber einem guten Generator finden bisherige Studien keinen Unterschied in der Genauigkeit; das Benutzerhandbuch fasst die Belege zusammen.
+	Hide the sources	Quellen ausblenden
+	Sources and keys…	Quellen und Schlüssel…
+	No key	Kein Schlüssel
+	From byte	Ab Byte
+	Bytes per run	Bytes pro Lauf
+	from a pilot	aus einem Pilotlauf
+	Estimate	Schätzung
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} Bytes für {runs} Läufe: {requests} Anfragen, mindestens {time}
+	More than a month of the free tier allows.	Mehr, als das kostenlose Kontingent im Monat erlaubt.
+	Key kept	Schlüssel gespeichert
+	Forget key	Schlüssel vergessen
+	Key	Schlüssel
+	Save key	Schlüssel speichern
+	Add a source	Quelle hinzufügen
+	Address, with {n} for the count	Adresse, mit {n} für die Anzahl
+	Key header	Schlüssel-Header
+	JSON path	JSON-Pfad
+	Encoding	Kodierung
+	Add	Hinzufügen
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Im Browser werden Schlüssel unverschlüsselt im lokalen Speicher dieser Website abgelegt: Alles, was auf dieser Seite läuft, und jeder, der dieses Browserprofil nutzt, kann sie lesen. Verwenden Sie einen Schlüssel, den Sie widerrufen können, oder die Desktop-App, die Schlüssel in der Schlüsselverwaltung des Systems aufbewahrt.
 	Scenario	Szenario
 	Scenario: {name}	Szenario: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Beim Öffnen von {scenario} gehen die ungespeicherten Änderungen an {name} verloren. Zuerst speichern?

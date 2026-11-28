@@ -1539,6 +1539,41 @@ connection	Flow	Tok
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Reference má {n_a} běhů a tento běh {n_b}, takže prvních {n} z každého se porovnává po párech; reference a nyní jsou jejich průměry z těchto běhů.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Náhodná čísla ze souboru {file} (SHA-256 {sha}…), {bytes} bajtů pro každý běh od bajtu {offset}
 	Seed {seed} taken from {source}	Počáteční hodnota generátoru {seed} převzatá z {source}
+	quantum	kvantový
+	public beacon, for seeds only	veřejný maják, jen pro počáteční hodnoty
+	not quantum (atmospheric noise)	nekvantový (atmosférický šum)
+	added by you	přidáno vámi
+	Draw a seed first.	Nejdřív vylosujte počáteční hodnotu.
+	Give the file of random bytes.	Zadejte soubor náhodných bajtů.
+	Random numbers	Náhodná čísla
+	Generator	Generátor
+	Seed from a source	Počáteční hodnota ze zdroje
+	File of random bytes	Soubor náhodných bajtů
+	Live from a source	Živě ze zdroje
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, nastavený z počáteční hodnoty experimentu: opakovatelný a to, co simulace běžně používá.
+	Draw a seed	Vylosovat počáteční hodnotu
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Bezplatná úroveň ANU (100 požadavků měsíčně) pokrývá počáteční hodnoty, ne živé běhy: živý běh potřebuje placenou úroveň. Každý běh čeká na své bajty a každý bajt se zapisuje do souboru, takže se běh dá z něj zopakovat.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Čísla z fyzického zdroje jsou nepředvídatelná a říkají, odkud pocházejí. Oproti dobrému generátoru dosavadní studie nenacházejí v přesnosti žádný rozdíl; příručka shrnuje důkazy.
+	Hide the sources	Skrýt zdroje
+	Sources and keys…	Zdroje a klíče…
+	No key	Žádný klíč
+	From byte	Od bajtu
+	Bytes per run	Bajtů na běh
+	from a pilot	z pilotního běhu
+	Estimate	Odhad
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} bajtů pro {runs} běhů: {requests} požadavků, nejméně {time}
+	More than a month of the free tier allows.	Více, než dovoluje bezplatná úroveň za měsíc.
+	Key kept	Klíč uložen
+	Forget key	Zapomenout klíč
+	Key	Klíč
+	Save key	Uložit klíč
+	Add a source	Přidat zdroj
+	Address, with {n} for the count	Adresa, kde {n} je počet
+	Key header	Hlavička klíče
+	JSON path	Cesta JSON
+	Encoding	Kódování
+	Add	Přidat
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	V prohlížeči se klíče ukládají nešifrované do místního úložiště tohoto webu: přečíst je může cokoli, co na této stránce běží, i každý, kdo používá tento profil prohlížeče. Použijte klíč, který můžete odvolat, nebo desktopovou aplikaci, která klíče ukládá do klíčenky systému.
 	Scenario	Scénář
 	Scenario: {name}	Scénář: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Otevřením scénáře {scenario} se zahodí neuložené změny v {name}. Uložit je nejprve?

@@ -1539,6 +1539,41 @@ connection	Flow	顺序流
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	基线有 {n_a} 次运行，此次运行有 {n_b} 次，因此各取前 {n} 次运行进行配对比较；基线和当前是它们在这些运行上的均值。
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	来自文件 {file} 的随机数 (SHA-256 {sha}…)，每次运行从字节 {offset} 起取 {bytes} 字节
 	Seed {seed} taken from {source}	取自 {source} 的随机种子 {seed}
+	quantum	量子
+	public beacon, for seeds only	公开信标，仅用于种子
+	not quantum (atmospheric noise)	非量子（大气噪声）
+	added by you	由你添加
+	Draw a seed first.	请先抽取种子。
+	Give the file of random bytes.	请指定随机字节文件。
+	Random numbers	随机数
+	Generator	生成器
+	Seed from a source	来自来源的种子
+	File of random bytes	随机字节文件
+	Live from a source	从来源实时获取
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**，以实验的种子初始化：可重复，也是仿真通常使用的方式。
+	Draw a seed	抽取种子
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU 的免费额度（每月 100 次请求）可用于种子，不能用于实时运行：实时运行需要其付费额度。每次运行都要等待它的字节，每个字节都会记录在文件中，因此运行可以据此重复。
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	来自物理来源的数字不可预测，并说明了它们的出处。与好的生成器相比，迄今的研究未发现准确性上有差异；用户指南概述了这些证据。
+	Hide the sources	隐藏来源
+	Sources and keys…	来源和密钥…
+	No key	无密钥
+	From byte	起始字节
+	Bytes per run	每次运行的字节数
+	from a pilot	来自试运行
+	Estimate	估计
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs} 次运行需要 {bytes} 字节：{requests} 次请求，至少 {time}
+	More than a month of the free tier allows.	超过免费额度一个月的上限。
+	Key kept	密钥已保留
+	Forget key	忘记密钥
+	Key	密钥
+	Save key	保存密钥
+	Add a source	添加来源
+	Address, with {n} for the count	地址，其中 {n} 代表数量
+	Key header	密钥标头
+	JSON path	JSON 路径
+	Encoding	编码
+	Add	添加
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	在浏览器中，密钥未经加密保存在此网站的本地存储中：此页面上运行的任何内容，以及使用此浏览器配置文件的任何人，都能读取它们。请使用可以撤销的密钥，或使用桌面应用，它会把密钥保存在系统钥匙串中。
 	Scenario	场景
 	Scenario: {name}	场景：{name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	打开 {scenario} 会丢弃 {name} 中未保存的更改。先保存吗？

@@ -20,6 +20,11 @@ pub trait Backend {
     fn commands(&mut self) -> Result<Value, String>;
     /// What the agent is driving, for its instructions.
     fn describe(&self) -> String;
+    /// The engine of a headless backend, to give it the app's fetching and key store for random
+    /// number sources; `None` for a running app, which has its own.
+    fn engine_mut(&mut self) -> Option<&mut Engine> {
+        None
+    }
 }
 
 /// The catalogue of commands, as `stochcraft-cli schema` prints it.
@@ -48,16 +53,34 @@ impl Headless {
     /// The command's parameters with its file's path checked against the roots (and resolved,
     /// when confined): what `file.open` reads, and what `file.save` writes, given or not.
     fn confine(&self, command: &str, mut params: Value) -> Result<Value, String> {
-        // A run that reads its random numbers from a file reads that file: it must lie in the
-        // roots too.
-        if matches!(command, "run" | "run.start") && self.roots.is_confined() {
-            if let Some(r) = params
-                .get_mut("random")
-                .filter(|r| r["mode"] == "byte_file")
+        // A run that reads its random numbers from a file reads that file, and a live run or a
+        // fetch writes the file it records the fetched bytes in: they must lie in the roots too.
+        if matches!(command, "run" | "run.start" | "random.fetch") && self.roots.is_confined() {
+            let (slot, access) = if command == "random.fetch" {
+                (Some(&mut params), Access::Write)
+            } else {
+                let access = if params["random"]["mode"] == "live" {
+                    Access::Write
+                } else {
+                    Access::Read
+                };
+                let slot = params
+                    .get_mut("random")
+                    .filter(|r| matches!(r["mode"].as_str(), Some("byte_file" | "live")));
+                (slot, access)
+            };
+            if let Some(r) = slot
                 && let Some(Value::String(file)) = r.get("file").cloned()
             {
-                let resolved = self.roots.check(Path::new(&file), Access::Read)?;
-                r["file"] = Value::String(resolved.to_string_lossy().into_owned());
+                let resolved = self.roots.check(Path::new(&file), access)?;
+                let resolved = resolved.to_string_lossy().into_owned();
+                // The manifest the engine writes beside a recorded file, `<file>.json`: checked
+                // too, before anything is written, so a link there cannot lead out of the root.
+                if access == Access::Write {
+                    let manifest = format!("{resolved}.json");
+                    self.roots.check(Path::new(&manifest), Access::Write)?;
+                }
+                r["file"] = Value::String(resolved);
             }
             return Ok(params);
         }
@@ -109,6 +132,10 @@ impl Default for Headless {
 }
 
 impl Backend for Headless {
+    fn engine_mut(&mut self) -> Option<&mut Engine> {
+        Some(&mut self.engine)
+    }
+
     fn execute(&mut self, command: &str, params: Value) -> Result<Value, String> {
         let params = self.confine(command, params)?;
         self.engine
@@ -296,5 +323,53 @@ mod tests {
         let stream = first_reachable(targets).unwrap();
         assert_eq!(stream.peer_addr().unwrap().port(), port);
         assert!(first_reachable(Vec::new()).is_err());
+    }
+
+    /// A link at `link` to `target`; `false` where the system does not allow one (Windows
+    /// without the privilege to make links).
+    fn link(target: &Path, link: &Path) -> bool {
+        #[cfg(unix)]
+        let made = std::os::unix::fs::symlink(target, link);
+        #[cfg(windows)]
+        let made = std::os::windows::fs::symlink_file(target, link);
+        #[cfg(not(any(unix, windows)))]
+        let made: std::io::Result<()> = Err(std::io::ErrorKind::Unsupported.into());
+        made.is_ok()
+    }
+
+    #[test]
+    fn a_manifest_linked_out_of_the_write_root_is_refused_before_anything_is_written() {
+        let dir = std::env::temp_dir().join(format!("stochcraft-manifest-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let root = dir.join("root");
+        std::fs::create_dir_all(&root).unwrap();
+        let root = std::fs::canonicalize(&root).unwrap();
+        let outside = std::fs::canonicalize(&dir).unwrap().join("outside.json");
+        std::fs::write(&outside, "{}").unwrap();
+        let file = root.join("bytes.bin");
+        if !link(&outside, &root.join("bytes.bin.json")) {
+            // No links here (Windows without the privilege): nothing to check.
+            let _ = std::fs::remove_dir_all(&dir);
+            return;
+        }
+        let h = Headless::new(Roots::new(Some(&root), Some(&root)).unwrap());
+        let file_text = file.to_string_lossy().into_owned();
+        let fetch = json!({ "source": "anu", "bytes": 64, "file": file_text });
+        let live = json!({ "random": { "mode": "live", "source": "anu", "file": file_text } });
+        for (command, params) in [("random.fetch", fetch), ("run.start", live)] {
+            let refused = h.confine(command, params).unwrap_err();
+            assert!(refused.contains("outside"), "{command}: {refused}");
+        }
+        // A run that only reads the file writes no manifest, so its link is not checked.
+        std::fs::write(&file, [0u8; 64]).unwrap();
+        let read = json!({ "random": { "mode": "byte_file", "file": file_text } });
+        assert!(h.confine("run", read).is_ok());
+        // Nothing was written outside the root.
+        assert_eq!(std::fs::read_to_string(&outside).unwrap(), "{}");
+        // A manifest beside the file, in the root, is fine.
+        std::fs::remove_file(root.join("bytes.bin.json")).unwrap();
+        let fetch = json!({ "source": "anu", "bytes": 64, "file": file_text });
+        assert!(h.confine("random.fetch", fetch).is_ok());
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

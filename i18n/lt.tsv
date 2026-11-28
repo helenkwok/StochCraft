@@ -1539,6 +1539,41 @@ connection	Flow	Srautas
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Atskaitos taške yra {n_a} vykdymų, o šiame vykdyme – {n_b}, todėl pirmieji {n} iš kiekvieno lyginami poromis; atskaitos taškas ir dabar yra jų vidurkiai per tuos vykdymus.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Atsitiktiniai skaičiai iš failo {file} (SHA-256 {sha}…), {bytes} baitų kiekvienam vykdymui nuo baito {offset}
 	Seed {seed} taken from {source}	Sėkla {seed}, paimta iš {source}
+	quantum	kvantinis
+	public beacon, for seeds only	viešas švyturys, tik sėkloms
+	not quantum (atmospheric noise)	ne kvantinis (atmosferos triukšmas)
+	added by you	pridėta jūsų
+	Draw a seed first.	Pirmiausia ištraukite sėklą.
+	Give the file of random bytes.	Nurodykite atsitiktinių baitų failą.
+	Random numbers	Atsitiktiniai skaičiai
+	Generator	Generatorius
+	Seed from a source	Sėkla iš šaltinio
+	File of random bytes	Atsitiktinių baitų failas
+	Live from a source	Tiesiogiai iš šaltinio
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, paleistas iš eksperimento sėklos: kartojamas ir tai, ką imitacija paprastai naudoja.
+	Draw a seed	Ištraukti sėklą
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU nemokamas lygis (100 užklausų per mėnesį) apima sėklas, bet ne tiesioginius vykdymus: tiesioginiam vykdymui reikia mokamo lygio. Kiekvienas vykdymas laukia savo baitų, o kiekvienas baitas įrašomas į failą, todėl vykdymą galima pakartoti iš jo.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Skaičiai iš fizinio šaltinio yra nenuspėjami ir nurodo, iš kur atėjo. Palyginti su geru generatoriumi, iki šiol atlikti tyrimai tikslumo skirtumo neranda; vadovas apibendrina įrodymus.
+	Hide the sources	Slėpti šaltinius
+	Sources and keys…	Šaltiniai ir raktai…
+	No key	Nėra rakto
+	From byte	Nuo baito
+	Bytes per run	Baitų per vykdymą
+	from a pilot	iš bandomojo vykdymo
+	Estimate	Įvertis
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} baitų {runs} vykdymų: {requests} užklausų, ne mažiau kaip {time}
+	More than a month of the free tier allows.	Daugiau, nei leidžia nemokamas lygis per mėnesį.
+	Key kept	Raktas išsaugotas
+	Forget key	Užmiršti raktą
+	Key	Raktas
+	Save key	Įrašyti raktą
+	Add a source	Pridėti šaltinį
+	Address, with {n} for the count	Adresas, kuriame {n} yra skaičius
+	Key header	Rakto antraštė
+	JSON path	JSON kelias
+	Encoding	Kodavimas
+	Add	Pridėti
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Naršyklėje raktai laikomi šios svetainės vietinėje saugykloje neužšifruoti: juos gali perskaityti viskas, kas veikia šiame puslapyje, ir bet kas, kas naudoja šį naršyklės profilį. Naudokite raktą, kurį galite atšaukti, arba darbalaukio programą, kuri raktus laiko sistemos raktų pakabuke.
 	Scenario	Scenarijus
 	Scenario: {name}	Scenarijus: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Atidarius {scenario}, neįrašyti {name} pakeitimai bus atmesti. Pirmiau juos įrašyti?

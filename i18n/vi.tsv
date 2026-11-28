@@ -1539,6 +1539,41 @@ connection	Flow	Luồng
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Mốc so sánh có {n_a} lần chạy còn lần chạy này có {n_b}, nên {n} lần chạy đầu của mỗi bên được so sánh theo cặp; mốc so sánh và hiện tại là giá trị trung bình của chúng trên các lần chạy đó.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Số ngẫu nhiên từ tệp {file} (SHA-256 {sha}…), {bytes} byte cho mỗi lần chạy từ byte {offset}
 	Seed {seed} taken from {source}	Hạt giống ngẫu nhiên {seed} lấy từ {source}
+	quantum	lượng tử
+	public beacon, for seeds only	đèn hiệu công khai, chỉ cho hạt giống
+	not quantum (atmospheric noise)	không phải lượng tử (nhiễu khí quyển)
+	added by you	do bạn thêm
+	Draw a seed first.	Hãy rút một hạt giống trước.
+	Give the file of random bytes.	Hãy cung cấp tệp byte ngẫu nhiên.
+	Random numbers	Số ngẫu nhiên
+	Generator	Bộ tạo
+	Seed from a source	Hạt giống từ một nguồn
+	File of random bytes	Tệp byte ngẫu nhiên
+	Live from a source	Trực tiếp từ một nguồn
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, khởi tạo từ hạt giống của thí nghiệm: lặp lại được, và là thứ mô phỏng thường dùng.
+	Draw a seed	Rút hạt giống
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Gói miễn phí của ANU (100 yêu cầu mỗi tháng) chỉ đủ cho hạt giống, không đủ cho các lần chạy trực tiếp: một lần chạy trực tiếp cần gói trả phí. Mỗi lần chạy chờ byte của nó, và mọi byte đều được ghi vào tệp, nên lần chạy có thể lặp lại từ đó.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Các số từ nguồn vật lý không thể đoán trước và cho biết chúng đến từ đâu. So với một bộ tạo tốt, các nghiên cứu cho đến nay không thấy khác biệt về độ chính xác; hướng dẫn sử dụng tóm tắt các bằng chứng.
+	Hide the sources	Ẩn các nguồn
+	Sources and keys…	Nguồn và khóa…
+	No key	Không có khóa
+	From byte	Từ byte
+	Bytes per run	Byte mỗi lần chạy
+	from a pilot	từ lần chạy thử
+	Estimate	Ước lượng
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} byte cho {runs} lần chạy: {requests} yêu cầu, ít nhất {time}
+	More than a month of the free tier allows.	Nhiều hơn mức gói miễn phí cho phép trong một tháng.
+	Key kept	Đã giữ khóa
+	Forget key	Quên khóa
+	Key	Khóa
+	Save key	Lưu khóa
+	Add a source	Thêm một nguồn
+	Address, with {n} for the count	Địa chỉ, với {n} cho số lượng
+	Key header	Tiêu đề khóa
+	JSON path	Đường dẫn JSON
+	Encoding	Mã hóa
+	Add	Thêm
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Trong trình duyệt, khóa được lưu không mã hóa trong bộ nhớ cục bộ của trang này: bất cứ thứ gì chạy trên trang này, và bất kỳ ai dùng hồ sơ trình duyệt này, đều có thể đọc chúng. Hãy dùng khóa mà bạn có thể thu hồi, hoặc ứng dụng máy tính, vốn giữ khóa trong chuỗi khóa của hệ thống.
 	Scenario	Kịch bản
 	Scenario: {name}	Kịch bản: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Mở {scenario} sẽ bỏ các thay đổi chưa lưu của {name}. Lưu trước?

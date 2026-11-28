@@ -594,8 +594,8 @@ section.
 By default every run draws its random numbers from xoshiro256**, a pseudo-random generator, seeded
 from the experiment's seed. A run can instead read them from a file of random bytes, for example
 bytes recorded from a quantum or other physical random number source. This is a setting of the
-run (`random` in the `run` and `run.start` commands, for scripts and agents); choosing a source in
-the window comes later.
+run (`random` in the `run` and `run.start` commands, for scripts and agents), and the window's
+experiment settings choose it (below).
 
 **What it does and does not give you.** Bytes from a physical source are unpredictable, and
 the file, with its SHA-256 in the run record, says exactly which numbers the run used. They do
@@ -651,6 +651,87 @@ that needs more than 8 MiB of the file is refused before it starts; run it in sl
 run's `seed` runs the usual pseudo-random streams from that seed, and records where the seed came
 from (for example a randomness beacon's pulse). The run repeats from its seed without calling the
 source again.
+
+### Choosing the source in the window
+
+Experiment settings (the model's properties, under the experiment's fields) has a **Random
+numbers** section with four choices:
+
+- **Generator**, the default: xoshiro256** from the experiment's seed, as always.
+- **Seed from a source**: **Draw a seed** asks the chosen source for one draw (by default the NIST
+  Randomness Beacon's latest pulse, 512 bits a minute, public, so never for secrets) and shows
+  "Seed … taken from …". The next run uses that seed, and its record names the source, the time
+  and the pulse; the run repeats from its seed without calling out. The seed is the SHA-256 of
+  the bytes drawn, its first eight bytes read as a little-endian number, keeping the low 53 bits
+  so it stays exact wherever numbers are 64-bit floating point. This is the main free use.
+- **File of random bytes**: the file, the byte to start from and the bytes per run (left empty, a
+  pilot chooses them); **Estimate** gives what a source would be asked for to fill it.
+- **Live from a source**: the run fetches each run's segment while it goes, up to four runs
+  ahead, and records every byte, in order, into the file named, with a manifest beside it
+  (`<file>.json`: the source, each answer's time, the SHA-256 and a health check). A run starts
+  only once its segment has arrived, so a live run goes one run after another, in slices; its
+  record is a run on the recorded file, which repeats it exactly. A run that sets its own number
+  of runs and reaches its precision early records only the segments it fetched; its record gives
+  the runs it made, and its replay stops at the same place. In the browser, which has no file
+  system, nothing is written and there is no manifest: the bytes are kept in the page under the
+  file's name, and runs there read them under that name (with the SHA-256 the record gives) until
+  the page is closed. The page offers no download of them yet, so to keep a recording, record it
+  in the desktop app or the command line. **Estimate** gives the bytes,
+  requests and least time first. ANU's free tier (100 requests a month, one a second) covers
+  seeds, not live runs: 100 runs of 16 KiB each take 80 requests, and a run of any real size
+  needs its paid tier.
+
+**Sources and keys…** opens the source manager. The presets are ANU Quantum Numbers (a quantum
+source; it needs your own key, free or paid), the NIST Randomness Beacon (seeds only) and
+random.org (off until you enable it; not quantum: atmospheric noise). **Add a source** takes a
+name, an address with `{n}` where the count goes, the header the key goes in, and how the answer
+gives its bytes (a JSON path with hexadecimal, Base64 or numbers from 0 to 255, or the whole
+answer as hexadecimal, Base64, numbers or raw bytes).
+
+**Keys** are entered only there. On the desktop they are kept in the system's keychain (the
+Windows Credential Manager, the macOS Keychain, the Secret Service on Linux); in the browser in
+the site's local storage, unencrypted, which the window warns about. A key is never written to a
+model file, the results, the run record, the journal, the recovery copy or a log, and no command
+takes or shows one (`random.sources` says only whether a source has one). It is sent only over
+HTTPS, to the origin it was given for: changing a source's address to another origin forgets the
+key, and a redirect is never followed. An address is refused when it has a user name or password
+before its host, or a query parameter whose name, once percent-decoded, contains `key`, `token`,
+`secret`, `password`, `passwd`, `auth`, `sig` or `credential`. Nothing else in an address is
+checked: never put a key or other secret in its path or under another name, but give it as the
+source's key, which goes in the key header.
+
+**What the evidence says.** Most controlled comparisons of a physical (quantum) source with a
+modern, well-tested pseudo-random generator find no significant difference in the results: in
+computational chemistry (Ghersi, Parakh and Mezei, Journal of Computational Chemistry, 2017,
+doi:10.1002/jcc.25065) and the initialisation of neural networks (Heese et al., Machine
+Learning, 2024, doi:10.1007/s10994-023-06490-y). Clear errors come from poor generators, such as
+short-period linear congruential ones. Some studies report gains: smaller errors in Monte Carlo
+estimates of π and Buffon's needle (Lebedev et al., Computer Physics Communications, 2026,
+doi:10.1016/j.cpc.2026.110082), though from a single run per source, with no confidence
+intervals, and with the source's maker among the authors; and a smaller root-mean-square error with
+the authors' own quantum source (Tudor et al., Physica A, 2019, vol. 534, 121901), with no repeated
+runs. None of these
+gains has been reproduced independently. A 2026 survey of such comparisons (Raubitzek, Mühlhauser
+and Mallinger, Entropy, 2026, doi:10.3390/e28111237) concludes that neither an advantage nor an
+equivalence has been shown. What a physical source clearly gives is unpredictable seeds and a
+record of where they came from; no comparison of this kind has been found for discrete-event
+simulation.
+
+**Other services.** ANU's free tier needs a key (requests without one are refused) and allows
+100 requests a month, one a second; its paid tier is sold per request. A service can be added in
+the source manager if it answers an HTTPS request with random bytes in one of the formats above.
+Cisco's Outshift QRNG, for example, needs a key, and its free tier is for testing and
+demonstration, not production; it serves numbers generated in advance, not drawn at the time of
+the request.
+
+**A health check** runs on every fetch: the frequency (monobit) and runs tests of NIST SP 800-22
+Rev. 1a (sections 2.1 and 2.3) and a check for repeated 32-byte blocks. It warns and never
+blocks, and passing it says little: it catches gross faults, such as a service answering with
+the same bytes twice.
+
+The commands behind the section are `random.sources`, `random.source.set`, `random.estimate`,
+`random.seed.draw`, `random.fetch` and `random.status` (none is journalled, so a replay never
+calls out), and `random` with `"mode": "live"` in `run.start`.
 
 **Not yet.** A file serves process models only. System dynamics, agent-based and Monte Carlo
 models, and sweeps, sensitivity, designed experiments, sizing, evaluation and optimisation, refuse

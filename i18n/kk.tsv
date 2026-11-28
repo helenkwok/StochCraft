@@ -1539,6 +1539,41 @@ connection	Flow	Ағын
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Базалық нұсқада {n_a} іске қосу, ал бұл іске қосуда {n_b} бар, сондықтан олардың әрқайсысының алғашқы {n} жұптасып салыстырылады; базалық нұсқа және қазір — сол іске қосулар бойынша олардың орташалары.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	{file} файлындағы кездейсоқ сандар (SHA-256 {sha}…), әр іске қосуға {offset}-байттан бастап {bytes} байт
 	Seed {seed} taken from {source}	{source} көзінен алынған {seed} кездейсоқ тұқымы
+	quantum	кванттық
+	public beacon, for seeds only	жария маяк, тек тұқымдар үшін
+	not quantum (atmospheric noise)	кванттық емес (атмосфералық шу)
+	added by you	өзіңіз қосқан
+	Draw a seed first.	Алдымен тұқым алыңыз.
+	Give the file of random bytes.	Кездейсоқ байттар файлын көрсетіңіз.
+	Random numbers	Кездейсоқ сандар
+	Generator	Генератор
+	Seed from a source	Дереккөзден тұқым
+	File of random bytes	Кездейсоқ байттар файлы
+	Live from a source	Дереккөзден тікелей
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, эксперимент тұқымынан іске қосылған: қайталанатын және модельдеу әдетте қолданатын нұсқа.
+	Draw a seed	Тұқым алу
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU-дың тегін деңгейі (айына 100 сұрау) тұқымдарды қамтиды, тікелей іске қосуларды қамтымайды: тікелей іске қосуға ақылы деңгей керек. Әр іске қосу өз байттарын күтеді, ал әр байт файлға жазылады, сондықтан іске қосуды содан қайталауға болады.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Физикалық дереккөзден алынған сандар болжанбайды және олардың қайдан келгенін айтады. Жақсы генератормен салыстырғанда, осы уақытқа дейінгі зерттеулер дәлдікте айырмашылық таппайды; нұсқаулық дәлелдерді қорытындылайды.
+	Hide the sources	Дереккөздерді жасыру
+	Sources and keys…	Дереккөздер мен кілттер…
+	No key	Кілт жоқ
+	From byte	Байттан бастап
+	Bytes per run	Әр іске қосуға байт
+	from a pilot	пилоттық іске қосудан
+	Estimate	Бағалау
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} байт {runs} іске қосуға: {requests} сұрау, кемінде {time}
+	More than a month of the free tier allows.	Тегін деңгей бір айда рұқсат ететіннен көп.
+	Key kept	Кілт сақталды
+	Forget key	Кілтті ұмыту
+	Key	Кілт
+	Save key	Кілтті сақтау
+	Add a source	Дереккөз қосу
+	Address, with {n} for the count	Мекенжай, мұнда {n} — саны
+	Key header	Кілт тақырыбы
+	JSON path	JSON жолы
+	Encoding	Кодтау
+	Add	Қосу
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	Браузерде кілттер осы сайттың жергілікті сақтау орнында шифрланбай сақталады: оларды осы бетте жұмыс істейтін кез келген нәрсе және осы браузер профилін қолданатын кез келген адам оқи алады. Қайтарып алуға болатын кілтті немесе кілттерді жүйенің кілттер байламында сақтайтын жұмыс үстелі қолданбасын пайдаланыңыз.
 	Scenario	Сценарий
 	Scenario: {name}	Сценарий: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} ашылса, {name} ішіндегі сақталмаған өзгерістер жоғалады. Алдымен сақтау керек пе?

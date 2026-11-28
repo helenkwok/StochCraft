@@ -29,6 +29,7 @@ impl App {
                         _ => false,
                     }),
             },
+            random_sources: self.engine.random_sources_settings(),
         }
     }
 
@@ -52,6 +53,7 @@ impl App {
             .and_then(|v| serde_json::from_value(v).ok())
             .unwrap_or_default();
         self.keymap.set_overrides(overrides);
+        self.engine.set_random_sources(&prefs.random_sources);
     }
 
     /// Shows the interface in the language with this code, or the system's (`None`, or a code no

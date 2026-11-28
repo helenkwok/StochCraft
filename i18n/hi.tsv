@@ -1539,6 +1539,41 @@ connection	Flow	प्रवाह
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	आधार रेखा में {n_a} रन हैं और इस रन में {n_b}, इसलिए दोनों के पहले {n} रन की तुलना जोड़ियों में होती है; आधार रेखा और अब उन रन पर उनके माध्य हैं।
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	फ़ाइल {file} से यादृच्छिक संख्याएँ (SHA-256 {sha}…), हर रन के लिए बाइट {offset} से {bytes} बाइट
 	Seed {seed} taken from {source}	यादृच्छिक बीज {seed}, {source} से लिया गया
+	quantum	क्वांटम
+	public beacon, for seeds only	सार्वजनिक बीकन, केवल बीज के लिए
+	not quantum (atmospheric noise)	क्वांटम नहीं (वायुमंडलीय शोर)
+	added by you	आपके द्वारा जोड़ा गया
+	Draw a seed first.	पहले एक बीज निकालें।
+	Give the file of random bytes.	यादृच्छिक बाइट की फ़ाइल दें।
+	Random numbers	यादृच्छिक संख्याएँ
+	Generator	जनरेटर
+	Seed from a source	स्रोत से बीज
+	File of random bytes	यादृच्छिक बाइट की फ़ाइल
+	Live from a source	स्रोत से लाइव
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, प्रयोग के बीज से शुरू: दोहराने योग्य, और वही जो सिमुलेशन आम तौर पर इस्तेमाल करता है।
+	Draw a seed	बीज निकालें
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ANU का मुफ़्त स्तर (महीने में 100 अनुरोध) बीज के लिए है, लाइव रन के लिए नहीं: लाइव रन के लिए उसका सशुल्क स्तर चाहिए। हर रन अपने बाइट का इंतज़ार करता है, और हर बाइट फ़ाइल में दर्ज होता है, इसलिए रन उसी से दोहराया जा सकता है।
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	भौतिक स्रोत की संख्याएँ अनुमान से परे होती हैं और बताती हैं कि वे कहाँ से आईं। एक अच्छे जनरेटर की तुलना में अब तक के अध्ययनों में सटीकता में कोई अंतर नहीं मिला है; गाइड प्रमाणों का सार देता है।
+	Hide the sources	स्रोत छिपाएँ
+	Sources and keys…	स्रोत और कुंजियाँ…
+	No key	कोई कुंजी नहीं
+	From byte	बाइट से
+	Bytes per run	प्रति रन बाइट
+	from a pilot	पायलट रन से
+	Estimate	अनुमान
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{runs} रन के लिए {bytes} बाइट: {requests} अनुरोध, कम से कम {time}
+	More than a month of the free tier allows.	मुफ़्त स्तर एक महीने में जितना देता है, उससे ज़्यादा।
+	Key kept	कुंजी रखी गई
+	Forget key	कुंजी भुलाएँ
+	Key	कुंजी
+	Save key	कुंजी सहेजें
+	Add a source	स्रोत जोड़ें
+	Address, with {n} for the count	पता, जिसमें {n} गिनती के लिए है
+	Key header	कुंजी हेडर
+	JSON path	JSON पथ
+	Encoding	एन्कोडिंग
+	Add	जोड़ें
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	ब्राउज़र में कुंजियाँ इस साइट के लोकल स्टोरेज में बिना एन्क्रिप्शन के रखी जाती हैं: इस पेज पर चलने वाली कोई भी चीज़ और इस ब्राउज़र प्रोफ़ाइल का इस्तेमाल करने वाला कोई भी व्यक्ति उन्हें पढ़ सकता है। ऐसी कुंजी इस्तेमाल करें जिसे आप रद्द कर सकें, या डेस्कटॉप ऐप, जो कुंजियाँ सिस्टम के कीचेन में रखता है।
 	Scenario	परिदृश्य
 	Scenario: {name}	परिदृश्य: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	{scenario} खोलने पर {name} के बिना सहेजे गए बदलाव हट जाएँगे। पहले सहेजें?

@@ -1539,6 +1539,41 @@ connection	Flow	Flux
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	Referința are {n_a} rulări, iar această rulare {n_b}, deci primele {n} din fiecare sunt comparate pe perechi; referința și acum sunt mediile lor pe acele rulări.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	Numere aleatoare din fișierul {file} (SHA-256 {sha}…), {bytes} octeți pentru fiecare rulare, începând de la octetul {offset}
 	Seed {seed} taken from {source}	Sămânța {seed} luată din {source}
+	quantum	cuantic
+	public beacon, for seeds only	far public, doar pentru semințe
+	not quantum (atmospheric noise)	necuantic (zgomot atmosferic)
+	added by you	adăugată de tine
+	Draw a seed first.	Mai întâi extrage o sămânță.
+	Give the file of random bytes.	Indică fișierul de octeți aleatori.
+	Random numbers	Numere aleatoare
+	Generator	Generator
+	Seed from a source	Sămânță dintr-o sursă
+	File of random bytes	Fișier de octeți aleatori
+	Live from a source	În direct dintr-o sursă
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, inițializat cu sămânța experimentului: repetabil și ceea ce folosește de obicei simularea.
+	Draw a seed	Extrage o sămânță
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	Nivelul gratuit ANU (100 de cereri pe lună) acoperă semințele, nu rulările în direct: o rulare în direct are nevoie de nivelul plătit. Fiecare rulare așteaptă octeții săi, iar fiecare octet este înregistrat în fișier, astfel încât rularea se repetă pornind de la el.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	Numerele dintr-o sursă fizică sunt imprevizibile și spun de unde provin. Față de un generator bun, studiile de până acum nu găsesc nicio diferență de exactitate; ghidul rezumă dovezile.
+	Hide the sources	Ascunde sursele
+	Sources and keys…	Surse și chei…
+	No key	Fără cheie
+	From byte	De la octetul
+	Bytes per run	Octeți per rulare
+	from a pilot	dintr-o rulare pilot
+	Estimate	Estimare
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} octeți pentru {runs} rulări: {requests} cereri, cel puțin {time}
+	More than a month of the free tier allows.	Mai mult decât permite nivelul gratuit într-o lună.
+	Key kept	Cheie păstrată
+	Forget key	Uită cheia
+	Key	Cheie
+	Save key	Salvează cheia
+	Add a source	Adaugă o sursă
+	Address, with {n} for the count	Adresă, cu {n} pentru număr
+	Key header	Antetul cheii
+	JSON path	Calea JSON
+	Encoding	Codificare
+	Add	Adaugă
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	În browser, cheile sunt păstrate necriptate în stocarea locală a acestui site: orice rulează pe această pagină și oricine folosește acest profil de browser le poate citi. Folosește o cheie pe care o poți revoca sau aplicația desktop, care păstrează cheile în lanțul de chei al sistemului.
 	Scenario	Scenariu
 	Scenario: {name}	Scenariu: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	Deschiderea {scenario} renunță la modificările nesalvate din {name}. Le salvați mai întâi?

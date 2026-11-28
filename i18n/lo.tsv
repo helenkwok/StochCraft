@@ -1539,6 +1539,41 @@ connection	Flow	ເສັ້ນທາງ
 	The baseline has {n_a} runs and this run {n_b}, so the first {n} of each are compared in pairs; the baseline and now are their means over those runs.	ເສັ້ນຖານມີ {n_a} ຮອບ ແລະ ຮອບນີ້ມີ {n_b} ຮອບ, ຈຶ່ງປຽບທຽບ {n} ຮອບທຳອິດຂອງແຕ່ລະອັນແບບຈັບຄູ່; ເສັ້ນຖານ ແລະ ປັດຈຸບັນແມ່ນຄ່າສະເລ່ຍຂອງຮອບເຫຼົ່ານັ້ນ.
 	Random numbers from the file {file} (SHA-256 {sha}…), {bytes} bytes for each run from byte {offset}	ຕົວເລກສຸ່ມຈາກໄຟລ໌ {file} (SHA-256 {sha}…), {bytes} ໄບຕ໌ ສຳລັບແຕ່ລະຮອບ ເລີ່ມຈາກໄບຕ໌ {offset}
 	Seed {seed} taken from {source}	ເມັດສຸ່ມ {seed} ທີ່ເອົາມາຈາກ {source}
+	quantum	ຄວອນຕັມ
+	public beacon, for seeds only	ບີຄອນສາທາລະນະ, ສຳລັບເມັດສຸ່ມເທົ່ານັ້ນ
+	not quantum (atmospheric noise)	ບໍ່ແມ່ນຄວອນຕັມ (ສຽງລົບກວນໃນບັນຍາກາດ)
+	added by you	ທີ່ທ່ານເພີ່ມ
+	Draw a seed first.	ສຸ່ມເມັດສຸ່ມກ່ອນ.
+	Give the file of random bytes.	ລະບຸໄຟລ໌ໄບຕ໌ສຸ່ມ.
+	Random numbers	ຕົວເລກສຸ່ມ
+	Generator	ຕົວສ້າງ
+	Seed from a source	ເມັດສຸ່ມຈາກແຫຼ່ງທີ່ມາ
+	File of random bytes	ໄຟລ໌ໄບຕ໌ສຸ່ມ
+	Live from a source	ສົດຈາກແຫຼ່ງທີ່ມາ
+	xoshiro256**, seeded from the experiment's seed: repeatable, and what simulation normally uses.	xoshiro256**, ເລີ່ມຈາກເມັດສຸ່ມຂອງການທົດລອງ: ເຮັດຊ້ຳໄດ້, ແລະເປັນສິ່ງທີ່ການຈຳລອງໃຊ້ໂດຍທົ່ວໄປ.
+	Draw a seed	ສຸ່ມເມັດສຸ່ມ
+	ANU's free tier (100 requests a month) covers seeds, not live runs: a live run needs its paid tier. Each run waits for its bytes, and every byte is recorded in the file, so the run repeats from it.	ລະດັບຟຣີຂອງ ANU (100 ຄຳຂໍຕໍ່ເດືອນ) ໃຊ້ໄດ້ສຳລັບເມັດສຸ່ມ, ບໍ່ແມ່ນການປະມວນຜົນສົດ: ການປະມວນຜົນສົດຕ້ອງໃຊ້ລະດັບທີ່ເສຍເງິນ. ແຕ່ລະຮອບລໍຖ້າໄບຕ໌ຂອງມັນ, ແລະທຸກໄບຕ໌ຖືກບັນທຶກໄວ້ໃນໄຟລ໌, ດັ່ງນັ້ນຮອບນັ້ນຈຶ່ງເຮັດຊ້ຳຈາກໄຟລ໌ນັ້ນໄດ້.
+	Numbers from a physical source are unpredictable and say where they came from. Against a good generator, studies so far find no difference in accuracy; the guide sums up the evidence.	ຕົວເລກຈາກແຫຼ່ງທາງກາຍະພາບຄາດເດົາບໍ່ໄດ້ ແລະບອກວ່າມາຈາກໃສ. ເມື່ອທຽບກັບຕົວສ້າງທີ່ດີ ການສຶກສາຈົນເຖິງຕອນນີ້ບໍ່ພົບຄວາມແຕກຕ່າງດ້ານຄວາມຖືກຕ້ອງ; ຄູ່ມືສະຫຼຸບຫຼັກຖານໄວ້.
+	Hide the sources	ເຊື່ອງແຫຼ່ງທີ່ມາ
+	Sources and keys…	ແຫຼ່ງທີ່ມາ ແລະກະແຈ…
+	No key	ບໍ່ມີກະແຈ
+	From byte	ຈາກໄບຕ໌
+	Bytes per run	ໄບຕ໌ຕໍ່ຮອບ
+	from a pilot	ຈາກຮອບທົດລອງນຳ
+	Estimate	ການປະມານ
+	{bytes} bytes for {runs} runs: {requests} requests, at least {time}	{bytes} ໄບຕ໌ ສຳລັບ {runs} ຮອບ: {requests} ຄຳຂໍ, ຢ່າງໜ້ອຍ {time}
+	More than a month of the free tier allows.	ຫຼາຍກວ່າທີ່ລະດັບຟຣີອະນຸຍາດໃນໜຶ່ງເດືອນ.
+	Key kept	ເກັບກະແຈແລ້ວ
+	Forget key	ລືມກະແຈ
+	Key	ກະແຈ
+	Save key	ບັນທຶກກະແຈ
+	Add a source	ເພີ່ມແຫຼ່ງທີ່ມາ
+	Address, with {n} for the count	ທີ່ຢູ່, ໂດຍ {n} ແທນຈຳນວນ
+	Key header	ສ່ວນຫົວຂອງກະແຈ
+	JSON path	ເສັ້ນທາງ JSON
+	Encoding	ການເຂົ້າລະຫັດ
+	Add	ເພີ່ມ
+	In the browser, keys are kept in this site's local storage, unencrypted: anything that runs on this page, and anyone who uses this browser profile, can read them. Use a key you can revoke, or the desktop app, which keeps keys in the system's keychain.	ໃນບຣາວເຊີ, ກະແຈຖືກເກັບໄວ້ໃນບ່ອນເກັບຂໍ້ມູນໃນເຄື່ອງຂອງເວັບໄຊນີ້ໂດຍບໍ່ເຂົ້າລະຫັດ: ທຸກສິ່ງທີ່ເຮັດວຽກໃນໜ້ານີ້ ແລະທຸກຄົນທີ່ໃຊ້ໂປຣໄຟລ໌ບຣາວເຊີນີ້ສາມາດອ່ານມັນໄດ້. ໃຊ້ກະແຈທີ່ທ່ານຍົກເລີກໄດ້, ຫຼືແອັບເດັສທັອບ ທີ່ເກັບກະແຈໄວ້ໃນຊຸດກະແຈຂອງລະບົບ.
 	Scenario	ສະຖານະການ
 	Scenario: {name}	ສະຖານະການ: {name}
 	Opening {scenario} drops the unsaved changes to {name}. Save them first?	ການເປີດ {scenario} ຈະຍົກເລີກການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ບັນທຶກໃນ {name}. ບັນທຶກກ່ອນບໍ?
