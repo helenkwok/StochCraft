@@ -30,6 +30,12 @@ fn failed(e: impl std::fmt::Display) -> CommandError {
     CommandError::new(ErrorCode::RandomSourceFailed, e.to_string())
 }
 
+/// The manifest written beside a recorded `file`: none in the browser, which keeps the bytes in
+/// the page under that name and writes no file.
+fn manifest_written(file: &str) -> Option<String> {
+    (!cfg!(target_arch = "wasm32")).then(|| stochcraft_qrng::record::manifest_path(file))
+}
+
 /// What a draw or a fetch is for.
 #[derive(Debug)]
 enum Purpose {
@@ -99,7 +105,7 @@ impl LiveFeed {
                 "url": source.shown_url(),
                 "requests": self.download.requests(),
                 "fetched_ahead": AHEAD,
-                "manifest": stochcraft_qrng::record::manifest_path(&self.file),
+                "manifest": manifest_written(&self.file),
             },
         })
     }
@@ -392,7 +398,7 @@ impl Engine {
                 let manifest = self.record_bytes(file, d)?;
                 Ok(json!({
                     "file": file,
-                    "manifest": stochcraft_qrng::record::manifest_path(file),
+                    "manifest": manifest_written(file),
                     "bytes": d.data().len(),
                     "sha256": manifest.sha256,
                     "requests": d.requests(),

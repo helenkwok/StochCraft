@@ -75,8 +75,11 @@ pub struct Source {
     pub id: String,
     /// Its name as the window shows it.
     pub name: String,
-    /// The address, with `{n}` where the number of units to fetch goes. Over HTTPS whenever a
-    /// key is sent; never with a key in it.
+    /// The address, with `{n}` where the number of units to fetch goes (in the path or the
+    /// query, not the host or port). Over HTTPS whenever a key is sent. Refused with a user name
+    /// or password, or a query parameter whose percent-decoded name looks like a key (contains
+    /// key, token, secret, password, passwd, auth, sig or credential); nothing else is checked,
+    /// so a key never goes in the path either, but in the key header.
     pub url: String,
     #[serde(default)]
     pub method: Method,

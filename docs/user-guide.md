@@ -670,7 +670,13 @@ numbers** section with four choices:
   ahead, and records every byte, in order, into the file named, with a manifest beside it
   (`<file>.json`: the source, each answer's time, the SHA-256 and a health check). A run starts
   only once its segment has arrived, so a live run goes one run after another, in slices; its
-  record is a run on the recorded file, which repeats it exactly. **Estimate** gives the bytes,
+  record is a run on the recorded file, which repeats it exactly. A run that sets its own number
+  of runs and reaches its precision early records only the segments it fetched; its record gives
+  the runs it made, and its replay stops at the same place. In the browser, which has no file
+  system, nothing is written and there is no manifest: the bytes are kept in the page under the
+  file's name, and runs there read them under that name (with the SHA-256 the record gives) until
+  the page is closed. The page offers no download of them yet, so to keep a recording, record it
+  in the desktop app or the command line. **Estimate** gives the bytes,
   requests and least time first. ANU's free tier (100 requests a month, one a second) covers
   seeds, not live runs: 100 runs of 16 KiB each take 80 requests, and a run of any real size
   needs its paid tier.
@@ -688,7 +694,11 @@ the site's local storage, unencrypted, which the window warns about. A key is ne
 model file, the results, the run record, the journal, the recovery copy or a log, and no command
 takes or shows one (`random.sources` says only whether a source has one). It is sent only over
 HTTPS, to the origin it was given for: changing a source's address to another origin forgets the
-key, a redirect is never followed, and an address with a key in it is refused.
+key, and a redirect is never followed. An address is refused when it has a user name or password
+before its host, or a query parameter whose name, once percent-decoded, contains `key`, `token`,
+`secret`, `password`, `passwd`, `auth`, `sig` or `credential`. Nothing else in an address is
+checked: never put a key or other secret in its path or under another name, but give it as the
+source's key, which goes in the key header.
 
 **What the evidence says.** Most controlled comparisons of a physical (quantum) source with a
 modern, well-tested pseudo-random generator find no significant difference in the results: in
